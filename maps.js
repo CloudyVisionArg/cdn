@@ -13,24 +13,31 @@
 
 var maps = {
     initAutocompletes: function () {
-        debugger;
-        $('.maps-autocomplete').each(function () {
-            this.autocomplete = new google.maps.places.Autocomplete(this, {types: ['geocode']});
-            this.autocomplete.addListener('place_changed', maps.fillInAddress);
-        });
-
+        $(document).ready(function () {
+            $('.maps-autocomplete').each(function () {
+                var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
+                ac.addListener('place_changed', maps.fillInAddress);
+                ac.inputEl = this;
+                this.mapsAutocomplete = ac;
+            });
+        })
     },
 
     fillInAddress: function () {
-        debugger;
+        var place = this.getPlace();
+        var el = this.inputEl;
+		$(el).next('span').css('display', 'block');
+		onch = el.getAttribute('customonchange');
+		if (onch) eval(onch + '(place)');
     },
 
-    onInputChange: function () {
-        debugger;
+    onInputChange: function (el) {
+		$(el).next('span').css('display', 'none');
+		onch = el.getAttribute('customonchange');
+		if (onch) eval(onch + '(null)');
     },
 
-    geolocate: function () {
-        debugger;
+    geolocate: function (el) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var geolocation = {
@@ -41,49 +48,8 @@ var maps = {
                     center: geolocation,
                     radius: position.coords.accuracy
                 });
-                //#> & Name & <#_autocomplete.setBounds(circle.getBounds());
+                el.mapsAutocomplete.setBounds(circle.getBounds());
             });
         }
     },
 }
-
-/*
-<script>
-//var placeSearch;
-var #> & Name & <#_autocomplete;
-
-function #> & Name & <#_initAutocomplete() {
-	#> & Name & <#_autocomplete = new google.maps.places.Autocomplete((_getElement('#> & Name & <#')), {types: ['geocode']});
-	#> & Name & <#_autocomplete.addListener('place_changed', #> & Name & <#_fillInAddress);
-}
-
-// [START region_fillform]
-function #> & Name & <#_fillInAddress() {
-  var place = #> & Name & <#_autocomplete.getPlace();
-  $("##> & Name & <#").next("span").css("display", "block"); 
-  #> & IIf(OnChange & "" <> "", OnChange & "(place);", "") & <#
-}
-
-function #> & Name & <#_onInputChange() {
-  $("##> & Name & <#").next("span").css("display", "none"); 
-  #> & IIf(OnChange & "" <> "", OnChange & "(null);", "") & <#
-}
-
-function #> & Name & <#_geolocate() {
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			var geolocation = {
-				lat: position.coords.latitude,
-				lng: position.coords.longitude
-			};
-			var circle = new google.maps.Circle({
-				center: geolocation,
-				radius: position.coords.accuracy
-			});
-			#> & Name & <#_autocomplete.setBounds(circle.getBounds());
-		});
-	}
-}
-</script>
-#>
-*/
