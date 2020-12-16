@@ -2,7 +2,7 @@
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://cloudycrm.net/c/wapp/wapp.css?v=8';
+	linkTag.href = 'https://raw.githack.com/CloudyVisionArg/cdn/master/wapp.css';
 	headTag.appendChild(linkTag);
 
 	if ($('#script_emojis').length == 0) {
