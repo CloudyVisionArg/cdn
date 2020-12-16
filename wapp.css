@@ -1,0 +1,135 @@
+.wapp-chat {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
+    background-color: #eee5db;
+}
+
+.wapp-heading {
+	padding: 5px;
+	margin: 0;
+	height: 100%;
+	width: 100%;
+	background-color: #E8E9E8;
+	z-index: 1000;
+}
+
+.wapp-heading-title {
+	padding: 5px;
+}
+
+.wapp-messages {
+	min-height: 200px;
+    max-height: 450px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.wapp-previous {
+    text-align: center;
+    padding: 10px !important;
+}
+
+.wapp-previous a {
+    text-decoration: none;
+    font-weight: 550;
+    cursor: pointer;
+}
+
+.wapp-message {
+    margin: 0 !important;
+    padding-bottom: 15px !important;
+}
+
+.wapp-message-inbound {
+    padding: 0px 10px !important;
+    max-width: 75%;
+}
+
+.wapp-message-outbound {
+    padding: 0px 10px !important;
+    margin-left: 25% !important;
+    max-width: 75%;
+}
+
+.wapp-message-text {
+    padding: 3px 0px !important;
+    word-break: break-word;
+    font-weight: 300;
+    font-size: 14px;
+    color: #343631;
+    //font-family: "Apple Color Emoji";
+}
+
+.wapp-message-time {
+    margin-left: 50px !important;
+    font-size: 11.5px;
+    text-align: right;
+    color: #607a4d;
+    font-weight: 350;
+}
+
+.wapp-message-status {
+    letter-spacing: -5px;
+    font-weight: 100;
+}
+
+.wapp-inbound {
+    width: auto !important;
+    padding: 4px 10px 7px !important;
+    border-radius: 0px 10px 10px 10px;
+    background: #ffffff;
+    font-size: 12px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    word-wrap: break-word;
+    display: inline-block;
+}
+
+.wapp-outbound {
+    float: right;
+    width: auto !important;
+    background: #dcf8c6;
+    border-radius: 10px 0px 10px 10px;
+    padding: 4px 10px 7px !important;
+    font-size: 12px;
+    font-weight: 400;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    display: inline-block;
+    word-wrap: break-word;
+}
+
+.wapp-reply {
+    height: 100%;
+    width: 100%;
+    background-color: #ECECEC;
+    padding: 10px 5px !important;
+    margin: 0 !important;
+    z-index: 1000;
+}
+
+.wapp-reply-button {
+    padding: 5px 5px !important;
+}
+
+.wapp-reply-button i {
+    color: #5B6165;
+    cursor: pointer;
+    font-size: 1.6em;
+}
+
+.wapp-reply-input {
+    padding: 2px 8px !important;
+}
+
+.wapp-reply-input textarea {
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 8px !important;
+    height: 37px;
+    font-size: 15px;
+    resize: none;
+    border-width: 0;
+}
+
+.wapp-reply-input textarea:focus {
+    outline: none;
+}

@@ -2,7 +2,7 @@ function includeJs(pName, pCallback) {
 	var src = '';
 	var n = pName.toLowerCase();
 	if (n == 'emojis') {
-		src = 'https://gitcdn.link/repo/CloudyVisionArg/cdn/master/emojis.js'
+		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/emojis.js'
 	} else if (n == 'whatsapp') {
 		src = 'https://cloudycrm.net/c/wapp/wapp.js?v=7';
 	} else {
