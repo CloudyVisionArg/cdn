@@ -5,6 +5,8 @@ function includeJs(pName, pCallback) {
 		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/emojis.js'
 	} else if (n == 'whatsapp') {
 		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/wapp.js';
+	} else if (n == 'maps') {
+		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/maps.js';
 	} else {
 		throw pName + ' not registered';
 	}
