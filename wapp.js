@@ -122,7 +122,7 @@ var wapp = {
 			style: 'text-align: center;',
 		}).appendTo($heading);
 		
-		$headingSession.append('<img height="30" src="https://cloudycrm.net/c/wapp/red.png" />');
+		$headingSession.append('<img height="30" src="https://raw.githack.com/CloudyVisionArg/cdn/master/red.png" />');
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
@@ -245,7 +245,7 @@ var wapp = {
 			}
 				
 			var $img = pChat.find('.wapp-heading-title.session img');
-			$img.attr('src', 'https://cloudycrm.net/c/wapp/' + light + '.png');
+			$img.attr('src', 'https://raw.githack.com/CloudyVisionArg/cdn/master/' + light + '.png');
 			var $remain = pChat.find('.wapp-heading-title.session .session-time');
 			$remain.html(remain);
 		}
