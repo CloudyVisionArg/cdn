@@ -14,7 +14,37 @@
 var maps = {
     initAutocompletes: function () {
         debugger;
-    }
+        $('.maps-autocomplete').each(function () {
+            this.autocomplete = new google.maps.places.Autocomplete(this, {types: ['geocode']});
+            this.autocomplete.addListener('place_changed', maps.fillInAddress);
+        });
+
+    },
+
+    fillInAddress: function () {
+        debugger;
+    },
+
+    onInputChange: function () {
+        debugger;
+    },
+
+    geolocate: function () {
+        debugger;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                //#> & Name & <#_autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    },
 }
 
 /*
