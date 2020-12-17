@@ -71,7 +71,12 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 		div = pControl.parent();
 	} else {
 		div = $("<div/>").addClass("input-group");
-		div.append(pControl.clone());
+		var newControl = pControl.clone();
+		div.append(newControl);
+		if (pControl.hasClass('selectpicker')) {
+			pControl.selectpicker('destroy');
+			newControl.selectpicker('render');
+		}
 	}
 	
 	var span = $("<span/>").attr({
