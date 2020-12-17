@@ -2,11 +2,11 @@ function includeJs(pName, pCallback) {
 	var src = '';
 	var n = pName.toLowerCase();
 	if (n == 'emojis') {
-		src = 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/emojis.js'
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/emojis.js'
 	} else if (n == 'whatsapp') {
-		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/wapp.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/wapp.js';
 	} else if (n == 'maps') {
-		src = 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/maps.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/maps.js';
 	} else {
 		throw pName + ' not registered';
 	}
