@@ -2,7 +2,7 @@
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://raw.githack.com/CloudyVisionArg/cdn/master/wapp.css';
+	linkTag.href = 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/wapp.css';
 	headTag.appendChild(linkTag);
 
 	if ($('#script_emojis').length == 0) {
@@ -10,7 +10,7 @@
 		let scriptTag = document.createElement('script');
 		scriptTag.id = 'script_emojis';
 		scriptTag.type = 'text/javascript';
-		scriptTag.src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/emojis.js';
+		scriptTag.src = 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/emojis.js';
 		headTag.appendChild(scriptTag);
 	}
 }());
@@ -122,7 +122,7 @@ var wapp = {
 			style: 'text-align: center;',
 		}).appendTo($heading);
 		
-		$headingSession.append('<img height="30" src="https://raw.githack.com/CloudyVisionArg/cdn/master/red.png" />');
+		$headingSession.append('<img height="30" src="https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/red.png" />');
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
@@ -244,7 +244,12 @@ var wapp = {
 				remain = '';
 			}
 				
-			var $img = pChat.find('.wapp-heading-title.session img');
+            var $img = pChat.find('.wapp-heading-title.session img');
+            if (light == 'green') {
+                $img.attr('src', 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/green.png');
+            } else {
+                $img.attr('src', 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/red.png');
+            }
 			$img.attr('src', 'https://raw.githack.com/CloudyVisionArg/cdn/master/' + light + '.png');
 			var $remain = pChat.find('.wapp-heading-title.session .session-time');
 			$remain.html(remain);

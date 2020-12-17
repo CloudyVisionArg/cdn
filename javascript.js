@@ -2,11 +2,11 @@ function includeJs(pName, pCallback) {
 	var src = '';
 	var n = pName.toLowerCase();
 	if (n == 'emojis') {
-		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/emojis.js'
+		src = 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/emojis.js'
 	} else if (n == 'whatsapp') {
 		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/wapp.js';
 	} else if (n == 'maps') {
-		src = 'https://raw.githack.com/CloudyVisionArg/cdn/master/maps.js';
+		src = 'https://rawcdn.githack.com/CloudyVisionArg/cdn/deaeac8876bea7086ded43ea02142b7b2a6cf93c/maps.js';
 	} else {
 		throw pName + ' not registered';
 	}
@@ -49,7 +49,6 @@ function addOption(ctl, option, value) {
 	ctl.appendChild(opt);
 	return opt;
 }
-
 
 function addPhoneButton(pControl) {
 	addInputButton(pControl, "fa fa-phone", "window.open('tel:' + $('#" + pControl.attr("id") + "').val())");
