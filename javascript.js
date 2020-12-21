@@ -1,31 +1,3 @@
-function includeJs(pName, pCallback) {
-	var src = '';
-	var n = pName.toLowerCase();
-	if (n == 'emojis') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/emojis.js'
-	} else if (n == 'whatsapp') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/wapp.js';
-	} else if (n == 'maps') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/maps.js';
-	} else {
-		throw pName + ' not registered';
-	}
-	
-	if (src) {
-		if ($('#script_' + n).length == 0) {
-			let headTag = document.getElementsByTagName('head')[0];
-			let scriptTag = document.createElement('script');
-			headTag.appendChild(scriptTag);
-			if (pCallback) $(scriptTag).load(pCallback);
-			scriptTag.id = 'script_' + n;
-			scriptTag.type = 'text/javascript';
-			scriptTag.src = src;
-		} else {
-			if (pCallback) pCallback();
-		}
-	}
-}
-
 // string.replaceAll
 if (typeof String.prototype.replaceAll !== 'function') {
 	String.prototype.replaceAll = function(search, replacement) {
