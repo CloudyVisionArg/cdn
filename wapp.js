@@ -2,7 +2,7 @@
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/wapp.css';
+	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
 	headTag.appendChild(linkTag);
 
 	if ($('#script_emojis').length == 0) {
@@ -10,7 +10,7 @@
 		let scriptTag = document.createElement('script');
 		scriptTag.id = 'script_emojis';
 		scriptTag.type = 'text/javascript';
-		scriptTag.src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/emojis.js';
+		scriptTag.src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/emojis.js';
 		headTag.appendChild(scriptTag);
 	}
 }());
