@@ -1,18 +1,11 @@
-(function(){
+(function() {
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
 	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
 	headTag.appendChild(linkTag);
 
-	if ($('#script_emojis').length == 0) {
-		let headTag = document.getElementsByTagName('head')[0];
-		let scriptTag = document.createElement('script');
-		scriptTag.id = 'script_emojis';
-		scriptTag.type = 'text/javascript';
-		scriptTag.src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/emojis.js';
-		headTag.appendChild(scriptTag);
-	}
+	includeJs('emojis');
 }());
 
 $(document).ready(function () {
@@ -180,10 +173,12 @@ var wapp = {
 		$input.keyup(function () { wapp.inputResize(this); });
 		$input.keydown(function () { wapp.inputKeyDown(this); });
 
-		emojis.createPicker({
-			el: $emoji,
-			inputEl: $input,
-		});
+		$('#script_emojis')[0].loaded(function () {
+			emojis.createPicker({
+				el: $emoji,
+				inputEl: $input,
+			});
+		})
 		
 		// Boton Template
 		var $div = $('<div/>', {
