@@ -4,7 +4,7 @@
 
 $(document).ready(function () {
 	$.ajax({
-		url: 'https://cloudycrm.net/c/wapp/emojis.asp',
+		url: 'https://cloudycrm.net/c/emojis.asp',
 		dataType: 'jsonp',
 	})
 		.done(function (data, textStatus, jqXHR) {
@@ -91,15 +91,15 @@ var emojis = {
 			var $picker = $('#emojiPicker');
 			if ($picker.outerWidth() > $(document).width()) {
 				posX = ($(window).width() - $picker.outerWidth()) / 2;
-			} else if (event.pageX + $picker.outerWidth() > $(document).width()) {
+			} else if (e.pageX + $picker.outerWidth() > $(document).width()) {
 				posX = $(document).width() - $picker.outerWidth();
 			} else {
-				posX = event.pageX;
+				posX = e.pageX;
 			}
-			if (event.pageY - 200 > 0) {
-				posY = event.pageY - 200;
+			if (e.pageY - 200 > 0) {
+				posY = e.pageY - 200;
 			} else {
-				posY = event.pageY + 30;
+				posY = e.pageY + 30;
 			}
 			$picker.css({
 				left: posX + 'px',
