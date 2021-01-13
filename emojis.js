@@ -27,6 +27,12 @@ $(document).ready(function () {
 			
 			data.forEach(it => {
 				var emoji = it.html;
+				if (it.modifiers) {
+					var modif = it.modifiers.split(';');
+					modif.forEach(it2 => {
+						emoji += '&#x' + parseInt(it2).toString(16) + ';';
+					})
+				}
 
 				/* Este tambien anda:
 				var code = it.utf16.split(';');
