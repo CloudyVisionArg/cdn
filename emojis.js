@@ -75,8 +75,19 @@ var emojis = {
 		for (var i = 0; i < emojis.emojisJSON.length; i++) {
 			var it = emojis.emojisJSON[i];
 			if (it.name.toLowerCase() == pName.toLowerCase()) {
+				var ret = '';
 				var code = it.utf16.split(';');
-				return String.fromCharCode(code[0], code[1]);
+				code.forEach(it2 => {
+					ret += String.fromCharCode(it2);
+				});
+				if (it.modifiers) {
+					var modif = it.modifiers.split(';');
+					modif.forEach(it2 => {
+						ret += String.fromCharCode(it2);
+					})
+				};
+
+				return ret;
 			}
 		};
 	},
