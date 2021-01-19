@@ -44,6 +44,10 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	} else {
 		div = $('<div/>').addClass('input-group').insertAfter(pControl);
 		pControl.appendTo(div);
+		if (pControl.hasClass('selectpicker')) {
+			pControl.selectpicker('destroy');
+			pControl.selectpicker('render');
+		}
 	}
 	
 	var span = $('<span/>', {
