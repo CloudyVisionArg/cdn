@@ -59,7 +59,7 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 		span.appendTo(div);
 	};
 	
-	return div;
+	return span;
 }
 
 function wappNumber(pPhone) {
