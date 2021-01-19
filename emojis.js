@@ -34,11 +34,6 @@ $(document).ready(function () {
 					})
 				}
 
-				/* Este tambien anda:
-				var code = it.utf16.split(';');
-				var emoji = String.fromCharCode(code[0], code[1]);
-				*/
-				
 				$('<i/>', {
 				}).css({
 					fontStyle: 'normal',

@@ -23,39 +23,35 @@ function addOption(ctl, option, value) {
 }
 
 function addPhoneButton(pControl) {
-	addInputButton(pControl, "fa fa-phone", "window.open('tel:' + $('#" + pControl.attr("id") + "').val())");
+	addInputButton(pControl, 'fa fa-phone', 'window.open(\'tel:\' + $(\'#' + pControl.attr('id') + '\').val())');
 }
 
 function addWappButton(pControl) {
-	addInputButton(pControl, "fa fa-whatsapp", "window.open('https://api.whatsapp.com/send?phone=' + wappNumber($('#" + pControl.attr("id") + "').val()))");
+	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'https://api.whatsapp.com/send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 }
 
 function addEmailButton(pControl) {
-	addInputButton(pControl, "fa fa-envelope", "window.open('mailto:' + $('#" + pControl.attr("id") + "').val())");
+	return addInputButton(pControl, 'fa fa-envelope', 'window.open(\'mailto:\' + $(\'#' + pControl.attr('id') + '\').val())');
 }
 
 function addInputButton(pControl, pIcon, pAction, pPrepend) {
+	//todo: retornar el boton agregado
 	var esGroup = pControl.parent().hasClass('input-group');
 	var div;
 	
 	if (esGroup) {
 		div = pControl.parent();
 	} else {
-		div = $("<div/>").addClass("input-group");
-		var newControl = pControl.clone();
-		div.append(newControl);
-		if (pControl.hasClass('selectpicker')) {
-			pControl.selectpicker('destroy');
-			newControl.selectpicker('render');
-		}
+		div = $('<div/>').addClass('input-group').insertAfter(pControl);
+		pControl.appendTo(div);
 	}
 	
-	var span = $("<span/>").attr({
-		"class": "input-group-addon add-on",
-		"style": "cursor: pointer;",
-		"onclick": pAction,
+	var span = $('<span/>', {
+		'class': 'input-group-addon add-on',
+		'style': 'cursor: pointer;',
+		'onclick': pAction,
 	});
-	span.append("<span class='" + pIcon + "'></span></span>");
+	span.append('<span class="' + pIcon + '"></span></span>');
 	
 	if (pPrepend) {
 		span.prependTo(div);
@@ -63,11 +59,11 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 		span.appendTo(div);
 	};
 	
-	if (!esGroup) pControl.replaceWith(div);
+	return div;
 }
 
 function wappNumber(pPhone) {
-	var ret = pPhone.replace(/\+| |\(|\)|-/g, "");
+	var ret = pPhone.replace(/\+| |\(|\)|-/g, '');
 	if (ret.length == 10) ret = '54' + ret;
 	return ret;
 }
