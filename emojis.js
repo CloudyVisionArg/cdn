@@ -136,13 +136,13 @@ var emojis = {
 					left = inp.value.substring(0, selStart),
 					right = inp.value.substring(selEnd);
 				inp.value = left + pValue + right;
-				inp.focus();
 				var len = pValue.length;
 				inp.setSelectionRange(selStart + len, selStart + len);
 				//inp.blur()
 			} else {
 				inp.value += pValue;
 			}
+			inp.focus();
 			$(pInput).change();
 		} catch (err) {
 			debugger;

@@ -5,6 +5,7 @@
 	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
 	headTag.appendChild(linkTag);
 
+	includeJs('javascript');
 	includeJs('emojis');
 }());
 
@@ -644,8 +645,7 @@ var wapp = {
 		DoorsAPI.folderSearch(wapp.templatesFolder, 'text', 'name = \'' + template + '\'').then(
 			function (res) {
 				var $inp = $(el).closest('.wapp-reply').find('.wapp-reply-input textarea');
-				//todo: insertAtCaret
-				$inp.val(res[0]['TEXT']);
+				insertAtCaret($inp, res[0]['TEXT']);
 				wapp.inputResize($inp[0]);
 				$inp.focus();
 			},

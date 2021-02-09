@@ -1,3 +1,29 @@
+// Inserta pValue en pInput, en la posicion del cursor 
+function insertAtCaret(pInput, pValue) {
+	try {
+		var inp = $(pInput)[0];
+		if (document.all && inp.createTextRange && inp.caretPos) {
+			var cPos = inp.caretPos;
+			cPos.text = '' == cPos.text.charAt(cPos.text.length - 1) ? pValue + '' : pValue
+		} else if (inp.setSelectionRange) {
+			var selStart = inp.selectionStart,
+				selEnd = inp.selectionEnd,
+				left = inp.value.substring(0, selStart),
+				right = inp.value.substring(selEnd);
+			inp.value = left + pValue + right;
+			var len = pValue.length;
+			inp.setSelectionRange(selStart + len, selStart + len);
+			//inp.blur()
+		} else {
+			inp.value += pValue;
+		}
+		inp.focus();
+		$(pInput).change();
+	} catch (err) {
+		debugger;
+	}
+}	
+
 // string.replaceAll
 if (typeof String.prototype.replaceAll !== 'function') {
 	String.prototype.replaceAll = function(search, replacement) {
