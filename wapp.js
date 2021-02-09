@@ -108,14 +108,14 @@ var wapp = {
 			class: 'col-xs-5 wapp-heading-title',
 		}).appendTo($heading);
 		
-		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
+		$headingLeft.append('<b>1-' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
 			class: 'col-xs-2 wapp-heading-title session',
 			style: 'text-align: center;',
 		}).appendTo($heading);
 		
-		$headingSession.append('1<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
+		$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
