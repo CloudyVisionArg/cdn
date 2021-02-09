@@ -115,7 +115,7 @@ var wapp = {
 			style: 'text-align: center;',
 		}).appendTo($heading);
 		
-		$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
+		$headingSession.append('1<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
