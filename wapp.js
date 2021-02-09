@@ -108,7 +108,7 @@ var wapp = {
 			class: 'col-xs-5 wapp-heading-title',
 		}).appendTo($heading);
 		
-		$headingLeft.append('<b>10-' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
+		$headingLeft.append('<b>11-' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
 			class: 'col-xs-2 wapp-heading-title session',
