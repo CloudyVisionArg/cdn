@@ -172,7 +172,7 @@ var wapp = {
 		var $input = $('<textarea/>').appendTo($div);
 		$input.change(function () { wapp.inputResize(this); });
 		$input.keyup(function () { wapp.inputResize(this); });
-		$input.keydown(function () { wapp.inputKeyDown(this); });
+		$input.keydown(function (a,b,c,d) { debugger; wapp.inputKeyDown(this); });
 
 		$('#script_emojis')[0].loaded(function () {
 			emojis.createPicker({
