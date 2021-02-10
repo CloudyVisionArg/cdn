@@ -172,7 +172,7 @@ var wapp = {
 		var $input = $('<textarea/>').appendTo($div);
 		$input.change(function () { wapp.inputResize(this); });
 		$input.keyup(function () { wapp.inputResize(this); });
-		$input.keydown(function (a,b,c,d) { debugger; wapp.inputKeyDown(this); });
+		$input.keydown(function (e) { wapp.inputKeyDown(this, e); });
 
 		$('#script_emojis')[0].loaded(function () {
 			emojis.createPicker({
@@ -574,12 +574,12 @@ var wapp = {
 	},
 
 	// Enter manda, shift enter nueva linea
-	inputKeyDown: function (el,b,c,d) {
+	inputKeyDown: function (el, ev) {
 		debugger;
-		var keyCode = event.which || event.keyCode;
-		if (keyCode == 13 && !event.shiftKey) {
+		var keyCode = ev.which || ev.keyCode;
+		if (keyCode == 13 && !ev.shiftKey) {
 			// send
-			event.preventDefault();
+			ev.preventDefault();
 			wapp.send(el);
 		}
 	},
