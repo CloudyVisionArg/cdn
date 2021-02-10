@@ -574,7 +574,8 @@ var wapp = {
 	},
 
 	// Enter manda, shift enter nueva linea
-	inputKeyDown: function (el) {
+	inputKeyDown: function (el,b,c,d) {
+		debugger;
 		var keyCode = event.which || event.keyCode;
 		if (keyCode == 13 && !event.shiftKey) {
 			// send
