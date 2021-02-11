@@ -34,14 +34,14 @@ function includeJs() {
 	var src = '';
 	var id = arguments[0].toLowerCase();
 	if (id == 'javascript') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@13/javascript.js'
-		src = 'http://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@14/javascript.js'
+		//src = 'http://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
 	} else if (id == 'emojis') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@9/emojis.js'
-		src = 'http://cloudycrm.net/c/gitcdn.asp?path=/emojis.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@14/emojis.js'
+		//src = 'http://cloudycrm.net/c/gitcdn.asp?path=/emojis.js';
 	} else if (id == 'whatsapp') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@4/wapp.js';
-		src = 'http://cloudycrm.net/c/gitcdn.asp?path=/wapp.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@14/wapp.js';
+		//src = 'http://cloudycrm.net/c/gitcdn.asp?path=/wapp.js';
 	} else if (id == 'maps') {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/maps.js';
 	} else if (id == 'qrcode') {
