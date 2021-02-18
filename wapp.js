@@ -73,8 +73,6 @@ $(document).ready(function () {
 					$picker.on('click', 'li', function (e) {
 						var $this = $(this);
 						wapp.template($this.attr('data-value'), $this.closest('div')[0].target);
-						//insertAtCaret($(this).parent()[0].target, $(this).html());
-						//e.stopPropagation();
 					});
 
 					$(document).click(function () {
@@ -217,7 +215,7 @@ var wapp = {
 				top: posY + 'px',
 				zIndex: 1000,
 			});
-			$picker[0].target = $(this).closest('.wapp-reply').find('.wapp-reply-input textarea');
+			$picker[0].target = $(this).closest('.wapp-reply').find('.wapp-reply-input textarea')[0];
 			$picker.show();
 			e.stopPropagation();
 		});
