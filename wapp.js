@@ -70,7 +70,8 @@ $(document).ready(function () {
 					);
 
 					$picker.on('click', 'li', function (e) {
-						wapp.template(this.html(), $(this).closest('div')[0].target);
+						var $this = $(this);
+						wapp.template($this, $this.closest('div')[0].target);
 						//insertAtCaret($(this).parent()[0].target, $(this).html());
 						//e.stopPropagation();
 					});
