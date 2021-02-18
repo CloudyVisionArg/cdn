@@ -7,7 +7,6 @@
 
 	includeJs('javascript');
 	includeJs('emojis');
-	alert('hola');
 }());
 
 $(document).ready(function () {
