@@ -59,6 +59,7 @@ $(document).ready(function () {
 						overflowY: 'scroll',
 					}).appendTo($(document.body));
 
+					debugger;
 					DoorsAPI.folderSearch(fld, 'name', '', 'name').then(
 						function (res) {
 							$ul = $('<ul/>').appendTo($picker);
