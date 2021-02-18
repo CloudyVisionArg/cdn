@@ -61,7 +61,7 @@ $(document).ready(function () {
 
 					DoorsAPI.folderSearch(wapp.templatesFolder, 'name', '', 'name').then(
 						function (res) {
-							$ul = $('<ul/>').appendTo($picker);
+							var $ul = $('<ul/>').appendTo($picker);
 							res.forEach(it => {
 								$li = $('<li/>').appendTo($ul);
 								$li.append(it['NAME']);
@@ -69,6 +69,11 @@ $(document).ready(function () {
 						}
 					);
 
+					$picker.on('click', 'li', function (e) {
+						alert(this);
+						//insertAtCaret($(this).parent()[0].target, $(this).html());
+						//e.stopPropagation();
+					});
 
 					$(document).click(function () {
 						$picker.hide()
