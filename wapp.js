@@ -62,7 +62,10 @@ $(document).ready(function () {
 					DoorsAPI.folderSearch(fld, 'name', '', 'name').then(
 						function (res) {
 							$ul = $('<ul/>').appendTo($picker);
-							debugger;
+							res.forEach(it => {
+								$li = $('<li/>').appendTo($ul);
+								$li.append(it['NAME']);
+							})
 						}
 					);
 
