@@ -64,6 +64,7 @@ $(document).ready(function () {
 							var $ul = $('<ul/>').appendTo($picker);
 							res.forEach(it => {
 								$li = $('<li/>').appendTo($ul);
+								$li.attr('data-value', it['NAME']);
 								$li.append(it['NAME']);
 							})
 						}
@@ -71,7 +72,7 @@ $(document).ready(function () {
 
 					$picker.on('click', 'li', function (e) {
 						var $this = $(this);
-						wapp.template($this, $this.closest('div')[0].target);
+						wapp.template($this.attr('data-value'), $this.closest('div')[0].target);
 						//insertAtCaret($(this).parent()[0].target, $(this).html());
 						//e.stopPropagation();
 					});
