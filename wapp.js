@@ -1,3 +1,9 @@
+/*
+todo:
+- Hacer independiente de bootstrap y portar al app
+- Mejorar el estilo del picker de plantillas
+*/
+
 (function() {
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
