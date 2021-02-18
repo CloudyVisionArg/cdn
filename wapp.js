@@ -70,7 +70,7 @@ $(document).ready(function () {
 					);
 
 					$picker.on('click', 'li', function (e) {
-						alert(this);
+						wapp.template(this.html(), $(this).closest('div')[0].target);
 						//insertAtCaret($(this).parent()[0].target, $(this).html());
 						//e.stopPropagation();
 					});
@@ -695,15 +695,12 @@ var wapp = {
 		});
 	},
 	
-	template: function (el) {
-		var template = 'support_resume'; //todo: seleccionar
-		
+	template: function (template, target) {
 		DoorsAPI.folderSearch(wapp.templatesFolder, 'text', 'name = \'' + template + '\'').then(
 			function (res) {
-				var $inp = $(el).closest('.wapp-reply').find('.wapp-reply-input textarea');
-				insertAtCaret($inp, res[0]['TEXT']);
-				wapp.inputResize($inp[0]);
-				$inp.focus();
+				insertAtCaret(target, res[0]['TEXT']);
+				wapp.inputResize(target);
+				$(target).focus();
 			},
 			function (err) {
 				console.log(err);
