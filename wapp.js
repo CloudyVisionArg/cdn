@@ -44,6 +44,25 @@ $(document).ready(function () {
 			DoorsAPI.foldersGetByName(res, 'templates').then(
 				function (fld) {
 					wapp.templatesFolder = fld.FldId;
+
+					var $picker = $('<div/>', {
+						id: 'wappTemplatePicker',
+					}).css({
+						backgroundColor: '#ECECEC',
+						borderRadius: '12px',
+						display: 'none',
+						position: 'absolute',
+						border: '3px solid #ECECEC',
+						padding: '5px',
+						height: '170px',
+						width: '350px',
+						overflowY: 'scroll',
+					}).appendTo($(document.body));
+
+					$(document).click(function () {
+						$picker.hide()
+					});
+		
 				}
 			);
 	
@@ -160,8 +179,29 @@ var wapp = {
 			class: 'fa fa-copy',
 		}).appendTo($div);
 		
-		$template.click(function () {
-			wapp.template(this);
+		$template.click(function (e) {
+			var posX, posY;
+			var $picker = $('#wappTemplatePicker');
+			if ($picker.outerWidth() > $(document).width()) {
+				posX = ($(window).width() - $picker.outerWidth()) / 2;
+			} else if (e.pageX + $picker.outerWidth() > $(document).width()) {
+				posX = $(document).width() - $picker.outerWidth();
+			} else {
+				posX = e.pageX;
+			}
+			if (e.pageY - 200 > 0) {
+				posY = e.pageY - 200;
+			} else {
+				posY = e.pageY + 30;
+			}
+			$picker.css({
+				left: posX + 'px',
+				top: posY + 'px',
+				zIndex: 1000,
+			});
+			$picker[0].target = $(this).closest('.wapp-reply').find('.wapp-reply-input textarea');
+			$picker.show();
+			e.stopPropagation();
 		});
 
 		// Input
