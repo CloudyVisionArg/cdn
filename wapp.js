@@ -689,7 +689,7 @@ var wapp = {
 				url: '/c/codelibrun2.asp?codelib=WhatsappXHR',
 				method: 'POST',
 				data: {
-					wappaction: 'getDate',
+					wappaction: 'getDatee',
 				},
 			})
 				.done(function (data, textStatus, jqXHR) {
