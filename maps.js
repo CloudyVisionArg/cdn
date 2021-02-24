@@ -116,11 +116,11 @@ var maps = {
 		} else {
 			// La 1ra vez centra el mapa en la ubicacion del usuario
 			if (!maps.mapCentered) {
-	        	if (navigator.geolocation) {
+                try {
 	            	navigator.geolocation.getCurrentPosition(function (position) {
 	            		maps.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 	            	})
-	        	} else {
+	        	} catch {
 	        		maps.map.setCenter(new google.maps.LatLng(-31.41, -64.18)); // Cordoba
 	        	}
 			};
