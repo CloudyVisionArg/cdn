@@ -43,7 +43,7 @@ function includeJs() {
 		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@16/wapp.js';
 		src = 'http://cloudycrm.net/c/gitcdn.asp?path=/wapp.js';
 	} else if (id == 'maps') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@17/maps.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@18/maps.js';
 	} else if (id == 'qrcode') {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@5/qrcode.js';
 	} else {
