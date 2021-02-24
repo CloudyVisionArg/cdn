@@ -6,40 +6,70 @@
         scriptTag.type = 'text/javascript';
         scriptTag.async = true;
         scriptTag.defer = true;
-		scriptTag.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.initAutocompletes&types=geocode&language=es-ES';
+		scriptTag.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.init&language=es-ES';
 		headTag.appendChild(scriptTag);
 	}
 }());
 
 var maps = {
-    initAutocompletes: function () {
+	map: undefined,
+	mapMarker: undefined,
+	pickerTarget: undefined,
+	mapCentered: undefined,
+	
+    init: function () {
         $(document).ready(function () {
+        	// Crea los autocompletes
             $('.maps-autocomplete').each(function () {
                 var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
-                ac.addListener('place_changed', maps.fillInAddress);
+                ac.addListener('place_changed', maps.placeChanged);
                 ac.inputEl = this;
                 this.mapsAutocomplete = ac;
             });
+
+			// Crea el picker con el map
+			var $picker = $('<div/>', {
+				id: 'mapsLocationPicker',
+			}).css({
+				borderRadius: '12px',
+				display: 'none',
+				position: 'absolute',
+				border: '3px solid #ECECEC',
+			}).appendTo($(document.body));
+			
+		    maps.map = new google.maps.Map($picker[0], { zoom: 11 });
+	
+	        google.maps.event.addListener(maps.map, 'click', function (e) {                
+		        var loc = e.latLng;
+		        maps.setMarker(loc);
+		        maps.updateLocation();
+	        });
+	
+		    $picker.click(function (e) {
+		    	e.stopPropagation();
+		    });
+		    
+			$(document).click(function () {
+				$picker.hide()
+			});
         })
     },
 
-    fillInAddress: function () {
+    placeChanged: function () {
         var place = this.getPlace();
         var el = this.inputEl;
-		$(el).next('span').css('display', 'block');
+		$(el).next('span').css('display', place ? 'block' : 'none');
 		onch = el.getAttribute('customonchange');
 		if (onch) eval(onch + '(place)');
     },
 
     onInputChange: function (el) {
-		$(el).next('span').css('display', 'none');
-		onch = el.getAttribute('customonchange');
-		if (onch) eval(onch + '(null)');
+		el.mapsAutocomplete.set('place', undefined);
     },
 
-    geolocate: function (el) {
+    setBounds: function (el) {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.getCurrentPosition(function (position) {
                 var geolocation = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
@@ -52,4 +82,101 @@ var maps = {
             });
         }
     },
+    
+    pickLocation: function (el, e) {
+    	var $picker = $('#mapsLocationPicker')
+
+		var posY, height;
+		if (e.clientY > window.innerHeight - e.clientY) {
+			// Para arriba
+			posY = e.pageY - e.clientY + 15;
+			height = e.pageY - posY - 25;
+		} else {
+			// Para abajo
+			posY = e.pageY + 25;
+			height = window.innerHeight - e.clientY - 40;
+		}
+
+		$picker.css({
+			left: '5%',
+			width: '90%',
+			top: posY + 'px',
+			height: height + 'px',
+			zIndex: 1000,
+		});
+
+		maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
+		var place = maps.pickerTarget.mapsAutocomplete.getPlace();
+		
+		if (place) {
+			// Posiciona el marcador y centra el mapa en la ubicacion seleccionada
+			maps.setMarker(place.geometry.location);
+			maps.map.setCenter(new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()));
+			
+		} else {
+			// La 1ra vez centra el mapa en la ubicacion del usuario
+			if (!maps.mapCentered) {
+	        	if (navigator.geolocation) {
+	            	navigator.geolocation.getCurrentPosition(function (position) {
+	            		maps.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+	            	})
+	        	} else {
+	        		maps.map.setCenter(new google.maps.LatLng(-31.41, -64.18)); // Cordoba
+	        	}
+			};
+
+			if (maps.mapMarker) {
+				// Borra el marker
+				maps.mapMarker.setMap(null);
+				maps.mapMarker = undefined;
+			};
+		}
+		maps.mapCentered = true;
+		
+		$picker.show();
+		e.stopPropagation();
+    },
+    
+    setMarker: function (loc) {
+        if (!maps.mapMarker) {
+            maps.mapMarker = new google.maps.Marker({
+                position: loc,
+                map: maps.map,
+                draggable: true,
+            });
+
+            google.maps.event.addListener(maps.mapMarker, 'dragend', function (e){
+                maps.updateLocation();
+            });
+            
+        } else {
+            maps.mapMarker.setPosition(loc);
+        }
+    },
+    
+    updateLocation: function () {
+		var loc = maps.mapMarker.getPosition();
+		
+		var geocoder = new google.maps.Geocoder;
+		geocoder.geocode({ 'location': loc }, function(res, status) {
+			if (status === google.maps.GeocoderStatus.OK) {
+				if (res[0]) {
+					$(maps.pickerTarget).val(res[0].formatted_address);
+      	
+      				places = new google.maps.places.PlacesService(maps.map);
+					places.getDetails({ placeId: res[0].place_id }, function (place, status) {
+						if (status === google.maps.places.PlacesServiceStatus.OK) {
+							maps.pickerTarget.mapsAutocomplete.set('place', place);
+						} else {
+							console.log('PlacesService error: ' + status);
+						}
+  					});
+      			} else {
+        			window.alert('No results found');
+				}
+    		} else {
+				console.log('Geocoder error: ' + status);
+			}
+		});
+	},
 }
