@@ -68,18 +68,22 @@ var maps = {
     },
 
     setBounds: function (el) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle({
-                    center: geolocation,
-                    radius: position.coords.accuracy
+        try {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var geolocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    var circle = new google.maps.Circle({
+                        center: geolocation,
+                        radius: position.coords.accuracy
+                    });
+                    el.mapsAutocomplete.setBounds(circle.getBounds());
                 });
-                el.mapsAutocomplete.setBounds(circle.getBounds());
-            });
+            }
+        } catch (e) {
+            console.log(e);
         }
     },
     
