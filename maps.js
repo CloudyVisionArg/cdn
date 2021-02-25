@@ -80,6 +80,13 @@ var maps = {
                         radius: position.coords.accuracy
                     });
                     el.mapsAutocomplete.setBounds(circle.getBounds());
+                },
+                function (err) {
+                    var circle = new google.maps.Circle({
+                        center: { lat: -31.41, lng: -64.18 },
+                        radius: 1000,
+                    });
+                    el.mapsAutocomplete.setBounds(circle.getBounds());
                 }
             );
         }
