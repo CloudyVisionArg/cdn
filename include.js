@@ -63,8 +63,8 @@ function includeJs() {
 	}
 	
 	if (src) {
-		var $script = jQuery('#script_' + id);
-		if ($script.length == 0) {
+		var script = document.getElementById('script_' + id);
+		if (!script) {
 			var D = document
 			var scriptNode = D.createElement('script');
 			scriptNode.id = 'script_' + id;
@@ -98,7 +98,7 @@ function includeJs() {
 			cont.appendChild(scriptNode);
 			
 		} else {
-			if (callback) $script[0].loaded(callback);
+			if (callback) script.loaded(callback);
 		}
 	}
 }
