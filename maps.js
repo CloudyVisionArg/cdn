@@ -75,7 +75,7 @@ var maps = {
 		if (onch) eval(onch + '(place)');
 
         // Setea el place en el hidden
-        var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
+        var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
         $inputVal.val(place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng());
     },
 
