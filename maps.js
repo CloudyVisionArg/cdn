@@ -25,6 +25,8 @@ var maps = {
                 ac.addListener('place_changed', maps.placeChanged);
                 ac.inputEl = this;
                 this.mapsAutocomplete = ac;
+
+                debugger;
             });
 
 			// Crea el picker con el map
@@ -175,7 +177,7 @@ var maps = {
 				if (res[0]) {
 					$(maps.pickerTarget).val(res[0].formatted_address);
       	
-      				places = new google.maps.places.PlacesService(maps.map);
+      				var places = new google.maps.places.PlacesService(maps.map);
 					places.getDetails({ placeId: res[0].place_id }, function (place, status) {
 						if (status === google.maps.places.PlacesServiceStatus.OK) {
 							maps.pickerTarget.mapsAutocomplete.set('place', place);
