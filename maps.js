@@ -54,6 +54,7 @@ var maps = {
   					});
                 }
 
+                // Espera un segundo para que no se dispare con el setPlace de arriba
                 setTimeout(function () { ac.addListener('place_changed', maps.placeChanged); }, 1000);
             });
 
@@ -68,7 +69,6 @@ var maps = {
     },
 
     placeChanged: function () {
-        debugger;
         var place = this.getPlace();
         var el = this.inputEl;
 		$(el).next('span').css('display', place ? 'block' : 'none');
