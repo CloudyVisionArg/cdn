@@ -1,18 +1,5 @@
 (function(){
     includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.init&language=es-ES');
-
-    /*
-	if ($('#script_mapsapi').length == 0) {
-		let headTag = document.getElementsByTagName('head')[0];
-		let scriptTag = document.createElement('script');
-		scriptTag.id = 'script_mapsapi';
-        scriptTag.type = 'text/javascript';
-        scriptTag.async = true;
-        scriptTag.defer = true;
-		scriptTag.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.init&language=es-ES';
-		headTag.appendChild(scriptTag);
-	}
-    */
 }());
 
 var maps = {
