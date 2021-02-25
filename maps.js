@@ -81,7 +81,6 @@ var maps = {
             $inputVal.val('');
         };
 
-        debugger;
         var componentName = {
             street_number: 'short_name',
             route: 'long_name',
