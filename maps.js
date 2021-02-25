@@ -68,9 +68,9 @@ var maps = {
     },
 
     setBounds: function (el) {
-        try {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
                     var geolocation = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
@@ -80,10 +80,11 @@ var maps = {
                         radius: position.coords.accuracy
                     });
                     el.mapsAutocomplete.setBounds(circle.getBounds());
-                });
-            }
-        } catch (e) {
-            console.log(e);
+                },
+                function (e) {
+                    debugger;
+                }
+            );
         }
     },
     
@@ -120,12 +121,15 @@ var maps = {
 		} else {
 			// La 1ra vez centra el mapa en la ubicacion del usuario
 			if (!maps.mapCentered) {
-                try {
-	            	navigator.geolocation.getCurrentPosition(function (position) {
-	            		maps.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-	            	})
-	        	} catch {
-	        		maps.map.setCenter(new google.maps.LatLng(-31.41, -64.18)); // Cordoba
+                if (navigator.geolocation) {
+	            	navigator.geolocation.getCurrentPosition(
+                        function (position) {
+	            		    maps.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+	            	    },
+                        function (err) {
+                            maps.map.setCenter(new google.maps.LatLng(-31.41, -64.18)); // Cordoba
+                        }
+                    )
 	        	}
 			};
 
