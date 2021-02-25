@@ -71,12 +71,17 @@ var maps = {
         var place = this.getPlace();
         var el = this.inputEl;
 		$(el).next('span').css('display', place ? 'block' : 'none');
-		onch = el.getAttribute('customonchange');
-		if (onch) eval(onch + '(place)');
 
         // Setea el place en el hidden
         var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
-        $inputVal.val(place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng());
+        if (place) {
+            $inputVal.val(place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng());
+        } else {
+            $inputVal.val('');
+        };
+
+        onch = el.getAttribute('customonchange');
+		if (onch) eval(onch + '(place)');
     },
 
     onInputChange: function (el) {
