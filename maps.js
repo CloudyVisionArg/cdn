@@ -19,17 +19,7 @@ var maps = {
 	
     init: function () {
         $(document).ready(function () {
-        	// Crea los autocompletes
-            $('.maps-autocomplete').each(function () {
-                var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
-                ac.addListener('place_changed', maps.placeChanged);
-                ac.inputEl = this;
-                this.mapsAutocomplete = ac;
-
-                debugger;
-            });
-
-			// Crea el picker con el map
+            // Crea el picker con el map
 			var $picker = $('<div/>', {
 				id: 'mapsLocationPicker',
 			}).css({
@@ -46,7 +36,28 @@ var maps = {
 		        maps.setMarker(loc);
 		        maps.updateLocation();
 	        });
-	
+
+        	// Crea los autocompletes
+            $('.maps-autocomplete').each(function () {
+                var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
+                ac.inputEl = this;
+                this.mapsAutocomplete = ac;
+
+                // Setea el place (value) del Autocomplete
+                var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
+                if ($inputVal.val()) {
+                    debugger;
+                    var places = new google.maps.places.PlacesService(maps.map);
+                    places.getDetails({ placeId: $inputVal.val().split(';')[0] }, function (place, status) {
+						if (status === google.maps.places.PlacesServiceStatus.OK) {
+							ac.set('place', place);
+						}
+  					});
+                }
+
+                ac.addListener('place_changed', maps.placeChanged);
+            });
+
 		    $picker.click(function (e) {
 		    	e.stopPropagation();
 		    });
