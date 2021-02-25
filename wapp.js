@@ -11,10 +11,12 @@ todo:
 	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
 	headTag.appendChild(linkTag);
 
-	if (device) { // APP
-		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibsvc.asp'
-	} else {
+	if (typeof device == 'undefined' || typeof app7 == 'undefined') {
+		// Web
 		wapp.codelibUrl = '/c/codelibrun2.asp';
+	} else {
+		// App
+		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibsvc.asp'
 	};
 
 	includeJs('javascript');
@@ -659,7 +661,7 @@ var wapp = {
 			var fromN = $chat.attr('data-internal-number');
 			var toN = $chat.attr('data-external-number');
 			$.ajax({
-				url: '/c/codelibrun2.asp?codelib=WhatsappXHR',
+				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
 				data: {
 					wappaction: 'send',
@@ -693,7 +695,7 @@ var wapp = {
 	serverDate: function () {
 	    return new Promise(function (resolve, reject) {
 			$.ajax({
-				url: '/c/codelibrun2.asp?codelib=WhatsappXHR',
+				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
 				data: {
 					wappaction: 'getDatee',
@@ -724,7 +726,7 @@ var wapp = {
 	msgMedia: function (pSid) {
 	    return new Promise(function (resolve, reject) {
 			$.ajax({
-				url: '/c/codelibrun2.asp?codelib=WhatsappXHR',
+				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
 				data: {
 					wappaction: 'msgMedia',
