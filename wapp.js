@@ -16,16 +16,16 @@ todo:
 }());
 
 $(document).ready(function () {
-	if (typeof device == 'undefined' || typeof app7 == 'undefined') {
-		// Web
-		wapp.codelibUrl = '/c/codelibrun2.asp';
-	} else {
-		// App
-		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibsvc.asp'
-	};
-
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
+			if (typeof device == 'undefined' || typeof app7 == 'undefined') {
+				// Web
+				wapp.codelibUrl = '/c/codelibrun2.asp';
+			} else {
+				// App
+				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibsvc.asp'
+			};
+		
 			wapp.rootFolder = res;
 			
 			DoorsAPI.foldersGetByName(res, 'messages').then(
