@@ -68,6 +68,7 @@ var maps = {
     },
 
     placeChanged: function () {
+        debugger;
         var place = this.getPlace();
         var el = this.inputEl;
 		$(el).next('span').css('display', place ? 'block' : 'none');
