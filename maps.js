@@ -1,4 +1,7 @@
 (function(){
+    includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.init&language=es-ES');
+
+    /*
 	if ($('#script_mapsapi').length == 0) {
 		let headTag = document.getElementsByTagName('head')[0];
 		let scriptTag = document.createElement('script');
@@ -9,6 +12,7 @@
 		scriptTag.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.init&language=es-ES';
 		headTag.appendChild(scriptTag);
 	}
+    */
 }());
 
 var maps = {
@@ -126,6 +130,7 @@ var maps = {
                     el.mapsAutocomplete.setBounds(circle.getBounds());
                 },
                 function (err) {
+                    // Centra en Cordoba
                     var circle = new google.maps.Circle({
                         center: { lat: -31.41, lng: -64.18 },
                         radius: 1000,
