@@ -11,6 +11,11 @@ todo:
 	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
 	headTag.appendChild(linkTag);
 
+	includeJs('javascript');
+	includeJs('emojis');
+}());
+
+$(document).ready(function () {
 	if (typeof device == 'undefined' || typeof app7 == 'undefined') {
 		// Web
 		wapp.codelibUrl = '/c/codelibrun2.asp';
@@ -19,11 +24,6 @@ todo:
 		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibsvc.asp'
 	};
 
-	includeJs('javascript');
-	includeJs('emojis');
-}());
-
-$(document).ready(function () {
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
 			wapp.rootFolder = res;
