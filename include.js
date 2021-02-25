@@ -63,7 +63,7 @@ function includeJs() {
 	}
 	
 	if (src) {
-		var $script = $('#script_' + id);
+		var $script = jQuery('#script_' + id);
 		if ($script.length == 0) {
 			var D = document
 			var scriptNode = D.createElement('script');
