@@ -81,8 +81,31 @@ var maps = {
             $inputVal.val('');
         };
 
+        debugger;
+        var componentName = {
+            street_number: 'short_name',
+            route: 'long_name',
+            locality: 'long_name',
+            administrative_area_level_1: 'short_name',
+            administrative_area_level_2: 'short_name',
+            country: 'long_name',
+            postal_code: 'short_name'  
+        };
+    
+        var addressComponents;
+        
+        if (place) {
+            addressComponents = {};
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (componentName[addressType]) {
+                    addressComponents[addressType] = place.address_components[i][componentName[addressType]];
+                }
+            }
+        };
+            
         onch = el.getAttribute('customonchange');
-		if (onch) eval(onch + '(place)');
+		if (onch) eval(onch + '(place, addressComponents)');
     },
 
     onInputChange: function (el) {
