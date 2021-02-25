@@ -80,9 +80,6 @@ var maps = {
                         radius: position.coords.accuracy
                     });
                     el.mapsAutocomplete.setBounds(circle.getBounds());
-                },
-                function (e) {
-                    debugger;
                 }
             );
         }

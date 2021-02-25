@@ -11,6 +11,12 @@ todo:
 	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
 	headTag.appendChild(linkTag);
 
+	if (device) { // APP
+		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibsvc.asp'
+	} else {
+		wapp.codelibUrl = '/c/codelibrun2.asp';
+	};
+
 	includeJs('javascript');
 	includeJs('emojis');
 }());
@@ -124,6 +130,7 @@ var wapp = {
 	symbolsFolder: undefined,
 	templatesFolder: undefined,
 	loggedUser: undefined,
+	codelibUrl: undefined,
 	
 	viewImage: function (e) {
 		var $modal = $('#wappModal');
