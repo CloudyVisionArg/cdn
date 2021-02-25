@@ -54,7 +54,7 @@ var maps = {
   					});
                 }
 
-                ac.addListener('place_changed', maps.placeChanged);
+                setTimeout(function () { ac.addListener('place_changed', maps.placeChanged); }, 1000);
             });
 
 		    $picker.click(function (e) {
