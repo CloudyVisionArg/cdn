@@ -46,7 +46,6 @@ var maps = {
                 // Setea el place (value) del Autocomplete
                 var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
                 if ($inputVal.val()) {
-                    debugger;
                     var places = new google.maps.places.PlacesService(maps.map);
                     places.getDetails({ placeId: $inputVal.val().split(';')[0] }, function (place, status) {
 						if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -74,6 +73,10 @@ var maps = {
 		$(el).next('span').css('display', place ? 'block' : 'none');
 		onch = el.getAttribute('customonchange');
 		if (onch) eval(onch + '(place)');
+
+        // Setea el place en el hidden
+        var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
+        $inputVal.val(place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng());
     },
 
     onInputChange: function (el) {
