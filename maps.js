@@ -129,6 +129,7 @@ var maps = {
     },
     
     pickLocation: function (el, e) {
+        debugger;
     	var $picker = $('#mapsLocationPicker')
 
 		var posY, height;
