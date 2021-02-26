@@ -167,11 +167,7 @@ var maps = {
 	            	navigator.geolocation.getCurrentPosition(
                         function (position) {
 	            		    maps.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-	            	    },
-                        function (err) {
-                            debugger;
-                        },
-                        { timeout: 10000 },
+	            	    }
                     )
 	        	}
 			};
