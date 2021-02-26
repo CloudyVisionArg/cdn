@@ -156,7 +156,11 @@ var maps = {
 			zIndex: 1000,
 		});
 
-		maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
+        if (typeof(cordova) == 'object') {
+            maps.pickerTarget = el;
+        } else {
+            maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
+        }
 		var place = maps.pickerTarget.mapsAutocomplete.getPlace();
 		
 		if (place) {
