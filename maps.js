@@ -103,28 +103,31 @@ var maps = {
     },
 
     setBounds: function (el) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    var geolocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    var circle = new google.maps.Circle({
-                        center: geolocation,
-                        radius: position.coords.accuracy
-                    });
-                    el.mapsAutocomplete.setBounds(circle.getBounds());
-                },
-                function (err) {
-                    // Centra en Cordoba
-                    var circle = new google.maps.Circle({
-                        center: { lat: -31.41, lng: -64.18 },
-                        radius: 1000,
-                    });
-                    el.mapsAutocomplete.setBounds(circle.getBounds());
-                }
-            );
+        if (!el.bounded) {
+            // Centra en Cordoba por defecto
+            var circle = new google.maps.Circle({
+                center: { lat: -31.41, lng: -64.18 },
+                radius: 1000,
+            });
+            el.mapsAutocomplete.setBounds(circle.getBounds());
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        var geolocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        var circle = new google.maps.Circle({
+                            center: geolocation,
+                            radius: position.coords.accuracy
+                        });
+                        el.mapsAutocomplete.setBounds(circle.getBounds());
+                    }
+                );
+            }
+
+            el.bounded = true;
         }
     },
     
