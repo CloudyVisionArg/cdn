@@ -1,4 +1,4 @@
-(function(){
+(function () {
     includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.init&language=es-ES');
 }());
 
@@ -28,26 +28,28 @@ var maps = {
 		        maps.updateLocation();
 	        });
 
-        	// Crea los autocompletes
-            $('.maps-autocomplete').each(function () {
-                var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
-                ac.inputEl = this;
-                this.mapsAutocomplete = ac;
+            if (typeof(cordova) != 'object') {
+                // Crea los autocompletes
+                $('.maps-autocomplete').each(function () {
+                    var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
+                    ac.inputEl = this;
+                    this.mapsAutocomplete = ac;
 
-                // Setea el place (value) del Autocomplete
-                var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
-                if ($inputVal.val()) {
-                    var places = new google.maps.places.PlacesService(maps.map);
-                    places.getDetails({ placeId: $inputVal.val().split(';')[0] }, function (place, status) {
-						if (status === google.maps.places.PlacesServiceStatus.OK) {
-							ac.set('place', place);
-						}
-  					});
-                }
+                    // Setea el place (value) del Autocomplete
+                    var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
+                    if ($inputVal.val()) {
+                        var places = new google.maps.places.PlacesService(maps.map);
+                        places.getDetails({ placeId: $inputVal.val().split(';')[0] }, function (place, status) {
+                            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                ac.set('place', place);
+                            }
+                        });
+                    }
 
-                // Espera un segundo para que no se dispare con el setPlace de arriba
-                setTimeout(function () { ac.addListener('place_changed', maps.placeChanged); }, 1000);
-            });
+                    // Espera un segundo para que no se dispare con el setPlace de arriba
+                    setTimeout(function () { ac.addListener('place_changed', maps.placeChanged); }, 1000);
+                });
+            }
 
 		    $picker.click(function (e) {
 		    	e.stopPropagation();
