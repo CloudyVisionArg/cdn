@@ -153,7 +153,7 @@ var maps = {
 			width: '90%',
 			top: posY + 'px',
 			height: height + 'px',
-			zIndex: 1000,
+			zIndex: 20000,
 		});
 
         if (typeof(cordova) == 'object') {
