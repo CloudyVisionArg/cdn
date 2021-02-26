@@ -73,6 +73,10 @@ var maps = {
         } else {
             $inputVal.val('');
         };
+        
+        if (typeof(cordova) == 'object') {
+            app7.input.checkEmptyState(el);
+        }
 
         var componentName = {
             street_number: 'short_name',
