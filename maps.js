@@ -73,7 +73,7 @@ var maps = {
         } else {
             $inputVal.val('');
         };
-        
+
         if (typeof(cordova) == 'object') {
             app7.input.checkEmptyState(el);
         }
@@ -100,7 +100,7 @@ var maps = {
             }
         };
             
-        onch = el.getAttribute('customonchange');
+        onch = el.getAttribute('onplacechange');
 		if (onch) eval(onch + '(place, addressComponents)');
     },
 
