@@ -1,5 +1,9 @@
 (function () {
-    var key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
+    if (typeof(cordova) == 'object') {
+        var key = 'AIzaSyAJFOjxlaJ-vk66EyBsooHkvEJHipJRPGs';
+    } else {
+        var key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
+    }
     includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
 }());
 
