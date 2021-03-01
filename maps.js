@@ -91,26 +91,28 @@ var maps = {
             postal_code: 'short_name'  
         };
     
-        var addressComponents;
-        
-        if (place) {
-            addressComponents = {};
-            for (var i = 0; i < place.address_components.length; i++) {
-                var addressType = place.address_components[i].types[0];
-                if (componentName[addressType]) {
-                    addressComponents[addressType] = place.address_components[i][componentName[addressType]];
-                }
-            }
-        };
-
-        // todo: disparar solo si no se esta inicializado
+        if (!el.initializing) {
+            var addressComponents;
             
-        // Evento como attr del INPUT
-        onch = el.getAttribute('onplacechange');
-        if (onch) eval(onch + '(place, addressComponents)');
+            if (place) {
+                addressComponents = {};
+                for (var i = 0; i < place.address_components.length; i++) {
+                    var addressType = place.address_components[i].types[0];
+                    if (componentName[addressType]) {
+                        addressComponents[addressType] = place.address_components[i][componentName[addressType]];
+                    }
+                }
+            };
 
-        // Evento custom
-        el.dispatchEvent(new CustomEvent('placeChange', { detail: { place: place, addressComponents: addressComponents } }));
+            // todo: disparar solo si no se esta inicializado
+                
+            // Evento como attr del INPUT
+            onch = el.getAttribute('onplacechange');
+            if (onch) eval(onch + '(place, addressComponents)');
+
+            // Evento custom
+            el.dispatchEvent(new CustomEvent('placeChange', { detail: { place: place, addressComponents: addressComponents } }));
+        }
     },
 
     onInputChange: function (el) {
