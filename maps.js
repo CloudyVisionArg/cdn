@@ -1,6 +1,11 @@
 (function () {
     var key;
     if (typeof(cordova) == 'object') {
+        /*
+        todo: falta restringir esta clave
+        https://developers.google.com/maps/documentation/javascript/get-api-key
+        No se puede ingresar la URL ionic://localhost
+        */
         key = 'AIzaSyAJFOjxlaJ-vk66EyBsooHkvEJHipJRPGs';
     } else {
         key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
