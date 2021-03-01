@@ -1,5 +1,12 @@
 (function () {
-    includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY&libraries=places&callback=maps.init&language=es-ES');
+    var key;
+    key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
+    if (typeof(cordova) == 'object') {
+        if (devicePixelRatio.platform == 'iOS') {
+            key = 'AIzaSyAbjZNdNNeJKKaty2reh5yDalfGkeYPWwI';
+        }
+    }    
+    includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
 }());
 
 var maps = {
