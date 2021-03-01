@@ -1,3 +1,7 @@
+/*
+todo: ver de ponerle un boton Cerrar al mapa
+https://developers.google.com/maps/documentation/javascript/controls#maps_control_simple-javascript
+*/
 (function () {
     var key;
     if (typeof(cordova) == 'object') {
