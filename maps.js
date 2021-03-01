@@ -76,7 +76,7 @@ var maps = {
 
         if (typeof(cordova) == 'object') {
             app7.input.checkEmptyState(el);
-            $(el).closest('.item-input').find('i.f7-icons').html('placemark' + place ? '_fill' : '');
+            $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
         } else {
             $(el).next('span').css('display', place ? 'block' : 'none');
         };
