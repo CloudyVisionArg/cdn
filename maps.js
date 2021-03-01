@@ -34,6 +34,7 @@ var maps = {
                     var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
                     ac.inputEl = this;
                     this.mapsAutocomplete = ac;
+                    ac.addListener('place_changed', maps.onPlaceChange);
 
                     // Setea el place (value) del Autocomplete
                     var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
@@ -41,14 +42,12 @@ var maps = {
                         var places = new google.maps.places.PlacesService(maps.map);
                         places.getDetails({ placeId: $inputVal.val().split(';')[0] }, function (place, status) {
                             if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                ac.inputEl.initializing = true;
                                 ac.set('place', place);
+                                ac.inputEl.initializing = undefined;
                             }
                         });
                     }
-
-                    // todo: resolver con un flag
-                    // Espera un segundo para que no se dispare con el setPlace de arriba
-                    setTimeout(function () { ac.addListener('place_changed', maps.onPlaceChange); }, 1000);
                 });
             }
 
