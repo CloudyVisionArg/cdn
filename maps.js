@@ -90,7 +90,6 @@ var maps = {
             postal_code: 'short_name'  
         };
     
-        debugger;
         if (!el.initializing) {
             var addressComponents;
             
@@ -104,8 +103,6 @@ var maps = {
                 }
             };
 
-            // todo: disparar solo si no se esta inicializado
-                
             // Evento como attr del INPUT
             onch = el.getAttribute('onplacechange');
             if (onch) eval(onch + '(place, addressComponents)');
