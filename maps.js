@@ -1,7 +1,5 @@
 (function () {
-    debugger;
-    var key;
-    key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
+    var key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
     includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
 }());
 
