@@ -81,11 +81,9 @@ var maps = {
         var el = this.inputEl;
 
         // Setea el place como value
-        var value;
+        var value = '';
         if (place) {
             value = place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng()
-        } else {
-            value = '';
         }
 
         if (typeof(cordova) == 'object') {
