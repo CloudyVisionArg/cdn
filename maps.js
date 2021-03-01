@@ -2,11 +2,6 @@
     debugger;
     var key;
     key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
-    if (typeof(cordova) == 'object') {
-        if (device.platform == 'iOS') {
-            key = 'AIzaSyAbjZNdNNeJKKaty2reh5yDalfGkeYPWwI';
-        }
-    }    
     includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
 }());
 
