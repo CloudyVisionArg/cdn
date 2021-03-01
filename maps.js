@@ -91,6 +91,7 @@ var maps = {
             postal_code: 'short_name'  
         };
     
+        debugger;
         if (!el.initializing) {
             var addressComponents;
             
