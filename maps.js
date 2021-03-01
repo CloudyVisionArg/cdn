@@ -65,32 +65,34 @@ var maps = {
         var place = this.getPlace();
         var el = this.inputEl;
 
-        // Setea el place en el hidden
-        var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
+        // Setea el place como value
+        var value;
         if (place) {
-            $inputVal.val(place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng());
+            value = place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng()
         } else {
-            $inputVal.val('');
-        };
+            value = '';
+        }
 
         if (typeof(cordova) == 'object') {
-            app7.input.checkEmptyState(el);
+            $(el).attr('data-place', value);
             $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
         } else {
+            var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
+            $inputVal.val(value);
             $(el).next('span').css('display', place ? 'block' : 'none');
         };
 
-        var componentName = {
-            street_number: 'short_name',
-            route: 'long_name',
-            locality: 'long_name',
-            administrative_area_level_1: 'short_name',
-            administrative_area_level_2: 'short_name',
-            country: 'long_name',
-            postal_code: 'short_name'  
-        };
-    
         if (!el.initializing) {
+            var componentName = {
+                street_number: 'short_name',
+                route: 'long_name',
+                locality: 'long_name',
+                administrative_area_level_1: 'short_name',
+                administrative_area_level_2: 'short_name',
+                country: 'long_name',
+                postal_code: 'short_name'  
+            };
+        
             var addressComponents;
             
             if (place) {
@@ -229,8 +231,11 @@ var maps = {
 		geocoder.geocode({ 'location': loc }, function(res, status) {
 			if (status === google.maps.GeocoderStatus.OK) {
 				if (res[0]) {
-					$(maps.pickerTarget).val(res[0].formatted_address);
-      	
+                    if (typeof(cordova) == 'object') {
+                        setInputVal($(maps.pickerTarget), res[0].formatted_address);
+                    } else {
+                        $(maps.pickerTarget).val(res[0].formatted_address);
+                    }      	
       				var places = new google.maps.places.PlacesService(maps.map);
 					places.getDetails({ placeId: res[0].place_id }, function (place, status) {
 						if (status === google.maps.places.PlacesServiceStatus.OK) {
