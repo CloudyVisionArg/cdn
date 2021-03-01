@@ -65,7 +65,6 @@ var maps = {
     onPlaceChange: function () {
         var place = this.getPlace();
         var el = this.inputEl;
-		$(el).next('span').css('display', place ? 'block' : 'none');
 
         // Setea el place en el hidden
         var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
@@ -77,6 +76,9 @@ var maps = {
 
         if (typeof(cordova) == 'object') {
             app7.input.checkEmptyState(el);
+            $(el).closest('.item-input').find('i.f7-icons').html('placemark' + place ? '_fill' : '');
+        } else {
+            $(el).next('span').css('display', place ? 'block' : 'none');
         };
 
         var componentName = {
@@ -100,6 +102,8 @@ var maps = {
                 }
             }
         };
+
+        // todo: disparar solo si no se esta inicializado
             
         // Evento como attr del INPUT
         onch = el.getAttribute('onplacechange');
