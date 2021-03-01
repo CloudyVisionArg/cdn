@@ -3,7 +3,7 @@
     var key;
     key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
     if (typeof(cordova) == 'object') {
-        if (devicePixelRatio.platform == 'iOS') {
+        if (device.platform == 'iOS') {
             key = 'AIzaSyAbjZNdNNeJKKaty2reh5yDalfGkeYPWwI';
         }
     }    
