@@ -10,7 +10,7 @@ https://developers.google.com/maps/documentation/javascript/controls#maps_contro
         https://developers.google.com/maps/documentation/javascript/get-api-key
         No se puede ingresar la URL ionic://localhost
         */
-        key = 'AIzaSyAJFOjxlaJ-vk66EyBsooHkvEJHipJRPGs';
+        key = decrypt('U2FsdGVkX185iaL06rUr5owEDYh0KurvnV77gwzyA5G5TexfU3NdsWeJGWzLGIxODStXldXsT8xQ2KHH7iwbSg==', '');
     } else {
         key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
     }
