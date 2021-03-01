@@ -46,8 +46,9 @@ var maps = {
                         });
                     }
 
+                    // todo: resolver con un flag
                     // Espera un segundo para que no se dispare con el setPlace de arriba
-                    setTimeout(function () { ac.addListener('place_changed', maps.placeChanged); }, 1000);
+                    setTimeout(function () { ac.addListener('place_changed', maps.onPlaceChange); }, 1000);
                 });
             }
 
@@ -61,7 +62,7 @@ var maps = {
         })
     },
 
-    placeChanged: function () {
+    onPlaceChange: function () {
         var place = this.getPlace();
         var el = this.inputEl;
 		$(el).next('span').css('display', place ? 'block' : 'none');
@@ -72,6 +73,10 @@ var maps = {
             $inputVal.val(place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng());
         } else {
             $inputVal.val('');
+        };
+
+        if (typeof(cordova) == 'object') {
+            app7.input.checkEmptyState(el);
         };
 
         var componentName = {
@@ -96,11 +101,6 @@ var maps = {
             }
         };
             
-
-        if (typeof(cordova) == 'object') {
-            app7.input.checkEmptyState(el);
-        };
-
         // Evento como attr del INPUT
         onch = el.getAttribute('onplacechange');
         if (onch) eval(onch + '(place, addressComponents)');
