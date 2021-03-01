@@ -100,9 +100,10 @@ var maps = {
             app7.input.checkEmptyState(el);
 
             debugger;
-            if (el.onPlaceChange) {
+            if (typeof(el.onPlaceChange) == 'function') {
                 el.onPlaceChange(place, addressComponents);
             }
+            el.dispatchEvent(new CustomEvent('placeChange', { detail: { place: place, addressComponents: addressComponents } }));
         } else {
             onch = el.getAttribute('onplacechange');
             if (onch) eval(onch + '(place, addressComponents)');
