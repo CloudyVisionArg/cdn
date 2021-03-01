@@ -1,4 +1,5 @@
 (function () {
+    debugger;
     var key;
     key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
     if (typeof(cordova) == 'object') {
