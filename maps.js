@@ -74,10 +74,6 @@ var maps = {
             $inputVal.val('');
         };
 
-        if (typeof(cordova) == 'object') {
-            app7.input.checkEmptyState(el);
-        }
-
         var componentName = {
             street_number: 'short_name',
             route: 'long_name',
@@ -100,8 +96,17 @@ var maps = {
             }
         };
             
-        onch = el.getAttribute('onplacechange');
-		if (onch) eval(onch + '(place, addressComponents)');
+        if (typeof(cordova) == 'object') {
+            app7.input.checkEmptyState(el);
+
+            debugger;
+            if (el.onPlaceChange) {
+                el.onPlaceChange(place, addressComponents);
+            }
+        } else {
+            onch = el.getAttribute('onplacechange');
+            if (onch) eval(onch + '(place, addressComponents)');
+        }
     },
 
     onInputChange: function (el) {
