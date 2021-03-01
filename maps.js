@@ -96,18 +96,17 @@ var maps = {
             }
         };
             
+
         if (typeof(cordova) == 'object') {
             app7.input.checkEmptyState(el);
+        };
 
-            debugger;
-            if (typeof(el.onPlaceChange) == 'function') {
-                el.onPlaceChange(place, addressComponents);
-            }
-            el.dispatchEvent(new CustomEvent('placeChange', { detail: { place: place, addressComponents: addressComponents } }));
-        } else {
-            onch = el.getAttribute('onplacechange');
-            if (onch) eval(onch + '(place, addressComponents)');
-        }
+        // Evento como attr del INPUT
+        onch = el.getAttribute('onplacechange');
+        if (onch) eval(onch + '(place, addressComponents)');
+
+        // Evento custom
+        el.dispatchEvent(new CustomEvent('placeChange', { detail: { place: place, addressComponents: addressComponents } }));
     },
 
     onInputChange: function (el) {
