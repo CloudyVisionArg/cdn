@@ -34,20 +34,6 @@ var maps = {
 				border: '3px solid #ECECEC',
 			}).appendTo($(document.body));
 
-            var $close = $('<div/>', {
-                //width: auto,
-                position: 'absolute',
-                zIndex: 100,
-                top: '16px',
-                right: '16px',
-                //border-radius: 4px,
-                //border: solid 1px lightgray,
-                //background-color: rgb(250,250,250),
-                //box-shadow: lightgray 0px 10px 20px,
-                //font-size: 14px,
-                //padding: 10px,
-            }).append('x').appendTo($picker);
-			
 		    $picker.click(function (e) {
 		    	e.stopPropagation();
 		    });
@@ -63,6 +49,20 @@ var maps = {
 		        maps.setMarker(loc);
 		        maps.updateLocation();
 	        });
+
+            var $close = $('<div/>', {
+                //width: auto,
+                position: 'absolute',
+                zIndex: 100,
+                top: '16px',
+                right: '16px',
+                //border-radius: 4px,
+                //border: solid 1px lightgray,
+                //background-color: rgb(250,250,250),
+                //box-shadow: lightgray 0px 10px 20px,
+                //font-size: 14px,
+                //padding: 10px,
+            }).append('x').appendTo($picker);			
 
             if (typeof(cordova) != 'object') { // En el app se inicializan de otra forma
                 // Crea los autocompletes
