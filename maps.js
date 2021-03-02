@@ -14,6 +14,7 @@ https://developers.google.com/maps/documentation/javascript/controls#maps_contro
     } else {
         key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
     }
+    key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
     includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
 }());
 
