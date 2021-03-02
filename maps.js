@@ -6,9 +6,8 @@ https://developers.google.com/maps/documentation/javascript/controls#maps_contro
     var key;
     if (typeof(cordova) == 'object') {
         /*
-        todo: falta restringir esta clave
+        todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
         https://developers.google.com/maps/documentation/javascript/get-api-key
-        No se puede ingresar la URL ionic://localhost
         */
         key = decrypt('U2FsdGVkX1980jboiLSByehdC4OHgstgnLMTIAR3jlMmshxjimk1mfzFVv2NcgRQkl+FEI8GtQM+DmvOb8Cymg==', '');
     } else {
