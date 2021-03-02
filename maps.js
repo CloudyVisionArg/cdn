@@ -37,9 +37,9 @@ var maps = {
             var $close = $('<div/>', {
                 //width: auto,
                 position: absolute,
-                z-index: 100,
-                top: 16px,
-                right: 16px,
+                zIndex: 100,
+                top: '16px',
+                right: '16px',
                 //border-radius: 4px,
                 //border: solid 1px lightgray,
                 //background-color: rgb(250,250,250),
