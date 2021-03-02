@@ -36,7 +36,7 @@ var maps = {
 
             var $close = $('<div/>', {
                 //width: auto,
-                position: absolute,
+                position: 'absolute',
                 zIndex: 100,
                 top: '16px',
                 right: '16px',
