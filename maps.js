@@ -165,10 +165,7 @@ var maps = {
         debugger;
     	var $picker = $('#mapsLocationPicker')
 
-        if ($picker.is(':visible')) {
-            $picker.hide();
-        } else {
-            
+        if (!$picker.is(':visible')) {
             var posY, height;
             if (e.clientY > window.innerHeight - e.clientY) {
                 // Para arriba
