@@ -165,60 +165,65 @@ var maps = {
         debugger;
     	var $picker = $('#mapsLocationPicker')
 
-		var posY, height;
-		if (e.clientY > window.innerHeight - e.clientY) {
-			// Para arriba
-			posY = e.pageY - e.clientY + 15;
-			height = e.pageY - posY - 25;
-		} else {
-			// Para abajo
-			posY = e.pageY + 25;
-			height = window.innerHeight - e.clientY - 40;
-		}
-
-		$picker.css({
-			left: '5%',
-			width: '90%',
-			top: posY + 'px',
-			height: height + 'px',
-			zIndex: 20000,
-		});
-
-        if (typeof(cordova) == 'object') {
-            maps.pickerTarget = el;
+        if ($picker.is(':visible')) {
+            $picker.hide();
         } else {
-            maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
-        }
-		var place = maps.pickerTarget.mapsAutocomplete.getPlace();
-		
-		if (place) {
-			// Posiciona el marcador y centra el mapa en la ubicacion seleccionada
-			maps.setMarker(place.geometry.location);
-			maps.map.setCenter(new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()));
-			
-		} else {
-			// La 1ra vez centra el mapa en la ubicacion del usuario
-			if (!maps.mapCentered) {
-                maps.map.setCenter(new google.maps.LatLng(-31.41, -64.18)); // Cordoba
-                if (navigator.geolocation) {
-	            	navigator.geolocation.getCurrentPosition(
-                        function (position) {
-	            		    maps.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-	            	    }
-                    )
-	        	}
-			};
+            
+            var posY, height;
+            if (e.clientY > window.innerHeight - e.clientY) {
+                // Para arriba
+                posY = e.pageY - e.clientY + 15;
+                height = e.pageY - posY - 25;
+            } else {
+                // Para abajo
+                posY = e.pageY + 25;
+                height = window.innerHeight - e.clientY - 40;
+            }
 
-			if (maps.mapMarker) {
-				// Borra el marker
-				maps.mapMarker.setMap(null);
-				maps.mapMarker = undefined;
-			};
-		}
-		maps.mapCentered = true;
-		
-		$picker.show();
-		e.stopPropagation();
+            $picker.css({
+                left: '5%',
+                width: '90%',
+                top: posY + 'px',
+                height: height + 'px',
+                zIndex: 20000,
+            });
+
+            if (typeof(cordova) == 'object') {
+                maps.pickerTarget = el;
+            } else {
+                maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
+            }
+            var place = maps.pickerTarget.mapsAutocomplete.getPlace();
+            
+            if (place) {
+                // Posiciona el marcador y centra el mapa en la ubicacion seleccionada
+                maps.setMarker(place.geometry.location);
+                maps.map.setCenter(new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng()));
+                
+            } else {
+                // La 1ra vez centra el mapa en la ubicacion del usuario
+                if (!maps.mapCentered) {
+                    maps.map.setCenter(new google.maps.LatLng(-31.41, -64.18)); // Cordoba
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            function (position) {
+                                maps.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+                            }
+                        )
+                    }
+                };
+
+                if (maps.mapMarker) {
+                    // Borra el marker
+                    maps.mapMarker.setMap(null);
+                    maps.mapMarker = undefined;
+                };
+            }
+            maps.mapCentered = true;
+            
+            $picker.show();
+            e.stopPropagation();
+        }
     },
     
     setMarker: function (loc) {
