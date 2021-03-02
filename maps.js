@@ -33,8 +33,30 @@ var maps = {
 				position: 'absolute',
 				border: '3px solid #ECECEC',
 			}).appendTo($(document.body));
+
+            var $close = $('<div/>', {
+                //width: auto,
+                position: absolute,
+                z-index: 100,
+                top: 16px,
+                right: 16px,
+                //border-radius: 4px,
+                //border: solid 1px lightgray,
+                //background-color: rgb(250,250,250),
+                //box-shadow: lightgray 0px 10px 20px,
+                //font-size: 14px,
+                //padding: 10px,
+            }).append('x').appendTo($picker);
 			
-		    maps.map = new google.maps.Map($picker[0], { zoom: 11 });
+		    $picker.click(function (e) {
+		    	e.stopPropagation();
+		    });
+		    
+			$(document).click(function () {
+				$picker.hide()
+			});
+
+            maps.map = new google.maps.Map($picker[0], { zoom: 11 });
 	
 	        google.maps.event.addListener(maps.map, 'click', function (e) {                
 		        var loc = e.latLng;
@@ -42,7 +64,7 @@ var maps = {
 		        maps.updateLocation();
 	        });
 
-            if (typeof(cordova) != 'object') {
+            if (typeof(cordova) != 'object') { // En el app se inicializan de otra forma
                 // Crea los autocompletes
                 $('.maps-autocomplete').each(function () {
                     var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
@@ -64,14 +86,6 @@ var maps = {
                     }
                 });
             }
-
-		    $picker.click(function (e) {
-		    	e.stopPropagation();
-		    });
-		    
-			$(document).click(function () {
-				$picker.hide()
-			});
         })
     },
 
@@ -86,9 +100,11 @@ var maps = {
         }
 
         if (typeof(cordova) == 'object') {
+            // Cambia globo vacio/lleno
             $(el).attr('data-place', value);
             $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
         } else {
+            // Muestra/oculta el tilde verde
             var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
             $inputVal.val(value);
             $(el).next('span').css('display', place ? 'block' : 'none');
