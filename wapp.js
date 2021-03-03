@@ -146,7 +146,7 @@ var wapp = {
 	
 	renderChat: function (pCont) {
 		var $heading = $('<div/>', {
-			class: 'row wapp-heading',
+			class: 'wapp-row wapp-heading',
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
