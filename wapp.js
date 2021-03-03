@@ -150,13 +150,13 @@ var wapp = {
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
-			class: 'col-xs-5 wapp-heading-title',
+			class: 'wapp-col-xs-5 wapp-heading-title',
 		}).appendTo($heading);
 		
 		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
-			class: 'col-xs-2 wapp-heading-title session',
+			class: 'wapp-col-xs-2 wapp-heading-title session',
 			style: 'text-align: center;',
 		}).appendTo($heading);
 		
@@ -164,7 +164,7 @@ var wapp = {
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
-			class: 'col-xs-5 wapp-heading-title',
+			class: 'wapp-col-xs-5 wapp-heading-title',
 			style: 'text-align: right;',
 		}).appendTo($heading);
 		
@@ -175,20 +175,20 @@ var wapp = {
 		}).appendTo(pCont);
 		
 		$messages.append(`      
-		    <div class="roww">
-				<div class="col-xs-12 wapp-previous">
+		    <div class="wapp-row">
+				<div class="wapp-col-xs-12 wapp-previous">
 					<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 				</div>
 			</div>
 		`);
 			
 		var $reply = $('<div/>', {
-			class: 'roww wapp-reply',
+			class: 'wapp-row wapp-reply',
 		}).appendTo(pCont);
 		
 		// Boton Emoji
 		var $div = $('<div/>', {
-			class: 'col-xs-1 wapp-reply-button',
+			class: 'wapp-col-xs-1 wapp-reply-button',
 		}).appendTo($reply);
 		
 		var $emoji = $('<i/>', {
@@ -197,7 +197,7 @@ var wapp = {
 		
 		// Boton Template
 		var $div = $('<div/>', {
-			class: 'col-xs-1 wapp-reply-button',
+			class: 'wapp-col-xs-1 wapp-reply-button',
 		}).appendTo($reply);
 		
 		var $template = $('<i/>', {
@@ -231,7 +231,7 @@ var wapp = {
 
 		// Input
 		var $div = $('<div/>', {
-			class: 'col-xs-9 wapp-reply-input',
+			class: 'wapp-col-xs-9 wapp-reply-input',
 		}).appendTo($reply);
 		
 		var $input = $('<textarea/>').appendTo($div);
@@ -248,7 +248,7 @@ var wapp = {
 		
 		// Boton Template
 		var $div = $('<div/>', {
-			class: 'col-xs-1 wapp-reply-button',
+			class: 'wapp-col-xs-1 wapp-reply-button',
 		}).appendTo($reply);
 		
 		var $send = $('<i/>', {
@@ -367,13 +367,13 @@ var wapp = {
 			var appendBody = true;
 			
 			var $row = $('<div/>', {
-				class: 'roww wapp-message',
+				class: 'wapp-row wapp-message',
 				'data-sid': pMsg.sid,
 				'data-date': pMsg.date,
 			});
 			
 			var $col = $('<div/>', {
-				class: 'col-xs-12 wapp-message-' + pMsg.direction,
+				class: 'wapp-col-xs-12 wapp-message-' + pMsg.direction,
 			}).appendTo($row);
 			
 			var $msg = $('<div/>', {
