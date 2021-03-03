@@ -145,7 +145,7 @@ var wapp = {
 	
 	renderChat: function (pCont) {
 		var $heading = $('<div/>', {
-			class: 'row wapp-heading',
+			class: 'roww wapp-heading',
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
@@ -174,7 +174,7 @@ var wapp = {
 		}).appendTo(pCont);
 		
 		$messages.append(`      
-		    <div class="row">
+		    <div class="roww">
 				<div class="col-xs-12 wapp-previous">
 					<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 				</div>
@@ -182,7 +182,7 @@ var wapp = {
 		`);
 			
 		var $reply = $('<div/>', {
-			class: 'row wapp-reply',
+			class: 'roww wapp-reply',
 		}).appendTo(pCont);
 		
 		// Boton Emoji
@@ -366,7 +366,7 @@ var wapp = {
 			var appendBody = true;
 			
 			var $row = $('<div/>', {
-				class: 'row wapp-message',
+				class: 'roww wapp-message',
 				'data-sid': pMsg.sid,
 				'data-date': pMsg.date,
 			});
