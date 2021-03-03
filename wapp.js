@@ -95,12 +95,6 @@ $(document).ready(function () {
 		
 				}
 			);
-	
-			DoorsAPI.foldersGetByName(res, 'symbols').then(
-				function (fld) {
-					wapp.symbolsFolder = fld.FldId;
-				}
-			);
 		}
 	);
 
@@ -129,7 +123,6 @@ $(document).ready(function () {
 var wapp = {
 	rootFolder: undefined,
 	messagesFolder: undefined,
-	symbolsFolder: undefined,
 	templatesFolder: undefined,
 	loggedUser: undefined,
 	codelibUrl: undefined,
