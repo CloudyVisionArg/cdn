@@ -8,7 +8,8 @@ todo:
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
+	//linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
+	linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp.css';
 	headTag.appendChild(linkTag);
 
 	includeJs('javascript');
@@ -145,7 +146,7 @@ var wapp = {
 	
 	renderChat: function (pCont) {
 		var $heading = $('<div/>', {
-			class: 'roww wapp-heading',
+			class: 'row wapp-heading',
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
