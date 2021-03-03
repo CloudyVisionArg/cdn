@@ -3,6 +3,11 @@
     background-color: #eee5db;
 }
 
+.wapp-row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
 .wapp-heading {
 	padding: 5px;
 	margin: 0;
