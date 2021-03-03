@@ -145,26 +145,27 @@ var wapp = {
 	
 	renderChat: function (pCont) {
 		var $heading = $('<div/>', {
-			class: 'row wapp-heading',
+			class: 'wapp-heading',
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
-			class: 'col-xs-5 wapp-heading-title',
+			class: 'wapp-heading-title',
+			style: 'width: 42%'
 		}).appendTo($heading);
 		
 		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
-			class: 'col-xs-2 wapp-heading-title session',
-			style: 'text-align: center;',
+			class: 'wapp-heading-title session',
+			style: 'width: 16%; text-align: center;',
 		}).appendTo($heading);
 		
 		$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
-			class: 'col-xs-5 wapp-heading-title',
-			style: 'text-align: right;',
+			class: 'wapp-heading-title',
+			style: 'width: 42%; text-align: right;',
 		}).appendTo($heading);
 		
 		$headingRight.append('<b>' + pCont.attr('data-internal-name') + '</b><br>(' + pCont.attr('data-internal-number') + ')');
