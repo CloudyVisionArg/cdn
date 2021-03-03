@@ -1,11 +1,18 @@
-.wapp-chat {
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
-    background-color: #eee5db;
-}
-
+/* Estilos Bootstrap */
 .wapp-row {
     margin-right: -15px;
     margin-left: -15px;
+}
+
+.wapp-row:after, .wapp-row:before {
+    display: table;
+    content: " ";
+}
+/* Fin estilos Bootstrap */
+
+.wapp-chat {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
+    background-color: #eee5db;
 }
 
 .wapp-heading {
