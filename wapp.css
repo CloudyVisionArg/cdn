@@ -8,6 +8,10 @@
     display: table;
     content: " ";
 }
+
+.wapp-row:after {
+    clear: both;
+}
 /* Fin estilos Bootstrap */
 
 .wapp-chat {
