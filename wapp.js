@@ -20,7 +20,7 @@ $(document).ready(function () {
 		function (res) {
 			if (typeof(cordova) == 'object') {
 				// App
-				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibsvc.asp'
+				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
 			} else {
 				// Web
 				wapp.codelibUrl = '/c/codelibrun2.asp';
@@ -698,7 +698,7 @@ var wapp = {
 				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
 				data: {
-					wappaction: 'getDatee',
+					wappaction: 'getDate',
 				},
 			})
 				.done(function (data, textStatus, jqXHR) {
