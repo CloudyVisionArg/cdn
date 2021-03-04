@@ -694,7 +694,7 @@ var wapp = {
 
 	send: function (el) {
 		var $chat = $(el).closest('div.wapp-chat');
-		var $inp = $(el).closest('.wapp-reply').find('.wapp-reply-input textarea');
+		var $inp = $chat.find('.wapp-reply');
 		if ($inp.val()) {
 			var fromN = $chat.attr('data-internal-number');
 			var toN = $chat.attr('data-external-number');
