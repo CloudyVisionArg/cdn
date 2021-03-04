@@ -501,7 +501,7 @@ var wapp = {
 			}
 			
 			var $msgTime = $('<div/>', {
-				class: 'wapp-message-time pull-right',
+				class: 'wapp-message-time',
 			}).appendTo($msg);
 			
 			dt = new Date(pMsg.date);
