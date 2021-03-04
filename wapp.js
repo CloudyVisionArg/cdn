@@ -250,7 +250,8 @@ var wapp = {
 
 		// Input
 		var $div = $('<div/>', {
-			style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%'),
+			style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%') + 
+				'; padding-left: 5px; padding-right: 5px;',
 		}).appendTo($reply);
 		
 		var $input = $('<textarea/>', {
