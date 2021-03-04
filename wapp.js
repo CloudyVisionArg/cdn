@@ -203,6 +203,7 @@ var wapp = {
 		// Boton Template
 		var $div = $('<div/>', {
 			class: 'wapp-button',
+			style: 'width: 8%',
 		}).appendTo($reply);
 		
 		var $template;
