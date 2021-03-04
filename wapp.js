@@ -407,12 +407,6 @@ var wapp = {
 				'data-date': pMsg.date,
 			});
 			
-			/*
-			var $col = $('<div/>', {
-				class: 'wapp-col-xs-12 wapp-message-' + pMsg.direction,
-			}).appendTo($row);
-			*/
-
 			var $msg = $('<div/>', {
 				class: 'wapp-' + pMsg.direction,
 			}).appendTo($row);

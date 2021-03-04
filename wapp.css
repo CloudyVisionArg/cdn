@@ -64,6 +64,14 @@
     word-wrap: break-word;
 }
 
+.wapp-message-text {
+    padding: 3px 0px !important;
+    word-break: break-word;
+    font-weight: 300;
+    font-size: 14px;
+    color: #343631;
+    /* font-family: "Apple Color Emoji"; */
+}
 
 
 /*
@@ -81,15 +89,6 @@
     padding: 0px 10px !important;
     margin-left: 25% !important;
     max-width: 75%;
-}
-
-.wapp-message-text {
-    padding: 3px 0px !important;
-    word-break: break-word;
-    font-weight: 300;
-    font-size: 14px;
-    color: #343631;
-    // font-family: "Apple Color Emoji";
 }
 
 .wapp-message-time {
