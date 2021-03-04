@@ -198,6 +198,13 @@ var wapp = {
 			var $emoji = $('<i/>', {
 				class: 'fa fa-smile-o',
 			}).appendTo($div);
+
+			$('#script_emojis')[0].loaded(function () {
+				emojis.createPicker({
+					el: $emoji,
+					inputEl: $input,
+				});
+			})
 		}
 		
 		// Boton Template
@@ -235,7 +242,7 @@ var wapp = {
 			$picker.css({
 				left: posX + 'px',
 				top: posY + 'px',
-				zIndex: 1000,
+				zIndex: 20000,
 			});
 			$picker[0].target = $(this).closest('.wapp-reply').find('.wapp-reply-input textarea')[0];
 			$picker.show();
@@ -252,14 +259,17 @@ var wapp = {
 		$input.keyup(function () { wapp.inputResize(this); });
 		$input.keydown(function (e) { wapp.inputKeyDown(this, e); });
 
-		$('#script_emojis')[0].loaded(function () {
-			emojis.createPicker({
-				el: $emoji,
-				inputEl: $input,
-			});
-		})
-		
-		// Boton Template
+		// Emoji picker
+		if (typeof(cordova) != 'object') {
+			$('#script_emojis')[0].loaded(function () {
+				emojis.createPicker({
+					el: $emoji,
+					inputEl: $input,
+				});
+			})
+		}
+
+		// Boton Enviar
 		var $div = $('<div/>', {
 			class: 'wapp-col-xs-1 wapp-reply-button',
 		}).appendTo($reply);
