@@ -162,8 +162,7 @@ var wapp = {
 		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
-			style: 'width: 20%;',
-			style: 'text-align: center;',
+			style: 'width: 20%; text-align: center;',
 		}).appendTo($heading);
 		
 		$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
