@@ -1,9 +1,13 @@
-/* Estilos Bootstrap */
-.wapp-row {
+.wapp-chat {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
+    background-color: #eee5db;
+    
+}
+
 /*
+.wapp-row {
     margin-right: -15px;
     margin-left: -15px;
-*/
 }
 .wapp-row:after, .wapp-row:before {
     display: table;
@@ -33,12 +37,6 @@
     min-height: 1px;
     padding-right: 15px;
     padding-left: 15px;
-}
-/* Fin estilos Bootstrap */
-
-.wapp-chat {
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
-    background-color: #eee5db;
 }
 
 .wapp-heading {
@@ -94,7 +92,7 @@
     font-weight: 300;
     font-size: 14px;
     color: #343631;
-    /* font-family: "Apple Color Emoji"; */
+    // font-family: "Apple Color Emoji";
 }
 
 .wapp-message-time {
@@ -171,3 +169,4 @@
 .wapp-reply-input textarea:focus {
     outline: none;
 }
+*/
