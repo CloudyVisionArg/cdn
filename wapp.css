@@ -10,12 +10,10 @@
 .wapp-heading {
 	background-color: #E8E9E8;
 	padding: 8px;
+    display: flex;
 }
 
 /*
-.wapp-heading-title {
-	padding: 5px;
-}
 
 .wapp-row {
     margin-right: -15px;

@@ -156,13 +156,13 @@ var wapp = {
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
-			class: 'wapp-heading-title',
+			style: 'width: 40%;',
 		}).appendTo($heading);
 		
 		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
-			class: 'wapp-heading-title session',
+			style: 'width: 20%;',
 			style: 'text-align: center;',
 		}).appendTo($heading);
 		
@@ -170,8 +170,7 @@ var wapp = {
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
-			class: 'wapp-heading-title',
-			style: 'text-align: right;',
+			style: 'width: 40%; text-align: right;',
 		}).appendTo($heading);
 		
 		$headingRight.append('<b>' + pCont.attr('data-internal-name') + '</b><br>(' + pCont.attr('data-internal-number') + ')');
