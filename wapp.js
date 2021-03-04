@@ -185,7 +185,7 @@ var wapp = {
 		`);
 			
 		var $reply = $('<div/>', {
-			class: 'wapp-row wapp-reply',
+			class: 'wapp-reply',
 		}).appendTo(pCont);
 		
 		// Boton Emoji

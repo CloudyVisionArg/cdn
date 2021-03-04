@@ -21,6 +21,17 @@
     padding: 10px;
 }
 
+.wapp-reply {
+    background-color: #ECECEC;
+    /*
+    height: 100%;
+    width: 100%;
+    padding: 10px 5px !important;
+    margin: 0 !important;
+    z-index: 1000;
+    */
+}
+
 
 /*
 
@@ -131,14 +142,6 @@
     word-wrap: break-word;
 }
 
-.wapp-reply {
-    height: 100%;
-    width: 100%;
-    background-color: #ECECEC;
-    padding: 10px 5px !important;
-    margin: 0 !important;
-    z-index: 1000;
-}
 
 .wapp-reply-button {
     padding: 5px 5px !important;
