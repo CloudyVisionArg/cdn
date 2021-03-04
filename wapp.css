@@ -9,9 +9,17 @@
 
 .wapp-heading {
 	background-color: #E8E9E8;
-	padding: 8px;
+	padding: 10px;
     display: flex;
 }
+
+.wapp-messages {
+	min-height: 200px;
+    max-height: 450px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 
 /*
 
@@ -47,14 +55,6 @@
     min-height: 1px;
     padding-right: 15px;
     padding-left: 15px;
-}
-
-
-.wapp-messages {
-	min-height: 200px;
-    max-height: 450px;
-    overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .wapp-previous {
