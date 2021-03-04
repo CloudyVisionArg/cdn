@@ -34,7 +34,7 @@
     border-radius: 10px;
     overflow: hidden;
     padding: 8px !important;
-    height: 37px !important;
+    height: 37px;
     font-size: 15px;
     resize: none;
     border-width: 0;

@@ -259,6 +259,7 @@ var wapp = {
 		
 		var $input = $('<textarea/>', {
 			class: 'wapp-reply',
+			style: 'height: 37px;',
 		}).appendTo($div);
 		$input.change(function () { wapp.inputResize(this); });
 		$input.keyup(function () { wapp.inputResize(this); });
