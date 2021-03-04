@@ -8,12 +8,7 @@
 }
 
 .wapp-heading {
-	padding: 5px;
-	margin: 0;
-	height: 100%;
-	width: 100%;
 	background-color: #E8E9E8;
-	z-index: 1000;
 }
 
 .wapp-heading-title {
