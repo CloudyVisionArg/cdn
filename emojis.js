@@ -18,7 +18,6 @@ $(document).ready(function () {
 				borderRadius: '12px',
 				display: 'none',
 				position: 'absolute',
-				border: '3px solid #ECECEC',
 				padding: '5px',
 				height: '170px',
 				width: '350px',

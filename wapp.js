@@ -73,7 +73,6 @@ $(document).ready(function () {
 						borderRadius: '12px',
 						display: 'none',
 						position: 'absolute',
-						border: '3px solid #ECECEC',
 						padding: '5px',
 						height: '170px',
 						width: '350px',
@@ -192,7 +191,7 @@ var wapp = {
 			// Boton Emoji
 			var $div = $('<div/>', {
 				class: 'wapp-button',
-				style: 'width: 8%',
+				style: 'width: 10%',
 			}).appendTo($reply);
 		
 			var $emoji = $('<i/>', {
@@ -210,7 +209,7 @@ var wapp = {
 		// Boton Template
 		var $div = $('<div/>', {
 			class: 'wapp-button',
-			style: 'width: 8%',
+			style: 'width: 10%',
 		}).appendTo($reply);
 		
 		var $template;
@@ -251,10 +250,12 @@ var wapp = {
 
 		// Input
 		var $div = $('<div/>', {
-			class: 'wapp-col-xs-9 wapp-reply-input',
+			style: 'width: 70%',
 		}).appendTo($reply);
 		
-		var $input = $('<textarea/>').appendTo($div);
+		var $input = $('<textarea/>', {
+			class: 'wapp-reply',
+		}).appendTo($div);
 		$input.change(function () { wapp.inputResize(this); });
 		$input.keyup(function () { wapp.inputResize(this); });
 		$input.keydown(function (e) { wapp.inputKeyDown(this, e); });
