@@ -278,11 +278,11 @@ var wapp = {
 		
 		var $send;
 		if (typeof(cordova) != 'object') {
-			$template = $('<i/>', {
+			$send = $('<i/>', {
 				class: 'fa fa-send',
 			}).appendTo($div);
 		} else {
-			$template = $('<i/>', {
+			$send = $('<i/>', {
 				class: 'f7-icons',
 			}).append('menu').appendTo($div);
 		}
