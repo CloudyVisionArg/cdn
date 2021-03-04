@@ -40,6 +40,10 @@
     border-width: 0;
 }
 
+.wapp-reply:focus {
+    outline: none;
+}
+
 .wapp-message {
     width: 100%;
     display: inline-block;
@@ -89,87 +93,3 @@
     letter-spacing: -5px;
     font-weight: 100;
 }
-
-
-/*
-.wapp-message {
-    margin: 0 !important;
-    padding-bottom: 15px !important;
-}
-
-.wapp-message-inbound {
-    padding: 0px 10px !important;
-    max-width: 75%;
-}
-
-.wapp-message-outbound {
-    padding: 0px 10px !important;
-    margin-left: 25% !important;
-    max-width: 75%;
-}
-
-.wapp-reply-button {
-    padding: 5px 5px !important;
-}
-
-.wapp-reply-button i {
-    color: #5B6165;
-    cursor: pointer;
-    font-size: 1.6em;
-}
-
-.wapp-reply-input {
-    padding: 2px 8px !important;
-}
-
-.wapp-reply-input textarea:focus {
-    outline: none;
-}
-
-.wapp-row {
-    margin-right: -15px;
-    margin-left: -15px;
-}
-.wapp-row:after, .wapp-row:before {
-    display: table;
-    content: " ";
-}
-.wapp-row:after {
-    clear: both;
-}
-.wapp-col-xs-1 {
-    width: 8.33333333%;
-}
-.wapp-col-xs-2 {
-    width: 16.66666667%;
-}
-.wapp-col-xs-5 {
-    width: 41.66666667%;
-}
-.wapp-col-xs-9 {
-    width: 75%;
-}
-.wapp-col-xs-12 {
-    width: 100%;
-}
-.wapp-col-xs-1, .wapp-col-xs-2, .wapp-col-xs-5, .wapp-col-xs-9, .wapp-col-xs-12 {
-    float: left;
-    position: relative;
-    min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-.wapp-previous {
-    text-align: center;
-    padding: 10px !important;
-}
-
-.wapp-previous a {
-    text-decoration: none;
-    font-weight: 550;
-    cursor: pointer;
-}
-
-
-*/
