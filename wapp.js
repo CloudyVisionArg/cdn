@@ -389,6 +389,7 @@ var wapp = {
 						return render(pMsg);
 					},
 					function (err) {
+						debugger;
 						console.log(err.responseText);
 						return render(pMsg);
 					}
@@ -775,6 +776,7 @@ var wapp = {
 					resolve(data);
 				})
 				.fail(function (jqXHR, textStatus, errorThrown) {
+					debugger;
 					reject(jqXHR);
 				});
 	    });
