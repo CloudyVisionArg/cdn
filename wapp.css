@@ -41,7 +41,7 @@
 }
 
 .wapp-inbound {
-    width: auto !important;
+    width: max-content;
     max-width: 75%;
     padding: 4px 10px 7px 10px !important;
     border-radius: 0px 10px 10px 10px;
@@ -52,7 +52,7 @@
 
 .wapp-outbound {
     float: right;
-    width: auto !important;
+    width: max-content;
     max-width: 75%;
     background: #dcf8c6;
     border-radius: 10px 0px 10px 10px;
