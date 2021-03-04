@@ -566,9 +566,17 @@ var wapp = {
 		} else if (pStatus == 'sent') {
 			return '<span class="wapp-message-status">' + tick + '</span>';
 		} else if (pStatus == 'queued') {
-			return '<i class="fa fa-clock-o" />';
+			if (typeof(cordova) == 'object') {
+				return '<i class="f7-icons">clock</i>';
+			} else {
+				return '<i class="fa fa-clock-o" />';
+			}
 		} else if (pStatus == 'undelivered') {
-			return '<i class="fa fa-exclamation-circle" />';
+			if (typeof(cordova) == 'object') {
+				return '<i class="f7-icons">exclamationmark_circle_fill</i>';
+			} else {
+				return '<i class="fa fa-exclamation-circle" />';
+			}
 		} else {
 			return '??';
 		}
