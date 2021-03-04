@@ -402,7 +402,7 @@ var wapp = {
 			
 			var $row = $('<div/>', {
 				class: 'wapp-message',
-				style: 'width: 100%; display: inline-block; padding-botom: 15px !important;',
+				style: 'width: 100%; display: inline-block; padding-bottom: 15px !important;',
 				'data-sid': pMsg.sid,
 				'data-date': pMsg.date,
 			});
