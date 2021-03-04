@@ -193,9 +193,16 @@ var wapp = {
 			style: 'width: 8%',
 		}).appendTo($reply);
 		
-		var $emoji = $('<i/>', {
-			class: 'fa fa-smile-o',
-		}).appendTo($div);
+		var $emoji;
+		if (typeof(cordova) == 'object') {
+			$emoji = $('<i/>', {
+				class: 'f7-icons',
+			}).append('smiley').appendTo($div);
+		} else {
+			$emoji = $('<i/>', {
+				class: 'fa fa-smile-o',
+			}).appendTo($div);
+		}
 		
 		// Boton Template
 		var $div = $('<div/>', {
