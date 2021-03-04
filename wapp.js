@@ -683,6 +683,7 @@ var wapp = {
 
 	// Enter manda, shift enter nueva linea
 	inputKeyDown: function (el, ev) {
+		debugger;
 		var keyCode = ev.which || ev.keyCode;
 		if (keyCode == 13 && !ev.shiftKey) {
 			// send
