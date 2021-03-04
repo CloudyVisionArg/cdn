@@ -25,7 +25,7 @@ $(document).ready(function () {
 				// App
 				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
 
-				root.style.setProperty('--wapp-chat-horizontal-margin', '16px');
+				root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
 			} else {
 				// Web
 				wapp.codelibUrl = '/c/codelibrun2.asp';
@@ -338,7 +338,7 @@ var wapp = {
 				light = 'red';
 				remain = '';
 			}
-				
+			
             var $img = pChat.find('.wapp-heading .session img');
             $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/' + light + '.png');
 			var $remain = pChat.find('.wapp-heading .session .session-time');
@@ -401,18 +401,20 @@ var wapp = {
 			var appendBody = true;
 			
 			var $row = $('<div/>', {
-				class: 'wapp-row wapp-message',
+				class: 'wapp-message',
 				'data-sid': pMsg.sid,
 				'data-date': pMsg.date,
 			});
 			
+			/*
 			var $col = $('<div/>', {
 				class: 'wapp-col-xs-12 wapp-message-' + pMsg.direction,
 			}).appendTo($row);
-			
+			*/
+
 			var $msg = $('<div/>', {
 				class: 'wapp-' + pMsg.direction,
-			}).appendTo($col);
+			}).appendTo($row);
 		
 			if (pMsg.operator) $msg.append(pMsg.operator);
 			
