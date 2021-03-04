@@ -47,7 +47,6 @@
     border-radius: 0px 10px 10px 10px;
     background: #ffffff;
     font-size: 12px;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
     word-wrap: break-word;
 }
 
@@ -59,15 +58,14 @@
     border-radius: 10px 0px 10px 10px;
     padding: 4px 10px 7px !important;
     font-size: 12px;
-    font-weight: 400;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    font-weight: 500;
     word-wrap: break-word;
 }
 
 .wapp-message-text {
     padding: 3px 0px !important;
     word-break: break-word;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 14px;
     color: #343631;
     /* font-family: "Apple Color Emoji"; */
