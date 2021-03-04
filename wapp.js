@@ -310,7 +310,6 @@ var wapp = {
 			
 			DoorsAPI.folderSearch(wapp.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
 				function (res) {
-					debugger;
 					if (res.length > 0) {
 						render(res[0]['CREATED']);
 					} else {
@@ -318,6 +317,7 @@ var wapp = {
 					}
 				},
 				function (err) {
+					console.log(err);
 					debugger;
 				}
 			)
@@ -614,7 +614,6 @@ var wapp = {
 		
 		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 			function (res) {
-				debugger;
 				if (res.length < msgLimit && !incLoad) pChat.find('div.wapp-previous a').hide();
 				
 				if (res.length > 0) {
@@ -665,12 +664,14 @@ var wapp = {
 							}
 		                },
 		                function (err) {
+							console.log(err);
 		                	debugger;
 		                }
 		            );
 	        	}
 			},
 			function (err) {
+				console.log(err);
 				debugger;
 			}
 		)
