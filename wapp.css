@@ -73,6 +73,19 @@
     /* font-family: "Apple Color Emoji"; */
 }
 
+.wapp-message-time {
+    margin-left: 50px !important;
+    font-size: 11.5px;
+    text-align: right;
+    color: #607a4d;
+    font-weight: 350;
+}
+
+.wapp-message-status {
+    letter-spacing: -5px;
+    font-weight: 100;
+}
+
 
 /*
 .wapp-message {
@@ -89,19 +102,6 @@
     padding: 0px 10px !important;
     margin-left: 25% !important;
     max-width: 75%;
-}
-
-.wapp-message-time {
-    margin-left: 50px !important;
-    font-size: 11.5px;
-    text-align: right;
-    color: #607a4d;
-    font-weight: 350;
-}
-
-.wapp-message-status {
-    letter-spacing: -5px;
-    font-weight: 100;
 }
 
 .wapp-reply-button {
