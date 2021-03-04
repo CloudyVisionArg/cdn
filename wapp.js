@@ -519,6 +519,7 @@ var wapp = {
 	
 	// Deja crecer hasta 4 lineas, muestra los scrolls para mas
 	inputResize: function (el) {
+		debugger;
 		el.style.height = '1px';
 		scrH = el.scrollHeight;
 		if (scrH < 37) scrH = 37;
