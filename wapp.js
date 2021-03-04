@@ -188,31 +188,33 @@ var wapp = {
 			class: 'wapp-heading',
 		}).appendTo(pCont);
 		
-		// Boton Emoji
-		var $div = $('<div/>', {
-			class: 'wapp-button',
-			style: 'width: 8%',
-		}).appendTo($reply);
+		if (typeof(cordova) != 'object') {
+			// Boton Emoji
+			var $div = $('<div/>', {
+				class: 'wapp-button',
+				style: 'width: 8%',
+			}).appendTo($reply);
 		
-		var $emoji;
-		if (typeof(cordova) == 'object') {
-			$emoji = $('<i/>', {
-				class: 'f7-icons',
-			}).append('smiley').appendTo($div);
-		} else {
-			$emoji = $('<i/>', {
+			var $emoji = $('<i/>', {
 				class: 'fa fa-smile-o',
 			}).appendTo($div);
 		}
 		
 		// Boton Template
 		var $div = $('<div/>', {
-			class: 'wapp-col-xs-1 wapp-reply-button',
+			class: 'wapp-button',
 		}).appendTo($reply);
 		
-		var $template = $('<i/>', {
-			class: 'fa fa-copy',
-		}).appendTo($div);
+		var $template;
+		if (typeof(cordova) != 'object') {
+			$template = $('<i/>', {
+				class: 'fa fa-list-ul',
+			}).appendTo($div);
+		} else {
+			$template = $('<i/>', {
+				class: 'f7-icons',
+			}).append('menu').appendTo($div);
+		}
 		
 		$template.click(function (e) {
 			var posX, posY;
