@@ -22,6 +22,10 @@ $(document).ready(function () {
 			if (typeof(cordova) == 'object') {
 				// App
 				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
+
+				var root = document.documentElement;
+				root.style.setProperty('--wapp-chat-horizontal-margin', '16px');
+
 			} else {
 				// Web
 				wapp.codelibUrl = '/c/codelibrun2.asp';

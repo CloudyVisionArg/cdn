@@ -3,6 +3,8 @@
     background-color: #eee5db;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    margin-left: var(--wapp-chat-horizontal-margin);
+    margin-right: var(--wapp-chat-horizontal-margin);
 }
 
 /*
