@@ -26,11 +26,13 @@ $(document).ready(function () {
 				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
 
 				root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
+				root.style.setProperty('--wapp-button-size', '30px');
 			} else {
 				// Web
 				wapp.codelibUrl = '/c/codelibrun2.asp';
 
 				root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
+				root.style.setProperty('--wapp-button-size', '25px');
 			};
 		
 			wapp.rootFolder = res;

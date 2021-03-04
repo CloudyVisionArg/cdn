@@ -22,7 +22,7 @@
 }
 
 .wapp-button {
-    font-size: 28px;
+    font-size: var(--wapp-button-size);
     cursor: pointer;
     color: #5B6165;
     text-align: center;
