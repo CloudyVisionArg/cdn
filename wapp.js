@@ -567,13 +567,13 @@ var wapp = {
 			return '<span class="wapp-message-status">' + tick + '</span>';
 		} else if (pStatus == 'queued') {
 			if (typeof(cordova) == 'object') {
-				return '<i class="f7-icons">clock</i>';
+				return '<i class="f7-icons" style="font-size: 11px;">clock</i>';
 			} else {
 				return '<i class="fa fa-clock-o" />';
 			}
 		} else if (pStatus == 'undelivered') {
 			if (typeof(cordova) == 'object') {
-				return '<i class="f7-icons">exclamationmark_circle_fill</i>';
+				return '<i class="f7-icons" style="font-size: 11px;">exclamationmark_circle_fill</i>';
 			} else {
 				return '<i class="fa fa-exclamation-circle" />';
 			}
