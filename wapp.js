@@ -181,7 +181,7 @@ var wapp = {
 		}).appendTo(pCont);
 		
 		$messages.append(`      
-		    <div style="text-align: center;">
+		    <div style="text-align: center; margin-bottom: 15px;">
 				<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 			</div>
 		`);
