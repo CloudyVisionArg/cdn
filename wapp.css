@@ -42,25 +42,25 @@
 
 .wapp-inbound {
     width: auto !important;
+    max-width: 75%;
     padding: 4px 10px 7px !important;
     border-radius: 0px 10px 10px 10px;
     background: #ffffff;
     font-size: 12px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
     word-wrap: break-word;
-    display: inline-block;
 }
 
 .wapp-outbound {
     float: right;
     width: auto !important;
+    max-width: 75%;
     background: #dcf8c6;
     border-radius: 10px 0px 10px 10px;
     padding: 4px 10px 7px !important;
     font-size: 12px;
     font-weight: 400;
     text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-    display: inline-block;
     word-wrap: break-word;
 }
 
