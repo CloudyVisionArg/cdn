@@ -6,10 +6,8 @@
 */
 }
 .wapp-row:after, .wapp-row:before {
-/*
     display: table;
     content: " ";
-*/
 }
 .wapp-row:after {
     clear: both;
