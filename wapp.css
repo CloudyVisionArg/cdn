@@ -40,6 +40,12 @@
     border-width: 0;
 }
 
+.wapp-message {
+    width: 100%;
+    display: inline-block;
+    padding-bottom: 10px !important;
+}
+
 .wapp-inbound {
     width: max-content;
     max-width: 75%;
