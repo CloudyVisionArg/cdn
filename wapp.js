@@ -250,7 +250,7 @@ var wapp = {
 
 		// Input
 		var $div = $('<div/>', {
-			style: 'width: 70%',
+			style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%'),
 		}).appendTo($reply);
 		
 		var $input = $('<textarea/>', {
@@ -272,12 +272,20 @@ var wapp = {
 
 		// Boton Enviar
 		var $div = $('<div/>', {
-			class: 'wapp-col-xs-1 wapp-reply-button',
+			class: 'wapp-button',
+			style: 'width: 10%',
 		}).appendTo($reply);
 		
-		var $send = $('<i/>', {
-			class: 'fa fa-send',
-		}).appendTo($div);
+		var $send;
+		if (typeof(cordova) != 'object') {
+			$template = $('<i/>', {
+				class: 'fa fa-send',
+			}).appendTo($div);
+		} else {
+			$template = $('<i/>', {
+				class: 'f7-icons',
+			}).append('menu').appendTo($div);
+		}
 		
 		$send.click(function () {
 			wapp.send(this);
