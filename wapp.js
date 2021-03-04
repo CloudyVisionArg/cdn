@@ -19,16 +19,18 @@ todo:
 $(document).ready(function () {
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
+			var root = document.documentElement;
+
 			if (typeof(cordova) == 'object') {
 				// App
 				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
 
-				var root = document.documentElement;
 				root.style.setProperty('--wapp-chat-horizontal-margin', '16px');
-
 			} else {
 				// Web
 				wapp.codelibUrl = '/c/codelibrun2.asp';
+
+				root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
 			};
 		
 			wapp.rootFolder = res;
@@ -150,17 +152,17 @@ var wapp = {
 	
 	renderChat: function (pCont) {
 		var $heading = $('<div/>', {
-			class: 'wapp-row wapp-heading',
+			class: 'wapp-heading',
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
-			class: 'wapp-col-xs-5 wapp-heading-title',
+			class: 'wapp-heading-title',
 		}).appendTo($heading);
 		
 		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
-			class: 'wapp-col-xs-2 wapp-heading-title session',
+			class: 'wapp-heading-title session',
 			style: 'text-align: center;',
 		}).appendTo($heading);
 		
@@ -168,7 +170,7 @@ var wapp = {
 		$headingSession.append('<div class="session-time"></div>');
 
 		var $headingRight = $('<div/>', {
-			class: 'wapp-col-xs-5 wapp-heading-title',
+			class: 'wapp-heading-title',
 			style: 'text-align: right;',
 		}).appendTo($heading);
 		

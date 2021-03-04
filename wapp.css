@@ -7,6 +7,19 @@
     margin-right: var(--wapp-chat-horizontal-margin);
 }
 
+.wapp-heading {
+	padding: 5px;
+	margin: 0;
+	height: 100%;
+	width: 100%;
+	background-color: #E8E9E8;
+	z-index: 1000;
+}
+
+.wapp-heading-title {
+	padding: 5px;
+}
+
 /*
 .wapp-row {
     margin-right: -15px;
@@ -42,18 +55,6 @@
     padding-left: 15px;
 }
 
-.wapp-heading {
-	padding: 5px;
-	margin: 0;
-	height: 100%;
-	width: 100%;
-	background-color: #E8E9E8;
-	z-index: 1000;
-}
-
-.wapp-heading-title {
-	padding: 5px;
-}
 
 .wapp-messages {
 	min-height: 200px;
