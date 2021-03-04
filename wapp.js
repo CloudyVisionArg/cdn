@@ -190,6 +190,7 @@ var wapp = {
 		
 		// Boton Emoji
 		var $div = $('<div/>', {
+			class: 'wapp-button',
 			style: 'width: 8%',
 		}).appendTo($reply);
 		
