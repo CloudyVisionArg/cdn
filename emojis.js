@@ -23,6 +23,7 @@ $(document).ready(function () {
 				height: '170px',
 				width: '350px',
 				overflowY: 'scroll',
+				zIndex: 20000,
 			}).appendTo($(document.body));
 			
 			data.forEach(it => {
