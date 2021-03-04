@@ -23,7 +23,6 @@ $(document).ready(function () {
 				height: '170px',
 				width: '350px',
 				overflowY: 'scroll',
-				zIndex: 20000,
 			}).appendTo($(document.body));
 			
 			data.forEach(it => {
@@ -117,7 +116,7 @@ var emojis = {
 			$picker.css({
 				left: posX + 'px',
 				top: posY + 'px',
-				zIndex: 1000,
+				zIndex: 20000,
 			});
 			$picker[0].target = this.emojis.inputEl;
 			$picker.show();
