@@ -161,6 +161,7 @@ var wapp = {
 		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
 		
 		var $headingSession = $('<div/>', {
+			class: 'session',
 			style: 'width: 20%; text-align: center;',
 		}).appendTo($heading);
 		
@@ -338,9 +339,9 @@ var wapp = {
 				remain = '';
 			}
 				
-            var $img = pChat.find('.wapp-heading-title.session img');
+            var $img = pChat.find('.wapp-heading .session img');
             $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/' + light + '.png');
-			var $remain = pChat.find('.wapp-heading-title.session .session-time');
+			var $remain = pChat.find('.wapp-heading .session .session-time');
 			$remain.html(remain);
 		}
 	},
