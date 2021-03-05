@@ -137,7 +137,7 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 
-	loaded = function (pCallback) {
+	loaded: function (pCallback) {
 		var interv = setInterval(function () {
 			if (wapp.messagesFolder) {
 				clearInterval(interv);
