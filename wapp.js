@@ -617,6 +617,27 @@ var wapp = {
 	},
 
 	loadMessages: function (pChat, pOlders) {
+
+
+		$.ajax({
+			url: wapp.codelibUrl + '?codelib=WhatsappXHR',
+			method: 'POST',
+			data: {
+				wappaction: 'test',
+			},
+		})
+			.done(function (data, textStatus, jqXHR) {
+				debugger;
+				resolve(xmlDecodeDate(data));
+			})
+			.fail(function (jqXHR, textStatus, errorThrown) {
+				debugger;
+				reject(jqXHR);
+			});
+
+
+
+
 		var msgLimit = 50;
 		var extNumber = pChat.attr('data-external-number');
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
