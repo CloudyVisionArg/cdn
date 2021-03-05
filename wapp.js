@@ -611,6 +611,11 @@ var wapp = {
 		}
 	},
 
+	resetChat: function (pChat) {
+		pChat.find('div.wapp-messages').empty();
+		pChat.removeAttr('data-last-load');
+	},
+
 	loadMessages: function (pChat, pOlders) {
 		var msgLimit = 50;
 		var extNumber = pChat.attr('data-external-number');
@@ -685,6 +690,7 @@ var wapp = {
 								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
 							} else {
 								// Se va al fondo
+								debugger;
 								if (atBottom) {
 									if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20)
 										$cont.scrollTop($cont[0].scrollHeight);
