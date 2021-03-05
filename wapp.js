@@ -44,22 +44,20 @@ $(document).ready(function () {
 					if (typeof(cordova) != 'object') {
 						// Carga inicial
 						$('div.wapp-chat').each(function () {
-							wapp.renderChat($(this));
-							wapp.loadMessages($(this));
-							wapp.refreshSession($(this));
+							wapp.initChat($(this));
 						});
 					}
 					
 					// Carga mensajes nuevos cada 5 segs
 					setInterval(function () {
-						$('div.wapp-chat[data-ready]').each(function () {
+						$('div.wapp-chat[data-init]').each(function () {
 							wapp.loadMessages($(this));
 						});
 					}, 5000);
 	
 					// Actualiza el estado de la sesion cada 1'
 					setInterval(function () {
-						$('div.wapp-chat[data-ready]').each(function () {
+						$('div.wapp-chat[data-init]').each(function () {
 							wapp.refreshSession($(this));
 						});
 					}, 60000);
@@ -137,7 +135,7 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 
-	loaded: function (pCallback) {
+	ready: function (pCallback) {
 		var interv = setInterval(function () {
 			if (wapp.messagesFolder) {
 				clearInterval(interv);
@@ -162,7 +160,7 @@ var wapp = {
 		});
 	},
 	
-	renderChat: function (pCont) {
+	initChat: function (pCont) {
 		var $heading = $('<div/>', {
 			class: 'wapp-heading',
 		}).appendTo(pCont);
@@ -307,7 +305,9 @@ var wapp = {
 			wapp.send(this);
 		});
 
-		pCont.attr('data-ready', '1');
+		pCont.attr('data-init', '1');
+		wapp.loadMessages($(this));
+		wapp.refreshSession($(this));
 	},
 	
 	refreshSession: function (pChat, pDate) {
