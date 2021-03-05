@@ -306,8 +306,8 @@ var wapp = {
 		});
 
 		pCont.attr('data-init', '1');
-		wapp.loadMessages($(this));
-		wapp.refreshSession($(this));
+		wapp.loadMessages(pCont);
+		wapp.refreshSession(pCont);
 	},
 	
 	refreshSession: function (pChat, pDate) {
