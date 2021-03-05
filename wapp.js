@@ -622,6 +622,7 @@ var wapp = {
 		$.ajax({
 			url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 			method: 'POST',
+			crossDomain: true,
 			data: {
 				wappaction: 'test',
 			},
