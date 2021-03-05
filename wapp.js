@@ -421,7 +421,7 @@ var wapp = {
 				class: 'wapp-message-text',
 			}).appendTo($msg);
 		
-			if (pMsg.nummedia > 0) {
+			if (pMsg.nummedia > 0 && pMsg.media) {
 				var media = undefined;
 				try {
 					media = JSON.parse(pMsg.media);
