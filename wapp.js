@@ -41,12 +41,14 @@ $(document).ready(function () {
 				function (fld) {
 					wapp.messagesFolder = fld.FldId;
 	
-					// Carga inicial
-					$('div.wapp-chat').each(function () {
-						wapp.renderChat($(this));
-						wapp.loadMessages($(this));
-						wapp.refreshSession($(this));
-					});
+					if (typeof(cordova) != 'object') {
+						// Carga inicial
+						$('div.wapp-chat').each(function () {
+							wapp.renderChat($(this));
+							wapp.loadMessages($(this));
+							wapp.refreshSession($(this));
+						});
+					}
 					
 					// Carga mensajes nuevos cada 5 segs
 					setInterval(function () {
@@ -134,7 +136,16 @@ var wapp = {
 	templatesFolder: undefined,
 	loggedUser: undefined,
 	codelibUrl: undefined,
-	
+
+	loaded = function (pCallback) {
+		var interv = setInterval(function () {
+			if (wapp.messagesFolder) {
+				clearInterval(interv);
+				if (pCallback) pCallback();
+			}
+		}, 10)
+	},
+
 	viewImage: function (e) {
 		var $modal = $('#wappModal');
 		var $modalDialog = $modal.find('.modal-dialog');
@@ -437,6 +448,7 @@ var wapp = {
 						if (it.ContentType.substr(0, 5) == 'image') {
 							$('<img/>', {
 								src: it.Url,
+								//todo: estos tamaños??
 								style: 'cursor: pointer; width: 260px; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
@@ -482,9 +494,20 @@ var wapp = {
 					href: 'https://www.google.com/maps/place/' + lat + ',' + lng,
 				}).appendTo($div);
 				
+				var key;
+				if (typeof(cordova) == 'object') {
+					/*
+					todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
+					https://developers.google.com/maps/documentation/javascript/get-api-key
+					*/
+					key = decrypt('U2FsdGVkX1980jboiLSByehdC4OHgstgnLMTIAR3jlMmshxjimk1mfzFVv2NcgRQkl+FEI8GtQM+DmvOb8Cymg==', '');
+				} else {
+					key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
+				}
+			
 				var $img = $('<img/>', {
 					src: 'https://maps.google.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=color:red%7Csize:mid%7C' + 
-						lat + ',' + lng + '&zoom=15&size=260x130&key=AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY',
+						lat + ',' + lng + '&zoom=15&size=260x130&key=' + key,
 					style: 'width: 260px; height: 130px; object-fit: cover;',
 				}).appendTo($a);
 			}
