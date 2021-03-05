@@ -305,9 +305,10 @@ var wapp = {
 			wapp.send(this);
 		});
 
-		pCont.attr('data-init', '1');
 		wapp.loadMessages(pCont);
 		wapp.refreshSession(pCont);
+
+		pCont.attr('data-init', '1');
 	},
 	
 	refreshSession: function (pChat, pDate) {
