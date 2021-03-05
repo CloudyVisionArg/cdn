@@ -690,7 +690,6 @@ var wapp = {
 								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
 							} else {
 								// Se va al fondo
-								debugger;
 								if (atBottom) {
 									if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20)
 										$cont.scrollTop($cont[0].scrollHeight);
