@@ -1,6 +1,5 @@
 /*
 todo:
-- Hacer independiente de bootstrap y portar al app
 - Mejorar el estilo del picker de plantillas
 */
 
@@ -27,6 +26,7 @@ $(document).ready(function () {
 
 				root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
 				root.style.setProperty('--wapp-button-size', '30px');
+				
 			} else {
 				// Web
 				wapp.codelibUrl = '/c/codelibrun2.asp';
@@ -50,14 +50,14 @@ $(document).ready(function () {
 					
 					// Carga mensajes nuevos cada 5 segs
 					setInterval(function () {
-						$('div.wapp-chat[data-init]').each(function () {
+						$('div.wapp-chat[data-ready]').each(function () {
 							wapp.loadMessages($(this));
 						});
 					}, 5000);
 	
 					// Actualiza el estado de la sesion cada 1'
 					setInterval(function () {
-						$('div.wapp-chat[data-init]').each(function () {
+						$('div.wapp-chat[data-ready]').each(function () {
 							wapp.refreshSession($(this));
 						});
 					}, 60000);
@@ -308,7 +308,7 @@ var wapp = {
 		wapp.loadMessages(pCont);
 		wapp.refreshSession(pCont);
 
-		pCont.attr('data-init', '1');
+		pCont.attr('data-ready', '1');
 	},
 	
 	refreshSession: function (pChat, pDate) {
