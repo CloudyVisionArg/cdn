@@ -627,7 +627,8 @@ var wapp = {
 			},
 		})
 			.done(function (data, textStatus, jqXHR) {
-				debugger;
+				//debugger;
+				console.log(data);
 				resolve(xmlDecodeDate(data));
 			})
 			.fail(function (jqXHR, textStatus, errorThrown) {
