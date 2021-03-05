@@ -52,14 +52,14 @@ $(document).ready(function () {
 					
 					// Carga mensajes nuevos cada 5 segs
 					setInterval(function () {
-						$('div.wapp-chat').each(function () {
+						$('div.wapp-chat[data-ready]').each(function () {
 							wapp.loadMessages($(this));
 						});
 					}, 5000);
 	
 					// Actualiza el estado de la sesion cada 1'
 					setInterval(function () {
-						$('div.wapp-chat').each(function () {
+						$('div.wapp-chat[data-ready]').each(function () {
 							wapp.refreshSession($(this));
 						});
 					}, 60000);
@@ -306,6 +306,8 @@ var wapp = {
 		$send.click(function () {
 			wapp.send(this);
 		});
+
+		pCont.attr('data-ready', '1');
 	},
 	
 	refreshSession: function (pChat, pDate) {
