@@ -625,6 +625,10 @@ var wapp = {
 			data: {
 				wappaction: 'test',
 			},
+			xhrFields: {
+				withCredentials: true
+			},
+		  
 		})
 			.done(function (data, textStatus, jqXHR) {
 				//debugger;
