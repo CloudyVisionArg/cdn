@@ -883,6 +883,7 @@ var wapp = {
 				data: dataWithCred,
 			})
 				.done(function (data, textStatus, jqXHR) {
+					debugger;
 					resolve(data, textStatus, jqXHR);
 				})
 				.fail(function (jqXHR, textStatus, errorThrown) {
