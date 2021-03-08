@@ -627,6 +627,7 @@ var wapp = {
 			if (xhr.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
 				if (xhr.status == 200) {
 					debugger;
+					console.log(xhr.responseText);
 				} else if (xmlhttp.status == 400) {
 					debugger;
 				} else {
