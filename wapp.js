@@ -621,6 +621,9 @@ var wapp = {
 		this.xhr({ wappaction: 'test' }).then(
 			function (res) {
 				console.log(res.data);
+			},
+			function (err) {
+				debugger;
 			}
 		);
 		
