@@ -621,7 +621,6 @@ var wapp = {
 
 		var xhr = new XMLHttpRequest();
 		var url = wapp.codelibUrl + '?codelib=WhatsappXHR';
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 		var payload = encodeURIComponent('wappaction') + '=' + encodeURIComponent('test');
 
 		xhr.onreadystatechange = function() {
@@ -637,6 +636,7 @@ var wapp = {
 		};
 
 		xhr.open('POST', url, true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 		xhr.send(payload);
 
 
