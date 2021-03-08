@@ -617,6 +617,13 @@ var wapp = {
 	},
 
 	loadMessages: function (pChat, pOlders) {
+
+		wapp.xhr({ 'method': 'test' }).then(
+			function (res) {
+				console.log(res);
+			}
+		)
+
 		var msgLimit = 50;
 		var extNumber = pChat.attr('data-external-number');
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
