@@ -737,6 +737,32 @@ var wapp = {
 		if ($inp.val()) {
 			var fromN = $chat.attr('data-internal-number');
 			var toN = $chat.attr('data-external-number');
+
+			wapp.xhr({
+				wappaction: 'send',
+				from: fromN,
+				to: toN,
+				body: $inp.val(),
+			}).then(
+				function (data, textStatus, jqXHR) {
+					var $dom = $($.parseXML(jqXHR.responseText));
+					msg = {};
+					msg.sid = $dom.find('Message Sid').html();
+					msg.direction = 'outbound';
+					msg.operator = wapp.loggedUser.Name;
+					msg.status = $dom.find('Message Status').html();
+					msg.body = $dom.find('Message Body').html();
+					msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
+					var $cont = $chat.find('div.wapp-messages');
+					$cont.append(wapp.renderMsg(msg));
+					$cont.scrollTop($cont[0].scrollHeight);
+				},
+				function (jqXHR, textStatus, errorThrown) {
+					alert('Error: ' + jqXHR.responseText);
+				}
+			)
+
+			/*
 			$.ajax({
 				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
@@ -763,6 +789,7 @@ var wapp = {
 				.fail(function (jqXHR, textStatus, errorThrown) {
 					alert('Error: ' + jqXHR.responseText);
 				});
+			*/
 	
 			$inp.val('');
 			wapp.inputResize($inp[0]);
@@ -771,6 +798,16 @@ var wapp = {
 
 	serverDate: function () {
 	    return new Promise(function (resolve, reject) {
+			wapp.xhr({ wappaction: 'getDate' }).then(
+				function (data, textStatus, jqXHR) {
+					resolve(xmlDecodeDate(data));
+				},
+				function (jqXHR, textStatus, errorThrown) {
+					reject(jqXHR);
+				}
+			)
+
+			/*
 			$.ajax({
 				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
@@ -784,6 +821,7 @@ var wapp = {
 				.fail(function (jqXHR, textStatus, errorThrown) {
 					reject(jqXHR);
 				});
+			*/
 		});
 	},
 	
@@ -802,6 +840,20 @@ var wapp = {
 	
 	msgMedia: function (pSid) {
 	    return new Promise(function (resolve, reject) {
+			wapp.xhr({
+				wappaction: 'msgMedia',
+				sid: pSid,
+			}).then(
+				function (data, textStatus, jqXHR) {
+					resolve(data);
+				},
+				function (jqXHR, textStatus, errorThrown) {
+					debugger;
+					reject(jqXHR);
+				}
+			)
+
+			/*
 			$.ajax({
 				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
@@ -817,6 +869,7 @@ var wapp = {
 					debugger;
 					reject(jqXHR);
 				});
+			*/
 	    });
 	},
 
@@ -830,11 +883,11 @@ var wapp = {
 				data: dataWithCred,
 			})
 				.done(function (data, textStatus, jqXHR) {
-					resolve(data);
+					resolve(data, textStatus, jqXHR);
 				})
 				.fail(function (jqXHR, textStatus, errorThrown) {
 					debugger;
-					reject(jqXHR);
+					reject(jqXHR, textStatus, errorThrown);
 				});
 	    });
 
