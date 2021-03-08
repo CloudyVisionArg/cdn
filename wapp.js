@@ -618,7 +618,7 @@ var wapp = {
 
 	loadMessages: function (pChat, pOlders) {
 		
-		this.xhr({ wappmethod: 'test' }).then(
+		this.xhr({ wappaction: 'test' }).then(
 			function (res) {
 				console.log(res.data);
 			}
