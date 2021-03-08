@@ -708,7 +708,7 @@ var wapp = {
 											$cont.scrollTop($cont[0].scrollHeight);
 									}
 								}
-							}, 1000)
+							}, 1500)
 		                },
 		                function (err) {
 							console.log(err);
