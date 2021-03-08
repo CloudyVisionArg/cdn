@@ -14,7 +14,7 @@ If branch = "" Then branch = "master"
 Set xhr = CreateObject("MSXML2.XMLHTTP")
 URL = "https://api.github.com/repos/" & owner & "/" & repo & "/contents" & path & "?ref=" & branch
 xhr.Open "GET", URL, False
-xhr.setRequestHeader "Authorization", "token 44483e5cf393cf30ada4f942656a41a8bc9f6d95"
+xhr.setRequestHeader "Authorization", "token c2d708448ee7a12f0c24" & "4e78905b91e1e9ac02ca"
 xhr.setRequestHeader "accept", "application/vnd.github.VERSION.raw"
 xhr.Send
 
