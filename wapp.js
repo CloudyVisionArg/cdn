@@ -617,6 +617,14 @@ var wapp = {
 	},
 
 	loadMessages: function (pChat, pOlders) {
+		
+		this.xhr({ wappmethod: 'test' }).then(
+			function (res) {
+				console.log(res.data);
+			}
+		);
+
+
 		var msgLimit = 50;
 		var extNumber = pChat.attr('data-external-number');
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
@@ -756,35 +764,6 @@ var wapp = {
 				}
 			)
 
-			/*
-			$.ajax({
-				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
-				method: 'POST',
-				data: {
-					wappaction: 'send',
-					from: fromN,
-					to: toN,
-					body: $inp.val(),
-				},
-			})
-				.done(function (data, textStatus, jqXHR) {
-					var $dom = $($.parseXML(jqXHR.responseText));
-					msg = {};
-					msg.sid = $dom.find('Message Sid').html();
-					msg.direction = 'outbound';
-					msg.operator = wapp.loggedUser.Name;
-					msg.status = $dom.find('Message Status').html();
-					msg.body = $dom.find('Message Body').html();
-					msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
-					var $cont = $chat.find('div.wapp-messages');
-					$cont.append(wapp.renderMsg(msg));
-					$cont.scrollTop($cont[0].scrollHeight);
-				})
-				.fail(function (jqXHR, textStatus, errorThrown) {
-					alert('Error: ' + jqXHR.responseText);
-				});
-			*/
-	
 			$inp.val('');
 			wapp.inputResize($inp[0]);
 		}
@@ -800,22 +779,6 @@ var wapp = {
 					reject(err);
 				}
 			)
-
-			/*
-			$.ajax({
-				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
-				method: 'POST',
-				data: {
-					wappaction: 'getDate',
-				},
-			})
-				.done(function (data, textStatus, jqXHR) {
-					resolve(xmlDecodeDate(data));
-				})
-				.fail(function (jqXHR, textStatus, errorThrown) {
-					reject(jqXHR);
-				});
-			*/
 		});
 	},
 	
@@ -846,24 +809,6 @@ var wapp = {
 					reject(err.jqXHR);
 				}
 			)
-
-			/*
-			$.ajax({
-				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
-				method: 'POST',
-				data: {
-					wappaction: 'msgMedia',
-					sid: pSid,
-				},
-			})
-				.done(function (data, textStatus, jqXHR) {
-					resolve(data);
-				})
-				.fail(function (jqXHR, textStatus, errorThrown) {
-					debugger;
-					reject(jqXHR);
-				});
-			*/
 	    });
 	},
 
