@@ -875,7 +875,6 @@ var wapp = {
 
 	xhr: function(data) {
 	    return new Promise(function (resolve, reject) {
-			debugger;
 			var dataWithCred = Object.assign(data, credentials());
 			$.ajax({
 				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
