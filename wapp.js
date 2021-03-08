@@ -741,6 +741,8 @@ var wapp = {
 	send: function (el) {
 		if (typeof(cordova) == 'object') {
 			app7.preloader.show();
+		} else {
+			$('body').css('cursor', 'progress');
 		}
 
 		var $chat = $(el).closest('div.wapp-chat');
@@ -770,11 +772,15 @@ var wapp = {
 
 					if (typeof(cordova) == 'object') {
 						app7.preloader.hide();
+					} else {
+						$('body').css('cursor', 'default');
 					}
 				},
 				function (err) {
 					if (typeof(cordova) == 'object') {
 						app7.preloader.hide();
+					} else {
+						$('body').css('cursor', 'default');
 					}
 
 					alert('Error: ' + err.jqXHR.responseText);
