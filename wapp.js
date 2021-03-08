@@ -822,8 +822,7 @@ var wapp = {
 	    return new Promise(function (resolve, reject) {
 			var dataExt = Object.assign(data, getContext());
 			$.ajax({
-				url: wapp.codelibUrl,
-				codelib: 'WhatsappXHR',
+				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
 				data: dataExt,
 			})
