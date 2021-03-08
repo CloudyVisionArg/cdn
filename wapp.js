@@ -619,6 +619,28 @@ var wapp = {
 	loadMessages: function (pChat, pOlders) {
 
 
+		var xhr = new XMLHttpRequest();
+		var url = wapp.codelibUrl + '?codelib=WhatsappXHR';
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+		var payload = encodeURIComponent('wappaction') + '=' + encodeURIComponent('test');
+
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+				if (xhr.status == 200) {
+					debugger;
+				} else if (xmlhttp.status == 400) {
+					debugger;
+				} else {
+					debugger;
+				}
+			}
+		};
+
+		xhr.open('POST', url, true);
+		xhr.send(payload);
+
+
+		/*
 		$.ajax({
 			url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 			method: 'POST',
@@ -638,6 +660,7 @@ var wapp = {
 			.fail(function (jqXHR, textStatus, errorThrown) {
 				debugger;
 			});
+		*/
 
 
 
