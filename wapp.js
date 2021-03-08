@@ -29,7 +29,7 @@ $(document).ready(function () {
 				
 			} else {
 				// Web
-				wapp.codelibUrl = '/c/codelibrun2.asp';
+				wapp.codelibUrl = '/c/codelibapi.asp';
 
 				root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
 				root.style.setProperty('--wapp-button-size', '25px');
