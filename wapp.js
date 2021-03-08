@@ -112,6 +112,7 @@ $(document).ready(function () {
 		}
 	);
 
+	// todo: sacar bootstrap
 	// El DIV para mostrar imagenes fullScreen
 	$(document.body).append(`	
 		<div class="modal fade" id="wappModal" tabindex="-1" role="dialog">
@@ -617,7 +618,7 @@ var wapp = {
 	},
 
 	loadMessages: function (pChat, pOlders) {
-		
+		/*
 		this.xhr({ wappaction: 'test' }).then(
 			function (res) {
 				console.log(res.data);
@@ -626,7 +627,7 @@ var wapp = {
 				debugger;
 			}
 		);
-		
+		*/
 
 		var msgLimit = 50;
 		var extNumber = pChat.attr('data-external-number');
