@@ -739,6 +739,10 @@ var wapp = {
 	},
 
 	send: function (el) {
+		if (typeof(cordova) == 'object') {
+			app7.preloader.show();
+		}
+
 		var $chat = $(el).closest('div.wapp-chat');
 		var $inp = $chat.find('.wapp-reply');
 		if ($inp.val()) {
@@ -763,8 +767,16 @@ var wapp = {
 					var $cont = $chat.find('div.wapp-messages');
 					$cont.append(wapp.renderMsg(msg));
 					$cont.scrollTop($cont[0].scrollHeight);
+
+					if (typeof(cordova) == 'object') {
+						app7.preloader.hide();
+					}
 				},
 				function (err) {
+					if (typeof(cordova) == 'object') {
+						app7.preloader.hide();
+					}
+
 					alert('Error: ' + err.jqXHR.responseText);
 				}
 			)
