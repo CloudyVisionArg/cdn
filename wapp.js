@@ -820,11 +820,12 @@ var wapp = {
 
 	xhr: function(data) {
 	    return new Promise(function (resolve, reject) {
-			var dataWithCred = Object.assign(data, credentials());
+			var dataExt = Object.assign(data, getContext());
 			$.ajax({
-				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
+				url: wapp.codelibUrl,
+				codelib: 'WhatsappXHR',
 				method: 'POST',
-				data: dataWithCred,
+				data: dataExt,
 			})
 				.done(function (data, textStatus, jqXHR) {
 					resolve({ data: data, textStatus: textStatus, jqXHR: jqXHR });
@@ -834,7 +835,7 @@ var wapp = {
 				});
 	    });
 
-		function credentials() {
+		function getContext() {
 			pwd = window.localStorage.getItem('userPassword');
 			if (!pwd) {
 				pwd = '';
