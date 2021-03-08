@@ -895,6 +895,7 @@ var wapp = {
 				userName: window.localStorage.getItem('userName'),
 				password: pwd,
 				instance: window.localStorage.getItem('instance'),
+				cordova: typeof(cordova) == 'object' ? 1 : 0,
 			}
 		}
 	}
