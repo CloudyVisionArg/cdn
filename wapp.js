@@ -840,9 +840,16 @@ var wapp = {
 	    });
 
 		function credentials() {
+			pwd = window.localStorage.getItem('userPassword');
+			if (!pwd) {
+				pwd = '';
+			} else if (pwd.substr(0, 2) == '__') {
+				pwd = decrypt(pwd.substr(2), '__')
+			}
+		
 			return {
 				userName: window.localStorage.getItem('userName'),
-				password: this.decryptPass(window.localStorage.getItem('userPassword')),
+				password: pwd,
 				instance: window.localStorage.getItem('instance'),
 			}
 		}
