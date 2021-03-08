@@ -737,9 +737,9 @@ var wapp = {
 				to: toN,
 				body: $inp.val(),
 			}).then(
-				function (data, textStatus, jqXHR) {
+				function (res) {
 					debugger;
-					var $dom = $($.parseXML(jqXHR.responseText));
+					var $dom = $($.parseXML(res.jqXHR.responseText));
 					msg = {};
 					msg.sid = $dom.find('Message Sid').html();
 					msg.direction = 'outbound';
@@ -751,8 +751,8 @@ var wapp = {
 					$cont.append(wapp.renderMsg(msg));
 					$cont.scrollTop($cont[0].scrollHeight);
 				},
-				function (jqXHR, textStatus, errorThrown) {
-					alert('Error: ' + jqXHR.responseText);
+				function (err) {
+					alert('Error: ' + err.jqXHR.responseText);
 				}
 			)
 
@@ -793,11 +793,11 @@ var wapp = {
 	serverDate: function () {
 	    return new Promise(function (resolve, reject) {
 			wapp.xhr({ wappaction: 'getDate' }).then(
-				function (data, textStatus, jqXHR) {
-					resolve(xmlDecodeDate(data));
+				function (res) {
+					resolve(xmlDecodeDate(res.data));
 				},
-				function (jqXHR, textStatus, errorThrown) {
-					reject(jqXHR);
+				function (err) {
+					reject(err);
 				}
 			)
 
@@ -838,12 +838,12 @@ var wapp = {
 				wappaction: 'msgMedia',
 				sid: pSid,
 			}).then(
-				function (data, textStatus, jqXHR) {
-					resolve(data);
+				function (res) {
+					resolve(res.data);
 				},
-				function (jqXHR, textStatus, errorThrown) {
+				function (err) {
 					debugger;
-					reject(jqXHR);
+					reject(err.jqXHR);
 				}
 			)
 
@@ -876,12 +876,10 @@ var wapp = {
 				data: dataWithCred,
 			})
 				.done(function (data, textStatus, jqXHR) {
-					debugger;
-					resolve(data, textStatus, jqXHR);
+					resolve({ data: data, textStatus: textStatus, jqXHR: jqXHR });
 				})
 				.fail(function (jqXHR, textStatus, errorThrown) {
-					debugger;
-					reject(jqXHR, textStatus, errorThrown);
+					reject({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
 				});
 	    });
 
