@@ -752,7 +752,6 @@ var wapp = {
 				body: $inp.val(),
 			}).then(
 				function (res) {
-					debugger;
 					var $dom = $($.parseXML(res.jqXHR.responseText));
 					msg = {};
 					msg.sid = $dom.find('Message Sid').html();
