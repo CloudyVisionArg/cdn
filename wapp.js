@@ -823,7 +823,8 @@ var wapp = {
 	xhr: function(data) {
 	    return new Promise(function (resolve, reject) {
 			debugger;
-			var dataWithCred = { data, credentials() };
+			var cred = credentials();
+			var dataWithCred = { data, cred };
 			$.ajax({
 				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
 				method: 'POST',
