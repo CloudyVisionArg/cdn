@@ -61,7 +61,6 @@ function addEmailButton(pControl) {
 }
 
 function addInputButton(pControl, pIcon, pAction, pPrepend) {
-	//todo: retornar el boton agregado
 	var esGroup = pControl.parent().hasClass('input-group');
 	var div;
 	
