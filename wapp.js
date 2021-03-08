@@ -255,7 +255,7 @@ var wapp = {
 				top: posY + 'px',
 				zIndex: 20000,
 			});
-			$picker[0].target = $(this).closest('.wapp-reply').find('.wapp-reply-input textarea')[0];
+			$picker[0].target = $(this).closest('.wapp-heading').find('.wapp-reply')[0];
 			$picker.show();
 			e.stopPropagation();
 		});
