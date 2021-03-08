@@ -617,56 +617,6 @@ var wapp = {
 	},
 
 	loadMessages: function (pChat, pOlders) {
-
-
-		var xhr = new XMLHttpRequest();
-		var url = wapp.codelibUrl + '?codelib=WhatsappXHR';
-		var payload = encodeURIComponent('wappaction') + '=' + encodeURIComponent('test');
-
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
-				if (xhr.status == 200) {
-					debugger;
-					console.log(xhr.responseText);
-				} else if (xmlhttp.status == 400) {
-					debugger;
-				} else {
-					debugger;
-				}
-			}
-		};
-
-		xhr.open('POST', url, true);
-		xhr.withCredentials = true;
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-		xhr.send(payload);
-
-
-		/*
-		$.ajax({
-			url: wapp.codelibUrl + '?codelib=WhatsappXHR',
-			method: 'POST',
-			crossDomain: true,
-			data: {
-				wappaction: 'test',
-			},
-			xhrFields: {
-				withCredentials: true
-			},
-		  
-		})
-			.done(function (data, textStatus, jqXHR) {
-				//debugger;
-				console.log(data);
-			})
-			.fail(function (jqXHR, textStatus, errorThrown) {
-				debugger;
-			});
-		*/
-
-
-
-
 		var msgLimit = 50;
 		var extNumber = pChat.attr('data-external-number');
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
@@ -862,4 +812,31 @@ var wapp = {
 				});
 	    });
 	},
+
+	xhr: function(data) {
+	    return new Promise(function (resolve, reject) {
+			debugger;
+			var dataWithCred = { data, credentials() };
+			$.ajax({
+				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
+				method: 'POST',
+				data: dataWithCred,
+			})
+				.done(function (data, textStatus, jqXHR) {
+					resolve(data);
+				})
+				.fail(function (jqXHR, textStatus, errorThrown) {
+					debugger;
+					reject(jqXHR);
+				});
+	    });
+
+		function credentials() {
+			return {
+				userName: window.localStorage.getItem('userName'),
+				password: this.decryptPass(window.localStorage.getItem('userPassword')),
+				instance: window.localStorage.getItem('instance'),
+			}
+		}
+	}
 }
