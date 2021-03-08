@@ -617,13 +617,13 @@ var wapp = {
 	},
 
 	loadMessages: function (pChat, pOlders) {
-		/*
+		
 		this.xhr({ wappaction: 'test' }).then(
 			function (res) {
 				console.log(res.data);
 			}
 		);
-		*/
+		
 
 		var msgLimit = 50;
 		var extNumber = pChat.attr('data-external-number');
