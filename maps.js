@@ -11,7 +11,7 @@ https://developers.google.com/maps/documentation/javascript/controls#maps_contro
         */
         key = decrypt('U2FsdGVkX1980jboiLSByehdC4OHgstgnLMTIAR3jlMmshxjimk1mfzFVv2NcgRQkl+FEI8GtQM+DmvOb8Cymg==', '');
     } else {
-        key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
+        key = 'AIzaSyDZy47rgaX-Jz74' + 'vgsA_wTUlbAodzLvnYY';
     }
     includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
 }());
