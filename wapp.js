@@ -151,10 +151,10 @@ var wapp = {
 			var popup = getPopup();
 			var $cont = popup.$el.find('.page-content .block');
 
-			var $img = $('<img/>');
+			var $img = $('<img/>').appendTo($cont);
 			$img.attr('src', $(this).attr('src'));
 			$img.load(function () {
-				$cont.html($img);
+				//$cont.html($img);
 				//$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
 			});
 
