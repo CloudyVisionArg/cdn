@@ -149,10 +149,15 @@ var wapp = {
 	viewImage: function (e) {
 		if (typeof(cordova) == 'object') {
 			var popup = getPopup();
-			var $pre = $('<pre/>', {
-				style: 'white-space: pre-wrap;',
-			}).append('texto muuuuy laaaargo')
-			$pre.appendTo(popup.$el.find('.page-content .block'));
+			var $cont = popup.$el.find('.page-content .block');
+
+			var $img = $('<img/>');
+			$img.attr('src', $(this).attr('src'));
+			$img.load(function () {
+				$cont.html($img);
+				//$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
+			});
+
 			popup.open();
 
 		} else {
