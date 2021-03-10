@@ -112,20 +112,21 @@ $(document).ready(function () {
 		}
 	);
 
-	// todo: sacar bootstrap
-	// El DIV para mostrar imagenes fullScreen
-	$(document.body).append(`	
-		<div class="modal fade" id="wappModal" tabindex="-1" role="dialog">
-		  <div class="modal-dialog" style="width: fit-content; margin: auto;">
-		    <div class="modal-content">
-		      <div class="modal-body" style="padding: 5px;"></div>
-		      <button style="position: fixed; top: 10px; right: 10px; background-color: white; padding: 0 5px 5px 5px; opacity: 0.5;" type="button" class="close" data-dismiss="modal">
-		        <span aria-hidden="true">&times;</span>
-		      </button>
-		    </div>
-		  </div>
-		</div>
-	`);
+	if (typeof(cordova) != 'object') {
+		// El DIV para mostrar imagenes fullScreen
+		$(document.body).append(`	
+			<div class="modal fade" id="wappModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" style="width: fit-content; margin: auto;">
+				<div class="modal-content">
+				<div class="modal-body" style="padding: 5px;"></div>
+				<button style="position: fixed; top: 10px; right: 10px; background-color: white; padding: 0 5px 5px 5px; opacity: 0.5;" type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				</div>
+			</div>
+			</div>
+		`);
+	}
 });
 
 
@@ -146,19 +147,29 @@ var wapp = {
 	},
 
 	viewImage: function (e) {
-		var $modal = $('#wappModal');
-		var $modalDialog = $modal.find('.modal-dialog');
-		var $modalBody = $modal.find('.modal-body');
-		$modalBody.html('<div style="padding: 30px;">Cargando...</div>');
-		$modalDialog.css({marginTop: ($(window).height() - 150) / 2});
-		$modal.modal('show');
-		var $img = $('<img/>');
-		$img.css({maxHeight: $(window).height() - 30, maxWidth: '100%'});
-		$img.attr('src', $(this).attr('src'));
-		$img.load(function () {
-			$modalBody.html($img);
-			$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
-		});
+		if (typeof(cordova) == 'object') {
+			var popup = getPopup('Estado de la sincronizacion');
+			var $pre = $('<pre/>', {
+				style: 'white-space: pre-wrap;',
+			}).append('texto muuuuy laaaargo')
+			$pre.appendTo(popup.$el.find('.page-content .block'));
+			popup.open();
+
+		} else {
+			var $modal = $('#wappModal');
+			var $modalDialog = $modal.find('.modal-dialog');
+			var $modalBody = $modal.find('.modal-body');
+			$modalBody.html('<div style="padding: 30px;">Cargando...</div>');
+			$modalDialog.css({marginTop: ($(window).height() - 150) / 2});
+			$modal.modal('show');
+			var $img = $('<img/>');
+			$img.css({maxHeight: $(window).height() - 30, maxWidth: '100%'});
+			$img.attr('src', $(this).attr('src'));
+			$img.load(function () {
+				$modalBody.html($img);
+				$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
+			});
+		}
 	},
 	
 	initChat: function (pCont) {
