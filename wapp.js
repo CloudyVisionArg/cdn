@@ -148,7 +148,7 @@ var wapp = {
 
 	viewImage: function (e) {
 		if (typeof(cordova) == 'object') {
-			var popup = getPopup('Estado de la sincronizacion');
+			var popup = getPopup();
 			var $pre = $('<pre/>', {
 				style: 'white-space: pre-wrap;',
 			}).append('texto muuuuy laaaargo')
