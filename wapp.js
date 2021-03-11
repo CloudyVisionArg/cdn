@@ -800,11 +800,11 @@ var wapp = {
 	},
 
 	send: function (el) {
-		wapp.cursorLoading(true);
-
 		var $chat = $(el).closest('div.wapp-chat');
 		var $inp = $chat.find('.wapp-reply');
 		if ($inp.val()) {
+			wapp.cursorLoading(true);
+
 			var fromN = $chat.attr('data-internal-number');
 			var toN = $chat.attr('data-external-number');
 
