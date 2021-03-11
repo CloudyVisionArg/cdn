@@ -141,6 +141,19 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 
+	cursorLoading: function(pLoading) {
+		if (typeof(cordova) == 'object') {
+			if (pLoading) {
+				app7.preloader.show();
+			} else {
+				app7.preloader.hide();
+			}
+
+		} else {
+			$('body').css('cursor', pLoading ? 'progress' : 'default');
+		}
+	},
+
 	ready: function (pCallback) {
 		var interv = setInterval(function () {
 			if (wapp.messagesFolder) {
@@ -664,12 +677,6 @@ var wapp = {
 		var intNumber = pChat.attr('data-internal-number');
 		if (!extNumber || !intNumber) return;
 
-		if (typeof(cordova) == 'object') {
-			app7.preloader.show();
-		} else {
-			$('body').css('cursor', 'progress');
-		}
-
 		// Toma los 10 ult digitos
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
 		var intNumberPart = intNumber.substr(intNumber.length - 10);
@@ -755,7 +762,7 @@ var wapp = {
 		                },
 		                function (err) {
 							console.log(err);
-							ending();
+							wapp.cursorLoading(false);
 		                	debugger;
 		                }
 		            );
@@ -763,21 +770,14 @@ var wapp = {
 			},
 			function (err) {
 				console.log(err);
-				ending();
+				wapp.cursorLoading(false);
 				debugger;
 			}
 		)
-
-		function ending() {
-			if (typeof(cordova) == 'object') {
-				app7.preloader.hide();
-			} else {
-				$('body').css('cursor', 'default');
-			}
-		}
 	},
 
 	loadMore: function (el) {
+		wapp.cursorLoading(true);
 		wapp.loadMessages($(el).closest('div.wapp-chat'), true);
 	},
 
@@ -792,11 +792,7 @@ var wapp = {
 	},
 
 	send: function (el) {
-		if (typeof(cordova) == 'object') {
-			app7.preloader.show();
-		} else {
-			$('body').css('cursor', 'progress');
-		}
+		wapp.cursorLoading(true);
 
 		var $chat = $(el).closest('div.wapp-chat');
 		var $inp = $chat.find('.wapp-reply');
@@ -823,24 +819,16 @@ var wapp = {
 					$cont.append(wapp.renderMsg(msg));
 					$cont.scrollTop($cont[0].scrollHeight);
 
-					ending();
+					wapp.cursorLoading(false);
 				},
 				function (err) {
-					ending();
+					wapp.cursorLoading(false);
 					alert('Error: ' + err.jqXHR.responseText);
 				}
 			)
 
 			$inp.val('');
 			wapp.inputResize($inp[0]);
-
-			function ending() {
-				if (typeof(cordova) == 'object') {
-					app7.preloader.hide();
-				} else {
-					$('body').css('cursor', 'default');
-				}
-			}
 		}
 	},
 
