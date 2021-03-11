@@ -664,6 +664,12 @@ var wapp = {
 		var intNumber = pChat.attr('data-internal-number');
 		if (!extNumber || !intNumber) return;
 
+		if (typeof(cordova) == 'object') {
+			app7.preloader.show();
+		} else {
+			$('body').css('cursor', 'progress');
+		}
+
 		// Toma los 10 ult digitos
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
 		var intNumberPart = intNumber.substr(intNumber.length - 10);
@@ -742,10 +748,14 @@ var wapp = {
 											$cont.scrollTop($cont[0].scrollHeight);
 									}
 								}, 2000);
-							}
+							};
+							
+							ending();
+
 		                },
 		                function (err) {
 							console.log(err);
+							ending();
 		                	debugger;
 		                }
 		            );
@@ -753,9 +763,18 @@ var wapp = {
 			},
 			function (err) {
 				console.log(err);
+				ending();
 				debugger;
 			}
 		)
+
+		function ending() {
+			if (typeof(cordova) == 'object') {
+				app7.preloader.hide();
+			} else {
+				$('body').css('cursor', 'default');
+			}
+		}
 	},
 
 	loadMore: function (el) {
@@ -804,25 +823,24 @@ var wapp = {
 					$cont.append(wapp.renderMsg(msg));
 					$cont.scrollTop($cont[0].scrollHeight);
 
-					if (typeof(cordova) == 'object') {
-						app7.preloader.hide();
-					} else {
-						$('body').css('cursor', 'default');
-					}
+					ending();
 				},
 				function (err) {
-					if (typeof(cordova) == 'object') {
-						app7.preloader.hide();
-					} else {
-						$('body').css('cursor', 'default');
-					}
-
+					ending();
 					alert('Error: ' + err.jqXHR.responseText);
 				}
 			)
 
 			$inp.val('');
 			wapp.inputResize($inp[0]);
+
+			function ending() {
+				if (typeof(cordova) == 'object') {
+					app7.preloader.hide();
+				} else {
+					$('body').css('cursor', 'default');
+				}
+			}
 		}
 	},
 
