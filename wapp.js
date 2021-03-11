@@ -493,7 +493,7 @@ var wapp = {
 							//todo: Safari no soporta OGG, ver si se puede hacer algo con esto: https://github.com/brion/ogv.js/
 							var $med = $('<audio/>', {
 								controls: true,
-								style: 'width: 260px;',
+								style: 'width: 100%;',
 							}).appendTo($div);
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
@@ -501,7 +501,7 @@ var wapp = {
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
 								controls: true,
-								style: 'width: 260px; object-fit: contain;',
+								style: 'width: 100%; object-fit: contain;',
 							}).appendTo($div);
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
