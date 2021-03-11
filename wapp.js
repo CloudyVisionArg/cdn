@@ -545,7 +545,7 @@ var wapp = {
 				var $img = $('<img/>', {
 					src: 'https://maps.google.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=color:red%7Csize:mid%7C' + 
 						lat + ',' + lng + '&zoom=15&size=260x130&key=' + key,
-					style: 'width: 260px; height: 130px; object-fit: cover;',
+					style: 'width: 100%; height: 130px; object-fit: cover;',
 				}).appendTo($a);
 			}
 
