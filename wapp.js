@@ -485,7 +485,6 @@ var wapp = {
 						if (it.ContentType.substr(0, 5) == 'image') {
 							$('<img/>', {
 								src: it.Url,
-								//todo: estos tamaños??
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
@@ -525,12 +524,7 @@ var wapp = {
 				var lng = pMsg.longitude;
 				
 				var $div = $('<div/>').appendTo($msgText);
-				
-				var $a = $('<a/>', {
-					target: '_blank',
-					href: 'https://www.google.com/maps/place/' + lat + ',' + lng,
-				}).appendTo($div);
-				
+
 				var key;
 				if (typeof(cordova) == 'object') {
 					/*
@@ -539,14 +533,21 @@ var wapp = {
 					*/
 					key = decrypt('U2FsdGVkX1980jboiLSByehdC4OHgstgnLMTIAR3jlMmshxjimk1mfzFVv2NcgRQkl+FEI8GtQM+DmvOb8Cymg==', '');
 				} else {
-					key = 'AIzaSyDZy47rgaX-Jz74vgsA_wTUlbAodzLvnYY';
+					key = 'AIzaSyDZy47rgaX-Jz74' + 'vgsA_wTUlbAodzLvnYY';
 				}
-			
+
 				var $img = $('<img/>', {
 					src: 'https://maps.google.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=color:red%7Csize:mid%7C' + 
 						lat + ',' + lng + '&zoom=15&size=260x130&key=' + key,
-					style: 'width: 100%; height: 130px; object-fit: cover;',
-				}).appendTo($a);
+					style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
+				}).appendTo($div);
+
+				var url = 'https://www.google.com/maps/place/' + lat + ',' + lng;
+				if (typeof(cordova) == 'object') {
+					$img.click(cordova.InAppBrowser.open(url, '_system'));
+				} else {
+					$img.click(window.open(url));
+				}
 			}
 
 			if (appendBody) {
