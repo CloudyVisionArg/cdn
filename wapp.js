@@ -487,7 +487,7 @@ var wapp = {
 							$('<img/>', {
 								src: it.Url,
 								//todo: estos tamaños??
-								style: 'cursor: pointer; width: 240px; height: 130px; object-fit: cover;',
+								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
