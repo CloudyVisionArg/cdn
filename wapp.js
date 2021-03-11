@@ -221,7 +221,7 @@ var wapp = {
 		}).appendTo(pCont);
 		
 		$messages.append(`      
-		    <div style="text-align: center; margin-bottom: 15px;">
+		    <div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
 				<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 			</div>
 		`);
@@ -683,7 +683,7 @@ var wapp = {
 		
 		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 			function (res) {
-				if (res.length < msgLimit && !incLoad) pChat.find('div.wapp-previous a').hide();
+				if (res.length < msgLimit && !incLoad) pChat.find('div.wapp-loadmore a').hide();
 				
 				if (res.length > 0) {
 		            // Arma un array de AccId
