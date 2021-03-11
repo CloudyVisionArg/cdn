@@ -547,8 +547,7 @@ var wapp = {
 				$img.attr('data-lng', lng);
 
 				$img.click(function () {
-					debugger;
-					var url = 'https://www.google.com/maps/place/' + lat + ',' + lng;
+					var url = 'https://www.google.com/maps/place/' + $(this).attr('data-lat') + ',' + $(this).attr('data-lng');
 					if (typeof(cordova) == 'object') {
 						cordova.InAppBrowser.open(url, '_system');
 					} else {
