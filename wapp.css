@@ -7,7 +7,7 @@
     margin-right: var(--wapp-chat-horizontal-margin);
 }
 
-.wapp-heading {
+.wapp-header, .wapp-footer {
     background-color: #ECECEC;
 	padding: 10px;
     display: flex;

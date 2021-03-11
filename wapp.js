@@ -206,7 +206,7 @@ var wapp = {
 	
 	initChat: function (pCont) {
 		var $heading = $('<div/>', {
-			class: 'wapp-heading',
+			class: 'wapp-header',
 		}).appendTo(pCont);
 		
 		var $headingLeft = $('<div/>', {
@@ -240,7 +240,7 @@ var wapp = {
 		`);
 			
 		var $reply = $('<div/>', {
-			class: 'wapp-heading',
+			class: 'wapp-footer',
 		}).appendTo(pCont);
 		
 		if (typeof(cordova) != 'object') {
@@ -299,7 +299,7 @@ var wapp = {
 				top: posY + 'px',
 				zIndex: 20000,
 			});
-			$picker[0].target = $(this).closest('.wapp-heading').find('.wapp-reply')[0];
+			$picker[0].target = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
 			$picker.show();
 			e.stopPropagation();
 		});
@@ -404,9 +404,9 @@ var wapp = {
 				remain = '';
 			}
 			
-            var $img = pChat.find('.wapp-heading .session img');
+            var $img = pChat.find('.wapp-header .session img');
             $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/' + light + '.png');
-			var $remain = pChat.find('.wapp-heading .session .session-time');
+			var $remain = pChat.find('.wapp-header .session .session-time');
 			$remain.html(remain);
 		}
 	},
