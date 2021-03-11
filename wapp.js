@@ -222,7 +222,7 @@ var wapp = {
 		
 		$messages.append(`      
 		    <div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
-				<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
+				<a href='#' onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 			</div>
 		`);
 			
@@ -506,6 +506,7 @@ var wapp = {
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
+							// todo: no anda en cordova
 							$('<a/>', {
 								 target: '_blank',
 								 href: it.Url,
@@ -542,13 +543,19 @@ var wapp = {
 					style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 				}).appendTo($div);
 
-				var url = 'https://www.google.com/maps/place/' + lat + ',' + lng;
-				if (typeof(cordova) == 'object') {
-					$img.click(cordova.InAppBrowser.open(url, '_system'));
-				} else {
-					$img.click(window.open(url));
-				}
-			}
+				$img.attr('data-lat', lat);
+				$img.attr('data-lng', lng);
+
+				$img.click(function () {
+					debugger;
+					var url = 'https://www.google.com/maps/place/' + lat + ',' + lng;
+					if (typeof(cordova) == 'object') {
+						cordova.InAppBrowser.open(url, '_system');
+					} else {
+						window.open(url);
+					}
+				});
+			};
 
 			if (appendBody) {
 				var body = pMsg.body;
