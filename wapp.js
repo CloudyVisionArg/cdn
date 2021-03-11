@@ -722,17 +722,17 @@ var wapp = {
 								wapp.insertMsg(pChat, msg);
 							});
 							
-							setTimeout(function () {
-								if (pOlders && $older.length > 0) {
-									$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
-								} else {
+							if (pOlders && $older.length > 0) {
+								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
+							} else {
+								setTimeout(function () {
 									// Se va al fondo
 									if (atBottom) {
 										if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20)
 											$cont.scrollTop($cont[0].scrollHeight);
 									}
-								}
-							}, 2000)
+								}, 2000);
+							}
 		                },
 		                function (err) {
 							console.log(err);
