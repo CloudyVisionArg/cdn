@@ -482,7 +482,6 @@ var wapp = {
 						
 						var $div = $('<div/>').appendTo($msgText);
 						
-						debugger;
 						if (it.ContentType.substr(0, 5) == 'image') {
 							$('<img/>', {
 								src: it.Url,
