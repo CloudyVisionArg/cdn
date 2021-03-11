@@ -348,10 +348,11 @@ var wapp = {
 
 		} else {
 			var extNumber = pChat.attr('data-external-number');
-			if (!extNumber) return;
-
-			var extNumberPart = extNumber.substr(extNumber.length - 10);
 			var intNumber = pChat.attr('data-internal-number');
+			if (!extNumber || !intNumber) return;
+
+			// Toma los 10 ult digitos
+			var extNumberPart = extNumber.substr(extNumber.length - 10);
 			var intNumberPart = intNumber.substr(intNumber.length - 10);
 
 			var formula = 'from like \'%' + extNumberPart + '\' and to like \'%' + intNumberPart + '\'';
@@ -485,7 +486,7 @@ var wapp = {
 							$('<img/>', {
 								src: it.Url,
 								//todo: estos tamaños??
-								style: 'cursor: pointer; width: 260px; height: 130px; object-fit: cover;',
+								style: 'cursor: pointer; width: 250px; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
@@ -653,11 +654,13 @@ var wapp = {
 		var msgLimit = 50;
 		
 		var extNumber = pChat.attr('data-external-number');
-		if (!extNumber) return;
-
-		var extNumberPart = extNumber.substr(extNumber.length - 10);
 		var intNumber = pChat.attr('data-internal-number');
+		if (!extNumber || !intNumber) return;
+
+		// Toma los 10 ult digitos
+		var extNumberPart = extNumber.substr(extNumber.length - 10);
 		var intNumberPart = intNumber.substr(intNumber.length - 10);
+
 		var incLoad = false;
 		var lastLoad = pChat.attr('data-last-load');
 		if (lastLoad) lastLoad = new Date(new Date(lastLoad) - 5000);
