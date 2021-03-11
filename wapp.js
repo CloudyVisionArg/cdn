@@ -660,6 +660,12 @@ var wapp = {
 			} else {
 				return '<i class="fa fa-exclamation-circle" />';
 			}
+		} else if (pStatus == 'failed') {
+			if (typeof(cordova) == 'object') {
+				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>';
+			} else {
+				return '<i class="fa fa-exclamation-triangle" />';
+			}
 		} else {
 			return '??';
 		}
