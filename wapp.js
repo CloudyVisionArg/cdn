@@ -505,7 +505,7 @@ var wapp = {
 							//todo: Safari no soporta OGG, ver si se puede hacer algo con esto: https://github.com/brion/ogv.js/
 							var $med = $('<audio/>', {
 								controls: true,
-								style: 'width: 240px;',
+								style: 'width: 230px;',
 							}).appendTo($div);
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
