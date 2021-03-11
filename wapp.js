@@ -50,16 +50,36 @@ $(document).ready(function () {
 					
 					// Carga mensajes nuevos cada 5 segs
 					setInterval(function () {
-						$('div.wapp-chat[data-ready]').each(function () {
-							wapp.loadMessages($(this));
-						});
+						if (typeof(cordova) == 'object') {
+							if (app7.online) {
+								dSession.checkToken(doAction);
+							}
+						} else {
+							doAction();
+						}
+
+						function doAction() {
+							$('div.wapp-chat[data-ready]').each(function () {
+								wapp.loadMessages($(this));
+							});
+						}
 					}, 5000);
 	
 					// Actualiza el estado de la sesion cada 1'
 					setInterval(function () {
-						$('div.wapp-chat[data-ready]').each(function () {
-							wapp.refreshSession($(this));
-						});
+						if (typeof(cordova) == 'object') {
+							if (app7.online) {
+								dSession.checkToken(doAction);
+							}
+						} else {
+							doAction();
+						}
+
+						function doAction() {
+							$('div.wapp-chat[data-ready]').each(function () {
+								wapp.refreshSession($(this));
+							});
+						}
 					}, 60000);
 				}
 			);
