@@ -757,8 +757,7 @@ var wapp = {
 								}, 2000);
 							};
 							
-							ending();
-
+							wapp.cursorLoading(false);
 		                },
 		                function (err) {
 							console.log(err);
