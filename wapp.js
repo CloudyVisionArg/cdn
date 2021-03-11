@@ -348,6 +348,8 @@ var wapp = {
 
 		} else {
 			var extNumber = pChat.attr('data-external-number');
+			if (!extNumber) return;
+
 			var extNumberPart = extNumber.substr(extNumber.length - 10);
 			var intNumber = pChat.attr('data-internal-number');
 			var intNumberPart = intNumber.substr(intNumber.length - 10);
@@ -648,19 +650,11 @@ var wapp = {
 	},
 
 	loadMessages: function (pChat, pOlders) {
-		/*
-		this.xhr({ wappaction: 'test' }).then(
-			function (res) {
-				console.log(res.data);
-			},
-			function (err) {
-				debugger;
-			}
-		);
-		*/
-
 		var msgLimit = 50;
+		
 		var extNumber = pChat.attr('data-external-number');
+		if (!extNumber) return;
+
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
 		var intNumber = pChat.attr('data-internal-number');
 		var intNumberPart = intNumber.substr(intNumber.length - 10);
