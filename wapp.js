@@ -754,13 +754,16 @@ var wapp = {
 							if (pOlders && $older.length > 0) {
 								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
 							} else {
-								setTimeout(function () {
-									// Se va al fondo
+								if (incLoad) {
 									if (atBottom) {
 										if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20)
 											$cont.scrollTop($cont[0].scrollHeight);
 									}
-								}, 2000);
+								} else {
+									setTimeout(function () {
+										$cont.scrollTop($cont[0].scrollHeight);
+									}, 2000);
+								}
 							};
 
 							wapp.cursorLoading(false);
