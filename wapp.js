@@ -141,6 +141,7 @@ $(document).ready(function () {
 			wapp.useOgv = true;
 		}
 	}
+	if (wapp.useOgv) includeJs('ogv', 'http://cloudycrm.net/c/wapp/ogv.js');
 });
 
 
