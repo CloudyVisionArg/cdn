@@ -528,7 +528,7 @@ var wapp = {
 								})
 
 							} else if (typeof(cordova) == 'object' && device.platform == 'iOS') {
-								cordova.plugins.fileOpener2.open(pFile, undefined, {
+								cordova.plugins.fileOpener2.open(it.Url, undefined, {
 									success: function () {
 										console.log('File opened');
 									},
