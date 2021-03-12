@@ -540,7 +540,8 @@ var wapp = {
 											console.log('File opened');
 										},
 										error: function (err) {
-											logAndToast('fileOpener2 error: ' + err.message);
+											console.log(err);
+											toast('fileOpener2 error: ' + err.message);
 										},
 									});
 								})
