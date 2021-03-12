@@ -108,16 +108,11 @@ $(document).ready(function () {
 				}
 			);
 
-			if (typeof(cordova) == 'object' && device.platform == 'iOS') {
+			var ua = navigator.userAgent;
+			if (typeof(cordova) != 'object' && ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
 				wapp.useOgv = true;
-				includeJs('ogv', '/lib/ogv/ogv.js');
-			} else {
-				var ua = navigator.userAgent;
-				if (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
-					wapp.useOgv = true;
-					includeJs('ogv', '/c/wapp/ogv/ogv.js');
-				}
-			};
+				includeJs('ogv', '/c/wapp/ogv/ogv.js');
+			}
 		}
 	);
 
@@ -530,17 +525,18 @@ var wapp = {
 								$btn.appendTo($div);
 								$btn.click(function () {
 									player.play();
-
-									var media = new Media(player.src,
-										function () {
-											debugger;
-										},
-										function () {
-											debugger;
-										},
-									);
 								})
 
+							} else if (typeof(cordova) == 'object' && device.platform == 'iOS') {
+								cordova.plugins.fileOpener2.open(pFile, undefined, {
+									success: function () {
+										console.log('File opened');
+									},
+									error: function (err) {
+										logAndToast('fileOpener2 error: ' + err.message);
+									},
+								});
+											
 							} else {
 								var $med = $('<audio/>', {
 									controls: true,
