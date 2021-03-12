@@ -108,7 +108,6 @@ $(document).ready(function () {
 				}
 			);
 
-			debugger;
 			if (typeof(cordova) == 'object' && device.platform == 'iOS') {
 				wapp.useOgv = true;
 			} else {
@@ -515,7 +514,10 @@ var wapp = {
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
 							if (wapp.useOgv) {
-								$div.append('holaaa');
+								var player = new OGVPlayer();
+								$div.append(player);
+								player.src = 'https://cloudycrm.net/c/wapp/corsproxy.asp?url=' + encodeURIComponent(it.Url);
+								//player.play();
 
 							} else {
 								//todo: Safari no soporta OGG, ver si se puede hacer algo con esto: https://github.com/brion/ogv.js/
