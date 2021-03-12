@@ -514,13 +514,18 @@ var wapp = {
 							}).click(wapp.viewImage).appendTo($div);
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
-							//todo: Safari no soporta OGG, ver si se puede hacer algo con esto: https://github.com/brion/ogv.js/
-							var $med = $('<audio/>', {
-								controls: true,
-								style: 'width: 230px;',
-							}).appendTo($div);
-							
-							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+							if (wapp.useOgv) {
+								$div.append('holaaa');
+
+							} else {
+								//todo: Safari no soporta OGG, ver si se puede hacer algo con esto: https://github.com/brion/ogv.js/
+								var $med = $('<audio/>', {
+									controls: true,
+									style: 'width: 230px;',
+								}).appendTo($div);
+								
+								$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+							}
 							
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
