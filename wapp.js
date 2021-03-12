@@ -110,6 +110,7 @@ $(document).ready(function () {
 
 			if (typeof(cordova) == 'object' && device.platform == 'iOS') {
 				wapp.useOgv = true;
+				includeJs('ogv', '/lib/ogv/ogv.js');
 			} else {
 				var ua = navigator.userAgent;
 				if (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
