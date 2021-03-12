@@ -108,11 +108,13 @@ $(document).ready(function () {
 				}
 			);
 
+			/*
 			var ua = navigator.userAgent;
 			if (typeof(cordova) != 'object' && ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
 				wapp.useOgv = true;
 				includeJs('ogv', '/c/wapp/ogv/ogv.js');
 			}
+			*/
 		}
 	);
 
@@ -146,7 +148,7 @@ var wapp = {
 	templatesFolder: undefined,
 	loggedUser: undefined,
 	codelibUrl: undefined,
-	useOgv: undefined,
+	//useOgv: undefined,
 
 	cursorLoading: function(pLoading) {
 		if (typeof(cordova) == 'object') {
@@ -510,6 +512,14 @@ var wapp = {
 							}).click(wapp.viewImage).appendTo($div);
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
+							var $med = $('<audio/>', {
+								controls: true,
+								style: 'width: 230px;',
+							}).appendTo($div);
+							
+							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+
+							/*
 							if (wapp.useOgv) {
 								let player = new OGVPlayer();
 								$div.append(player);
@@ -527,36 +537,7 @@ var wapp = {
 								$btn.click(function () {
 									player.play();
 								})
-
-							} else if (typeof(cordova) == 'object' && device.platform == 'iOS') {
-								$btn = $('<i/>', {
-									class: 'f7-icons',
-								}).append('play_fill');
-								$btn.appendTo($div);
-								$btn.click(function () {
-									debugger;
-									cordova.InAppBrowser.open(it.Url, '_system');
-									/*
-									cordova.plugins.fileOpener2.open(it.Url, undefined, {
-										success: function () {
-											console.log('File opened');
-										},
-										error: function (err) {
-											console.log(err);
-											toast('fileOpener2 error: ' + err.message);
-										},
-									});
-									*/
-								})
-											
-							} else {
-								var $med = $('<audio/>', {
-									controls: true,
-									style: 'width: 230px;',
-								}).appendTo($div);
-								
-								$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
-							}
+							*/
 							
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
