@@ -501,6 +501,7 @@ var wapp = {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
 						
 						var $div = $('<div/>').appendTo($msgText);
+						var $btn;
 						
 						if (it.ContentType.substr(0, 5) == 'image') {
 							$('<img/>', {
@@ -528,14 +529,20 @@ var wapp = {
 								})
 
 							} else if (typeof(cordova) == 'object' && device.platform == 'iOS') {
-								cordova.plugins.fileOpener2.open(it.Url, undefined, {
-									success: function () {
-										console.log('File opened');
-									},
-									error: function (err) {
-										logAndToast('fileOpener2 error: ' + err.message);
-									},
-								});
+								$btn = $('<i/>', {
+									class: 'f7-icons',
+								}).append('play_fill');
+								$btn.appendTo($div);
+								$btn.click(function () {
+									cordova.plugins.fileOpener2.open(it.Url, undefined, {
+										success: function () {
+											console.log('File opened');
+										},
+										error: function (err) {
+											logAndToast('fileOpener2 error: ' + err.message);
+										},
+									});
+								})
 											
 							} else {
 								var $med = $('<audio/>', {
