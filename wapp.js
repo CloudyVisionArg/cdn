@@ -520,10 +520,10 @@ var wapp = {
 								if (typeof(cordova) == 'object') {
 									$btn = $('<i/>', {
 										class: 'f7-icons',
-									}).append('clock');
+									}).append('play_fill');
 								} else {
 									$btn = $('<i/>', {
-										class: 'fa fa-clock-o',
+										class: 'fa fa-play',
 									});
 								}
 								$btn.appendTo($div);
@@ -532,9 +532,7 @@ var wapp = {
 									player.play();
 								})
 
-
 							} else {
-								//todo: Safari no soporta OGG, ver si se puede hacer algo con esto: https://github.com/brion/ogv.js/
 								var $med = $('<audio/>', {
 									controls: true,
 									style: 'width: 230px;',
