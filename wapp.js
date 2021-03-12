@@ -517,7 +517,7 @@ var wapp = {
 								let player = new OGVPlayer();
 								$div.append(player);
 								player.src = 'https://cloudycrm.net/c/wapp/corsproxy.asp?url=' + encodeURIComponent(it.Url);
-								let $button = $('<button/>')
+								let $button = $('<button/>').appendTo($div);
 								$button.click(function () {
 									debugger;
 									player.play();
