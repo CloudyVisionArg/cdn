@@ -515,7 +515,7 @@ var wapp = {
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
 							if (wapp.useOgv) {
 								let player = new OGVPlayer();
-								//$div.append(player);
+								$div.append(player);
 								player.src = 'https://cloudycrm.net/c/wapp/corsproxy.asp?url=' + encodeURIComponent(it.Url);
 								if (typeof(cordova) == 'object') {
 									$btn = $('<i/>', {
@@ -783,13 +783,11 @@ var wapp = {
 							
 							if (pOlders && $older.length > 0) {
 								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
-								debugger;
 							} else {
 								if (incLoad) {
 									if (atBottom) {
 										if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
 											$cont.scrollTop($cont[0].scrollHeight);
-											debugger;
 										}
 									}
 								} else {
@@ -797,7 +795,7 @@ var wapp = {
 										debugger;
 										$cont.scrollTop($cont[0].scrollHeight);
 										debugger;
-									}, 5000);
+									}, 2000);
 								}
 							};
 
