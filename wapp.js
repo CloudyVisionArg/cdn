@@ -114,9 +114,9 @@ $(document).ready(function () {
 				var ua = navigator.userAgent;
 				if (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
 					wapp.useOgv = true;
+					includeJs('ogv', '/c/wapp/ogv/ogv.js');
 				}
-			}
-			if (wapp.useOgv) includeJs('ogv', 'https://cloudycrm.net/c/wapp/ogv/ogv.js');
+			};
 		}
 	);
 
