@@ -781,20 +781,22 @@ var wapp = {
 								wapp.insertMsg(pChat, msg);
 							});
 							
-							debugger;
 							if (pOlders && $older.length > 0) {
 								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
+								debugger;
 							} else {
 								if (incLoad) {
 									if (atBottom) {
-										if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20)
+										if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
 											$cont.scrollTop($cont[0].scrollHeight);
+											debugger;
+										}
 									}
 								} else {
 									setTimeout(function () {
-										debugger;
 										$cont.scrollTop($cont[0].scrollHeight);
-									}, 2000);
+										debugger;
+									}, 3000);
 								}
 							};
 
