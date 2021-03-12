@@ -530,6 +530,15 @@ var wapp = {
 								$btn.appendTo($div);
 								$btn.click(function () {
 									player.play();
+
+									var media = new Media(player.src,
+										function () {
+											debugger;
+										},
+										function () {
+											debugger;
+										},
+									);
 								})
 
 							} else {
