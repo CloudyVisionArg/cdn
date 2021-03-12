@@ -517,8 +517,17 @@ var wapp = {
 								let player = new OGVPlayer();
 								$div.append(player);
 								player.src = 'https://cloudycrm.net/c/wapp/corsproxy.asp?url=' + encodeURIComponent(it.Url);
-								let $button = $('<button/>').appendTo($div);
-								$button.click(function () {
+								if (typeof(cordova) == 'object') {
+									$btn = $('<i/>', {
+										class: 'f7-icons',
+									}).append('clock');
+								} else {
+									$btn = $('<i/>', {
+										class: 'fa fa-clock-o',
+									});
+								}
+								$btn.appendTo($div);
+								$btn.click(function () {
 									debugger;
 									player.play();
 								})
