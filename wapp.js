@@ -107,6 +107,17 @@ $(document).ready(function () {
 		
 				}
 			);
+
+			debugger;
+			if (typeof(cordova) == 'object' && device.platform == 'iOS') {
+				wapp.useOgv = true;
+			} else {
+				var ua = navigator.userAgent;
+				if (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
+					wapp.useOgv = true;
+				}
+			}
+			if (wapp.useOgv) includeJs('ogv', 'http://cloudycrm.net/c/wapp/ogv.js');
 		}
 	);
 
@@ -131,17 +142,6 @@ $(document).ready(function () {
 			</div>
 		`);
 	}
-
-	debugger;
-	if (typeof(cordova) == 'object' && device.platform == 'iOS') {
-		wapp.useOgv = true;
-	} else {
-		var ua = navigator.userAgent;
-		if (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
-			wapp.useOgv = true;
-		}
-	}
-	if (wapp.useOgv) includeJs('ogv', 'http://cloudycrm.net/c/wapp/ogv.js');
 });
 
 
