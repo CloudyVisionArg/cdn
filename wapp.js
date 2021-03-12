@@ -131,6 +131,16 @@ $(document).ready(function () {
 			</div>
 		`);
 	}
+
+	debugger;
+	if (typeof(cordova) == 'object' && device.platform == 'iOS') {
+		wapp.useOgv = true;
+	} else {
+		var ua = navigator.userAgent;
+		if (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
+			wapp.useOgv = true;
+		}
+	}
 });
 
 
@@ -140,6 +150,7 @@ var wapp = {
 	templatesFolder: undefined,
 	loggedUser: undefined,
 	codelibUrl: undefined,
+	useOgv: undefined,
 
 	cursorLoading: function(pLoading) {
 		if (typeof(cordova) == 'object') {
