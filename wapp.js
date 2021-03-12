@@ -792,6 +792,7 @@ var wapp = {
 									}
 								} else {
 									setTimeout(function () {
+										debugger;
 										$cont.scrollTop($cont[0].scrollHeight);
 									}, 2000);
 								}
