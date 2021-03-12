@@ -534,6 +534,7 @@ var wapp = {
 								}).append('play_fill');
 								$btn.appendTo($div);
 								$btn.click(function () {
+									debugger;
 									cordova.plugins.fileOpener2.open(it.Url, undefined, {
 										success: function () {
 											console.log('File opened');
