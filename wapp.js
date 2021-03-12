@@ -515,7 +515,7 @@ var wapp = {
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
 							if (wapp.useOgv) {
 								let player = new OGVPlayer();
-								$div.append(player);
+								//$div.append(player);
 								player.src = 'https://cloudycrm.net/c/wapp/corsproxy.asp?url=' + encodeURIComponent(it.Url);
 								if (typeof(cordova) == 'object') {
 									$btn = $('<i/>', {
@@ -797,7 +797,7 @@ var wapp = {
 										debugger;
 										$cont.scrollTop($cont[0].scrollHeight);
 										debugger;
-									}, 3000);
+									}, 5000);
 								}
 							};
 
