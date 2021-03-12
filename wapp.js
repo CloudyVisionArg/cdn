@@ -528,7 +528,6 @@ var wapp = {
 								}
 								$btn.appendTo($div);
 								$btn.click(function () {
-									debugger;
 									player.play();
 								})
 
@@ -782,6 +781,7 @@ var wapp = {
 								wapp.insertMsg(pChat, msg);
 							});
 							
+							debugger;
 							if (pOlders && $older.length > 0) {
 								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
 							} else {
