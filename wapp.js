@@ -535,6 +535,8 @@ var wapp = {
 								$btn.appendTo($div);
 								$btn.click(function () {
 									debugger;
+									cordova.InAppBrowser.open(it.Url, '_system');
+									/*
 									cordova.plugins.fileOpener2.open(it.Url, undefined, {
 										success: function () {
 											console.log('File opened');
@@ -544,6 +546,7 @@ var wapp = {
 											toast('fileOpener2 error: ' + err.message);
 										},
 									});
+									*/
 								})
 											
 							} else {
