@@ -514,10 +514,15 @@ var wapp = {
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
 							if (wapp.useOgv) {
-								var player = new OGVPlayer();
+								let player = new OGVPlayer();
 								$div.append(player);
 								player.src = 'https://cloudycrm.net/c/wapp/corsproxy.asp?url=' + encodeURIComponent(it.Url);
-								//player.play();
+								let $button = $('<button/>')
+								$button.click(function () {
+									debugger;
+									player.play();
+								})
+
 
 							} else {
 								//todo: Safari no soporta OGG, ver si se puede hacer algo con esto: https://github.com/brion/ogv.js/
