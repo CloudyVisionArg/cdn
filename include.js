@@ -35,23 +35,23 @@ function includeJs() {
 	var id = arguments[0].toLowerCase();
 
 	if (id == 'javascript') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@14/javascript.js'
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/javascript.js'
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
 
 	} else if (id == 'emojis') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@14/emojis.js'
-		src = 'https://cloudycrm.net/c/gitcdn.asp?path=/emojis.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/emojis.js'
+		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/emojis.js';
 
 	} else if (id == 'whatsapp') {
 		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@16/wapp.js';
 		src = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp.js';
 
 	} else if (id == 'maps') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/maps.js';
-		src = 'https://cloudycrm.net/c/gitcdn.asp?path=/maps.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/maps.js';
+		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/maps.js';
 
 	} else if (id == 'qrcode') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@5/qrcode.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/qrcode.js';
 
 	} else {
 		if (typeof arguments[1] == 'string') {
