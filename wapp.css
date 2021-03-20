@@ -5,6 +5,8 @@
     font-size: 14px;
     margin-left: var(--wapp-chat-horizontal-margin);
     margin-right: var(--wapp-chat-horizontal-margin);
+    margin-top: var(--wapp-chat-vertical-margin);
+    margin-bottom: var(--wapp-chat-vertical-margin);
 }
 
 .wapp-header, .wapp-footer {
