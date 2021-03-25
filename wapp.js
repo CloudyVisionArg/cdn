@@ -1,6 +1,7 @@
 /*
 todo:
 - Mejorar el estilo del picker de plantillas
+- Enviar media
 */
 
 (function() {
@@ -522,6 +523,7 @@ var wapp = {
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 
 							/*
+							//todo: Safari no reproduce OGG, probe con este pero anda en la web, no en el app
 							if (wapp.useOgv) {
 								let player = new OGVPlayer();
 								$div.append(player);
@@ -886,13 +888,16 @@ var wapp = {
 	},
 	
 	template: function (template, target) {
+		wapp.cursorLoading(true);
 		DoorsAPI.folderSearch(wapp.templatesFolder, 'text', 'name = \'' + template + '\'').then(
 			function (res) {
+				wapp.cursorLoading(false);
 				insertAtCaret(target, res[0]['TEXT']);
 				wapp.inputResize(target);
 				$(target).focus();
 			},
 			function (err) {
+				wapp.cursorLoading(false);
 				console.log(err);
 			}
 		)
