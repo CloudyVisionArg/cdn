@@ -166,6 +166,7 @@ var wapp = {
 		}
 	},
 
+	// Llama al callback cdo termina de inicializarse
 	ready: function (pCallback) {
 		var interv = setInterval(function () {
 			if (wapp.messagesFolder) {
@@ -739,8 +740,6 @@ var wapp = {
 			formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
 		};
 		
-		var $cont = pChat.find('div.wapp-messages');
-		
 		wapp.serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
 		
 		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
@@ -755,6 +754,7 @@ var wapp = {
 		            // Levanta los accounts, completa el nombre y renderiza
 		            DoorsAPI.accountsSearch('acc_id in (' + ids.join(',') + ')', 'name').then(
 		                function (accs) {
+							var $cont = pChat.find('div.wapp-messages');
 		                	var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
 		                	var sessionUpdated = false;
 		                	
