@@ -219,7 +219,7 @@ var wapp = {
 	
 	renderChat: function(pCont) {
 		var $cont = $(pCont);
-		if ($cont.children('.div.wapp-header').length > 0) return;
+		if ($cont.attr('data-rendered') == '1') return;
 
 		var $heading = $('<div/>', {
 			class: 'wapp-header',
