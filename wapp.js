@@ -872,6 +872,7 @@ var wapp = {
 		
 		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 			function (res) {
+				debugger;
 				var $loadMore = pChat.find('div.wapp-loadmore a');
 				if (res.length < msgLimit && !incLoad) {
 					$loadMore.hide();
