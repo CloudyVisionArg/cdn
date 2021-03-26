@@ -306,6 +306,12 @@ var wapp = {
 						buttons: [
 							[
 								{
+									text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
+									onClick: function () {
+										toast('En desarrollo');
+									}
+								},
+								{
 									text: '<i class="f7-icons">camera</i>&nbsp;&nbsp;C&aacute;mara',
 									onClick: function () {
 										toast('En desarrollo');
@@ -324,13 +330,13 @@ var wapp = {
 									}
 								},
 								{
-									text: '<i class="f7-icons">plus</i>&nbsp;&nbsp;Ubicaci&oacute;n',
+									text: '<i class="f7-icons">placemark</i>&nbsp;&nbsp;Ubicaci&oacute;n',
 									onClick: function () {
 										toast('En desarrollo');
 									}
 								},
 								{
-									text: '<i class="f7-icons">menu</i>&nbsp;&nbsp;Plantilla',
+									text: '<i class="f7-icons">chat_bubble_text</i>&nbsp;&nbsp;Plantilla',
 									onClick: function (actions, e) {
 										debugger;
 										if (wapp.templates && wapp.templates.length > 0) {
