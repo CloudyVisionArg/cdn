@@ -284,7 +284,45 @@ var wapp = {
 				}).append('plus').appendTo($div);
 			}
 
-			
+			$media.click(function (e) {
+				if (typeof(cordova) != 'object') {
+					alert('En desarrollo');
+
+				} else {
+					//  Media options
+					var mediaOptions = app7.actions.create({
+						buttons: [
+							{
+								text: 'Quick sync',
+								onClick: function () {
+									sync.sync();
+								}
+							},
+							{
+								text: 'Full sync',
+								onClick: function () {
+									sync.sync(true);
+								}
+							},
+							{
+								text: 'Reset sync status',
+								onClick: function () {
+									sync.syncing(false);
+									toast("Sync status reseted");
+								}
+							},
+							{
+								text: 'Cancel',
+								color: 'red',
+								close: true,
+							},
+						]
+					});
+
+					mediaOptions.open();
+				}
+			});
+
 			// Boton Emoji
 			if (typeof(cordova) != 'object') {
 				var $div = $('<div/>', {
