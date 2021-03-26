@@ -384,6 +384,7 @@ var wapp = {
 						]
 					});
 
+					mediaActions.params.chatEl = $cont[0];
 					mediaActions.open();
 				}
 			});
