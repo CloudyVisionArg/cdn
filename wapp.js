@@ -293,28 +293,34 @@ var wapp = {
 					var mediaOptions = app7.actions.create({
 						buttons: [
 							{
-								text: 'Quick sync',
+								text: 'Cámara',
 								onClick: function () {
-									sync.sync();
+									toast('En desarrollo');
 								}
 							},
 							{
-								text: 'Full sync',
+								text: 'Fotos y Videos',
 								onClick: function () {
-									sync.sync(true);
+									toast('En desarrollo');
 								}
 							},
 							{
-								text: 'Reset sync status',
+								text: 'Documento',
 								onClick: function () {
-									sync.syncing(false);
-									toast("Sync status reseted");
+									toast('En desarrollo');
 								}
 							},
 							{
-								text: 'Cancel',
-								color: 'red',
-								close: true,
+								text: 'Ubicación',
+								onClick: function () {
+									toast('En desarrollo');
+								}
+							},
+							{
+								text: 'Plantilla',
+								onClick: function () {
+									toast('En desarrollo');
+								}
 							},
 						]
 					});
