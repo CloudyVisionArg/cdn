@@ -292,36 +292,45 @@ var wapp = {
 					//  Media options
 					var mediaOptions = app7.actions.create({
 						buttons: [
-							{
-								text: 'Cámara',
-								onClick: function () {
-									toast('En desarrollo');
+							[
+								{
+									text: 'Cámara',
+									onClick: function () {
+										toast('En desarrollo');
+									}
+								},
+								{
+									text: 'Fotos y Videos',
+									onClick: function () {
+										toast('En desarrollo');
+									}
+								},
+								{
+									text: 'Documento',
+									onClick: function () {
+										toast('En desarrollo');
+									}
+								},
+								{
+									text: 'Ubicación',
+									onClick: function () {
+										toast('En desarrollo');
+									}
+								},
+								{
+									text: 'Plantilla',
+									onClick: function () {
+										toast('En desarrollo');
+									}
+								},
+							],
+							[
+								{
+									text: 'Cancelar',
+									bold: true,
+									close: true,
 								}
-							},
-							{
-								text: 'Fotos y Videos',
-								onClick: function () {
-									toast('En desarrollo');
-								}
-							},
-							{
-								text: 'Documento',
-								onClick: function () {
-									toast('En desarrollo');
-								}
-							},
-							{
-								text: 'Ubicación',
-								onClick: function () {
-									toast('En desarrollo');
-								}
-							},
-							{
-								text: 'Plantilla',
-								onClick: function () {
-									toast('En desarrollo');
-								}
-							},
+							]
 						]
 					});
 
