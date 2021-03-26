@@ -47,14 +47,14 @@ $(document).ready(function () {
 					if (typeof(cordova) != 'object') {
 						// Carga inicial
 						$('div.wapp-chat').each(function () {
-							wapp.initChat($(this));
+							wapp.init($(this));
 						});
 					}
 					
 					// Carga mensajes nuevos cada 5 segs
 					setInterval(function () {
 						wapp.checkSession(function () {
-							$('div.wapp-chat[data-ready]').each(function () {
+							$('div.wapp-chat[data-rendered]').each(function () {
 								wapp.loadMessages($(this));
 							});
 						});
@@ -63,7 +63,7 @@ $(document).ready(function () {
 					// Actualiza el estado de la sesion cada 1'
 					setInterval(function () {
 						wapp.checkSession(function () {
-							$('div.wapp-chat[data-ready]').each(function () {
+							$('div.wapp-chat[data-rendered]').each(function () {
 								wapp.refreshSession($(this));
 							});
 						});
@@ -217,16 +217,20 @@ var wapp = {
 		}
 	},
 	
-	initChat: function (pCont) {
+	renderChat: function(pCont) {
+		var $cont = $(pCont);
+		if ($cont.children('.div.wapp-header').length > 0) return;
+
 		var $heading = $('<div/>', {
 			class: 'wapp-header',
-		}).appendTo(pCont);
+		}).appendTo($cont);
 		
 		var $headingLeft = $('<div/>', {
 			style: 'width: 40%;',
 		}).appendTo($heading);
 		
-		$headingLeft.append('<b>' + pCont.attr('data-external-name') + '</b><br>(' + pCont.attr('data-external-number') + ')');
+		$headingLeft.append('<b><span class="external-name"' + pCont.attr('data-external-name') + 
+			'</span></b><br>(<span class="external-number">' + pCont.attr('data-external-number') + '</span>)');
 		
 		var $headingSession = $('<div/>', {
 			class: 'session',
@@ -240,7 +244,8 @@ var wapp = {
 			style: 'width: 40%; text-align: right;',
 		}).appendTo($heading);
 		
-		$headingRight.append('<b>' + pCont.attr('data-internal-name') + '</b><br>(' + pCont.attr('data-internal-number') + ')');
+		$headingRight.append('<b><span class="internal-name"' + pCont.attr('data-internal-name') + 
+		'</span></b><br>(<span class="internal-number">' + pCont.attr('data-internal-number') + '</span>)');
 
 		var $messages = $('<div/>', {
 			class: 'wapp-messages',
@@ -362,10 +367,28 @@ var wapp = {
 			wapp.send(this);
 		});
 
-		wapp.loadMessages(pCont);
-		wapp.refreshSession(pCont);
+		$cont.attr('data-rendered', '1');
+	},
 
-		pCont.attr('data-ready', '1');
+	init: function (pCont, pOptions) {
+		var $cont = $(pCont);
+		wapp.renderChat($cont);
+
+		function setAttr(pCont, pAttr, pOptions, pOption) {
+			if (pOptions && pOptions[pOption] != undefined) {
+				pCont.attr('data-' + pAttr, pOptions[pOption]) 
+				pCont.find('span.' + pAttr).html(pOptions[pOption])
+			}
+		};
+
+		setAttr($cont, 'external-name', pOptions, 'extName');
+		setAttr($cont, 'external-number', pOptions, 'extNumber');
+		setAttr($cont, 'internal-name', pOptions, 'intName');
+		setAttr($cont, 'internal-number', pOptions, 'intNumber');
+
+		wapp.clear($cont);
+		wapp.loadMessages($cont);
+		wapp.refreshSession($cont);
 	},
 	
 	refreshSession: function (pChat, pDate) {
@@ -705,7 +728,7 @@ var wapp = {
 		}
 	},
 
-	resetChat: function (pChat) {
+	clear: function (pChat) {
 		pChat.find('div.wapp-messages').empty();
 		pChat.removeAttr('data-last-load');
 	},
