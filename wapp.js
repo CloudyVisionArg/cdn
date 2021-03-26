@@ -219,7 +219,7 @@ var wapp = {
 	
 	renderChat: function(pCont) {
 		var $cont = $(pCont);
-		
+
 		if ($cont.attr('data-rendered') == '1') {
 			$cont.find('span.external-name').html($cont.attr('data-external-name'));
 			$cont.find('span.external-number').html($cont.attr('data-external-number'));
@@ -266,9 +266,27 @@ var wapp = {
 			var $reply = $('<div/>', {
 				class: 'wapp-footer',
 			}).appendTo($cont);
-			
+
+			// Boton + (media)
+			var $div = $('<div/>', {
+				class: 'wapp-button',
+				style: 'width: 10%',
+			}).appendTo($reply);
+
+			var $media;
 			if (typeof(cordova) != 'object') {
-				// Boton Emoji
+				$media = $('<i/>', {
+					class: 'fa fa-plus',
+				}).appendTo($div);
+			} else {
+				$media = $('<i/>', {
+					class: 'f7-icons',
+				}).append('plus').appendTo($div);
+			}
+
+			
+			// Boton Emoji
+			if (typeof(cordova) != 'object') {
 				var $div = $('<div/>', {
 					class: 'wapp-button',
 					style: 'width: 10%',
@@ -286,6 +304,7 @@ var wapp = {
 				})
 			}
 			
+			/*
 			// Boton Template
 			var $div = $('<div/>', {
 				class: 'wapp-button',
@@ -327,6 +346,7 @@ var wapp = {
 				$picker.show();
 				e.stopPropagation();
 			});
+			*/
 
 			// Input
 			var $div = $('<div/>', {
@@ -732,7 +752,12 @@ var wapp = {
 		
 		var extNumber = pChat.attr('data-external-number');
 		var intNumber = pChat.attr('data-internal-number');
-		if (!extNumber || !intNumber) return;
+
+		if (!extNumber || !intNumber) {
+			pChat.find('div.wapp-loadmore a').hide();
+			wapp.cursorLoading(false);
+			return;
+		}
 
 		// Toma los 10 ult digitos
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
