@@ -294,7 +294,7 @@ var wapp = {
 						buttons: [
 							[
 								{
-									text: 'Cámara',
+									text: 'C&aacute;mara',
 									onClick: function () {
 										toast('En desarrollo');
 									}
@@ -312,7 +312,7 @@ var wapp = {
 									}
 								},
 								{
-									text: 'Ubicación',
+									text: 'Ubicaci&oacute;n',
 									onClick: function () {
 										toast('En desarrollo');
 									}
