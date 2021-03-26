@@ -332,6 +332,13 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">menu</i>&nbsp;&nbsp;Plantilla',
 									onClick: function (actions, e) {
+										debugger;
+										if (wapp.templates && wapp.templates.length > 0) {
+											var tmp;
+
+										} else {
+											toast('No hay plantillas definidas');
+										}
 										var posX, posY;
 										var $picker = $('#wappTemplatePicker');
 										if ($picker.outerWidth() > $(document).width()) {
