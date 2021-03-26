@@ -229,8 +229,8 @@ var wapp = {
 			style: 'width: 40%;',
 		}).appendTo($heading);
 		
-		$headingLeft.append('<b><span class="external-name"' + pCont.attr('data-external-name') + 
-			'</span></b><br>(<span class="external-number">' + pCont.attr('data-external-number') + '</span>)');
+		$headingLeft.append('<b><span class="external-name">' + $cont.attr('data-external-name') + 
+			'</span></b><br>(<span class="external-number">' + $cont.attr('data-external-number') + '</span>)');
 		
 		var $headingSession = $('<div/>', {
 			class: 'session',
@@ -244,12 +244,12 @@ var wapp = {
 			style: 'width: 40%; text-align: right;',
 		}).appendTo($heading);
 		
-		$headingRight.append('<b><span class="internal-name"' + pCont.attr('data-internal-name') + 
-		'</span></b><br>(<span class="internal-number">' + pCont.attr('data-internal-number') + '</span>)');
+		$headingRight.append('<b><span class="internal-name">' + $cont.attr('data-internal-name') + 
+		'</span></b><br>(<span class="internal-number">' + $cont.attr('data-internal-number') + '</span>)');
 
 		var $messages = $('<div/>', {
 			class: 'wapp-messages',
-		}).appendTo(pCont);
+		}).appendTo($cont);
 		
 		$messages.append(`      
 		    <div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
@@ -259,7 +259,7 @@ var wapp = {
 			
 		var $reply = $('<div/>', {
 			class: 'wapp-footer',
-		}).appendTo(pCont);
+		}).appendTo($cont);
 		
 		if (typeof(cordova) != 'object') {
 			// Boton Emoji
