@@ -294,31 +294,31 @@ var wapp = {
 						buttons: [
 							[
 								{
-									text: '<i class="f7-icons">camera</i> C&aacute;mara',
+									text: '<i class="f7-icons">camera</i>&nbsp;&nbsp;C&aacute;mara',
 									onClick: function () {
 										toast('En desarrollo');
 									}
 								},
 								{
-									text: '<i class="f7-icons">photo</i> Fotos y Videos',
+									text: '<i class="f7-icons">photo</i>&nbsp;&nbsp;Fotos y Videos',
 									onClick: function () {
 										toast('En desarrollo');
 									}
 								},
 								{
-									text: '<i class="f7-icons">doc</i> Documento',
+									text: '<i class="f7-icons">doc</i>&nbsp;&nbsp;Documento',
 									onClick: function () {
 										toast('En desarrollo');
 									}
 								},
 								{
-									text: '<i class="f7-icons">plus</i> Ubicaci&oacute;n',
+									text: '<i class="f7-icons">plus</i>&nbsp;&nbsp;Ubicaci&oacute;n',
 									onClick: function () {
 										toast('En desarrollo');
 									}
 								},
 								{
-									text: '<i class="f7-icons">menu</i> Plantilla',
+									text: '<i class="f7-icons">menu</i>&nbsp;&nbsp;Plantilla',
 									onClick: function () {
 										toast('En desarrollo');
 									}
