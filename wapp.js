@@ -371,6 +371,7 @@ var wapp = {
 	},
 
 	init: function (pCont, pOptions) {
+		debugger;
 		var $cont = $(pCont);
 		wapp.renderChat($cont);
 
