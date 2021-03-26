@@ -319,6 +319,7 @@ var wapp = {
 								},
 								{
 									text: 'Plantilla',
+									label: true,
 									onClick: function () {
 										toast('En desarrollo');
 									}
