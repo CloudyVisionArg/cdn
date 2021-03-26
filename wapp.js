@@ -219,155 +219,162 @@ var wapp = {
 	
 	renderChat: function(pCont) {
 		var $cont = $(pCont);
-		if ($cont.attr('data-rendered') == '1') return;
+		
+		if ($cont.attr('data-rendered') == '1') {
+			$cont.find('span.external-name').html($cont.attr('data-external-name'));
+			$cont.find('span.external-number').html($cont.attr('data-external-number'));
+			$cont.find('span.internal-name').html($cont.attr('data-internal-name'));
+			$cont.find('span.internal-number').html($cont.attr('data-internal-number'));
 
-		var $heading = $('<div/>', {
-			class: 'wapp-header',
-		}).appendTo($cont);
-		
-		var $headingLeft = $('<div/>', {
-			style: 'width: 40%;',
-		}).appendTo($heading);
-		
-		$headingLeft.append('<b><span class="external-name">' + $cont.attr('data-external-name') + 
-			'</span></b><br>(<span class="external-number">' + $cont.attr('data-external-number') + '</span>)');
-		
-		var $headingSession = $('<div/>', {
-			class: 'session',
-			style: 'width: 20%; text-align: center;',
-		}).appendTo($heading);
-		
-		$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
-		$headingSession.append('<div class="session-time"></div>');
-
-		var $headingRight = $('<div/>', {
-			style: 'width: 40%; text-align: right;',
-		}).appendTo($heading);
-		
-		$headingRight.append('<b><span class="internal-name">' + $cont.attr('data-internal-name') + 
-		'</span></b><br>(<span class="internal-number">' + $cont.attr('data-internal-number') + '</span>)');
-
-		var $messages = $('<div/>', {
-			class: 'wapp-messages',
-		}).appendTo($cont);
-		
-		$messages.append(`      
-		    <div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
-				<a href='#' onclick="wapp.loadMore(this)">Mensajes anteriores</a>
-			</div>
-		`);
+		} else {
+			var $heading = $('<div/>', {
+				class: 'wapp-header',
+			}).appendTo($cont);
 			
-		var $reply = $('<div/>', {
-			class: 'wapp-footer',
-		}).appendTo($cont);
-		
-		if (typeof(cordova) != 'object') {
-			// Boton Emoji
+			var $headingLeft = $('<div/>', {
+				style: 'width: 40%;',
+			}).appendTo($heading);
+			
+			$headingLeft.append('<b><span class="external-name">' + $cont.attr('data-external-name') + 
+				'</span></b><br>(<span class="external-number">' + $cont.attr('data-external-number') + '</span>)');
+			
+			var $headingSession = $('<div/>', {
+				class: 'session',
+				style: 'width: 20%; text-align: center;',
+			}).appendTo($heading);
+			
+			$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
+			$headingSession.append('<div class="session-time"></div>');
+
+			var $headingRight = $('<div/>', {
+				style: 'width: 40%; text-align: right;',
+			}).appendTo($heading);
+			
+			$headingRight.append('<b><span class="internal-name">' + $cont.attr('data-internal-name') + 
+			'</span></b><br>(<span class="internal-number">' + $cont.attr('data-internal-number') + '</span>)');
+
+			var $messages = $('<div/>', {
+				class: 'wapp-messages',
+			}).appendTo($cont);
+			
+			$messages.append(`      
+				<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
+					<a href='#' onclick="wapp.loadMore(this)">Mensajes anteriores</a>
+				</div>
+			`);
+				
+			var $reply = $('<div/>', {
+				class: 'wapp-footer',
+			}).appendTo($cont);
+			
+			if (typeof(cordova) != 'object') {
+				// Boton Emoji
+				var $div = $('<div/>', {
+					class: 'wapp-button',
+					style: 'width: 10%',
+				}).appendTo($reply);
+			
+				var $emoji = $('<i/>', {
+					class: 'fa fa-smile-o',
+				}).appendTo($div);
+
+				$('#script_emojis')[0].loaded(function () {
+					emojis.createPicker({
+						el: $emoji,
+						inputEl: $input,
+					});
+				})
+			}
+			
+			// Boton Template
 			var $div = $('<div/>', {
 				class: 'wapp-button',
 				style: 'width: 10%',
 			}).appendTo($reply);
-		
-			var $emoji = $('<i/>', {
-				class: 'fa fa-smile-o',
-			}).appendTo($div);
-
-			$('#script_emojis')[0].loaded(function () {
-				emojis.createPicker({
-					el: $emoji,
-					inputEl: $input,
+			
+			var $template;
+			if (typeof(cordova) != 'object') {
+				$template = $('<i/>', {
+					class: 'fa fa-list-ul',
+				}).appendTo($div);
+			} else {
+				$template = $('<i/>', {
+					class: 'f7-icons',
+				}).append('menu').appendTo($div);
+			}
+			
+			$template.click(function (e) {
+				var posX, posY;
+				var $picker = $('#wappTemplatePicker');
+				if ($picker.outerWidth() > $(document).width()) {
+					posX = ($(window).width() - $picker.outerWidth()) / 2;
+				} else if (e.pageX + $picker.outerWidth() > $(document).width()) {
+					posX = $(document).width() - $picker.outerWidth();
+				} else {
+					posX = e.pageX;
+				}
+				if (e.pageY - 200 > 0) {
+					posY = e.pageY - 200;
+				} else {
+					posY = e.pageY + 30;
+				}
+				$picker.css({
+					left: posX + 'px',
+					top: posY + 'px',
+					zIndex: 20000,
 				});
-			})
-		}
-		
-		// Boton Template
-		var $div = $('<div/>', {
-			class: 'wapp-button',
-			style: 'width: 10%',
-		}).appendTo($reply);
-		
-		var $template;
-		if (typeof(cordova) != 'object') {
-			$template = $('<i/>', {
-				class: 'fa fa-list-ul',
-			}).appendTo($div);
-		} else {
-			$template = $('<i/>', {
-				class: 'f7-icons',
-			}).append('menu').appendTo($div);
-		}
-		
-		$template.click(function (e) {
-			var posX, posY;
-			var $picker = $('#wappTemplatePicker');
-			if ($picker.outerWidth() > $(document).width()) {
-				posX = ($(window).width() - $picker.outerWidth()) / 2;
-			} else if (e.pageX + $picker.outerWidth() > $(document).width()) {
-				posX = $(document).width() - $picker.outerWidth();
-			} else {
-				posX = e.pageX;
-			}
-			if (e.pageY - 200 > 0) {
-				posY = e.pageY - 200;
-			} else {
-				posY = e.pageY + 30;
-			}
-			$picker.css({
-				left: posX + 'px',
-				top: posY + 'px',
-				zIndex: 20000,
+				$picker[0].target = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
+				$picker.show();
+				e.stopPropagation();
 			});
-			$picker[0].target = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
-			$picker.show();
-			e.stopPropagation();
-		});
 
-		// Input
-		var $div = $('<div/>', {
-			style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%') + 
-				'; padding-left: 5px; padding-right: 5px;',
-		}).appendTo($reply);
-		
-		var $input = $('<textarea/>', {
-			class: 'wapp-reply',
-			style: 'height: 37px;',
-		}).appendTo($div);
-		$input.change(function () { wapp.inputResize(this); });
-		$input.keyup(function () { wapp.inputResize(this); });
-		$input.keydown(function (e) { wapp.inputKeyDown(this, e); });
-
-		// Emoji picker
-		if (typeof(cordova) != 'object') {
-			$('#script_emojis')[0].loaded(function () {
-				emojis.createPicker({
-					el: $emoji,
-					inputEl: $input,
-				});
-			})
-		}
-
-		// Boton Enviar
-		var $div = $('<div/>', {
-			class: 'wapp-button',
-			style: 'width: 10%',
-		}).appendTo($reply);
-		
-		var $send;
-		if (typeof(cordova) != 'object') {
-			$send = $('<i/>', {
-				class: 'fa fa-send',
+			// Input
+			var $div = $('<div/>', {
+				style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%') + 
+					'; padding-left: 5px; padding-right: 5px;',
+			}).appendTo($reply);
+			
+			var $input = $('<textarea/>', {
+				class: 'wapp-reply',
+				style: 'height: 37px;',
 			}).appendTo($div);
-		} else {
-			$send = $('<i/>', {
-				class: 'f7-icons',
-			}).append('paperplane').appendTo($div);
-		}
-		
-		$send.click(function () {
-			wapp.send(this);
-		});
+			$input.change(function () { wapp.inputResize(this); });
+			$input.keyup(function () { wapp.inputResize(this); });
+			$input.keydown(function (e) { wapp.inputKeyDown(this, e); });
 
-		$cont.attr('data-rendered', '1');
+			// Emoji picker
+			if (typeof(cordova) != 'object') {
+				$('#script_emojis')[0].loaded(function () {
+					emojis.createPicker({
+						el: $emoji,
+						inputEl: $input,
+					});
+				})
+			}
+
+			// Boton Enviar
+			var $div = $('<div/>', {
+				class: 'wapp-button',
+				style: 'width: 10%',
+			}).appendTo($reply);
+			
+			var $send;
+			if (typeof(cordova) != 'object') {
+				$send = $('<i/>', {
+					class: 'fa fa-send',
+				}).appendTo($div);
+			} else {
+				$send = $('<i/>', {
+					class: 'f7-icons',
+				}).append('paperplane').appendTo($div);
+			}
+			
+			$send.click(function () {
+				wapp.send(this);
+			});
+
+			$cont.attr('data-rendered', '1');
+		}
 	},
 
 	init: function (pCont) {
