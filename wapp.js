@@ -386,7 +386,7 @@ var wapp = {
 			} else {
 				$send = $('<i/>', {
 					class: 'f7-icons',
-				}).append('paperplane').appendTo($div);
+				}).append('paperplane_fill').appendTo($div);
 			}
 			
 			$send.click(function () {
