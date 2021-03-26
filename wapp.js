@@ -111,7 +111,7 @@ $(document).ready(function () {
 
 					$picker.on('click', 'li', function (e) {
 						var $this = $(this);
-						wapp.template($this.attr('data-value'), $this.closest('div')[0].target);
+						wapp.putTemplate($this.attr('data-value'), $this.closest('div')[0].target);
 					});
 
 					$(document).click(function () {
@@ -338,17 +338,14 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">chat_bubble_text</i>&nbsp;&nbsp;Plantilla',
 									onClick: function (actions, e) {
-										debugger;
 										if (wapp.templates && wapp.templates.length > 0) {
 											var tempButtons = [
 												[],
-												[
-													{
-														text: 'Cancelar',
-														bold: true,
-														close: true,
-													}
-												]
+												[{
+													text: 'Cancelar',
+													bold: true,
+													close: true,
+												}]
 											];
 
 											wapp.templates.forEach(it => {
@@ -362,10 +359,11 @@ var wapp = {
 												buttons: tempButtons,
 											});
 
+											tempActions.params.chatEl = actions.params.chatEl;
 											tempActions.open();
 
-											function tempClick() {
-												alert(this.text);
+											function tempClick(actions, e) {
+												wapp.putTemplate(this.text, $(actions.params.chatEl).find('.wapp-reply')[0]);
 											};
 
 										} else {
@@ -1044,7 +1042,7 @@ var wapp = {
 		});
 	},
 	
-	template: function (template, target) {
+	putTemplate: function (template, target) {
 		wapp.cursorLoading(true);
 		DoorsAPI.folderSearch(wapp.templatesFolder, 'text', 'name = \'' + template + '\'').then(
 			function (res) {
