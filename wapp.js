@@ -319,9 +319,29 @@ var wapp = {
 								},
 								{
 									text: '<i class="f7-icons">menu</i>&nbsp;&nbsp;Plantilla',
-									onClick: function (a,b,c) {
-										debugger;
-										toast('En desarrollo');
+									onClick: function (actions, e) {
+										var posX, posY;
+										var $picker = $('#wappTemplatePicker');
+										if ($picker.outerWidth() > $(document).width()) {
+											posX = ($(window).width() - $picker.outerWidth()) / 2;
+										} else if (e.pageX + $picker.outerWidth() > $(document).width()) {
+											posX = $(document).width() - $picker.outerWidth();
+										} else {
+											posX = e.pageX;
+										}
+										if (e.pageY - 200 > 0) {
+											posY = e.pageY - 200;
+										} else {
+											posY = e.pageY + 30;
+										}
+										$picker.css({
+											left: posX + 'px',
+											top: posY + 'px',
+											zIndex: 20000,
+										});
+										$picker[0].target = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
+										$picker.show();
+										e.stopPropagation();
 									}
 								},
 							],
