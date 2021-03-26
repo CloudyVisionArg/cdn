@@ -75,6 +75,14 @@ $(document).ready(function () {
 				function (fld) {
 					wapp.templatesFolder = fld.FldId;
 
+					DoorsAPI.folderSearch(wapp.templatesFolder, 'name', '', 'name').then(
+						function (res) {
+							wapp.templates = res.map(it => it['NAME']);
+							debugger;
+						}
+					);
+
+					/*					
 					var $picker = $('<div/>', {
 						id: 'wappTemplatePicker',
 					}).css({
@@ -107,6 +115,7 @@ $(document).ready(function () {
 					$(document).click(function () {
 						$picker.hide()
 					});
+					*/
 		
 				}
 			);
@@ -149,6 +158,7 @@ var wapp = {
 	rootFolder: undefined,
 	messagesFolder: undefined,
 	templatesFolder: undefined,
+	templates: undefined,
 	loggedUser: undefined,
 	codelibUrl: undefined,
 	//useOgv: undefined,
