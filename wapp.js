@@ -370,23 +370,9 @@ var wapp = {
 		$cont.attr('data-rendered', '1');
 	},
 
-	init: function (pCont, pOptions) {
-		debugger;
+	init: function (pCont) {
 		var $cont = $(pCont);
 		wapp.renderChat($cont);
-
-		function setAttr(pCont, pAttr, pOptions, pOption) {
-			if (pOptions && pOptions[pOption] != undefined) {
-				pCont.attr('data-' + pAttr, pOptions[pOption]) 
-				pCont.find('span.' + pAttr).html(pOptions[pOption])
-			}
-		};
-
-		setAttr($cont, 'external-name', pOptions, 'extName');
-		setAttr($cont, 'external-number', pOptions, 'extNumber');
-		setAttr($cont, 'internal-name', pOptions, 'intName');
-		setAttr($cont, 'internal-number', pOptions, 'intNumber');
-
 		wapp.clear($cont);
 		wapp.loadMessages($cont);
 		wapp.refreshSession($cont);
