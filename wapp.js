@@ -318,7 +318,7 @@ var wapp = {
 									}
 								},
 								{
-									text: '<i class="f7-icons">plus<i/>Plantilla',
+									text: '<i class="f7-icons">plus</i>Plantilla',
 									onClick: function () {
 										toast('En desarrollo');
 									}
