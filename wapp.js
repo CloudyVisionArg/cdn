@@ -806,7 +806,7 @@ var wapp = {
 								} else {
 									setTimeout(function () {
 										$cont.scrollTop($cont[0].scrollHeight);
-									}, 2000);
+									}, 1500);
 								}
 							};
 
