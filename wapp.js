@@ -829,7 +829,13 @@ var wapp = {
 	},
 
 	clear: function (pChat) {
-		pChat.find('div.wapp-messages').empty();
+		var $messages = pChat.find('div.wapp-messages')
+		$messages.empty();
+		$messages.append(`      
+			<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
+				<a href='#' onclick="wapp.loadMore(this)">Mensajes anteriores</a>
+			</div>
+		`);
 		pChat.removeAttr('data-last-load');
 	},
 
