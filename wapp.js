@@ -78,11 +78,13 @@ $(document).ready(function () {
 					DoorsAPI.folderSearch(wapp.templatesFolder, 'name', '', 'name').then(
 						function (res) {
 							wapp.templates = res.map(it => it['NAME']);
-							debugger;
 						}
 					);
 
-					/*					
+					/*
+					Este es un picker parecido al de los emojis, no lo vamos a usar en cordova
+					ver como lo implementamos en web
+
 					var $picker = $('<div/>', {
 						id: 'wappTemplatePicker',
 					}).css({
@@ -870,7 +872,12 @@ var wapp = {
 		
 		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 			function (res) {
-				if (res.length < msgLimit && !incLoad) pChat.find('div.wapp-loadmore a').hide();
+				var $loadMore = pChat.find('div.wapp-loadmore a');
+				if (res.length < msgLimit && !incLoad) {
+					$loadMore.hide();
+				} else {
+					$loadMore.show();
+				}
 				
 				if (res.length > 0) {
 		            // Arma un array de AccId
