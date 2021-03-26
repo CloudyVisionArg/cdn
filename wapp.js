@@ -320,6 +320,7 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">menu</i>&nbsp;&nbsp;Plantilla',
 									onClick: function () {
+										debugger;
 										toast('En desarrollo');
 									}
 								},
