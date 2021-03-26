@@ -338,6 +338,8 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">chat_bubble_text</i>&nbsp;&nbsp;Plantillas',
 									onClick: function (actions, e) {
+										actions.close();
+
 										if (wapp.templates && wapp.templates.length > 0) {
 											var tempButtons = [
 												[],
@@ -360,7 +362,6 @@ var wapp = {
 											});
 
 											tempActions.params.chatEl = actions.params.chatEl;
-											actions.close();
 											tempActions.open();
 
 											function tempClick(actions, e) {
