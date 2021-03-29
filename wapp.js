@@ -314,6 +314,7 @@ var wapp = {
 			}
 			*/
 
+			/*
 			$media.click(function (e) {
 				if (typeof(cordova) != 'object') {
 					alert('En desarrollo');
@@ -406,6 +407,7 @@ var wapp = {
 					mediaActions.open();
 				}
 			});
+			*/
 
 			// Boton Emoji
 			if (typeof(cordova) != 'object') {
