@@ -384,6 +384,7 @@ var wapp = {
 						]
 					});
 
+					debugger;
 					mediaActions.params.chatEl = $cont[0];
 					mediaActions.open();
 				}
