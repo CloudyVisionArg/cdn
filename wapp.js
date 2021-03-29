@@ -295,11 +295,10 @@ var wapp = {
 				<div class="dropup">
 	  
 				<ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Another action</a></li>
-					<li><a href="#">Something else here</a></li>
+					<li><a href="#">Madia</a></li>
+					<li><a href="#">Plantilla</a></li>
 					<li role="separator" class="divider"></li>
-					<li><a href="#">Separated link</a></li>
+					<li><a href="#">Cancelar</a></li>
 				</ul>
 				</div>
 				`);
