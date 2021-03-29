@@ -282,17 +282,19 @@ var wapp = {
 
 			$reply.append(`
 			<div class="dropup">
-  <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">
-  <i class="fa fa-plus" aria-hidden="true"></i>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
+			<a href="#" data-toggle="dropdown">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+		  	</a>
+			<!-- <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown"> -->
+  
+			<ul class="dropdown-menu">
+				<li><a href="#">Action</a></li>
+				<li><a href="#">Another action</a></li>
+				<li><a href="#">Something else here</a></li>
+				<li role="separator" class="divider"></li>
+				<li><a href="#">Separated link</a></li>
+			</ul>
+			</div>
 			`);
 
 			/*
