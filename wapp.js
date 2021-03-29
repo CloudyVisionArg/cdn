@@ -282,10 +282,10 @@ var wapp = {
 
 			$reply.append(`
 			<div class="dropup">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">
   <i class="fa fa-plus" aria-hidden="true"></i>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+  <ul class="dropdown-menu">
     <li><a href="#">Action</a></li>
     <li><a href="#">Another action</a></li>
     <li><a href="#">Something else here</a></li>
