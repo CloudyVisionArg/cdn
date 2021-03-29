@@ -279,25 +279,6 @@ var wapp = {
 				class: 'wapp-footer',
 			}).appendTo($cont);
 
-
-			$reply.append(`
-			<div class="dropup">
-			<a href="#" data-toggle="dropdown">
-				<i class="fa fa-plus" aria-hidden="true"></i>
-		  	</a>
-			<!-- <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown"> -->
-  
-			<ul class="dropdown-menu">
-				<li><a href="#">Action</a></li>
-				<li><a href="#">Another action</a></li>
-				<li><a href="#">Something else here</a></li>
-				<li role="separator" class="divider"></li>
-				<li><a href="#">Separated link</a></li>
-			</ul>
-			</div>
-			`);
-
-			/*
 			// Boton + (media)
 			var $div = $('<div/>', {
 				class: 'wapp-button',
@@ -309,17 +290,30 @@ var wapp = {
 				$media = $('<i/>', {
 					class: 'fa fa-plus',
 				}).appendTo($div);
+
+				$media.append(`
+				<div class="dropup">
+	  
+				<ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+				</ul>
+				</div>
+				`);
+	
 			} else {
 				$media = $('<i/>', {
 					class: 'f7-icons',
 				}).append('plus').appendTo($div);
 			}
-			*/
 
-			/*
 			$media.click(function (e) {
 				if (typeof(cordova) != 'object') {
-					alert('En desarrollo');
+					$(this).find('.dropdown-menu').toggle();
+					//alert('En desarrollo');
 
 				} else {
 					//  Media options
