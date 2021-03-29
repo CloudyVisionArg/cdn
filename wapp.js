@@ -403,7 +403,6 @@ var wapp = {
 					mediaActions.open();
 				}
 			});
-			*/
 
 			// Boton Emoji
 			if (typeof(cordova) != 'object') {
