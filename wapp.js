@@ -32,16 +32,16 @@ todo:
 }());
 
 $(document).ready(function () {
-	if (typeof(cordova) == 'object') {
-		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
-	} else {
-		wapp.codelibUrl = '/c/codelibapi.asp';
-	};
-
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
 			wapp.rootFolder = res;
 			
+			if (typeof(cordova) == 'object') {
+				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
+			} else {
+				wapp.codelibUrl = '/c/codelibapi.asp';
+			};
+		
 			DoorsAPI.foldersGetByName(res, 'messages').then(
 				function (fld) {
 					wapp.messagesFolder = fld.FldId;
