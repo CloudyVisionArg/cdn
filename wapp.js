@@ -301,15 +301,13 @@ var wapp = {
 				$dropup.append(`
 				<ul class="dropdown-menu">
 					<li><a href="#">Archivo</a></li>
-					<div class="dropdown">
-						<li data-toggle="dropdown">Hola</li>
+					<li class="dropdown-submenu">
+						<a tabindex="-1" href="#">Plantilla <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Plantilla 1</a></li>
 							<li><a href="#">Plantilla 2</a></li>
 						</ul>
-					</div>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">Cancelar</a></li>
+					</li>
 				</ul>
 				`);
 	
