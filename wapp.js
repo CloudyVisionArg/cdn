@@ -289,20 +289,22 @@ var wapp = {
 
 			var $media;
 			if (typeof(cordova) != 'object') {
-				$media = $('<i/>', {
-					class: 'fa fa-plus',
+				var $dropup = $('<div/>', {
+					class: 'dropup',
 				}).appendTo($div);
 
+				$media = $('<i/>', {
+					class: 'fa fa-plus',
+					'data-toggle': 'dropdown',
+				}).appendTo($dropup);
+
 				$media.append(`
-				<div class="dropup">
-	  
 				<ul class="dropdown-menu">
 					<li><a href="#">Madia</a></li>
 					<li><a href="#">Plantilla</a></li>
 					<li role="separator" class="divider"></li>
 					<li><a href="#">Cancelar</a></li>
 				</ul>
-				</div>
 				`);
 	
 			} else {
@@ -313,7 +315,8 @@ var wapp = {
 
 			$media.click(function (e) {
 				if (typeof(cordova) != 'object') {
-					$(this).find('.dropdown-menu').toggle();
+					debugger;
+					//$(this).find('.dropdown-menu').toggle();
 					//alert('En desarrollo');
 
 				} else {
