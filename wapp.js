@@ -16,16 +16,12 @@ todo:
 
 	if (typeof(cordova) == 'object') {
 		// App
-		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
-
 		root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
 		root.style.setProperty('--wapp-chat-vertical-margin', '10px');
 		root.style.setProperty('--wapp-button-size', '30px');
 		
 	} else {
 		// Web
-		wapp.codelibUrl = '/c/codelibapi.asp';
-
 		root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
 		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
 		root.style.setProperty('--wapp-button-size', '25px');
@@ -36,6 +32,12 @@ todo:
 }());
 
 $(document).ready(function () {
+	if (typeof(cordova) == 'object') {
+		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
+	} else {
+		wapp.codelibUrl = '/c/codelibapi.asp';
+	};
+
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
 			wapp.rootFolder = res;
