@@ -302,7 +302,7 @@ var wapp = {
 				<ul class="dropdown-menu">
 					<li><a href="#">Archivo</a></li>
 					<li class="dropdown-submenu">
-						<a tabindex="-1" href="#">Plantilla</a>
+						<a class="plantillas" tabindex="-1" href="#">Plantilla</a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Plantilla 1</a></li>
 							<li><a href="#">Plantilla 2</a></li>
@@ -310,6 +310,12 @@ var wapp = {
 					</li>
 				</ul>
 				`);
+
+				$dropup.find('.plantillas').on('click', function(e) {
+					$(this).next('ul').toggle();
+					e.stopPropagation();
+					e.preventDefault();
+				  });
 	
 			} else {
 				$media = $('<i/>', {
@@ -319,7 +325,6 @@ var wapp = {
 
 			$media.click(function (e) {
 				if (typeof(cordova) != 'object') {
-					debugger;
 					//$(this).find('.dropdown-menu').toggle();
 					//alert('En desarrollo');
 
