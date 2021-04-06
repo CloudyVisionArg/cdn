@@ -294,14 +294,20 @@ var wapp = {
 				}).appendTo($div);
 
 				$media = $('<i/>', {
-					class: 'fa fa-plus dropdown-toggle',
+					class: 'fa fa-plus',
 					'data-toggle': 'dropdown',
 				}).appendTo($dropup);
 
 				$dropup.append(`
 				<ul class="dropdown-menu">
-					<li><a href="#">Madia</a></li>
-					<li><a href="#">Plantilla</a></li>
+					<li><a href="#">Archivo</a></li>
+					<div class="dropdown">
+						<li data-toggle="dropdown"><a href="#">Plantilla</a></li>
+						<ul class="dropdown-menu">
+							<li><a href="#">Plantilla 1</a></li>
+							<li><a href="#">Plantilla 2</a></li>
+						</ul>
+					</div>
 					<li role="separator" class="divider"></li>
 					<li><a href="#">Cancelar</a></li>
 				</ul>
