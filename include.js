@@ -78,11 +78,6 @@ function includeJs() {
 			scriptNode.async = true;
 			scriptNode.src = src;
 			
-			scriptNode.addEventListener('load', function () {
-				this._loaded = true;
-				if (callback) callback(this);
-			});
-			
 			scriptNode.loaded = function (pCallback) {
 				var self = this;
 				var waiting = 0;
@@ -100,6 +95,12 @@ function includeJs() {
 				}, 10)
 			};
 			
+			scriptNode.addEventListener('load', function () {
+				this._loaded = true;
+			});
+
+			if (callback) scriptNode.loaded(callback);
+
 			var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
 			cont.appendChild(scriptNode);
 			

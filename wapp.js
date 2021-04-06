@@ -12,6 +12,25 @@ todo:
 	linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp.css';
 	headTag.appendChild(linkTag);
 
+	var root = document.documentElement;
+
+	if (typeof(cordova) == 'object') {
+		// App
+		wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
+
+		root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
+		root.style.setProperty('--wapp-chat-vertical-margin', '10px');
+		root.style.setProperty('--wapp-button-size', '30px');
+		
+	} else {
+		// Web
+		wapp.codelibUrl = '/c/codelibapi.asp';
+
+		root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
+		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
+		root.style.setProperty('--wapp-button-size', '25px');
+	};
+
 	includeJs('javascript');
 	includeJs('emojis');
 }());
@@ -19,25 +38,6 @@ todo:
 $(document).ready(function () {
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
-			var root = document.documentElement;
-
-			if (typeof(cordova) == 'object') {
-				// App
-				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
-
-				root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
-				root.style.setProperty('--wapp-chat-vertical-margin', '10px');
-				root.style.setProperty('--wapp-button-size', '30px');
-				
-			} else {
-				// Web
-				wapp.codelibUrl = '/c/codelibapi.asp';
-
-				root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
-				root.style.setProperty('--wapp-chat-vertical-margin', '0px');
-				root.style.setProperty('--wapp-button-size', '25px');
-			};
-		
 			wapp.rootFolder = res;
 			
 			DoorsAPI.foldersGetByName(res, 'messages').then(
