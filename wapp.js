@@ -298,7 +298,7 @@ var wapp = {
 					'data-toggle': 'dropdown',
 				}).appendTo($dropup);
 
-				$media.append(`
+				$dropup.append(`
 				<ul class="dropdown-menu">
 					<li><a href="#">Madia</a></li>
 					<li><a href="#">Plantilla</a></li>
