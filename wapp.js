@@ -302,7 +302,7 @@ var wapp = {
 				<ul class="dropdown-menu">
 					<li><a href="#">Archivo</a></li>
 					<li class="dropdown-submenu">
-						<a tabindex="-1" href="#">Plantilla <span class="caret"></span></a>
+						<a tabindex="-1" href="#">Plantilla</a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Plantilla 1</a></li>
 							<li><a href="#">Plantilla 2</a></li>
