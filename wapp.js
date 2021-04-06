@@ -294,7 +294,7 @@ var wapp = {
 				}).appendTo($div);
 
 				$media = $('<i/>', {
-					class: 'fa fa-plus',
+					class: 'fa fa-plus dropdown-toggle',
 					'data-toggle': 'dropdown',
 				}).appendTo($dropup);
 
