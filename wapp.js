@@ -273,7 +273,7 @@ var wapp = {
 			
 			$messages.append(`      
 				<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
-					<a href='#' onclick="wapp.loadMore(this)">Mensajes anteriores</a>
+					<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 				</div>
 			`);
 				
@@ -304,9 +304,7 @@ var wapp = {
 
 				var $li = $('<li/>').appendTo($menu);
 				
-				var $file = $('<a/>', {
-					//href: '#',
-				}).append('Archivo');
+				var $file = $('<a/>').append('Archivo');
 				$file.appendTo($li);
 				$file.click(function (e) {
 					alert('En desarrollo');
@@ -316,9 +314,7 @@ var wapp = {
 					class: 'dropdown-submenu',
 				}).appendTo($menu);
 
-				var $aTmp = $('<a/>', {
-					//href: '#',
-				}).append('Plantilla <span class="caret">');
+				var $aTmp = $('<a/>').append('Plantilla <span class="caret">');
 				$aTmp.appendTo($liTmp);
 
 				$aTmp.click(function (e) {
@@ -331,9 +327,7 @@ var wapp = {
 			
 							wapp.templates.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
-								var $a = $('<a/>', {
-									//href: '#',
-								}).appendTo($li);
+								var $a = $('<a/>').appendTo($li);
 								$a.append(it);
 								$a.click(function (e) {
 									wapp.putTemplate(this.text, $(this).closest('.wapp-footer').find('.wapp-reply')[0]);
@@ -913,7 +907,7 @@ var wapp = {
 		$messages.empty();
 		$messages.append(`      
 			<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
-				<a href='#' onclick="wapp.loadMore(this)">Mensajes anteriores</a>
+				<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 			</div>
 		`);
 		pChat.removeAttr('data-last-load');
