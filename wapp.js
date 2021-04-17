@@ -298,6 +298,65 @@ var wapp = {
 					'data-toggle': 'dropdown',
 				}).appendTo($dropup);
 
+				var $menu = $('<ul/>', {
+					class: 'dropdown-menu',
+				}).appendTo($dropup);
+
+				var $li = $('<li/>').appendTo($menu);
+				
+				var $file = $('<a/>', {
+					href: '#',
+				}).append('Archivo');
+				$file.appendTo($li);
+				$file.click(function (e) {
+					alert('En desarrollo');
+				});
+
+				var $liTmp = $('<li/>', {
+					class: 'dropdown-submenu',
+				});
+
+				var $aTmp = $('<a/>', {
+					href: '#',
+				}).append('Plantilla <span class="caret">');
+				$aTmp.appenTo($liTmp);
+
+				$aTmp.click(function (e) {
+					debugger;
+					if (wapp.templates && wapp.templates.length > 0) {
+						$(this).next('ul').toggle();
+						e.stopPropagation();
+						e.preventDefault();
+					} else {
+						alert('No hay plantillas definidas');
+					}
+				});
+
+				$ulTmp = $('<ul/>', {
+					class: 'dropdown-menu',
+				}).appendTo($liTmp);
+
+				if (wapp.templates && wapp.templates.length > 0) {
+					wapp.templates.forEach(it => {
+						var $li = $('<li/>').appendTo($ulTmp);
+						var $a = $('<a/>', {
+							href: '#',
+						}).appendTo($li);
+						$a.append(it);
+						$a.click(function (e) {
+							debugger;
+						});
+					});
+				};
+
+				/*
+				tempActions.params.chatEl = actions.params.chatEl;
+				tempActions.open();
+
+				function tempClick(actions, e) {
+					wapp.putTemplate(this.text, $(actions.params.chatEl).find('.wapp-reply')[0]);
+				};
+
 				$dropup.append(`
 				<ul class="dropdown-menu">
 					<li><a href="#">Archivo</a></li>
@@ -310,25 +369,15 @@ var wapp = {
 					</li>
 				</ul>
 				`);
+				*/
 
-				$dropup.find('.plantillas').on('click', function(e) {
-					$(this).next('ul').toggle();
-					e.stopPropagation();
-					e.preventDefault();
-				  });
 	
 			} else {
 				$media = $('<i/>', {
 					class: 'f7-icons',
 				}).append('plus').appendTo($div);
-			}
 
-			$media.click(function (e) {
-				if (typeof(cordova) != 'object') {
-					//$(this).find('.dropdown-menu').toggle();
-					//alert('En desarrollo');
-
-				} else {
+				$media.click(function (e) {
 					//  Media options
 					var mediaActions = app7.actions.create({
 						buttons: [
@@ -367,7 +416,7 @@ var wapp = {
 									text: '<i class="f7-icons">chat_bubble_text</i>&nbsp;&nbsp;Plantillas',
 									onClick: function (actions, e) {
 										actions.close();
-
+	
 										if (wapp.templates && wapp.templates.length > 0) {
 											var tempButtons = [
 												[],
@@ -377,25 +426,25 @@ var wapp = {
 													close: true,
 												}]
 											];
-
+	
 											wapp.templates.forEach(it => {
 												tempButtons[0].push({
 													text: it,
 													onClick: tempClick,
 												})
 											});
-
+	
 											tempActions = app7.actions.create({
 												buttons: tempButtons,
 											});
-
+	
 											tempActions.params.chatEl = actions.params.chatEl;
 											tempActions.open();
-
+	
 											function tempClick(actions, e) {
 												wapp.putTemplate(this.text, $(actions.params.chatEl).find('.wapp-reply')[0]);
 											};
-
+	
 										} else {
 											toast('No hay plantillas definidas');
 										}
@@ -411,11 +460,12 @@ var wapp = {
 							]
 						]
 					});
-
+	
 					mediaActions.params.chatEl = $cont[0];
 					mediaActions.open();
-				}
-			});
+				});
+			}
+
 
 			// Boton Emoji
 			if (typeof(cordova) != 'object') {
