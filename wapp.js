@@ -351,29 +351,11 @@ var wapp = {
 					}
 				});
 
-				/*
-				tempActions.params.chatEl = actions.params.chatEl;
-				tempActions.open();
+				$('<li/>', {
+					role: 'separator',
+					class: 'divider',
+				}).appendTo($menu);
 
-				function tempClick(actions, e) {
-					wapp.putTemplate(this.text, $(actions.params.chatEl).find('.wapp-reply')[0]);
-				};
-
-				$dropup.append(`
-				<ul class="dropdown-menu">
-					<li><a href="#">Archivo</a></li>
-					<li class="dropdown-submenu">
-						<a class="plantillas" href="#">Plantilla <span class="caret"></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Plantilla con nombre laaargo laarguisimoo</a></li>
-							<li><a href="#">Plantilla 2</a></li>
-						</ul>
-					</li>
-				</ul>
-				`);
-				*/
-
-	
 			} else {
 				$media = $('<i/>', {
 					class: 'f7-icons',
