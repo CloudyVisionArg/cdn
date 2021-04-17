@@ -336,6 +336,7 @@ var wapp = {
 					class: 'dropdown-menu',
 				}).appendTo($liTmp);
 
+				debugger;
 				if (wapp.templates && wapp.templates.length > 0) {
 					wapp.templates.forEach(it => {
 						var $li = $('<li/>').appendTo($ulTmp);
