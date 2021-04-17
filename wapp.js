@@ -351,7 +351,7 @@ var wapp = {
 				}).appendTo($menu);
 
 				var $li = $('<li/>').appendTo($menu);
-\				$('<a/>').append('Cancelar').appendTo($li);
+				$('<a/>').append('Cancelar').appendTo($li);
 
 			} else {
 				$media = $('<i/>', {
