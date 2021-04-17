@@ -322,16 +322,15 @@ var wapp = {
 				$aTmp.appendTo($liTmp);
 
 				$aTmp.click(function (e) {
-					debugger;
 					var $this = $(this);
 					if (wapp.templates && wapp.templates.length > 0) {
 						if ($this.next('ul').length == 0) {
-							var $ulTmp = $('<ul/>', {
+							var $ul = $('<ul/>', {
 								class: 'dropdown-menu',
-							}).appendTo($liTmp);
+							}).appendTo($this.parent());
 			
 							wapp.templates.forEach(it => {
-								var $li = $('<li/>').appendTo($ulTmp);
+								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a/>', {
 									href: '#',
 								}).appendTo($li);
