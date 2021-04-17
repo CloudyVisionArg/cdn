@@ -319,7 +319,7 @@ var wapp = {
 				var $aTmp = $('<a/>', {
 					href: '#',
 				}).append('Plantilla <span class="caret">');
-				$aTmp.appenTo($liTmp);
+				$aTmp.appendTo($liTmp);
 
 				$aTmp.click(function (e) {
 					debugger;
