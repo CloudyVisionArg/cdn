@@ -305,7 +305,7 @@ var wapp = {
 				var $li = $('<li/>').appendTo($menu);
 				
 				var $file = $('<a/>', {
-					href: '#',
+					//href: '#',
 				}).append('Archivo');
 				$file.appendTo($li);
 				$file.click(function (e) {
@@ -317,7 +317,7 @@ var wapp = {
 				}).appendTo($menu);
 
 				var $aTmp = $('<a/>', {
-					href: '#',
+					//href: '#',
 				}).append('Plantilla <span class="caret">');
 				$aTmp.appendTo($liTmp);
 
@@ -332,7 +332,7 @@ var wapp = {
 							wapp.templates.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a/>', {
-									href: '#',
+									//href: '#',
 								}).appendTo($li);
 								$a.append(it);
 								$a.click(function (e) {
