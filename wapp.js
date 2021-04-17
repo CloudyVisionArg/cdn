@@ -336,7 +336,7 @@ var wapp = {
 								}).appendTo($li);
 								$a.append(it);
 								$a.click(function (e) {
-									debugger;
+									wapp.putTemplate(this.text, $(this).closest('.wapp-footer').find('.wapp-reply')[0]);
 								});
 							});
 		
