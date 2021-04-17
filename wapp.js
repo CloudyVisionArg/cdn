@@ -271,13 +271,11 @@ var wapp = {
 				class: 'wapp-messages',
 			}).appendTo($cont);
 			
-			/*
 			$messages.append(`      
 				<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
 					<a onclick="wapp.loadMore(this)">Mensajes anteriores</a>
 				</div>
 			`);
-			*/
 				
 			var $reply = $('<div/>', {
 				class: 'wapp-footer',
@@ -351,6 +349,9 @@ var wapp = {
 					role: 'separator',
 					class: 'divider',
 				}).appendTo($menu);
+
+				var $li = $('<li/>').appendTo($menu);
+\				$('<a/>').append('Cancelar').appendTo($li);
 
 			} else {
 				$media = $('<i/>', {
