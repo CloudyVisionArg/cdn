@@ -321,6 +321,7 @@ var wapp = {
 				}).append('Plantilla <span class="caret">');
 				$aTmp.appendTo($liTmp);
 
+				debugger;
 				$aTmp.click(function (e) {
 					debugger;
 					if (wapp.templates && wapp.templates.length > 0) {
@@ -336,7 +337,6 @@ var wapp = {
 					class: 'dropdown-menu',
 				}).appendTo($liTmp);
 
-				debugger;
 				if (wapp.templates && wapp.templates.length > 0) {
 					wapp.templates.forEach(it => {
 						var $li = $('<li/>').appendTo($ulTmp);
