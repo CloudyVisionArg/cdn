@@ -314,7 +314,7 @@ var wapp = {
 
 				var $liTmp = $('<li/>', {
 					class: 'dropdown-submenu',
-				});
+				}).appendTo($menu);
 
 				var $aTmp = $('<a/>', {
 					href: '#',
