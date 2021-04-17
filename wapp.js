@@ -321,34 +321,36 @@ var wapp = {
 				}).append('Plantilla <span class="caret">');
 				$aTmp.appendTo($liTmp);
 
-				debugger;
 				$aTmp.click(function (e) {
 					debugger;
+					var $this = $(this);
 					if (wapp.templates && wapp.templates.length > 0) {
-						$(this).next('ul').toggle();
+						if ($this.next('ul').length == 0) {
+							var $ulTmp = $('<ul/>', {
+								class: 'dropdown-menu',
+							}).appendTo($liTmp);
+			
+							wapp.templates.forEach(it => {
+								var $li = $('<li/>').appendTo($ulTmp);
+								var $a = $('<a/>', {
+									href: '#',
+								}).appendTo($li);
+								$a.append(it);
+								$a.click(function (e) {
+									debugger;
+								});
+							});
+		
+						};
+
+						$this.next('ul').toggle();
 						e.stopPropagation();
 						e.preventDefault();
+
 					} else {
 						alert('No hay plantillas definidas');
 					}
 				});
-
-				$ulTmp = $('<ul/>', {
-					class: 'dropdown-menu',
-				}).appendTo($liTmp);
-
-				if (wapp.templates && wapp.templates.length > 0) {
-					wapp.templates.forEach(it => {
-						var $li = $('<li/>').appendTo($ulTmp);
-						var $a = $('<a/>', {
-							href: '#',
-						}).appendTo($li);
-						$a.append(it);
-						$a.click(function (e) {
-							debugger;
-						});
-					});
-				};
 
 				/*
 				tempActions.params.chatEl = actions.params.chatEl;
