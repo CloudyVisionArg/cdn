@@ -35,8 +35,8 @@ function includeJs() {
 	var id = arguments[0].toLowerCase();
 
 	if (id == 'javascript') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/javascript.js'
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
+		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/javascript.js'
+		src = 'https://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
 
 	} else if (id == 'emojis') {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/emojis.js'
