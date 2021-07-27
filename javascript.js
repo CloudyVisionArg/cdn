@@ -54,7 +54,7 @@ function addPhoneButton(pControl) {
 
 function addWappButton(pControl) {
 	//addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'https://api.whatsapp.com/send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
-	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'whatsapp://send/?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
+	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'whatsapp://send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 }
 
 function addEmailButton(pControl) {
