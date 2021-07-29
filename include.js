@@ -107,9 +107,11 @@ function includeJs() {
 
 			var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
 			cont.appendChild(scriptNode);
+			return scriptNode;
 			
 		} else {
 			if (callback) script.loaded(callback);
+			return script;
 		}
 	}
 }
