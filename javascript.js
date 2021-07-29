@@ -54,7 +54,7 @@ function addPhoneButton(pControl) {
 
 function addWappButton(pControl) {
 	if (window.WhatsappURL == undefined) {
-		if (window.confirm('Tiene instalado el cliente Wjhatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
+		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
 			window.WhatsappURL = 'whatsapp://send';
 		} else {
 			window.WhatsappURL = 'https://web.whatsapp.com/send';
