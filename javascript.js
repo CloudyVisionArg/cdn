@@ -55,6 +55,7 @@ function addPhoneButton(pControl) {
 function addWappButton(pControl) {
 	if (window.WhatsappURL == undefined) {
 		includeJs('custom-protocol-check', function () {
+			debugger;
 			window.customProtocolCheck('whatsapp://send',
 				function () {
 					window.WhatsappURL = 'whatsapp://send';
