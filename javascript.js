@@ -55,14 +55,12 @@ function addPhoneButton(pControl) {
 function addWappButton(pControl) {
 	if (window.WhatsappURL == undefined) {
 		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
+			debugger;
 			window.WhatsappURL = 'whatsapp://send';
 		} else {
 			window.WhatsappURL = 'https://web.whatsapp.com/send';
 		}
 	}
-	includeJs('custom-protocol-check').loaded(function () {
-		console.log('holaa');
-	})
 	//addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'https://api.whatsapp.com/send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'whatsapp://send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 }
