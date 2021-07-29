@@ -60,8 +60,7 @@ function addWappButton(pControl) {
 			sessionStorage.setItem('WhatsappURL', 'https://web.whatsapp.com/send');
 		}
 	}
-	//addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'https://api.whatsapp.com/send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
-	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'whatsapp://send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
+	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(sessionStorage.getItem(\'WhatsappURL\') + \'?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 }
 
 function addEmailButton(pControl) {
