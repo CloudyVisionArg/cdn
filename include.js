@@ -35,8 +35,8 @@ function includeJs() {
 	var id = arguments[0].toLowerCase();
 
 	if (id == 'javascript') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@21/javascript.js'
-		src = 'https://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@22/javascript.js'
+		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
 
 	} else if (id == 'emojis') {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/emojis.js'
@@ -52,10 +52,6 @@ function includeJs() {
 
 	} else if (id == 'qrcode') {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/qrcode.js';
-
-	} else if (id == 'custom-protocol-check') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@22/custom-protocol-check.js';
-		src = 'https://cloudycrm.net/c/gitcdn.asp?path=/custom-protocol-check.js';
 
 	} else {
 		if (typeof arguments[1] == 'string') {
