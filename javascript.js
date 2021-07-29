@@ -53,9 +53,17 @@ function addPhoneButton(pControl) {
 }
 
 function addWappButton(pControl) {
-	includeJs('custom-protocol-check', function () {
-		console.log('cpc');
-	});
+	if (window.WhatsappURL == undefined) {
+		includeJs('custom-protocol-check', function () {
+			window.customProtocolCheck('whatsapp://send',
+				function () {
+					window.WhatsappURL = 'whatsapp://send';
+				},
+				function() {
+					window.WhatsappURL = 'https://web.whatsapp.com/send'
+				}, 5000);
+		});
+	}
 	//addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'https://api.whatsapp.com/send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(\'whatsapp://send?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 }
