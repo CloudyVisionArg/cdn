@@ -53,6 +53,7 @@ function addPhoneButton(pControl) {
 }
 
 function addWappButton(pControl) {
+	debugger;
 	if (!sessionStorage.getItem('WhatsappURL')) {
 		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
 			sessionStorage.setItem('WhatsappURL', 'whatsapp://send');
@@ -61,6 +62,10 @@ function addWappButton(pControl) {
 		}
 	}
 	addInputButton(pControl, 'fa fa-whatsapp', 'window.open(sessionStorage.getItem(\'WhatsappURL\') + \'?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
+}
+
+function wappButtonClick() {
+
 }
 
 function addEmailButton(pControl) {
