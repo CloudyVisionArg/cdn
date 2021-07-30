@@ -60,14 +60,14 @@ function wappButtonClick(pButton) {
 	var wappURL = sessionStorage.getItem('WhatsappURL');
 	if (!wappURL) {
 		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
-			wappURL = 'whatsapp://send';
+			wappURL = 'whatsapp://';
 		} else {
-			wappURL = 'https://web.whatsapp.com/send';
+			wappURL = 'https://web.whatsapp.com/';
 		}
 	}
 	sessionStorage.setItem('WhatsappURL', wappURL);
 	var number = $(pButton).siblings('input[type="text"]').val();
-	window.open(wappURL + '?phone=' + wappNumber(number));
+	window.open(wappURL + 'send?phone=' + wappNumber(number));
 }
 
 function addEmailButton(pControl) {
