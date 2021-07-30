@@ -61,14 +61,14 @@ function addWappButton(pControl) {
 		}
 	}
 	if (localStorage.getItem('hola') == 'chau') {
-		addInputButton(pControl, 'fa fa-whatsapp', 'wappButtonClick()');
+		addInputButton(pControl, 'fa fa-whatsapp', 'wappButtonClick(this)');
 
 	} else {
 		addInputButton(pControl, 'fa fa-whatsapp', 'window.open(sessionStorage.getItem(\'WhatsappURL\') + \'?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
 	}
 }
 
-function wappButtonClick() {
+function wappButtonClick(pButton) {
 	debugger;
 
 }
