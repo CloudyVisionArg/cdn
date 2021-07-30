@@ -69,17 +69,17 @@ function addWappButton(pControl) {
 }
 
 function wappButtonClick(pButton) {
-	debugger;
-	if (!sessionStorage.getItem('WhatsappURL')) {
+	var wappURL = sessionStorage.getItem('WhatsappURL');
+	if (!wappURL) {
 		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
-			sessionStorage.setItem('WhatsappURL', 'whatsapp://send');
+			wappURL = 'whatsapp://send';
 		} else {
-			sessionStorage.setItem('WhatsappURL', 'https://web.whatsapp.com/send');
+			wappURL = 'https://web.whatsapp.com/send';
 		}
 	}
-
-	var number = $(pButton).siblings('input').val();
-	window.open(sessionStorage.getItem('WhatsappURL') + '?phone=' + wappNumber(number));
+	sessionStorage.setItem('WhatsappURL', wappURL);
+	var number = $(pButton).siblings('input[type="text"]').val();
+	window.open(wappURL + '?phone=' + wappNumber(number));
 }
 
 function addEmailButton(pControl) {
