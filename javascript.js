@@ -53,19 +53,7 @@ function addPhoneButton(pControl) {
 }
 
 function addWappButton(pControl) {
-	if (!sessionStorage.getItem('WhatsappURL')) {
-		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
-			sessionStorage.setItem('WhatsappURL', 'whatsapp://send');
-		} else {
-			sessionStorage.setItem('WhatsappURL', 'https://web.whatsapp.com/send');
-		}
-	}
-	if (localStorage.getItem('hola') == 'chau') {
-		addInputButton(pControl, 'fa fa-whatsapp', 'wappButtonClick(this)');
-
-	} else {
-		addInputButton(pControl, 'fa fa-whatsapp', 'window.open(sessionStorage.getItem(\'WhatsappURL\') + \'?phone=\' + wappNumber($(\'#' + pControl.attr('id') + '\').val()))');
-	}
+	addInputButton(pControl, 'fa fa-whatsapp', 'wappButtonClick(this)');
 }
 
 function wappButtonClick(pButton) {
