@@ -656,7 +656,6 @@ var wapp = {
 	renderMsg: function (pMsg) {
 		// Pide el media, si no esta
 		if (pMsg.nummedia > 0) {
-			debugger;
 			if (!pMsg.media) {
 				wapp.msgMedia(pMsg.sid).then(
 					function (res) {
