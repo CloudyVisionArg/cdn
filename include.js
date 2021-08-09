@@ -28,6 +28,7 @@ Al usar loaded tener en cuenta que el id se pasa a minusculas:
 	});
 */
 
+// todo: ver de recibir la version para el @
 function includeJs() {
 	// Los src de gitcdn.asp no hacen cache, usar cdo se estan haciendo cambios
 
