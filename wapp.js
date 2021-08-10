@@ -367,9 +367,7 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
 									onClick: function () {
-										debugger;
-										debugger;
-										wapp.sendAudio();
+										wapp.sendAudio(mediaActions.params.chatEl);
 									}
 								},
 								{
@@ -1172,7 +1170,7 @@ var wapp = {
 		}
 	},
 
-	sendAudio: function () {
+	sendAudio: function (pChat) {
 		// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
 
 		audioRecorder(function (file) {
@@ -1192,7 +1190,7 @@ var wapp = {
 
 							wapp.cursorLoading(true);
 
-							var $chat = $(el).closest('div.wapp-chat');
+							var $chat = $(pChat);
 							var fromN = $chat.attr('data-internal-number');
 							var toN = $chat.attr('data-external-number');
 				
