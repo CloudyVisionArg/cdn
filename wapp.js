@@ -366,7 +366,7 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
 									onClick: function () {
-										toast('En desarrolloo');
+										wapp.sendAudio();
 									}
 								},
 								{
@@ -1167,5 +1167,10 @@ var wapp = {
 				cordova: typeof(cordova) == 'object' ? 1 : 0,
 			}
 		}
-	}
+	},
+
+	sendAudio: function () {
+		alert('sendAudio');
+
+	},
 }
