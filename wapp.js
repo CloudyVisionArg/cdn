@@ -1180,21 +1180,23 @@ var wapp = {
 				//var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/my-first-bucket/' +  filePath;
 				wapp.s3.upload(
 					{
-						Key: 'my-first-bucket-path/' + file.name,
+						Key: window.localStorage.getItem('authToken') + '/' + file.name,
 						Body: file,
 						ACL: 'public-read'
 					},
 					function(err, data) {
-						if(err) {
+						debugger;
+
+						if (err) {
 							reject('error');
 						}
 						alert('Successfully Uploaded!');
 					}
-				).on('httpUploadProgress', function (progress) {
-					var uploaded = parseInt((progress.loaded * 100) / progress.total);
-					$('progress').attr('value', uploaded);
-				});
 
+				).on('httpUploadProgress', function (progress) {
+					// Por si hay que actualizar un progress
+					var uploaded = parseInt((progress.loaded * 100) / progress.total);
+				});
 			});
         });
 	},
