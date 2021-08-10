@@ -1205,15 +1205,22 @@ var wapp = {
 	},
 
 	sendMedia: function (pFile, pChat) {
-		// todo: ver en web
 		wapp.cursorLoading(true);
 
+		// todo: ver en web (getFile no va)
 		getFile(pFile.localURL).then(
 			function (file2) {
 				var reader = new FileReader();
 				reader.onloadend = function (e) {
 					var blobData = new Blob([this.result], { type: file2.type });
-					debugger;
+
+					// Setea un ContentType valido para Twilio:
+					// https://www.twilio.com/docs/sms/accepted-mime-types
+					if (file2.type == 'audio/x-m4a') {
+						blobData.contentType = 'audio/mpeg';
+					} else if (file2.type == 'audio/aac') {
+						// completar con android
+					};
 
 					// Pasos para configurar un Bucket publico en S3:
 					// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
@@ -1222,18 +1229,16 @@ var wapp = {
 							{
 								Key: window.localStorage.getItem('authToken') + '/' + file2.name,
 								Body: blobData,
+								ContentType: blobData.contentType,
 								ACL: 'public-read',
-								ContentType: 'audio/mpeg', // todo: ver en android q es aac
-								//https://www.twilio.com/docs/sms/accepted-mime-types
 							},
 							function(err, data) {
 								if (err) {
 									debugger;
 									wapp.cursorLoading(false);
 									reject('error');
+
 								} else {
-									debugger;
-		
 									var $chat = $(pChat);
 									var fromN = $chat.attr('data-internal-number');
 									var toN = $chat.attr('data-external-number');
