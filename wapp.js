@@ -368,6 +368,7 @@ var wapp = {
 									text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
 									onClick: function () {
 										debugger;
+										debugger;
 										wapp.sendAudio();
 									}
 								},
