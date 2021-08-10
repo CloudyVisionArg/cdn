@@ -1181,7 +1181,10 @@ var wapp = {
 	},
 
 	getS3: function (pCallback) {
-		if (!wapp.s3) {
+		if (wapp.s3) {
+			if (pCallback) pCallback();
+		} else {
+			
 			includeJs('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
 
 				var bucketName = 'cloudy-whatsapp-connector';
