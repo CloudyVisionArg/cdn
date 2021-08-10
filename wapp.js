@@ -1170,7 +1170,9 @@ var wapp = {
 	},
 
 	sendAudio: function () {
-		alert('sendAudio');
+		audioRecorder(function (file) {
+			debugger;
+        });
 
 	},
 }
