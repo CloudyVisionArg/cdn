@@ -1198,13 +1198,16 @@ var wapp = {
 					// Pasos para configurar un Bucket publico en S3:
 					// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
 					wapp.getS3(function () {
+						var s3Key = window.localStorage.getItem('authToken') + '/' + file2.name;
+
 						wapp.s3.upload(
 							{
-								Key: window.localStorage.getItem('authToken') + '/' + file2.name,
+								Key: s3Key,
 								Body: blobData,
 								ContentType: blobData.contentType,
 								ACL: 'public-read',
 							},
+
 							function(err, data) {
 								if (err) {
 									debugger;
@@ -1252,16 +1255,13 @@ var wapp = {
 										}
 									);
 
+									// Borra el archivo de S3 despues de un minuto
 									setTimeout(function () {
-										debugger;
-										var params = {
-											//Bucket: 'your bucket',
-											Key: window.localStorage.getItem('authToken') + '/' + file2.name,
-										};
-
-										wapp.s3.deleteObject(params, function (err, data) {
-											if (err) console.log(err, err.stack); // error
-											else console.log(); // deleted
+										wapp.s3.deleteObject({ Key: s3Key }, function (err, data) {
+											if (err) {
+												console.log(err, err.stack);
+												debugger;
+											}
 										});
 									}, 60000)
 								}
