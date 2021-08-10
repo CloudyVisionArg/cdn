@@ -1179,7 +1179,8 @@ var wapp = {
 					{
 						Key: window.localStorage.getItem('authToken') + '/' + file.name,
 						Body: file,
-						ACL: 'public-read'
+						ACL: 'public-read',
+						ContentType: 'audio/mpeg', // ver en android q es aac
 					},
 					function(err, data) {
 						if (err) {
@@ -1194,13 +1195,11 @@ var wapp = {
 							var fromN = $chat.attr('data-internal-number');
 							var toN = $chat.attr('data-external-number');
 				
-							var f = 'https://cloudy-whatsapp-connector.s3.sa-east-1.amazonaws.com/my-first-bucket-path/0-02_min_audio_2021-01-15_16-26.m4a';
 							wapp.xhr({
 								wappaction: 'send',
 								from: fromN,
 								to: toN,
-								//mediaUrl: data.Location,
-								mediaUrl: f,
+								mediaUrl: data.Location,
 							}).then(
 								function (res) {
 									debugger;
