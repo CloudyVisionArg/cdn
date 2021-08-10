@@ -165,6 +165,7 @@ var wapp = {
 	templates: undefined,
 	loggedUser: undefined,
 	codelibUrl: undefined,
+	s3: undefined,
 	//useOgv: undefined,
 
 	cursorLoading: function(pLoading) {
@@ -1171,8 +1172,36 @@ var wapp = {
 
 	sendAudio: function () {
 		audioRecorder(function (file) {
-			debugger;
+			wapp.getS3(function () {
+				debugger;
+
+			});
         });
 
 	},
+
+	getS3: function (pCallback) {
+		if (!wapp.s3) {
+			includeJs('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
+
+				var bucketName = 'cloudy-whatsapp-connector';
+				var bucketRegion = 'sa-east-1';
+				var IdentityPoolId = 'sa-east-1:47e23fb7-5933-4128-b037-c6208f3fe4bf';
+				
+				AWS.config.update({
+					region: bucketRegion,
+					credentials: new AWS.CognitoIdentityCredentials({
+						IdentityPoolId: IdentityPoolId
+					})
+				});
+				
+				wapp.s3 = new AWS.S3({
+					apiVersion: '2006-03-01',
+					params: {Bucket: bucketName}
+				});
+				
+				if (pCallback) pCallback();
+			})
+		}
+	}
 }
