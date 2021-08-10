@@ -1220,8 +1220,8 @@ var wapp = {
 												msg.status = $dom.find('Message Status').html();
 												msg.body = $dom.find('Message Body').html();
 												msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
+												msg.nummedia = $dom.find('Message NumMedia').html();;
 												/*
-												msg.nummedia = row['NUMMEDIA'];
 												msg.media = row['MEDIA'];
 												msg.latitude = row['LATITUDE'];
 												msg.longitude = row['LONGITUDE'];
