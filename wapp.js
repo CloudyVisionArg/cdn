@@ -1171,13 +1171,35 @@ var wapp = {
 	},
 
 	sendAudio: function () {
+		// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
+
 		audioRecorder(function (file) {
 			wapp.getS3(function () {
 				debugger;
 
+
+				//var fileName = file.name;
+				//var filePath = 'my-first-bucket-path/' + fileName;
+				//var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/my-first-bucket/' +  filePath;
+				s3.upload(
+					{
+						Key: filePath,
+						Body: file,
+						ACL: 'public-read'
+					},
+					function(err, data) {
+						if(err) {
+							reject('error');
+						}
+						alert('Successfully Uploaded!');
+					}
+				).on('httpUploadProgress', function (progress) {
+					var uploaded = parseInt((progress.loaded * 100) / progress.total);
+					$('progress').attr('value', uploaded);
+				});
+
 			});
         });
-
 	},
 
 	getS3: function (pCallback) {
