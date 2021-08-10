@@ -1282,7 +1282,7 @@ var wapp = {
 						});
 					});
 				};
-				reader.readAsArrayBuffer(file);
+				reader.readAsArrayBuffer(file2);
 
 			},
 			function (err) {
