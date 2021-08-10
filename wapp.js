@@ -1175,9 +1175,6 @@ var wapp = {
 
 		audioRecorder(function (file) {
 			wapp.getS3(function () {
-				debugger;
-
-				//var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/my-first-bucket/' +  filePath;
 				wapp.s3.upload(
 					{
 						Key: window.localStorage.getItem('authToken') + '/' + file.name,
@@ -1185,12 +1182,50 @@ var wapp = {
 						ACL: 'public-read'
 					},
 					function(err, data) {
-						debugger;
-
 						if (err) {
+							debugger;
 							reject('error');
+						} else {
+							debugger;
+
+							wapp.cursorLoading(true);
+
+							var fromN = $chat.attr('data-internal-number');
+							var toN = $chat.attr('data-external-number');
+				
+							wapp.xhr({
+								wappaction: 'send',
+								from: fromN,
+								to: toN,
+								mediaUrl: data.Location,
+							}).then(
+								function (res) {
+									debugger;
+									var $dom = $($.parseXML(res.jqXHR.responseText));
+									msg = {};
+									msg.sid = $dom.find('Message Sid').html();
+									msg.direction = 'outbound';
+									msg.operator = wapp.loggedUser.Name;
+									msg.status = $dom.find('Message Status').html();
+									msg.body = $dom.find('Message Body').html();
+									msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
+									var $cont = $chat.find('div.wapp-messages');
+									$cont.append(wapp.renderMsg(msg));
+									$cont.scrollTop($cont[0].scrollHeight);
+				
+									wapp.cursorLoading(false);
+								},
+								function (err) {
+									debugger;
+									wapp.cursorLoading(false);
+									alert('Error: ' + err.jqXHR.responseText);
+								}
+							)
+				
+
+
+
 						}
-						alert('Successfully Uploaded!');
 					}
 
 				).on('httpUploadProgress', function (progress) {
@@ -1210,7 +1245,7 @@ var wapp = {
 
 				var bucketName = 'cloudy-whatsapp-connector';
 				var bucketRegion = 'sa-east-1';
-				var IdentityPoolId = 'sa-east-1:47e23fb7-5933-4128-b037-c6208f3fe4bf';
+				var IdentityPoolId = decrypt('U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==', '')
 				
 				AWS.config.update({
 					region: bucketRegion,
