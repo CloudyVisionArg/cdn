@@ -1180,6 +1180,70 @@ var wapp = {
 					var reader = new FileReader();
 					reader.onloadend = function (e) {
 						var blobData = new Blob([this.result], { type: file2.type });
+
+						wapp.getS3(function () {
+							wapp.s3.upload(
+								{
+									Key: window.localStorage.getItem('authToken') + '/' + file.name,
+									Body: blobData,
+									ACL: 'public-read',
+									ContentType: 'audio/mpeg', // todo: ver en android q es aac
+								},
+								function(err, data) {
+									if (err) {
+										debugger;
+										reject('error');
+									} else {
+										debugger;
+			
+										wapp.cursorLoading(true);
+			
+										var $chat = $(pChat);
+										var fromN = $chat.attr('data-internal-number');
+										var toN = $chat.attr('data-external-number');
+							
+										wapp.xhr({
+											wappaction: 'send',
+											from: fromN,
+											to: toN,
+											mediaUrl: data.Location,
+										}).then(
+											function (res) {
+												debugger;
+												var $dom = $($.parseXML(res.jqXHR.responseText));
+												msg = {};
+												msg.sid = $dom.find('Message Sid').html();
+												msg.direction = 'outbound';
+												msg.operator = wapp.loggedUser.Name;
+												msg.status = $dom.find('Message Status').html();
+												msg.body = $dom.find('Message Body').html();
+												msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
+												var $cont = $chat.find('div.wapp-messages');
+												$cont.append(wapp.renderMsg(msg));
+												$cont.scrollTop($cont[0].scrollHeight);
+							
+												wapp.cursorLoading(false);
+											},
+											function (err) {
+												debugger;
+												wapp.cursorLoading(false);
+												alert('Error: ' + err.jqXHR.responseText);
+											}
+										)
+							
+			
+			
+			
+									}
+								}
+			
+							).on('httpUploadProgress', function (progress) {
+								// Por si hay que actualizar un progress
+								var uploaded = parseInt((progress.loaded * 100) / progress.total);
+							});
+						});
+			
+
 					};
 					reader.readAsArrayBuffer(file);
 
@@ -1189,67 +1253,6 @@ var wapp = {
 				}
 			);
 
-			wapp.getS3(function () {
-				wapp.s3.upload(
-					{
-						Key: window.localStorage.getItem('authToken') + '/' + file.name,
-						Body: file,
-						ACL: 'public-read',
-						ContentType: 'audio/mpeg', // todo: ver en android q es aac
-					},
-					function(err, data) {
-						if (err) {
-							debugger;
-							reject('error');
-						} else {
-							debugger;
-
-							wapp.cursorLoading(true);
-
-							var $chat = $(pChat);
-							var fromN = $chat.attr('data-internal-number');
-							var toN = $chat.attr('data-external-number');
-				
-							wapp.xhr({
-								wappaction: 'send',
-								from: fromN,
-								to: toN,
-								mediaUrl: data.Location,
-							}).then(
-								function (res) {
-									debugger;
-									var $dom = $($.parseXML(res.jqXHR.responseText));
-									msg = {};
-									msg.sid = $dom.find('Message Sid').html();
-									msg.direction = 'outbound';
-									msg.operator = wapp.loggedUser.Name;
-									msg.status = $dom.find('Message Status').html();
-									msg.body = $dom.find('Message Body').html();
-									msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
-									var $cont = $chat.find('div.wapp-messages');
-									$cont.append(wapp.renderMsg(msg));
-									$cont.scrollTop($cont[0].scrollHeight);
-				
-									wapp.cursorLoading(false);
-								},
-								function (err) {
-									debugger;
-									wapp.cursorLoading(false);
-									alert('Error: ' + err.jqXHR.responseText);
-								}
-							)
-				
-
-
-
-						}
-					}
-
-				).on('httpUploadProgress', function (progress) {
-					// Por si hay que actualizar un progress
-					var uploaded = parseInt((progress.loaded * 100) / progress.total);
-				});
-			});
         });
 	},
 
