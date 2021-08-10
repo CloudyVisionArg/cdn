@@ -1184,10 +1184,10 @@ var wapp = {
 						wapp.getS3(function () {
 							wapp.s3.upload(
 								{
-									Key: window.localStorage.getItem('authToken') + '/' + file.name,
+									Key: window.localStorage.getItem('authToken') + '/' + file2.name,
 									Body: blobData,
 									ACL: 'public-read',
-									ContentType: 'audio/mpeg', // todo: ver en android q es aac
+									ContentType: file2.type, // todo: ver en android q es aac
 								},
 								function(err, data) {
 									if (err) {
