@@ -1256,7 +1256,7 @@ var wapp = {
 										debugger;
 										var params = {
 											//Bucket: 'your bucket',
-											Key: data.Location,
+											Key: window.localStorage.getItem('authToken') + '/' + file2.name,
 										};
 
 										wapp.s3.deleteObject(params, function (err, data) {
