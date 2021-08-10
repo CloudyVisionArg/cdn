@@ -1176,34 +1176,6 @@ var wapp = {
         });
 	},
 
-	getS3: function (pCallback) {
-		if (wapp.s3) {
-			if (pCallback) pCallback();
-
-		} else {
-			includeJs('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
-
-				var bucketName = 'cloudy-whatsapp-connector';
-				var bucketRegion = 'sa-east-1';
-				var IdentityPoolId = decrypt('U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==', '')
-				
-				AWS.config.update({
-					region: bucketRegion,
-					credentials: new AWS.CognitoIdentityCredentials({
-						IdentityPoolId: IdentityPoolId
-					})
-				});
-				
-				wapp.s3 = new AWS.S3({
-					apiVersion: '2006-03-01',
-					params: {Bucket: bucketName}
-				});
-				
-				if (pCallback) pCallback();
-			})
-		}
-	},
-
 	sendMedia: function (pFile, pChat) {
 		wapp.cursorLoading(true);
 
@@ -1216,6 +1188,7 @@ var wapp = {
 
 					// Setea un ContentType valido para Twilio:
 					// https://www.twilio.com/docs/sms/accepted-mime-types
+					dsebugger;
 					if (file2.type == 'audio/x-m4a') {
 						blobData.contentType = 'audio/mpeg';
 					} else if (file2.type == 'audio/aac') {
@@ -1296,5 +1269,34 @@ var wapp = {
 			}
 		);
 
-	}
+	},
+
+	getS3: function (pCallback) {
+		if (wapp.s3) {
+			if (pCallback) pCallback();
+
+		} else {
+			includeJs('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
+
+				var bucketName = 'cloudy-whatsapp-connector';
+				var bucketRegion = 'sa-east-1';
+				var IdentityPoolId = decrypt('U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==', '')
+				
+				AWS.config.update({
+					region: bucketRegion,
+					credentials: new AWS.CognitoIdentityCredentials({
+						IdentityPoolId: IdentityPoolId
+					})
+				});
+				
+				wapp.s3 = new AWS.S3({
+					apiVersion: '2006-03-01',
+					params: {Bucket: bucketName}
+				});
+				
+				if (pCallback) pCallback();
+			})
+		}
+	},
+
 }
