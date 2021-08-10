@@ -1174,13 +1174,24 @@ var wapp = {
 		// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
 
 		audioRecorder(function (file) {
+			debugger;
+			getFile(file.localURL).then(
+				function (file2) {
+					var reader = new FileReader();
+					reader.onloadend = function (e) {
+						var blobData = new Blob([this.result], { type: file2.type });
+					};
+					reader.readAsArrayBuffer(file);
+
+				},
+
 			wapp.getS3(function () {
 				wapp.s3.upload(
 					{
 						Key: window.localStorage.getItem('authToken') + '/' + file.name,
 						Body: file,
 						ACL: 'public-read',
-						ContentType: 'audio/mpeg', // ver en android q es aac
+						ContentType: 'audio/mpeg', // todo: ver en android q es aac
 					},
 					function(err, data) {
 						if (err) {
