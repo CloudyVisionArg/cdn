@@ -1184,6 +1184,10 @@ var wapp = {
 					reader.readAsArrayBuffer(file);
 
 				},
+				function (err) {
+					debugger;
+				}
+			);
 
 			wapp.getS3(function () {
 				wapp.s3.upload(
