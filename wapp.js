@@ -1171,6 +1171,7 @@ var wapp = {
 	},
 
 	sendAudio: function (pChat) {
+		// Pasos para configurar un Bucket publico en S3:
 		// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
 
 		audioRecorder(function (file) {
@@ -1188,6 +1189,7 @@ var wapp = {
 									Body: blobData,
 									ACL: 'public-read',
 									ContentType: 'audio/mpeg', // todo: ver en android q es aac
+									//https://www.twilio.com/docs/sms/accepted-mime-types
 								},
 								function(err, data) {
 									if (err) {
@@ -1218,6 +1220,13 @@ var wapp = {
 												msg.status = $dom.find('Message Status').html();
 												msg.body = $dom.find('Message Body').html();
 												msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
+												/*
+												msg.nummedia = row['NUMMEDIA'];
+												msg.media = row['MEDIA'];
+												msg.latitude = row['LATITUDE'];
+												msg.longitude = row['LONGITUDE'];
+												*/
+
 												var $cont = $chat.find('div.wapp-messages');
 												$cont.append(wapp.renderMsg(msg));
 												$cont.scrollTop($cont[0].scrollHeight);
