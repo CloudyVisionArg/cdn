@@ -1187,7 +1187,7 @@ var wapp = {
 									Key: window.localStorage.getItem('authToken') + '/' + file2.name,
 									Body: blobData,
 									ACL: 'public-read',
-									ContentType: file2.type, // todo: ver en android q es aac
+									ContentType: 'audio/mpeg', // todo: ver en android q es aac
 								},
 								function(err, data) {
 									if (err) {
