@@ -367,6 +367,7 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
 									onClick: function () {
+										debugger;
 										wapp.sendAudio();
 									}
 								},
@@ -1190,6 +1191,7 @@ var wapp = {
 
 							wapp.cursorLoading(true);
 
+							var $chat = $(el).closest('div.wapp-chat');
 							var fromN = $chat.attr('data-internal-number');
 							var toN = $chat.attr('data-external-number');
 				
