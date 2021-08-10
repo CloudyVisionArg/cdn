@@ -1250,7 +1250,20 @@ var wapp = {
 											wapp.cursorLoading(false);
 											alert('Error: ' + err.jqXHR.responseText);
 										}
-									)
+									);
+
+									setTimeout(function () {
+										debugger;
+										var params = {
+											//Bucket: 'your bucket',
+											Key: data.Location,
+										};
+
+										wapp.s3.deleteObject(params, function (err, data) {
+											if (err) console.log(err, err.stack); // error
+											else console.log(); // deleted
+										});
+									}, 60000)
 								}
 							}
 		
