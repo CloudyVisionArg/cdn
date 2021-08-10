@@ -1177,13 +1177,10 @@ var wapp = {
 			wapp.getS3(function () {
 				debugger;
 
-
-				//var fileName = file.name;
-				//var filePath = 'my-first-bucket-path/' + fileName;
 				//var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/my-first-bucket/' +  filePath;
-				s3.upload(
+				wapp.s3.upload(
 					{
-						Key: filePath,
+						Key: 'my-first-bucket-path/' + file.name,
 						Body: file,
 						ACL: 'public-read'
 					},
