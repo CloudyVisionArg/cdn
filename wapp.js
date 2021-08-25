@@ -82,45 +82,6 @@ $(document).ready(function () {
 							wapp.templates = res.map(it => it['NAME']);
 						}
 					);
-
-					/*
-					Este es un picker parecido al de los emojis, no lo vamos a usar en cordova
-					ver como lo implementamos en web
-
-					var $picker = $('<div/>', {
-						id: 'wappTemplatePicker',
-					}).css({
-						backgroundColor: '#ECECEC',
-						borderRadius: '12px',
-						display: 'none',
-						position: 'absolute',
-						padding: '5px',
-						height: '170px',
-						width: '350px',
-						overflowY: 'scroll',
-					}).appendTo($(document.body));
-
-					DoorsAPI.folderSearch(wapp.templatesFolder, 'name', '', 'name').then(
-						function (res) {
-							var $ul = $('<ul/>').appendTo($picker);
-							res.forEach(it => {
-								$li = $('<li/>').appendTo($ul);
-								$li.attr('data-value', it['NAME']);
-								$li.append(it['NAME']);
-							})
-						}
-					);
-
-					$picker.on('click', 'li', function (e) {
-						var $this = $(this);
-						wapp.putTemplate($this.attr('data-value'), $this.closest('div')[0].target);
-					});
-
-					$(document).click(function () {
-						$picker.hide()
-					});
-					*/
-		
 				}
 			);
 

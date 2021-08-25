@@ -109,7 +109,7 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 
 function wappNumber(pPhone) {
 	var ret = pPhone.replace(/\+| |\(|\)|-/g, '');
-	if (ret.length == 10) ret = '54' + ret;
+	if (ret.length == 10) ret = '549' + ret;
 	return ret;
 }
 
