@@ -67,8 +67,7 @@ function wappButtonClick(pButton) {
 	}
 	sessionStorage.setItem('WhatsappURL', wappURL);
 	var number = $(pButton).siblings('input[type="text"]').val();
-	var w = window.open(wappURL + 'send?phone=' + wappNumber(number));
-	setTimeout(function () { w.close() }, 10000);
+	window.open(wappURL + 'send?phone=' + wappNumber(number));
 }
 
 function addEmailButton(pControl) {
