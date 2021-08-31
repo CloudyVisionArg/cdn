@@ -1152,9 +1152,9 @@ var wapp = {
 					// https://www.twilio.com/docs/sms/accepted-mime-types
 					debugger;
 					if (file2.type == 'audio/x-m4a') {
-						blobData.contentType = 'audio/mpeg';
+						blobData.contentType = 'audio/mp4';
 					} else if (file2.type == 'audio/aac') {
-						// completar con android
+						blobData.contentType = 'audio/mp4';
 					};
 
 					// Pasos para configurar un Bucket publico en S3:
