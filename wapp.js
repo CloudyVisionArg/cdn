@@ -1133,6 +1133,7 @@ var wapp = {
 
 	sendAudio: function (pChat) {
 		audioRecorder(function (file) {
+			debugger;
 			wapp.sendMedia(file, pChat);
         });
 	},
