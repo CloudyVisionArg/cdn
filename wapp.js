@@ -1154,7 +1154,7 @@ var wapp = {
 					if (file2.type == 'audio/x-m4a') {
 						blobData.contentType = 'audio/mp4';
 					} else if (file2.type == 'audio/aac') {
-						blobData.contentType = 'audio/mp4';
+						blobData.contentType = 'audio/ac3';
 					};
 
 					// Pasos para configurar un Bucket publico en S3:
