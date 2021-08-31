@@ -1218,6 +1218,7 @@ var wapp = {
 									);
 
 									// Borra el archivo de S3 despues de un minuto
+									/*
 									setTimeout(function () {
 										wapp.s3.deleteObject({ Key: s3Key }, function (err, data) {
 											if (err) {
@@ -1226,6 +1227,7 @@ var wapp = {
 											}
 										});
 									}, 60000)
+									*/
 								}
 							}
 		
