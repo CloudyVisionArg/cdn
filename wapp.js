@@ -1152,7 +1152,7 @@ var wapp = {
 					// https://www.twilio.com/docs/sms/accepted-mime-types
 					debugger;
 					if (file2.type == 'audio/x-m4a') {
-						blobData.contentType = 'audio/mp4';
+						blobData.contentType = 'audio/mpeg';
 					} else if (file2.type == 'audio/aac') {
 						blobData.contentType = 'audio/ac3';
 					};
