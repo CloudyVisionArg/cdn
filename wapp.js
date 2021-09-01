@@ -334,7 +334,7 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">camera</i>&nbsp;&nbsp;C&aacute;mara',
 									onClick: function () {
-										toast('En desarrollo');
+										wapp.sendCamera(mediaActions.params.chatEl);
 									}
 								},
 								{
@@ -1136,6 +1136,21 @@ var wapp = {
 			debugger;
 			wapp.sendMedia(file, pChat);
         });
+	},
+
+	sendCamera: function (pChat) {
+		navigator.camera.getPicture(
+            function (fileURL) {
+                getFile(fileURL).then(
+                    function (file) {
+                        wapp.sendMedia(file, pChat);
+                    },
+                    errMgr
+                )
+            },
+            errMgr,
+            cameraOptions(Camera.PictureSourceType.CAMERA)
+        );
 	},
 
 	sendMedia: function (pFile, pChat) {
