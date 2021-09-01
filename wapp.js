@@ -1151,6 +1151,11 @@ var wapp = {
             errMgr,
             cameraOptions(Camera.PictureSourceType.CAMERA)
         );
+
+		function errMgr(pMsg) {
+			console.log(pMsg);
+			toast(pMsg);
+		}
 	},
 
 	sendMedia: function (pFile, pChat) {
