@@ -251,6 +251,8 @@ var wapp = {
 
 			var $media;
 			if (typeof(cordova) != 'object') {
+				// Web
+
 				var $dropup = $('<div/>', {
 					class: 'dropup',
 				}).appendTo($div);
@@ -316,6 +318,8 @@ var wapp = {
 				$('<a/>').append('Cancelar').appendTo($li);
 
 			} else {
+				// Cordova
+
 				$media = $('<i/>', {
 					class: 'f7-icons',
 				}).append('plus').appendTo($div);
@@ -340,7 +344,7 @@ var wapp = {
 								{
 									text: '<i class="f7-icons">photo</i>&nbsp;&nbsp;Fotos y Videos',
 									onClick: function () {
-										toast('En desarrollo');
+										wapp.sendPhoto(mediaActions.params.chatEl);
 									}
 								},
 								{
@@ -409,7 +413,6 @@ var wapp = {
 				});
 			}
 
-
 			// Boton Emoji
 			if (typeof(cordova) != 'object') {
 				var $div = $('<div/>', {
@@ -429,50 +432,6 @@ var wapp = {
 				})
 			}
 			
-			/*
-			// Boton Template
-			var $div = $('<div/>', {
-				class: 'wapp-button',
-				style: 'width: 10%',
-			}).appendTo($reply);
-			
-			var $template;
-			if (typeof(cordova) != 'object') {
-				$template = $('<i/>', {
-					class: 'fa fa-list-ul',
-				}).appendTo($div);
-			} else {
-				$template = $('<i/>', {
-					class: 'f7-icons',
-				}).append('menu').appendTo($div);
-			}
-			
-			$template.click(function (e) {
-				var posX, posY;
-				var $picker = $('#wappTemplatePicker');
-				if ($picker.outerWidth() > $(document).width()) {
-					posX = ($(window).width() - $picker.outerWidth()) / 2;
-				} else if (e.pageX + $picker.outerWidth() > $(document).width()) {
-					posX = $(document).width() - $picker.outerWidth();
-				} else {
-					posX = e.pageX;
-				}
-				if (e.pageY - 200 > 0) {
-					posY = e.pageY - 200;
-				} else {
-					posY = e.pageY + 30;
-				}
-				$picker.css({
-					left: posX + 'px',
-					top: posY + 'px',
-					zIndex: 20000,
-				});
-				$picker[0].target = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
-				$picker.show();
-				e.stopPropagation();
-			});
-			*/
-
 			// Input
 			var $div = $('<div/>', {
 				style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%') + 
@@ -1139,17 +1098,33 @@ var wapp = {
 	},
 
 	sendCamera: function (pChat) {
+		wapp.getPicture(Camera.PictureSourceType.CAMERA, 
+			function (file) {
+				wapp.sendMedia(file, pChat);
+			}
+		)
+	},
+
+	sendPhoto: function (pChat) {
+		wapp.getPicture(Camera.PictureSourceType.PHOTOLIBRARY, 
+			function (file) {
+				wapp.sendMedia(file, pChat);
+			}
+		)
+	},
+
+	getPicture: function (pSource, pCallback) {
 		navigator.camera.getPicture(
             function (fileURL) {
                 getFile(fileURL).then(
                     function (file) {
-                        wapp.sendMedia(file, pChat);
+						if (pCallback) pCallback(file);
                     },
                     errMgr
                 )
             },
             errMgr,
-            cameraOptions(Camera.PictureSourceType.CAMERA)
+            cameraOptions(pSource)
         );
 
 		function errMgr(pMsg) {
