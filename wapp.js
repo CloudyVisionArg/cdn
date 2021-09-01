@@ -1175,7 +1175,9 @@ var wapp = {
 						blobData.contentType = 'audio/mpeg';
 					} else if (file2.type == 'audio/aac') {
 						blobData.contentType = 'audio/ac3';
-					};
+					} else {
+						blobData.contentType = file2.type;
+					}
 
 					// Pasos para configurar un Bucket publico en S3:
 					// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
