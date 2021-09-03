@@ -1082,6 +1082,7 @@ var wapp = {
 			}
 		
 			return {
+				authToken: window.localStorage.getItem('authToken'),
 				userName: window.localStorage.getItem('userName'),
 				password: pwd,
 				instance: window.localStorage.getItem('instance'),
