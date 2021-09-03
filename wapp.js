@@ -1119,6 +1119,7 @@ var wapp = {
         );
 
 		function errMgr(pMsg) {
+			debugger;
 			console.log(pMsg);
 			toast(pMsg);
 		}
