@@ -1074,18 +1074,8 @@ var wapp = {
 	    });
 
 		function getContext() {
-			pwd = window.localStorage.getItem('userPassword');
-			if (!pwd) {
-				pwd = '';
-			} else if (pwd.substr(0, 2) == '__') {
-				pwd = decrypt(pwd.substr(2), '__')
-			}
-		
 			return {
 				authToken: window.localStorage.getItem('authToken'),
-				userName: window.localStorage.getItem('userName'),
-				password: pwd,
-				instance: window.localStorage.getItem('instance'),
 				cordova: typeof(cordova) == 'object' ? 1 : 0,
 			}
 		}
