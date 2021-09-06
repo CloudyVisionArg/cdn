@@ -1194,7 +1194,7 @@ var wapp = {
 
 											msg.media = JSON.stringify([{
 												Url: data.Location,
-												ContentType: blobData.contentType,
+												ContentType: file2.type,
 											}]);
 
 											/*
