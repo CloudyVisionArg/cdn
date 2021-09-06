@@ -584,23 +584,23 @@ var wapp = {
 				wapp.msgMedia(pMsg.sid).then(
 					function (res) {
 						pMsg.media = res;
-						return render(pMsg);
+						render(pMsg, pCallback);
 					},
 					function (err) {
 						debugger;
 						console.log(err.responseText);
-						return render(pMsg);
+						render(pMsg, pCallback);
 					}
 				);
 			} else {
-				return render(pMsg);
+				render(pMsg, pCallback);
 			}
 		} else {
-			return render(pMsg);
+			render(pMsg, pCallback);
 		}
 		
 		// Renderiza
-		function render(pMsg) {
+		function render(pMsg, pCallback) {
 			var appendBody = true;
 			
 			var $row = $('<div/>', {
@@ -754,7 +754,6 @@ var wapp = {
 			}
 			
 			if (pCallback) pCallback($row);
-			return $row;
 		}
 	},
 	
