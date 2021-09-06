@@ -1191,6 +1191,12 @@ var wapp = {
 											msg.body = $dom.find('Message Body').html();
 											msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
 											msg.nummedia = $dom.find('Message NumMedia').html();;
+
+											msg.media = JSON.stringify({
+												Url: data.Location,
+												ContentType: blobData.contentType,
+											})
+											
 											/*
 											msg.media = row['MEDIA'];
 											msg.latitude = row['LATITUDE'];
