@@ -1145,7 +1145,7 @@ var wapp = {
 					if (file2.type == 'audio/x-m4a') {
 						blobData.contentType = 'audio/mpeg';
 					} else if (file2.type == 'audio/aac') {
-						blobData.contentType = 'audio/ac3';
+						blobData.contentType = 'audio/aac';
 					} else {
 						blobData.contentType = file2.type;
 					}
