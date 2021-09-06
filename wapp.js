@@ -549,7 +549,9 @@ var wapp = {
 		var $cont = pChat.find('div.wapp-messages');
 		var $msgs = pChat.find('div.wapp-message');
 		if ($msgs.length == 0) {
-			$cont.append(wapp.renderMsg(pMsg));
+			wapp.renderMsg(pMsg, function (msgRow) {
+				$cont.append(msgRow);
+			});
 		} else {
 			var $msg = $msgs.filter('[data-sid="' + pMsg.sid + '"]');
 			if ($msg.length > 0) {
@@ -557,36 +559,34 @@ var wapp = {
 				$msg.find('.wapp-message-status-container').html(wapp.getTicks(pMsg.status));
 			} else {
 				$msg = $msgs.first();
-				var $msgRnd = wapp.renderMsg(pMsg);
-				if (pMsg.date <= $msg.attr('data-date')) {
-					$msg.before($msgRnd);
-				} else {
-					$msg = $msgs.last();
-					while ($msg.attr('data-date') > pMsg.date) $msg = $msg.prev();
-					if ($msg) {
-						$msg.after($msgRnd);
+				wapp.renderMsg(pMsg, function (msgRow) {
+					if (pMsg.date <= $msg.attr('data-date')) {
+						$msg.before(msgRow);
 					} else {
-						// No deberia llegar aca, lo pongo al ultimo
-						$cont.append($msgRnd);
+						$msg = $msgs.last();
+						while ($msg.attr('data-date') > pMsg.date) $msg = $msg.prev();
+						if ($msg) {
+							$msg.after(msgRow);
+						} else {
+							// No deberia llegar aca, lo pongo al ultimo
+							$cont.append(msgRow);
+						}
 					}
-				}
+				});
 			}
 		}
 	},
 	
-	renderMsg: function (pMsg) {
+	renderMsg: function (pMsg, pCallback) {
 		// Pide el media, si no esta
 		if (pMsg.nummedia > 0) {
 			if (!pMsg.media) {
-				wapp.cursorLoading(true);
 				wapp.msgMedia(pMsg.sid).then(
 					function (res) {
-						wapp.cursorLoading(false);
 						pMsg.media = res;
 						return render(pMsg);
 					},
 					function (err) {
-						wapp.cursorLoading(false);
 						debugger;
 						console.log(err.responseText);
 						return render(pMsg);
@@ -753,6 +753,7 @@ var wapp = {
 				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status) + '</span>');
 			}
 			
+			if (pCallback) pCallback($row);
 			return $row;
 		}
 	},
@@ -997,11 +998,12 @@ var wapp = {
 					msg.status = $dom.find('Message Status').html();
 					msg.body = $dom.find('Message Body').html();
 					msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
-					var $cont = $chat.find('div.wapp-messages');
-					$cont.append(wapp.renderMsg(msg));
-					$cont.scrollTop($cont[0].scrollHeight);
-
-					wapp.cursorLoading(false);
+					wapp.renderMsg(msg, function (msgRow) {
+						var $cont = $chat.find('div.wapp-messages');
+						$cont.append(msgRow);
+						$cont.scrollTop($cont[0].scrollHeight);
+						wapp.cursorLoading(false);
+					});
 				},
 				function (err) {
 					wapp.cursorLoading(false);
@@ -1196,11 +1198,12 @@ var wapp = {
 											msg.longitude = row['LONGITUDE'];
 											*/
 
-											var $cont = $chat.find('div.wapp-messages');
-											$cont.append(wapp.renderMsg(msg));
-											$cont.scrollTop($cont[0].scrollHeight);
-						
-											wapp.cursorLoading(false);
+											wapp.renderMsg(msg, function (msgRow) {
+												var $cont = $chat.find('div.wapp-messages');
+												$cont.append(msgRow);
+												$cont.scrollTop($cont[0].scrollHeight);
+												wapp.cursorLoading(false);
+											});
 										},
 										function (err) {
 											debugger;
