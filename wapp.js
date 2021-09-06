@@ -8,8 +8,8 @@ todo:
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
-	//linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@3/wapp.css';
-	linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp.css';
+	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@30/wapp.css';
+	//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp.css';
 	headTag.appendChild(linkTag);
 
 	var root = document.documentElement;
@@ -1196,9 +1196,8 @@ var wapp = {
 												Url: data.Location,
 												ContentType: blobData.contentType,
 											})
-											
+
 											/*
-											msg.media = row['MEDIA'];
 											msg.latitude = row['LATITUDE'];
 											msg.longitude = row['LONGITUDE'];
 											*/
@@ -1218,7 +1217,6 @@ var wapp = {
 									);
 
 									// Borra el archivo de S3 despues de un minuto
-									/*
 									setTimeout(function () {
 										wapp.s3.deleteObject({ Key: s3Key }, function (err, data) {
 											if (err) {
@@ -1227,7 +1225,6 @@ var wapp = {
 											}
 										});
 									}, 60000)
-									*/
 								}
 							}
 		
