@@ -578,12 +578,15 @@ var wapp = {
 		// Pide el media, si no esta
 		if (pMsg.nummedia > 0) {
 			if (!pMsg.media) {
+				wapp.cursorLoading(true);
 				wapp.msgMedia(pMsg.sid).then(
 					function (res) {
+						wapp.cursorLoading(false);
 						pMsg.media = res;
 						return render(pMsg);
 					},
 					function (err) {
+						wapp.cursorLoading(false);
 						debugger;
 						console.log(err.responseText);
 						return render(pMsg);
