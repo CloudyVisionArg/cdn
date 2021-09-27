@@ -1090,8 +1090,8 @@ var wapp = {
 			return {
 				authToken: window.localStorage.getItem('authToken'),
 				cordova: typeof(cordova) == 'object' ? 1 : 0,
-
-				// todo: Sacar cdo este el setToken en el W3
+				
+				/* todo: Sacar cdo este el setToken en el W3 */
 				userName: window.localStorage.getItem('userName'),
 				password: pwd,
 				instance: window.localStorage.getItem('instance'),
