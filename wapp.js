@@ -1078,9 +1078,22 @@ var wapp = {
 	    });
 
 		function getContext() {
+			// todo: Sacar cdo este el setToken en el W3
+			pwd = window.localStorage.getItem('userPassword');
+			if (!pwd) {
+				pwd = '';
+			} else if (pwd.substr(0, 2) == '__') {
+				pwd = decrypt(pwd.substr(2), '__')
+			}
+
 			return {
 				authToken: window.localStorage.getItem('authToken'),
 				cordova: typeof(cordova) == 'object' ? 1 : 0,
+
+				// todo: Sacar cdo este el setToken en el W3
+				userName: window.localStorage.getItem('userName'),
+				password: pwd,
+				instance: window.localStorage.getItem('instance'),
 			}
 		}
 	},
