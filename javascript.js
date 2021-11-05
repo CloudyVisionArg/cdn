@@ -1,3 +1,7 @@
+/*
+todo: inventario de metodos y changeLog
+*/
+
 // Inserta pValue en pInput, en la posicion del cursor 
 function insertAtCaret(pInput, pValue) {
 	try {

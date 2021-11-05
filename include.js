@@ -111,4 +111,8 @@ function includeJs() {
 			return script;
 		}
 	}
-}
+};
+
+function scriptLoaded(scriptName, callback) {
+	document.getElementById('script_' + scriptName.toLowerCase()).loaded(callback);
+};
