@@ -9,21 +9,15 @@ Ej:
 		// emojis loaded
 	});
 	
-Tambien puedo verificar si la biblioteca esta cargada con el metodo loaded:
+Tambien puedo verificar si la biblioteca esta cargada con el metodo scriptLoaded:
 
-	$('#script_emojis')[0].loaded(function () {
+	scriptLoaded('emojis', function () {
 		// emojis loaded
 	});
 
 Puedo usarlo para mis propios script especificando el src:
 
 	includeJs('myScript', 'http://path/to/my/script.js', function () {
-		// myScript loaded
-	});
-
-Al usar loaded tener en cuenta que el id se pasa a minusculas:
-
-	$('#script_myscript')[0].loaded(function () {
 		// myScript loaded
 	});
 */

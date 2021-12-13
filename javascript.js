@@ -100,7 +100,7 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 		'style': 'cursor: pointer;',
 		'onclick': pAction,
 	});
-	span.append('<span class="' + pIcon + '"></span></span>');
+	span.append('<span class="' + pIcon + '"></span>');
 	
 	if (pPrepend) {
 		span.prependTo(div);

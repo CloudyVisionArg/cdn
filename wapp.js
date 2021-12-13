@@ -1029,7 +1029,7 @@ var wapp = {
 	
 	putTemplate: function (template, target) {
 		wapp.cursorLoading(true);
-		DoorsAPI.folderSearch(wapp.templatesFolder, 'text', 'name = \'' + template + '\'').then(
+		DoorsAPI.folderSearch(wapp.templatesFolder, 'text', 'name = \'' + template + '\'', '', 1, null, 0).then(
 			function (res) {
 				wapp.cursorLoading(false);
 				insertAtCaret(target, res[0]['TEXT']);
