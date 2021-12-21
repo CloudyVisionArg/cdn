@@ -53,6 +53,10 @@ function includeJs() {
 	} else if (id == 'qrcode') {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/qrcode.js';
 
+	} else if (id == 'app7-controls') {
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@35/app7/controls.js';
+		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/controls.js';
+
 	} else {
 		if (typeof arguments[1] == 'string') {
 			src = arguments[1];
