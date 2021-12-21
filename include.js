@@ -66,7 +66,7 @@ function includeJs() {
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/sync.js';
 
 	} else if (id == 'app7-dsession') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@37/app7/dsession.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@38/app7/dsession.js';
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/dsession.js';
 
 	} else {
