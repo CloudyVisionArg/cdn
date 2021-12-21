@@ -3,7 +3,6 @@ var freeAnonUserName = 'anonimo';
 var freeAnonUserPass = 'gTfy4#j0/x';
 var freeInstance = 'TemplateFree';
 
-debugger;
 var dSession = new DSession();
 
 function DSession() {
