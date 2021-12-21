@@ -23,6 +23,11 @@ Puedo usarlo para mis propios script especificando el src:
 */
 
 // todo: ver de recibir la version para el @
+/*
+arg 0: Id del script
+arg 1: string -> SRC del script custom / function -> Callback
+arg 2: function -> Callback (script custom)
+*/
 function includeJs() {
 	// Los src de gitcdn.asp no hacen cache, usar cdo se estan haciendo cambios
 
