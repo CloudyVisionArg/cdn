@@ -62,11 +62,11 @@ function includeJs() {
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/doorsapi.js';
 
 	} else if (id == 'app7-sync') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@40/app7/sync.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@41/app7/sync.js';
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/sync.js';
 
 	} else if (id == 'app7-dsession') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@40/app7/dsession.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@41/app7/dsession.js';
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/dsession.js';
 
 	} else {
