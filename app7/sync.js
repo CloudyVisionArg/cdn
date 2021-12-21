@@ -1,3 +1,4 @@
+debugger;
 var sync = new Sync();
 
 // todo: attachments
