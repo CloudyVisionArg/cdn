@@ -54,8 +54,16 @@ function includeJs() {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/qrcode.js';
 
 	} else if (id == 'app7-controls') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@35/app7/controls.js';
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@36/app7/controls.js';
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/controls.js';
+
+	} else if (id == 'app7-doorsapi') {
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@36/app7/doorsapi.js';
+		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/doorsapi.js';
+
+	} else if (id == 'app7-sync') {
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@36/app7/sync.js';
+		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/sync.js';
 
 	} else {
 		if (typeof arguments[1] == 'string') {
