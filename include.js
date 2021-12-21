@@ -69,6 +69,10 @@ function includeJs() {
 		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@41/app7/dsession.js';
 		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/dsession.js';
 
+	} else if (id == 'app7-global') {
+		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@42/app7/global.js';
+		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/global.js';
+
 	} else {
 		if (typeof arguments[1] == 'string') {
 			src = arguments[1];
