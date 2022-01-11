@@ -25,69 +25,60 @@ Puedo usarlo para mis propios script especificando el src:
 // todo: ver de recibir la version para el @
 /*
 arg 0: Id del script
-arg 1: string -> SRC del script custom / function -> Callback
+arg 1: string -> SRC del script custom / function -> Callback / Number -> Version (0: lastCommit)
 arg 2: function -> Callback (script custom)
 */
-function includeJs() {
-	// Los src de gitcdn.asp no hacen cache, usar cdo se estan haciendo cambios
 
-	var src = '';
+function includeJs() {
+	debugger;
+
+	var scripts = [];
+	scripts.push({ id: 'javascript', path: '/javascript.js', version: 33 });
+	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
+	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 42 });
+	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
+	scripts.push({ id: 'qrcode', path: '/qrcode.js', version: 20 });
+	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 36 });
+	scripts.push({ id: 'app7-doorsapi', path: '/app7/doorsapi.js', version: 36 });
+	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
+	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 42 });
+
+	var src, reqVer, callback;
+
 	var id = arguments[0].toLowerCase();
 
-	if (id == 'javascript') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@33/javascript.js'
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/javascript.js';
+	if (typeof arguments[1] == 'string') {
+		src = arguments[1];
+	} else if (typeof arguments[1] == 'number') {
+		reqVer = arguments[1]
+	} else if (typeof arguments[1] == 'function') {
+		callback = arguments[1];
+	}
 
-	} else if (id == 'emojis') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/emojis.js'
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/emojis.js';
+	if (typeof arguments[2] == 'function') {
+		callback = arguments[2];
+	}
 
-	} else if (id == 'whatsapp') {
-		//src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@16/wapp.js';
-		src = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp.js';
+	var script = scripts.find(el => el.id == src.toLowerCase());
 
-	} else if (id == 'maps') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/maps.js';
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/maps.js';
-
-	} else if (id == 'qrcode') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@20/qrcode.js';
-
-	} else if (id == 'app7-controls') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@36/app7/controls.js';
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/controls.js';
-
-	} else if (id == 'app7-doorsapi') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@36/app7/doorsapi.js';
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/doorsapi.js';
-
-	} else if (id == 'app7-sync') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@41/app7/sync.js';
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/sync.js';
-
-	} else if (id == 'app7-dsession') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@41/app7/dsession.js';
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/dsession.js';
-
-	} else if (id == 'app7-global') {
-		src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@42/app7/global.js';
-		//src = 'https://cloudycrm.net/c/gitcdn.asp?path=/app7/global.js';
+	if (script) {
+		if (reqVer != undefined) {
+			if (reqVer == 0) {
+				src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+			} else {
+				src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + reqVer + script.path;
+			}
+		} else {
+			src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + script.version + script.path;
+		}
 
 	} else {
-		if (typeof arguments[1] == 'string') {
-			src = arguments[1];
-		} else {
+		if (!src) {
 			throw id + ' not registered and no src specified';
 		}
 	}
-	
-	var callback;
-	if (typeof arguments[1] == 'function') {
-		callback = arguments[1];
-	} else if (typeof arguments[2] == 'function') {
-		callback = arguments[2];
-	}
-	
+
 	if (src) {
 		var script = document.getElementById('script_' + id);
 		if (!script) {

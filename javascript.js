@@ -1,5 +1,29 @@
 /*
-todo: inventario de metodos y changeLog
+Changelog:
+2022-01-11: JP - ChangeLog e Inventario de metodos
+
+Funciones varias de JavaScript
+
+Inventario de metodos:
+
+insertAtCaret(pInput, pValue)
+string.replaceAll(search, replacement)
+addOption(ctl, option, value)
+addInputButton(pControl, pIcon, pAction, pPrepend)
+addPhoneButton(pControl)
+addWappButton(pControl)
+wappButtonClick(pButton)
+addEmailButton(pControl)
+wappNumber(pPhone)
+xmlDecodeDate(pDate)
+xmlEncodeDate(pDate)
+timeZone()
+fechaTexto(pFecha, pSinAnio, pSinHora)
+ISODate(pDate)
+ISOTime(pDate, pSeconds)
+leadingZeros(pString, pLength)
+getDocField(pDoc, pFieldName)
+errMsg(pErr)
 */
 
 // Inserta pValue en pInput, en la posicion del cursor 
@@ -52,33 +76,6 @@ function addOption(ctl, option, value) {
 	return opt;
 }
 
-function addPhoneButton(pControl) {
-	addInputButton(pControl, 'fa fa-phone', 'window.open(\'tel:\' + $(\'#' + pControl.attr('id') + '\').val())');
-}
-
-function addWappButton(pControl) {
-	addInputButton(pControl, 'fa fa-whatsapp', 'wappButtonClick(this)');
-}
-
-function wappButtonClick(pButton) {
-	var wappURL = sessionStorage.getItem('WhatsappURL');
-	if (!wappURL) {
-		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
-			wappURL = 'whatsapp://';
-		} else {
-			wappURL = 'https://web.whatsapp.com/';
-		}
-	}
-	sessionStorage.setItem('WhatsappURL', wappURL);
-	var number = $(pButton).siblings('input[type="text"]').val();
-	var w = window.open(wappURL + 'send?phone=' + wappNumber(number));
-	if (wappURL == 'whatsapp://') setTimeout(function () { w.close() }, 10000);
-}
-
-function addEmailButton(pControl) {
-	return addInputButton(pControl, 'fa fa-envelope', 'window.open(\'mailto:\' + $(\'#' + pControl.attr('id') + '\').val())');
-}
-
 function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	var esGroup = pControl.parent().hasClass('input-group');
 	var div;
@@ -110,6 +107,33 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	
 	if (!esGroup) pControl.replaceWith(div);
 	return span;
+}
+
+function addPhoneButton(pControl) {
+	addInputButton(pControl, 'fa fa-phone', 'window.open(\'tel:\' + $(\'#' + pControl.attr('id') + '\').val())');
+}
+
+function addWappButton(pControl) {
+	addInputButton(pControl, 'fa fa-whatsapp', 'wappButtonClick(this)');
+}
+
+function wappButtonClick(pButton) {
+	var wappURL = sessionStorage.getItem('WhatsappURL');
+	if (!wappURL) {
+		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
+			wappURL = 'whatsapp://';
+		} else {
+			wappURL = 'https://web.whatsapp.com/';
+		}
+	}
+	sessionStorage.setItem('WhatsappURL', wappURL);
+	var number = $(pButton).siblings('input[type="text"]').val();
+	var w = window.open(wappURL + 'send?phone=' + wappNumber(number));
+	if (wappURL == 'whatsapp://') setTimeout(function () { w.close() }, 10000);
+}
+
+function addEmailButton(pControl) {
+	return addInputButton(pControl, 'fa fa-envelope', 'window.open(\'mailto:\' + $(\'#' + pControl.attr('id') + '\').val())');
 }
 
 function wappNumber(pPhone) {
