@@ -30,8 +30,6 @@ arg 2: function -> Callback (script custom)
 */
 
 function includeJs() {
-	debugger;
-
 	var scripts = [];
 	scripts.push({ id: 'javascript', path: '/javascript.js', version: 33 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
@@ -59,6 +57,8 @@ function includeJs() {
 	if (typeof arguments[2] == 'function') {
 		callback = arguments[2];
 	}
+
+	debugger;
 
 	var script = scripts.find(el => el.id == id.toLowerCase());
 
