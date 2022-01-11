@@ -1,6 +1,7 @@
 /*
 includeJs permite cargar una biblioteca Javascript en forma dinamica.
 La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
+
 Ej:
 
 	includeJs('emojis');
@@ -9,9 +10,27 @@ Ej:
 		// emojis loaded
 	});
 	
-Tambien puedo verificar si la biblioteca esta cargada con el metodo scriptLoaded:
+Tambien puedo verificar si la biblioteca se termino de cargar con el metodo scriptLoaded:
 
 	scriptLoaded('emojis', function () {
+		// emojis loaded
+	});
+
+O mediante el metodo loaded del elemento script (hay que poner el prefijo script_)
+
+	document.getElementById('script_emojis').loaded(function () {
+		// emojis loaded
+	});
+
+Puedo especificar la version (tag del commit)
+
+	includeJs('emojis', 15, function () {
+		// emojis loaded
+	});
+
+U obtener el ultimo commit, sin caches, pidiendo la version 0
+
+	includeJs('emojis', 0, function () {
 		// emojis loaded
 	});
 
@@ -22,14 +41,15 @@ Puedo usarlo para mis propios script especificando el src:
 	});
 */
 
-// todo: ver de recibir la version para el @
 /*
-arg 0: Id del script
-arg 1: string -> SRC del script custom / function -> Callback / Number -> Version (0: lastCommit)
-arg 2: function -> Callback (script custom)
+Argumentos:
+0: Id del script
+1: string -> SRC del script custom / function -> Callback / Number -> Version (0: lastCommit)
+2: function -> Callback (script custom)
 */
 
 function includeJs() {
+	// Scripts registrados
 	var scripts = [];
 	scripts.push({ id: 'javascript', path: '/javascript.js', version: 33 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
