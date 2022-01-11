@@ -60,7 +60,7 @@ function includeJs() {
 		callback = arguments[2];
 	}
 
-	var script = scripts.find(el => el.id == src.toLowerCase());
+	var script = scripts.find(el => el.id == id.toLowerCase());
 
 	if (script) {
 		if (reqVer != undefined) {
