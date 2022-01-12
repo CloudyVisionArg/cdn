@@ -100,10 +100,10 @@ function includeJs() {
 	}
 
 	if (src) {
-		var script = document.getElementById('script_' + id);
-		if (!script) {
-			var D = document
-			var scriptNode = D.createElement('script');
+		var scriptNode = document.getElementById('script_' + id);
+		if (!scriptNode) {
+			var D = document;
+			scriptNode = D.createElement('script');
 			scriptNode.id = 'script_' + id;
 			scriptNode.type = 'text/javascript';
 			scriptNode.async = true;
@@ -130,15 +130,15 @@ function includeJs() {
 				this._loaded = true;
 			});
 
-			if (callback) scriptNode.loaded(callback);
-
 			var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
 			cont.appendChild(scriptNode);
+
+			if (callback) scriptNode.loaded(callback);
 			return scriptNode;
 			
 		} else {
-			if (callback) script.loaded(callback);
-			return script;
+			if (callback) scriptNode.loaded(callback);
+			return scriptNode;
 		}
 	}
 };
