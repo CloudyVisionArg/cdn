@@ -68,49 +68,51 @@ Argumentos:
 */
 
 function includeJs() {
-	var src, reqVer, callback;
+	var src, pSrc, pVer, pCallback;
 	var scripts = registeredScripts();
 
-	var id = arguments[0].toLowerCase();
+	var pId = arguments[0].toLowerCase();
 
 	if (typeof arguments[1] == 'string') {
-		src = arguments[1];
+		pSrc = arguments[1];
 	} else if (typeof arguments[1] == 'number') {
-		reqVer = arguments[1]
+		pVer = arguments[1]
 	} else if (typeof arguments[1] == 'function') {
-		callback = arguments[1];
+		pCallback = arguments[1];
 	}
 
 	if (typeof arguments[2] == 'function') {
-		callback = arguments[2];
+		pCallback = arguments[2];
 	}
 
-	var scriptSrc = scriptSource(id, reqVer);
-	if (scriptSrc) {
-		src = scriptSrc;
-	} else {
-		if (!src) throw id + ' not registered and no src specified';
+	var src = scriptSrc(pId, pVer);
+	if (!src) {
+		if (pSrc) {
+			src = pSrc;
+		} else {
+			throw pId + ' not registered and no src specified';
+		}
 	}
 
 	if (src) {
-		var scriptNode = document.getElementById('script_' + id);
+		var scriptNode = document.getElementById('script_' + pId);
 		if (!scriptNode) {
 			var D = document;
 			scriptNode = D.createElement('script');
-			scriptNode.id = 'script_' + id;
+			scriptNode.id = 'script_' + pId;
 			scriptNode.type = 'text/javascript';
 			scriptNode.async = true;
 			scriptNode.src = src;
 			
-			scriptNode.loaded = function (pCallback) {
+			scriptNode.loaded = function (callback) {
 				var self = this;
 				var waiting = 0;
 				var interv = setInterval(function () {
 					waiting += 10;
 					if (self._loaded  || waiting > 3000) {
 						clearInterval(interv);
-						if (pCallback) pCallback(self);
-						if (waiting > 3000) console.log('includeJs(' + id + ') timeout');
+						if (callback) callback(self);
+						if (waiting > 3000) console.log('includeJs(' + pId + ') timeout');
 						
 						/* Cuando se esta depurando y hay un debugger en la carga de la pagina,
 						el evento load no se dispara, en ese caso loaded llama igual al
@@ -126,11 +128,11 @@ function includeJs() {
 			var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
 			cont.appendChild(scriptNode);
 
-			if (callback) scriptNode.loaded(callback);
+			if (pCallback) scriptNode.loaded(pCallback);
 			return scriptNode;
 			
 		} else {
-			if (callback) scriptNode.loaded(callback);
+			if (pCallback) scriptNode.loaded(pCallback);
 			return scriptNode;
 		}
 	}
@@ -140,7 +142,7 @@ function scriptLoaded(scriptName, callback) {
 	document.getElementById('script_' + scriptName.toLowerCase()).loaded(callback);
 };
 
-function scriptSource(scriptId, version) {
+function scriptSrc(scriptId, version) {
 	var src;
 	var scripts = registeredScripts();
 	var script = scripts.find(el => el.id == scriptId.toLowerCase());
