@@ -41,16 +41,10 @@ Puedo usarlo para mis propios script especificando el src:
 	});
 */
 
-/*
-Argumentos:
-0: Id del script
-1: string -> SRC del script custom / function -> Callback / Number -> Version (0: lastCommit)
-2: function -> Callback (script custom)
-*/
-
-function includeJs() {
-	// Scripts registrados
+// Scripts registrados
+function registeredScripts() {
 	var scripts = [];
+
 	scripts.push({ id: 'javascript', path: '/javascript.js', version: 33 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 42 });
@@ -61,8 +55,21 @@ function includeJs() {
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 42 });
+	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 43 });
 
+	return scripts;
+}
+
+/*
+Argumentos:
+0: Id del script
+1: string -> SRC del script custom / function -> Callback / number -> Version (0: lastCommit)
+2: function -> Callback (script custom)
+*/
+
+function includeJs() {
 	var src, reqVer, callback;
+	var scripts = registeredScripts();
 
 	var id = arguments[0].toLowerCase();
 
@@ -78,25 +85,11 @@ function includeJs() {
 		callback = arguments[2];
 	}
 
-	debugger;
-
-	var script = scripts.find(el => el.id == id.toLowerCase());
-
-	if (script) {
-		if (reqVer != undefined) {
-			if (reqVer == 0) {
-				src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
-			} else {
-				src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + reqVer + script.path;
-			}
-		} else {
-			src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + script.version + script.path;
-		}
-
+	var scriptSrc = scriptSource(id, reqVer);
+	if (scriptSrc) {
+		src = scriptSrc;
 	} else {
-		if (!src) {
-			throw id + ' not registered and no src specified';
-		}
+		if (!src) throw id + ' not registered and no src specified';
 	}
 
 	if (src) {
@@ -146,3 +139,26 @@ function includeJs() {
 function scriptLoaded(scriptName, callback) {
 	document.getElementById('script_' + scriptName.toLowerCase()).loaded(callback);
 };
+
+function scriptSource(scriptId, version) {
+	var src;
+	var scripts = registeredScripts();
+	var script = scripts.find(el => el.id == scriptId.toLowerCase());
+
+	if (script) {
+		if (version != undefined) {
+			if (version == 0) {
+				src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+			} else {
+				src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + version + script.path;
+			}
+		} else {
+			src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + script.version + script.path;
+		}
+
+	} else {
+		src = undefined;
+	}
+
+	return src;
+}
