@@ -194,7 +194,7 @@ function renderPage() {
     // page
     $page = getPage({
         id: 'generic_' + getGuid(),
-        title: 'Cargando...',
+        title: 'Cargando000...',
         leftbutton: {
             text: 'Salir'
         },
@@ -1041,7 +1041,7 @@ function $get(pSelector) {
 
 function fillControls() {
     if (!doc.IsNew) {
-        var title = getDocField(doc, 'subject').Value + "_test";
+        var title = getDocField(doc, 'subject').Value;
         if (!title) title = 'Doc Id ' + doc.DocId;
         $navbar.find('.title').html(title);
 
