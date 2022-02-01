@@ -27,7 +27,7 @@ function getInputText(pId, pLabel, pValue) {
 
     $('<div/>', {
         class: 'item-title item-floating-label',
-    }).append(pLabel).appendTo($itemInner);
+    }).append(pLabel + '_test').appendTo($itemInner);
     
     $inputWrap = $('<div/>', {
         class: 'item-input-wrap',
