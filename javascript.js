@@ -174,10 +174,14 @@ function timeZone() {
 }
 
 function fechaTexto(pFecha, pSinAnio, pSinHora) {
-	var ret = pFecha.getDate() + '/' + (pFecha.getMonth() + 1)
-	if (!pSinAnio) ret += '/' + pFecha.getFullYear().toString().slice(-2);
-	if (!pSinHora) ret += ' ' + ISOTime(pFecha);
-	return ret;
+	if (pFecha.valueOf() > 0) {
+		var ret = pFecha.getDate() + '/' + (pFecha.getMonth() + 1)
+		if (!pSinAnio) ret += '/' + pFecha.getFullYear().toString().slice(-2);
+		if (!pSinHora) ret += ' ' + ISOTime(pFecha);
+		return ret;
+	} else {
+		return '';
+	}
 }
 
 function ISODate(pDate) {
