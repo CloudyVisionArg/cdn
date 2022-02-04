@@ -149,14 +149,12 @@ function scriptSrc(scriptId, version) {
 	var script = scripts.find(el => el.id == scriptId.toLowerCase());
 
 	if (script) {
-		if (version != undefined) {
-			if (version == 0) {
-				src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
-			} else {
-				src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + version + script.path;
-			}
+		var v = (version != undefined ? version : script.version);
+
+		if (v == 0) {
+			src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
 		} else {
-			src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + script.version + script.path;
+			src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
 		}
 
 	} else {
