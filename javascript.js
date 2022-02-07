@@ -13,6 +13,7 @@ addInputButton(pControl, pIcon, pAction, pPrepend)
 addPhoneButton(pControl)
 addWappButton(pControl)
 wappButtonClick(pButton)
+wappUrl()
 addEmailButton(pControl)
 wappNumber(pPhone)
 xmlDecodeDate(pDate)
@@ -118,18 +119,23 @@ function addWappButton(pControl) {
 }
 
 function wappButtonClick(pButton) {
-	var wappURL = sessionStorage.getItem('WhatsappURL');
-	if (!wappURL) {
-		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
-			wappURL = 'whatsapp://';
-		} else {
-			wappURL = 'https://web.whatsapp.com/';
-		}
-	}
-	sessionStorage.setItem('WhatsappURL', wappURL);
+	var url = wappUrl();
 	var number = $(pButton).siblings('input[type="text"]').val();
-	var w = window.open(wappURL + 'send?phone=' + wappNumber(number));
-	if (wappURL == 'whatsapp://') setTimeout(function () { w.close() }, 10000);
+	var w = window.open(url + 'send?phone=' + wappNumber(number));
+	if (url == 'whatsapp://') setTimeout(function () { w.close() }, 10000);
+}
+
+function wappUrl() {
+	var ret = sessionStorage.getItem('WhatsappURL');
+	if (!ret) {
+		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
+			ret = 'whatsapp://';
+		} else {
+			ret = 'https://web.whatsapp.com/';
+		}
+		sessionStorage.setItem('WhatsappURL', ret);
+	}
+	return ret;
 }
 
 function addEmailButton(pControl) {
