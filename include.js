@@ -50,7 +50,7 @@ function registeredScripts() {
 	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 42 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
 	scripts.push({ id: 'qrcode', path: '/qrcode.js', version: 20 });
-	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 36 });
+	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 48 });
 	scripts.push({ id: 'app7-doorsapi', path: '/app7/doorsapi.js', version: 36 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
