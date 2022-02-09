@@ -50,7 +50,7 @@ function getInputText(pId, pLabel, pValue) {
 function setInputVal(pInput, pVal) {
     pInput.val(pVal);
     app7.input.checkEmptyState(pInput);
-    if (pInput.prop("tagName") == 'TEXTAREA' && pInput.hasClass('resizable')) {
+    if (pInput.prop('tagName') == 'TEXTAREA' && pInput.hasClass('resizable')) {
         app7.input.resizeTextarea(pInput);
     }
 }
@@ -640,6 +640,7 @@ toggle.on('change', function (t) {
 })
 toggle.checked = true;
 */
+
 function getToggle(pId, pLabel) {
     var $li, $itemCont, $itemInner, $itemAfter;
 
