@@ -1290,7 +1290,7 @@ var wapp = {
 
 	sendFileWeb: function (pEl) {
 		//https://www.html5rocks.com/es/tutorials/file/dndfiles//
-		
+		debugger;
 		alert('En desarrollo');
 	}
 
