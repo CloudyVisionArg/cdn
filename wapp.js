@@ -270,7 +270,7 @@ var wapp = {
 				var $file = $('<a/>').append('Archivo');
 				$file.appendTo($li);
 				$file.click(function (e) {
-					alert('En desarrollo');
+					wapp.sendFileWeb(this);
 				});
 
 				var $liTmp = $('<li/>', {
@@ -1287,5 +1287,11 @@ var wapp = {
 			})
 		}
 	},
+
+	sendFileWeb: function (pEl) {
+		//https://www.html5rocks.com/es/tutorials/file/dndfiles//
+		
+		alert('En desarrollo');
+	}
 
 }
