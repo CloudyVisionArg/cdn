@@ -54,7 +54,7 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-doorsapi', path: '/app7/doorsapi.js', version: 36 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 42 });
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 49 });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 44 });
 
