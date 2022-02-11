@@ -11,7 +11,7 @@ dbRead(pSql, pArgs, pSuccessCallback, pErrorCallback)
 logDateTime(pDate)
 closeConsole()
 showConsole(allowClose)
-loadLoginCustomJS(){
+loadLoginCustomJS()
 showLogin(allowClose)
 errPage(err)
 cleanDb(pCallback)
@@ -25,8 +25,8 @@ saveDoc2(pTable, pKeyName, pKeyVal, pCallback)
 errMsg(pErr)
 encrypt(pString, pPass)
 decrypt(pString, pPass)
-String.prototype.replaceAll
-String.prototype.repeat
+String.prototype.replaceAll(search, replacement)
+String.prototype.repeat(count)
 executeCode(pCode, pSuccess, pFailure)
 getCodelib(pCode)
 statusBar(pShow)
@@ -229,7 +229,7 @@ function showConsole(allowClose) {
     });
 }
 
-function loadLoginCustomJS(){
+function loadLoginCustomJS() {
     var el = document.createElement('script');
     el.setAttribute('type', 'text/javascript');
     el.setAttribute('src', 'custom/' + self.custom + '/login.js');
@@ -887,7 +887,7 @@ function decrypt(pString, pPass) {
 
 // string.replaceAll
 if (typeof String.prototype.replaceAll !== 'function') {
-	String.prototype.replaceAll = function(search, replacement) {
+	String.prototype.replaceAll = function (search, replacement) {
 		var target = this;
 		return target.replace(new RegExp(search, 'g'), replacement);
 	};
@@ -895,7 +895,7 @@ if (typeof String.prototype.replaceAll !== 'function') {
 
 // string.repeat
 if (typeof String.prototype.repeat !== 'function') {
-	String.prototype.repeat = function(count) {
+	String.prototype.repeat = function (count) {
         var target = this;
         var ret = '';
         for (var i = 0; i < count; i++) {
