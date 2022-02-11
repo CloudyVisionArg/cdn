@@ -60,7 +60,7 @@ getFile(pFileURL)
 audioRecorder(pCallback)
 */
 
-dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback) {
+function dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback) {
     db.transaction(
         function (tx) {
             tx.executeSql(pSql, pArgs,
