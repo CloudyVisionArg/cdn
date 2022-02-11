@@ -1,4 +1,66 @@
-function dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback) {
+/*
+Changelog:
+2022-02-11: JP - ChangeLog e Inventario de metodos
+
+Funciones varias de JavaScript del APP7
+
+Inventario de metodos:
+
+dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback)
+dbRead(pSql, pArgs, pSuccessCallback, pErrorCallback)
+logDateTime(pDate)
+closeConsole()
+showConsole(allowClose)
+loadLoginCustomJS(){
+showLogin(allowClose)
+errPage(err)
+cleanDb(pCallback)
+pushRegistration(pPushSetings, pCallback)
+pushUnreg(pCallback)
+getDocField(pDoc, pFieldName)
+getFormField(pForm, pFieldName)
+asyncLoop(iterations, func, callback)
+saveDoc(pTable, pFields, pCallback, pSkipServer)
+saveDoc2(pTable, pKeyName, pKeyVal, pCallback)
+errMsg(pErr)
+encrypt(pString, pPass)
+decrypt(pString, pPass)
+String.prototype.replaceAll
+String.prototype.repeat
+executeCode(pCode, pSuccess, pFailure)
+getCodelib(pCode)
+statusBar(pShow)
+formatNumber(pValue)
+formatPesos(pValue)
+formatDate(pDate)
+scalablePage(scalable)
+goTop()
+toast(message, duration, position)
+getURLParameter(name, url)
+getGuid()
+ifNull(pValue, pDefault)
+ISODate(pDate)
+ISOTime(pDate, pSeconds)
+leadingZeros(pString, pLength)
+getObjProp(pObj, pProp)
+f7AppEvents()
+getFolderElements(pFolder)
+sqlEncode(pValue, pType)
+folderSearch(fldId, fields, formula, order, limit, maxLen, forceOnline)
+folderSearchGroups(fldId, groups, totals, formula, order, limit, forceOnline)
+accountsSearch(filter, order, forceOnline)
+convertSqliteResultSet(pRes)
+convertSqliteAccounts(pRes)
+clearTextSelection()
+objPropCI(pObj, pProp)
+htmlEncode(text)
+fileSize(size)
+cameraOptions(pSource)
+getFile(pFileURL)
+audioRecorder(pCallback)
+*/
+
+dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback) {
     db.transaction(
         function (tx) {
             tx.executeSql(pSql, pArgs,
@@ -978,6 +1040,7 @@ function toast(message, duration, position) {
 }
 
 function getURLParameter(name, url) {
+    // todo: cambiar por URLSearchParams
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
     var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),

@@ -1,3 +1,13 @@
+/*
+Crea un selector de emojis. Hay que pasarle el elemento donde se hace click para abrir
+el selector, y el elemento donde se escribe el emoji: Ej:
+
+emojis.createPicker({
+	el: $('#notas_add').prev('span'),
+	inputEl: $('#notas_add'),
+});
+*/
+
 (function(){
 	includeJs('javascript');
 }());
@@ -86,15 +96,6 @@ var emojis = {
 		};
 	},
 
-	/*
-	Crea un selector de emojis. Hay que pasarle el elemento donde se hace click para abrir
-	el selector, y el elemento donde se escribe el emoji: Ej:
-	
-	emojis.createPicker({
-		el: $('#notas_add').prev('span'),
-		inputEl: $('#notas_add'),
-	});
-	*/
 	createPicker: function (pOptions) {
 		$(pOptions.el)[0].emojis = pOptions;
 		$(pOptions.el).click(function (e) {
