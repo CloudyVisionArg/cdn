@@ -579,13 +579,13 @@ function pushRegistration(pPushSetings, pCallback) {
         console.log('push regType: ' + data.registrationType);
         
         DoorsAPI.pushRegistration({
-            "AppVersion": app7.version,
-            "DeviceModel": device.model,
-            "DevicePlatform": device.platform,
-            "DeviceVersion": device.version,
-            "Login": dSession.loggedUser()['Login'],
-            "RegistrationId": data.registrationId,
-            "RegistrationType": data.registrationType,
+            'AppVersion': app7.version,
+            'DeviceModel': device.model,
+            'DevicePlatform': device.platform,
+            'DeviceVersion': device.version,
+            'Login': dSession.loggedUser()['Login'],
+            'RegistrationId': data.registrationId,
+            'RegistrationType': data.registrationType,
 
         }).then(function (res) {
             if (pCallback) pCallback(app.push);
