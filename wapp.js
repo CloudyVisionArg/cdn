@@ -1161,7 +1161,6 @@ var wapp = {
 				}
 			);
 		} else {
-			debugger;
 			sendMedia2(pFile);
 		};
 
@@ -1197,7 +1196,7 @@ var wapp = {
 							if (err) {
 								debugger;
 								wapp.cursorLoading(false);
-								reject('error');
+								alert(errMsg(err));
 
 							} else {
 								var $chat = $(pChat);
