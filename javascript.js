@@ -6,6 +6,8 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+encrypt(pString, pPass)
+decrypt(pString, pPass)
 insertAtCaret(pInput, pValue)
 string.replaceAll(search, replacement)
 addOption(ctl, option, value)
@@ -36,7 +38,6 @@ function encrypt(pString, pPass) {
 	})
 }
 function decrypt(pString, pPass) {
-	debugger;
 	includeJs('cryptojs-aes', function () {
 		return CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8)
 	})

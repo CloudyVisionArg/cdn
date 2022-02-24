@@ -26,7 +26,7 @@ todo:
 		root.style.setProperty('--wapp-button-size', '25px');
 	};
 
-	includeJs('javascript', 0);
+	includeJs('javascript');
 	includeJs('emojis');
 }());
 
