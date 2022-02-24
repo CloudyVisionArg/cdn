@@ -1167,6 +1167,7 @@ var wapp = {
 				}
 			);
 		} else {
+			debugger;
 			sendMedia2(pFile);
 		};
 
