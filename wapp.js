@@ -122,7 +122,6 @@ $(document).ready(function () {
 		}).appendTo(document.body);
 
 		$file.change(function (e) {
-			debugger;
 			let inp = e.target;
 			if (inp.files.length > 0) {
 				wapp.sendMedia(inp.files[0], $(inp).prop('data-chat'));
@@ -1159,118 +1158,122 @@ var wapp = {
 	sendMedia: function (pFile, pChat) {
 		wapp.cursorLoading(true);
 
-		// todo: ver en web (getFile no va)
-		getFile(pFile.localURL).then(
-			function (file2) {
-				var reader = new FileReader();
-				reader.onloadend = function (e) {
-					var blobData = new Blob([this.result], { type: file2.type });
-
-					// Setea un ContentType valido para Twilio:
-					// https://www.twilio.com/docs/sms/accepted-mime-types
+		if (typeof(cordova) == 'object') {
+			getFile(pFile.localURL).then(
+				sendMedia2,
+				function (err) {
+					wapp.cursorLoading(false);
 					debugger;
-					if (file2.type == 'audio/x-m4a') {
-						blobData.contentType = 'audio/mpeg';
-					} else if (file2.type == 'audio/aac') {
-						blobData.contentType = 'audio/basic';
-					} else {
-						blobData.contentType = file2.type;
-					}
+				}
+			);
+		} else {
+			sendMedia2(pFile);
+		};
 
-					// Pasos para configurar un Bucket publico en S3:
-					// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
-					wapp.getS3(function () {
-						var s3Key = window.localStorage.getItem('authToken') + '/' + file2.name;
+		function sendMedia2(file2) {
+			var reader = new FileReader();
+			reader.onloadend = function (e) {
+				var blobData = new Blob([this.result], { type: file2.type });
 
-						wapp.s3.upload(
-							{
-								Key: s3Key,
-								Body: blobData,
-								ContentType: blobData.contentType,
-								ACL: 'public-read',
-							},
-
-							function(err, data) {
-								if (err) {
-									debugger;
-									wapp.cursorLoading(false);
-									reject('error');
-
-								} else {
-									var $chat = $(pChat);
-									var fromN = $chat.attr('data-internal-number');
-									var toN = $chat.attr('data-external-number');
-						
-									wapp.xhr({
-										wappaction: 'send',
-										from: fromN,
-										to: toN,
-										mediaUrl: data.Location,
-									}).then(
-										function (res) {
-											debugger;
-											var $dom = $($.parseXML(res.jqXHR.responseText));
-											msg = {};
-											msg.sid = $dom.find('Message Sid').html();
-											msg.direction = 'outbound';
-											msg.operator = wapp.loggedUser.Name;
-											msg.status = $dom.find('Message Status').html();
-											msg.body = $dom.find('Message Body').html();
-											msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
-											msg.nummedia = $dom.find('Message NumMedia').html();;
-
-											msg.media = JSON.stringify([{
-												Url: data.Location,
-												ContentType: file2.type,
-											}]);
-
-											/*
-											msg.latitude = row['LATITUDE'];
-											msg.longitude = row['LONGITUDE'];
-											*/
-
-											wapp.renderMsg(msg, function (msgRow) {
-												var $cont = $chat.find('div.wapp-messages');
-												$cont.append(msgRow);
-												$cont.scrollTop($cont[0].scrollHeight);
-												wapp.cursorLoading(false);
-											});
-										},
-										function (err) {
-											debugger;
-											wapp.cursorLoading(false);
-											alert('Error: ' + err.jqXHR.responseText);
-										}
-									);
-
-									/*
-									// Borra el archivo de S3 despues de un minuto
-									setTimeout(function () {
-										wapp.s3.deleteObject({ Key: s3Key }, function (err, data) {
-											if (err) {
-												console.log(err, err.stack);
-												debugger;
-											}
-										});
-									}, 60000)
-									*/
-								}
-							}
-		
-						).on('httpUploadProgress', function (progress) {
-							// Por si hay que actualizar un progress
-							var uploaded = parseInt((progress.loaded * 100) / progress.total);
-						});
-					});
-				};
-				reader.readAsArrayBuffer(file2);
-
-			},
-			function (err) {
-				wapp.cursorLoading(false);
+				// Setea un ContentType valido para Twilio:
+				// https://www.twilio.com/docs/sms/accepted-mime-types
 				debugger;
-			}
-		);
+				if (file2.type == 'audio/x-m4a') {
+					blobData.contentType = 'audio/mpeg';
+				} else if (file2.type == 'audio/aac') {
+					blobData.contentType = 'audio/basic';
+				} else {
+					blobData.contentType = file2.type;
+				}
+
+				// Pasos para configurar un Bucket publico en S3:
+				// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
+				wapp.getS3(function () {
+					var s3Key = window.localStorage.getItem('authToken') + '/' + file2.name;
+
+					wapp.s3.upload(
+						{
+							Key: s3Key,
+							Body: blobData,
+							ContentType: blobData.contentType,
+							ACL: 'public-read',
+						},
+
+						function(err, data) {
+							if (err) {
+								debugger;
+								wapp.cursorLoading(false);
+								reject('error');
+
+							} else {
+								var $chat = $(pChat);
+								var fromN = $chat.attr('data-internal-number');
+								var toN = $chat.attr('data-external-number');
+					
+								wapp.xhr({
+									wappaction: 'send',
+									from: fromN,
+									to: toN,
+									mediaUrl: data.Location,
+								}).then(
+									function (res) {
+										debugger;
+										var $dom = $($.parseXML(res.jqXHR.responseText));
+										msg = {};
+										msg.sid = $dom.find('Message Sid').html();
+										msg.direction = 'outbound';
+										msg.operator = wapp.loggedUser.Name;
+										msg.status = $dom.find('Message Status').html();
+										msg.body = $dom.find('Message Body').html();
+										msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
+										msg.nummedia = $dom.find('Message NumMedia').html();;
+
+										msg.media = JSON.stringify([{
+											Url: data.Location,
+											ContentType: file2.type,
+										}]);
+
+										/*
+										msg.latitude = row['LATITUDE'];
+										msg.longitude = row['LONGITUDE'];
+										*/
+
+										wapp.renderMsg(msg, function (msgRow) {
+											var $cont = $chat.find('div.wapp-messages');
+											$cont.append(msgRow);
+											$cont.scrollTop($cont[0].scrollHeight);
+											wapp.cursorLoading(false);
+										});
+									},
+									function (err) {
+										debugger;
+										wapp.cursorLoading(false);
+										alert('Error: ' + err.jqXHR.responseText);
+									}
+								);
+
+								/*
+								// Borra el archivo de S3 despues de un minuto
+								setTimeout(function () {
+									wapp.s3.deleteObject({ Key: s3Key }, function (err, data) {
+										if (err) {
+											console.log(err, err.stack);
+											debugger;
+										}
+									});
+								}, 60000)
+								*/
+							}
+						}
+	
+					).on('httpUploadProgress', function (progress) {
+						// Por si hay que actualizar un progress
+						var uploaded = parseInt((progress.loaded * 100) / progress.total);
+					});
+				});
+			};
+			reader.readAsArrayBuffer(file2);
+		}
 
 	},
 
