@@ -115,9 +115,16 @@ $(document).ready(function () {
 			</div>
 		`);
 
-		$(document.body).append(`
-			<input type="file" style="display: none;" id="wappFile">
-		`);
+		let $file = $('<input/>', {
+			type: 'file',
+			id: 'wappFile',
+			style: 'display: none;'
+		}).appendTo(document.body);
+
+		$file.change(function (a,b,c) {
+			debugger;
+		})
+
 	}
 });
 
