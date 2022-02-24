@@ -45,7 +45,7 @@ Puedo usarlo para mis propios script especificando el src:
 function registeredScripts() {
 	var scripts = [];
 
-	scripts.push({ id: 'javascript', path: '/javascript.js', version: 46 });
+	scripts.push({ id: 'javascript', path: '/javascript.js', version: 51 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 42 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
