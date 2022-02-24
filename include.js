@@ -57,6 +57,7 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 49 });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 44 });
+	scripts.push({ id: 'cryptojs-aes', path: '/crypto-js/aes.js', version: 50 });
 
 	return scripts;
 }
