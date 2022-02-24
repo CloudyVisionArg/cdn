@@ -125,6 +125,7 @@ $(document).ready(function () {
 			let inp = e.target;
 			if (inp.files.length > 0) {
 				wapp.sendMedia(inp.files[0], $(inp).prop('data-chat'));
+				inp.value = '';
 			}
 		})
 
@@ -1101,26 +1102,6 @@ var wapp = {
 					cordova: 0,
 				}
 			}
-	
-			/*
-			// todo: Sacar cdo este el setToken en el W3
-			pwd = window.localStorage.getItem('userPassword');
-			if (!pwd) {
-				pwd = '';
-			} else if (pwd.substr(0, 2) == '__') {
-				pwd = decrypt(pwd.substr(2), '__')
-			}
-
-			return {
-				authToken: window.localStorage.getItem('authToken'),
-				cordova: typeof(cordova) == 'object' ? 1 : 0,
-
-				// todo: Sacar cdo este el setToken en el W3
-				userName: window.localStorage.getItem('userName'),
-				password: pwd,
-				instance: window.localStorage.getItem('instance'),
-			}
-			*/
 		}
 	},
 
@@ -1203,6 +1184,7 @@ var wapp = {
 				// Pasos para configurar un Bucket publico en S3:
 				// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
 				wapp.getS3(function () {
+					debugger;
 					var s3Key = window.localStorage.getItem('authToken') + '/' + file2.name;
 
 					wapp.s3.upload(
