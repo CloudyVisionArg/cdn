@@ -1078,7 +1078,6 @@ var wapp = {
 	},
 
 	xhr: function(data) {
-		debugger;
 	    return new Promise(function (resolve, reject) {
 			var dataExt = Object.assign(data, getContext());
 			$.ajax({
