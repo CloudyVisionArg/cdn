@@ -1304,7 +1304,7 @@ var wapp = {
 		debugger;
 		//alert('En desarrollo');
 		var $file = $('#wappFile');
-		$file.setAttribute('data-target', pTarget);
+		$file.prop('data-target', pChat);
 		$file.click();
 	}
 
