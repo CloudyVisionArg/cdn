@@ -125,10 +125,8 @@ $(document).ready(function () {
 			debugger;
 			let inp = e.target;
 			if (inp.files.length > 0) {
-
+				wapp.sendMedia(inp.files[0], $(inp).prop('data-chat'));
 			}
-			let chat = $file.prop('data-chat');
-			debugger;
 		})
 
 	}
@@ -1305,9 +1303,6 @@ var wapp = {
 	},
 
 	sendFileWeb: function (pChat) {
-		//https://www.html5rocks.com/es/tutorials/file/dndfiles//
-		debugger;
-		//alert('En desarrollo');
 		var $file = $('#wappFile');
 		$file.prop('data-chat', pChat);
 		$file.click();
