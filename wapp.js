@@ -116,7 +116,7 @@ $(document).ready(function () {
 		`);
 
 		$(document.body).append(`
-			<input type="file" id="wappFile">
+			<input type="file" style="display: none;" id="wappFile">
 		`);
 	}
 });
