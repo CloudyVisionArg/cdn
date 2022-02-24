@@ -6,8 +6,8 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
-encrypt(pString, pPass)
-decrypt(pString, pPass)
+encryptAsync(pString, pPass, pCallback)
+decryptAsync(pString, pPass, pCallback)
 insertAtCaret(pInput, pValue)
 string.replaceAll(search, replacement)
 addOption(ctl, option, value)
@@ -32,14 +32,18 @@ errMsg(pErr)
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
 // https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
-function encrypt(pString, pPass) {
+function encryptAsync(pString, pPass, pCallback) {
 	includeJs('cryptojs-aes', function () {
-		return CryptoJS.AES.encrypt(pString, pPass).toString();
+		if (pCallback) {
+			pCallback(CryptoJS.AES.encrypt(pString, pPass).toString());
+		}
 	})
 }
-function decrypt(pString, pPass) {
+function decryptAsync(pString, pPass, pCallback) {
 	includeJs('cryptojs-aes', function () {
-		return CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8)
+		if (pCallback) {
+			pCallback(CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8));
+		}
 	})
 }
 

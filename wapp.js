@@ -1094,7 +1094,11 @@ var wapp = {
 			if (typeof(cordova) == 'object') {
 				return {
 					authToken: window.localStorage.getItem('authToken'),
-					cordova: typeof(cordova) == 'object' ? 1 : 0,
+					cordova: 1,
+				}
+			} else {
+				return {
+					cordova: 0,
 				}
 			}
 	
@@ -1293,24 +1297,30 @@ var wapp = {
 
 		} else {
 			includeJs('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
+				var id = 'U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==';
+				if (typeof(cordova) == 'object') {
+					getS32(decrypt(id, ''));
+				} else {
+					decryptAsync(id, '', function (res) {
+						getS32(res);
+					});
+				}
 
-				var bucketName = 'cloudy-whatsapp-connector';
-				var bucketRegion = 'sa-east-1';
-				var IdentityPoolId = decrypt('U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==', '')
-				
-				AWS.config.update({
-					region: bucketRegion,
-					credentials: new AWS.CognitoIdentityCredentials({
-						IdentityPoolId: IdentityPoolId
-					})
-				});
-				
-				wapp.s3 = new AWS.S3({
-					apiVersion: '2006-03-01',
-					params: {Bucket: bucketName}
-				});
-				
-				if (pCallback) pCallback();
+				function getS32(pId) {
+					AWS.config.update({
+						region: 'sa-east-1',
+						credentials: new AWS.CognitoIdentityCredentials({
+							IdentityPoolId: pId
+						})
+					});
+					
+					wapp.s3 = new AWS.S3({
+						apiVersion: '2006-03-01',
+						params: {Bucket: 'cloudy-whatsapp-connector'}
+					});
+					
+					if (pCallback) pCallback();
+				}
 			})
 		}
 	},
