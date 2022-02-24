@@ -1185,7 +1185,7 @@ var wapp = {
 				// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
 				wapp.getS3(function () {
 					debugger;
-					var s3Key = window.localStorage.getItem('authToken') + '/' + file2.name;
+					var s3Key = Doors.RESTFULL.AuthToken + '/' + file2.name;
 
 					wapp.s3.upload(
 						{
