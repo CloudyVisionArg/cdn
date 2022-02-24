@@ -27,6 +27,21 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+// CryptoJS
+// https://code.google.com/archive/p/crypto-js/
+// https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
+function encrypt(pString, pPass) {
+	includeJs('cryptojs-aes', function () {
+		return CryptoJS.AES.encrypt(pString, pPass).toString();
+	})
+}
+function decrypt(pString, pPass) {
+	debugger;
+	includeJs('cryptojs-aes', function () {
+		return CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8)
+	})
+}
+
 // Inserta pValue en pInput, en la posicion del cursor 
 function insertAtCaret(pInput, pValue) {
 	try {
