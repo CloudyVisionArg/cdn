@@ -122,7 +122,11 @@ $(document).ready(function () {
 		}).appendTo(document.body);
 
 		$file.change(function (e) {
-			let $file = $(e.target);
+			debugger;
+			let inp = e.target;
+			if (inp.files.length > 0) {
+
+			}
 			let chat = $file.prop('data-chat');
 			debugger;
 		})
