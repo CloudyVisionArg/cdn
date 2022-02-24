@@ -102,7 +102,7 @@ $(document).ready(function () {
 
 	if (typeof(cordova) != 'object') {
 		// El DIV para mostrar imagenes fullScreen
-		$(document.body).append(`	
+		$(document.body).append(`
 			<div class="modal fade" id="wappModal" tabindex="-1" role="dialog">
 			<div class="modal-dialog" style="width: fit-content; margin: auto;">
 				<div class="modal-content">
@@ -113,6 +113,10 @@ $(document).ready(function () {
 				</div>
 			</div>
 			</div>
+		`);
+
+		$(document.body).append(`
+			<input type="file" id="wappFile">
 		`);
 	}
 });
