@@ -121,7 +121,9 @@ $(document).ready(function () {
 			style: 'display: none;'
 		}).appendTo(document.body);
 
-		$file.change(function (a,b,c) {
+		$file.change(function (e) {
+			let $file = $(e.target);
+			let chat = $file.prop('data-chat');
 			debugger;
 		})
 
@@ -1304,7 +1306,7 @@ var wapp = {
 		debugger;
 		//alert('En desarrollo');
 		var $file = $('#wappFile');
-		$file.prop('data-target', pChat);
+		$file.prop('data-chat', pChat);
 		$file.click();
 	}
 
