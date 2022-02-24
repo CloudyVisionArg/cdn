@@ -274,7 +274,7 @@ var wapp = {
 				var $file = $('<a/>').append('Archivo');
 				$file.appendTo($li);
 				$file.click(function (e) {
-					wapp.sendFileWeb(this);
+					wapp.sendFileWeb($cont[0]);
 				});
 
 				var $liTmp = $('<li/>', {
@@ -1292,11 +1292,13 @@ var wapp = {
 		}
 	},
 
-	sendFileWeb: function (pEl) {
+	sendFileWeb: function (pChat) {
 		//https://www.html5rocks.com/es/tutorials/file/dndfiles//
 		debugger;
 		//alert('En desarrollo');
-		$('#wappFile').click();
+		var $file = $('#wappFile');
+		$file.setAttribute('data-target', pTarget);
+		$file.click();
 	}
 
 }
