@@ -83,14 +83,6 @@ $(document).ready(function () {
 					);
 				}
 			);
-
-			/*
-			var ua = navigator.userAgent;
-			if (typeof(cordova) != 'object' && ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/') == -1) {
-				wapp.useOgv = true;
-				includeJs('ogv', '/c/wapp/ogv/ogv.js');
-			}
-			*/
 		}
 	);
 
@@ -115,6 +107,7 @@ $(document).ready(function () {
 			</div>
 		`);
 
+		// El input para leer archivos
 		let $file = $('<input/>', {
 			type: 'file',
 			id: 'wappFile',
@@ -141,7 +134,6 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 	s3: undefined,
-	//useOgv: undefined,
 
 	cursorLoading: function(pLoading) {
 		if (typeof(cordova) == 'object') {
