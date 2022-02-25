@@ -1174,6 +1174,8 @@ var wapp = {
 								var $chat = $(pChat);
 								var fromN = $chat.attr('data-internal-number');
 								var toN = $chat.attr('data-external-number');
+
+								debugger;
 					
 								wapp.xhr({
 									wappaction: 'send',
