@@ -653,27 +653,6 @@ var wapp = {
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 
-							/*
-							//todo: Safari no reproduce OGG, probe con este pero anda en la web, no en el app
-							if (wapp.useOgv) {
-								let player = new OGVPlayer();
-								$div.append(player);
-								player.src = 'https://cloudycrm.net/c/wapp/corsproxy.asp?url=' + encodeURIComponent(it.Url);
-								if (typeof(cordova) == 'object') {
-									$btn = $('<i/>', {
-										class: 'f7-icons',
-									}).append('play_fill');
-								} else {
-									$btn = $('<i/>', {
-										class: 'fa fa-play',
-									});
-								}
-								$btn.appendTo($div);
-								$btn.click(function () {
-									player.play();
-								})
-							*/
-							
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
 								controls: true,
@@ -684,12 +663,13 @@ var wapp = {
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
+							// todo: ver si se puede reemplazar Descargar con el nombre del archivo
 							$('<a/>', {
 								 target: '_blank',
 								 href: it.Url,
 								 download: pMsg.body,
 								 style: 'font-weight: 500;',
-							}).append(pMsg.body).appendTo($div);
+							}).append('Descargar').appendTo($div);
 							
 							appendBody = false;
 						}
