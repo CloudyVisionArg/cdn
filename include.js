@@ -45,19 +45,19 @@ Puedo usarlo para mis propios script especificando el src:
 function registeredScripts() {
 	var scripts = [];
 
+	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 53 });
 	scripts.push({ id: 'javascript', path: '/javascript.js', version: 52 });
-	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
-	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 52 });
-	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
-	scripts.push({ id: 'qrcode', path: '/qrcode.js', version: 20 });
-	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 48 });
-	scripts.push({ id: 'app7-doorsapi', path: '/app7/doorsapi.js', version: 36 });
-	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
-	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
+	scripts.push({ id: 'cryptojs-aes', path: '/crypto-js/aes.js', version: 50 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 49 });
+	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 48 });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 44 });
-	scripts.push({ id: 'cryptojs-aes', path: '/crypto-js/aes.js', version: 50 });
+	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
+	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
+	scripts.push({ id: 'app7-doorsapi', path: '/app7/doorsapi.js', version: 36 });
+	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
+	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
+	scripts.push({ id: 'qrcode', path: '/qrcode.js', version: 20 });
 
 	return scripts;
 }
