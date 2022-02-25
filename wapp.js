@@ -663,13 +663,13 @@ var wapp = {
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
-							// todo: ver si se puede reemplazar Descargar con el nombre del archivo
+							// todo: no estan apareciendo los enlaces de descarga
 							$('<a/>', {
 								 target: '_blank',
 								 href: it.Url,
 								 download: pMsg.body,
 								 style: 'font-weight: 500;',
-							}).append('Descargar').appendTo($div);
+							}).append(pMsg.body).appendTo($div);
 							
 							appendBody = false;
 						}
