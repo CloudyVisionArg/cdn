@@ -718,7 +718,7 @@ var wapp = {
 				if (body) {
 					body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
 					
-					//todo: estos deberian trabajar con word boundary, mejorar
+					//todo: estos reemplazos tienen trabajar con word boundary
 					// https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
 					body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
 					// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
