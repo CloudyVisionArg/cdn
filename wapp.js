@@ -1181,6 +1181,7 @@ var wapp = {
 									wappaction: 'send',
 									from: fromN,
 									to: toN,
+									body: file2.name,
 									mediaUrl: data.Location,
 								}).then(
 									function (res) {
