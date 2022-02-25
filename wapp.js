@@ -721,8 +721,9 @@ var wapp = {
 					//todo: estos deberian trabajar con word boundary, mejorar
 					// https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
 					body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
-					body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
-					body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los _ con <i>
+					// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
+					//body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
+					body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los ~ con <del>
 				};
 				
 				$msgText.append(body);
