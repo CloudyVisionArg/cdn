@@ -663,7 +663,6 @@ var wapp = {
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
-							// todo: no estan apareciendo los enlaces de descarga
 							$('<a/>', {
 								 target: '_blank',
 								 href: it.Url,
@@ -1182,7 +1181,7 @@ var wapp = {
 									wappaction: 'send',
 									from: fromN,
 									to: toN,
-									body: file2.name,
+									body: file2.name, // todo: el body va solo en documentos
 									mediaUrl: data.Location,
 								}).then(
 									function (res) {
