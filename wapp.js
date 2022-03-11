@@ -838,18 +838,18 @@ var wapp = {
 			return;
 		}
 
-		// Toma los 10 ult digitos
-		var extNumberPart = extNumber.substr(extNumber.length - 10);
-		var intNumberPart = intNumber.substr(intNumber.length - 10);
+		// Elimina los caracteres no numericos y da vuelta
+		var extNumberRev = extNumber.replace(/\D/g,'').reverse();
+		var intNumberRev = intNumber.replace(/\D/g,'').reverse();
 
 		debugger;
-		
+
 		var incLoad = false;
 		var lastLoad = pChat.attr('data-last-load');
 		if (lastLoad) lastLoad = new Date(new Date(lastLoad) - 5000);
 		
-		var formula = '(from like \'%' + extNumberPart + '\' and to like \'%' + intNumberPart + 
-			'\') or (to like \'%' + extNumberPart + '\' and from like \'%' + intNumberPart + '\')';
+		var formula = '(from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + 
+			'%\') or (to_numrev like \'' + extNumberRev + '%\' and from_numrev like \'' + intNumberRev + '%\')';
 		
 		if (pOlders) {
 			var $older = pChat.find('div.wapp-message').first();
