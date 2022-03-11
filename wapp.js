@@ -505,10 +505,10 @@ var wapp = {
 			if (!extNumber || !intNumber) return;
 
 			// Toma los 10 ult digitos
-			var extNumberPart = extNumber.substr(extNumber.length - 10);
-			var intNumberPart = intNumber.substr(intNumber.length - 10);
+			var extNumberRev = extNumber.replace(/\D/g,'').reverse();
+			var intNumberRev = intNumber.replace(/\D/g,'').reverse();
 
-			var formula = 'from like \'%' + extNumberPart + '\' and to like \'%' + intNumberPart + '\'';
+			var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
 			
 			DoorsAPI.folderSearch(wapp.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
 				function (res) {
@@ -841,8 +841,6 @@ var wapp = {
 		// Elimina los caracteres no numericos y da vuelta
 		var extNumberRev = extNumber.replace(/\D/g,'').reverse();
 		var intNumberRev = intNumber.replace(/\D/g,'').reverse();
-
-		debugger;
 
 		var incLoad = false;
 		var lastLoad = pChat.attr('data-last-load');
