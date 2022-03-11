@@ -46,7 +46,7 @@ function registeredScripts() {
 	var scripts = [];
 
 	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 53 });
-	scripts.push({ id: 'javascript', path: '/javascript.js', version: 52 });
+	scripts.push({ id: 'javascript', path: '/javascript.js', version: 0 });
 	scripts.push({ id: 'cryptojs-aes', path: '/crypto-js/aes.js', version: 50 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 49 });
 	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 48 });

@@ -842,6 +842,8 @@ var wapp = {
 		var extNumberPart = extNumber.substr(extNumber.length - 10);
 		var intNumberPart = intNumber.substr(intNumber.length - 10);
 
+		debugger;
+		
 		var incLoad = false;
 		var lastLoad = pChat.attr('data-last-load');
 		if (lastLoad) lastLoad = new Date(new Date(lastLoad) - 5000);
