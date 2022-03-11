@@ -891,7 +891,7 @@ var wapp = {
 		
 								var msg = {};
 								msg.sid = row['MESSAGESID'];
-								if (row['FROM'].indexOf(extNumberPart) >= 0) {
+								if (row['FROM_NUMREV'].indexOf(extNumberRev) >= 0) {
 									msg.direction = 'inbound';
 									if (!sessionUpdated && !pOlders) {
 										wapp.refreshSession(pChat, row['CREATED']);
