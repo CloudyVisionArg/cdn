@@ -630,6 +630,7 @@ var wapp = {
 				try {
 					media = JSON.parse(pMsg.media);
 				} catch (err) {
+					debugger;
 					console.log(err);
 				};
 				if (media) {
