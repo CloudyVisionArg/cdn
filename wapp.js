@@ -504,7 +504,7 @@ var wapp = {
 			var intNumber = pChat.attr('data-internal-number');
 			if (!extNumber || !intNumber) return;
 
-			// Toma los 10 ult digitos
+			// Elimina los caracteres no numericos y da vuelta
 			var extNumberRev = extNumber.replace(/\D/g,'').reverse();
 			var intNumberRev = intNumber.replace(/\D/g,'').reverse();
 
