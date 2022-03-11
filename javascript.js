@@ -6,6 +6,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+string.reverse()
 encryptAsync(pString, pPass, pCallback)
 decryptAsync(pString, pPass, pCallback)
 insertAtCaret(pInput, pValue)
@@ -28,6 +29,13 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+// string.reverse
+if (typeof String.prototype.reverse !== 'function') {
+	String.prototype.reverse = function () {
+		return this.split('').reverse().join('');
+	};
+}
 
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
@@ -75,7 +83,7 @@ function insertAtCaret(pInput, pValue) {
 
 // string.replaceAll
 if (typeof String.prototype.replaceAll !== 'function') {
-	String.prototype.replaceAll = function(search, replacement) {
+	String.prototype.replaceAll = function (search, replacement) {
 		var target = this;
 		return target.replace(new RegExp(search, 'g'), replacement);
 	};
