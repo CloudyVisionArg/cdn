@@ -1,11 +1,13 @@
 /*
 Changelog:
+2022-03-28: JP - getCookie
 2022-01-11: JP - ChangeLog e Inventario de metodos
 
 Funciones varias de JavaScript
 
 Inventario de metodos:
 
+getCookie(pName)
 string.reverse()
 encryptAsync(pString, pPass, pCallback)
 decryptAsync(pString, pPass, pCallback)
@@ -29,6 +31,13 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+function getCookie(pName) {
+	const cookies = decodeURIComponent(document.cookie).split('; ');
+	cookies.forEach(val => {
+		if (val.indexOf(pName) === 0) return val.substring(pName.length);
+	})
+}
 
 // string.reverse
 if (typeof String.prototype.reverse !== 'function') {
