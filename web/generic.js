@@ -155,13 +155,14 @@ function renderPage() {
                 <i class="fa fa-print"></i>
                 <span class="d-none d-sm-inline-block"> Imprimir</span>
             </button>
-            <button type="button" id="save" name="save" class="btn btn-primary" onclick="submitForm('save');">
-                <span class="fa fa-save" aria-hidden="true"></span>
+            <button type="button" id="save" class="btn btn-primary" onclick="submitForm('save');">
+                <i class="fa fa-cloud-upload"></i>
                 <span class="d-none d-sm-inline-block"> Guardar</span>
             </button>
-            <button type="button" id="saveexit" name="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
-                <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
-                <span class="hidden-xs"> Guardar y salir</span>
+            <button type="button" id="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
+                <i class="fa fa-cloud-upload"></i>
+                <i class="fa-sign-out"></i>
+                <span class="d-none d-sm-inline-block"> Guardar y salir</span>
             </button>
             <button type="button" id="cancel" name="cancel" class="btn btn-primary" onclick="exitForm(false);">
                 <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
