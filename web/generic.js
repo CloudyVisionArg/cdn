@@ -151,9 +151,9 @@ function renderPage() {
 
     $cont.append(`
         <div class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
-            <button type="button" id="print" name="print" class="btn btn-primary" onclick="printForm();">
+            <button type="button" id="print" class="btn btn-primary" onclick="printForm();">
                 <i class="fa fa-print"></i>
-                <span class="hidden-xs"> Imprimir</span>
+                <span class="d-xs-none"> Imprimir</span>
             </button>
             <button type="button" id="save" name="save" class="btn btn-primary" onclick="submitForm('save');">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
