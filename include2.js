@@ -94,6 +94,7 @@ function includeJs() {
         });
 
         function includeEl(pEl) {
+            debugger;
             if (typeof pEl.version == 'number') {
                 includeJs(pEl.id, pEl.version, function () {
                     pEl.loaded = true;
