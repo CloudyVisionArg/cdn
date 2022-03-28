@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+objProp(pObj, pProp, pCI)
 getCookie(pName)
 string.reverse()
 encryptAsync(pString, pPass, pCallback)
@@ -31,6 +32,24 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+// Devuelve una property de un objeto, pCI indica si es Case Insensitive (default = false)
+function objProp(pObj, pProp, pCI) {
+    var keys = Object.keys(pObj);
+    for (var i = 0; i < keys.length; i++) {
+		var a, b;
+		if (pCI) {
+			a = keys[i].toLowerCase();
+			b = pProp.toLowerCase()
+		} else {
+			a = keys[i];
+			b = pProp;
+		}
+        if (a == b) {
+            return pObj[keys[i]];
+        }
+    }
+}
 
 function getCookie(pName) {
 	var cookies = decodeURIComponent(document.cookie).split('; ');
