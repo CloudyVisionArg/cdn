@@ -81,7 +81,7 @@ function includeJs() {
                 // Tiene dependencias, hay que esperar que se carguen
                 el.depends.forEach(function (el2, ix2) {
                     setTimeout(function wait() {
-                        if (initScripts.find(el3 => el3.id == el2 && !el3.loaded)) {
+                        if (scripts.find(el3 => el3.id == el2 && !el3.loaded)) {
                             setTimeout(wait, 100);
                         } else {
                             includeEl(el);
@@ -107,7 +107,7 @@ function includeJs() {
 
         // Espera a que terminen de cargar todos e inicializa
         setTimeout(function wait() {
-            if (initScripts.find(el => !el.loaded)) {
+            if (scripts.find(el => !el.loaded)) {
                 setTimeout(wait, 100)
             } else {
                 if (typeof arguments[1] == 'function') {
