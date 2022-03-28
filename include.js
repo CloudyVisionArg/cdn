@@ -39,6 +39,17 @@ Puedo usarlo para mis propios script especificando el src:
 	includeJs('myScript', 'http://path/to/my/script.js', function () {
 		// myScript loaded
 	});
+
+Tambien puedo armar un array de includes y cargarlos todos juntos:
+
+	var scripts = [];
+	scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+	scripts.push({ id: 'app7-doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
+	scripts.push({ id: 'javascript', version: 0 });
+	
+	includeJs(scripts, function () {
+		// scripts loaded
+	});
 */
 
 // Scripts registrados
@@ -64,80 +75,131 @@ function registeredScripts() {
 
 /*
 Argumentos:
-0: Id del script
-1: string -> SRC del script custom / function -> Callback / number -> Version (0: lastCommit)
-2: function -> Callback (script custom)
+0:
+	- string -> Id del script
+	- array -> Inclusion multiple [{ id, version, src, depends[id] }] (version se considera antes que src)
+1: 
+	- string -> SRC del script custom
+	- number -> Version (0 = lastCommit)
+	- function -> Callback
+2:
+	- function -> Callback
 */
 
 function includeJs() {
 	var src, pSrc, pVer, pCallback;
 	var scripts = registeredScripts();
 
-	var pId = arguments[0].toLowerCase();
+    if (Array.isArray(arguments[0])) {
+        let arrScr = arguments[0];
+        pCallback = arguments[1];
 
-	if (typeof arguments[1] == 'string') {
-		pSrc = arguments[1];
-	} else if (typeof arguments[1] == 'number') {
-		pVer = arguments[1]
-	} else if (typeof arguments[1] == 'function') {
-		pCallback = arguments[1];
-	}
+        // Itera el array y carga todos los scripts
+        arrScr.forEach(function (el, ix) {
+            if (el.depends) {
+                // Tiene dependencias, hay que esperar que se carguen
+                el.depends.forEach(function (el2, ix2) {
+                    setTimeout(function wait() {
+                        if (arrScr.find(el3 => el3.id == el2 && !el3.loaded)) {
+                            setTimeout(wait, 100);
+                        } else {
+                            includeEl(el);
+                        }
+                    }, 0)
+                })
+            } else {
+                includeEl(el);
+            }
+        });
 
-	if (typeof arguments[2] == 'function') {
-		pCallback = arguments[2];
-	}
+        function includeEl(pEl) {
+            if (typeof pEl.version == 'number') {
+                includeJs(pEl.id, pEl.version, function () {
+                    pEl.loaded = true;
+                })
+            } else {
+                includeJs(pEl.id, pEl.src, function () {
+                    pEl.loaded = true;
+                })
+            }
+        }
 
-	var src = scriptSrc(pId, pVer);
-	if (!src) {
-		if (pSrc) {
-			src = pSrc;
-		} else {
-			throw pId + ' not registered and no src specified';
-		}
-	}
+        // Espera a que terminen de cargar todos e inicializa
+        setTimeout(function wait() {
+            if (arrScr.find(el => !el.loaded)) {
+                setTimeout(wait, 100)
+            } else {
+                if (pCallback) pCallback();
+            }
+        }, 0);
 
-	if (src) {
-		var scriptNode = document.getElementById('script_' + pId);
-		if (!scriptNode) {
-			var D = document;
-			scriptNode = D.createElement('script');
-			scriptNode.id = 'script_' + pId;
-			scriptNode.type = 'text/javascript';
-			scriptNode.async = true;
-			scriptNode.src = src;
-			
-			scriptNode.loaded = function (callback) {
-				var self = this;
-				var waiting = 0;
-				var interv = setInterval(function () {
-					waiting += 10;
-					if (self._loaded  || waiting > 3000) {
-						clearInterval(interv);
-						if (callback) callback(self);
-						if (waiting > 3000) console.log('includeJs(' + pId + ') timeout');
-						
-						/* Cuando se esta depurando y hay un debugger en la carga de la pagina,
-						el evento load no se dispara, en ese caso loaded llama igual al
-						callback luego de 3 segundos */
-					}
-				}, 10)
-			};
-			
-			scriptNode.addEventListener('load', function () {
-				this._loaded = true;
-			});
+    } else if (typeof arguments[0] == 'string') {
+        var pId = arguments[0].toLowerCase();
 
-			var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
-			cont.appendChild(scriptNode);
+        if (typeof arguments[1] == 'string') {
+            pSrc = arguments[1];
+        } else if (typeof arguments[1] == 'number') {
+            pVer = arguments[1]
+        } else if (typeof arguments[1] == 'function') {
+            pCallback = arguments[1];
+        }
 
-			if (pCallback) scriptNode.loaded(pCallback);
-			return scriptNode;
-			
-		} else {
-			if (pCallback) scriptNode.loaded(pCallback);
-			return scriptNode;
-		}
-	}
+        if (typeof arguments[2] == 'function') {
+            pCallback = arguments[2];
+        }
+
+        var src = scriptSrc(pId, pVer);
+        if (!src) {
+            if (pSrc) {
+                src = pSrc;
+            } else {
+                throw pId + ' not registered and no src specified';
+            }
+        }
+
+        if (src) {
+            var scriptNode = document.getElementById('script_' + pId);
+            if (!scriptNode) {
+                var D = document;
+                scriptNode = D.createElement('script');
+                scriptNode.id = 'script_' + pId;
+                scriptNode.type = 'text/javascript';
+                scriptNode.async = true;
+                scriptNode.src = src;
+                
+                scriptNode.loaded = function (callback) {
+                    var self = this;
+                    var waiting = 0;
+                    var interv = setInterval(function () {
+                        waiting += 10;
+                        if (self._loaded  || waiting > 3000) {
+                            clearInterval(interv);
+                            if (callback) callback(self);
+                            if (waiting > 3000) console.log('includeJs(' + pId + ') timeout');
+                            
+                            /* Cuando se esta depurando y hay un debugger en la carga de la pagina,
+                            el evento load no se dispara, en ese caso loaded llama igual al
+                            callback luego de 3 segundos */
+                        }
+                    }, 10)
+                };
+                
+                scriptNode.addEventListener('load', function () {
+                    this._loaded = true;
+                });
+
+                var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
+                cont.appendChild(scriptNode);
+
+                if (pCallback) scriptNode.loaded(pCallback);
+                return scriptNode;
+                
+            } else {
+                if (pCallback) scriptNode.loaded(pCallback);
+                return scriptNode;
+            }
+        }
+    }
 };
 
 function scriptLoaded(scriptName, callback) {
