@@ -119,7 +119,7 @@ function includeJs() {
 
 
 
-    } else if (typeof arguments[1] == 'string') {
+    } else if (typeof arguments[0] == 'string') {
         var pId = arguments[0].toLowerCase();
 
         if (typeof arguments[1] == 'string') {
