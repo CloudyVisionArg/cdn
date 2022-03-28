@@ -33,12 +33,14 @@ errMsg(pErr)
 */
 
 function getCookie(pName) {
-	const cookies = decodeURIComponent(document.cookie).split('; ');
+	var cookies = decodeURIComponent(document.cookie).split('; ');
+	var ret;
 	cookies.forEach(val => {
 		if (val.indexOf(pName) === 0) {
-			return val.substring(pName.length);
+			ret = val.substring(pName.length);
 		}
 	})
+	return ret;
 }
 
 // string.reverse
