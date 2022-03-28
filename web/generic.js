@@ -156,8 +156,8 @@ function renderPage() {
                 <span class="d-none d-sm-inline-block"> Imprimir</span>
             </button>
             <button type="button" id="save" name="save" class="btn btn-primary" onclick="submitForm('save');">
-                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                <span class="hidden-xs"> Guardar</span>
+                <span class="fa fa-save" aria-hidden="true"></span>
+                <span class="d-none d-sm-inline-block"> Guardar</span>
             </button>
             <button type="button" id="saveexit" name="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
                 <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
