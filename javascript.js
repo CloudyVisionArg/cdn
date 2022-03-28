@@ -36,7 +36,6 @@ function getCookie(pName) {
 	const cookies = decodeURIComponent(document.cookie).split('; ');
 	cookies.forEach(val => {
 		if (val.indexOf(pName) === 0) {
-			debugger;
 			return val.substring(pName.length);
 		}
 	})
