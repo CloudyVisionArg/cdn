@@ -161,12 +161,12 @@ function renderPage() {
             </button>
             <button type="button" id="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
                 <i class="fa fa-cloud-upload"></i>
-                <i class="fa-sign-out"></i>
+                <i class="fa fa-sign-out"></i>
                 <span class="d-none d-sm-inline-block"> Guardar y salir</span>
             </button>
-            <button type="button" id="cancel" name="cancel" class="btn btn-primary" onclick="exitForm(false);">
-                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-                <span class="hidden-xs"> Salir</span>
+            <button type="button" id="cancel" class="btn btn-primary" onclick="exitForm(false);">
+                <i class="fa fa-sign-out"></i>
+                <span class="d-none d-sm-inline-block"> Salir</span>
             </button>
     </div>
     `);
