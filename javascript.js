@@ -35,7 +35,10 @@ errMsg(pErr)
 function getCookie(pName) {
 	const cookies = decodeURIComponent(document.cookie).split('; ');
 	cookies.forEach(val => {
-		if (val.indexOf(pName) === 0) return val.substring(pName.length);
+		if (val.indexOf(pName) === 0) {
+			debugger;
+			return val.substring(pName.length);
+		}
 	})
 }
 
