@@ -143,5 +143,6 @@ function getControlsRights(pControls) {
 }
 
 function renderPage() {
+    document.title = 'holaaa';
 }
 
