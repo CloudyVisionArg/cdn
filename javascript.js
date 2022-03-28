@@ -34,10 +34,11 @@ errMsg(pErr)
 
 function getCookie(pName) {
 	var cookies = decodeURIComponent(document.cookie).split('; ');
+	var key = pName + '=';
 	var ret;
 	cookies.forEach(val => {
-		if (val.indexOf(pName) === 0) {
-			ret = val.substring(pName.length + 1);
+		if (val.indexOf(key) === 0) {
+			ret = val.substring(key.length);
 		}
 	})
 	return ret;
