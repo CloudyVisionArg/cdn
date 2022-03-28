@@ -150,12 +150,26 @@ function renderPage() {
     }).appendTo($body);
 
     $cont.append(`
-        <div class="btn-group" role="group" style="position:fixed; top:10px; right:10px; z-index:1000;">
-            <button type="button" class="btn btn-primary">Left</button>
-            <button type="button" class="btn btn-primary">Middle</button>
-            <button type="button" class="btn btn-primary">Right</button>
-        </div>
+        <div class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
+            <button type="button" id="print" name="print" class="btn btn-primary" onclick="printForm();">
+                <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                <span class="hidden-xs"> Imprimir</span>
+            </button>
+            <button type="button" id="save" name="save" class="btn btn-primary" onclick="submitForm('save');">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                <span class="hidden-xs"> Guardar</span>
+            </button>
+            <button type="button" id="saveexit" name="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
+                <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+                <span class="hidden-xs"> Guardar y salir</span>
+            </button>
+            <button type="button" id="cancel" name="cancel" class="btn btn-primary" onclick="exitForm(false);">
+                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                <span class="hidden-xs"> Salir</span>
+            </button>
+    </div>
     `);
 
+    
 }
 
