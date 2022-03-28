@@ -146,7 +146,7 @@ function renderPage() {
     var $body = $('body');
 
     var $cont = $('<div/>', {
-        class: 'container'
+        class: 'container-fluid',
     }).appendTo($body);
 
     $cont.append(`
