@@ -94,12 +94,11 @@ function includeJs() {
         });
 
         function includeEl(pEl) {
-            debugger;
             if (typeof pEl.version == 'number') {
                 includeJs(pEl.id, pEl.version, function () {
                     pEl.loaded = true;
                 })
-            } else if (typeof pEl.src == 'string') {
+            } else {
                 includeJs(pEl.id, pEl.src, function () {
                     pEl.loaded = true;
                 })
