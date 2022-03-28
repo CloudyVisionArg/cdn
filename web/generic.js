@@ -150,7 +150,7 @@ function renderPage() {
     }).appendTo($body);
 
     $cont.append(`
-        <div class="btn-group" role="group" style="position:fixed; top:2px; right:10px; z-index:1000;">
+        <div class="btn-group" role="group" style="position:fixed; top:10px; right:10px; z-index:1000;">
             <button type="button" class="btn btn-primary">Left</button>
             <button type="button" class="btn btn-primary">Middle</button>
             <button type="button" class="btn btn-primary">Right</button>
