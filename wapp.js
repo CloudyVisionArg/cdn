@@ -505,8 +505,8 @@ var wapp = {
 			if (!extNumber || !intNumber) return;
 
 			// Elimina los caracteres no numericos y da vuelta
-			var extNumberRev = extNumber.replace(/\D/g,'').reverse();
-			var intNumberRev = intNumber.replace(/\D/g,'').reverse();
+			var extNumberRev = extNumber.replace(/\D/g, '').reverse();
+			var intNumberRev = intNumber.replace(/\D/g, '').reverse();
 
 			var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
 			
@@ -718,7 +718,7 @@ var wapp = {
 				if (body) {
 					body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
 					
-					//todo: estos reemplazos tienen trabajar con word boundary
+					//todo: estos reemplazos deben trabajar con word boundary
 					// https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
 					body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
 					// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
@@ -840,8 +840,8 @@ var wapp = {
 		}
 
 		// Elimina los caracteres no numericos y da vuelta
-		var extNumberRev = extNumber.replace(/\D/g,'').reverse();
-		var intNumberRev = intNumber.replace(/\D/g,'').reverse();
+		var extNumberRev = extNumber.replace(/\D/g, '').reverse();
+		var intNumberRev = intNumber.replace(/\D/g, '').reverse();
 
 		var incLoad = false;
 		var lastLoad = pChat.attr('data-last-load');
