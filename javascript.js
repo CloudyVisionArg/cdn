@@ -37,7 +37,7 @@ function getCookie(pName) {
 	var ret;
 	cookies.forEach(val => {
 		if (val.indexOf(pName) === 0) {
-			ret = val.substring(pName.length);
+			ret = val.substring(pName.length + 1);
 		}
 	})
 	return ret;
