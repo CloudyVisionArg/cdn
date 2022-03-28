@@ -107,7 +107,6 @@ function includeJs() {
 
         // Espera a que terminen de cargar todos e inicializa
         setTimeout(function wait() {
-            debugger;
             if (scripts.find(el => !el.loaded)) {
                 setTimeout(wait, 100)
             } else {
