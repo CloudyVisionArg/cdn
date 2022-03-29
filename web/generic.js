@@ -189,15 +189,15 @@ function renderPage() {
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <button type="button" class="nav-link active" data-bs-toggle="tab" 
-                        data-bs-target="#tabMain" aria-controls="tabMain" aria-selected="true">Datos</button>
+                        data-bs-target="#tabMain">Datos</button>
                 </li>
                 <li class="nav-item">
                     <button type="button" class="nav-link" data-bs-toggle="tab" 
-                        data-bs-target="#tabHeader" aria-controls="tabHeader" aria-selected="false">Header</button>
+                        data-bs-target="#tabHeader">Header</button>
                 </li>
                 <li class="nav-item">
                     <button type="button" class="nav-link" data-bs-toggle="tab" 
-                        data-bs-target="#tabHist" aria-controls="tabHist" aria-selected="false">Historial</button>
+                        data-bs-target="#tabHist">Historial</button>
                 </li>
             </ul>
         `);
