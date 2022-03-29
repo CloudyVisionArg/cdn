@@ -173,6 +173,139 @@ function renderPage() {
     </div>
     `);
 
+    if (!controls) {
+
+        // SIN CONTROLES
+
+        $cont.Append(`
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Active</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled">Disabled</a>
+                </li>
+            </ul>
+        `);
+/*
+        var $tabMain, $tabHeader, $tabHist, $div, $ul, $ctl;
+
+        // TABBAR
+
+        $tabbar = $('<div/>', {
+            class: 'toolbar tabbar toolbar-top',
+            style: 'top: 0;',
+        }).appendTo($pageCont);
+
+        $tabbarInner = $('<div/>', {
+            class: 'toolbar-inner',
+        }).appendTo($tabbar);
+
+        $('<a/>', {
+            class: 'tab-link tab-link-active',
+            href: '#' + $page.attr('id') + ' #tabMain',
+        }).append('Datos').appendTo($tabbarInner);
+
+        $('<a/>', {
+            class: 'tab-link',
+            href: '#' + $page.attr('id') + ' #tabHeader',
+        }).append('Header').appendTo($tabbarInner);
+
+        $('<a/>', {
+            class: 'tab-link',
+            href: '#' + $page.attr('id') + ' #tabHist',
+        }).append('Historial').appendTo($tabbarInner);
+
+
+        // TABS
+
+        $tabs = $('<div/>', {
+            class: 'tabs',
+        }).appendTo($pageCont);
+
+
+        // tabMain
+
+        $tabMain = $('<div/>', {
+            class: 'tab tab-active',
+            id: 'tabMain',
+        }).appendTo($tabs);
+
+        $div = $('<div/>', {
+            class: 'list no-hairlines-md',
+            style: 'margin-top: 0;',
+        }).appendTo($tabMain);
+
+        $ul = $('<ul/>').appendTo($div);
+
+        doc.CustomFields.forEach(field => {
+            if (!field.HeaderTable && field.Name != 'DOC_ID') {
+                getDefaultControl(field).appendTo($ul);
+            }
+        });
+
+        $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
+        $ctl.find('.list').on('click', 'a', downloadAtt);
+        $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
+        $ctl.find('div.row').on('click', 'button', addAtt);
+
+
+        // tabHeader
+
+        $tabHeader = $('<div/>', {
+            class: 'tab',
+            id: 'tabHeader',
+        }).appendTo($tabs);
+
+        $div = $('<div/>', {
+            class: 'list no-hairlines-md',
+            style: 'margin-top: 0;',
+        }).appendTo($tabHeader);
+
+        $ul = $('<ul/>').appendTo($div);
+
+        doc.CustomFields.forEach(field => {
+            if (field.HeaderTable) {
+                getDefaultControl(field).appendTo($ul);
+            }
+        })
+
+        doc.HeadFields.forEach(field => {
+            getDefaultControl(field).appendTo($ul);
+        })
+
+        // tabHist
+
+        $tabHist = $('<div/>', {
+            class: 'tab',
+            id: 'tabHist',
+        }).appendTo($tabs);
+
+        $('<div/>', {
+            'data-doclog': 1,
+        }).append('Cargando...').appendTo($tabHist);
+*/
+
+    } else {
+/*
+        // CON CONTROLES
+
+        // Evento BeforeRender
+        var ev = getEvent('BeforeRender');
+        if (ev) {
+            try {
+                eval(ev);
+            } catch (err) {
+                console.log('Error in BeforeRender: ' + errMsg(err));
+            }
+        };
+*/
     
 }
 
