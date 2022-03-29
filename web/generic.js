@@ -174,7 +174,7 @@ function renderPage() {
     `);
 
     $cont.append(`
-        <div class="row" style="padding: 0px 15px;">
+        <div class="row" style="padding-top: 8px;">
             <h4>Cargando...</h4>
         </div>
         <hr>
