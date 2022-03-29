@@ -185,7 +185,7 @@ function renderPage() {
         // SIN CONTROLES
 
         $cont.append(`
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <button type="button" class="nav-link active" aria-current="page">Datos</button>
                 </li>
