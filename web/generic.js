@@ -186,14 +186,14 @@ function renderPage() {
 
         $cont.append(`
             <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
-                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#tabMain" aria-current="page">Datos</button>
+                <li class="nav-item" role="presentation">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#tabMain" aria-controls="tabMain" aria-selected="true">Datos</button>
                 </li>
-                <li class="nav-item">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHeader">Header</button>
+                <li class="nav-item" role="presentation">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHeader" aria-controls="tabHeader" aria-selected="true">Header</button>
                 </li>
-                <li class="nav-item">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHist">Historial</button>
+                <li class="nav-item" role="presentation">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHist" aria-controls="tabHist" aria-selected="true">Historial</button>
                 </li>
             </ul>
         `);
