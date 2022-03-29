@@ -162,7 +162,7 @@ function renderPage() {
                 <span class="d-none d-sm-inline-block"> Guardar</span>
             </button>
             <button type="button" id="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
-                <i class="fa fa-cloud-upload"></i>+
+                <i class="fa fa-cloud-upload"></i>/
                 <i class="fa fa-sign-out"></i>
                 <span class="d-none d-sm-inline-block"> Guardar y salir</span>
             </button>
