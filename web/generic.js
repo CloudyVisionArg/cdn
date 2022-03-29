@@ -174,7 +174,7 @@ function renderPage() {
     `);
 
     $cont.append(`
-        <div class="row" style="padding-top: 8px;">
+        <div id="title" class="row" style="padding-top: 8px;">
             <h4>Cargando...</h4>
         </div>
         <hr>
@@ -187,16 +187,13 @@ function renderPage() {
         $cont.append(`
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Active</a>
+                    <a class="nav-link active" aria-current="page" href="#">Datos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">Header</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
+                    <a class="nav-link" href="#">Historial</a>
                 </li>
             </ul>
         `);
