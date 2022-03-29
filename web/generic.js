@@ -187,13 +187,13 @@ function renderPage() {
         $cont.append(`
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Datos</a>
+                    <button type="button" class="nav-link active" aria-current="page">Datos</button>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Header</a>
+                    <button type="button" class="nav-link">Header</button>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Historial</a>
+                    <button type="button" class="nav-link">Historial</button>
                 </li>
             </ul>
         `);
