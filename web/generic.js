@@ -184,27 +184,31 @@ function renderPage() {
 
         // SIN CONTROLES
 
+
         $cont.append(`
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#tabMain" aria-controls="tabMain" aria-selected="true">Datos</button>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" data-bs-toggle="tab" 
+                        data-bs-target="#tabMain" aria-controls="tabMain" aria-selected="true">Datos</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHeader" aria-controls="tabHeader" aria-selected="true">Header</button>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-bs-toggle="tab" 
+                        data-bs-target="#tabHeader" aria-controls="tabHeader" aria-selected="false">Header</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHist" aria-controls="tabHist" aria-selected="true">Historial</button>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-bs-toggle="tab" 
+                        data-bs-target="#tabHist" aria-controls="tabHist" aria-selected="false">Historial</button>
                 </li>
             </ul>
         `);
 
-$cont.append(        `
-<div class="tab-content">
-  <div class="tab-pane fade show active" id="tabMain" role="tabpanel" aria-labelledby="home-tab">1</div>
-  <div class="tab-pane fade" id="tabHeader" role="tabpanel" aria-labelledby="profile-tab">2</div>
-  <div class="tab-pane fade" id="tabHist" role="tabpanel" aria-labelledby="contact-tab">3</div>
-</div>
-`);
+        $cont.append(`
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tabMain">1</div>
+            <div class="tab-pane fade" id="tabHeader">2</div>
+            <div class="tab-pane fade" id="tabHist">3</div>
+        </div>
+        `);
 /*
         var $tabMain, $tabHeader, $tabHist, $div, $ul, $ctl;
 
