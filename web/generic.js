@@ -173,6 +173,13 @@ function renderPage() {
     </div>
     `);
 
+    $cont.append(`
+        <div class="row">
+            <h4>Cargando...</h4>
+        </div>
+        <hr>
+    `);
+    
     if (!controls) {
 
         // SIN CONTROLES
