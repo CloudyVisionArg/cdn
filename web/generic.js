@@ -197,6 +197,14 @@ function renderPage() {
                 </li>
             </ul>
         `);
+
+$cont.append(        `
+<div class="tab-content">
+  <div class="tab-pane fade show active" id="tabMain" role="tabpanel" aria-labelledby="home-tab">1</div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">2</div>
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">3</div>
+</div>
+`);
 /*
         var $tabMain, $tabHeader, $tabHist, $div, $ul, $ctl;
 
