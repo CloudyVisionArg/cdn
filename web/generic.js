@@ -187,13 +187,13 @@ function renderPage() {
         $cont.append(`
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" aria-current="page">Datos</button>
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#tabMain" aria-current="page">Datos</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab">Header</button>
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHeader">Header</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab">Historial</button>
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tabHist">Historial</button>
                 </li>
             </ul>
         `);
@@ -201,8 +201,8 @@ function renderPage() {
 $cont.append(        `
 <div class="tab-content">
   <div class="tab-pane fade show active" id="tabMain" role="tabpanel" aria-labelledby="home-tab">1</div>
-  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">2</div>
-  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">3</div>
+  <div class="tab-pane fade" id="tabHeader" role="tabpanel" aria-labelledby="profile-tab">2</div>
+  <div class="tab-pane fade" id="tabHist" role="tabpanel" aria-labelledby="contact-tab">3</div>
 </div>
 `);
 /*
