@@ -212,6 +212,7 @@ function renderPage() {
         var $tab = $cont.find('#tabMain');
 
         var newRow = true, $row, $col;
+        debugger;
         doc.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 if (newRow) {
