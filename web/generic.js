@@ -236,6 +236,8 @@ function renderPage() {
         });
 
         // tabHeader
+
+        var $tab = $cont.find('#tabHeader');
         newRow = true;
 
         doc.CustomFields.forEach(field => {
