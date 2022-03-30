@@ -6,7 +6,7 @@ function newInputText(pId, pLabel, pValue) {
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
     $('<input/>', {
-        type: 'text',
+        type: 'number',
         class: 'form-control',
         id: pId,
         value: pValue,
