@@ -210,9 +210,12 @@ function renderPage() {
             </div>
         `);
 
+        // tabMain
+
         var $tab = $cont.find('#tabMain');
 
         var newRow = true, $row, $col;
+
         doc.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 if (newRow) {
@@ -231,6 +234,44 @@ function renderPage() {
 
             }
         });
+
+        // tabHeader
+        newRow = true;
+
+        doc.CustomFields.forEach(field => {
+            if (field.HeaderTable) {
+                if (newRow) {
+                    $row = $('<div/>', {
+                        class: 'row',
+                    }).appendTo($tab);
+                    newRow = false;
+                } else {
+                    newRow = true;
+                };
+                $col = $('<div/>', {
+                    class: 'col-12 col-md-6 form-group',
+                }).appendTo($row);
+
+                getDefaultControl(field).appendTo($col);
+            }
+        })
+
+        doc.HeadFields.forEach(field => {
+            if (newRow) {
+                $row = $('<div/>', {
+                    class: 'row',
+                }).appendTo($tab);
+                newRow = false;
+            } else {
+                newRow = true;
+            };
+            $col = $('<div/>', {
+                class: 'col-12 col-md-6 form-group',
+            }).appendTo($row);
+
+            getDefaultControl(field).appendTo($col);
+    })
+
 
         /*
 
