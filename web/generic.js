@@ -203,9 +203,9 @@ function renderPage() {
 
         $cont.append(`
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="tabMain">1</div>
-                <div class="tab-pane fade" id="tabHeader">2</div>
-                <div class="tab-pane fade" id="tabHist">3</div>
+                <div class="tab-pane fade show active" id="tabMain" />
+                <div class="tab-pane fade" id="tabHeader" />
+                <div class="tab-pane fade" id="tabHist" />
             </div>
         `);
 
