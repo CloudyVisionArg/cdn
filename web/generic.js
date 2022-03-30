@@ -184,7 +184,6 @@ function renderPage() {
 
         // SIN CONTROLES
 
-
         $cont.append(`
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -203,68 +202,41 @@ function renderPage() {
         `);
 
         $cont.append(`
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="tabMain">1</div>
-            <div class="tab-pane fade" id="tabHeader">2</div>
-            <div class="tab-pane fade" id="tabHist">3</div>
-        </div>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tabMain">1</div>
+                <div class="tab-pane fade" id="tabHeader">2</div>
+                <div class="tab-pane fade" id="tabHist">3</div>
+            </div>
         `);
-/*
-        var $tabMain, $tabHeader, $tabHist, $div, $ul, $ctl;
 
-        // TABBAR
+        var $tab = $cont.find('#tabMain');
 
-        $tabbar = $('<div/>', {
-            class: 'toolbar tabbar toolbar-top',
-            style: 'top: 0;',
-        }).appendTo($pageCont);
-
-        $tabbarInner = $('<div/>', {
-            class: 'toolbar-inner',
-        }).appendTo($tabbar);
-
-        $('<a/>', {
-            class: 'tab-link tab-link-active',
-            href: '#' + $page.attr('id') + ' #tabMain',
-        }).append('Datos').appendTo($tabbarInner);
-
-        $('<a/>', {
-            class: 'tab-link',
-            href: '#' + $page.attr('id') + ' #tabHeader',
-        }).append('Header').appendTo($tabbarInner);
-
-        $('<a/>', {
-            class: 'tab-link',
-            href: '#' + $page.attr('id') + ' #tabHist',
-        }).append('Historial').appendTo($tabbarInner);
-
-
-        // TABS
-
-        $tabs = $('<div/>', {
-            class: 'tabs',
-        }).appendTo($pageCont);
-
-
-        // tabMain
-
-        $tabMain = $('<div/>', {
-            class: 'tab tab-active',
-            id: 'tabMain',
-        }).appendTo($tabs);
-
-        $div = $('<div/>', {
-            class: 'list no-hairlines-md',
-            style: 'margin-top: 0;',
-        }).appendTo($tabMain);
-
-        $ul = $('<ul/>').appendTo($div);
-
+        var newRow = true, $row, $col;
         doc.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
-                getDefaultControl(field).appendTo($ul);
+                if (newRow) {
+                    $row = $('<div/>', {
+                        class: 'row',
+                    }).appendTo($tab);
+                    newRow = false;
+                } else {
+                    newRow = true;
+                };
+                $col = $('<div/>', {
+                    class: 'col-xs-12 col-sm-6 form-group',
+                }).appendTo($row);
+
+
+                $col.append('<label>' + pField.Description ? pField.Description : pField.Name + '</label>')
+                //RWL "<label>" & ObjectDesc(oField) & "</label>"
+
+                //getDefaultControl(field).appendTo($ul);
+
             }
         });
+
+        /*
+
 
         $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
         $ctl.find('.list').on('click', 'a', downloadAtt);
@@ -323,6 +295,37 @@ function renderPage() {
         };
 */
     };
-    
 }
+
+function getDefaultControl(pField) {
+    var $ret, $input, label;
+
+    label = pField.Description ? pField.Description : pField.Name;
+
+    if (pField.Type == 1) {
+        if (pField.Length > 0 && pField.Length < 500) {
+            $ret = getInputText(pField.Name, label);
+            $input = $ret.find('input');
+        } else {
+            $ret = getTextarea(pField.Name, label);
+            $input = $ret.find('textarea');
+        }
+
+    } else if (pField.Type == 2) {
+        $ret = getDTPicker(pField.Name, label, 'datetime-local');
+        $input = $ret.find('input');
+
+    } else if (pField.Type == 3) {
+        $ret = getInputText(pField.Name, label);
+        $input = $ret.find('input');
+        $input.attr('data-numeral', numeral.options.defaultFormat);
+    };
+
+    if (!pField.Updatable) inputReadonly($input, true);
+    if ($input) $input.attr('data-textfield', pField.Name.toLowerCase())
+
+    return $ret;
+}
+
+
 
