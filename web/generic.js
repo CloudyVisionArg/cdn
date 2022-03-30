@@ -315,7 +315,7 @@ function getDefaultControl(pField) {
         $input = $ret.find('input');
 
     } else if (pField.Type == 3) {
-        $ret = getInputText(pField.Name, label);
+        $ret = newInputText(pField.Name, label);
         $input = $ret.find('input');
         //$input.attr('data-numeral', numeral.options.defaultFormat);
     };
