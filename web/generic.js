@@ -216,7 +216,7 @@ function renderPage() {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 if (newRow) {
                     $row = $('<div/>', {
-                        class: 'row mb-3',
+                        class: 'row mt-3',
                     }).appendTo($tab);
                     newRow = false;
                 } else {
