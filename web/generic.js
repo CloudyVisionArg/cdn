@@ -155,20 +155,20 @@ function renderPage() {
         <div class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
             <button type="button" id="print" class="btn btn-primary" onclick="printForm();">
                 <i class="fa fa-print"></i>
-                <span class="d-none d-sm-inline-block"> Imprimir</span>
+                <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
             <button type="button" id="save" class="btn btn-primary" onclick="submitForm('save');">
                 <i class="fa fa-cloud-upload"></i>
-                <span class="d-none d-sm-inline-block"> Guardar</span>
+                <span class="d-none d-md-inline-block"> Guardar</span>
             </button>
             <button type="button" id="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
                 <i class="fa fa-cloud-upload"></i> +
                 <i class="fa fa-sign-out"></i>
-                <span class="d-none d-sm-inline-block"> Guardar y salir</span>
+                <span class="d-none d-md-inline-block"> Guardar y salir</span>
             </button>
             <button type="button" id="cancel" class="btn btn-primary" onclick="exitForm(false);">
                 <i class="fa fa-sign-out"></i>
-                <span class="d-none d-sm-inline-block"> Salir</span>
+                <span class="d-none d-md-inline-block"> Salir</span>
             </button>
     </div>
     `);
