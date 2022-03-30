@@ -226,7 +226,7 @@ function renderPage() {
                     class: 'col-xs-12 col-sm-6 form-group',
                 }).appendTo($row);
 
-                $col.append('<label>' + (field.Description ? field.Description : field.Name) + '</label>');
+                $col.append('<label class="form-label">' + (field.Description ? field.Description : field.Name) + '</label>');
                 $col.append('<input type="password" class="form-control"></input>');
                 //RWL "<label>" & ObjectDesc(oField) & "</label>"
 
