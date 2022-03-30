@@ -223,7 +223,7 @@ function renderPage() {
                     newRow = true;
                 };
                 $col = $('<div/>', {
-                    class: 'mt-3 col-xs-12 col-sm-6 form-group',
+                    class: 'mt-3 col-12 col-md-6 form-group',
                 }).appendTo($row);
 
                 $col.append('<label class="form-label">' + (field.Description ? field.Description : field.Name) + '</label>');
