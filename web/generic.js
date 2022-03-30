@@ -212,7 +212,6 @@ function renderPage() {
         var $tab = $cont.find('#tabMain');
 
         var newRow = true, $row, $col;
-        debugger;
         doc.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 if (newRow) {
@@ -227,7 +226,7 @@ function renderPage() {
                     class: 'col-xs-12 col-sm-6 form-group',
                 }).appendTo($row);
 
-                $col.append('<label>' + field.Description ? field.Description : field.Name + '</label>');
+                $col.append('<label>' + (field.Description ? field.Description : field.Name) + '</label>');
                 //RWL "<label>" & ObjectDesc(oField) & "</label>"
 
                 //getDefaultControl(field).appendTo($ul);
