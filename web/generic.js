@@ -227,7 +227,7 @@ function renderPage() {
                     class: 'col-xs-12 col-sm-6 form-group',
                 }).appendTo($row);
 
-                $col.append('<label>' + field.Description ? field.Description : field.Name + '</label>')
+                $col.append('<label>' + field.Description ? field.Description : field.Name + '</label>');
                 //RWL "<label>" & ObjectDesc(oField) & "</label>"
 
                 //getDefaultControl(field).appendTo($ul);
