@@ -228,6 +228,13 @@ function renderPage() {
             }
         });
 
+        /*
+        $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
+        $ctl.find('.list').on('click', 'a', downloadAtt);
+        $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
+        $ctl.find('div.row').on('click', 'button', addAtt);
+        */
+
         // tabHeader
 
         var $tab = $cont.find('#tabHeader');
@@ -265,38 +272,6 @@ function renderPage() {
 
 
         /*
-
-
-        $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
-        $ctl.find('.list').on('click', 'a', downloadAtt);
-        $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
-        $ctl.find('div.row').on('click', 'button', addAtt);
-
-
-        // tabHeader
-
-        $tabHeader = $('<div/>', {
-            class: 'tab',
-            id: 'tabHeader',
-        }).appendTo($tabs);
-
-        $div = $('<div/>', {
-            class: 'list no-hairlines-md',
-            style: 'margin-top: 0;',
-        }).appendTo($tabHeader);
-
-        $ul = $('<ul/>').appendTo($div);
-
-        doc.CustomFields.forEach(field => {
-            if (field.HeaderTable) {
-                getDefaultControl(field).appendTo($ul);
-            }
-        })
-
-        doc.HeadFields.forEach(field => {
-            getDefaultControl(field).appendTo($ul);
-        })
-
         // tabHist
 
         $tabHist = $('<div/>', {
@@ -307,7 +282,7 @@ function renderPage() {
         $('<div/>', {
             'data-doclog': 1,
         }).append('Cargando...').appendTo($tabHist);
-*/
+        */
 
     } else {
 /*
@@ -357,6 +332,3 @@ function getDefaultControl(pField) {
 
     return $ret;
 }
-
-
-
