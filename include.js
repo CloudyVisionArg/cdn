@@ -56,6 +56,7 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 function registeredScripts() {
 	var scripts = [];
 
+	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 	scripts.push({ id: 'whatsapp', path: '/wapp.js', version: 54 });
 	scripts.push({ id: 'javascript', path: '/javascript.js', version: 54 });

@@ -10,6 +10,7 @@ arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.j
 arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
 arrScripts.push({ id: 'app7-doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'javascript', version: 0 });
+arrScripts.push({ id: 'web-controls', version: 0 });
 
 includeJs(arrScripts, function () {
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
@@ -223,13 +224,10 @@ function renderPage() {
                     newRow = true;
                 };
                 $col = $('<div/>', {
-                    class: 'mt-3 col-12 col-md-6 form-group',
+                    class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                $col.append('<label class="form-label">' + (field.Description ? field.Description : field.Name) + '</label>');
-                $col.append('<input type="text" class="form-control"></input>');
-
-                //getDefaultControl(field).appendTo($ul);
+                getDefaultControl(field).appendTo($col);
 
             }
         });
@@ -303,25 +301,27 @@ function getDefaultControl(pField) {
 
     if (pField.Type == 1) {
         if (pField.Length > 0 && pField.Length < 500) {
-            $ret = getInputText(pField.Name, label);
+            $ret = newInputText(pField.Name, label);
             $input = $ret.find('input');
         } else {
-            $ret = getTextarea(pField.Name, label);
+            $ret = newInputText(pField.Name, label);
+            //$ret = getTextarea(pField.Name, label);
             $input = $ret.find('textarea');
         }
 
     } else if (pField.Type == 2) {
-        $ret = getDTPicker(pField.Name, label, 'datetime-local');
+        $ret = newInputText(pField.Name, label);
+        //$ret = getDTPicker(pField.Name, label, 'datetime-local');
         $input = $ret.find('input');
 
     } else if (pField.Type == 3) {
         $ret = getInputText(pField.Name, label);
         $input = $ret.find('input');
-        $input.attr('data-numeral', numeral.options.defaultFormat);
+        //$input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
-    if (!pField.Updatable) inputReadonly($input, true);
-    if ($input) $input.attr('data-textfield', pField.Name.toLowerCase())
+    if (!pField.Updatable) $input.attr({ 'readonly': 'readonly' });
+    $input.attr('data-textfield', pField.Name.toLowerCase())
 
     return $ret;
 }
