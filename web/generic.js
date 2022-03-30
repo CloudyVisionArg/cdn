@@ -148,7 +148,7 @@ function renderPage() {
     var $body = $('body');
 
     var $cont = $('<div/>', {
-        class: 'container-fluid',
+        class: 'container',
     }).appendTo($body);
 
     $cont.append(`
@@ -228,7 +228,6 @@ function renderPage() {
 
                 $col.append('<label class="form-label">' + (field.Description ? field.Description : field.Name) + '</label>');
                 $col.append('<input type="text" class="form-control"></input>');
-                //RWL "<label>" & ObjectDesc(oField) & "</label>"
 
                 //getDefaultControl(field).appendTo($ul);
 
