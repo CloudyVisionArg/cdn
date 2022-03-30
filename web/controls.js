@@ -9,7 +9,6 @@ function newInputText(pId, pLabel, pValue) {
         type: 'text',
         class: 'form-control',
         id: pId,
-        placeholder: pLabel,
         value: pValue,
     }).appendTo($div);
 
