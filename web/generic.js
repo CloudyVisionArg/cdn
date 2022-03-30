@@ -210,46 +210,32 @@ function renderPage() {
             </div>
         `);
 
+        var $tab, $row, $col;
+
         // tabMain
 
-        var $tab = $cont.find('#tabMain');
-
-        var newRow = true, $row, $col;
+        $tab = $cont.find('#tabMain');
+        $row = undefined;
 
         doc.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
-                if (newRow) {
-                    $row = $('<div/>', {
-                        class: 'row',
-                    }).appendTo($tab);
-                    newRow = false;
-                } else {
-                    newRow = true;
-                };
+                $row = getRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
                 getDefaultControl(field).appendTo($col);
-
             }
         });
 
         // tabHeader
 
         var $tab = $cont.find('#tabHeader');
-        newRow = true;
+        $row = undefined;
 
         doc.CustomFields.forEach(field => {
             if (field.HeaderTable) {
-                if (newRow) {
-                    $row = $('<div/>', {
-                        class: 'row',
-                    }).appendTo($tab);
-                    newRow = false;
-                } else {
-                    newRow = true;
-                };
+                $row = getRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
@@ -259,20 +245,23 @@ function renderPage() {
         })
 
         doc.HeadFields.forEach(field => {
-            if (newRow) {
-                $row = $('<div/>', {
-                    class: 'row',
-                }).appendTo($tab);
-                newRow = false;
-            } else {
-                newRow = true;
-            };
+            $row = getRow($row, $tab);
             $col = $('<div/>', {
                 class: 'col-12 col-md-6 form-group',
             }).appendTo($row);
 
             getDefaultControl(field).appendTo($col);
-    })
+        })
+
+        function getRow(pRow, pCont) {
+            if (pRow && pRow.children().length < 2) {
+                return pRow;
+            } else {
+                return $('<div/>', {
+                    class: 'row',
+                }).appendTo(pCont);
+            }
+        }
 
 
         /*
