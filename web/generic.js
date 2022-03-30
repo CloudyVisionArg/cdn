@@ -216,14 +216,14 @@ function renderPage() {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 if (newRow) {
                     $row = $('<div/>', {
-                        class: 'row mt-3',
+                        class: 'row',
                     }).appendTo($tab);
                     newRow = false;
                 } else {
                     newRow = true;
                 };
                 $col = $('<div/>', {
-                    class: 'col-xs-12 col-sm-6 form-group',
+                    class: 'mt-3 col-xs-12 col-sm-6 form-group',
                 }).appendTo($row);
 
                 $col.append('<label class="form-label">' + (field.Description ? field.Description : field.Name) + '</label>');
