@@ -337,7 +337,7 @@ function getDefaultControl(pField) {
         }
 
     } else if (pField.Type == 2) {
-        $ret = newDTPicker(pField.Name, label, 'datetime-local');
+        $ret = newDTPicker(pField.Name, label, 'date');
         $input = $ret.find('input');
 
     } else if (pField.Type == 3) {
