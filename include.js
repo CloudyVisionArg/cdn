@@ -58,8 +58,10 @@ function registeredScripts() {
 
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
-	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 56 });
+	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 58 });
+	scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 58 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 57 });
+	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 56 });
 	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 49 });
