@@ -11,6 +11,8 @@ arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@
 arrScripts.push({ id: 'app7-doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'javascript', version: 0 });
 arrScripts.push({ id: 'web-controls', version: 0 });
+arrScripts.push({ id: 'lib-numeral' });
+arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 
 includeJs(arrScripts, function () {
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';

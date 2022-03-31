@@ -52,6 +52,15 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 	});
 */
 
+/* TODO: soportar CSS
+	var headTag = document.getElementsByTagName('head')[0];
+	var linkTag = document.createElement('link');
+	linkTag.rel = 'stylesheet';
+	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
+	//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp/wapp.css';
+	headTag.appendChild(linkTag);
+*/
+
 // Scripts registrados
 function registeredScripts() {
 	var scripts = [];
