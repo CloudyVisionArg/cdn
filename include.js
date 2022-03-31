@@ -58,9 +58,10 @@ function registeredScripts() {
 
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
-	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 54 });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 54 });
-	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 50 });
+	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 55 });
+	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 55 });
+	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
+	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 49 });
 	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 48 });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
@@ -70,11 +71,10 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-doorsapi', path: '/app7/doorsapi.js', version: 36 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
-	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 20 });
 
 	// Backguard compatibility
-	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 54 });
-	scripts.push({ id: 'qrcode', path: 'lib/qrcode.js', version: 20 });
+	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 55 });
+	scripts.push({ id: 'qrcode', path: 'lib/qrcode.js', version: 55 });
 
 	return scripts;
 }
