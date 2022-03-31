@@ -74,14 +74,14 @@ if (typeof String.prototype.reverse !== 'function') {
 // https://code.google.com/archive/p/crypto-js/
 // https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
 function encryptAsync(pString, pPass, pCallback) {
-	includeJs('cryptojs-aes', function () {
+	includeJs('lib-cryptojs-aes', function () {
 		if (pCallback) {
 			pCallback(CryptoJS.AES.encrypt(pString, pPass).toString());
 		}
 	})
 }
 function decryptAsync(pString, pPass, pCallback) {
-	includeJs('cryptojs-aes', function () {
+	includeJs('lib-cryptojs-aes', function () {
 		if (pCallback) {
 			pCallback(CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8));
 		}

@@ -7,8 +7,8 @@ todo:
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@30/wapp.css';
-	//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp.css';
+	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@30/wapp/wapp.css';
+	//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp/wapp.css';
 	headTag.appendChild(linkTag);
 
 	var root = document.documentElement;
@@ -545,7 +545,7 @@ var wapp = {
 			}
 			
             var $img = pChat.find('.wapp-header .session img');
-            $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/' + light + '.png');
+            $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/wapp/' + light + '.png');
 			var $remain = pChat.find('.wapp-header .session .session-time');
 			$remain.html(remain);
 		}
