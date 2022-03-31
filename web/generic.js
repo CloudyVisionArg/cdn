@@ -74,7 +74,7 @@ function getDoc() {
 }
 
 function getControlsFolder() {
-	var cf = objProp(doc.Tags, 'controlsFolder', true);
+	var cf = objPropCI(doc.Tags, 'controlsFolder');
 	
 	if (cf) {
 		DoorsAPI.foldersGetByPath(folder.RootFolderId, cf).then(
@@ -115,7 +115,7 @@ function loadControls() {
 }
 
 function getControlsRights(pControls) {
-	var cr = objProp(doc.Tags, 'controlsRights', true);
+	var cr = objPropCI(doc.Tags, 'controlsRights');
 	if (cr) {
 		try {
 			controlsRights = $.parseXML(cr);
@@ -337,8 +337,7 @@ function getDefaultControl(pField) {
         }
 
     } else if (pField.Type == 2) {
-        $ret = newInputText(pField.Name, label);
-        //$ret = getDTPicker(pField.Name, label, 'datetime-local');
+        $ret = newDTPicker(pField.Name, label, 'datetime-local');
         $input = $ret.find('input');
 
     } else if (pField.Type == 3) {
