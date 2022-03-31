@@ -7,7 +7,7 @@ todo:
 	var headTag = document.getElementsByTagName('head')[0];
 	var linkTag = document.createElement('link');
 	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@30/wapp/wapp.css';
+	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
 	//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp/wapp.css';
 	headTag.appendChild(linkTag);
 
@@ -225,7 +225,7 @@ var wapp = {
 				style: 'width: 20%; text-align: center;',
 			}).appendTo($heading);
 			
-			$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/red.png" />');
+			$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/red.png" />');
 			$headingSession.append('<div class="session-time"></div>');
 
 			var $headingRight = $('<div/>', {
@@ -545,7 +545,7 @@ var wapp = {
 			}
 			
             var $img = pChat.find('.wapp-header .session img');
-            $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@2/wapp/' + light + '.png');
+            $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/' + light + '.png');
 			var $remain = pChat.find('.wapp-header .session .session-time');
 			$remain.html(remain);
 		}
