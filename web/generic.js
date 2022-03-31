@@ -26,7 +26,11 @@ includeJs(arrScripts, function () {
 			console.log(err);
 		}
 	);
-	
+
+    // todo: setar segun el LNG_ID
+    numeral.locale('es'); // http://numeraljs.com/
+    numeral.defaultFormat('0,0.[00]');
+
 	urlParams = new URLSearchParams(window.location.search);
 	fld_id = urlParams.get('fld_id');
 	doc_id = urlParams.get('doc_id');
@@ -301,6 +305,20 @@ function renderPage() {
         };
 */
     };
+
+    // Validacion de numero
+    $('[data-numeral]').change(function (e) {
+        var $this = $(this);
+        var n = numeral($this.val());
+        if (n.value()) {
+            $this.val(n.format($this.attr('data-numeral')));
+        } else {
+            $this.val('');
+            // todo: cambiar por toast
+            alert('Ingrese un numero valido');
+        }
+    });
+    
 }
 
 function getDefaultControl(pField) {
@@ -326,7 +344,7 @@ function getDefaultControl(pField) {
     } else if (pField.Type == 3) {
         $ret = newInputText(pField.Name, label);
         $input = $ret.find('input');
-        //$input.attr('data-numeral', numeral.options.defaultFormat);
+        $input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
     if (!pField.Updatable) $input.attr({ 'readonly': 'readonly' });
