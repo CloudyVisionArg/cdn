@@ -187,17 +187,6 @@ function renderPage() {
         <hr>
     `);
     
-    $cont.append(`
-    <div class="input-group date" id="datepicker">
-        <input type="text" class="form-control" id="date"/>
-        <span class="input-group-append">
-          <span class="input-group-text bg-light d-block">
-            <i class="fa fa-calendar"></i>
-          </span>
-        </span>
-      </div>
-    `);
-    
     if (!controls) {
 
         // SIN CONTROLES
