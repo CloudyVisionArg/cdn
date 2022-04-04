@@ -17,7 +17,7 @@ arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 includeJs(arrScripts, function () {
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
-	//Doors.RESTFULL.AuthToken = 'B3ECBFD9E08A25A73CC243F662099323865DD9CBCCB62121C37A68D53F6430D2';
+	Doors.RESTFULL.AuthToken = 'B3ECBFD9E08A25A73CC243F662099323865DD9CBCCB62121C37A68D53F6430D2';
 
 	DoorsAPI.islogged().then(
 		function (res) {
