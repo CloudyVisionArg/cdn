@@ -1,12 +1,12 @@
 /*
-includeJs permite cargar una biblioteca Javascript en forma dinamica.
+include permite cargar una biblioteca Javascript o CSS en forma dinamica.
 La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
 
 Ej:
 
-	includeJs('emojis');
+	include('emojis');
 	
-	includeJs('emojis', function () {
+	include('emojis', function () {
 		// emojis loaded
 	});
 	
@@ -24,19 +24,19 @@ O mediante el metodo loaded del elemento script (hay que poner el prefijo script
 
 Puedo especificar la version (tag del commit)
 
-	includeJs('emojis', 15, function () {
+	include('emojis', 15, function () {
 		// emojis v15 loaded
 	});
 
 U obtener el ultimo commit, sin caches, pidiendo la version 0
 
-	includeJs('emojis', 0, function () {
+	include('emojis', 0, function () {
 		// emojis last commit loaded
 	});
 
 Puedo usarlo para mis propios script especificando el src:
 
-	includeJs('myScript', 'http://path/to/my/script.js', function () {
+	include('myScript', 'http://path/to/my/script.js', function () {
 		// myScript loaded
 	});
 
@@ -44,12 +44,15 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 
 	var scripts = [];
 	scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+	scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
 	scripts.push({ id: 'app7-doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
 	scripts.push({ id: 'javascript', version: 0 });
 	
-	includeJs(scripts, function () {
+	include(scripts, function () {
 		// all scripts loaded
 	});
+
+Si el src termina en '.css' se creara un <link>, si no un <script>
 */
 
 // Scripts registrados
@@ -95,10 +98,6 @@ Argumentos:
 */
 
 function include() {
-	includeJs.apply(null, arguments);
-}
-
-function includeJs() {
 	var src, pSrc, pVer, pCallback;
 	var scripts = registeredScripts();
 
@@ -126,11 +125,11 @@ function includeJs() {
 
         function includeEl(pEl) {
             if (typeof pEl.version == 'number') {
-                includeJs(pEl.id, pEl.version, function () {
+                include(pEl.id, pEl.version, function () {
                     pEl.loaded = true;
                 })
             } else {
-                includeJs(pEl.id, pEl.src, function () {
+                include(pEl.id, pEl.src, function () {
                     pEl.loaded = true;
                 })
             }
@@ -170,15 +169,6 @@ function includeJs() {
         }
 
         if (src) {
-			/* TODO: soportar CSS
-				var headTag = document.getElementsByTagName('head')[0];
-				var linkTag = document.createElement('link');
-				linkTag.rel = 'stylesheet';
-				linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
-				//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp/wapp.css';
-				headTag.appendChild(linkTag);
-			*/
-
 			var scriptNode = document.getElementById('script_' + pId);
             if (!scriptNode) {
                 var D = document;
@@ -202,7 +192,7 @@ function includeJs() {
                         if (self._loaded  || waiting > 3000) {
                             clearInterval(interv);
                             if (callback) callback(self);
-                            if (waiting > 3000) console.log('includeJs(' + pId + ') timeout');
+                            if (waiting > 3000) console.log('include(' + pId + ') timeout');
                             
                             /* Cuando se esta depurando y hay un debugger en la carga de la pagina,
                             el evento load no se dispara, en ese caso loaded llama igual al
@@ -228,6 +218,11 @@ function includeJs() {
         }
     }
 };
+
+// Backguard copatibility
+function includeJs() {
+	include.apply(null, arguments);
+}
 
 function scriptLoaded(scriptName, callback) {
 	document.getElementById('script_' + scriptName.toLowerCase()).loaded(callback);

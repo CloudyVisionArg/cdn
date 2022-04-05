@@ -8,13 +8,15 @@ var constrolsFolder, controls, controlsRights;
 var arrScripts = [];
 arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
 arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
+arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+arrScripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
 arrScripts.push({ id: 'app7-doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'javascript', version: 0 });
 arrScripts.push({ id: 'web-controls', version: 0 });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 
-includeJs(arrScripts, function () {
+include(arrScripts, function () {
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
 	Doors.RESTFULL.AuthToken = '83B26B91392CE31B04F03278A83DDB28B263967C021C74C261DE38BE072DE103';
