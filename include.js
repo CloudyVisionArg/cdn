@@ -185,7 +185,7 @@ function includeJs() {
 				if (src.substring(src.length - 4).toLowerCase() == '.css') {
 					scriptNode = D.createElement('link');
 					scriptNode.rel = 'stylesheet';
-					scriptNode.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
+					scriptNode.href = src;
 				} else {
 					scriptNode = D.createElement('script');
 					scriptNode.type = 'text/javascript';
