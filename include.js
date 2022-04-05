@@ -25,13 +25,13 @@ O mediante el metodo loaded del elemento script (hay que poner el prefijo script
 Puedo especificar la version (tag del commit)
 
 	includeJs('emojis', 15, function () {
-		// emojis loaded
+		// emojis v15 loaded
 	});
 
 U obtener el ultimo commit, sin caches, pidiendo la version 0
 
 	includeJs('emojis', 0, function () {
-		// emojis loaded
+		// emojis last commit loaded
 	});
 
 Puedo usarlo para mis propios script especificando el src:
@@ -48,17 +48,8 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 	scripts.push({ id: 'javascript', version: 0 });
 	
 	includeJs(scripts, function () {
-		// scripts loaded
+		// all scripts loaded
 	});
-*/
-
-/* TODO: soportar CSS
-	var headTag = document.getElementsByTagName('head')[0];
-	var linkTag = document.createElement('link');
-	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
-	//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp/wapp.css';
-	headTag.appendChild(linkTag);
 */
 
 // Scripts registrados
@@ -94,7 +85,7 @@ function registeredScripts() {
 Argumentos:
 0:
 	- string -> Id del script
-	- array -> Inclusion multiple [{ id, version, src, depends[id] }] (version se considera antes que src)
+	- array -> Inclusion multiple [{ id, version / src, depends[id] }] (version se considera antes que src)
 1: 
 	- string -> SRC del script custom
 	- number -> Version (0 = lastCommit)
@@ -102,6 +93,10 @@ Argumentos:
 2:
 	- function -> Callback
 */
+
+function include() {
+	includeJs.apply(null, arguments);
+}
 
 function includeJs() {
 	var src, pSrc, pVer, pCallback;
@@ -175,14 +170,29 @@ function includeJs() {
         }
 
         if (src) {
-            var scriptNode = document.getElementById('script_' + pId);
+			/* TODO: soportar CSS
+				var headTag = document.getElementsByTagName('head')[0];
+				var linkTag = document.createElement('link');
+				linkTag.rel = 'stylesheet';
+				linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
+				//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp/wapp.css';
+				headTag.appendChild(linkTag);
+			*/
+
+			var scriptNode = document.getElementById('script_' + pId);
             if (!scriptNode) {
                 var D = document;
-                scriptNode = D.createElement('script');
+				if (src.substring(src.length - 4).toLowerCase() == '.css') {
+					scriptNode = D.createElement('link');
+					scriptNode.rel = 'stylesheet';
+					scriptNode.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
+				} else {
+					scriptNode = D.createElement('script');
+					scriptNode.type = 'text/javascript';
+					scriptNode.async = true;
+					scriptNode.src = src;
+				}
                 scriptNode.id = 'script_' + pId;
-                scriptNode.type = 'text/javascript';
-                scriptNode.async = true;
-                scriptNode.src = src;
                 
                 scriptNode.loaded = function (callback) {
                     var self = this;
