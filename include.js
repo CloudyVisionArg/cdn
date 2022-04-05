@@ -65,6 +65,7 @@ function registeredScripts() {
 	scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 57 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 56 });
+	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
 	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 49 });
@@ -135,7 +136,7 @@ function include() {
             }
         }
 
-        // Espera a que terminen de cargar todos e inicializa
+        // Espera a que terminen de cargar todos y hace callback
         setTimeout(function wait() {
             if (arrScr.find(el => !el.loaded)) {
                 setTimeout(wait, 100)

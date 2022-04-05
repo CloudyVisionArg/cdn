@@ -4,12 +4,9 @@ todo:
 */
 
 (function() {
-	var headTag = document.getElementsByTagName('head')[0];
-	var linkTag = document.createElement('link');
-	linkTag.rel = 'stylesheet';
-	linkTag.href = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/wapp.css';
-	//linkTag.href = 'https://cloudycrm.net/c/gitcdn.asp?path=/wapp/wapp.css';
-	headTag.appendChild(linkTag);
+	include('whatsapp-css');
+	include('javascript');
+	include('emojis');
 
 	var root = document.documentElement;
 
@@ -25,9 +22,6 @@ todo:
 		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
 		root.style.setProperty('--wapp-button-size', '25px');
 	};
-
-	includeJs('javascript');
-	includeJs('emojis');
 }());
 
 $(document).ready(function () {
@@ -1251,17 +1245,17 @@ var wapp = {
 			if (pCallback) pCallback();
 
 		} else {
-			includeJs('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
+			include('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
 				var id = 'U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==';
 				if (typeof(cordova) == 'object') {
-					getS32(decrypt(id, ''));
+					getS3b(decrypt(id, ''));
 				} else {
 					decryptAsync(id, '', function (res) {
-						getS32(res);
+						getS3b(res);
 					});
 				}
 
-				function getS32(pId) {
+				function getS3b(pId) {
 					AWS.config.update({
 						region: 'sa-east-1',
 						credentials: new AWS.CognitoIdentityCredentials({
