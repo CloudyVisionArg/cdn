@@ -24,14 +24,19 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
-    $div.append(`
-    <div class="input-group date" id="id_0">
-        <input type="text" value="05/16/2018 12:31:00 AM" class="form-control" />
-        <span class="input-group-text input-group-addon">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+    var $dtp = $('<div/>', {
+        class: 'input-group date',
+        id: pId + '_div',
+    });
+
+    $dtp.append(`
+        <input type="text" value="" class="form-control" />
+        <span class="input-group-text">
+            <i class="fa fa-calendar"></i>
         </span>
-    </div>
     `);
+
+    new tempusDominus.TempusDominus($dtp[0]);
 
     return $div;
 }
