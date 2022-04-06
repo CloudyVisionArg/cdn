@@ -36,7 +36,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         </span>
     `);
 
-    //new tempusDominus.TempusDominus($dtp[0]);
+    new tempusDominus.TempusDominus($dtp[0]);
 
     return $div;
 }
