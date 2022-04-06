@@ -27,14 +27,25 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     var $dtp = $('<div/>', {
         class: 'input-group date',
         id: pId + '_div',
+        'data-td-target-input': 'nearest',
+        'data-td-target-toggle': 'nearest',
     }).appendTo($div);
 
-    $dtp.append(`
-        <input type="text" value="" class="form-control" />
-        <span class="input-group-text">
-            <i class="bi bi-calendar"></i>
-        </span>
-    `);
+    $('<input/>', {
+        type: 'text',
+        id: pId,
+        value: pValue,
+        class: 'form-control',
+        'data-td-target': '#' + pId + '_div',
+    }).appendTo($dtp);
+
+    var $sp = $('<span/>', {
+        class: 'input-group-text',
+        'data-td-target': '#' + pId + '_div',
+        'data-td-toggle': 'datetimepicker',
+    }).appendTo($dtp);
+
+    $sp.append('<i class="bi bi-calendar"></i>');
 
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
