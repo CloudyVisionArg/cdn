@@ -15,7 +15,8 @@ arrScripts.push({ id: 'web-javascript', version: 0 });
 arrScripts.push({ id: 'web-controls', version: 0 });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
-arrScripts.push({ id: 'tempus-dominus', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js', depends: ['lib-numeral'] });
+arrScripts.push({ id: 'tempus-dominus', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js', depends: [] });
+arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css', depends: [] });
 
 
 include(arrScripts, function () {
