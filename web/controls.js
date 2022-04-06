@@ -27,7 +27,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     var $dtp = $('<div/>', {
         class: 'input-group date',
         id: pId + '_div',
-    });
+    }).appendTo($div);
 
     $dtp.append(`
         <input type="text" value="" class="form-control" />
