@@ -18,6 +18,37 @@ function newInputText(pId, pLabel, pValue) {
 function newDTPicker(pId, pLabel, pType, pValue) {
     // pType: date, time, datetime-local
 
+/*
+    date: 
+        display: {
+          viewMode: 'clock',
+          components: {
+            decades: true,
+            year: true,
+            month: true,
+            date: true,
+            hours: false,
+            minutes: false,
+            seconds: false,
+          }
+        }
+      });
+
+    time:
+    display: {
+        viewMode: 'clock',
+        components: {
+          decades: false,
+          year: false,
+          month: false,
+          date: false,
+          hours: true,
+          minutes: true,
+          seconds: false
+        }
+      }
+*/
+
     var $div = $('<div/>', {
         class: 'mt-3',
     });
@@ -47,6 +78,8 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 
     $sp.append('<i class="bi bi-calendar"></i>');
 
+    tempusDominus.extend(tempusDominus.plugins.moment_parse, 'DD.MM.yyyy hh:mm a');
+    
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
             icons: {
