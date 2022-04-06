@@ -39,15 +39,15 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
             icons: {
-                time: 'fa fa-clock',
-                date: 'fa fa-calendar',
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar-o',
                 up: 'fa fa-arrow-up',
                 down: 'fa fa-arrow-down',
                 previous: 'fa fa-chevron-left',
                 next: 'fa fa-chevron-right',
-                today: 'fa fa-calendar-check',
-                clear: 'fa fa-trash',
-                close: 'fa fa-x',
+                today: 'fa fa-calendar-check-o',
+                clear: 'fa fa-trash-o',
+                close: 'fa fa-times',
             },
         }
     });
