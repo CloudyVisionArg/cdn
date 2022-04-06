@@ -1010,7 +1010,7 @@ function pageInit(e, page) {
     if ($mapsAc.length > 0) {
         $mapsAc.attr('data-filling', '1');
 
-        includeJs('maps', function () {
+        include('maps', function () {
             document.getElementById('script_mapsapi').loaded(function () {
                 $mapsAc.each(function () {
                     var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
@@ -1232,7 +1232,7 @@ function fillControls() {
     // Inicializa los chats de Whatsapp
     var $wappChats = $get('div.wapp-chat');
     if ($wappChats.length > 0) {
-        includeJs('whatsapp', function () {
+        include('whatsapp', function () {
             wapp.ready(function () {
                 $wappChats.each(function () {
                     var $this = $(this);

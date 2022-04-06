@@ -9,7 +9,7 @@ emojis.createPicker({
 */
 
 (function(){
-	includeJs('javascript');
+	include('javascript');
 }());
 
 $(document).ready(function () {

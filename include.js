@@ -52,7 +52,7 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 		// all scripts loaded
 	});
 
-Si el src termina en '.css' se creara un <link>, si no un <script>
+Si el src termina en '.css' se creara un <link>, sino un <script>
 */
 
 // Scripts registrados
@@ -173,6 +173,7 @@ function include() {
 			var scriptNode = document.getElementById('script_' + pId);
             if (!scriptNode) {
                 var D = document;
+                
 				if (src.substring(src.length - 4).toLowerCase() == '.css') {
 					scriptNode = D.createElement('link');
 					scriptNode.rel = 'stylesheet';
@@ -220,7 +221,7 @@ function include() {
     }
 };
 
-// Backguard copatibility
+// Backguard compatibility
 function includeJs() {
 	include.apply(null, arguments);
 }

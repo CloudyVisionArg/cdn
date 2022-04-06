@@ -24,12 +24,14 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
-    $('<input/>', {
-        type: pType ? pType : 'date',
-        class: 'form-control',
-        id: pId,
-        value: pValue,
-    }).appendTo($div);
+    $div.append(`
+    <div class="input-group date" id="id_0">
+        <input type="text" value="05/16/2018 12:31:00 AM" class="form-control" />
+        <span class="input-group-text input-group-addon">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+        </span>
+    </div>
+    `);
 
     return $div;
 }

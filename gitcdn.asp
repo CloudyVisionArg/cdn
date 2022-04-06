@@ -1,5 +1,5 @@
 <%
-' Este asp permite utilizar Github como CDN, con la ventaja que no hace cache (a diferencia de jsDelivr y raw.githubusercontent.com)
+' Este asp permite utilizar Github como CDN, con la ventaja que no hace cache (a diferencia de jsDelivr)
 ' Ej: <script src="http://cloudycrm.net/c/gitcdn.asp?owner=CloudyVisionArg&repo=cdn?branch=master&path=/wapp.js"
 ' ESTE ASP ES PARA DESARROLLO ya que las API de Github tienen limites de hits, PARA PRODUCCION USAR jsDelivr
 

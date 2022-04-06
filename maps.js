@@ -13,7 +13,7 @@ https://developers.google.com/maps/documentation/javascript/controls#maps_contro
     } else {
         key = 'AIzaSyDZy47rgaX-Jz74' + 'vgsA_wTUlbAodzLvnYY';
     }
-    includeJs('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
+    include('mapsapi', 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=maps.init&language=es-ES');
 }());
 
 var maps = {
