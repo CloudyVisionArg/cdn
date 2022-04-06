@@ -32,22 +32,22 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     $dtp.append(`
         <input type="text" value="" class="form-control" />
         <span class="input-group-text">
-            <i class="fa fa-calendar"></i>
+            <i class="bi bi-calendar"></i>
         </span>
     `);
 
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
             icons: {
-                time: 'fa fa-clock-o',
-                date: 'fa fa-calendar-o',
-                up: 'fa fa-arrow-up',
-                down: 'fa fa-arrow-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
-                today: 'fa fa-calendar-check-o',
-                clear: 'fa fa-trash-o',
-                close: 'fa fa-times',
+                time: 'bi bi-clock',
+                date: 'bi bi-calendar',
+                up: 'bi bi-arrow-up',
+                down: 'bi bi-arrow-down',
+                previous: 'bi bi-chevron-left',
+                next: 'bi bi-chevron-right',
+                today: 'bi bi-calendar-check',
+                clear: 'bi bi-trash',
+                close: 'bi bi-x',
             },
         }
     });
