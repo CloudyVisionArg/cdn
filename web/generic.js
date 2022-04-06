@@ -1,6 +1,6 @@
 'use strict';
 
-// https://fontawesome.com/v4/icons/ para buscar iconos
+// Para buscar iconos: https://icons.getbootstrap.com
 
 var urlParams, fld_id, folder, doc_id, doc;
 var constrolsFolder, controls, controlsRights;
@@ -10,7 +10,7 @@ arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.j
 arrScripts.push({ id: 'popper', src: 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js' });
 arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js', depends: ['popper'] });
 arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
-arrScripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
+arrScripts.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
 arrScripts.push({ id: 'app7-doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'web-javascript', version: 0 });
 arrScripts.push({ id: 'web-controls', version: 0 });
@@ -166,11 +166,11 @@ function renderPage() {
     $cont.append(`
         <div class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
             <button type="button" id="print" class="btn btn-primary" onclick="printForm();">
-                <i class="fa fa-print"></i>
+                <i class="bi bi-printer"></i>
                 <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
             <button type="button" id="save" class="btn btn-primary" onclick="submitForm('save');">
-                <i class="fa fa-cloud-upload"></i>
+                <i class="bi bi-cloud-arrow-up"></i>
                 <span class="d-none d-md-inline-block"> Guardar</span>
             </button>
             <button type="button" id="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
