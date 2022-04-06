@@ -7,9 +7,8 @@ var constrolsFolder, controls, controlsRights;
 
 var arrScripts = [];
 arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
-//arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
-arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js' });
-
+arrScripts.push({ id: 'popper', src: 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js' });
+arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js', depends: ['popper'] });
 arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
 arrScripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
 arrScripts.push({ id: 'app7-doorsapi', depends: ['jquery'] });
@@ -17,8 +16,7 @@ arrScripts.push({ id: 'web-javascript', version: 0 });
 arrScripts.push({ id: 'web-controls', version: 0 });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
-arrScripts.push({ id: 'popper', src: 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js' });
-arrScripts.push({ id: 'tempus-dominus', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js', depends: ['popper']  });
+arrScripts.push({ id: 'tempus-dominus', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js', depends: ['popper'] });
 arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css' });
 
 include(arrScripts, function () {
