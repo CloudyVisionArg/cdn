@@ -166,7 +166,7 @@ function renderPage() {
     $cont.append(`
         <div class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
             <button type="button" id="print" class="btn btn-primary" onclick="printForm();">
-                <i class="bi bi-printer"></i>
+                <i class="bi bi-printer-fill"></i>
                 <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
             <button type="button" id="save" class="btn btn-primary" onclick="submitForm('save');">
