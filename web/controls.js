@@ -80,6 +80,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
+            viewMode: 'clock',
             icons: {
                 time: 'bi bi-clock',
                 date: 'bi bi-calendar',
