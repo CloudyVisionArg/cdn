@@ -45,7 +45,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         'data-td-toggle': 'datetimepicker',
     }).appendTo($dtp);
 
-    $sp.append('<i class="bi bi-calendar"></i>');
+    $sp.append('<i class="bi bi-calendar3"></i>');
 
     var t = pType.toLowerCase();
     var comp = {
