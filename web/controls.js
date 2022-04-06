@@ -78,8 +78,6 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 
     $sp.append('<i class="bi bi-calendar"></i>');
 
-    tempusDominus.extend(tempusDominus.plugins.moment_parse, 'DD.MM.yyyy hh:mm a');
-    
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
             icons: {
