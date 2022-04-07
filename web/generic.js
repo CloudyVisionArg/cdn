@@ -374,19 +374,19 @@ function fillControls() {
 
         /*
         getDocLog(doc_id, function (table) {
-            $get('[data-doclog]').html(table);
+            $('[data-doclog]').html(table);
         });
         */
 
     } else {
         title = 'Nuevo documento';
-        //$get('[data-doclog]').html('');
+        //$('[data-doclog]').html('');
     }    
 
     document.title = title;
     $('#title').html(title);
 
-    $get('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
+    $('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
         var tf, textField, text;
         var vf, valueField, value;
         var xf, xmlField, xml;
@@ -515,7 +515,7 @@ function fillControls() {
         }
     });
 
-    $get('[data-autocomplete]').each(function (ix, el) {
+    $('[data-autocomplete]').each(function (ix, el) {
         var $el = $(el);
         var ac = app7.autocomplete.get($el);
         var $li = $el.closest('li');
@@ -566,7 +566,7 @@ function fillControls() {
     })
 
     // Inicializa los chats de Whatsapp
-    var $wappChats = $get('div.wapp-chat');
+    var $wappChats = $('div.wapp-chat');
     if ($wappChats.length > 0) {
         include('whatsapp', function () {
             wapp.ready(function () {
@@ -589,7 +589,7 @@ function fillControls() {
         });
     }
 
-    $get('[data-attachments]').each(function (ix, el) {
+    $('[data-attachments]').each(function (ix, el) {
         fillAttachments($(el));
     });
 
