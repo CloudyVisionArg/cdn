@@ -621,7 +621,7 @@ function saveDoc() {
     //$navbar.find('.right .button').addClass('disabled');
     //app7.preloader.show();
 
-    $get('[data-textfield]').each(function (ix, el) {
+    $('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
         var field = getDocField(doc, $el.attr('data-textfield'));
 
@@ -671,7 +671,7 @@ function saveDoc() {
         }
     });
 
-    $get('[data-valuefield]').each(function (ix, el) {
+    $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
         var field = getDocField(doc, $el.attr('data-valuefield'));
 
@@ -698,7 +698,7 @@ function saveDoc() {
         }
     });
 
-    $get('[data-xmlfield]').each(function (ix, el) {
+    $('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
         var field = getDocField(doc, $el.attr('data-xmlfield'));
 
@@ -773,7 +773,7 @@ function saveDoc() {
 function saveAtt() {
     return new Promise(function (resolve, reject) {
         var calls = [];
-        var $attsToSave = $get('li[data-attachments] [data-att-action]');
+        var $attsToSave = $('li[data-attachments] [data-att-action]');
 
         if ($attsToSave.length == 0) {
             resolve('OK');
