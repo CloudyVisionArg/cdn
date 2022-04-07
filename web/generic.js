@@ -369,7 +369,7 @@ function fillControls() {
     if (!doc.IsNew) {
         var title = getDocField(doc, 'subject').Value;
         if (!title) title = 'Doc Id ' + doc.DocId;
-        window.title = title;
+        document.title = title;
 
         /*
         getDocLog(doc_id, function (table) {
@@ -378,7 +378,7 @@ function fillControls() {
         */
 
     } else {
-        window.title = 'Nuevo documento';
+        document.title = 'Nuevo documento';
         //$get('[data-doclog]').html('');
     }    
 }
