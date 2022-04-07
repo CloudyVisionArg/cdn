@@ -55,7 +55,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         value: pValue,
         class: 'form-control',
         'data-td-target': '#' + pId + '_div',
-        'data-td-type': t,
+        'data-date-type': t,
     }).appendTo($dtp);
 
     var $sp = $('<span/>', {
@@ -96,13 +96,13 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 }
 
 function setDTPickerVal(pInput, pValue) {
-    var type = pInput.attr('type');
+    var type = pInput.attr('data-date-type');
     if (pValue != null && pValue != '') {
         if (type == 'date') {
             pInput.val(ISODate(pValue));
         } else if (type == 'time') {
             pInput.val(ISOTime(pValue));
-        } else if (type == 'datetime-local') {
+        } else {
             pInput.val(ISODate(pValue) + 'T' + ISOTime(pValue));
         }
     } else {
