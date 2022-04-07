@@ -5,7 +5,7 @@ Documentacion de componentes:
 
 Bootstrap: https://getbootstrap.com/docs/5.1/getting-started/introduction/
 Iconos: https://icons.getbootstrap.com
-Control DTPicker: https://getdatepicker.com/6/
+DTPicker: https://getdatepicker.com/6/
 Popper: https://popper.js.org/docs/v2/
 jQuery: https://api.jquery.com
 Numeral: http://numeraljs.com
@@ -385,4 +385,222 @@ function fillControls() {
 
     document.title = title;
     $('#title').html(title);
+
+    $get('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
+        var tf, textField, text;
+        var vf, valueField, value;
+        var xf, xmlField, xml;
+        var $el = $(el);
+
+        tf = $el.attr('data-textfield');
+        if (tf && tf != '[NULL]') {
+            var textField = getDocField(doc, tf);
+            if (textField) {
+                text = textField.Value;
+            } else {
+                text = null;
+                console.log('No se encontro el campo ' + tf.toUpperCase());
+            }
+        };
+
+        vf = $el.attr('data-valuefield');
+        if (vf && vf != '[NULL]') {
+            var valueField = getDocField(doc, vf);
+            if (valueField) {
+                value = valueField.Value;
+            } else {
+                value = null;
+                console.log('No se encontro el campo ' + vf.toUpperCase());
+            }
+        };
+
+        xf = $el.attr('data-xmlfield');
+        if (xf && xf != '[NULL]') {
+            var xmlField = getDocField(doc, xf);
+            if (xmlField) {
+                xml = xmlField.Value;
+            } else {
+                xml = null;
+                console.log('No se encontro el campo ' + xf.toUpperCase());
+            }
+        };
+
+        if (el.tagName == 'INPUT') {
+            
+            var type = $el.attr('type').toLowerCase();
+
+            if (type == 'text') {
+                var format = $el.attr('data-numeral');
+                if (format) {
+                    // Input numeric
+                    var n = numeral(text);
+                    if (n.value() != null) {
+                        $el.val(n.format(format));
+                    } else {
+                        $el.val('');
+                    }
+                } else if ($el.attr('data-td-target')) {
+                    // DTPicker
+                    setDTPickerVal($el, text);
+
+                } else if ($el.hasClass('maps-autocomplete')) {
+                    // Input maps
+                    setInputVal($el, text);
+
+                    // Setea el place (value) del Autocomplete
+                    el.initializing = true;
+                    el.mapsAutocomplete.set('place', undefined);
+                    el.initializing = undefined;
+
+                    if (value) {
+                        var places = new google.maps.places.PlacesService(maps.map);
+                        places.getDetails({ placeId: value.split(';')[0] }, function (place, status) {
+                            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                el.initializing = true;
+                                el.mapsAutocomplete.set('place', place);
+                                el.initializing = undefined;
+                            }
+                        });
+                    };
+        
+                } else {
+                    if (textField && textField.Type == 2) {
+                        if (text) {
+                            setInputVal($el, formatDate(text));
+                        } else {
+                            setInputVal($el, '');
+                        }
+                    } else {
+                        setInputVal($el, text);
+                    }
+                }
+
+            } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                setDTPickerVal($el, text);
+
+            } else if (type == 'checkbox') {
+                el.checked = (text == '1');
+
+            } else if (type == 'hidden') {
+                if (textField) {
+                    $el.val(text);
+                } else if (valueField) {
+                    $el.val(value);
+                } else if (xmlField) {
+                    $el.val(xml);
+                }
+            }
+
+        } else if (el.tagName == 'TEXTAREA') {
+            setInputVal($el, text);
+
+        } else if (el.tagName == 'SELECT') {
+            if ($el.attr('multiple')) {
+                var t = text ? text.split(';') : null;
+                var v = value ? value.split(';') : null;
+                setSelectVal($el, t, v);
+            } else {
+                setSelectVal($el, text, value);
+            }
+
+        } else if (el.tagName == 'DIV') {
+            if ($el.hasClass('text-editor')) {
+                app7.textEditor.get($el).setValue(text);
+            }
+
+        } else if (el.tagName == 'A') {
+            if ($el.attr('data-autocomplete')) {
+                $el.find('.item-after').html(text);
+            }
+        }
+    });
+
+    $get('[data-autocomplete]').each(function (ix, el) {
+        var $el = $(el);
+        var ac = app7.autocomplete.get($el);
+        var $li = $el.closest('li');
+        var $v = $li.find('[data-valuefield]');
+        var $x = $li.find('[data-xmlfield]');
+        if ($x.val()) {
+            try {
+                var $dom = $($.parseXML($x.val()));
+                var values = [];
+                $dom.find('item').each(function (ix, el) {
+                    var value = {};
+                    for (var i = 0; i < el.attributes.length; i++) {
+                        var attr = el.attributes[i];
+                        value[attr.name.toUpperCase()] = attr.value;
+                    };
+                    values.push(value);
+                });
+                ac.value = values;
+
+            } catch (err) {
+                console.log('Error setting autocomplete value: ' + errMsg(err));
+            }
+ 
+        } else if ($el.val() || $v.val()) {
+            var txts = ($el.val() != '' ? $el.val().split(';') : []);
+            var vals = ($v.val() != '' ? $v.val().split(';') : []);
+            var values = [];
+            var ts = ac.params.textSource.toUpperCase();
+            var vs = ac.params.valueSource.toUpperCase();
+            var i = 0;
+            while (txts[i] != undefined || vals[i] != undefined) {
+                var value = {};
+                if (ts && txts[i] != undefined) {
+                    value[ts] = txts[i];
+                }
+                if (vs && vals[i] != undefined) {
+                    value[vs] = txts[i];
+                }
+                values.push(value);
+                i++;
+            }
+            ac.value = values;
+ 
+        } else {
+            ac.value = [];
+        }
+        //ac.emit('change', ac.value);
+    })
+
+    // Inicializa los chats de Whatsapp
+    var $wappChats = $get('div.wapp-chat');
+    if ($wappChats.length > 0) {
+        include('whatsapp', function () {
+            wapp.ready(function () {
+                $wappChats.each(function () {
+                    var $this = $(this);
+                    setFieldAttr($this, 'data-internal-name');
+                    setFieldAttr($this, 'data-internal-number');
+                    setFieldAttr($this, 'data-external-name');
+                    setFieldAttr($this, 'data-external-number');
+                    wapp.init($this);
+
+                    function setFieldAttr(pCont, pAttr) {
+                        var field = pCont.attr(pAttr + '-field');
+                        if (field) {
+                            pCont.attr(pAttr, getDocField(doc, field).Value);
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    $get('[data-attachments]').each(function (ix, el) {
+        fillAttachments($(el));
+    });
+
+    // Evento AfterRender
+    var ev = getEvent('AfterRender');
+    if (ev) {
+        try {
+            eval(ev);
+        } catch (err) {
+            console.log('Error in AfterRender: ' + errMsg(err));
+        }
+    };
+
 }

@@ -47,12 +47,15 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         'data-td-target-toggle': 'nearest',
     }).appendTo($div);
 
+    var t = pType.toLowerCase();
+
     $('<input/>', {
         type: 'text',
         id: pId,
         value: pValue,
         class: 'form-control',
         'data-td-target': '#' + pId + '_div',
+        'data-td-type': t,
     }).appendTo($dtp);
 
     var $sp = $('<span/>', {
@@ -62,8 +65,6 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     }).appendTo($dtp);
 
     $sp.append('<i class="bi bi-calendar3"></i>');
-
-    var t = pType.toLowerCase();
 
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
@@ -92,4 +93,19 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     });
 
     return $div;
+}
+
+function setDTPickerVal(pInput, pValue) {
+    var type = pInput.attr('type');
+    if (pValue != null && pValue != '') {
+        if (type == 'date') {
+            pInput.val(ISODate(pValue));
+        } else if (type == 'time') {
+            pInput.val(ISOTime(pValue));
+        } else if (type == 'datetime-local') {
+            pInput.val(ISODate(pValue) + 'T' + ISOTime(pValue));
+        }
+    } else {
+        pInput.val('');
+    }
 }
