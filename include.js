@@ -78,7 +78,7 @@ function registeredScripts() {
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
 
-	// Backguard compatibility
+	// Backward compatibility
 	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 57 });
 	scripts.push({ id: 'qrcode', path: 'lib/qrcode.js', version: 55 });
 
@@ -221,7 +221,7 @@ function include() {
     }
 };
 
-// Backguard compatibility
+// Backward compatibility
 function includeJs() {
 	include.apply(null, arguments);
 }
