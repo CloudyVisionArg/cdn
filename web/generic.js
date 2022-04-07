@@ -13,6 +13,7 @@ Numeral: http://numeraljs.com
 
 var urlParams, fld_id, folder, doc_id, doc;
 var constrolsFolder, controls, controlsRights;
+var saving;
 
 var arrScripts = [];
 arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
@@ -33,7 +34,8 @@ include(arrScripts, function () {
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
 	Doors.RESTFULL.AuthToken = '83B26B91392CE31B04F03278A83DDB28B263967C021C74C261DE38BE072DE103';
 
-	DoorsAPI.islogged().then(
+    // todo: mensaje y terminar
+    DoorsAPI.islogged().then(
 		function (res) {
 		},
 		function (err) {
@@ -140,6 +142,7 @@ function getControlsRights(pControls) {
 	
 	var ctl;
 	if (controlsRights) {
+        // Mergea controlsRights en controls
 		var $cr = $(controlsRights);
 		var name, r, w;
 		$cr.find('item').each(function (ix, el) {
@@ -178,7 +181,7 @@ function renderPage() {
                 <i class="bi bi-printer-fill"></i>
                 <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
-            <button type="button" id="save" class="btn btn-primary" onclick="submitForm('save');">
+            <button type="button" id="save" class="btn btn-primary" onclick="saveDoc();">
                 <i class="bi bi-cloud-arrow-up-fill"></i>
                 <span class="d-none d-md-inline-block"> Guardar</span>
             </button>
@@ -615,8 +618,8 @@ function getEvent(pEvent) {
 function saveDoc() {
     if (saving) return;
     saving = true;
-    $navbar.find('.right .button').addClass('disabled');
-    app7.preloader.show();
+    //$navbar.find('.right .button').addClass('disabled');
+    //app7.preloader.show();
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
