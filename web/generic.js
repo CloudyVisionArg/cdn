@@ -445,7 +445,7 @@ function fillControls() {
 
                 } else if ($el.hasClass('maps-autocomplete')) {
                     // Input maps
-                    setInputVal($el, text);
+                    $el.val(text);
 
                     // Setea el place (value) del Autocomplete
                     el.initializing = true;
@@ -466,12 +466,12 @@ function fillControls() {
                 } else {
                     if (textField && textField.Type == 2) {
                         if (text) {
-                            setInputVal($el, formatDate(text));
+                            $el.val(formatDate(text));
                         } else {
-                            setInputVal($el, '');
+                            $el.val('');
                         }
                     } else {
-                        setInputVal($el, text);
+                        $el.val(text);
                     }
                 }
 
@@ -492,7 +492,7 @@ function fillControls() {
             }
 
         } else if (el.tagName == 'TEXTAREA') {
-            setInputVal($el, text);
+            $el.val(text);
 
         } else if (el.tagName == 'SELECT') {
             if ($el.attr('multiple')) {
