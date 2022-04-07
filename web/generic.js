@@ -332,6 +332,7 @@ function renderPage() {
         }
     });
     
+    fillControls();
 }
 
 function getDefaultControl(pField) {
@@ -362,4 +363,22 @@ function getDefaultControl(pField) {
     $input.attr('data-textfield', pField.Name.toLowerCase())
 
     return $ret;
+}
+
+function fillControls() {
+    if (!doc.IsNew) {
+        var title = getDocField(doc, 'subject').Value;
+        if (!title) title = 'Doc Id ' + doc.DocId;
+        window.title = title;
+
+        /*
+        getDocLog(doc_id, function (table) {
+            $get('[data-doclog]').html(table);
+        });
+        */
+
+    } else {
+        window.title = 'Nuevo documento';
+        //$get('[data-doclog]').html('');
+    }    
 }
