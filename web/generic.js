@@ -604,3 +604,10 @@ function fillControls() {
     };
 
 }
+
+function getEvent(pEvent) {
+    if (controls) {
+        var ev = controls.find(el => el['NAME'] && el['NAME'].toUpperCase() == pEvent.toUpperCase());
+        if (ev) return ev['SCRIPTBEFORERENDER'];
+    }
+}
