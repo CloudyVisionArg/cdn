@@ -611,3 +611,225 @@ function getEvent(pEvent) {
         if (ev) return ev['SCRIPTBEFORERENDER'];
     }
 }
+
+function saveDoc() {
+    if (saving) return;
+    saving = true;
+    $navbar.find('.right .button').addClass('disabled');
+    app7.preloader.show();
+
+    $get('[data-textfield]').each(function (ix, el) {
+        var $el = $(el);
+        var field = getDocField(doc, $el.attr('data-textfield'));
+
+        if (field && field.Updatable) {
+            if (el.tagName == 'INPUT') {
+                var type = $el.attr('type').toLowerCase();
+                if (type == 'text') {
+                    if ($el.attr('data-numeral') || field.Type == 3) {
+                        field.Value = numeral($el.val()).value();
+                    } else if (field.Type == 2) {
+                        var mom = moment($el.val(), 'L LT');
+                        if (mom.isValid()) {
+                            field.Value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
+                        } else {
+                            field.Value = null;
+                        }
+                    } else {
+                        field.Value = $el.val();
+                    };
+
+                } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                    field.Value = getDTPickerVal($el);
+
+                } else if (type == 'checkbox') {
+                    field.Value = el.checked ? '1' : '0';
+
+                } else if (type == 'hidden') {
+                    field.Value = $el.val();
+                }
+
+            } else if (el.tagName == 'SELECT') {
+                var aux = getSelectText($el);
+                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+
+            } else if (el.tagName == 'DIV') {
+                if ($el.hasClass('text-editor')) {
+                    field.Value = app7.textEditor.get($el).getValue();
+                }
+
+            } else if (el.tagName == 'A') {
+                if ($el.attr('data-autocomplete')) {
+                    field.Value = $el.find('.item-after').html();
+                }
+            } else if(el.tagName == 'TEXTAREA') {
+                field.Value = $el.val();
+            }
+        }
+    });
+
+    $get('[data-valuefield]').each(function (ix, el) {
+        var $el = $(el);
+        var field = getDocField(doc, $el.attr('data-valuefield'));
+
+        if (field && field.Updatable) {
+            if (el.tagName == 'SELECT') {
+                var aux = getSelectVal($el);
+                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+
+            } else if (el.tagName == 'INPUT') {
+                if ($el.hasClass('maps-autocomplete')) {
+                    field.Value = $el.attr('data-place');
+
+                } else {
+                    var type = $el.attr('type').toLowerCase();
+                    if (type == 'hidden') {
+                        if (field.Type == 3) {
+                            field.Value = numeral($el.val()).value();
+                        } else {
+                            field.Value = $el.val();
+                        };
+                    }
+                }
+            }
+        }
+    });
+
+    $get('[data-xmlfield]').each(function (ix, el) {
+        var $el = $(el);
+        var field = getDocField(doc, $el.attr('data-xmlfield'));
+
+        if (field && field.Updatable) {
+            if (el.tagName == 'INPUT') {
+                var type = $el.attr('type').toLowerCase();
+                if (type == 'hidden') {
+                    field.Value = $el.val();
+                }
+            }
+        }
+    });
+
+    // Evento BeforeSave
+    var ev = getEvent('BeforeSave');
+    if (ev) {
+        try {
+            eval(ev);
+        } catch (err) {
+            console.log('Error in BeforeSave: ' + errMsg(err));
+        }
+    };
+
+    DoorsAPI.documentSave(doc).then(
+        function (doc2) {
+            doc = doc2;
+            doc_id = getDocField(doc, 'doc_id').Value;
+
+            saveAtt().then(
+                function (res) {
+                    // Evento AfterSave
+                    var ev = getEvent('AfterSave');
+                    if (ev) {
+                        try {
+                            eval(ev);
+                        } catch (err) {
+                            console.log('Error in AfterSave: ' + errMsg(err));
+                        }
+                    };
+
+                    saving = false;
+                    app7.preloader.hide();
+                    $navbar.find('.right .button').removeClass('disabled');
+                    toast('Cambios guardados');
+                    fillControls();
+                },
+                errMgr
+            );
+        },
+        errMgr
+    );
+
+    function errMgr(pErr) {
+        saving = false;
+        app7.preloader.hide();
+        $navbar.find('.right .button').removeClass('disabled');
+        if (Array.isArray(pErr)) {
+            if (pErr.length == 1) {
+                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result, 5000);
+
+            } else {
+                // Error de saveAtt
+                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion', 5000);
+            }
+        } else {
+            toast(errMsg(pErr), 5000);
+        }
+        console.log(pErr);
+    }
+}
+
+function saveAtt() {
+    return new Promise(function (resolve, reject) {
+        var calls = [];
+        var $attsToSave = $get('li[data-attachments] [data-att-action]');
+
+        if ($attsToSave.length == 0) {
+            resolve('OK');
+            
+        } else {
+            $attsToSave.each(function () {
+                var $this = $(this);
+                var tag = $this.closest('li.accordion-item').attr('data-attachments');
+                var attName = $this.attr('data-att-name');
+                var attAction = $this.attr('data-att-action');
+                
+                beginCall(attName, attAction);
+                
+                if (attAction == 'save') {
+                    getFile($this.attr('data-att-url')).then(
+                        function (file) {
+                            var reader = new FileReader();
+                            reader.onloadend = function (e) {
+                                var blobData = new Blob([this.result], { type: file.type });
+                                var formData = new FormData();
+                                // todo: como subimos el Tag?
+                                formData.append('attachment', blobData, file.name);
+                                DoorsAPI.attachmentsSave(doc_id, formData).then(
+                                    function (res) {
+                                        endCall(attName, 'OK');
+                                    },
+                                    function (err) {
+                                        endCall(attName, 'attachmentsSave error: ' + errMsg(err));
+                                    }
+                                )
+                            };
+                            reader.readAsArrayBuffer(file);
+    
+                        },
+                        function (err) {
+                            endCall(attName, 'file error: ' + errMsg(err));
+                        }
+                    )
+                    
+                } else if (attAction == 'delete') {
+                    // todo: borrar $this.attr('data-att-id')
+                    setTimeout(function () { endCall(attName, 'No implementado') }, 0);
+                }
+            
+                function beginCall(pName, pAction) {
+                    calls.push({ name: pName, action: pAction, result: 'pending' });
+                }
+                
+                function endCall(pName, pResult) {
+                    calls.find(el => el.name == pName).result = pResult;
+                    if (!calls.find(el => el.result == 'pending')) {
+                        if (calls.find(el => el.result != 'OK')) {
+                            reject(calls.filter(el => el.result != 'OK'));
+                        } else {
+                            resolve('OK');
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
