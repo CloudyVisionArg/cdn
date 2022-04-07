@@ -1,6 +1,15 @@
 'use strict';
 
-// Para buscar iconos: https://icons.getbootstrap.com
+/*
+Documentacion de componentes:
+
+Bootstrap: https://getbootstrap.com/docs/5.1/getting-started/introduction/
+Iconos: https://icons.getbootstrap.com
+Control DTPicker: https://getdatepicker.com/6/
+Popper: https://popper.js.org/docs/v2/
+jQuery: https://api.jquery.com
+Numeral: http://numeraljs.com
+*/
 
 var urlParams, fld_id, folder, doc_id, doc;
 var constrolsFolder, controls, controlsRights;
@@ -335,8 +344,7 @@ function getDefaultControl(pField) {
             $ret = newInputText(pField.Name, label);
             $input = $ret.find('input');
         } else {
-            $ret = newInputText(pField.Name, label);
-            //$ret = getTextarea(pField.Name, label);
+            $ret = getTextarea(pField.Name, label);
             $input = $ret.find('textarea');
         }
 

@@ -15,6 +15,22 @@ function newInputText(pId, pLabel, pValue) {
     return $div;
 }
 
+function newTextarea(pId, pLabel, pValue) {
+    var $div = $('<div/>', {
+        class: 'mt-3',
+    });
+
+    $div.append('<label class="form-label">' + pLabel + '</label>');
+
+    $('<textarea/>', {
+        class: 'form-control',
+        id: pId,
+        value: pValue,
+    }).appendTo($div);
+
+    return $div;
+}
+
 function newDTPicker(pId, pLabel, pType, pValue) {
     // pType: date, time, datetime-local
 
@@ -48,16 +64,6 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     $sp.append('<i class="bi bi-calendar3"></i>');
 
     var t = pType.toLowerCase();
-    var comp = {
-        decades: (t != 'time'),
-        year: (t != 'time'),
-        month: (t != 'time'),
-        date: (t != 'time'),
-        hours: (t != 'date'),
-        minutes: (t != 'date'),
-        seconds: false,
-        useTwentyfourHour: true,
-    };
 
     new tempusDominus.TempusDominus($dtp[0], {
         display: {
@@ -72,7 +78,16 @@ function newDTPicker(pId, pLabel, pType, pValue) {
                 clear: 'bi bi-trash',
                 close: 'bi bi-x',
             },
-            components: comp,
+            components: {
+                decades: (t != 'time'),
+                year: (t != 'time'),
+                month: (t != 'time'),
+                date: (t != 'time'),
+                hours: (t != 'date'),
+                minutes: (t != 'date'),
+                seconds: false,
+                useTwentyfourHour: true,
+            },
         }
     });
 
