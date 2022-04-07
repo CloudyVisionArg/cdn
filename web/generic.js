@@ -344,7 +344,7 @@ function getDefaultControl(pField) {
             $ret = newInputText(pField.Name, label);
             $input = $ret.find('input');
         } else {
-            $ret = getTextarea(pField.Name, label);
+            $ret = newTextarea(pField.Name, label);
             $input = $ret.find('textarea');
         }
 
