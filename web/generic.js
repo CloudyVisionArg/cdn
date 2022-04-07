@@ -366,10 +366,11 @@ function getDefaultControl(pField) {
 }
 
 function fillControls() {
+    var title;
+
     if (!doc.IsNew) {
-        var title = getDocField(doc, 'subject').Value;
+        title = getDocField(doc, 'subject').Value;
         if (!title) title = 'Doc Id ' + doc.DocId;
-        document.title = title;
 
         /*
         getDocLog(doc_id, function (table) {
@@ -378,7 +379,10 @@ function fillControls() {
         */
 
     } else {
-        document.title = 'Nuevo documento';
+        title = 'Nuevo documento';
         //$get('[data-doclog]').html('');
     }    
+
+    document.title = title;
+    $('#title').html(title);
 }
