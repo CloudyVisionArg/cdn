@@ -56,7 +56,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         class: 'form-control',
         'data-td-target': '#' + pId + '_div',
         'data-date-type': t,
-        readonly: true,
+        disabled: true,
     }).appendTo($dtp);
 
     var $sp = $('<span/>', {
