@@ -28,8 +28,11 @@ arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 arrScripts.push({ id: 'tempus-dominus', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js', depends: ['popper'] });
 arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css' });
+arrScripts.push({ id: 'lib-moment' });
 
 include(arrScripts, function () {
+    debugger;
+    
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
 	Doors.RESTFULL.AuthToken = '83B26B91392CE31B04F03278A83DDB28B263967C021C74C261DE38BE072DE103';
@@ -43,6 +46,7 @@ include(arrScripts, function () {
 		}
 	);
 
+    // todo: Reemplazar pot Intl
     // todo: setar segun el LNG_ID
     numeral.locale('es'); // http://numeraljs.com/
     numeral.defaultFormat('0,0.[00]');
