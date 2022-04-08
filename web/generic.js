@@ -5,7 +5,7 @@ Documentacion de componentes:
 
 Bootstrap: https://getbootstrap.com/docs/5.1/getting-started/introduction/
 Iconos: https://icons.getbootstrap.com
-DTPicker: https://getdatepicker.com/6/
+DTPicker: https://getdatepicker.com/5-4/
 Popper: https://popper.js.org/docs/v2/
 jQuery: https://api.jquery.com
 Numeral: http://numeraljs.com
@@ -26,8 +26,8 @@ arrScripts.push({ id: 'web-javascript', version: 0 });
 arrScripts.push({ id: 'web-controls' });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
-arrScripts.push({ id: 'tempus-dominus', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@v6-beta4/dist/js/tempus-dominus.js', depends: ['popper'] });
-arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@v6-beta4/dist/css/tempus-dominus.css' });
+arrScripts.push({ id: 'tempus-dominus', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js', depends: ['popper'] });
+arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
 arrScripts.push({ id: 'lib-moment' });
 
 include(arrScripts, function () {
