@@ -56,7 +56,6 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         class: 'form-control',
         'data-td-target': '#' + pId + '_div',
         'data-date-type': t,
-        disabled: true,
     }).appendTo($dtp);
 
     var $sp = $('<span/>', {
@@ -111,5 +110,16 @@ function setDTPickerVal(pInput, pValue) {
         }
     } else {
         pInput.val('');
+    }
+}
+
+function inputReadonly(pInput, pReadonly) {
+    debugger;
+    if (pReadonly) {
+        pInput.attr({ 'readonly': 'readonly' });
+        if (pInput[0].dtpicker) pInput[0].dtpicker.disable; 
+    } else {
+        pInput.removeAttr('readonly');
+        if (pInput[0].dtpicker) pInput[0].dtpicker.enable; 
     }
 }
