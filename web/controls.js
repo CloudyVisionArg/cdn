@@ -96,15 +96,14 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 }
 
 function setDTPickerVal(pInput, pValue) {
-    debugger;
     var type = pInput.attr('data-date-type');
     if (pValue != null && pValue != '') {
         if (type == 'date') {
-            pInput.val(ISODate(pValue));
+            pInput.val(moment(pValue).format('L'));
         } else if (type == 'time') {
-            pInput.val(ISOTime(pValue));
+            pInput.val(moment(pValue).format('LT'));
         } else {
-            pInput.val(ISODate(pValue) + 'T' + ISOTime(pValue));
+            pInput.val(moment(pValue).format('L LT'));
         }
     } else {
         pInput.val('');
