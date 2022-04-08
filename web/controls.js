@@ -67,6 +67,9 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     $sp.append('<i class="bi bi-calendar3"></i>');
 
     $dtp[0].dtpicker = new tempusDominus.TempusDominus($dtp[0], {
+        localization: {
+            locale: 'es',
+        },
         display: {
             icons: {
                 time: 'bi bi-clock',
