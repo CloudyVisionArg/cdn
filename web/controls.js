@@ -93,6 +93,8 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         }
     });
 
+    debugger;
+
     return $div;
 }
 
