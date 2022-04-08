@@ -23,7 +23,7 @@ arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootst
 arrScripts.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
 arrScripts.push({ id: 'app7-doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'web-javascript', version: 0 });
-arrScripts.push({ id: 'web-controls', version: 0 });
+arrScripts.push({ id: 'web-controls' });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 arrScripts.push({ id: 'tempus-dominus', src: 'https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js', depends: ['popper'] });

@@ -96,6 +96,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 }
 
 function setDTPickerVal(pInput, pValue) {
+    debugger;
     var type = pInput.attr('data-date-type');
     if (pValue != null && pValue != '') {
         if (type == 'date') {
