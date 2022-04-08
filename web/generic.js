@@ -54,8 +54,6 @@ include(arrScripts, function () {
 	fld_id = urlParams.get('fld_id');
 	doc_id = urlParams.get('doc_id');
 	
-    debugger;
-
 	if (fld_id) {
 		DoorsAPI.foldersGetById(fld_id).then(
 			function (res) {
