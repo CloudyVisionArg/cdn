@@ -31,8 +31,6 @@ arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdn.jsdelivr.net/gh/Eo
 arrScripts.push({ id: 'lib-moment' });
 
 include(arrScripts, function () {
-    debugger;
-
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
 	Doors.RESTFULL.AuthToken = '83B26B91392CE31B04F03278A83DDB28B263967C021C74C261DE38BE072DE103';
@@ -56,6 +54,8 @@ include(arrScripts, function () {
 	fld_id = urlParams.get('fld_id');
 	doc_id = urlParams.get('doc_id');
 	
+    debugger;
+
 	if (fld_id) {
 		DoorsAPI.foldersGetById(fld_id).then(
 			function (res) {
