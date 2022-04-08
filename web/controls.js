@@ -89,6 +89,11 @@ function newDTPicker(pId, pLabel, pType, pValue) {
                 seconds: false,
                 useTwentyfourHour: true,
             },
+            buttons: {
+                today: true,
+                close: true,
+                clear: true,
+            }
         }
     });
 
