@@ -70,7 +70,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         'data-toggle': 'datetimepicker',
     }).appendTo($dtp);
 
-    $sp.append('<i class="bi bi-calendar3"></i>');
+    $sp.append('<i class="bi bi-' + (t == 'time' ? 'clock': 'calendar3') + '"></i>');
 
     $dtp.datetimepicker({
         locale: 'es',
