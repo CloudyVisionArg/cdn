@@ -36,7 +36,7 @@ errMsg(pErr)
 */
 
 spinner = $('<div/>', {
-	style: 'position:absolute; top:0; width: 100vw; height: 100vh; z-index: 999; background-color: rgb(255,255,255,0.2); display: none;',
+	style: 'position:absolute; top:0; width: 100vw; height: 100vh; z-index: 999; background-color: rgb(255,255,255,0.5); display: none;',
 }).appendTo($('body'));
 spinner.append('<div class="spinner-border"></div>');
 
