@@ -376,6 +376,10 @@ function printForm() {
     var toast = new bootstrap.Toast('#t1')
     toast.show()
 
+    $('#t1').on('hidden.bs.toast', function () {
+        debugger;
+    })
+
     setTimeout(function () {
         var toast2 = new bootstrap.Toast('#t2')
         toast2.show()
