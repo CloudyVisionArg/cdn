@@ -382,7 +382,7 @@ function getDefaultControl(pField) {
 }
 
 function renderControls(pCont, pParent) {
-    var ctl, type, $this, domAttr, label, $input, aux, bsctl;
+    var $row, $col, ctl, type, $this, domAttr, label, $input, aux, bsctl;
     var tf, textField, vf, valueField;
 
     var subset = controls.filter(function (el) {
@@ -432,6 +432,10 @@ function renderControls(pCont, pParent) {
             }
         };
 
+        $row = getRow($row, pCont);
+        $col = $('<div/>', {
+            class: 'col-12 col-md-6 form-group',
+        }).appendTo($row);
 
         // todo: revisar que esten soportadas todas las properties de controls3
 
@@ -892,7 +896,7 @@ function renderControls(pCont, pParent) {
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
 
-        if ($this) $this.appendTo(pCont);
+        if ($this) $this.appendTo($col);
     }
 }
 
