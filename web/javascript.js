@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+spinner
 toast(pText, pOptions)
 formatDate(pDate)
 objPropCI(pObj, pProp, pCI)
@@ -35,6 +36,13 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+/*
+Muestra/oculta un spinner que tapa toda la pagina
+Requiere bootstrap 5
+
+spinner.show();
+spinner.hide();
+*/
 spinner = $('<div/>', {
 	style: 'position:absolute; top:0; width: 100vw; height: 100vh; z-index: 9999; background-color: rgb(255,255,255,0.5); display: none;',
 }).appendTo($('body'));
