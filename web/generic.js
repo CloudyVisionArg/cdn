@@ -377,7 +377,7 @@ function fillControls() {
 
     if (!doc.IsNew) {
         title = getDocField(doc, 'subject').Value;
-        if (!title) title = 'Doc Id ' + doc.DocId;
+        if (!title) title = 'Doc #' + doc.DocId;
 
         /*
         getDocLog(doc_id, function (table) {
