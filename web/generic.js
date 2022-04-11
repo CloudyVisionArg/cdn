@@ -356,7 +356,7 @@ function renderPage() {
     </div>
   </div>
 
-  <div id="t1" class="toast">
+  <div id="t2" class="toast">
     <div class="toast-header">
       <img src="..." class="rounded me-2" alt="...">
       <strong class="me-auto">Bootstrap</strong>
