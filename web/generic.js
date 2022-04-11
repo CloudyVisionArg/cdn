@@ -261,7 +261,7 @@ function renderPage() {
 
         // tabHeader
 
-        var $tab = $cont.find('#tabHeader');
+        $tab = $cont.find('#tabHeader');
         $row = undefined;
 
         doc.CustomFields.forEach(field => {
@@ -284,17 +284,6 @@ function renderPage() {
             getDefaultControl(field).appendTo($col);
         })
 
-        function getRow(pRow, pCont) {
-            if (pRow && pRow.children().length < 2) {
-                return pRow;
-            } else {
-                return $('<div/>', {
-                    class: 'row',
-                }).appendTo(pCont);
-            }
-        }
-
-
         /*
         // tabHist
 
@@ -309,7 +298,7 @@ function renderPage() {
         */
 
     } else {
-/*
+
         // CON CONTROLES
 
         // Evento BeforeRender
@@ -321,7 +310,7 @@ function renderPage() {
                 console.log('Error in BeforeRender: ' + errMsg(err));
             }
         };
-*/
+
     };
 
     // Validacion de numero
@@ -337,6 +326,16 @@ function renderPage() {
     });
     
     fillControls();
+}
+
+function getRow(pRow, pCont) {
+    if (pRow && pRow.children().length < 2) {
+        return pRow;
+    } else {
+        return $('<div/>', {
+            class: 'row',
+        }).appendTo(pCont);
+    }
 }
 
 function printForm() {
