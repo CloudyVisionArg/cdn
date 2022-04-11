@@ -334,8 +334,7 @@ function renderPage() {
             $this.val(n.format($this.attr('data-numeral')));
         } else {
             $this.val('');
-            // todo: cambiar por toast
-            alert('Ingrese un numero valido');
+            toast('Ingrese un numero valido');
         }
     });
     
@@ -344,57 +343,6 @@ function renderPage() {
 
 function printForm() {
     toast('holaaaa', {delay: 1000});
-
-    setTimeout(function () {
-        toast('chauuu');
-    }, 2000)
-}
-
-function toast(pText, pOptions) {
-    var opt = {
-        animation: true,
-        autohide: true,
-        delay: 5000,
-        title: 'Cloudy CRM',
-        subtitle: '',
-        icon: 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png',
-    }
-    Object.assign(opt, pOptions);
-    debugger;
-
-    var $cont = $('.toast-container');
-    if ($cont.length == 0) {
-        $cont = $('<div/>', {
-            class: 'toast-container position-absolute p-3 top-0 end-0',
-            style: 'z-index: 5000;',
-        }).appendTo($('body'));
-    }
-
-    var $toast = $('<div/>', {
-        class: 'toast',
-    }).appendTo($cont);
-
-    var $th = $('<div/>', {
-        class: 'toast-header',
-    }).appendTo($toast);
-
-    $th.append('<img src="' + opt.icon + '" class="rounded me-2" alt="...">')
-    $th.append('<strong class="me-auto">' + opt.title + '</strong>');
-    $th.append('<small class="text-muted">' + opt.subtitle + '</small>');
-    $th.append('<button type="button" class="btn-close" data-bs-dismiss="toast"></button>');
-
-    var $tb = $('<div/>', {
-        class: 'toast-body',
-    }).appendTo($toast);
-
-    $tb.append(pText);
-
-    var t = new bootstrap.Toast($toast, opt);
-    $toast.on('hidden.bs.toast', function () {
-        $(this).remove();
-    });
-
-    t.show()
 }
 
 function getDefaultControl(pField) {
@@ -795,7 +743,7 @@ function saveDoc() {
                     saving = false;
                     //app7.preloader.hide();
                     //$navbar.find('.right .button').removeClass('disabled');
-                    //toast('Cambios guardados');
+                    toast('Cambios guardados');
                     fillControls();
                 },
                 errMgr
@@ -810,14 +758,14 @@ function saveDoc() {
         //$navbar.find('.right .button').removeClass('disabled');
         if (Array.isArray(pErr)) {
             if (pErr.length == 1) {
-                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result, 5000);
+                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result);
 
             } else {
                 // Error de saveAtt
-                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion', 5000);
+                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion');
             }
         } else {
-            //toast(errMsg(pErr), 5000);
+            toast(errMsg(pErr));
         }
         console.log(pErr);
     }

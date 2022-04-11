@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+toast(pText, pOptions)
 formatDate(pDate)
 objPropCI(pObj, pProp, pCI)
 getCookie(pName)
@@ -33,6 +34,52 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+// Requiere bootstrap 5
+function toast(pText, pOptions) {
+    var opt = {
+        autohide: true,
+        delay: 5000,
+        title: 'Cloudy CRM',
+        subtitle: '',
+        icon: 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png',
+    }
+    Object.assign(opt, pOptions);
+
+    var $cont = $('.toast-container');
+    if ($cont.length == 0) {
+        $cont = $('<div/>', {
+            class: 'toast-container position-absolute p-3 top-0 end-0',
+            style: 'z-index: 5000;',
+        }).appendTo($('body'));
+    }
+
+    var $toast = $('<div/>', {
+        class: 'toast',
+    }).appendTo($cont);
+
+    var $th = $('<div/>', {
+        class: 'toast-header',
+    }).appendTo($toast);
+
+    $th.append('<img src="' + opt.icon + '" class="rounded me-2">')
+    $th.append('<strong class="me-auto">' + opt.title + '</strong>');
+    $th.append('<small class="text-muted">' + opt.subtitle + '</small>');
+    $th.append('<button type="button" class="btn-close" data-bs-dismiss="toast"></button>');
+
+    var $tb = $('<div/>', {
+        class: 'toast-body',
+    }).appendTo($toast);
+
+    $tb.append(pText);
+
+    var t = new bootstrap.Toast($toast, opt);
+    $toast.on('hidden.bs.toast', function () {
+        $(this).remove();
+    });
+
+    t.show()
+}
 
 function formatDate(pDate) {
     var dt, ret;
