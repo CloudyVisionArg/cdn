@@ -351,6 +351,14 @@ function printForm() {
 }
 
 function toast(pText, pOptions) {
+    var opt = {
+        animation: true,
+        autohide: true,
+        delay: 5000,
+    }
+    Object.assign(opt, pOptions);
+    debugger;
+
     var $cont = $('.toast-container');
     if ($cont.length == 0) {
         $cont = $('<div/>', {
