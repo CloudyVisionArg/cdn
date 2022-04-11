@@ -6,9 +6,9 @@ Documentacion de componentes:
 Bootstrap: https://getbootstrap.com/docs/5.1/getting-started/introduction/
 Iconos: https://icons.getbootstrap.com
 DTPicker: https://getdatepicker.com/5-4/
-Popper: https://popper.js.org/docs/v2/
 jQuery: https://api.jquery.com
 Numeral: http://numeraljs.com
+Moment: https://momentjs.com
 */
 
 var urlParams, fld_id, folder, doc_id, doc;
@@ -17,8 +17,7 @@ var saving;
 
 var arrScripts = [];
 arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
-arrScripts.push({ id: 'popper', src: 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js' });
-arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js', depends: ['popper'] });
+arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
 arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
 arrScripts.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
 arrScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
