@@ -311,6 +311,11 @@ function renderPage() {
             }
         };
 
+        // Membrete
+
+        renderControls($cont, '[NULL]');
+
+
     };
 
     // Validacion de numero
@@ -374,6 +379,521 @@ function getDefaultControl(pField) {
     $input.attr('data-textfield', pField.Name.toLowerCase())
 
     return $ret;
+}
+
+function renderControls(pCont, pParent) {
+    var ctl, type, $this, domAttr, label, $input, aux, bsctl;
+    var tf, textField, vf, valueField;
+
+    var subset = controls.filter(function (el) {
+        return el['PARENT'] == pParent && el['CONTROL'].toUpperCase() != 'TAB' &&
+            el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 && el['R'] != '0'
+    });
+
+    for (var i = 0; i < subset.length; i++) {
+        ctl = subset[i];
+        type = ctl['CONTROL'].toUpperCase();
+        domAttr = undefined;
+        if (ctl['XMLATTRIBUTES']) {
+            try {
+                domAttr = $.parseXML(ctl['XMLATTRIBUTES']);
+            } catch (err) {
+                console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + errMsg(err));
+            }
+        };
+        ctl.domAttr = domAttr;
+        ctl.attr = function (attribute) {
+            if (this.domAttr) return this.domAttr.documentElement.getAttribute(attribute);
+        };
+
+        label = ctl['DESCRIPTION'] ? ctl['DESCRIPTION'] : ctl['NAME'];
+        $this = undefined;
+        $input = undefined;
+        bsctl = undefined;
+
+        tf = undefined;
+        textField = undefined;
+        vf = undefined;
+        valueField = undefined;
+
+        var tf = ctl.attr('textfield');
+        if (tf && tf != '[NULL]') {
+            var textField = getDocField(doc, tf);
+            if (!textField) {
+                console.log('No se encontro el campo ' + tf.toUpperCase());
+            }
+        };
+
+        var vf = ctl.attr('valuefield');
+        if (vf && vf != '[NULL]') {
+            var valueField = getDocField(doc, vf);
+            if (!valueField) {
+                console.log('No se encontro el campo ' + vf.toUpperCase());
+            }
+        };
+
+
+        // todo: revisar que esten soportadas todas las properties de controls3
+
+        // -- Textbox --
+
+        if (type == 'TEXTBOX') {
+            if (ctl.attr('mode') == '2') { // Multiline
+                $this = newTextarea(ctl['NAME'], label);
+                $input = $this.find('textarea');
+
+            } else {
+                $this = newInputText(ctl['NAME'], label);
+                $input = $this.find('input');
+                if (ctl.attr('mode') == '3') $input.attr('type', 'password');
+                if (ctl.attr('isnumber') == '1') $input.attr('data-numeral', numeral.options.defaultFormat);
+            }
+
+            $input.attr('data-textfield', tf);
+
+            if (ctl.attr('maxlength')) {
+                $input.attr('maxlength', ctl.attr('maxlength'));
+            } else if (textField && textField.Type == 1 && textField.Length > 0) {
+                $input.attr('maxlength', textField.Length);
+            }
+
+            if (textField && textField.Type == 3) {
+                $input.attr('data-numeral', numeral.options.defaultFormat)
+            }
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                inputReadonly($input, true);
+            }
+
+            if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
+                f7ctl = inputDataList($input, {
+                    folder: fld_id,
+                    field: tf
+                });
+            }
+
+            if (ctl.attr('buttons') == 'phone') addPhoneButtons($this);
+            if (ctl.attr('buttons') == 'email') addEmailButton($this);
+
+
+        // -- DTPicker --
+
+        } else if (type == 'DTPICKER') {
+            var mode = 'date';
+            if (ctl.attr('mode') == '2') {
+                mode = 'datetime-local';
+            } else if (ctl.attr('mode') == '3') {
+                mode = 'time';
+            }
+            $this = newDTPicker(ctl['NAME'], label, mode)
+            $input = $this.find('input');
+            $input.attr('data-textfield', tf);
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                inputReadonly($input, true);
+            }
+
+
+        // -- HtmlRaw --
+
+        } else if (type == 'HTMLRAW') {
+            $this = $('<li/>')
+            $('<div/>', {
+                id: ctl['NAME'],
+                name: ctl['NAME'],
+            }).appendTo($this);
+
+
+        // -- Select --
+
+        } else if (type == 'SELECT') {
+            /*
+            $this = getSmartSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
+            $input = $this.find('select');
+            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('.smart-select').addClass('disabled');
+            }
+            */
+
+
+        // -- SelectFolder --
+
+        } else if (type == 'SELECTFOLDER') {
+            /*
+            $this = getSmartSelect(ctl['NAME'], label);
+            $input = $this.find('select');
+            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('.smart-select').addClass('disabled');
+            }
+
+            $input.attr('data-textfield', tf);
+            $input.attr('data-valuefield', vf);
+
+            $input.attr('data-fill', '1');
+            $input.attr('data-fill-folder', ctl.attr('searchfolder'));
+            $input.attr('data-fill-fields', ctl.attr('fieldlist'));
+            $input.attr('data-fill-formula', ctl.attr('searchfilter'));
+            $input.attr('data-fill-order', ctl.attr('searchorder'));
+            $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
+
+            if (ctl.attr('searchbar') == '1') {
+                f7ctl.params.openIn = 'popup';
+                f7ctl.params.searchbar = true;
+            }
+            */
+
+
+        // -- SelectKeywords --
+
+        } else if (type == 'SELECTKEYWORDS') {
+            /*
+            $this = getSmartSelect(ctl['NAME'], label);
+            $input = $this.find('select');
+            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('.smart-select').addClass('disabled');
+            }
+
+            $input.attr('data-textfield', tf);
+            $input.attr('data-valuefield', vf);
+
+            $input.attr('data-fill', '1');
+            $input.attr('data-fill-folder', ctl.attr('folder'));
+            $input.attr('data-fill-fields', 'DESCRIPTION, ID');
+            $input.attr('data-fill-formula', 'TYPE = ' + sqlEncode(ctl.attr('keywordtype'), 1) +
+                ' and (DISABLED = 0 OR DISABLED is NULL)');
+            aux = ctl.attr('order');
+            $input.attr('data-fill-order', (aux ? aux : 'DESCRIPTION'));
+            $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
+            /*
+            Si hacen falta los XFIELD agregarlos en el SBF asi:
+                $input.attr('data-fill-fields', $input.attr('data-fill-fields') + ', xfield1') 
+            */
+
+            /*
+            if (ctl.attr('searchbar') == '1') {
+                f7ctl.params.openIn = 'popup';
+                f7ctl.params.searchbar = true;
+            }
+            */
+
+
+        // -- DocumentLog --
+
+        } else if (type == 'DOCUMENTLOG') {
+            /*
+            $this = $('<li/>');
+            
+            $('<div/>', {
+                id: ctl['NAME'],
+                name: ctl['NAME'],
+                class: 'block',
+                'data-doclog': 1,
+            }).append('Cargando...').appendTo($this);
+            */
+
+
+        // -- HtmlArea --
+
+        } else if (type == 'HTMLAREA') {
+            /*
+            $this = getTextEditor(ctl['NAME'], label);
+            $input = $this.find('.text-editor');
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $input.addClass('disabled');
+            }
+
+            $input.attr('data-textfield', tf);
+            */
+
+
+        // -- Checkbox --
+
+        } else if (type == 'CHECKBOX') {
+            /*
+            $this = getToggle(ctl['NAME'], label);
+            $input = $this.find('input');
+            f7ctl = app7.smartSelect.get($this.find('.toggle'));
+
+            $input.attr('data-textfield', tf);
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('.toggle').addClass('disabled');
+            }
+            */
+
+
+        // -- Hidden --
+
+        } else if (type == 'HIDDEN') {
+            $this = $('<input/>', {
+                type: 'hidden',
+                name: ctl['NAME'],
+                id: ctl['NAME'],
+                'data-textfield': tf
+            })
+
+        
+        // -- Fieldset --
+
+        } else if (type == 'FIELDSET') {
+            /*
+            $this = getCollapsible(ctl['NAME'], ctl['DESCRIPTION']);
+
+            var $ul = $('<ul/>')
+            renderControls($ul, ctl['NAME']);
+
+            if ($ul.html()) {
+                $('<div/>', {
+                    class: 'list no-hairlines-md',
+                    style: 'margin-top: 0;',
+                }).append($ul).appendTo($this.find('.accordion-item-content'));
+            }
+            */
+
+
+        // -- SelectMultiple --
+
+        } else if (type == 'SELECTMULTIPLE') {
+            /*
+            $this = getSmartSelect(ctl['NAME'], label, true);
+            $input = $this.find('select');
+            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('.smart-select').addClass('disabled');
+            }
+
+            if (ctl.attr('searchbar') == '1') {
+                f7ctl.params.openIn = 'popup';
+                f7ctl.params.searchbar = true;
+            }
+            */
+
+
+        // -- SelectMultipleFolder --
+
+        } else if (type == 'SELECTMULTIPLEFOLDER') {
+            /*
+            $this = getSmartSelect(ctl['NAME'], label, true);
+            $input = $this.find('select');
+            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('.smart-select').addClass('disabled');
+            }
+
+            $input.attr('data-textfield', tf);
+            $input.attr('data-valuefield', vf);
+
+            $input.attr('data-fill', '1');
+            $input.attr('data-fill-folder', ctl.attr('searchfolder'));
+            $input.attr('data-fill-fields', ctl.attr('fieldlist'));
+            $input.attr('data-fill-formula', ctl.attr('searchfilter'));
+            $input.attr('data-fill-order', ctl.attr('searchorder'));
+            $input.attr('data-fill-withoutnothing', '1');
+
+            if (ctl.attr('searchbar') == '1') {
+                f7ctl.params.openIn = 'popup';
+                f7ctl.params.searchbar = true;
+            }
+            */
+
+
+        // -- LookupboxAccounts --
+
+        } else if (type == 'LOOKUPBOXACCOUNTS') {
+            /*
+            $this = getSmartSelect(ctl['NAME'], label, ctl.attr('mode') == '2');
+            $input = $this.find('select');
+            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('.smart-select').addClass('disabled');
+            }
+
+            $input.attr('data-textfield', tf);
+            $input.attr('data-valuefield', vf);
+
+            aux = '(disabled = 0 or disabled is null) and system = 0';
+            if (ctl.attr('formula')) {
+                aux = aux + ' and (' + ctl.attr('formula') + ')';
+            }
+            $input.attr('data-fill', '1');
+            $input.attr('data-fill-folder', 'accounts');
+            $input.attr('data-fill-formula', aux);
+            $input.attr('data-fill-order', 'name');
+            $input.attr('data-fill-withoutnothing',
+                (ctl.attr('allownull') == '0' || ctl.attr('mode') == '2') ? '1' : '0');
+
+            if (ctl.attr('searchbar') == '1') {
+                f7ctl.params.openIn = 'popup';
+                f7ctl.params.searchbar = true;
+            }
+            */
+
+
+        // -- Autocomplete --
+
+        } else if (type == 'AUTOCOMPLETE') {
+            /*
+            // todo: faltan editurl y addurl
+
+            $this = getAutocomplete(ctl['NAME'], label, {
+                folder: ctl.attr('searchfolder'),
+                rootFolder: folder.RootFolderId,
+                searchFields: ctl.attr('searchfields'),
+                extraFields: ctl.attr('returnfields'),
+                formula: ctl.attr('searchfilter'),
+                order: ctl.attr('searchorder'),
+            }, ctl.attr('mode') == '1');
+
+            $input = $this.find('[data-autocomplete]');
+            f7ctl = app7.autocomplete.get($input);
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                if ($input[0].tagName == 'INPUT') {
+                    inputReadonly($input, true);
+                } else {
+                    $input.addClass('disabled');
+                }
+            }
+
+            $input.attr('data-textfield', tf)
+            f7ctl.params.textSource = ctl.attr('textsource');
+
+            $('<input/>', {
+                type: 'hidden',
+                'data-valuefield': vf,
+            }).appendTo($this);
+            f7ctl.params.valueSource = ctl.attr('valuesource');
+
+            $('<input/>', {
+                type: 'hidden',
+                'data-xmlfield': ctl.attr('xmlfield'),
+            }).appendTo($this);
+
+            f7ctl.on('change', function (value) {
+                var self = this;
+
+                if (self.inputEl) {
+                    // Dropdown (simple)
+                    var $li = $(self.inputEl).closest('li')
+                } else {
+                    // Popup (multiple)
+                    var $li = $(self.openerEl).closest('li')
+                    var $t = $(self.openerEl).find('.item-after');
+                    var ts = self.params.textSource.toUpperCase();
+                    var ta = [];
+                }
+                var $v = $li.find('[data-valuefield]');
+                var vs = self.params.valueSource.toUpperCase();
+                var va = [];
+
+                var $x = $li.find('[data-xmlfield]');
+                var dom = $.parseXML('<root/>');
+
+                if (value.length > 0) {
+                    var $it;
+                    value.forEach(el => {
+                        va.push(el[vs]);
+                        if ($t) ta.push(el[ts]);
+                        var $it = $('<item/>', dom);
+                        Object.keys(el).forEach(prop => {
+                            $it.attr(prop.toLowerCase(), el[prop]);
+                        });
+                        $it.appendTo(dom.documentElement);
+                    })
+                    $v.val(va.join(';'));
+                    if ($t) $t.html(ta.join(';'));
+                    $x.val((new XMLSerializer()).serializeToString(dom));
+
+                } else {
+                    $v.val('');
+                    $x.val('');
+                    if ($t) $t.html('');
+                };
+            });
+            */
+
+
+        // -- Attachments --
+
+        } else if (type == 'ATTACHMENTS') {
+            /*
+            $this = getAttachments(ctl['NAME'], label);
+            $this.find('.list').on('click', 'a.item-content', downloadAtt);
+            $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
+            $this.find('div.row').on('click', 'button', addAtt);
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.attr('readonly', true);
+                $this.find('div.row').hide();
+            }
+
+            // El TAG se setea en el APP7_SCRIPT asi:
+            // $this.attr('data-attachments', 'miTag');
+            */
+
+        } else if (type == 'TIMEINTERVAL') {
+            /*
+            Set this = getTimeInterval (oNode, oProperties)
+            executeScriptBeforeRender oNode
+            If oNode.getAttribute("w") & "" <> "1" Then this.Readonly = True
+            oStrBuilder.Append getLabel(oNode)
+            */
+
+        } else if (type == 'LINK') {
+            /*
+            Set this = getLink (oNode, oProperties)
+            executeScriptBeforeRender oNode
+            If oNode.getAttribute("w") & "" <> "1" Then this.Readonly = True
+            oStrBuilder.Append "<label style='width:100%'> </label>"
+            */
+
+        } else if (type == 'BUTTONSBAR') {
+            /*
+            Set this = getButtonsBar(oNode, oProperties)
+            executeScriptBeforeRender oNode
+            'If oNode.getAttribute("w") & "" <> "1" Then this.Readonly = True
+            'oStrBuilder.Append this.Render
+            */
+
+        } else if (type == 'BUTTON') {
+            /*
+            Set this = getButton(oNode, oProperties)
+            executeScriptBeforeRender oNode
+            If oNode.getAttribute("w") & "" <> "1" Then this.Readonly = True
+            */
+        }
+
+        try {
+            if (ctl['SCRIPTBEFORERENDER']) eval(ctl['SCRIPTBEFORERENDER']);
+        } catch (err) {
+            console.log('Error in ' + ctl['NAME'] + '.SCRIPTBEFORERENDER: ' + errMsg(err));
+        }
+        /*
+        Objetos disponibles en este script:
+            doc: El objeto Document que se esta abriendo
+            folder: La carpeta actual
+            controlsFolder: La carpeta de controles
+            controls: El search a la carpeta de controles completo
+            ctl: El row del control actual
+            ctl.attr: Function que devuelve un atributo de XMLATTRIBUTES
+            $this: El control completo JQuery (inluido el <li>)
+            $input: El input, textarea, select, etc, dentro del control
+                (puede ser undefined en caso de los raw y otros)
+            bsctl: El control Bootstrap (depende del control)
+            textField: El objeto Field bindeado con textField (depende del control)
+            valueField: El objeto Field bindeado con valueField (depende del control)
+        */
+
+        if ($this) $this.appendTo(pCont);
+    }
 }
 
 function fillControls() {
