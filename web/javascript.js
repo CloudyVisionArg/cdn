@@ -43,10 +43,23 @@ Requiere bootstrap 5
 spinner.show();
 spinner.hide();
 */
+(function($) {
+	$.each(['show', 'hide'], function(i, ev) {
+		var el = $.fn[ev];
+		$.fn[ev] = function() {
+			this.trigger(ev);
+			return el.apply(this, arguments);
+		};
+	});
+})(jQuery);
+
 spinner = $('<div/>', {
 	style: 'position:absolute; top:0; width: 100%; height: 100%; z-index: 9999; background-color: rgb(255,255,255,0.5); display: none;',
 }).appendTo($('body'));
 spinner.append('<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;"><div class="spinner-border"></div></div>');
+spinner.on('show', function () {
+	debugger;
+})
 
 // Requiere bootstrap 5
 function toast(pText, pOptions) {
