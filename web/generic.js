@@ -738,9 +738,9 @@ function saveDoc() {
                     };
 
                     saving = false;
-                    app7.preloader.hide();
-                    $navbar.find('.right .button').removeClass('disabled');
-                    toast('Cambios guardados');
+                    //app7.preloader.hide();
+                    //$navbar.find('.right .button').removeClass('disabled');
+                    //toast('Cambios guardados');
                     fillControls();
                 },
                 errMgr
@@ -751,8 +751,8 @@ function saveDoc() {
 
     function errMgr(pErr) {
         saving = false;
-        app7.preloader.hide();
-        $navbar.find('.right .button').removeClass('disabled');
+        //app7.preloader.hide();
+        //$navbar.find('.right .button').removeClass('disabled');
         if (Array.isArray(pErr)) {
             if (pErr.length == 1) {
                 toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result, 5000);
@@ -762,7 +762,7 @@ function saveDoc() {
                 toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion', 5000);
             }
         } else {
-            toast(errMsg(pErr), 5000);
+            //toast(errMsg(pErr), 5000);
         }
         console.log(pErr);
     }
