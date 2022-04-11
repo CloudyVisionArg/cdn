@@ -43,8 +43,7 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     var $dtp = $('<div/>', {
         class: 'input-group date',
         id: pId + '_div',
-        'data-td-target-input': 'nearest',
-        'data-td-target-toggle': 'nearest',
+        'data-target-input': 'nearest',
     }).appendTo($div);
 
     var t = pType.toLowerCase();
@@ -53,56 +52,21 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         type: 'text',
         id: pId,
         value: pValue,
-        class: 'form-control',
-        'data-td-target': '#' + pId + '_div',
+        class: 'form-control datetimepicker-input',
+        'data-target': '#' + pId + '_div',
         'data-date-type': t,
     }).appendTo($dtp);
 
     var $sp = $('<span/>', {
         class: 'input-group-text',
-        'data-td-target': '#' + pId + '_div',
-        'data-td-toggle': 'datetimepicker',
+        'data-target': '#' + pId + '_div',
+        'data-toggle': 'datetimepicker',
     }).appendTo($dtp);
 
     $sp.append('<i class="bi bi-calendar3"></i>');
 
-    $dtp[0].dtpicker = new tempusDominus.TempusDominus($dtp[0], {
-        localization: {
-            locale: 'es',
-        },
-        display: {
-            icons: {
-                time: 'bi bi-clock',
-                date: 'bi bi-calendar',
-                up: 'bi bi-arrow-up',
-                down: 'bi bi-arrow-down',
-                previous: 'bi bi-chevron-left',
-                next: 'bi bi-chevron-right',
-                today: 'bi bi-calendar-check',
-                clear: 'bi bi-trash',
-                close: 'bi bi-x',
-            },
-            components: {
-                decades: (t != 'time'),
-                year: (t != 'time'),
-                month: (t != 'time'),
-                date: (t != 'time'),
-                hours: (t != 'date'),
-                minutes: (t != 'date'),
-                seconds: false,
-                useTwentyfourHour: true,
-            },
-            buttons: {
-                today: true,
-                close: true,
-                clear: true,
-            }
-        }
-    });
-
-    // Setea referencia al picker en el input tambien
-    $inp[0].dtpicker = $dtp[0].dtpicker;
-
+    $dtp.datetimepicker();
+    
     return $div;
 }
 
