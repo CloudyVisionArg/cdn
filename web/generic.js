@@ -446,7 +446,7 @@ function fillControls() {
                     } else {
                         $el.val('');
                     }
-                } else if ($el.attr('data-td-target')) {
+                } else if ($el.attr('data-date-type')) {
                     // DTPicker
                     setDTPickerVal($el, text);
 
@@ -481,9 +481,6 @@ function fillControls() {
                         $el.val(text);
                     }
                 }
-
-            } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                setDTPickerVal($el, text);
 
             } else if (type == 'checkbox') {
                 el.checked = (text == '1');
@@ -646,9 +643,6 @@ function saveDoc() {
                         field.Value = $el.val();
                     };
 
-                } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                    field.Value = getDTPickerVal($el);
-
                 } else if (type == 'checkbox') {
                     field.Value = el.checked ? '1' : '0';
 
@@ -776,6 +770,10 @@ function saveDoc() {
 
 function saveAtt() {
     return new Promise(function (resolve, reject) {
+
+        resolve('OK');
+        return;
+
         var calls = [];
         var $attsToSave = $('li[data-attachments] [data-att-action]');
 
