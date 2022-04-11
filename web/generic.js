@@ -377,7 +377,7 @@ function printForm() {
     toast.show()
 
     $('#t1').on('hidden.bs.toast', function () {
-        debugger;
+        $(this).remove();
     })
 
     setTimeout(function () {
