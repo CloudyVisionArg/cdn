@@ -356,7 +356,7 @@ function getDefaultControl(pField) {
         }
 
     } else if (pField.Type == 2) {
-        $ret = newDTPicker(pField.Name, label, 'date');
+        $ret = newDTPicker(pField.Name, label, 'time');
         $input = $ret.find('input');
 
     } else if (pField.Type == 3) {
