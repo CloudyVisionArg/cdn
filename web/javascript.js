@@ -44,7 +44,7 @@ spinner.show();
 spinner.hide();
 */
 spinner = $('<div/>', {
-	style: 'position:absolute; top:0; width: 100vw; height: 100vh; z-index: 9999; background-color: rgb(255,255,255,0.5); display: none;',
+	style: 'position:absolute; top:0; width: 100%; height: 100%; z-index: 9999; background-color: rgb(255,255,255,0.5); display: none;',
 }).appendTo($('body'));
 spinner.append('<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;"><div class="spinner-border"></div></div>');
 
