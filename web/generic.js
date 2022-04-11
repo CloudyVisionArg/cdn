@@ -119,7 +119,7 @@ function getControlsFolder() {
 }
 
 function loadControls() {
-	folderSearch(controlsFolder['FldId'], '', '', 'parent, order, column').then(
+	DoorsAPI.folderSearch(controlsFolder['FldId'], '', '', 'parent, order, column').then(
 		function (res) {
 			controls = res;
 			getControlsRights(controls);
