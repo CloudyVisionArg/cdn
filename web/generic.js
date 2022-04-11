@@ -378,7 +378,9 @@ function toast(pText, pOptions) {
 
     $tb.append(pText);
 
-    var t = new bootstrap.Toast($toast);
+    var t = new bootstrap.Toast($toast, {
+        delay: 1000,
+    });
     $toast.on('hidden.bs.toast', function () {
         $(this).remove();
     });
