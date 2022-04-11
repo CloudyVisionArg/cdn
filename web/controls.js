@@ -74,7 +74,9 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 
     $dtp.datetimepicker({
         locale: 'es',
-        showClose: true,
+        buttons: {
+            showClose: true,
+        },
         format: f,
     });
 
