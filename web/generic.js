@@ -343,7 +343,8 @@ function renderPage() {
 
     $cont.append(`
     <div class="toast-container">
-  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+  <div id="t1" class="toast">
     <div class="toast-header">
       <img src="..." class="rounded me-2" alt="...">
       <strong class="me-auto">Bootstrap</strong>
@@ -355,7 +356,7 @@ function renderPage() {
     </div>
   </div>
 
-  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="t1" class="toast">
     <div class="toast-header">
       <img src="..." class="rounded me-2" alt="...">
       <strong class="me-auto">Bootstrap</strong>
@@ -366,8 +367,17 @@ function renderPage() {
       Heads up, toasts will stack automatically
     </div>
   </div>
+
 </div>
     `)
+}
+
+function printForm() {
+    var toast = new bootstrap.Toast('#t1')
+    toast.show()
+
+    var toast = new bootstrap.Toast('#t2')
+    toast.show()
 }
 
 function getDefaultControl(pField) {
