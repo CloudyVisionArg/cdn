@@ -38,7 +38,7 @@ errMsg(pErr)
 spinner = $('<div/>', {
 	style: 'position:absolute; top:0; width: 100vw; height: 100vh; z-index: 9999; background-color: rgb(255,255,255,0.5); display: none;',
 }).appendTo($('body'));
-spinner.append('<div class="spinner-border"></div>');
+spinner.append('<div class="d-flex justify-content-center"><div class="spinner-border"></div></div>');
 
 // Requiere bootstrap 5
 function toast(pText, pOptions) {
