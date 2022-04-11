@@ -21,6 +21,7 @@ arrScripts.push({ id: 'popper', src: 'https://cdn.jsdelivr.net/npm/@popperjs/cor
 arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js', depends: ['popper'] });
 arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
 arrScripts.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
+arrScripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
 arrScripts.push({ id: 'app7-doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'web-javascript', version: 0 });
 arrScripts.push({ id: 'web-controls' });
