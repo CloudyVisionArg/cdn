@@ -33,7 +33,7 @@ arrScripts.push({ id: 'lib-moment' });
 include(arrScripts, function () {
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
-	Doors.RESTFULL.AuthToken = '83B26B91392CE31B04F03278A83DDB28B263967C021C74C261DE38BE072DE103';
+	Doors.RESTFULL.AuthToken = '8F7B48DCE93ED4DE55A38E0D58288B60E1DB7F5B2646209739AE718BC2A82D5F';
 
     // todo: mensaje y terminar
     DoorsAPI.islogged().then(
