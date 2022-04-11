@@ -347,12 +347,12 @@ function renderPage() {
   <div id="t1" class="toast">
     <div class="toast-header">
       <img src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png" class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <small class="text-muted">just now</small>
+      <strong class="me-auto">Cloudy CRM</strong>
+      <small class="text-muted">Recien</small>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body">
-      See? Just like this.
+      Holaaaa
     </div>
   </div>
 
