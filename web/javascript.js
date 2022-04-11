@@ -58,7 +58,7 @@ spinner = $('<div/>', {
 }).appendTo($('body'));
 spinner.append('<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;"><div class="spinner-border"></div></div>');
 spinner.on('show', function () {
-	debugger;
+	$(this).css('height', $(document).height());
 })
 
 // Requiere bootstrap 5
