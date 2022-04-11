@@ -376,9 +376,11 @@ function printForm() {
     var toast = new bootstrap.Toast('#t1')
     toast.show()
 
+    setTimeout(function () {
+        var toast2 = new bootstrap.Toast('#t2')
+        toast2.show()
     
-    var toast2 = new bootstrap.Toast('#t2')
-    toast2.show()
+    }, 2000)
 }
 
 function getDefaultControl(pField) {
