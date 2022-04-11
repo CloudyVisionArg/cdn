@@ -376,8 +376,9 @@ function printForm() {
     var toast = new bootstrap.Toast('#t1')
     toast.show()
 
-    var toast = new bootstrap.Toast('#t2')
-    toast.show()
+    
+    //var toast = new bootstrap.Toast('#t2')
+    //toast.show()
 }
 
 function getDefaultControl(pField) {
