@@ -55,11 +55,10 @@ elem.on('show', function () {
 })(jQuery);
 
 /*
-Muestra/oculta un spinner que tapa toda la pagina
-Requiere bootstrap 5
+Muestra/oculta un spinner que tapa toda la pagina. Requiere bootstrap 5
 
-spinner.show();
-spinner.hide();
+preloader.show();
+preloader.hide();
 */
 preloader = $('<div/>', {
 	style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
@@ -86,8 +85,8 @@ function toast(pText, pOptions) {
     var $cont = $('.toast-container');
     if ($cont.length == 0) {
         $cont = $('<div/>', {
-            class: 'toast-container position-absolute p-3 top-0 end-0',
-            style: 'z-index: 2000;',
+            class: 'toast-container p-3',
+            style: 'position:fixed; top:0; right:0; z-index: 2000;',
         }).appendTo($('body'));
     }
 
