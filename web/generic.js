@@ -344,7 +344,7 @@ function renderPage() {
 function printForm() {
     spinner.show();
     setTimeout(function () {
-        spinner.hide();
+        //spinner.hide();
     }, 5000);
 
 }
