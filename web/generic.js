@@ -341,6 +341,7 @@ function renderPage() {
     
     fillControls();
 
+    /*
     $cont.append(`
     <div class="toast-container position-absolute p-3 top-0 end-0" style="z-index: 5000;">
 
@@ -370,9 +371,16 @@ function renderPage() {
 
 </div>
     `)
+    */
 }
 
 function printForm() {
+    debugger;
+    var $cont = $('.toast-container');
+    if ($cont) {
+        alert('hola');
+    }
+
     var toast = new bootstrap.Toast('#t1')
     toast.show()
 
@@ -385,6 +393,11 @@ function printForm() {
         toast2.show()
     
     }, 2000)
+}
+
+function toast(pText) {
+    var $cont = $('.toast-container');
+
 }
 
 function getDefaultControl(pField) {
