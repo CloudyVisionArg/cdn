@@ -342,7 +342,11 @@ function renderPage() {
 }
 
 function printForm() {
-    toast('holaaaa', {delay: 1000});
+    spinner.show();
+    setTimeout(function () {
+        spinner.hide();
+    }, 5000);
+
 }
 
 function getDefaultControl(pField) {
