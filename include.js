@@ -59,6 +59,7 @@ Si el src termina en '.css' se creara un <link>, sino un <script>
 function registeredScripts() {
 	var scripts = [];
 
+	scripts.push({ id: 'dsession', path: '/dsession.js', version: 67 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
@@ -74,12 +75,12 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 44 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
-	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
 	scripts.push({ id: 'app7-doorsapi', path: '/app7/doorsapi.js', version: 36 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
 
 	// Backward compatibility
+	scripts.push({ id: 'app7-dsession', path: '/dsession.js', version: 41 });
 	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 57 });
 	scripts.push({ id: 'qrcode', path: 'lib/qrcode.js', version: 55 });
 
