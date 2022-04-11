@@ -27,7 +27,7 @@ arrScripts.push({ id: 'web-javascript', version: 0 });
 arrScripts.push({ id: 'web-controls' });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
-arrScripts.push({ id: 'tempus-dominus', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js', depends: ['popper'] });
+arrScripts.push({ id: 'tempus-dominus', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js', depends: ['jquery'] });
 arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
 arrScripts.push({ id: 'lib-moment' });
 
