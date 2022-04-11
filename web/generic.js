@@ -343,7 +343,7 @@ function renderPage() {
 }
 
 function printForm() {
-    toast('holaaaa');
+    toast('holaaaa', {delay: 1000});
 
     setTimeout(function () {
         toast('chauuu');
@@ -355,6 +355,9 @@ function toast(pText, pOptions) {
         animation: true,
         autohide: true,
         delay: 5000,
+        title: 'Cloudy CRM',
+        subtitle: '',
+        icon: 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png',
     }
     Object.assign(opt, pOptions);
     debugger;
@@ -375,9 +378,9 @@ function toast(pText, pOptions) {
         class: 'toast-header',
     }).appendTo($toast);
 
-    $th.append('<img src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png" class="rounded me-2" alt="...">')
-    $th.append('<strong class="me-auto">Cloudy CRM</strong>');
-    $th.append('<small class="text-muted">Recien</small>');
+    $th.append('<img src="' + opt.icon + '" class="rounded me-2" alt="...">')
+    $th.append('<strong class="me-auto">' + opt.title + '</strong>');
+    $th.append('<small class="text-muted">' + opt.subtitle + '</small>');
     $th.append('<button type="button" class="btn-close" data-bs-dismiss="toast"></button>');
 
     var $tb = $('<div/>', {
