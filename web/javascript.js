@@ -75,7 +75,7 @@ preloader.on('show', function () {
 function toast(pText, pOptions) {
     var opt = {
         autohide: true,
-        delay: 5000,
+        delay: 3000,
         title: 'Cloudy CRM',
         subtitle: '',
         icon: 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png',
