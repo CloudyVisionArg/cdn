@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+formatDate(pDate)
 objPropCI(pObj, pProp, pCI)
 getCookie(pName)
 string.reverse()
@@ -32,6 +33,23 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+function formatDate(pDate) {
+    var dt, ret;
+    if (Object.prototype.toString.call(pDate) === '[object Date]') {
+        dt = pDate;
+    } else {
+        dt = new Date(pDate);
+    }
+    if (dt != 'Invalid Date') {
+        ret = dt.toLocaleDateString()
+        var t = ISOTime(dt);
+        if (t != '00:00') ret += ' ' + t;
+        return ret;
+    } else {
+        return 'Invalid Date';
+    }
+}
 
 // Devuelve una property de un objeto (Case Insensitive)
 function objPropCI(pObj, pProp) {

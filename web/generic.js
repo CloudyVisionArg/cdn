@@ -366,7 +366,7 @@ function getDefaultControl(pField) {
         $input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
-    if (!pField.Updatable) inputReadonly($input, true);
+    if (!pField.Updatable) $input.attr({ 'readonly': 'readonly' });
     $input.attr('data-textfield', pField.Name.toLowerCase())
 
     return $ret;
