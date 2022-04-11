@@ -342,7 +342,7 @@ function renderPage() {
     fillControls();
 
     $cont.append(`
-    <div class="toast-container">
+    <div class="toast-container position-absolute p-3 top-0 end-0">
 
   <div id="t1" class="toast">
     <div class="toast-header">
