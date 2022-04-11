@@ -186,7 +186,7 @@ function renderPage() {
                 <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
             <button type="button" id="save" class="btn btn-primary" onclick="saveDoc();">
-                <i class="bi bi-cloud-arrow-up-fill"></i>
+                <i class="bi bi-cloudy-fill"></i>
                 <span class="d-none d-md-inline-block"> Guardar</span>
             </button>
             <button type="button" id="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
