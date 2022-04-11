@@ -12,7 +12,7 @@ Moment: https://momentjs.com
 */
 
 var urlParams, fld_id, folder, doc_id, doc;
-var constrolsFolder, controls, controlsRights;
+var controlsFolder, controls, controlsRights;
 var saving;
 
 var arrScripts = [];
@@ -44,7 +44,6 @@ include(arrScripts, function () {
 		}
 	);
 
-    // todo: Reemplazar pot Intl
     // todo: setar segun el LNG_ID
     moment.locale('es');
     numeral.locale('es'); // http://numeraljs.com/

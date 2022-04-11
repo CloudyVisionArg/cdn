@@ -97,13 +97,3 @@ function setDTPickerVal(pInput, pValue) {
         pInput.val('');
     }
 }
-
-function inputReadonly(pInput, pReadonly) {
-    if (pReadonly) {
-        pInput.attr({ 'readonly': 'readonly' });
-        if (pInput[0].dtpicker) pInput[0].dtpicker.disable();
-    } else {
-        pInput.removeAttr('readonly');
-        if (pInput[0].dtpicker) pInput[0].dtpicker.enable();
-    }
-}
