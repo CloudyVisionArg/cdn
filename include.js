@@ -59,7 +59,7 @@ Si el src termina en '.css' se creara un <link>, sino un <script>
 function registeredScripts() {
 	var scripts = [];
 
-	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 67 });
+	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 68 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
@@ -80,7 +80,7 @@ function registeredScripts() {
 	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
 
 	// Backward compatibility
-	scripts.push({ id: 'app7-doorsapi', path: '/doorsapi.js', version: 67 });
+	scripts.push({ id: 'app7-doorsapi', path: '/doorsapi.js', version: 68 });
 	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 57 });
 	scripts.push({ id: 'qrcode', path: 'lib/qrcode.js', version: 55 });
 
