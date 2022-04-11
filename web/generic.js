@@ -342,9 +342,9 @@ function renderPage() {
 }
 
 function printForm() {
-    spinner.show();
+    preloader.show();
     setTimeout(function () {
-        spinner.hide();
+        preloader.hide();
     }, 5000);
 
 }
@@ -626,8 +626,7 @@ function getEvent(pEvent) {
 function saveDoc() {
     if (saving) return;
     saving = true;
-    //$navbar.find('.right .button').addClass('disabled');
-    //app7.preloader.show();
+    preloader.show();
 
     $('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
@@ -745,8 +744,7 @@ function saveDoc() {
                     };
 
                     saving = false;
-                    //app7.preloader.hide();
-                    //$navbar.find('.right .button').removeClass('disabled');
+                    preloader.hide();
                     toast('Cambios guardados');
                     fillControls();
                 },
@@ -758,8 +756,7 @@ function saveDoc() {
 
     function errMgr(pErr) {
         saving = false;
-        //app7.preloader.hide();
-        //$navbar.find('.right .button').removeClass('disabled');
+        preloader.hide();
         if (Array.isArray(pErr)) {
             if (pErr.length == 1) {
                 toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result);
