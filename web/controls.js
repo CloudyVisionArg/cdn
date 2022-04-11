@@ -73,6 +73,8 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     $sp.append('<i class="bi bi-calendar3"></i>');
 
     $dtp.datetimepicker({
+        locale: 'es',
+        showClose: true,
         format: f,
     });
 
