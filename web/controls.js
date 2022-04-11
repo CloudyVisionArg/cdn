@@ -46,7 +46,14 @@ function newDTPicker(pId, pLabel, pType, pValue) {
         'data-target-input': 'nearest',
     }).appendTo($div);
 
-    var t = pType.toLowerCase();
+    var f, t = pType.toLowerCase();
+    if (t == 'date') {
+        f = 'L';
+    } else if (t == 'time') {
+        f = 'LT';
+    } else {
+        f = 'L LT';
+    }
 
     var $inp = $('<input/>', {
         type: 'text',
@@ -65,8 +72,10 @@ function newDTPicker(pId, pLabel, pType, pValue) {
 
     $sp.append('<i class="bi bi-calendar3"></i>');
 
-    $dtp.datetimepicker();
-    
+    $dtp.datetimepicker({
+        format: f,
+    });
+
     return $div;
 }
 
