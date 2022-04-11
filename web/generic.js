@@ -340,64 +340,50 @@ function renderPage() {
     });
     
     fillControls();
-
-    /*
-    $cont.append(`
-    <div class="toast-container position-absolute p-3 top-0 end-0" style="z-index: 5000;">
-
-  <div id="t1" class="toast">
-    <div class="toast-header">
-      <img src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png" class="rounded me-2" alt="...">
-      <strong class="me-auto">Cloudy CRM</strong>
-      <small class="text-muted">Recien</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Holaaaa
-    </div>
-  </div>
-
-  <div id="t2" class="toast">
-    <div class="toast-header">
-      <img src="..." class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <small class="text-muted">2 seconds ago</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Heads up, toasts will stack automatically
-    </div>
-  </div>
-
-</div>
-    `)
-    */
 }
 
 function printForm() {
-    debugger;
-    var $cont = $('.toast-container');
-    if ($cont) {
-        alert('hola');
-    }
-
-    var toast = new bootstrap.Toast('#t1')
-    toast.show()
-
-    $('#t1').on('hidden.bs.toast', function () {
-        $(this).remove();
-    })
+    toast('holaaaa');
 
     setTimeout(function () {
-        var toast2 = new bootstrap.Toast('#t2')
-        toast2.show()
-    
+        toast('chauuu');
     }, 2000)
 }
 
-function toast(pText) {
+function toast(pText, pOptions) {
     var $cont = $('.toast-container');
+    if ($cont.length == 0) {
+        $cont = $('<div/>', {
+            class: 'toast-container position-absolute p-3 top-0 end-0',
+            style: 'z-index: 5000;',
+        }).appendTo($('body'));
+    }
 
+    var $toast = $('<div/>', {
+        class: 'toast',
+    }).appendTo($cont);
+
+    var $th = $('<div/>', {
+        class: 'toast-header',
+    }).appendTo($toast);
+
+    $th.append('<img src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@66/img/favicon/favicon-32x32.png" class="rounded me-2" alt="...">')
+    $th.append('<strong class="me-auto">Cloudy CRM</strong>');
+    $th.append('<small class="text-muted">Recien</small>');
+    $th.append('<button type="button" class="btn-close" data-bs-dismiss="toast"></button>');
+
+    var $tb = $('<div/>', {
+        class: 'toast-body',
+    }).appendTo($toast);
+
+    $tb.append(pText);
+
+    var t = new bootstrap.Toast($toast);
+    $toast.on('hidden.bs.toast', function () {
+        $(this).remove();
+    });
+
+    t.show()
 }
 
 function getDefaultControl(pField) {
