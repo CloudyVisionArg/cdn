@@ -194,7 +194,7 @@ function renderPage() {
                 <span class="d-none d-md-inline-block"> Guardar y salir</span>
             </button>
             <button type="button" id="cancel" class="btn btn-primary" onclick="exitForm(false);">
-                <i class="bi bi-box-arrow-right"></i>
+                <i class="bi bi-caret-right-fill"></i>
                 <span class="d-none d-md-inline-block"> Salir</span>
             </button>
     </div>
