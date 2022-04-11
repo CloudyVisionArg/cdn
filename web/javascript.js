@@ -56,9 +56,12 @@ spinner.hide();
 spinner = $('<div/>', {
 	style: 'position:absolute; top:0; width: 100%; height: 100%; z-index: 9999; background-color: rgb(255,255,255,0.5); display: none;',
 }).appendTo($('body'));
-spinner.append('<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);"><div class="spinner-border"></div></div>');
+spinner.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
 spinner.on('show', function () {
-	$(this).css('height', $(document).height());
+	$(this).css({
+		'height': $(document).height(),
+		'width': $(document).width(),
+	});
 })
 
 // Requiere bootstrap 5
