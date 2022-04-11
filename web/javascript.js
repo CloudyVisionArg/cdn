@@ -7,7 +7,8 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
-spinner
+Eventos show y hide en jQuery
+preloader
 toast(pText, pOptions)
 formatDate(pDate)
 objPropCI(pObj, pProp, pCI)
@@ -37,11 +38,11 @@ errMsg(pErr)
 */
 
 /*
-Muestra/oculta un spinner que tapa toda la pagina
-Requiere bootstrap 5
+Agrega a jQuery soporte para eventos show y hide
 
-spinner.show();
-spinner.hide();
+elem.on('show', function () {
+	// elem visible
+})
 */
 (function($) {
 	$.each(['show', 'hide'], function(i, ev) {
@@ -53,11 +54,18 @@ spinner.hide();
 	});
 })(jQuery);
 
-spinner = $('<div/>', {
+/*
+Muestra/oculta un spinner que tapa toda la pagina
+Requiere bootstrap 5
+
+spinner.show();
+spinner.hide();
+*/
+preloader = $('<div/>', {
 	style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
 }).appendTo($('body'));
-spinner.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
-spinner.on('show', function () {
+preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
+preloader.on('show', function () {
 	$(this).css({
 		'height': $(document).height(),
 		'width': $(document).width(),
