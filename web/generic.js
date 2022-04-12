@@ -334,7 +334,7 @@ function renderPage() {
 }
 
 function getRow(pRow, pCont, pCol) {
-    var row;
+    var $row;
 
     if (pCol == undefined) {
         if (pRow && pRow.children().length < 2) {
@@ -345,13 +345,18 @@ function getRow(pRow, pCont, pCol) {
             }).appendTo(pCont);
         }
     } else {
-debugger;
+
         if (pRow && pCol == '2' && pRow[0].lastCol == '1') {
-            row = pRow;
+            $row = pRow;
         } else {
-            row = $('<div/>', {
+            $row = $('<div/>', {
                 class: 'row',
             }).appendTo(pCont);
+            if (pCol == 2) {
+                $('<div/>', {
+                    class: 'col-12 col-md-6 form-group',
+                }).appendTo($row);
+            }
             row.lastCol = pCol;
         };
         
