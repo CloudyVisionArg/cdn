@@ -324,11 +324,11 @@ function renderPage() {
 
         if (tabs.length > 0) {
             var $navTabs = $('<ul/>', {
-                class: 'nav nav-tabs',
+                class: 'nav nav-tabs mt-3',
             }).appendTo($cont);
 
             var $tabCont = $('<div/>', {
-                class: 'tab-content mt-3',
+                class: 'tab-content',
             }).appendTo($cont);
 
             var tab, label, $tab, $li;
