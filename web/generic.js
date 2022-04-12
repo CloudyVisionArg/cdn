@@ -286,7 +286,6 @@ function renderPage() {
             getDefaultControl(field).appendTo($col);
         })
 
-        /*
         // tabHist
 
         $tabHist = $('<div/>', {
@@ -297,7 +296,6 @@ function renderPage() {
         $('<div/>', {
             'data-doclog': 1,
         }).append('Cargando...').appendTo($tabHist);
-        */
 
     } else {
 
@@ -317,7 +315,48 @@ function renderPage() {
 
         renderControls($cont, '[NULL]');
 
+        // TABS
 
+        var tabs = controls.filter(function (el) {
+            return el['CONTROL'].toUpperCase() == 'TAB' && el['DONOTRENDER'] != 1 &&
+                el['R'] != '0' && el['HIDEINAPP'] != '1'
+        });
+
+        if (tabs.length > 0) {
+            var $navTabs = $('<ul/>', {
+                class: 'nav nav-tabs',
+            }).appendTo($cont);
+
+            var $tabCont = $('<div/>', {
+                class: 'tab-content',
+            }).appendTo($cont);
+
+            var tab, label, $tab, $li;
+            for (var i = 0; i < tabs.length; i++) {
+                tab = tabs[i];
+                label = tab['DESCRIPTION'] ? tab['DESCRIPTION'] : tab['NAME'];
+
+                $li = $('<li/>', {
+                    class: 'nav-item',
+                }).appendTo($navTabs);
+
+                $('<button/>', {
+                    type: 'button',
+                    class: 'nav-link' + (i == 0 ? ' active' : ''),
+                    'data-bs-toggle': 'tab',
+                    'data-bs-target': '#' + tab['NAME'],
+                }).append(label).appendTo($li);
+
+                <div class="tab-pane fade show active" id="tabMain"></div>
+                
+                $tab = $('<div/>', {
+                    class: 'tab-pane fade' + (i == 0 ? ' show active' : ''),
+                    id: tab['NAME'],
+                }).appendTo($tabCont);
+
+                renderControls($tab, tab['NAME']);
+            }
+        }
     };
 
     // Validacion de numero
