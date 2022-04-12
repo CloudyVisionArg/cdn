@@ -196,6 +196,8 @@ function inputDataList(pInput, pSource) {
                 )
             }
         )
+    } else {
+        ac.params.src = pSource;
     };
 
     return ac;

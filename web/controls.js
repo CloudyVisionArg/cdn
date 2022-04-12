@@ -97,3 +97,7 @@ function setDTPickerVal(pInput, pValue) {
         pInput.val('');
     }
 }
+
+function inputDataList(pInput, pSource) {
+
+}

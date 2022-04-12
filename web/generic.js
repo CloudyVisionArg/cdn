@@ -31,6 +31,8 @@ arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/a
 arrScripts.push({ id: 'lib-moment' });
 
 include(arrScripts, function () {
+    preloader.show();
+    
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
 	Doors.RESTFULL.AuthToken = '8F7B48DCE93ED4DE55A38E0D58288B60E1DB7F5B2646209739AE718BC2A82D5F';
@@ -330,7 +332,83 @@ function renderPage() {
         }
     });
     
-    fillControls();
+    // Llena controles Select
+    $('[data-fill]').each(function (ix, el) {
+        var $el = $(el);
+        $el.removeAttr('data-fill');
+        $el.attr('data-filling', '1');
+        var fld = $el.attr('data-fill-folder');
+
+        if (fld == 'accounts') {
+            fillSelect($el,
+                accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
+                $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
+                function (res) {
+                    $el.find('option').each(function (ix, el) {
+                        var $e = $(el);
+                        var type = $e.attr('data-field-type');
+                        if (type == '1') {
+                            $e.attr('data-option-icon-ios', 'f7:person');
+                            $e.attr('data-option-icon-md', 'material:person_outline');
+                        } else if (type == '2') {
+                            $e.attr('data-option-icon-ios', 'f7:person_2_fill');
+                            $e.attr('data-option-icon-md', 'material:group');
+                        }
+                    })
+                }
+            );
+
+        } else {
+            getControlFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
+                function (res) {
+                    var arrFields, textField, valueField, dataFields;
+
+                    var arrFields = $el.attr('data-fill-fields').split(',');
+                    if (arrFields.length > 0) textField = arrFields.shift().trim();
+                    if (arrFields.length > 0) valueField = arrFields.shift().trim();
+                    if (arrFields.length > 0) dataFields = arrFields.join(',');
+
+                    fillSelect($el,
+                        folderSearch(res['FldId'], $el.attr('data-fill-fields'),
+                            $el.attr('data-fill-formula'), $el.attr('data-fill-order')
+                        ),
+                        $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
+                    );
+                },
+                function (err) {
+                    console.log(err);
+                }
+            )
+        }
+    });
+
+    // Crea los Maps Autocomplete
+    var $mapsAc = $get('.maps-autocomplete');
+    if ($mapsAc.length > 0) {
+        $mapsAc.attr('data-filling', '1');
+
+        include('maps', function () {
+            document.getElementById('script_mapsapi').loaded(function () {
+                $mapsAc.each(function () {
+                    var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
+                    ac.inputEl = this;
+                    this.mapsAutocomplete = ac;
+                    ac.addListener('place_changed', maps.onPlaceChange);
+                    $(this).removeAttr('data-filling');
+                });
+            })
+        });
+    }
+
+    // Espera que se terminen de llenar todos los controles antes de hacer el fill
+    setTimeout(function waiting() {
+        if ($page.find('[data-filling]').length > 0) {
+            setTimeout(waiting, 100);
+        } else {
+            fillControls(doc);
+            preloader.hide();
+        }
+    }, 0);
 }
 
 function getRow(pRow, pCont, pCol) {
@@ -344,9 +422,9 @@ function getRow(pRow, pCont, pCol) {
                 class: 'row',
             }).appendTo(pCont);
         }
-    } else {
 
-        if (pRow && pCol == '2' && pRow[0].lastCol == '1') {
+    } else {
+        if (pCol == '2' && pRow && pRow[0].lastCol == '1') {
             $row = pRow;
         } else {
             $row = $('<div/>', {
@@ -493,7 +571,7 @@ function renderControls(pCont, pParent) {
             if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
                 f7ctl = inputDataList($input, {
                     folder: fld_id,
-                    field: tf
+                    field: tf,
                 });
             }
 
