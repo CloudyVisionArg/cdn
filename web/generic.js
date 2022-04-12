@@ -402,7 +402,7 @@ function renderPage() {
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     setTimeout(function waiting() {
-        if ($page.find('[data-filling]').length > 0) {
+        if ($('[data-filling]').length > 0) {
             setTimeout(waiting, 100);
         } else {
             fillControls(doc);
