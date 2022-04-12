@@ -32,7 +32,7 @@ arrScripts.push({ id: 'lib-moment' });
 
 include(arrScripts, function () {
     preloader.show();
-    
+
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
 	Doors.RESTFULL.AuthToken = '8F7B48DCE93ED4DE55A38E0D58288B60E1DB7F5B2646209739AE718BC2A82D5F';
@@ -383,7 +383,7 @@ function renderPage() {
     });
 
     // Crea los Maps Autocomplete
-    var $mapsAc = $get('.maps-autocomplete');
+    var $mapsAc = $('.maps-autocomplete');
     if ($mapsAc.length > 0) {
         $mapsAc.attr('data-filling', '1');
 
