@@ -455,7 +455,7 @@ function renderControls(pCont, pParent) {
 
         $row = getRow($row, pCont, ctl['COLUMN']);
         $col = $('<div/>', {
-            class: 'col-12 col-md-6 form-group',
+            class: 'col-12 col-md-' + (ctl['COLUMN'] == '0' ? '12': '6') + ' form-group',
         }).appendTo($row);
 
         // todo: revisar que esten soportadas todas las properties de controls3
