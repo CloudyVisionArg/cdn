@@ -357,10 +357,10 @@ function getRow(pRow, pCont, pCol) {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
             }
-            row.lastCol = pCol;
+            $row[0].lastCol = pCol;
         };
         
-        return row;
+        return $row;
     }
 }
 
