@@ -347,8 +347,6 @@ function renderPage() {
                     'data-bs-target': '#' + tab['NAME'],
                 }).append(label).appendTo($li);
 
-                <div class="tab-pane fade show active" id="tabMain"></div>
-                
                 $tab = $('<div/>', {
                     class: 'tab-pane fade' + (i == 0 ? ' show active' : ''),
                     id: tab['NAME'],
