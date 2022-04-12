@@ -328,7 +328,7 @@ function renderPage() {
             }).appendTo($cont);
 
             var $tabCont = $('<div/>', {
-                class: 'tab-content',
+                class: 'tab-content mt-3',
             }).appendTo($cont);
 
             var tab, label, $tab, $li;
