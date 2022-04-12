@@ -45,7 +45,7 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 	var scripts = [];
 	scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
 	scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
-	scripts.push({ id: 'app7-doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
+	scripts.push({ id: 'doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
 	scripts.push({ id: 'javascript', version: 0 });
 	
 	include(scripts, function () {

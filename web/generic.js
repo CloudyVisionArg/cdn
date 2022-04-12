@@ -333,13 +333,29 @@ function renderPage() {
     fillControls();
 }
 
-function getRow(pRow, pCont) {
-    if (pRow && pRow.children().length < 2) {
-        return pRow;
+function getRow(pRow, pCont, pCol) {
+    var row;
+
+    if (pCol == undefined) {
+        if (pRow && pRow.children().length < 2) {
+            return pRow;
+        } else {
+            return $('<div/>', {
+                class: 'row',
+            }).appendTo(pCont);
+        }
     } else {
-        return $('<div/>', {
-            class: 'row',
-        }).appendTo(pCont);
+debugger;
+        if (pCol == '0' || pCol == '1' || (pCol == '2' && pRow[0].lastCol != '1')) {
+            row = $('<div/>', {
+                class: 'row',
+            }).appendTo(pCont);
+            row.lastCol = pCol;
+        } else {
+            row = pRow;
+        };
+        
+        return row;
     }
 }
 
@@ -432,7 +448,7 @@ function renderControls(pCont, pParent) {
             }
         };
 
-        $row = getRow($row, pCont);
+        $row = getRow($row, pCont, ctl['COLUMN']);
         $col = $('<div/>', {
             class: 'col-12 col-md-6 form-group',
         }).appendTo($row);
