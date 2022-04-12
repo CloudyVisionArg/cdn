@@ -346,13 +346,13 @@ function getRow(pRow, pCont, pCol) {
         }
     } else {
 debugger;
-        if (pCol == '0' || pCol == '1' || (pCol == '2' && pRow && pRow[0].lastCol != '1')) {
+        if (pRow && pCol == '2' && pRow[0].lastCol == '1') {
+            row = pRow;
+        } else {
             row = $('<div/>', {
                 class: 'row',
             }).appendTo(pCont);
             row.lastCol = pCol;
-        } else {
-            row = pRow;
         };
         
         return row;
