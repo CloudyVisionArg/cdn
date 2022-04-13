@@ -282,7 +282,7 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
         }
 
         function ending() {
-            debugger;
+            if (pSelect.selectpicker) pSelect.selectpicker('refresh');
             pSelect.removeAttr('data-filling');
             resolve(true);
         }
@@ -333,4 +333,6 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
             }
         }
     }
+
+    if (pSelect.selectpicker) pSelect.selectpicker('refresh');
 }
