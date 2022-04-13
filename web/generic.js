@@ -390,11 +390,9 @@ function renderPage() {
                         var $e = $(el);
                         var type = $e.attr('data-field-type');
                         if (type == '1') {
-                            $e.attr('data-option-icon-ios', 'f7:person');
-                            $e.attr('data-option-icon-md', 'material:person_outline');
+                            $e.attr('data-icon', 'fa fa-user-o');
                         } else if (type == '2') {
-                            $e.attr('data-option-icon-ios', 'f7:person_2_fill');
-                            $e.attr('data-option-icon-md', 'material:group');
+                            $e.attr('data-icon', 'fa fa-users');
                         }
                     })
                 }
