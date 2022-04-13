@@ -190,31 +190,100 @@ function newSelect(pId, pLabel, pMultiple) {
 
     return $div;
 }
+
 /*
-oScrB.Append "<select"
-If Not bEnabled Then oScrB.Append " disabled"
-If bReadonly Then oScrB.Append " readonly"
-If bMultiple Then oScrB.Append " multiple"
-If sTooltip & "" <> "" Then
-    oScrB.Append GetAtt("data-toogle", "tooltip")
-    oScrB.Append GetAtt("title", sTooltip)
-End If
-
-sAtt = AttributesString(Me, True)
-If sAtt <> "" Then oScrB.Append sAtt
-oScrB.Append ">" & vbCrLf
-
-For i = 1 To oItems.Count
-    oScrB.Append oItems(i).Render & vbCrLf
-Next
-
-oScrB.Append "</select>"
-oScrB.Append "<script>$(document).ready(function () {"
-oScrB.Append "if ($('#" & sName & "').data('selectpicker') == undefined) {"
-oScrB.Append "	$('#" & sName & "').selectpicker({ style: 'btn-default', size: 'auto' });"
-oScrB.Append "}"
-if Readonly Then
-    oScrB.Append "disableSelect3('" & sName & "');"
-End If
-oScrB.Append "});</script>"
+Llena un Select:
+- Si pSource es Array, se agregan los elementos de pecho
+- pSource tambien pueder ser un folderSearch o accountsSearch:
+- Ej: fillSelect($select, DoorsAPI.folderSearch(fld_id, etc...))
+- Si pWithoutNothing == true no se pone el elemento (ninguno)
+- El text del option es el campo textField, si no viene se toma el 1ro
+- El value del option son los valueFields separados por ';', si no vienen son todos los campos
+- Los dataFields se ponen como atributos data-field-nombrecampo
 */
+function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, dataFields) {
+    return new Promise(function (resolve, reject) {
+        var option;
+
+        pSelect.attr('data-filling', '1');
+
+        if (!pWithoutNothing) {
+            option = $('<option/>', { value: '[NULL]' });
+            option.appendTo(pSelect);
+        }
+        
+        if (Array.isArray(pSource)) {
+            // Lista de items
+            for (var i = 0; i < pSource.length; i++) {
+                option = $('<option/>', { 'value': pSource[i] });
+                option.html(pSource[i]);
+                option.appendTo(pSelect);
+            }
+            ending();
+            
+        } else if ((typeof pSource === 'object' || typeof pSource === 'function') && typeof pSource.then === 'function') {
+            // Promise, es un folderSearch
+            pSource.then(
+                function (res) {
+                    fillMe(pSelect, res);
+                    ending();
+                },
+                function (err) {
+                    console.log(err);
+                    throw err;
+                }
+            );
+        };
+
+        function fillMe(pSelect, pRes) {
+            pRes.forEach(row => {
+                option = $('<option/>', { 'value': getValue(row) });
+                option.html(getText(row));
+                setData(row, option);
+                option.appendTo(pSelect);
+            })
+        }
+
+        function getValue(pRow) {
+            if (valueFields) {
+                var fields = valueFields.split(',');
+                var vals = [];
+                for (var i = 0; i < fields.length; i++) {
+                    vals.push(objPropCI(pRow, fields[i].trim()));
+                }
+                return vals.join(';');
+            } else {
+                var vals = [];
+                Object.keys(pRow).forEach(key => {
+                    vals.push(pRow[key]);
+                })
+                return vals.join(';');
+            }
+        }
+
+        function getText(pRow) {
+            if (textField) {
+                return objPropCI(pRow, textField);
+            } else {
+                var keys = Object.keys(pRow);
+                return pRow[keys[0]];
+            }
+        }
+
+        function setData(pRow, pOption) {
+            if (dataFields) {
+                var fields = dataFields.split(',');
+                var f;
+                for (var i = 0; i < fields.length; i++) {
+                    f = fields[i].trim().toLowerCase();
+                    pOption.attr('data-field-' + f, objPropCI(pRow, f));
+                }
+            }
+        }
+
+        function ending() {
+            pSelect.removeAttr('data-filling');
+            resolve(true);
+        }
+    });
+}

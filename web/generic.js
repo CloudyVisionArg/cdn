@@ -383,7 +383,7 @@ function renderPage() {
 
         if (fld == 'accounts') {
             fillSelect($el,
-                accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
+                DoorsAPI.accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
                 $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
                 function (res) {
                     $el.find('option').each(function (ix, el) {
@@ -411,7 +411,7 @@ function renderPage() {
                     if (arrFields.length > 0) dataFields = arrFields.join(',');
 
                     fillSelect($el,
-                        folderSearch(res['FldId'], $el.attr('data-fill-fields'),
+                        DoorsAPI.folderSearch(res['FldId'], $el.attr('data-fill-fields'),
                             $el.attr('data-fill-formula'), $el.attr('data-fill-order')
                         ),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
