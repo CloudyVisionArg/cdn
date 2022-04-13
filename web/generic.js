@@ -644,7 +644,7 @@ function renderControls(pCont, pParent) {
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr('readonly') = true;
+                $input.attr('readonly', true);
             }
 
 

@@ -183,7 +183,7 @@ function newSelect(pId, pLabel, pMultiple) {
         id: pId,
     }).appendTo($div);
 
-    if (pMultiple) $sel.attr('multiple') = true;
+    if (pMultiple) $sel.attr('multiple', true);
 
     $sel.selectpicker();
     //$sel.selectpicker({ style: 'btn-default' });
