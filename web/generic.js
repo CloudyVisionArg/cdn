@@ -656,6 +656,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS') {
             $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1', {
                 liveSearch: (ctl.attr('searchbar') == '1'),
+                style: 'btn-outline-dark',
             });
             $input = $this.find('select');
 
