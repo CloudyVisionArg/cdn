@@ -401,7 +401,7 @@ function renderPage() {
             );
 
         } else {
-            getControlFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
+            getFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
                 function (res) {
                     var arrFields, textField, valueField, dataFields;
 
