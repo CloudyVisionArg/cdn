@@ -282,6 +282,7 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
         }
 
         function ending() {
+            debugger;
             pSelect.removeAttr('data-filling');
             resolve(true);
         }
