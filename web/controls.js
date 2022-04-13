@@ -289,6 +289,28 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
     });
 }
 
+function getSelectVal(pSelect) {
+    var val = pSelect.val();
+    return val && val != '[NULL]' ? val : null;
+}
+
+function getSelectText(pSelect) {
+    var val = pSelect.val();
+    if (val) {
+        if (Array.isArray(val)) {
+            var arr = [];
+            pSelect.find('option:selected').each(function (ix, el) {
+                arr.push($(el).text());
+            });
+            return arr;
+        } else {
+            return pSelect.find('option:selected').text();
+        };
+    } else {
+        return null;
+    }
+}
+
 /*
 Asigna el value a un select
 pNotFoundAction:
