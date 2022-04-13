@@ -419,24 +419,6 @@ function renderPage() {
         }
     });
 
-    // Crea los Maps Autocomplete
-    var $mapsAc = $('.maps-autocomplete');
-    if ($mapsAc.length > 0) {
-        $mapsAc.attr('data-filling', '1');
-
-        include('maps', function () {
-            document.getElementById('script_mapsapi').loaded(function () {
-                $mapsAc.each(function () {
-                    var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
-                    ac.inputEl = this;
-                    this.mapsAutocomplete = ac;
-                    ac.addListener('place_changed', maps.onPlaceChange);
-                    $(this).removeAttr('data-filling');
-                });
-            })
-        });
-    }
-
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     setTimeout(function waiting() {
         if ($('[data-filling]').length > 0) {
@@ -480,11 +462,11 @@ function getRow(pRow, pCont, pCol) {
 }
 
 function printForm() {
-    preloader.show();
-    setTimeout(function () {
-        preloader.hide();
-    }, 5000);
+    //todo:
+}
 
+function exitForm() {
+    history.back();
 }
 
 function getDefaultControl(pField) {

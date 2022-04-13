@@ -99,5 +99,76 @@ function setDTPickerVal(pInput, pValue) {
 }
 
 function inputDataList(pInput, pSource) {
+    debugger;
+    pInput.attr('autocomplete', 'off');
 
+    getFolder(objPropCI(pSource, 'folder'), objPropCI(pSource, 'rootFolder')).then(
+        function (fld) {
+            var f = objPropCI(pSource, 'field').toUpperCase();
+            DoorsAPI.folderSearchGroups(fld['FldId'], f, '', f + ' is not null and ' + f + ' <> \'\'').then(
+                function (res) {
+                    var id = pInput.attr('id');
+                    pInput.attr('list', id + '_list');
+                    var $list = $('<datalist/>', {
+                        id: id + '_list',
+                    });
+                    $list.insertAfter(pInput);
+                    res.forEach(el => {
+                        $('<option/>', {
+                            value: el[f],
+                        }).appendTo($list);
+                    });
+                },
+                function (err) {
+                    console.log(err);
+                }
+            )
+        }
+    )
+}
+
+function newInputMaps() {
+    include('maps');
+
+    /*
+    Public Name
+	Public PlaceHolder
+	Public Text
+	Public OnChange
+	Public CssClass
+	Public Ticked ' Deprecado por Value
+	Public Value
+	Public Readonly
+
+    If Readonly Then
+        oSB.Append "<input type='text' name='" & Name & "' id='" & Name & "' class='form-control' value='" & AttEnc(Text & "") & "' readonly></input>"
+        oSB.Append "<span style='color:#3c763d; right:18px; top:25px; z-index: 1000;" & IIf(Value & "" <> "" Or Ticked, "", "display:none;") & _
+            "' class='glyphicon glyphicon-ok form-control-feedback'></span>"
+    Else
+        oSB.Append "<div class='input-group'>"
+        oSB.Append "<input type='text' name='" & Name & "' id='" & Name & "' class='form-control maps-autocomplete' placeholder='" & PlaceHolder & _
+            "' value='" & AttEnc(Text & "") & "' onfocus='maps.setBounds(this)' onchange='maps.onInputChange(this)' onplacechange='" & OnChange & "'></input>"
+        oSB.Append "<span style='color:#3c763d; right:40px; z-index: 1000;" & IIf(Value & "" <> "" Or Ticked, "", "display:none;") & _
+            "' class='glyphicon glyphicon-ok form-control-feedback'></span>"
+        oSB.Append "<span class='input-group-addon add-on' style='cursor: pointer;' onclick='maps.pickLocation(this, event)'><span class='glyphicon glyphicon-map-marker'></span></span>"
+        oSB.Append "</div>"
+        oSB.Append "<input type='hidden' name='" & Name & "_value' id='" & Name & "_value' value='" & AttEnc(Value & "") & "'>"
+    End If
+
+    Render = oSB.ToString()
+*/
+}
+
+/*
+Devuelve un folder por ID o PATH
+Si es por PATH hay que pasar el RootFolderId
+*/
+function getFolder(pFolder, pRootFolderId) {
+    return new Promise(function (resolve, reject) {
+        if (!isNaN(parseInt(pFolder))) {
+            DoorsAPI.foldersGetById(pFolder).then(resolve, reject);
+        } else {
+            DoorsAPI.foldersGetByPath(pRootFolderId, pFolder).then(resolve, reject);
+        }
+    });
 }

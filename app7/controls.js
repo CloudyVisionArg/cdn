@@ -230,6 +230,8 @@ function getInputAddress(pId, pLabel, pValue) {
         maps.pickLocation($input[0], e);
     });
 
+    //todo: me parece q falta el hidden, dps revisar bien
+    
     return $itemInput;
 }
 
