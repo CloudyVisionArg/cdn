@@ -686,6 +686,7 @@ function renderControls(pCont, pParent) {
             }
 
             $input.selectpicker({ liveSearch: true });
+            $input.selectpicker('refresh');
             /*
             if (ctl.attr('searchbar') == '1') {
                 f7ctl.params.openIn = 'popup';
