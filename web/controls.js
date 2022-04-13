@@ -171,3 +171,48 @@ function getFolder(pFolder, pRootFolderId) {
         }
     });
 }
+
+function newSelect(pId, pLabel) {
+    var $div = $('<div/>', {
+        class: 'mt-3',
+    });
+
+    $div.append('<label class="form-label">' + pLabel + '</label>');
+
+    var $sel = $('<select/>', {
+        id: pId,
+    }).appendTo($div);
+
+    $sel.selectpicker();
+    //$sel.selectpicker({ style: 'btn-default' });
+
+    return $div;
+}
+/*
+oScrB.Append "<select"
+If Not bEnabled Then oScrB.Append " disabled"
+If bReadonly Then oScrB.Append " readonly"
+If bMultiple Then oScrB.Append " multiple"
+If sTooltip & "" <> "" Then
+    oScrB.Append GetAtt("data-toogle", "tooltip")
+    oScrB.Append GetAtt("title", sTooltip)
+End If
+
+sAtt = AttributesString(Me, True)
+If sAtt <> "" Then oScrB.Append sAtt
+oScrB.Append ">" & vbCrLf
+
+For i = 1 To oItems.Count
+    oScrB.Append oItems(i).Render & vbCrLf
+Next
+
+oScrB.Append "</select>"
+oScrB.Append "<script>$(document).ready(function () {"
+oScrB.Append "if ($('#" & sName & "').data('selectpicker') == undefined) {"
+oScrB.Append "	$('#" & sName & "').selectpicker({ style: 'btn-default', size: 'auto' });"
+oScrB.Append "}"
+if Readonly Then
+    oScrB.Append "disableSelect3('" & sName & "');"
+End If
+oScrB.Append "});</script>"
+*/
