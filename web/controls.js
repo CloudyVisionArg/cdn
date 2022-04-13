@@ -181,6 +181,7 @@ function newSelect(pId, pLabel, pMultiple) {
 
     var $sel = $('<select/>', {
         id: pId,
+        class: 'form-control',
     }).appendTo($div);
 
     if (pMultiple) $sel.attr('multiple', true);
