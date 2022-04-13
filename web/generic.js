@@ -15,6 +15,14 @@ var urlParams, fld_id, folder, doc_id, doc;
 var controlsFolder, controls, controlsRights;
 var saving;
 
+var arrPreloader = [];
+arrPreloader.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+arrPreloader.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+arrPreloader.push({ id: 'web-javascript', version: 0 });
+include(arrPreloader, function () {
+    preloader.show();
+});
+
 var arrScripts = [];
 arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
 arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
