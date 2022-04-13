@@ -654,7 +654,9 @@ function renderControls(pCont, pParent) {
         // -- SelectFolder / SelectKeywords --
 
         } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS') {
-            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
+            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1', {
+                liveSearch: (ctl.attr('searchbar') == '1'),
+            });
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
@@ -686,15 +688,6 @@ function renderControls(pCont, pParent) {
                 $input.attr('data-fill-order', ctl.attr('searchorder'));
 
             }
-
-            $input.attr('data-live-search', true);
-            $input.selectpicker('refresh');
-            /*
-            if (ctl.attr('searchbar') == '1') {
-                f7ctl.params.openIn = 'popup';
-                f7ctl.params.searchbar = true;
-            }
-            */
 
 
         // -- DocumentLog --

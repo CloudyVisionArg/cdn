@@ -172,7 +172,7 @@ function getFolder(pFolder, pRootFolderId) {
     });
 }
 
-function newSelect(pId, pLabel, pMultiple) {
+function newSelect(pId, pLabel, pMultiple, pOptions) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
@@ -182,12 +182,11 @@ function newSelect(pId, pLabel, pMultiple) {
     var $sel = $('<select/>', {
         id: pId,
         class: 'form-control',
-        //'data-live-search': true,
     }).appendTo($div);
 
     if (pMultiple) $sel.attr('multiple', true);
 
-    $sel.selectpicker();
+    $sel.selectpicker(pOptions);
 
     return $div;
 }
