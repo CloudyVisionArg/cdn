@@ -6,6 +6,7 @@ Documentacion de componentes:
 Bootstrap: https://getbootstrap.com/docs/5.1/getting-started/introduction/
 Iconos: https://icons.getbootstrap.com
 DTPicker: https://getdatepicker.com/5-4/
+bootstrap-select: https://developer.snapappointments.com/bootstrap-select/
 jQuery: https://api.jquery.com
 Numeral: http://numeraljs.com
 Moment: https://momentjs.com
@@ -29,6 +30,9 @@ arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 arrScripts.push({ id: 'tempus-dominus', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js', depends: ['jquery'] });
 arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
 arrScripts.push({ id: 'lib-moment' });
+arrScripts.push({ id: 'bootstrap-select', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js' });
+arrScripts.push({ id: 'bootstrap-select-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
+arrScripts.push({ id: 'bootstrap-select-translation', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-*.min.js' });
 
 include(arrScripts, function () {
     preloader.show();
@@ -601,7 +605,7 @@ function renderControls(pCont, pParent) {
                 });
             }
 
-            if (ctl.attr('buttons') == 'phone') addPhoneButtons($this);
+            if (ctl.attr('buttons') == 'phone') addPhoneButton($this);
             if (ctl.attr('buttons') == 'email') addEmailButton($this);
 
 
