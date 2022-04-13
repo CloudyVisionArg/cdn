@@ -685,7 +685,7 @@ function renderControls(pCont, pParent) {
 
             }
 
-            $input.selectpicker({ liveSearch: true });
+            $input.attr('data-live-search', true);
             $input.selectpicker('refresh');
             /*
             if (ctl.attr('searchbar') == '1') {
