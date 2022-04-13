@@ -462,7 +462,14 @@ function getRow(pRow, pCont, pCol) {
 }
 
 function printForm() {
-    //todo:
+	var frm = top.window.frames['frameDer'];
+	if (!frm) frm = window;
+	if (!frm) {
+		toast('Imposible imprimir el formulario');
+		return;
+	}
+	frm.focus();
+	frm.window ? frm.window.print() : frm.print();
 }
 
 function exitForm() {
