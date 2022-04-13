@@ -588,7 +588,7 @@ function renderControls(pCont, pParent) {
             }
 
             if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
-                f7ctl = inputDataList($input, {
+                inputDataList($input, {
                     folder: fld_id,
                     field: tf,
                 });
