@@ -639,10 +639,12 @@ function renderControls(pCont, pParent) {
             }).appendTo($this);
 
 
-        // -- Select --
+        // -- Select / SelectMultiple --
 
-        } else if (type == 'SELECT') {
-            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
+        } else if (type == 'SELECT' || type == 'SELECTMULTIPLE') {
+            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1' || type == 'SELECTMULTIPLE', {
+                liveSearch: (ctl.attr('searchbar') == '1'),
+            });
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
@@ -651,12 +653,11 @@ function renderControls(pCont, pParent) {
             }
 
 
-        // -- SelectFolder / SelectKeywords --
+        // -- SelectFolder / SelectKeywords / SelectMultipleFolder --
 
-        } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS') {
-            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1', {
+        } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER') {
+            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1' || type == 'SELECTMULTIPLEFOLDER', {
                 liveSearch: (ctl.attr('searchbar') == '1'),
-                style: 'btn-outline-dark',
             });
             $input = $this.find('select');
 
@@ -682,7 +683,7 @@ function renderControls(pCont, pParent) {
                 Si hacen falta los XFIELD agregarlos en el SBF asi:
                     $input.attr('data-fill-fields', $input.attr('data-fill-fields') + ', xfield1') 
                 */
-            } else { // SELECTFOLDER
+            } else { // SELECTFOLDER / SELECTMULTIPLEFOLDER
                 $input.attr('data-fill-folder', ctl.attr('searchfolder'));
                 $input.attr('data-fill-fields', ctl.attr('fieldlist'));
                 $input.attr('data-fill-formula', ctl.attr('searchfilter'));
@@ -760,54 +761,6 @@ function renderControls(pCont, pParent) {
                     class: 'list no-hairlines-md',
                     style: 'margin-top: 0;',
                 }).append($ul).appendTo($this.find('.accordion-item-content'));
-            }
-            */
-
-
-        // -- SelectMultiple --
-
-        } else if (type == 'SELECTMULTIPLE') {
-            /*
-            $this = getSmartSelect(ctl['NAME'], label, true);
-            $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('.smart-select').addClass('disabled');
-            }
-
-            if (ctl.attr('searchbar') == '1') {
-                f7ctl.params.openIn = 'popup';
-                f7ctl.params.searchbar = true;
-            }
-            */
-
-
-        // -- SelectMultipleFolder --
-
-        } else if (type == 'SELECTMULTIPLEFOLDER') {
-            /*
-            $this = getSmartSelect(ctl['NAME'], label, true);
-            $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('.smart-select').addClass('disabled');
-            }
-
-            $input.attr('data-textfield', tf);
-            $input.attr('data-valuefield', vf);
-
-            $input.attr('data-fill', '1');
-            $input.attr('data-fill-folder', ctl.attr('searchfolder'));
-            $input.attr('data-fill-fields', ctl.attr('fieldlist'));
-            $input.attr('data-fill-formula', ctl.attr('searchfilter'));
-            $input.attr('data-fill-order', ctl.attr('searchorder'));
-            $input.attr('data-fill-withoutnothing', '1');
-
-            if (ctl.attr('searchbar') == '1') {
-                f7ctl.params.openIn = 'popup';
-                f7ctl.params.searchbar = true;
             }
             */
 
