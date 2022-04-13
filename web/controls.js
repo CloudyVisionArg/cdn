@@ -99,7 +99,6 @@ function setDTPickerVal(pInput, pValue) {
 }
 
 function inputDataList(pInput, pSource) {
-    debugger;
     pInput.attr('autocomplete', 'off');
 
     getFolder(objPropCI(pSource, 'folder'), objPropCI(pSource, 'rootFolder')).then(
