@@ -649,38 +649,9 @@ function renderControls(pCont, pParent) {
             }
 
 
-        // -- SelectFolder --
+        // -- SelectFolder / SelectKeywords --
 
-        } else if (type == 'SELECTFOLDER') {
-            /*
-            $this = getSmartSelect(ctl['NAME'], label);
-            $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('.smart-select').addClass('disabled');
-            }
-
-            $input.attr('data-textfield', tf);
-            $input.attr('data-valuefield', vf);
-
-            $input.attr('data-fill', '1');
-            $input.attr('data-fill-folder', ctl.attr('searchfolder'));
-            $input.attr('data-fill-fields', ctl.attr('fieldlist'));
-            $input.attr('data-fill-formula', ctl.attr('searchfilter'));
-            $input.attr('data-fill-order', ctl.attr('searchorder'));
-            $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
-
-            if (ctl.attr('searchbar') == '1') {
-                f7ctl.params.openIn = 'popup';
-                f7ctl.params.searchbar = true;
-            }
-            */
-
-
-        // -- SelectKeywords --
-
-        } else if (type == 'SELECTKEYWORDS') {
+        } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS') {
             $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
             $input = $this.find('select');
 
@@ -693,18 +664,28 @@ function renderControls(pCont, pParent) {
             $input.attr('data-valuefield', vf);
 
             $input.attr('data-fill', '1');
-            $input.attr('data-fill-folder', ctl.attr('folder'));
-            $input.attr('data-fill-fields', 'DESCRIPTION, ID');
-            $input.attr('data-fill-formula', 'TYPE = ' + sqlEncode(ctl.attr('keywordtype'), 1) +
-                ' and (DISABLED = 0 OR DISABLED is NULL)');
-            aux = ctl.attr('order');
-            $input.attr('data-fill-order', (aux ? aux : 'DESCRIPTION'));
             $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
-            /*
-            Si hacen falta los XFIELD agregarlos en el SBF asi:
-                $input.attr('data-fill-fields', $input.attr('data-fill-fields') + ', xfield1') 
-            */
 
+            if (type == 'SELECTKEYWORDS') {
+                $input.attr('data-fill-folder', ctl.attr('folder'));
+                $input.attr('data-fill-fields', 'DESCRIPTION, ID');
+                $input.attr('data-fill-formula', 'TYPE = ' + sqlEncode(ctl.attr('keywordtype'), 1) +
+                    ' and (DISABLED = 0 OR DISABLED is NULL)');
+                aux = ctl.attr('order');
+                $input.attr('data-fill-order', (aux ? aux : 'DESCRIPTION'));
+                /*
+                Si hacen falta los XFIELD agregarlos en el SBF asi:
+                    $input.attr('data-fill-fields', $input.attr('data-fill-fields') + ', xfield1') 
+                */
+            } else { // SELECTFOLDER
+                $input.attr('data-fill-folder', ctl.attr('searchfolder'));
+                $input.attr('data-fill-fields', ctl.attr('fieldlist'));
+                $input.attr('data-fill-formula', ctl.attr('searchfilter'));
+                $input.attr('data-fill-order', ctl.attr('searchorder'));
+
+            }
+
+            $input.selectpicker({ liveSearch: true });
             /*
             if (ctl.attr('searchbar') == '1') {
                 f7ctl.params.openIn = 'popup';
