@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+sqlEncode(pValue, pType)
 Eventos show y hide en jQuery
 preloader
 toast(pText, pOptions)
@@ -36,6 +37,39 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+function sqlEncode(pValue, pType) {
+    if (pValue == null) {
+        return 'NULL';
+    } else {
+        if (pType == 1) {
+            return '\'' + pValue.replaceAll('\'', '\'\'') + '\'';
+
+        } else if (pType == 2) {
+            var ret = ISODate(pValue);
+            if (ret == null) {
+                return 'NULL';
+            } else {
+                return '\'' + ret + ' ' + ISOTime(pValue, true) + '\''; 
+            }
+
+        } else if (pType == 3) {
+            if (typeof pValue == 'number') {
+                return pValue.toString();
+            } else {
+                var n = numeral(pValue).value();
+                if (n != null) {
+                    return n.toString();
+                } else {
+                    return 'NULL';
+                }
+            };
+
+        } else {
+            throw 'Unknown type: ' + pType;
+        }
+    };
+}
 
 /*
 Agrega a jQuery soporte para eventos show y hide
