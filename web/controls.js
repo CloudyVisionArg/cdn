@@ -287,3 +287,49 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
         }
     });
 }
+
+/*
+Asigna el value a un select
+pNotFoundAction:
+    -1: Deja como esta, sin seleccionar
+    0: Selecciona el 1ro
+    1: Lo agrega (opcion por defecto)
+*/
+function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
+    pSelect.val(null);
+
+    if (pSelect.attr('multiple')) {
+        if (pValue) {
+            pSelect.val(pValue);
+        } else if (pText) {
+            pSelect.find('option').filter(function() {
+                return pText.indexOf($(this).text()) >= 0;
+            }).prop('selected', true);
+        }
+
+    } else {
+        var notFound = (pNotFoundAction === undefined) ? 1 : pNotFoundAction;
+
+        if (pValue) {
+            pSelect.val(pValue);
+        } else {
+            pSelect.find('option').filter(function() {
+                return $(this).text() == pText;
+            }).prop('selected', true);
+        };
+
+        if (pSelect[0].selectedIndex < 0) {
+            if (notFound == 1 && (pValue || pText)) {
+                var option = $('<option/>', {
+                    value: pValue,
+                    selected: 'selected',
+                });
+                option.html(pText);
+                option.appendTo(pSelect);
+
+            } else if (notFound == 0) {
+                pSelect[0].selectedIndex = 0;
+            }
+        }
+    }
+}
