@@ -653,11 +653,11 @@ function renderControls(pCont, pParent) {
             }
 
 
-        // -- SelectFolder / SelectKeywords / SelectMultipleFolder --
+        // -- SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
 
-        } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER') {
+        } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
             $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1' || type == 'SELECTMULTIPLEFOLDER', {
-                liveSearch: (ctl.attr('searchbar') == '1'),
+                liveSearch: (ctl.attr('searchbar') == '1' || type == 'LOOKUPBOXACCOUNTS'),
             });
             $input = $this.find('select');
 
@@ -670,7 +670,6 @@ function renderControls(pCont, pParent) {
             $input.attr('data-valuefield', vf);
 
             $input.attr('data-fill', '1');
-            $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
 
             if (type == 'SELECTKEYWORDS') {
                 $input.attr('data-fill-folder', ctl.attr('folder'));
@@ -679,15 +678,31 @@ function renderControls(pCont, pParent) {
                     ' and (DISABLED = 0 OR DISABLED is NULL)');
                 aux = ctl.attr('order');
                 $input.attr('data-fill-order', (aux ? aux : 'DESCRIPTION'));
+                $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
                 /*
                 Si hacen falta los XFIELD agregarlos en el SBF asi:
                     $input.attr('data-fill-fields', $input.attr('data-fill-fields') + ', xfield1') 
                 */
-            } else { // SELECTFOLDER / SELECTMULTIPLEFOLDER
+
+            } else if (type == 'SELECTFOLDER' || type == 'SELECTMULTIPLEFOLDER') {
                 $input.attr('data-fill-folder', ctl.attr('searchfolder'));
                 $input.attr('data-fill-fields', ctl.attr('fieldlist'));
                 $input.attr('data-fill-formula', ctl.attr('searchfilter'));
                 $input.attr('data-fill-order', ctl.attr('searchorder'));
+                $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' || type == 'SELECTMULTIPLEFOLDER' ? '1' : '0');
+
+            } else if (type == 'LOOKUPBOXACCOUNTS') {
+                $input.attr('data-fill-folder', 'accounts');
+                aux = '(disabled = 0 or disabled is null) and system = 0';
+                if (ctl.attr('formula')) {
+                    aux = aux + ' and (' + ctl.attr('formula') + ')';
+                }
+                $input.attr('data-fill-formula', aux);
+                $input.attr('data-fill-order', 'name');
+                $input.attr('data-fill-withoutnothing',
+                    (ctl.attr('allownull') == '0' || ctl.attr('mode') == '2') ? '1' : '0');
+    
+
             }
 
 
@@ -764,40 +779,7 @@ function renderControls(pCont, pParent) {
             }
             */
 
-
-        // -- LookupboxAccounts --
-
-        } else if (type == 'LOOKUPBOXACCOUNTS') {
-            /*
-            $this = getSmartSelect(ctl['NAME'], label, ctl.attr('mode') == '2');
-            $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('.smart-select').addClass('disabled');
-            }
-
-            $input.attr('data-textfield', tf);
-            $input.attr('data-valuefield', vf);
-
-            aux = '(disabled = 0 or disabled is null) and system = 0';
-            if (ctl.attr('formula')) {
-                aux = aux + ' and (' + ctl.attr('formula') + ')';
-            }
-            $input.attr('data-fill', '1');
-            $input.attr('data-fill-folder', 'accounts');
-            $input.attr('data-fill-formula', aux);
-            $input.attr('data-fill-order', 'name');
-            $input.attr('data-fill-withoutnothing',
-                (ctl.attr('allownull') == '0' || ctl.attr('mode') == '2') ? '1' : '0');
-
-            if (ctl.attr('searchbar') == '1') {
-                f7ctl.params.openIn = 'popup';
-                f7ctl.params.searchbar = true;
-            }
-            */
-
-
+            
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
