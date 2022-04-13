@@ -390,9 +390,9 @@ function renderPage() {
                         var $e = $(el);
                         var type = $e.attr('data-field-type');
                         if (type == '1') {
-                            $e.attr('data-icon', 'fa fa-user-o');
+                            $e.attr('data-icon', 'bi bi-person');
                         } else if (type == '2') {
-                            $e.attr('data-icon', 'fa fa-users');
+                            $e.attr('data-icon', 'bi bi-people');
                         }
                     })
                 }
