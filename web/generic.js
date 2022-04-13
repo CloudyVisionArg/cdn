@@ -382,7 +382,6 @@ function renderPage() {
         var fld = $el.attr('data-fill-folder');
 
         if (fld == 'accounts') {
-            debugger;
             fillSelect($el,
                 DoorsAPI.accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
                 $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
