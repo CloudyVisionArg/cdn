@@ -686,7 +686,6 @@ function renderControls(pCont, pParent) {
                 $input.attr('data-fill-fields', ctl.attr('fieldlist'));
                 $input.attr('data-fill-formula', ctl.attr('searchfilter'));
                 $input.attr('data-fill-order', ctl.attr('searchorder'));
-
             }
 
 
