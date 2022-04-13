@@ -640,15 +640,12 @@ function renderControls(pCont, pParent) {
         // -- Select --
 
         } else if (type == 'SELECT') {
-            /*
-            $this = getSmartSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
+            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('.smart-select').addClass('disabled');
+                $input.attr('readonly') = true;
             }
-            */
 
 
         // -- SelectFolder --

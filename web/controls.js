@@ -172,7 +172,7 @@ function getFolder(pFolder, pRootFolderId) {
     });
 }
 
-function newSelect(pId, pLabel) {
+function newSelect(pId, pLabel, pMultiple) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
@@ -182,6 +182,8 @@ function newSelect(pId, pLabel) {
     var $sel = $('<select/>', {
         id: pId,
     }).appendTo($div);
+
+    if (pMultiple) $sel.attr('multiple') = true;
 
     $sel.selectpicker();
     //$sel.selectpicker({ style: 'btn-default' });
