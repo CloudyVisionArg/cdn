@@ -392,7 +392,7 @@ function renderPage() {
                         if (type == '1') {
                             $e.attr('data-icon', 'bi bi-person');
                         } else if (type == '2') {
-                            $e.attr('data-icon', 'bi bi-people');
+                            $e.attr('data-icon', 'bi bi-people-fill');
                         }
                     })
                 }
