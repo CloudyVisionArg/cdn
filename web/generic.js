@@ -467,10 +467,12 @@ function getRow(pRow, pCont, pCol) {
 }
 
 function printForm() {
+    debugger;
+
 	var frm = top.window.frames['frameDer'];
 	if (!frm) frm = window;
 	if (!frm) {
-		toast('Imposible imprimir el formulario');
+		toast('No se pudo imprimir el formulario');
 		return;
 	}
 	frm.focus();
