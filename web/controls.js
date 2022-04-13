@@ -209,7 +209,7 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
 
         if (!pWithoutNothing) {
             option = $('<option/>', { value: '[NULL]' });
-            option.appendTo(pSelect);
+            option.html('(ninguno)').appendTo(pSelect);
         }
         
         if (Array.isArray(pSource)) {
