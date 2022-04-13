@@ -645,6 +645,7 @@ function renderControls(pCont, pParent) {
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $input.attr('readonly', true);
+                $input.selectpicker('refresh');
             }
 
 
@@ -680,13 +681,12 @@ function renderControls(pCont, pParent) {
         // -- SelectKeywords --
 
         } else if (type == 'SELECTKEYWORDS') {
-            /*
-            $this = getSmartSelect(ctl['NAME'], label);
+            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('.smart-select').addClass('disabled');
+                $input.attr('readonly', true);
+                $input.selectpicker('refresh');
             }
 
             $input.attr('data-textfield', tf);
