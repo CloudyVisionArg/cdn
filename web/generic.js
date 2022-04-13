@@ -382,6 +382,7 @@ function renderPage() {
         var fld = $el.attr('data-fill-folder');
 
         if (fld == 'accounts') {
+            debugger;
             fillSelect($el,
                 DoorsAPI.accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
                 $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
@@ -701,8 +702,6 @@ function renderControls(pCont, pParent) {
                 $input.attr('data-fill-order', 'name');
                 $input.attr('data-fill-withoutnothing',
                     (ctl.attr('allownull') == '0' || ctl.attr('mode') == '2') ? '1' : '0');
-    
-
             }
 
 
@@ -779,7 +778,7 @@ function renderControls(pCont, pParent) {
             }
             */
 
-            
+
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
