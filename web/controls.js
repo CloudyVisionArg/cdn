@@ -392,7 +392,7 @@ function newCKEditor(pId, pLabel, pValue) {
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
-		
+		/*
 			oStrBuilder.Append oTextBox.Render & VbCrLf
 			oStrBuilder.Append "<script>" & VbCrLf
 			oStrBuilder.Append "CKEDITOR.replace('" & Name & "'"
@@ -410,4 +410,5 @@ function newCKEditor(pId, pLabel, pValue) {
 			
 			oStrBuilder.Append ").on('fileUploadResponse', function(evt) { reloadAttachments(); });" & VbCrLf & "</script>"
     return $div;
+    */
 }
