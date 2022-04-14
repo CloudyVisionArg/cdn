@@ -726,12 +726,11 @@ function renderControls(pCont, pParent) {
         // -- HtmlArea --
 
         } else if (type == 'HTMLAREA') {
-            debugger;
             var aux = parseInt(ctl.attr('height'));
             $this = newCKEditor(ctl['NAME'], label, {
                 readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
                 height: !isNaN(aux) ? aux : 200,
-                customConfig: ctl.attr('mode') == 'BASIC' ? 'configbasic.js' : 'config.js',
+                customConfig: ctl.attr('mode') == 'basic' ? 'configbasic.js' : 'config.js',
             });
             $input = $this.find('textarea');
             $input.attr('data-textfield', tf);
