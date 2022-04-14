@@ -1,4 +1,4 @@
-function newInputText(pId, pLabel, pValue) {
+function newInputText(pId, pLabel) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
@@ -9,13 +9,12 @@ function newInputText(pId, pLabel, pValue) {
         type: 'text',
         class: 'form-control',
         id: pId,
-        value: pValue,
     }).appendTo($div);
 
     return $div;
 }
 
-function newTextarea(pId, pLabel, pValue) {
+function newTextarea(pId, pLabel) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
@@ -25,13 +24,12 @@ function newTextarea(pId, pLabel, pValue) {
     $('<textarea/>', {
         class: 'form-control',
         id: pId,
-        value: pValue,
     }).appendTo($div);
 
     return $div;
 }
 
-function newDTPicker(pId, pLabel, pType, pValue) {
+function newDTPicker(pId, pLabel, pType) {
     // pType: date, time, datetime-local
 
     var $div = $('<div/>', {
@@ -58,7 +56,6 @@ function newDTPicker(pId, pLabel, pType, pValue) {
     var $inp = $('<input/>', {
         type: 'text',
         id: pId,
-        value: pValue,
         class: 'form-control datetimepicker-input',
         'data-target': '#' + pId + '_div',
         'data-date-type': t,
@@ -359,17 +356,14 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     if (pSelect.selectpicker) pSelect.selectpicker('refresh');
 }
 
-function newHtmlArea(pId, pLabel, pValue) {
+function newHtmlArea(pId, pLabel) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
-    $('<textarea/>', {
-        id: pId,
-        value: pValue,
-    }).appendTo($div);
+    $('<textarea/>', { id: pId }).appendTo($div);
 
     scriptLoaded('tiny-mce', function () {
         tinymce.init({
@@ -385,30 +379,29 @@ function newHtmlArea(pId, pLabel, pValue) {
     return $div;
 }
 
-function newCKEditor(pId, pLabel, pValue) {
+function newCKEditor(pId, pLabel, pOptions) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
-    var $txt = $('<textarea/>', {
-        id: pId,
-        value: pValue,
-    }).appendTo($div);
+    var $txt = $('<textarea/>', { id: pId }).appendTo($div);
+
+    var opt = {
+        customConfig: 'configbasic.js',
+        height: 200,
+        disableNativeSpellChecker: true,
+        scayt_autoStartup: true,
+        scayt_disableOptionsStorage: 'lang',
+        wsc_lang: 'es_ES',
+        scayt_sLang: 'es_ES',
+        //scayt_srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js', // esto poner si https = false
+    };
+    Object.assign(opt, pOptions);
 
     scriptLoaded('ckeditor', function () {
-        $txt[0].ckeditor = CKEDITOR.replace($txt[0], {
-            //customConfig: 'configbasic.js',
-            customConfig: 'config.js',
-            height: 200,
-            disableNativeSpellChecker: true,
-            scayt_autoStartup: true,
-            scayt_disableOptionsStorage: 'lang',
-            wsc_lang: 'es_ES',
-            scayt_sLang: 'es_ES',
-            //scayt_srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js', // esto poner si https = false
-        });
+        $txt[0].ckeditor = CKEDITOR.replace($txt[0], opt);
     });
 
     return $div;

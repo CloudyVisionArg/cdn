@@ -726,17 +726,15 @@ function renderControls(pCont, pParent) {
         // -- HtmlArea --
 
         } else if (type == 'HTMLAREA') {
-            $this = newCKEditor(ctl['NAME'], label);
-        
-
-            /*$input = $this.find('.text-editor');
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.addClass('disabled');
-            }
-
+            debugger;
+            var aux = parseInt(ctl.attr('height'));
+            $this = newCKEditor(ctl['NAME'], label, {
+                readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
+                height: aux,
+            });
+            $input = $this.find('textarea');
             $input.attr('data-textfield', tf);
-            */
+            $input.attr('data-ckeditor', true);
 
 
         // -- Checkbox --
