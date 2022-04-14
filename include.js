@@ -127,6 +127,7 @@ function include() {
         });
 
         function includeEl(pEl) {
+            if (pEl.id == 'bootstrap-select') debugger;
             console.log(pEl.id + ' includeEl');
             if (typeof pEl.version == 'number') {
                 include(pEl.id, pEl.version, function () {
