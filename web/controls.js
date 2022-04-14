@@ -403,6 +403,7 @@ function newCKEditor(pId, pLabel, pValue) {
 
             disableNativeSpellChecker: true,
             scayt_autoStartup: true,
+            scayt_srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js',
 
             readOnly: false,
 
