@@ -69,6 +69,7 @@ include(arrScripts, function () {
 	if (fld_id) {
 		DoorsAPI.foldersGetById(fld_id).then(
 			function (res) {
+                debugger;
 				folder = res;
 				getDoc();
 			},
@@ -949,7 +950,6 @@ function renderControls(pCont, pParent) {
 function fillControls() {
     var title;
 
-    debugger;
     if (!doc.IsNew) {
         title = getDocField(doc, 'subject').Value;
         if (!title) title = 'Doc #' + doc.DocId;
