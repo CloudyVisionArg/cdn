@@ -20,7 +20,7 @@ var saving, cache;
 // Includes que no es necesario esperar
 include('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css');
 include('font-awesome', 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css');
-include('tiny-mce', 'https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js');
+include('tiny-mce', 'https://cdn.tiny.cloud/1/ylziska7z6h6ckylfg3muxu1zjqyc56qj420nrvjx4zn3frm/tinymce/6/tinymce.min.js');
 
 // Includes que tienen que estar antes de dibujar la pag
 var arrScripts = [];
