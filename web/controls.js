@@ -398,15 +398,10 @@ function newCKEditor(pId, pLabel, pValue) {
     }).appendTo($div);
 
     scriptLoaded('ckeditor', function () {
-        CKEDITOR.replace($txt[0], {
+        $txt[0].ckeditor = CKEDITOR.replace($txt[0], {
             //customConfig: 'configbasic.js',
             customConfig: 'config.js',
-
-
-            readOnly: false,
-
             height: 200,
-
             disableNativeSpellChecker: true,
             scayt_autoStartup: true,
             scayt_disableOptionsStorage: 'lang',
@@ -414,8 +409,7 @@ function newCKEditor(pId, pLabel, pValue) {
             scayt_sLang: 'es_ES',
             //scayt_srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js', // esto poner si https = false
         });
-    })
+    });
 
     return $div;
-
 }
