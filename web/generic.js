@@ -1399,16 +1399,18 @@ function saveAtt() {
     });
 }
 
+// accountsSearch con cache
 function accountsSearch(pFormula, pOrder) {
     return new Promise(function (resolve, reject) {
-        debugger;
-        var key = 'accSearch-' + pFormula + '-'+ pOrder;
-        var cached = getCache(key + '-resolve');
-        if (cached) {
+        var key = 'accSearch-' + pFormula + '-' + pOrder;
+        // Esta el resultado?
+        var cached = getCache(key);
+        if (cached != undefined) {
             resolve(cached);
         } else {
-            cached = getCache(key);
-            if (cached) {
+            // Esta la promise?
+            cached = getCache(key + '-promise');
+            if (cached != undefined) {
                 cached.then(
                     function (res) {
                         resolve(res);
@@ -1420,10 +1422,12 @@ function accountsSearch(pFormula, pOrder) {
                 )
             } else {
                 var prom = DoorsAPI.accountsSearch(pFormula, pOrder);
-                setCache(key, prom);
+                // Cachea el promise
+                setCache(key + '-promise', prom);
                 prom.then(
                     function (res) {
-                        setCache(key + '-resolve', res);
+                        // Cachea el resultado
+                        setCache(key, res);
                         resolve(res);
                     },
                     function (err) {
@@ -1447,9 +1451,9 @@ function setCache(pKey, pValue) {
     if (Array.isArray(cache)) {
         var f = cache.find(el => el.key == pKey);
         if (f) {
-            f.value = pValue
+            f.value = pValue;
         } else {
-            cache.push({ key: pKey, value: pValue })
+            cache.push({ key: pKey, value: pValue });
         }
     } else {
         cache = [{ key: pKey, value: pValue }];
