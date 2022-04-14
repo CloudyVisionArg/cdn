@@ -69,8 +69,15 @@ include(arrScripts, function () {
 	if (fld_id) {
 		DoorsAPI.foldersGetById(fld_id).then(
 			function (res) {
-                debugger;
 				folder = res;
+                if (folder.Type == 1) {
+                    DoorsAPI.formsGetById(pFolder.FrmId).then(
+                        function (frm) {
+                            pFolder.Form = frm;
+                        }
+                    );
+                }
+            
 				getDoc();
 			},
 			errMgr
@@ -952,7 +959,12 @@ function fillControls() {
 
     if (!doc.IsNew) {
         title = getDocField(doc, 'subject').Value;
-        if (!title) title = 'Doc #' + doc.DocId;
+        debugger;
+        if (title) {
+            title += folder;
+        } else {
+            title = 'Doc #' + doc.DocId;
+        }
 
         /*
         getDocLog(doc_id, function (table) {
