@@ -71,9 +71,9 @@ include(arrScripts, function () {
 			function (res) {
 				folder = res;
                 if (folder.Type == 1) {
-                    DoorsAPI.formsGetById(pFolder.FrmId).then(
+                    DoorsAPI.formsGetById(folder.FrmId).then(
                         function (frm) {
-                            pFolder.Form = frm;
+                            folder.Form = frm;
                         }
                     );
                 }
