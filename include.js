@@ -178,7 +178,7 @@ function include() {
         if (src) {
 			var scriptNode = document.getElementById('script_' + pId);
             if (!scriptNode) {
-                console.log(pId + ' loading');
+                //console.log(pId + ' loading');
                 var D = document;
                 
 				if (src.substring(src.length - 4).toLowerCase() == '.css') {
