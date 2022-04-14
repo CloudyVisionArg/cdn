@@ -392,23 +392,29 @@ function newCKEditor(pId, pLabel, pValue) {
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
-		/*
-			oStrBuilder.Append oTextBox.Render & VbCrLf
-			oStrBuilder.Append "<script>" & VbCrLf
-			oStrBuilder.Append "CKEDITOR.replace('" & Name & "'"
-	
-			sAux = ""
-			For Each sConf In oConfig
-				If oConfig(sConf) & "" <> "" Then
-					sAux = sAux & ", " & sConf & " : " & oConfig(sConf)
-				End If
-			Next
-			If sAux <> "" Then
-				sAux = Mid(sAux, 3)
-				oStrBuilder.Append ", {" & sAux & "}"
-			End If
-			
-			oStrBuilder.Append ").on('fileUploadResponse', function(evt) { reloadAttachments(); });" & VbCrLf & "</script>"
-    return $div;
-    */
+    $('<textarea/>', {
+        id: pId,
+        value: pValue,
+    }).appendTo($div);
+
+    scriptLoaded('ckeditor', function () {
+        newCKEditor.replace(pId, {
+            customConfig: 'configbasic.js', // config.js
+
+            disableNativeSpellChecker: false,
+			scayt_autoStartup: false,
+
+            readOnly: false,
+
+            height: 50,
+
+            scayt_disableOptionsStorage: 'lang',
+
+            wsc_lang: 'es_ES',
+			scayt_sLang: 'es_ES',
+
+
+        });
+
+    })
 }
