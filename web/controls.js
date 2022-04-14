@@ -398,7 +398,7 @@ function newCKEditor(pId, pLabel, pValue) {
     }).appendTo($div);
 
     scriptLoaded('ckeditor', function () {
-        newCKEditor.replace(pId, {
+        CKEDITOR.replace(pId, {
             customConfig: 'configbasic.js', // config.js
 
             disableNativeSpellChecker: false,
