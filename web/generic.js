@@ -949,6 +949,7 @@ function renderControls(pCont, pParent) {
 function fillControls() {
     var title;
 
+    debugger;
     if (!doc.IsNew) {
         title = getDocField(doc, 'subject').Value;
         if (!title) title = 'Doc #' + doc.DocId;
