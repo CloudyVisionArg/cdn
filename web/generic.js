@@ -383,7 +383,7 @@ function renderPage() {
 
         if (fld == 'accounts') {
             fillSelect($el,
-                DoorsAPI.accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
+                accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
                 $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
                 function (res) {
                     $el.find('option').each(function (ix, el) {
