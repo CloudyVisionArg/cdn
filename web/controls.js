@@ -358,3 +358,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
 
     if (pSelect.selectpicker) pSelect.selectpicker('refresh');
 }
+
+function newHtmlArea() {
+    
+}
