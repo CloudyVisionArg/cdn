@@ -41,6 +41,7 @@ arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src
 arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
 
 include(arrScripts, function () {
+    console.log('Page init');
     preloader.show();
 
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
