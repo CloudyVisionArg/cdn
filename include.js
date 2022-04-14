@@ -112,16 +112,16 @@ function include() {
         arrScr.forEach(function (el, ix) {
             if (el.depends) {
                 // Tiene dependencias, hay que esperar que se carguen
-                el.depends.forEach(function (el2, ix2) {
-                    setTimeout(function wait() {
+                setTimeout(function wait() {
+                    el.depends.forEach(function (el2, ix2) {
                         if (arrScr.find(el3 => el3.id == el2 && !el3.loaded)) {
                             setTimeout(wait, 100);
                         } else {
                             if (el.id == 'bootstrap-select') debugger;
                             includeEl(el);
                         }
-                    }, 0)
-                })
+                    })
+                }, 0)
             } else {
                 includeEl(el);
             }
