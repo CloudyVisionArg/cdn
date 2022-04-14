@@ -359,6 +359,23 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     if (pSelect.selectpicker) pSelect.selectpicker('refresh');
 }
 
-function newHtmlArea() {
-    
+function newHtmlArea(pId, pLabel, pValue) {
+    var $div = $('<div/>', {
+        class: 'mt-3',
+    });
+
+    $div.append('<label class="form-label">' + pLabel + '</label>');
+
+    $('<textarea/>', {
+        id: pId,
+        value: pValue,
+    }).appendTo($div);
+
+    scriptLoaded('tiny-mce', function () {
+        tinymce.init({
+            selector: '#' + pId,
+        });
+    });
+
+    return $div;
 }
