@@ -401,8 +401,8 @@ function newCKEditor(pId, pLabel, pValue) {
         CKEDITOR.replace($txt[0], {
             customConfig: 'configbasic.js', // config.js
 
-            disableNativeSpellChecker: false,
-            scayt_autoStartup: false,
+            disableNativeSpellChecker: true,
+            scayt_autoStartup: true,
 
             readOnly: false,
 
