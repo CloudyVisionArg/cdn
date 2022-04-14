@@ -399,7 +399,8 @@ function newCKEditor(pId, pLabel, pValue) {
 
     scriptLoaded('ckeditor', function () {
         CKEDITOR.replace($txt[0], {
-            customConfig: 'configbasic.js', // config.js
+            //customConfig: 'configbasic.js',
+            customConfig: 'config.js',
 
             disableNativeSpellChecker: true,
             scayt_autoStartup: true,
