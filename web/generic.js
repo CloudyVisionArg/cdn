@@ -1418,20 +1418,20 @@ function accountsSearch(pFormula, pOrder) {
                         reject(err);
                     }
                 )
+            } else {
+                var prom = DoorsAPI.accountsSearch(pFormula, pOrder);
+                setCache(key, prom);
+                prom.then(
+                    function (res) {
+                        setCache(key + '-resolve', res);
+                        resolve(res);
+                    },
+                    function (err) {
+                        console.log(err);
+                        reject(err);
+                    }
+                )
             }
-        } else {
-            var prom = DoorsAPI.accountsSearch(pFormula, pOrder);
-            setCache(key, prom);
-            prom.then(
-                function (res) {
-                    setCache(key + '-resolve', res);
-                    resolve(res);
-                },
-                function (err) {
-                    console.log(err);
-                    reject(err);
-                }
-            )
         }
     });
 }
