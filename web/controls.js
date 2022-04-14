@@ -392,13 +392,13 @@ function newCKEditor(pId, pLabel, pValue) {
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
-    $('<textarea/>', {
+    var $txt = $('<textarea/>', {
         id: pId,
         value: pValue,
     }).appendTo($div);
 
     scriptLoaded('ckeditor', function () {
-        CKEDITOR.replace(pId, {
+        CKEDITOR.replace($txt, {
             customConfig: 'configbasic.js', // config.js
 
             disableNativeSpellChecker: false,
