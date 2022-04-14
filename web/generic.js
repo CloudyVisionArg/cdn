@@ -726,7 +726,6 @@ function renderControls(pCont, pParent) {
         // -- HtmlArea --
 
         } else if (type == 'HTMLAREA') {
-            debugger;
             $this = newCKEditor(ctl['NAME'], label);
         
 
