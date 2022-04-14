@@ -726,7 +726,7 @@ function renderControls(pCont, pParent) {
         // -- HtmlArea --
 
         } else if (type == 'HTMLAREA') {
-            $this = newHtmlArea(ctl['NAME'], label);
+            $this = newCKEditor(ctl['NAME'], label);
             /*$input = $this.find('.text-editor');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
