@@ -406,7 +406,7 @@ function newCKEditor(pId, pLabel, pValue) {
 
             readOnly: false,
 
-            height: 50,
+            height: 200,
 
             scayt_disableOptionsStorage: 'lang',
 
