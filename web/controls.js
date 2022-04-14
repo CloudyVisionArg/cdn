@@ -397,24 +397,23 @@ function newCKEditor(pId, pLabel, pValue) {
         value: pValue,
     }).appendTo($div);
 
-    scriptLoaded('ckeditor', function () {
-        CKEDITOR.replace($txt[0], {
-            customConfig: 'configbasic.js', // config.js
-
-            disableNativeSpellChecker: false,
-			scayt_autoStartup: false,
-
-            readOnly: false,
-
-            height: 50,
-
-            scayt_disableOptionsStorage: 'lang',
-
-            wsc_lang: 'es_ES',
-			scayt_sLang: 'es_ES',
-
-
-        });
-
-    })
+    $div[0].addEventListener('DOMNodeInserted', function (ev) {
+        scriptLoaded('ckeditor', function () {
+            CKEDITOR.replace($txt[0], {
+                customConfig: 'configbasic.js', // config.js
+    
+                disableNativeSpellChecker: false,
+                scayt_autoStartup: false,
+    
+                readOnly: false,
+    
+                height: 50,
+    
+                scayt_disableOptionsStorage: 'lang',
+    
+                wsc_lang: 'es_ES',
+                scayt_sLang: 'es_ES',
+            });
+        })
+    }, false);
 }
