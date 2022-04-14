@@ -396,8 +396,11 @@ function newCKEditor(pId, pLabel, pOptions) {
         scayt_disableOptionsStorage: 'lang',
         wsc_lang: 'es_ES',
         scayt_sLang: 'es_ES',
-        //scayt_srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js', // esto poner si https = false
     };
+    if (location.protocol != 'https:') {
+        // Da error CORS
+        opt.scayt_srcUrl = 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js';
+    }
     Object.assign(opt, pOptions);
 
     scriptLoaded('ckeditor', function () {
