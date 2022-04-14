@@ -359,7 +359,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     if (pSelect.selectpicker) pSelect.selectpicker('refresh');
 }
 
-function newHtmlArea(pId, pLabel, pValue) {
+function newTiny(pId, pLabel, pValue) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
@@ -374,7 +374,7 @@ function newHtmlArea(pId, pLabel, pValue) {
     scriptLoaded('tiny-mce', function () {
         tinymce.init({
             selector: '#' + pId,
-            plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
+            plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments ',
             toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents',
             toolbar_mode: 'floating',
             tinycomments_mode: 'embedded',
@@ -382,5 +382,32 @@ function newHtmlArea(pId, pLabel, pValue) {
         });
     });
 
+    return $div;
+}
+
+function newCKEditor(pId, pLabel, pValue) {
+    var $div = $('<div/>', {
+        class: 'mt-3',
+    });
+
+    $div.append('<label class="form-label">' + pLabel + '</label>');
+
+		
+			oStrBuilder.Append oTextBox.Render & VbCrLf
+			oStrBuilder.Append "<script>" & VbCrLf
+			oStrBuilder.Append "CKEDITOR.replace('" & Name & "'"
+	
+			sAux = ""
+			For Each sConf In oConfig
+				If oConfig(sConf) & "" <> "" Then
+					sAux = sAux & ", " & sConf & " : " & oConfig(sConf)
+				End If
+			Next
+			If sAux <> "" Then
+				sAux = Mid(sAux, 3)
+				oStrBuilder.Append ", {" & sAux & "}"
+			End If
+			
+			oStrBuilder.Append ").on('fileUploadResponse', function(evt) { reloadAttachments(); });" & VbCrLf & "</script>"
     return $div;
 }
