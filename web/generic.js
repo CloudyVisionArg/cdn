@@ -1403,13 +1403,28 @@ function accountsSearch(pFormula, pOrder) {
     return new Promise(function (resolve, reject) {
         debugger;
         var key = 'accSearch-' + pFormula + '-'+ pOrder;
-        var cached = getCache(key);
+        var cached = getCache(key + '-resolve');
         if (cached) {
             resolve(cached);
         } else {
-            DoorsAPI.accountsSearch(pFormula, pOrder).then(
+            cached = getCache(key);
+            if (cached) {
+                cached.then(
+                    function (res) {
+                        resolve(res);
+                    },
+                    function (err) {
+                        console.log(err);
+                        reject(err);
+                    }
+                )
+            }
+        } else {
+            var prom = DoorsAPI.accountsSearch(pFormula, pOrder);
+            setCache(key, prom);
+            prom.then(
                 function (res) {
-                    setCache(key, res);
+                    setCache(key + '-resolve', res);
                     resolve(res);
                 },
                 function (err) {
