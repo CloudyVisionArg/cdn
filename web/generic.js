@@ -729,7 +729,7 @@ function renderControls(pCont, pParent) {
             var aux = parseInt(ctl.attr('height'));
             $this = newCKEditor(ctl['NAME'], label, {
                 readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
-                height: !isNaN(aux) ? aux : 200,
+                height: !isNaN(aux) ? aux : 150,
                 customConfig: ctl.attr('mode') == 'basic' ? 'configbasic.js' : 'config.js',
             });
             $input = $this.find('textarea');
