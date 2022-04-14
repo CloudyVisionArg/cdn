@@ -130,10 +130,12 @@ function include() {
             if (typeof pEl.version == 'number') {
                 include(pEl.id, pEl.version, function () {
                     pEl.loaded = true;
+                    console.log(pEl.id.substring(7) + ' includeEl cb');
                 })
             } else {
                 include(pEl.id, pEl.src, function () {
                     pEl.loaded = true;
+                    console.log(pEl.id.substring(7) + ' includeEl cb');
                 })
             }
         }
@@ -193,8 +195,9 @@ function include() {
                     var waiting = 0;
                     var interv = setInterval(function () {
                         waiting += 10;
-                        if (self._loaded  || waiting > 3000) {
+                        if (self._loaded || waiting > 3000) {
                             clearInterval(interv);
+                            console.log(self.id.substring(7) + ' loaded');
                             if (callback) callback(self);
                             if (waiting > 3000) console.log('include(' + pId + ') timeout');
                             
@@ -207,7 +210,7 @@ function include() {
                 
                 scriptNode.addEventListener('load', function () {
                     this._loaded = true;
-                    console.log(this.id.substring(7) + ' loaded');
+                    console.log(this.id.substring(7) + ' load');
                 });
 
                 var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
