@@ -113,17 +113,16 @@ function include() {
             if (el.depends) {
                 // Tiene dependencias, hay que esperar que se carguen
                 setTimeout(function wait() {
-                    var all = true;
+                    var unloaded = false;
                     el.depends.forEach(function (el2, ix2) {
                         if (arrScr.find(el3 => el3.id == el2 && !el3.loaded)) {
-                            all = false;
+                            unloaded = true;
                         }
                     });
-                    if (all) {
-                        if (el.id == 'bootstrap-select') debugger;
-                        includeEl(el);
-                    } else {
+                    if (unloaded) {
                         setTimeout(wait, 100);
+                    } else {
+                        includeEl(el);
                     }
                 }, 0)
             } else {
@@ -132,16 +131,13 @@ function include() {
         });
 
         function includeEl(pEl) {
-            console.log(pEl.id + ' includeEl');
             if (typeof pEl.version == 'number') {
                 include(pEl.id, pEl.version, function () {
                     pEl.loaded = true;
-                    console.log(pEl.id + ' includeEl cb');
                 })
             } else {
                 include(pEl.id, pEl.src, function () {
                     pEl.loaded = true;
-                    console.log(pEl.id + ' includeEl cb');
                 })
             }
         }
@@ -203,7 +199,6 @@ function include() {
                         waiting += 10;
                         if (self._loaded || waiting > 3000) {
                             clearInterval(interv);
-                            console.log(self.id.substring(7) + ' loaded');
                             if (callback) callback(self);
                             if (waiting > 3000) console.log('include(' + pId + ') timeout');
                             
