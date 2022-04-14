@@ -402,18 +402,17 @@ function newCKEditor(pId, pLabel, pValue) {
             //customConfig: 'configbasic.js',
             customConfig: 'config.js',
 
-            disableNativeSpellChecker: true,
-            scayt_autoStartup: true,
-            //scayt_srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js',
 
-            readOnly: true,
+            readOnly: false,
 
             height: 200,
 
+            disableNativeSpellChecker: true,
+            scayt_autoStartup: true,
             scayt_disableOptionsStorage: 'lang',
-
             wsc_lang: 'es_ES',
             scayt_sLang: 'es_ES',
+            //scayt_srcUrl: 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js', // esto poner si https = false
         });
     })
 
