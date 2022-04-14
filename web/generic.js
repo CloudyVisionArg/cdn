@@ -26,7 +26,7 @@ include('tiny-mce', 'https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.j
 var arrScripts = [];
 arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
 arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
-arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+arrScripts.push({ id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css', , depends: ['bootstrap'] });
 arrScripts.push({ id: 'doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'web-javascript', version: 0, depends: ['jquery'] });
 arrScripts.push({ id: 'web-controls' });
@@ -36,9 +36,9 @@ arrScripts.push({ id: 'tempus-dominus', src: 'https://cdnjs.cloudflare.com/ajax/
 arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
 arrScripts.push({ id: 'lib-moment' });
 arrScripts.push({ id: 'bootstrap-select', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js', depends: ['jquery', 'bootstrap', 'bootstrap-css'] });
-arrScripts.push({ id: 'bootstrap-select-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css', depends: ['jquery', 'bootstrap', 'bootstrap-css', 'bootstrap-select'] });
+arrScripts.push({ id: 'bootstrap-select-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css', depends: ['bootstrap-select'] });
 // todo: esto deberia ser segun el lenguaje
-arrScripts.push({ id: 'bootstrap-select-lang', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js', depends: ['jquery', 'bootstrap', 'bootstrap-css', 'bootstrap-select'] });
+arrScripts.push({ id: 'bootstrap-select-lang', src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js', depends: ['bootstrap-select'] });
 
 include(arrScripts, function () {
     preloader.show();
