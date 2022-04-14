@@ -388,6 +388,7 @@ function newCKEditor(pId, pLabel, pOptions) {
 
     var $txt = $('<textarea/>', { id: pId }).appendTo($div);
 
+    debugger;
     var opt = {
         customConfig: 'configbasic.js',
         height: 200,
