@@ -220,7 +220,9 @@ function renderPage() {
 
     $cont.append(`
         <div class="row" style="padding-top: 8px;">
-            <h4 id="title">Cargando...</h4>
+            <div class="col-6">
+                <h4 id="title">Cargando...</h4>
+            </div>
         </div>
         <hr>
     `);
