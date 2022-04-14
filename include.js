@@ -211,7 +211,7 @@ function include() {
                 
                 scriptNode.addEventListener('load', function () {
                     this._loaded = true;
-                    console.log(this.id.substring(7) + ' load');
+                    console.log(this.id.substring(7) + ' loaded');
                 });
 
                 var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
