@@ -726,6 +726,7 @@ function renderControls(pCont, pParent) {
         // -- HtmlArea --
 
         } else if (type == 'HTMLAREA') {
+            debugger;
             var aux = parseInt(ctl.attr('height'));
             $this = newCKEditor(ctl['NAME'], label, {
                 readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
