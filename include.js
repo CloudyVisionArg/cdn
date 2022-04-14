@@ -127,15 +127,16 @@ function include() {
         });
 
         function includeEl(pEl) {
+            console.log(pEl.id + ' includeEl');
             if (typeof pEl.version == 'number') {
                 include(pEl.id, pEl.version, function () {
                     pEl.loaded = true;
-                    console.log(pEl.id.substring(7) + ' includeEl cb');
+                    console.log(pEl.id + ' includeEl cb');
                 })
             } else {
                 include(pEl.id, pEl.src, function () {
                     pEl.loaded = true;
-                    console.log(pEl.id.substring(7) + ' includeEl cb');
+                    console.log(pEl.id + ' includeEl cb');
                 })
             }
         }
