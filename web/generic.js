@@ -77,7 +77,6 @@ include(arrScripts, function () {
                         }
                     );
                 }
-            
 				getDoc();
 			},
 			errMgr
@@ -955,15 +954,16 @@ function renderControls(pCont, pParent) {
 }
 
 function fillControls() {
-    var title;
+    var title, form;
+
+    form = folder.Form.Description ? folder.Form.Description : folder.Form.Name;
 
     if (!doc.IsNew) {
         title = getDocField(doc, 'subject').Value;
-        debugger;
         if (title) {
-            title += folder;
+            title += ' - ' + form;
         } else {
-            title = 'Doc #' + doc.DocId;
+            title = form + '#' + doc.DocId;
         }
 
         /*
@@ -973,7 +973,7 @@ function fillControls() {
         */
 
     } else {
-        title = 'Nuevo documento';
+        title = 'Nuevo ' + form;
         //$('[data-doclog]').html('');
     }    
 
