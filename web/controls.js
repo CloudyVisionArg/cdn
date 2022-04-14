@@ -359,7 +359,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     if (pSelect.selectpicker) pSelect.selectpicker('refresh');
 }
 
-function newHTmlArea(pId, pLabel, pValue) {
+function newHtmlArea(pId, pLabel, pValue) {
     var $div = $('<div/>', {
         class: 'mt-3',
     });
