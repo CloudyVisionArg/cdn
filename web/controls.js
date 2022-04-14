@@ -398,7 +398,7 @@ function newCKEditor(pId, pLabel, pOptions) {
         scayt_sLang: 'es_ES',
     };
     if (location.protocol != 'https:') {
-        // Da error CORS
+        // Da error CORS en http
         opt.scayt_srcUrl = 'https://svc.webspellchecker.net/spellcheck31/wscbundle/wscbundle.js';
     }
     Object.assign(opt, pOptions);
