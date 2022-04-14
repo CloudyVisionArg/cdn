@@ -14,7 +14,7 @@ Moment: https://momentjs.com
 
 var urlParams, fld_id, folder, doc_id, doc;
 var controlsFolder, controls, controlsRights;
-var saving;
+var saving, cache;
 
 var arrScripts = [];
 arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
@@ -1397,4 +1397,46 @@ function saveAtt() {
             });
         }
     });
+}
+
+function accountsSearch(pFormula, pOrder) {
+    return new Promise(function (resolve, reject) {
+        debugger;
+        var key = 'accSearch-' + pFormula + '-'+ pOrder;
+        var cached = getCache(key);
+        if (cached) {
+            resolve(cached);
+        } else {
+            DoorsAPI.accountsSearch(pFormula, pOrder).then(
+                function (res) {
+                    setCache(key, res);
+                    resolve(res);
+                },
+                function (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            )
+        }
+    });
+}
+
+function getCache(pKey) {
+    if (Array.isArray(cache)) {
+        var f = cache.find(el => el.key == pKey);
+        if (f) return f.value;
+    }
+}
+
+function setCache(pKey, pValue) {
+    if (Array.isArray(cache)) {
+        var f = cache.find(el => el.key == pKey);
+        if (f) {
+            f.value = pValue
+        } else {
+            cache.push({ key: pKey, value: pValue })
+        }
+    } else {
+        cache = [{ key: pKey, value: pValue }];
+    }
 }
