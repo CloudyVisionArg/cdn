@@ -963,7 +963,7 @@ function fillControls() {
         if (title) {
             title += ' - ' + form;
         } else {
-            title = form + '#' + doc.DocId;
+            title = form + ' #' + doc.DocId;
         }
 
         /*
