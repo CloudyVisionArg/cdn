@@ -1,0 +1,40 @@
+<div class="popup" id="popupConsole">
+    <div class="view">
+        <div class="page page-with-subnavbar">
+            <div class="navbar">
+                <div class="navbar-bg"></div>
+                <div class="navbar-inner">
+                    <div class="title">Consola</div>
+                    <div class="right">
+                        <!-- Link to close popup -->
+                        <a id="close" class="link">
+                            <i class="f7-icons ios-only">xmark</i>
+                            <i class="material-icons md-only">close</i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Subnavbar -->
+                <div class="subnavbar">
+                    <div class="subnavbar-inner">
+                        <!-- Subnavbar content, for example tabs buttons -->
+                        <div class="segmented segmented-raised">
+                            <button id="sync" class="button">Sync</button>
+                            <button id="credentials" class="button">Cuenta</button>
+                            <button id="support" class="button">Soporte</button>
+                            <button id="restart" class="button">Reiniciar</button>
+                            <!--
+                            Credenciales, Sync, Sync status
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-content">
+                <div class="block">
+                    <pre id="log" style="word-break: break-all; white-space: pre-wrap;">
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
