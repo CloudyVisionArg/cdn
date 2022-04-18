@@ -743,7 +743,7 @@ function renderControls(pCont, pParent) {
             $input.attr('data-textfield', tf);
             $input.attr('data-ckeditor', true);
 
-            $this.on('init', function () {
+            $input.on('init', function () {
                 debugger;
             })
 
