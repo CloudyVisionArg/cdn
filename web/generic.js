@@ -793,7 +793,7 @@ function renderControls(pCont, pParent) {
         // -- Fieldset --
 
         } else if (type == 'FIELDSET') {
-            $this = getFieldset(ctl['NAME'], ctl['DESCRIPTION']);
+            $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
             renderControls($this.find('.card-body'), ctl['NAME']);
 
 
