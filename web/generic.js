@@ -795,12 +795,13 @@ function renderControls(pCont, pParent) {
         } else if (type == 'FIELDSET') {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
             bsctl = $this.find('.collapse')[0].bscollapse;
-            debugger;
-            bsctl = bootstrap.Collapse.getOrCreateInstance($this.find('.collapse')[0]);
             renderControls($this.find('fieldset'), ctl['NAME']);
 
-
-            //$this.find('fieldset').attr('disabled', true);
+            /*
+            $this.find('fieldset').attr('disabled', true); // Desactiva todo el Fieldset
+            bsctl.show() // Abre el collapse
+            bsctl.hide() // Cierra el collapse
+            */
 
 
         // -- Autocomplete --
