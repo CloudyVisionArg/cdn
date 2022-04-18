@@ -424,7 +424,7 @@ function newFieldset(pId, pLabel) {
 
     $('<div/>', {
         id: pId,
-        class: 'card-body collapse',
+        class: 'card-body collapse show',
     }).appendTo($div);
 
     return $div;
