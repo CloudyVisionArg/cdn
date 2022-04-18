@@ -194,15 +194,29 @@ function renderPage() {
     var $body = $('body');
     var $d = $(document);
 
-    $d.keypress(function (e) {
-        if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
-            saveDoc();
-            e.preventDefault();
-        }
-    });
-
     $d.ready(function () {
+        // Tooltips
         $('[data-bs-toggle="tooltip"]').tooltip();
+
+        // Validacion de numero
+        $('[data-numeral]').change(function (e) {
+            var $this = $(this);
+            var n = numeral($this.val());
+            if (n.value()) {
+                $this.val(n.format($this.attr('data-numeral')));
+            } else {
+                $this.val('');
+                toast('Ingrese un numero valido');
+            }
+        });
+
+        // Kb shortcuts
+        $d.keypress(function (e) {
+            if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
+                e.preventDefault();
+                saveDoc();
+            }
+        });
     });
 
     var $cont = $('<div/>', {
@@ -387,18 +401,6 @@ function renderPage() {
         }
     };
 
-    // Validacion de numero
-    $('[data-numeral]').change(function (e) {
-        var $this = $(this);
-        var n = numeral($this.val());
-        if (n.value()) {
-            $this.val(n.format($this.attr('data-numeral')));
-        } else {
-            $this.val('');
-            toast('Ingrese un numero valido');
-        }
-    });
-    
     // Llena controles Select
     $('[data-fill]').each(function (ix, el) {
         var $el = $(el);
@@ -791,19 +793,8 @@ function renderControls(pCont, pParent) {
         // -- Fieldset --
 
         } else if (type == 'FIELDSET') {
-            /*
-            $this = getCollapsible(ctl['NAME'], ctl['DESCRIPTION']);
-
-            var $ul = $('<ul/>')
-            renderControls($ul, ctl['NAME']);
-
-            if ($ul.html()) {
-                $('<div/>', {
-                    class: 'list no-hairlines-md',
-                    style: 'margin-top: 0;',
-                }).append($ul).appendTo($this.find('.accordion-item-content'));
-            }
-            */
+            $this = getFieldset(ctl['NAME'], ctl['DESCRIPTION']);
+            renderControls($this.find('.card-body'), ctl['NAME']);
 
 
         // -- Autocomplete --

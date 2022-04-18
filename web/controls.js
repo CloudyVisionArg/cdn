@@ -406,3 +406,25 @@ function newCheckbox(pId, pLabel) {
 
     return $div;
 }
+
+function newFieldset(pId, pLabel) {
+    var $div = $('<div/>', {
+        class: 'card mt-3',
+    });
+
+    var $header = $('<h4/>', {
+        class: 'card-header',
+    }).appendTo($div);
+
+    $('<a/>', {
+        'data-bs-toggle': 'collapse',
+        href: '#' + pId,
+    }).append(pLabel).appendTo($header);
+
+    $('<div/>', {
+        id: pId,
+        class: 'card-body collapse',
+    })
+
+    return $div;
+}
