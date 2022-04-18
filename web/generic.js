@@ -659,7 +659,7 @@ function renderControls(pCont, pParent) {
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr('readonly', true);
+                $input.attr('disabled', true);
                 $input.selectpicker('refresh');
             }
 
@@ -672,7 +672,6 @@ function renderControls(pCont, pParent) {
             });
             $input = $this.find('select');
 
-            // todo: revisar esto q no anda
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $input.attr('disabled', true);
                 $input.selectpicker('refresh');
