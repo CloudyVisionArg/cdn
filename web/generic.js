@@ -192,12 +192,19 @@ function getControlsRights(pControls) {
 
 function renderPage() {
     var $body = $('body');
+    var $d = $(document);
 
-    $(document).keypress(function (e) {
+    $d.keypress(function (e) {
         if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
             saveDoc();
             e.preventDefault();
         }
+    });
+
+    console.log('preready');
+    $d.ready(function () {
+        console.log('ready');
+
     });
 
     var $cont = $('<div/>', {
@@ -210,7 +217,7 @@ function renderPage() {
                 <i class="bi bi-printer-fill"></i>
                 <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
-            <button type="button" id="save" class="btn btn-primary" onclick="saveDoc();" title="CTRL+S">
+            <button type="button" id="save" class="btn btn-primary" onclick="saveDoc();" title="CTRL+S" data-bs-toggle="tooltip">
                 <i class="bi bi-cloudy-fill"></i>
                 <span class="d-none d-md-inline-block"> Guardar</span>
             </button>
