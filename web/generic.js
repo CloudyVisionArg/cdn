@@ -681,7 +681,7 @@ function renderControls(pCont, pParent) {
         // -- SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
 
         } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
-            debugger;
+            if (ctl.NAME = 'task_customer') debugger;
             $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1' || type == 'SELECTMULTIPLEFOLDER', {
                 liveSearch: (ctl.attr('searchbar') == '1' || type == 'LOOKUPBOXACCOUNTS'),
             });
