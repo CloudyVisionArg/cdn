@@ -258,15 +258,8 @@ function showLogin(allowClose) {
                         ],
                     });
                     
-                    $get('#showpwd').mousedown(function () {
-                        console.log('mousedown')
+                    $get('#showpwd').click(function () {
                         $('#password').attr('type', 'text');
-                    }).mouseup(function () {
-                        console.log('mouseup')
-                        $('#password').attr('type','password');
-                    }).mouseout(function () {
-                        console.log('mouseout')
-                        $('#password').attr('type','password');
                     });
 
                     $get('#instance').change(function () {
