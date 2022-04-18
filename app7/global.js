@@ -259,7 +259,14 @@ function showLogin(allowClose) {
                     });
                     
                     $get('#showpwd').click(function () {
-                        $('#password').attr('type', 'text');
+                        var t = $('#password').attr('type');
+                        if (t == 'password') {
+                            $('#password').attr('type', 'text');
+                            $(this).html('eye_slash');
+                        } else if (t == 'text') {
+                            $('#password').attr('type', 'password');
+                            $(this).html('eye');
+                        }
                     });
 
                     $get('#instance').change(function () {
