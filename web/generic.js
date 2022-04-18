@@ -194,8 +194,7 @@ function renderPage() {
     var $body = $('body');
 
     $(document).keypress(function (e) {
-        debugger;
-        if (e.keyCode == 115 && e.altKey) { // ALT+S
+        if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
             saveDoc();
             e.preventDefault();
         }
