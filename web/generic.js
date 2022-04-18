@@ -674,7 +674,7 @@ function renderControls(pCont, pParent) {
 
             // todo: revisar esto q no anda
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr('dissbled', true);
+                $input.attr('disabled', true);
                 $input.selectpicker('refresh');
             }
 
