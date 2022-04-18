@@ -794,7 +794,7 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'FIELDSET') {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
-            renderControls($this.find('.card-body'), ctl['NAME']);
+            renderControls($this.find('fieldset'), ctl['NAME']);
 
 
         // -- Autocomplete --
