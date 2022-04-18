@@ -1083,7 +1083,12 @@ function fillControls() {
             }
 
         } else if (el.tagName == 'TEXTAREA') {
-            $el.val(text);
+            debugger;
+            if (el.ckeditor) {
+                el.ckeditor.setData(text);
+            } else {
+                $el.val(text);
+            }
 
         } else if (el.tagName == 'SELECT') {
             if ($el.attr('multiple')) {
@@ -1249,8 +1254,14 @@ function saveDoc() {
                 if ($el.attr('data-autocomplete')) {
                     field.Value = $el.find('.item-after').html();
                 }
+
             } else if(el.tagName == 'TEXTAREA') {
-                field.Value = $el.val();
+                debugger;
+                if (el.ckeditor) {
+                    field.value = el.ckeditor.getData();
+                } else {
+                    field.Value = $el.val();
+                }
             }
         }
     });
