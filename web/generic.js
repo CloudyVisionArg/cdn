@@ -759,7 +759,7 @@ function renderControls(pCont, pParent) {
 
             /*
             Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
-            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento init:
+            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckinit:
 
             $input.on('ckinit', function (e) {
                 this.ckeditor.setReadOnly(true);
@@ -951,9 +951,9 @@ function renderControls(pCont, pParent) {
             folder: La carpeta actual
             controlsFolder: La carpeta de controles
             controls: El search a la carpeta de controles completo
-            ctl: El row del control actual
-            ctl.attr: Function que devuelve un atributo de XMLATTRIBUTES
-            $this: El control completo JQuery (inluido el <li>)
+            ctl: El control que se esta dibujando
+            ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
+            $this: El control completo JQuery (inluido el <div/>)
             $input: El input, textarea, select, etc, dentro del control
                 (puede ser undefined en caso de los raw y otros)
             bsctl: El control Bootstrap (depende del control)

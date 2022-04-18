@@ -89,7 +89,8 @@ elem.on('show', function () {
 })(jQuery);
 
 /*
-Muestra/oculta un spinner que tapa toda la pagina. Requiere bootstrap 5
+Requiere bootstrap 5
+Muestra/oculta un spinner que tapa toda la pagina
 
 preloader.show();
 preloader.hide();
