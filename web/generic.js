@@ -794,9 +794,12 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'FIELDSET') {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
+            bsctl = bootstrap.Collapse.getInstance($this.find('.collapse')[0]);
+            debugger;
             renderControls($this.find('fieldset'), ctl['NAME']);
 
-            $this.find('fieldset').attr('disabled', true);
+
+            //$this.find('fieldset').attr('disabled', true);
 
 
         // -- Autocomplete --
