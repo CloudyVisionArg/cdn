@@ -796,6 +796,8 @@ function renderControls(pCont, pParent) {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
             renderControls($this.find('fieldset'), ctl['NAME']);
 
+            $this.find('fieldset').attr('disabled', true);
+
 
         // -- Autocomplete --
 
