@@ -743,10 +743,16 @@ function renderControls(pCont, pParent) {
             $input.attr('data-textfield', tf);
             $input.attr('data-ckeditor', true);
 
+            $this.on('init', function () {
+                debugger;
+            })
+
             /*
+            Tener en cuenta que el CKEditor no estara inicializado en el SBR
+            Esto es porque el textarea sobre el que se crea debe estar ya en el DOM,
+            (y el $this se agrega despues)
+            
             $input.ckeditor.setReadOnly(true / false);
-            $input.ckeditor.setData('holaaa');
-            $input.ckeditor.getData();
             */
 
 
@@ -928,6 +934,8 @@ function renderControls(pCont, pParent) {
             */
         }
 
+        if ($this) $this.appendTo($col);
+
         try {
             if (ctl['SCRIPTBEFORERENDER']) eval(ctl['SCRIPTBEFORERENDER']);
         } catch (err) {
@@ -948,8 +956,6 @@ function renderControls(pCont, pParent) {
             textField: El objeto Field bindeado con textField (depende del control)
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
-
-        if ($this) $this.appendTo($col);
     }
 }
 
