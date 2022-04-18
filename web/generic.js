@@ -192,6 +192,9 @@ function getControlsRights(pControls) {
 
 function renderPage() {
     var $body = $('body');
+    $(document).keypress(function (e) {
+        debugger;
+    });
 
     var $cont = $('<div/>', {
         class: 'container',
