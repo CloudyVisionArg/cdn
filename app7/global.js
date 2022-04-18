@@ -259,11 +259,13 @@ function showLogin(allowClose) {
                     });
                     
                     $get('#showpwd').mousedown(function () {
-                        debugger;
+                        console.log('mousedown')
                         $('#password').attr('type', 'text');
                     }).mouseup(function () {
+                        console.log('mouseup')
                         $('#password').attr('type','password');
                     }).mouseout(function () {
+                        console.log('mouseout')
                         $('#password').attr('type','password');
                     });
 
