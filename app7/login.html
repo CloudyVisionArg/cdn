@@ -1,0 +1,107 @@
+<div class="login-screen">
+    <!-- Default view-page layout -->
+    <div class="view">
+        <div class="page">
+        <!-- page-content has additional login-screen content -->
+        <div class="page-content login-screen-content">
+            <div class="login-screen-title">Cloudy CRM</div>
+            <div class="login-screen-logo"><img /></div>
+            <!-- Login form -->
+            <div class="list">
+                <ul>
+                <li class="item-content item-input">
+                    <div class="item-inner">
+                    <div class="item-title item-floating-label">Usuario</div>
+                    <div class="item-input-wrap">
+                        <input type="text" id="username" placeholder="Usuario">
+                        <span class="input-clear-button"></span>
+                    </div>
+                    </div>
+                </li>
+
+                <li class="item-content item-input">
+                    <div class="item-inner">
+                    <div class="item-title item-floating-label">Contraseña</div>
+                    <div class="item-input-wrap">
+                        <input type="password" id="password" placeholder="Contraseña">
+                        <span class="input-clear-button"></span>
+                    </div>
+                    </div>
+                    <div class="item-media" style="min-width: 40px; align-self: flex-end;">
+                        <i id="showpwd" class="f7-icons" style="color: rgb(255, 255, 255, 0.7);">eye</i>
+                    </div>
+                </li>
+
+                <li class="item-content item-input">
+                    <div class="item-inner">
+                    <div class="item-title item-floating-label">Instancia</div>
+                    <div class="item-input-wrap">
+                        <input type="text" id="instance" placeholder="Instancia">
+                        <span class="input-clear-button"></span>
+                    </div>
+                    </div>
+                </li>
+
+                <li class="accordion-item">
+                    <a href="" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title">Opciones</div>
+                        </div>
+                    </a>
+                    <div class="accordion-item-content" style="padding-left: 8px;">
+                        <div class="list no-hairlines-md">
+                            <ul>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                    <div class="item-title item-floating-label">End point</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" id="endpoint" placeholder="End point">
+                                        <span class="input-clear-button"></span>
+                                    </div>
+                                    </div>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                    <div class="item-title item-floating-label">App</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" id="appname" placeholder="App">
+                                        <span class="input-clear-button"></span>
+                                    </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                </ul>
+            </div>
+            <div id="message" class="block block-footer inset" style="color: red;"></div>
+            <div class="list">
+                <ul>
+                <li>
+                    <button id="logon" class="button button-large">Iniciar sesión</button>
+                </li>
+                <li>
+                    <button id="logoff" class="button button-large">Cerrar sesión</button>
+                </li>
+                <li>
+                    <button id="chpass" class="button button-large">Cambiar contraseña</button>
+                </li>
+                <li>
+                    <button id="signin" class="button button-large">Registrarme</button>
+                </li>
+                <li>
+                    <button id="resetpass" class="button button-large">Olvide mi contraseña</button>
+                </li>
+                <li>
+                    <button id="console" class="button button-large">Consola</button>
+                </li>
+                <li>
+                    <button id="cancel" class="button button-large">Salir</button>
+                </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
