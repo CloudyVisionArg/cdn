@@ -761,7 +761,7 @@ function renderControls(pCont, pParent) {
 
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('.toggle').addClass('disabled');
+                $input.attr('readonly', 'readonly');
             }
 
 
