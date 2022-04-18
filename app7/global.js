@@ -259,7 +259,6 @@ function showLogin(allowClose) {
                     });
                     
                     $get('#showpwd').click(function () {
-                        debugger;
                         var t = $('#password').attr('type');
                         if (t == 'password') {
                             $('#password').attr('type', 'text');
