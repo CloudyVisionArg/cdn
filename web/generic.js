@@ -1435,33 +1435,22 @@ function saveAtt() {
 // accountsSearch con cache
 function accountsSearch(pFormula, pOrder) {
     return new Promise(function (resolve, reject) {
-        var key = 'accSearch-' + pFormula + '-' + pOrder;
-        // Esta la promise?
-        cached = getCache(key);
-        if (cached != undefined) {
-            cached.then(
-                function (res) {
-                    resolve(res);
-                },
-                function (err) {
-                    console.log(err);
-                    reject(err);
-                }
-            )
-        } else {
-            var prom = DoorsAPI.accountsSearch(pFormula, pOrder);
-            // Cachea el promise
+        var key, prom;
+        key = 'accSearch-' + pFormula + '-' + pOrder;
+        prom = getCache(key);
+        if (prom == undefined) {
+            prom = DoorsAPI.accountsSearch(pFormula, pOrder);
             setCache(key, prom);
-            prom.then(
-                function (res) {
-                    resolve(res);
-                },
-                function (err) {
-                    console.log(err);
-                    reject(err);
-                }
-            )
         }
+        prom.then(
+            function (res) {
+                resolve(res);
+            },
+            function (err) {
+                console.log(err);
+                reject(err);
+            }
+        )
     });
 }
 
