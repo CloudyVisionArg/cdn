@@ -194,6 +194,7 @@ function renderPage() {
     var $body = $('body');
     $(document).keypress(function (e) {
         debugger;
+        e.preventDefault();
     });
 
     var $cont = $('<div/>', {
