@@ -89,7 +89,7 @@ elem.on('show', function () {
 })(jQuery);
 
 /*
-Requiere bootstrap 5
+Requiere bootstrap 5.1
 Muestra/oculta un spinner que tapa toda la pagina
 
 preloader.show();
@@ -106,7 +106,7 @@ preloader.on('show', function () {
 	});
 })
 
-// Requiere bootstrap 5
+// Requiere bootstrap 5.1
 function toast(pText, pOptions) {
     var opt = {
         autohide: true,
@@ -142,8 +142,15 @@ function toast(pText, pOptions) {
 		class: 'me-auto',
 	}).append(opt.title).appendTo($th);
 
-    $th.append('<small class="text-muted">' + opt.subtitle + '</small>');
-    $th.append('<button type="button" class="btn-close" data-bs-dismiss="toast"></button>');
+	$('<small/>', {
+		class: 'text-muted',
+	}).append(opt.subtitle).appendTo($th);
+
+	$('<button/>', {
+		type: 'button',
+		class: 'btn-close',
+		'data-bs-dismiss': 'toast',
+	}).appendTo($th);
 
     var $tb = $('<div/>', {
         class: 'toast-body',
@@ -152,6 +159,7 @@ function toast(pText, pOptions) {
     $tb.append(pText);
 
     var t = new bootstrap.Toast($toast, opt);
+	
     $toast.on('hidden.bs.toast', function () {
         $(this).remove();
     });
