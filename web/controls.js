@@ -422,10 +422,12 @@ function newFieldset(pId, pLabel) {
         href: '#' + pId,
     }).append(pLabel).appendTo($header);
 
-    $('<div/>', {
+    var $body = $('<div/>', {
         id: pId,
         class: 'card-body collapse show',
     }).appendTo($div);
+
+    $('<fieldset/>').appendTo($body);
 
     return $div;
 }
