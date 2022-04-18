@@ -59,7 +59,7 @@ Si el src termina en '.css' se creara un <link>, sino un <script>
 function registeredScripts() {
 	var scripts = [];
 
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 69 });
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 70 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 68 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
