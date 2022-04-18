@@ -412,7 +412,7 @@ function newFieldset(pId, pLabel) {
         class: 'card mt-3',
     });
 
-    var $header = $('<h5/>', {
+    var $header = $('<h6/>', {
         class: 'card-header',
     }).appendTo($div);
 
