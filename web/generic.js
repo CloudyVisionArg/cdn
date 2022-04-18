@@ -743,38 +743,26 @@ function renderControls(pCont, pParent) {
             $input.attr('data-textfield', tf);
             $input.attr('data-ckeditor', true);
 
-            $input.on('init', function (a,b,c) {
-                debugger;
-            })
             /*
-            Tener en cuenta que el CKEditor no estara inicializado en el SBR
-            Esto es porque la inicializacion es asincrona.
-            Para customizar el editor en el SBR suscribirse al evento init:
+            Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
+            inicializacion es asincrona. Para customizar el editor en el SBR usar el evento init:
 
-            $input.on('init', function () {
-                debugger;
+            $input.on('init', function (e) {
+                this.ckeditor.setReadOnly(true);
             })
-
-            el textarea sobre el que se crea debe estar ya en el DOM,
-            (y el $this se agrega despues)
-            
-            $input.ckeditor.setReadOnly(true / false);
             */
 
 
         // -- Checkbox --
 
         } else if (type == 'CHECKBOX') {
-            /*
-            $this = getToggle(ctl['NAME'], label);
+            $this = newCheckbox(ctl['NAME'], label);
             $input = $this.find('input');
-            f7ctl = app7.smartSelect.get($this.find('.toggle'));
 
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('.toggle').addClass('disabled');
             }
-            */
 
 
         // -- Hidden --

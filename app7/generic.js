@@ -632,7 +632,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'CHECKBOX') {
             $this = getToggle(ctl['NAME'], label);
             $input = $this.find('input');
-            f7ctl = app7.smartSelect.get($this.find('.toggle'));
+            f7ctl = app7.toggle.get($this.find('.toggle'));
 
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {

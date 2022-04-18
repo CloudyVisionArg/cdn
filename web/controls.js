@@ -356,29 +356,6 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     if (pSelect.selectpicker) pSelect.selectpicker('refresh');
 }
 
-function newHtmlArea(pId, pLabel) {
-    var $div = $('<div/>', {
-        class: 'mt-3',
-    });
-
-    $div.append('<label class="form-label">' + pLabel + '</label>');
-
-    $('<textarea/>', { id: pId }).appendTo($div);
-
-    scriptLoaded('tiny-mce', function () {
-        tinymce.init({
-            selector: '#' + pId,
-            plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
-            toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter image editimage pageembed permanentpen table tableofcontents',
-            toolbar_mode: 'floating',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-        });
-    });
-
-    return $div;
-}
-
 function newCKEditor(pId, pLabel, pOptions) {
     var $div = $('<div/>', {
         class: 'mt-3',
@@ -408,6 +385,24 @@ function newCKEditor(pId, pLabel, pOptions) {
         txt.ckeditor = CKEDITOR.replace(txt, opt);
         txt.dispatchEvent(new CustomEvent('init'));
     });
+
+    return $div;
+}
+
+function newCheckbox(pId, pLabel) {
+    var $div = $('<div/>', {
+        class: 'form-check mt-3',
+    });
+
+    $('<input/>', {
+        type: 'checkbox',
+        class: 'form-check-input',
+        id: pId,
+    }).appendTo($div);
+
+    $('<label/>', {
+        class: 'form-check-label',
+    }).append(pLabel).appendTo($div);
 
     return $div;
 }
