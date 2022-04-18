@@ -383,7 +383,7 @@ function newCKEditor(pId, pLabel, pOptions) {
     scriptLoaded('ckeditor', function () {
         var txt = $txt[0];
         txt.ckeditor = CKEDITOR.replace(txt, opt);
-        txt.dispatchEvent(new CustomEvent('init'));
+        txt.dispatchEvent(new CustomEvent('ckinit'));
     });
 
     return $div;

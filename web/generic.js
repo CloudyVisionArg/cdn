@@ -747,7 +747,7 @@ function renderControls(pCont, pParent) {
             Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
             inicializacion es asincrona. Para customizar el editor en el SBR usar su evento init:
 
-            $input.on('init', function (e) {
+            $input.on('ckinit', function (e) {
                 this.ckeditor.setReadOnly(true);
             })
             */
@@ -1436,39 +1436,31 @@ function saveAtt() {
 function accountsSearch(pFormula, pOrder) {
     return new Promise(function (resolve, reject) {
         var key = 'accSearch-' + pFormula + '-' + pOrder;
-        // Esta el resultado?
-        var cached = getCache(key);
+        // Esta la promise?
+        cached = getCache(key);
         if (cached != undefined) {
-            resolve(cached);
+            cached.then(
+                function (res) {
+                    resolve(res);
+                },
+                function (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            )
         } else {
-            // Esta la promise?
-            cached = getCache(key + '-promise');
-            if (cached != undefined) {
-                cached.then(
-                    function (res) {
-                        resolve(res);
-                    },
-                    function (err) {
-                        console.log(err);
-                        reject(err);
-                    }
-                )
-            } else {
-                var prom = DoorsAPI.accountsSearch(pFormula, pOrder);
-                // Cachea el promise
-                setCache(key + '-promise', prom);
-                prom.then(
-                    function (res) {
-                        // Cachea el resultado
-                        setCache(key, res);
-                        resolve(res);
-                    },
-                    function (err) {
-                        console.log(err);
-                        reject(err);
-                    }
-                )
-            }
+            var prom = DoorsAPI.accountsSearch(pFormula, pOrder);
+            // Cachea el promise
+            setCache(key, prom);
+            prom.then(
+                function (res) {
+                    resolve(res);
+                },
+                function (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            )
         }
     });
 }
@@ -1476,7 +1468,10 @@ function accountsSearch(pFormula, pOrder) {
 function getCache(pKey) {
     if (Array.isArray(cache)) {
         var f = cache.find(el => el.key == pKey);
-        if (f) return f.value;
+        if (f) {
+            console.log('Cache hit: ' + pKey);
+            return f.value;
+        }
     }
 }
 
