@@ -152,7 +152,7 @@ function showConsole(allowClose) {
         ]
     });
 
-    $.get('./console.html', function (data) {
+    $.get(scriptSrc('app7-console'), function (data) {
         var popup = app7.popup.create({
             content: data,
             closeByBackdropClick: false,
@@ -250,7 +250,7 @@ function showLogin(allowClose) {
                         routes: [
                             {
                                 path: '/chpass/',
-                                url: './chpass.html',
+                                url: scriptSrc('app7-chpass'),
                                 on: {
                                     pageInit: chpassInit,
                                 },
