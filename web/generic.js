@@ -201,10 +201,8 @@ function renderPage() {
         }
     });
 
-    console.log('preready');
     $d.ready(function () {
-        console.log('ready');
-
+        $('[data-bs-toggle="tooltip"]').tooltip();
     });
 
     var $cont = $('<div/>', {
