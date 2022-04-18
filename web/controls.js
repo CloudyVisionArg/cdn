@@ -429,5 +429,9 @@ function newFieldset(pId, pLabel) {
 
     $('<fieldset/>').appendTo($body);
 
+    $body[0].bscollapse = new bootstrap.Collapse($body, {
+        toggle: false,
+    });
+
     return $div;
 }

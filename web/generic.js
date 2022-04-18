@@ -794,7 +794,7 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'FIELDSET') {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
-            bsctl = bootstrap.Collapse.getInstance($this.find('.collapse')[0]);
+            bsctl = $this.find('.collapse')[0].bscollapse;
             debugger;
             renderControls($this.find('fieldset'), ctl['NAME']);
 
