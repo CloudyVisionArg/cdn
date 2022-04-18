@@ -672,8 +672,9 @@ function renderControls(pCont, pParent) {
             });
             $input = $this.find('select');
 
+            // todo: revisar esto q no anda
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr('disbled', true);
+                $input.attr('dissbled', true);
                 $input.selectpicker('refresh');
             }
 
@@ -745,7 +746,7 @@ function renderControls(pCont, pParent) {
 
             /*
             Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
-            inicializacion es asincrona. Para customizar el editor en el SBR usar el evento init:
+            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento init:
 
             $input.on('init', function (e) {
                 this.ckeditor.setReadOnly(true);
