@@ -1083,7 +1083,6 @@ function fillControls() {
             }
 
         } else if (el.tagName == 'TEXTAREA') {
-            debugger;
             if (el.ckeditor) {
                 el.ckeditor.setData(text);
             } else {
@@ -1256,7 +1255,6 @@ function saveDoc() {
                 }
 
             } else if(el.tagName == 'TEXTAREA') {
-                debugger;
                 if (el.ckeditor) {
                     field.value = el.ckeditor.getData();
                 } else {
