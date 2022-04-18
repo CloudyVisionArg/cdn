@@ -210,7 +210,7 @@ function renderPage() {
                 <i class="bi bi-printer-fill"></i>
                 <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
-            <button type="button" id="save" class="btn btn-primary" onclick="saveDoc();">
+            <button type="button" id="save" class="btn btn-primary" onclick="saveDoc();" title="CTRL+S">
                 <i class="bi bi-cloudy-fill"></i>
                 <span class="d-none d-md-inline-block"> Guardar</span>
             </button>
