@@ -258,6 +258,14 @@ function showLogin(allowClose) {
                         ],
                     });
                     
+                    $get('#showpwd').mousedown(function () {
+                        $('#password').attr('type', 'text');
+                    }).mouseup(function () {
+                        $('#password').attr('type','password');
+                    }).mouseout(function () {
+                        $('#password').attr('type','password');
+                    });
+
                     $get('#instance').change(function () {
                         if ($(this).val()) {
                             $(this).val($(this).val().trim()); /* quita espacios en blanco */
