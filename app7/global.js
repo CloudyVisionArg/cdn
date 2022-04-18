@@ -1190,7 +1190,7 @@ function getFolderElements(pFolder) {
                 arrViews.sort(function (a, b) {
                     if (!a['Private'] && b['Private']) {
                         return -1;
-                    } else if (a['Private'] && !b['Private']) {
+                    } else if (a['Private'] && !b['Private']) {
                         return 1;
                     } else {
                         var aTitle = a['Description'] ? a['Description'] : a['Name'];
