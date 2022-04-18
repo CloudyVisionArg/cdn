@@ -743,13 +743,19 @@ function renderControls(pCont, pParent) {
             $input.attr('data-textfield', tf);
             $input.attr('data-ckeditor', true);
 
+            $input.on('init', function (a,b,c) {
+                debugger;
+            })
+            /*
+            Tener en cuenta que el CKEditor no estara inicializado en el SBR
+            Esto es porque la inicializacion es asincrona.
+            Para customizar el editor en el SBR suscribirse al evento init:
+
             $input.on('init', function () {
                 debugger;
             })
 
-            /*
-            Tener en cuenta que el CKEditor no estara inicializado en el SBR
-            Esto es porque el textarea sobre el que se crea debe estar ya en el DOM,
+            el textarea sobre el que se crea debe estar ya en el DOM,
             (y el $this se agrega despues)
             
             $input.ckeditor.setReadOnly(true / false);
