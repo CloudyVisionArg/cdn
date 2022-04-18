@@ -796,6 +796,7 @@ function renderControls(pCont, pParent) {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
             bsctl = $this.find('.collapse')[0].bscollapse;
             debugger;
+            bsctl = bootstrap.Collapse.getOrCreateInstance($this.find('.collapse')[0]);
             renderControls($this.find('fieldset'), ctl['NAME']);
 
 
