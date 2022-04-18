@@ -192,9 +192,12 @@ function getControlsRights(pControls) {
 
 function renderPage() {
     var $body = $('body');
+    
     $(document).keypress(function (e) {
-        debugger;
-        e.preventDefault();
+        if (e.keyCode == 115 && e.altKey) { // ALT+S
+            saveDoc();
+            e.preventDefault();
+        }
     });
 
     var $cont = $('<div/>', {
