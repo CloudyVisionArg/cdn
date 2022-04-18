@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+htmlEncode(pText)
 sqlEncode(pValue, pType)
 Eventos show y hide en jQuery
 preloader
@@ -37,6 +38,12 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+function htmlEncode(pText) {
+    var sp = document.createElement('span');
+    sp.textContent = pText;
+    return sp.innerHTML;
+}
 
 function sqlEncode(pValue, pType) {
     if (pValue == null) {
@@ -159,7 +166,7 @@ function toast(pText, pOptions) {
     $tb.append(pText);
 
     var t = new bootstrap.Toast($toast, opt);
-	
+
     $toast.on('hidden.bs.toast', function () {
         $(this).remove();
     });
