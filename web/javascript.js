@@ -138,8 +138,10 @@ function toast(pText, pOptions) {
 		class: 'rounded me-2',
 	}).appendTo($th);
 
-	
-	$th.append('<strong class="me-auto">' + opt.title + '</strong>');
+	$('<strong/>', {
+		class: 'me-auto',
+	}).append(opt.title).appendTo($th);
+
     $th.append('<small class="text-muted">' + opt.subtitle + '</small>');
     $th.append('<button type="button" class="btn-close" data-bs-dismiss="toast"></button>');
 
