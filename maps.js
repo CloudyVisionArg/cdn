@@ -69,7 +69,7 @@ var maps = {
     initAc: function (el, callback) {
         debugger;
         scriptLoaded('mapsapi', function () {
-            var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
+            var ac = new google.maps.places.Autocomplete(el, {types: ['geocode']});
             ac.inputEl = el;
             el.mapsAutocomplete = ac;
             ac.addListener('place_changed', maps.onPlaceChange);
