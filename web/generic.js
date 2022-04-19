@@ -362,8 +362,7 @@ function renderPage() {
         // TABS
 
         var tabs = controls.filter(function (el) {
-            return el['CONTROL'].toUpperCase() == 'TAB' && el['DONOTRENDER'] != 1 &&
-                el['R'] != '0' && el['HIDEINAPP'] != '1'
+            return el['CONTROL'].toUpperCase() == 'TAB' && el['DONOTRENDER'] != 1 && el['R'] != '0'
         });
 
         if (tabs.length > 0) {
@@ -657,11 +656,9 @@ function renderControls(pCont, pParent) {
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {
-            $this = $('<li/>')
-            $('<div/>', {
+            $this = $('<div/>', {
                 id: ctl['NAME'],
-                name: ctl['NAME'],
-            }).appendTo($this);
+            });
 
 
         // -- Select / SelectMultiple --
@@ -797,8 +794,11 @@ function renderControls(pCont, pParent) {
             bsctl = $this.find('.collapse')[0].bscollapse;
             renderControls($this.find('fieldset'), ctl['NAME']);
 
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('fieldset').attr('disabled', true);
+            }
+
             /*
-            $this.find('fieldset').attr('disabled', true); // Desactiva todo el Fieldset
             bsctl.show() // Abre el collapse
             bsctl.hide() // Cierra el collapse
             */
@@ -1106,11 +1106,6 @@ function fillControls() {
                 setSelectVal($el, t, v);
             } else {
                 setSelectVal($el, text, value);
-            }
-
-        } else if (el.tagName == 'DIV') {
-            if ($el.hasClass('text-editor')) {
-                app7.textEditor.get($el).setValue(text);
             }
 
         } else if (el.tagName == 'A') {

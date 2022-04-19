@@ -203,8 +203,8 @@ function include() {
                         waiting += 10;
                         if (self._loaded || waiting > 3000) {
                             clearInterval(interv);
-                            if (callback) callback(self);
                             if (waiting > 3000) console.log('include(' + pId + ') timeout');
+                            if (callback) callback(self);
                             
                             /* Cuando se esta depurando y hay un debugger en la carga de la pagina,
                             el evento load no se dispara, en ese caso loaded llama igual al

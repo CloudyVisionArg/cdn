@@ -1,7 +1,5 @@
 function newInputText(pId, pLabel) {
-    var $div = $('<div/>', {
-        class: 'mt-3',
-    });
+    var $div = $('<div/>');
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
