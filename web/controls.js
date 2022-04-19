@@ -394,8 +394,13 @@ function newFieldset(pId, pLabel) {
     return $div;
 }
 
-function newMapsAutocomplete() {
+function newMapsAutocomplete(pId, pLabel) {
     include('maps');
+
+    var $inp = newInputText(pId, pLabel);
+
+    addInputButton($inp.find('input'));
+    debugger;
 
     /*
     Public Name
