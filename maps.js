@@ -92,16 +92,18 @@ var maps = {
                 } else {
                     el.initializing = true;
                     el.mapsAutocomplete.set('place', undefined);
+                    el.initializing = undefined;
 
                     if (value) {
                         var places = new google.maps.places.PlacesService(maps.map);
                         places.getDetails({ placeId: value.split(';')[0] }, function (place, status) {
                             if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                el.initializing = true;
                                 el.mapsAutocomplete.set('place', place);
+                                el.initializing = undefined;
                             }
                         });
                     };
-                    el.initializing = undefined;
                 }
 
             };
