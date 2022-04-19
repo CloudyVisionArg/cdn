@@ -409,7 +409,6 @@ function newMapsAutocomplete(pId, pLabel) {
     $inp.attr('data-filling', '1');
     include('maps', 0, function () {
         maps.initAc($inp[0], function () {
-            console.log('6');
             $inp.removeAttr('data-filling');
         });
     });

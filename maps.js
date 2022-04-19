@@ -69,9 +69,7 @@ var maps = {
         if (el.mapsAutocomplete || el.initializing) return;
         el.initializing = true;
 
-        console.log('1');
         scriptLoaded('mapsapi', function () {
-            console.log('2');
             var ac = new google.maps.places.Autocomplete(el, {types: ['geocode']});
             ac.inputEl = el;
             el.mapsAutocomplete = ac;
@@ -89,7 +87,6 @@ var maps = {
                 });
             }
 
-            console.log('3');
             el.mapsText = function (text) {
                 var self = this;
                 if (text == undefined) {
@@ -128,7 +125,6 @@ var maps = {
 
             el.initializing = undefined;
             if (callback) {
-                console.log('4');
                 callback(el);
             }
         });
