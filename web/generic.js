@@ -905,6 +905,30 @@ function renderControls(pCont, pParent) {
             */
 
 
+        // -- Maps Autocomplete --
+
+        } else if (type == 'MAPSAUTOCOMPLETE') {
+            var $this = newMapsAutocomplete(ctl['NAME'], label);
+            $this.addClass('mt-3');
+            $input = $this.find('.maps-autocomplete');
+
+            $input.attr('data-textfield', tf);
+            $input.attr('data-valuefield', vf);
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                // todo: inputReadonly($input, true);
+            }
+
+            /*
+            $input.on('placeChange', function (e) {
+                var addrComp = e.originalEvent.detail.addressComponents;
+                if (addrComp) {
+                    toast(addrComp['locality'] + ' - ' + addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
+                }
+            })
+            */
+
+
         // -- Attachments --
 
         } else if (type == 'ATTACHMENTS') {
@@ -1066,23 +1090,8 @@ function fillControls() {
 
                 } else if ($el.hasClass('maps-autocomplete')) {
                     // Input maps
-                    $el.val(text);
-
-                    // Setea el place (value) del Autocomplete
-                    el.initializing = true;
-                    el.mapsAutocomplete.set('place', undefined);
-                    el.initializing = undefined;
-
-                    if (value) {
-                        var places = new google.maps.places.PlacesService(maps.map);
-                        places.getDetails({ placeId: value.split(';')[0] }, function (place, status) {
-                            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                el.initializing = true;
-                                el.mapsAutocomplete.set('place', place);
-                                el.initializing = undefined;
-                            }
-                        });
-                    };
+                    el.mapsText(text);
+                    el.mapsValue(value);
         
                 } else {
                     if (textField && textField.Type == 2) {
@@ -1297,7 +1306,7 @@ function saveDoc() {
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = $el.attr('data-place');
+                    field.Value = el.mapsValue();
 
                 } else {
                     var type = $el.attr('type').toLowerCase();
