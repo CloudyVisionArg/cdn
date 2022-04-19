@@ -401,6 +401,7 @@ function newMapsAutocomplete(pId, pLabel) {
     var $inp = $ctl.find('input');
     $inp.addClass('maps-autocomplete');
     $inp.focus(function () {
+        debugger;
         maps.setBounds(this);
     });
     $inp.change(function () {
