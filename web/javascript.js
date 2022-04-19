@@ -39,6 +39,9 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+var bootstrapVersion = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
+debugger;
+
 function htmlEncode(pText) {
     var sp = document.createElement('span');
     sp.textContent = pText;
@@ -96,25 +99,32 @@ elem.on('show', function () {
 })(jQuery);
 
 /*
-Requiere bootstrap 5.1
+Requiere bootstrap 5
 Muestra/oculta un spinner que tapa toda la pagina
 
 preloader.show();
 preloader.hide();
 */
-preloader = $('<div/>', {
-	style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
-}).appendTo($('body'));
-preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
-preloader.on('show', function () {
-	$(this).css({
-		'height': $(document).height(),
-		'width': $(document).width(),
-	});
-})
+if (bootstrapVersion[0] >= 5) {
+	preloader = $('<div/>', {
+		style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
+	}).appendTo($('body'));
+	preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
+	preloader.on('show', function () {
+		$(this).css({
+			'height': $(document).height(),
+			'width': $(document).width(),
+		});
+	})
+}
 
-// Requiere bootstrap 5.1
+// Requiere bootstrap 5
 function toast(pText, pOptions) {
+	if (bootstrapVersion[0] < 5) {
+		console.log('Bootstrap 5 es requerido para toast');
+		return;
+	};
+
     var opt = {
         autohide: true,
         delay: 3000,
@@ -289,8 +299,6 @@ function addOption(ctl, option, value) {
 }
 
 function addInputButton(pControl, pIcon, pAction, pPrepend) {
-	debugger;
-	
 	var esGroup = pControl.parent().hasClass('input-group');
 	var div;
 	
@@ -306,8 +314,15 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 		}
 	}
 	
+	var spanClass;
+	if (bootstrapVersion[0] == 3) {
+		spanClass = 'input-group-addon add-on';
+	} else if (bootstrapVersion[0] >= '5') {
+		spanClass = 'input-group-text';
+	};
+
 	var span = $('<span/>', {
-		'class': 'input-group-addon add-on',
+		'class': spanClass,
 		'style': 'cursor: pointer;',
 		'onclick': pAction,
 	});
