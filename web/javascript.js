@@ -289,6 +289,8 @@ function addOption(ctl, option, value) {
 }
 
 function addInputButton(pControl, pIcon, pAction, pPrepend) {
+	debugger;
+	
 	var esGroup = pControl.parent().hasClass('input-group');
 	var div;
 	
