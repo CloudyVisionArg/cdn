@@ -407,7 +407,7 @@ function newMapsAutocomplete(pId, pLabel) {
     }).insertAfter($inp);
 
     $inp.attr('data-filling', '1');
-    include('maps', 0, function () {
+    include('maps', function () {
         maps.initAc($inp[0], function () {
             $inp.removeAttr('data-filling');
         });
