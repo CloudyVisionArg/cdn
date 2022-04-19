@@ -52,8 +52,8 @@ var maps = {
 
             if (typeof(cordova) != 'object') { // En el app se inicializan de otra forma
                 // Crea los autocompletes
+                debugger;
                 $('.maps-autocomplete').each(function () {
-                    debugger;
                     var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
                     ac.inputEl = this;
                     this.mapsAutocomplete = ac;
