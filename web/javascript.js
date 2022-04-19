@@ -41,11 +41,10 @@ errMsg(pErr)
 
 var bootstrapVersion;
 try {
-	bootstrapVersion = $.fn.tooltipp.Constructor.VERSION.split('.').map(el => parseInt(el));
+	bootstrapVersion = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
 } catch (er) {
 	bootstrapVersion = [null];
 };
-debugger;
 
 function htmlEncode(pText) {
     var sp = document.createElement('span');
