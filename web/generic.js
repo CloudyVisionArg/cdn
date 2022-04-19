@@ -606,7 +606,7 @@ function renderControls(pCont, pParent) {
 
             } else {
                 $this = newInputText(ctl['NAME'], label);
-                $ret.addClass('mt-3')
+                $this.addClass('mt-3')
                 $input = $this.find('input');
                 if (ctl.attr('mode') == '3') $input.attr('type', 'password');
                 if (ctl.attr('isnumber') == '1') $input.attr('data-numeral', numeral.options.defaultFormat);
