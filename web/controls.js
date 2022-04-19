@@ -399,6 +399,7 @@ function newMapsAutocomplete(pId, pLabel) {
     var $inp = $ctl.find('input');
     $inp = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     $inp.addClass('maps-autocomplete');
+    $inp.attr('placeholder', 'Calle nro, Localidad');
 
     $('<span/>', {
         style: 'color:#3c763d; right:40px; z-index:1000; display:none;',
