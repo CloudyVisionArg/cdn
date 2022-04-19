@@ -1005,21 +1005,6 @@ function pageInit(e, page) {
         );
     }
 
-    // Crea los Maps Autocomplete
-    var $mapsAc = $get('.maps-autocomplete');
-    if ($mapsAc.length > 0) {
-        $mapsAc.attr('data-filling', '1');
-
-        include('maps', 0, function () {
-            $mapsAc.each(function () {
-                var self = this;
-                maps.initAc(self, function () {
-                    $(self).removeAttr('data-filling');
-                });
-            });
-        });
-    }
-
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     setTimeout(function waiting() {
         if ($page.find('[data-filling]').length > 0) {

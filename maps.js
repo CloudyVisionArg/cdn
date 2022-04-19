@@ -66,9 +66,7 @@ var maps = {
     },
 
     initAc: function (el, callback) {
-        debugger;
         if (el.mapsAutocomplete || el.initializing) return;
-
         el.initializing = true;
 
         scriptLoaded('mapsapi', function () {
