@@ -142,7 +142,7 @@ function toast(pText, pOptions) {
     if ($cont.length == 0) {
         $cont = $('<div/>', {
             class: 'toast-container p-3',
-            style: 'position:fixed; top:20px; right:0; z-index: 2000;',
+            style: 'position:fixed; top:15px; right:0; z-index: 2000;',
         }).appendTo($('body'));
     }
 
