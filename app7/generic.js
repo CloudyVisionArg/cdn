@@ -1011,15 +1011,11 @@ function pageInit(e, page) {
         $mapsAc.attr('data-filling', '1');
 
         include('maps', function () {
-            document.getElementById('script_mapsapi').loaded(function () {
-                $mapsAc.each(function () {
-                    var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
-                    ac.inputEl = this;
-                    this.mapsAutocomplete = ac;
-                    ac.addListener('place_changed', maps.onPlaceChange);
+            $mapsAc.each(function () {
+                maps.initAc(this, function () {
                     $(this).removeAttr('data-filling');
                 });
-            })
+            });
         });
     }
 
@@ -1109,22 +1105,8 @@ function fillControls() {
                 } else {
                     if ($el.hasClass('maps-autocomplete')) {
                         setInputVal($el, text);
-
-                        // Setea el place (value) del Autocomplete
-                        el.initializing = true;
-                        el.mapsAutocomplete.set('place', undefined);
-                        el.initializing = undefined;
-    
-                        if (value) {
-                            var places = new google.maps.places.PlacesService(maps.map);
-                            places.getDetails({ placeId: value.split(';')[0] }, function (place, status) {
-                                if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                    el.initializing = true;
-                                    el.mapsAutocomplete.set('place', place);
-                                    el.initializing = undefined;
-                                }
-                            });
-                        };
+                        debugger;
+                        el.mapsValue(value);
         
                     } else {
                         if (textField && textField.Type == 2) {
@@ -1584,7 +1566,8 @@ function saveDoc() {
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = $el.attr('data-place');
+                    debugger;
+                    field.Value = el.mapsValue();
 
                 } else {
                     var type = $el.attr('type').toLowerCase();

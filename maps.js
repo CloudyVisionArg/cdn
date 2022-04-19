@@ -53,26 +53,60 @@ var maps = {
             if (typeof(cordova) != 'object') { // En el app se inicializan de otra forma
                 // Crea los autocompletes
                 $('.maps-autocomplete').each(function () {
-                    var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
-                    ac.inputEl = this;
-                    this.mapsAutocomplete = ac;
-                    ac.addListener('place_changed', maps.onPlaceChange);
-
-                    // Setea el place (value) del Autocomplete
-                    var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
-                    if ($inputVal.val()) {
-                        var places = new google.maps.places.PlacesService(maps.map);
-                        places.getDetails({ placeId: $inputVal.val().split(';')[0] }, function (place, status) {
-                            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                ac.inputEl.initializing = true;
-                                ac.set('place', place);
-                                ac.inputEl.initializing = undefined;
-                            }
-                        });
-                    }
+                    debugger;
+                    maps.initAc(this, function () {
+                        // Setea el hidden como value
+                        var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
+                        if ($inputVal.val()) {
+                            this.mapsValue($inputVal.val());
+                        }
+                    });
                 });
             }
         })
+    },
+
+    initAc: function (el, callback) {
+        scriptLoaded('mapsapi', function () {
+            var ac = new google.maps.places.Autocomplete(this, {types: ['geocode']});
+            ac.inputEl = el;
+            el.mapsAutocomplete = ac;
+            ac.addListener('place_changed', maps.onPlaceChange);
+
+            el.mapsText = function (text) {
+                if (text == undefined) {
+                    return el.value;
+                } else {
+                    el.value = text;
+                    $(el).change();
+                    return text;
+                }
+
+            };
+
+            el.mapsValue = function (value) {
+                if (value == undefined) {
+                    return $(el).attr('data-place');
+
+                } else {
+                    el.initializing = true;
+                    el.mapsAutocomplete.set('place', undefined);
+
+                    if (value) {
+                        var places = new google.maps.places.PlacesService(maps.map);
+                        places.getDetails({ placeId: value.split(';')[0] }, function (place, status) {
+                            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                el.mapsAutocomplete.set('place', place);
+                            }
+                        });
+                    };
+                    el.initializing = undefined;
+                }
+
+            };
+
+            if (callback) callback(el);
+        });
     },
 
     onPlaceChange: function () {
@@ -85,14 +119,14 @@ var maps = {
             value = place.place_id + ';' + place.geometry.location.lat() + ';' + place.geometry.location.lng()
         }
 
+        $(el).attr('data-place', value);
         if (typeof(cordova) == 'object') {
             // Cambia globo vacio/lleno
-            $(el).attr('data-place', value);
             $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
         } else {
-            // Muestra/oculta el tilde verde
             var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
             $inputVal.val(value);
+            // Muestra/oculta el tilde verde
             $(el).next('span').css('display', place ? 'block' : 'none');
         };
 

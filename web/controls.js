@@ -401,13 +401,19 @@ function newMapsAutocomplete(pId, pLabel) {
     var $inp = $ctl.find('input');
     $inp = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     $inp.addClass('maps-autocomplete');
+
     $inp.focus(function () {
         maps.setBounds(this);
     });
+
     $inp.change(function () {
         maps.onInputChange(this);
     });
 
+    $('<span/>', {
+        style: 'color:#3c763d; right:40px; z-index:1000; display:none;',
+        class: 'glyphicon glyphicon-ok form-control-feedback',
+    }).insertAfter($inp);
 
     $('<input/>', {
         type: 'hidden',
@@ -416,32 +422,17 @@ function newMapsAutocomplete(pId, pLabel) {
 
     return $ctl;
     /*
-    placeholder='" & PlaceHolder & _
+    placeholder
+    readonly
+    text/value
 
-    Public Name
-	Public PlaceHolder
-	Public Text
-	Public OnChange
-	Public CssClass
-	Public Ticked ' Deprecado por Value
-	Public Value
-	Public Readonly
-
-    If Readonly Then
-        oSB.Append "<input type='text' name='" & Name & "' id='" & Name & "' class='form-control' value='" & AttEnc(Text & "") & "' readonly></input>"
-        oSB.Append "<span style='color:#3c763d; right:18px; top:25px; z-index: 1000;" & IIf(Value & "" <> "" Or Ticked, "", "display:none;") & _
-            "' class='glyphicon glyphicon-ok form-control-feedback'></span>"
-    Else
-        oSB.Append "<div class='input-group'>"
-        oSB.Append "<input type='text' name='" & Name & "' id='" & Name & "' class='form-control maps-autocomplete' placeholder='" & PlaceHolder & _
-            "' value='" & AttEnc(Text & "") & "' onfocus='maps.setBounds(this)' onchange='maps.onInputChange(this)' onplacechange='" & OnChange & "'></input>"
-        oSB.Append "<span style='color:#3c763d; right:40px; z-index: 1000;" & IIf(Value & "" <> "" Or Ticked, "", "display:none;") & _
-            "' class='glyphicon glyphicon-ok form-control-feedback'></span>"
-        oSB.Append "<span class='input-group-addon add-on' style='cursor: pointer;' onclick='maps.pickLocation(this, event)'><span class='glyphicon glyphicon-map-marker'></span></span>"
-        oSB.Append "</div>"
-        oSB.Append "<input type='hidden' name='" & Name & "_value' id='" & Name & "_value' value='" & AttEnc(Value & "") & "'>"
-    End If
-
-    Render = oSB.ToString()
-*/
+    $input.on('placeChange', function (e) {
+        var addrComp = e.originalEvent.detail.addressComponents;
+        if (addrComp) {
+            setInputVal($get('#ciudad'), addrComp['administrative_area_level_2'] + ' - ' + addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
+            setInputVal($get('#provincia'), addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
+            setInputVal($get('#pais_empresa'), addrComp['country']);
+        }
+    })
+    */
 }

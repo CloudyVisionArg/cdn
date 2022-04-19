@@ -205,6 +205,8 @@ function inputDataList(pInput, pSource) {
 
 // Retorna un Automplete de Google Maps
 function getInputAddress(pId, pLabel, pValue) {
+    include('maps', 0);
+
     var $itemInput = getInputText(pId, pLabel, pValue);
     
     var $input = $itemInput.find('input');
@@ -230,8 +232,6 @@ function getInputAddress(pId, pLabel, pValue) {
         maps.pickLocation($input[0], e);
     });
 
-    //todo: me parece q falta el hidden, dps revisar bien
-    
     return $itemInput;
 }
 
