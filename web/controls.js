@@ -403,7 +403,7 @@ function newMapsAutocomplete(pId, pLabel) {
 
     $('<span/>', {
         style: 'color:#3c763d; right:40px; z-index:1000; display:none;',
-        class: 'glyphicon glyphicon-ok form-control-feedback',
+        class: 'bi bi-check',
     }).insertAfter($inp);
 
     $inp.attr('data-filling', '1');
