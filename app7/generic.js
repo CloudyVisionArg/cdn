@@ -1012,9 +1012,10 @@ function pageInit(e, page) {
 
         include('maps', function () {
             $mapsAc.each(function () {
-                maps.initAc(this, function () {
+                var self = this;
+                maps.initAc(self, function () {
                     debugger;
-                    $(this).removeAttr('data-filling');
+                    $(self).removeAttr('data-filling');
                 });
             });
         });
