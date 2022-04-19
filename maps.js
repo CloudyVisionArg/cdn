@@ -126,9 +126,11 @@ var maps = {
 
             };
 
-            console.log('4');
             el.initializing = undefined;
-            if (callback) callback(el);
+            if (callback) {
+                console.log('4');
+                callback(el);
+            }
         });
     },
 
