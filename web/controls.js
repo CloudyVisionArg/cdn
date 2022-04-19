@@ -397,9 +397,16 @@ function newFieldset(pId, pLabel) {
 function newMapsAutocomplete(pId, pLabel) {
     include('maps');
 
-    var $inp = newInputText(pId, pLabel);
+    var $ctl = newInputText(pId, pLabel);
+    var $inp = $ctl.find('input');
 
-    addInputButton($inp.find('input'), 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
+    addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
+    $inp.addClass('maps-autocomplete');
+
+    $('<input/>', {
+        type: 'hidden',
+        id: pId + '_value',
+    }).insertAfter($inp.parent());
 
     return $inp;
     /*
