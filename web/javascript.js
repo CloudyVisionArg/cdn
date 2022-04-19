@@ -339,7 +339,7 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	};
 	
 	if (!esGroup) pControl.replaceWith(div);
-	return span;
+	return newControl ? newControl : pControl;
 }
 
 function addPhoneButton(pControl) {
