@@ -515,10 +515,11 @@ function getDefaultControl(pField) {
     if (pField.Type == 1) {
         if (pField.Length > 0 && pField.Length < 500) {
             $ret = newInputText(pField.Name, label);
-            $ret.addClass('mt-3')
+            $ret.addClass('mt-3');
             $input = $ret.find('input');
         } else {
             $ret = newTextarea(pField.Name, label);
+            $ret.addClass('mt-3');
             $input = $ret.find('textarea');
         }
 
@@ -528,7 +529,7 @@ function getDefaultControl(pField) {
 
     } else if (pField.Type == 3) {
         $ret = newInputText(pField.Name, label);
-        $ret.addClass('mt-3')
+        $ret.addClass('mt-3');
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
     };
@@ -602,6 +603,7 @@ function renderControls(pCont, pParent) {
         if (type == 'TEXTBOX') {
             if (ctl.attr('mode') == '2') { // Multiline
                 $this = newTextarea(ctl['NAME'], label);
+                $this.addClass('mt-3');
                 $input = $this.find('textarea');
 
             } else {
