@@ -1010,7 +1010,7 @@ function pageInit(e, page) {
     if ($mapsAc.length > 0) {
         $mapsAc.attr('data-filling', '1');
 
-        include('maps', function () {
+        include('maps', 0, function () {
             $mapsAc.each(function () {
                 var self = this;
                 maps.initAc(self, function () {
