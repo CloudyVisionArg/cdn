@@ -53,7 +53,6 @@ var maps = {
             if (typeof(cordova) != 'object') { // En el app se inicializan de otra forma
                 // Crea los autocompletes
                 $('.maps-autocomplete').each(function () {
-                    debugger;
                     maps.initAc(this, function () {
                         // Setea el hidden como value
                         var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
@@ -67,14 +66,14 @@ var maps = {
     },
 
     initAc: function (el, callback) {
+        if (el.mapsAutocomplete) return;
+        
         scriptLoaded('mapsapi', function () {
             var ac = new google.maps.places.Autocomplete(el, {types: ['geocode']});
             ac.inputEl = el;
             el.mapsAutocomplete = ac;
             ac.addListener('place_changed', maps.onPlaceChange);
 
-            // todo: verificar cdo ya estan x markup
-            debugger;
             var $el = $(el);
             if ($(el).attr('onfocus') != 'maps.setBounds(this)') {
                 $el.focus(function () {

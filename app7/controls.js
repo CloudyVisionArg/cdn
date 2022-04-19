@@ -205,8 +205,6 @@ function inputDataList(pInput, pSource) {
 
 // Retorna un Automplete de Google Maps
 function getInputAddress(pId, pLabel, pValue) {
-    include('maps');
-
     var $itemInput = getInputText(pId, pLabel, pValue);
     
     var $input = $itemInput.find('input');
@@ -223,6 +221,13 @@ function getInputAddress(pId, pLabel, pValue) {
 
     $i.click(function (e) {
         maps.pickLocation($input[0], e);
+    });
+
+    include('maps', function () {
+        $input.attr('data-filling', '1');
+        maps.initAc($input[0], function () {
+            $input.removeAttr('data-filling');
+        });
     });
 
     return $itemInput;

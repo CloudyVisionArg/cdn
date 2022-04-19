@@ -402,13 +402,6 @@ function newMapsAutocomplete(pId, pLabel) {
     $inp = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     $inp.addClass('maps-autocomplete');
 
-    $inp.focus(function () {
-        maps.setBounds(this);
-    });
-
-    $inp.change(function () {
-        maps.onInputChange(this);
-    });
 
     $('<span/>', {
         style: 'color:#3c763d; right:40px; z-index:1000; display:none;',
