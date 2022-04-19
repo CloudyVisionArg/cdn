@@ -408,8 +408,8 @@ function newMapsAutocomplete(pId, pLabel) {
         id: pId + '_value',
     }).insertAfter($inp.parent());
 
-    return $inp;
     debugger;
+    return $inp;
     /*
     Public Name
 	Public PlaceHolder
