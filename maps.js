@@ -129,6 +129,7 @@ var maps = {
     },
 
     onPlaceChange: function () {
+        debugger;
         var place = this.getPlace();
         var el = this.inputEl;
 
