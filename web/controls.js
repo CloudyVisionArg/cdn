@@ -399,6 +399,7 @@ function newMapsAutocomplete(pId, pLabel) {
 
     var $ctl = newInputText(pId, pLabel);
     var $inp = $ctl.find('input');
+    $inp = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     $inp.addClass('maps-autocomplete');
     $inp.focus(function () {
         debugger;
@@ -408,7 +409,6 @@ function newMapsAutocomplete(pId, pLabel) {
         maps.onInputChange(this);
     });
 
-    $inp = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
 
     $('<input/>', {
         type: 'hidden',
