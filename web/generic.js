@@ -28,7 +28,7 @@ arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.j
 arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
 arrScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
 arrScripts.push({ id: 'doorsapi', depends: ['jquery'] });
-arrScripts.push({ id: 'web-javascript', version: 0, depends: ['jquery'] });
+arrScripts.push({ id: 'web-javascript', version: 0, depends: ['jquery', 'bootstrap'] });
 arrScripts.push({ id: 'web-controls' });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
