@@ -664,7 +664,6 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'HTMLRAW') {
             $this = $('<div/>', {
-                id: ctl['NAME'],
                 class: 'mt-3',
             });
 

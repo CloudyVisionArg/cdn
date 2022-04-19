@@ -402,6 +402,7 @@ function newMapsAutocomplete(pId, pLabel) {
     addInputButton($inp.find('input'));
     debugger;
 
+    return $inp;
     /*
     Public Name
 	Public PlaceHolder
