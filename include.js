@@ -59,28 +59,29 @@ Si el src termina en '.css' se creara un <link>, sino un <script>
 function registeredScripts() {
 	var scripts = [];
 
+	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
+	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
+
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 76 });
+	scripts.push({ id: 'maps', path: '/maps.js', version: 76 });
+	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 76 });
+	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 76 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 74 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 73 });
 	scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 73 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 68 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
-	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
-	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
 	scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 57 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 60 });
 	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
 	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
-	scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 48 });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
-	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 44 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
-	scripts.push({ id: 'maps', path: '/maps.js', version: 20 });
 
 	// Backward compatibility
 	scripts.push({ id: 'app7-doorsapi', path: '/doorsapi.js', version: 68 });
