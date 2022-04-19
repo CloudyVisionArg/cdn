@@ -76,12 +76,16 @@ var maps = {
             // todo: verificar cdo ya estan x markup
             debugger;
             var $el = $(el);
-            $el.focus(function () {
-                maps.setBounds(this);
-            });
-            $el.change(function () {
-                maps.onInputChange(this);
-            });
+            if ($(el).attr('onfocus') != 'maps.setBounds(this)') {
+                $el.focus(function () {
+                    maps.setBounds(this);
+                });
+            }
+            if ($(el).attr('onchange') != 'maps.onInputChange(this)') {
+                $el.change(function () {
+                    maps.onInputChange(this);
+                });
+            }
 
             el.mapsText = function (text) {
                 var self = this;
