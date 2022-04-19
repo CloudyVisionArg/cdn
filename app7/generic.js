@@ -1014,7 +1014,6 @@ function pageInit(e, page) {
             $mapsAc.each(function () {
                 var self = this;
                 maps.initAc(self, function () {
-                    debugger;
                     $(self).removeAttr('data-filling');
                 });
             });
