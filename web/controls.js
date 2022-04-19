@@ -395,7 +395,7 @@ function newFieldset(pId, pLabel) {
 }
 
 function newMapsAutocomplete(pId, pLabel) {
-    include('maps');
+    include('maps', 0);
 
     var $ctl = newInputText(pId, pLabel);
     var $inp = $ctl.find('input');
@@ -408,7 +408,6 @@ function newMapsAutocomplete(pId, pLabel) {
         id: pId + '_value',
     }).appendTo($ctl);
 
-    debugger;
     return $inp;
     /*
     Public Name
