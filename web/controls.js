@@ -408,7 +408,7 @@ function newMapsAutocomplete(pId, pLabel) {
         id: pId + '_value',
     }).appendTo($ctl);
 
-    return $inp;
+    return $ctl;
     /*
     Public Name
 	Public PlaceHolder
