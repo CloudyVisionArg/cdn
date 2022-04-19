@@ -223,9 +223,8 @@ function getInputAddress(pId, pLabel, pValue) {
         maps.pickLocation($input[0], e);
     });
 
-    debugger;
+    $input.attr('data-filling', '1');
     include('maps', function () {
-        $input.attr('data-filling', '1');
         maps.initAc($input[0], function () {
             $input.removeAttr('data-filling');
         });
