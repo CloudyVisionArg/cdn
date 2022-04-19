@@ -406,7 +406,7 @@ function newMapsAutocomplete(pId, pLabel) {
     $('<input/>', {
         type: 'hidden',
         id: pId + '_value',
-    }).insertAfter($inp.parent());
+    }).appendTo($ctl);
 
     debugger;
     return $inp;
