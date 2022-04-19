@@ -1013,6 +1013,7 @@ function pageInit(e, page) {
         include('maps', function () {
             $mapsAc.each(function () {
                 maps.initAc(this, function () {
+                    debugger;
                     $(this).removeAttr('data-filling');
                 });
             });
