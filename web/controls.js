@@ -28,9 +28,7 @@ function newTextarea(pId, pLabel) {
 function newDTPicker(pId, pLabel, pType) {
     // pType: date, time, datetime-local
 
-    var $div = $('<div/>', {
-        class: 'mt-3',
-    });
+    var $div = $('<div/>');
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
@@ -165,10 +163,8 @@ function getFolder(pFolder, pRootFolderId) {
     });
 }
 
-function newSelect(pId, pLabel, pMultiple, pOptions) {
-    var $div = $('<div/>', {
-        class: 'mt-3',
-    });
+function newSelect(pId, pLabel, pOptions) {
+    var $div = $('<div/>');
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
@@ -177,7 +173,7 @@ function newSelect(pId, pLabel, pMultiple, pOptions) {
         class: 'form-control',
     }).appendTo($div);
 
-    if (pMultiple) $sel.attr('multiple', true);
+    if (pOptions && pOptions.multiple) $sel.attr('multiple', true);
 
     $sel.selectpicker(pOptions);
 

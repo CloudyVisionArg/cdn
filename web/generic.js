@@ -525,6 +525,7 @@ function getDefaultControl(pField) {
 
     } else if (pField.Type == 2) {
         $ret = newDTPicker(pField.Name, label, 'datetime-local');
+        $ret.addClass('mt-3');
         $input = $ret.find('input');
 
     } else if (pField.Type == 3) {
@@ -651,6 +652,7 @@ function renderControls(pCont, pParent) {
                 mode = 'time';
             }
             $this = newDTPicker(ctl['NAME'], label, mode)
+            $this.addClass('mt-3');
             $input = $this.find('input');
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
@@ -669,9 +671,11 @@ function renderControls(pCont, pParent) {
         // -- Select / SelectMultiple --
 
         } else if (type == 'SELECT' || type == 'SELECTMULTIPLE') {
-            $this = newSelect(ctl['NAME'], label, ctl.attr('multiple') == '1' || type == 'SELECTMULTIPLE', {
+            $this = newSelect(ctl['NAME'], label, {
+                multiple: ctl.attr('multiple') == '1' || type == 'SELECTMULTIPLE',
                 liveSearch: (ctl.attr('searchbar') == '1'),
             });
+            $this.addClass('mt-3');
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
@@ -683,9 +687,11 @@ function renderControls(pCont, pParent) {
         // -- SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
 
         } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
-            $this = newSelect(ctl['NAME'], label, ctl.attr('mode') == '2' || type == 'SELECTMULTIPLEFOLDER', {
+            $this = newSelect(ctl['NAME'], label, {
+                multiple: ctl.attr('mode') == '2' || type == 'SELECTMULTIPLEFOLDER',
                 liveSearch: (ctl.attr('searchbar') == '1' || type == 'LOOKUPBOXACCOUNTS'),
             });
+            $this.addClass('mt-3');
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
