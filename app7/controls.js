@@ -205,7 +205,7 @@ function inputDataList(pInput, pSource) {
 
 // Retorna un Automplete de Google Maps
 function getInputAddress(pId, pLabel, pValue) {
-    include('maps', 0);
+    include('maps');
 
     var $itemInput = getInputText(pId, pLabel, pValue);
     
