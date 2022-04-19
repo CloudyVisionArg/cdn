@@ -67,7 +67,6 @@ var maps = {
     },
 
     initAc: function (el, callback) {
-        debugger;
         scriptLoaded('mapsapi', function () {
             var ac = new google.maps.places.Autocomplete(el, {types: ['geocode']});
             ac.inputEl = el;
@@ -75,11 +74,12 @@ var maps = {
             ac.addListener('place_changed', maps.onPlaceChange);
 
             el.mapsText = function (text) {
+                var self = this;
                 if (text == undefined) {
-                    return el.value;
+                    return self.value;
                 } else {
-                    el.value = text;
-                    $(el).change();
+                    self.value = text;
+                    $(self).change();
                     return text;
                 }
 
@@ -87,20 +87,21 @@ var maps = {
 
             el.mapsValue = function (value) {
                 if (value == undefined) {
-                    return $(el).attr('data-place');
+                    return $(this).attr('data-place');
 
                 } else {
-                    el.initializing = true;
-                    el.mapsAutocomplete.set('place', undefined);
-                    el.initializing = undefined;
+                    var self = this;
+                    self.initializing = true;
+                    self.mapsAutocomplete.set('place', undefined);
+                    self.initializing = undefined;
 
                     if (value) {
                         var places = new google.maps.places.PlacesService(maps.map);
                         places.getDetails({ placeId: value.split(';')[0] }, function (place, status) {
                             if (status === google.maps.places.PlacesServiceStatus.OK) {
-                                el.initializing = true;
-                                el.mapsAutocomplete.set('place', place);
-                                el.initializing = undefined;
+                                self.initializing = true;
+                                self.mapsAutocomplete.set('place', place);
+                                self.initializing = undefined;
                             }
                         });
                     };
