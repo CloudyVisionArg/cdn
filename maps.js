@@ -66,8 +66,9 @@ var maps = {
     },
 
     initAc: function (el, callback) {
+        debugger;
         if (el.mapsAutocomplete) return;
-        
+
         scriptLoaded('mapsapi', function () {
             var ac = new google.maps.places.Autocomplete(el, {types: ['geocode']});
             ac.inputEl = el;
