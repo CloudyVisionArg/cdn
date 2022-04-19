@@ -665,6 +665,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'HTMLRAW') {
             $this = $('<div/>', {
                 id: ctl['NAME'],
+                class: 'mt-3',
             });
 
 
@@ -808,7 +809,7 @@ function renderControls(pCont, pParent) {
             $this.find('.card-body').css('padding-top', '0');
 
             bsctl = $this.find('.collapse')[0].bscollapse;
-            
+
             renderControls($this.find('fieldset'), ctl['NAME']);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
