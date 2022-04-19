@@ -62,7 +62,7 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 77 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 78 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 77 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 77 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 76 });
