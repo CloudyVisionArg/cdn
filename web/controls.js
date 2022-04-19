@@ -408,6 +408,7 @@ function newMapsAutocomplete(pId, pLabel) {
         id: pId + '_value',
     }).appendTo($ctl);
 
+    debugger;
     return $ctl;
     /*
     Public Name
