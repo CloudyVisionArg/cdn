@@ -415,15 +415,14 @@ function newMapsAutocomplete(pId, pLabel) {
 
     return $ctl;
     /*
-    readonly
-    text/value
+    readonly??
 
-    $input.on('placeChange', function (e) {
+    $inp.on('placeChange', function (e) {
         var addrComp = e.originalEvent.detail.addressComponents;
         if (addrComp) {
-            setInputVal($get('#ciudad'), addrComp['administrative_area_level_2'] + ' - ' + addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
-            setInputVal($get('#provincia'), addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
-            setInputVal($get('#pais_empresa'), addrComp['country']);
+            $('#ciudad').val(addrComp['administrative_area_level_2'] + ' - ' + addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
+            $('#provincia').val(addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
+            $('#pais').val(addrComp['country']);
         }
     })
     */
