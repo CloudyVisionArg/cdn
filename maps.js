@@ -73,6 +73,16 @@ var maps = {
             el.mapsAutocomplete = ac;
             ac.addListener('place_changed', maps.onPlaceChange);
 
+            // todo: verificar cdo ya estan x markup
+            debugger;
+            var $el = $(el);
+            $el.focus(function () {
+                maps.setBounds(this);
+            });
+            $el.change(function () {
+                maps.onInputChange(this);
+            });
+
             el.mapsText = function (text) {
                 var self = this;
                 if (text == undefined) {

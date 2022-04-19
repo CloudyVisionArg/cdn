@@ -212,13 +212,6 @@ function getInputAddress(pId, pLabel, pValue) {
     var $input = $itemInput.find('input');
     $input.addClass('maps-autocomplete');
 
-    $input.focus(function () {
-        maps.setBounds(this);
-    });
-    $input.change(function () {
-        maps.onInputChange(this);
-    });
-
     var $inputMedia = $('<div/>', {
         class: 'item-media',
         style: 'min-width: 40px; align-self: flex-end;',
