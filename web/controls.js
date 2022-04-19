@@ -349,9 +349,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
 }
 
 function newCKEditor(pId, pLabel, pOptions) {
-    var $div = $('<div/>', {
-        class: 'mt-3',
-    });
+    var $div = $('<div/>');
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
@@ -383,7 +381,7 @@ function newCKEditor(pId, pLabel, pOptions) {
 
 function newCheckbox(pId, pLabel) {
     var $div = $('<div/>', {
-        class: 'form-check mt-3',
+        class: 'form-check',
     });
 
     $('<input/>', {

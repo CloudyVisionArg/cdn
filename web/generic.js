@@ -761,6 +761,7 @@ function renderControls(pCont, pParent) {
                 height: !isNaN(aux) ? aux : 150,
                 customConfig: ctl.attr('mode') == 'basic' ? 'configbasic.js' : 'config.js',
             });
+            $this.addClass('mt-3');
             $input = $this.find('textarea');
             $input.attr('data-textfield', tf);
             $input.attr('data-ckeditor', true);
@@ -779,6 +780,7 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'CHECKBOX') {
             $this = newCheckbox(ctl['NAME'], label);
+            $this.addClass('mt-3');
             $input = $this.find('input');
 
             $input.attr('data-textfield', tf);
