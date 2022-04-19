@@ -402,8 +402,8 @@ function newMapsAutocomplete(pId, pLabel) {
     $inp.attr('placeholder', 'Calle nro, Localidad');
 
     $('<span/>', {
-        style: 'color:#3c763d; right:50px; position:absolute; width:50px height:50px; z-index:1000; display:none;',
-        class: 'bi bi-check',
+        style: 'color:#3c763d; right:45px; position:absolute; z-index:1000; display:none;',
+        class: 'fs-4 bi bi-check',
     }).insertAfter($inp);
 
     $inp.attr('data-filling', '1');
