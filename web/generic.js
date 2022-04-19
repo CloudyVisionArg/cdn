@@ -796,6 +796,9 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'FIELDSET') {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
+            $this.addClass('mt-3');
+            $this.find('.card-body').css('padding-top', '0');
+
             bsctl = $this.find('.collapse')[0].bscollapse;
             renderControls($this.find('fieldset'), ctl['NAME']);
 

@@ -405,7 +405,7 @@ function newCheckbox(pId, pLabel) {
 
 function newFieldset(pId, pLabel) {
     var $div = $('<div/>', {
-        class: 'card mt-3',
+        class: 'card',
     });
 
     var $header = $('<h6/>', {
