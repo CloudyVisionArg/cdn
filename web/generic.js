@@ -449,8 +449,11 @@ function renderPage() {
     });
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
+    wt = 0;
     setTimeout(function waiting() {
         if ($('[data-filling]').length > 0) {
+            wt += 100;
+            if (wt > 2000) debugger;
             setTimeout(waiting, 100);
         } else {
             fillControls(doc);
