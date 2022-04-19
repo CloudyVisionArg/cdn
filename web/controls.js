@@ -395,23 +395,22 @@ function newFieldset(pId, pLabel) {
 }
 
 function newMapsAutocomplete(pId, pLabel) {
-    include('maps');
-
     var $ctl = newInputText(pId, pLabel);
     var $inp = $ctl.find('input');
     $inp = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     $inp.addClass('maps-autocomplete');
-
 
     $('<span/>', {
         style: 'color:#3c763d; right:40px; z-index:1000; display:none;',
         class: 'glyphicon glyphicon-ok form-control-feedback',
     }).insertAfter($inp);
 
-    $('<input/>', {
-        type: 'hidden',
-        id: pId + '_value',
-    }).appendTo($ctl);
+    $inp.attr('data-filling', '1');
+    include('maps', function () {
+        maps.initAc($inp[0], function () {
+            $inp.removeAttr('data-filling');
+        });
+    });
 
     return $ctl;
     /*
