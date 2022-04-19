@@ -1106,7 +1106,6 @@ function fillControls() {
                 } else {
                     if ($el.hasClass('maps-autocomplete')) {
                         setInputVal($el, text);
-                        debugger;
                         el.mapsValue(value);
         
                     } else {
@@ -1567,7 +1566,6 @@ function saveDoc() {
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    debugger;
                     field.Value = el.mapsValue();
 
                 } else {
