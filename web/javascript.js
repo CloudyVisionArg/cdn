@@ -39,7 +39,12 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
-var bootstrapVersion = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
+var bootstrapVersion;
+try {
+	bootstrapVersion = $.fn.tooltipp.Constructor.VERSION.split('.').map(el => parseInt(el));
+} catch (er) {
+	bootstrapVersion = [null];
+};
 debugger;
 
 function htmlEncode(pText) {
