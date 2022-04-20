@@ -377,6 +377,7 @@ function newFieldset(pId, pLabel) {
     $('<a/>', {
         'data-bs-toggle': 'collapse',
         class: 'link-secondary',
+        style: 'text-decoration: none;',
         href: '#' + pId,
     }).append(pLabel).appendTo($header);
 

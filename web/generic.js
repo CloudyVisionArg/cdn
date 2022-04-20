@@ -453,7 +453,7 @@ function renderPage() {
     setTimeout(function waiting() {
         if ($('[data-filling]').length > 0) {
             wt += 100;
-            if (wt > 2000) debugger;
+            if (wt == 3000) debugger; // Para poder ver q corno pasa
             setTimeout(waiting, 100);
         } else {
             fillControls(doc);
