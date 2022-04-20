@@ -196,7 +196,13 @@ function renderPage() {
 
     $d.ready(function () {
         // Tooltips
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip({
+            delay: {
+                show: 500,
+                hide: 100,
+            },
+            placement: 'auto',
+        });
 
         // Validacion de numero
         $('[data-numeral]').change(function (e) {
@@ -926,6 +932,8 @@ function renderControls(pCont, pParent) {
             }
 
             /*
+            Para attacharse al evento change en el SBR:
+
             $input.on('placeChange', function (e) {
                 var addrComp = e.originalEvent.detail.addressComponents;
                 if (addrComp) {
