@@ -405,7 +405,7 @@ function newMapsAutocomplete(pId, pLabel) {
 
     $('<span/>', {
         style: 'color:#3c763d; right:45px; position:absolute; z-index:1000; display:none;',
-        class: 'fs-4 bi bi-check-lg',
+        class: 'fs-4 bi bi-check',
     }).insertAfter($inp);
 
     $inp.attr('data-filling', '1');
