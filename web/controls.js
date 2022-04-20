@@ -90,6 +90,7 @@ function setDTPickerVal(pInput, pValue) {
 }
 
 function inputDataList(pInput, pSource) {
+    //todo: ver si puedo hacerlo sin permisos
     pInput.attr('autocomplete', 'off');
 
     getFolder(objPropCI(pSource, 'folder'), objPropCI(pSource, 'rootFolder')).then(
@@ -404,7 +405,7 @@ function newMapsAutocomplete(pId, pLabel) {
 
     $('<span/>', {
         style: 'color:#3c763d; right:45px; position:absolute; z-index:1000; display:none;',
-        class: 'fs-4 bi bi-check',
+        class: 'fs-4 bi bi-check2',
     }).insertAfter($inp);
 
     $inp.attr('data-filling', '1');

@@ -631,6 +631,7 @@ function renderControls(pCont, pParent) {
             }
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                //todo: revisar
                 inputReadonly($input, true);
             }
 
@@ -641,8 +642,9 @@ function renderControls(pCont, pParent) {
                 });
             }
 
-            if (ctl.attr('buttons') == 'phone') addPhoneButton($this);
-            if (ctl.attr('buttons') == 'email') addEmailButton($this);
+            if (ctl.attr('buttons').indexOf('email') >= 0) addEmailButton($this);
+            if (ctl.attr('buttons').indexOf('phone') >= 0) addPhoneButton($this);
+            if (ctl.attr('buttons').indexOf('whatsapp') >= 0) addWappButton($this);
 
 
         // -- DTPicker --
@@ -659,6 +661,7 @@ function renderControls(pCont, pParent) {
             $input = $this.find('input');
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                //todo: revisar
                 inputReadonly($input, true);
             }
 
