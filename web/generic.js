@@ -198,7 +198,7 @@ function renderPage() {
         // Tooltips
         $('[data-bs-toggle="tooltip"]').tooltip({
             delay: {
-                show: 1000,
+                show: 500,
                 hide: 100,
             },
             placement: 'auto',
