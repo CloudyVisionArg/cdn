@@ -46,7 +46,7 @@ include(arrScripts, function () {
 
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
-	Doors.RESTFULL.AuthToken = '408F7D71E82F037A70B36EF1484229CB99480095B65DEC7F6878FB9C91D87124';
+	Doors.RESTFULL.AuthToken = '7084BEAFB5325CDDE55C6D89F876B3D20E215F9CD47D19881EF9D206B741A408';
 
     // todo: mensaje y terminar
     DoorsAPI.islogged().then(
