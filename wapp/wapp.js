@@ -940,6 +940,7 @@ var wapp = {
 	},
 
 	loadMore: function (el) {
+		debugger;
 		wapp.cursorLoading(true);
 		wapp.loadMessages($(el).closest('div.wapp-chat'), true);
 	},
