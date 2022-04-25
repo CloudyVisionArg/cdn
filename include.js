@@ -62,6 +62,7 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
+	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 80 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 79 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 78 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 77 });
@@ -74,7 +75,6 @@ function registeredScripts() {
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
 	scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
-	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 60 });
 	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
 	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
