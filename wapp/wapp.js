@@ -864,7 +864,7 @@ var wapp = {
 				if (res.length < msgLimit && !incLoad) {
 					$loadMore.hide();
 				} else {
-					$loadMore.show();
+					//$loadMore.show();
 				}
 				
 				if (res.length > 0) {
