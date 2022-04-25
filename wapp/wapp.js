@@ -863,8 +863,6 @@ var wapp = {
 				var $loadMore = pChat.find('div.wapp-loadmore a');
 				if (res.length < msgLimit && !incLoad) {
 					$loadMore.hide();
-				} else {
-					//$loadMore.show();
 				}
 				
 				if (res.length > 0) {
