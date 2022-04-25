@@ -929,7 +929,9 @@ var wapp = {
 		                	debugger;
 		                }
 		            );
-	        	}
+	        	} else {
+					wapp.cursorLoading(false);
+				}
 			},
 			function (err) {
 				console.log(err);
