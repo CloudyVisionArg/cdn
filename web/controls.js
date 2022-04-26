@@ -432,7 +432,7 @@ function newMapsAutocomplete(pId, pLabel) {
 }
 
 // Devuelve una tabla con el DocLog del documento, mediante la funcion de Callback
-function newDocLog(pDocId, pCallback) {
+function newDocLog(pTitle, pDocId, pCallback) {
 	var $ctl, $cardHeader, $cardBody;
 	var $table, $thead, $tbody, $tr;
 	
@@ -442,7 +442,9 @@ function newDocLog(pDocId, pCallback) {
 
 	$cardHeader = $('<div/>', {
 		class: 'card-header',
-	}).append('Cambios de datos').appendTo($ctl);
+	}).appendTo($ctl);
+
+    $cardHeader.append(pTitle ? pTitle : 'Cambios de datos')
 
 	$cardBody = $('<div/>', {
 		class: 'card-body',
@@ -451,7 +453,7 @@ function newDocLog(pDocId, pCallback) {
 	$table = $('<table/>', {
         class: 'table',
     }).appendTo($cardBody);
-    
+
 	$thead = $('<thead/>').appendTo($table);
 	$tbody = $('<tbody/>').appendTo($table);
 

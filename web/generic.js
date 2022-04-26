@@ -1028,11 +1028,10 @@ function fillControls() {
             title = form + ' #' + doc.DocId;
         }
 
-        newDocLog(doc_id, function (ctl) {
-            $('[data-doclog]').each(function (ix) {
-                var $clon = ctl.clone();
-                $clon.find('.card-header').html($(this).attr('data-label'));
-                $(this).html($clon);
+        $('[data-doclog]').each(function (ix) {
+            var $self = $(this);
+            newDocLog($self.attr('data-label'), doc_id, function (ctl) {
+                $self.html(ctl);
             });
         });
 
