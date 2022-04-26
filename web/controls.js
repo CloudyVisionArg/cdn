@@ -471,7 +471,10 @@ function newDocLog(pTitle, pDocId, pCallback) {
 				userAnt = row['AccName'];
 				dtAnt = dt;
 
-				$tr = $('<tr/>').appendTo($tbody);
+				$tr = $('<tr/>', {
+                    style: 'border-top: 2px solid currentColor;',
+                }).appendTo($tbody);
+                
 				$('<td/>', {
 					colspan: 2,
                 }).append('<b>' + userAnt + ' el ' + dtAnt.toLocaleDateString() 
