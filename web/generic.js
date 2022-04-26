@@ -1024,10 +1024,6 @@ function fillControls() {
         title = 'Nuevo ' + form;
     }    
 
-    $('[data-doclog]').each(function (ix) {
-        this._value(doc_id);
-    });
-
     document.title = title;
     $('#title').html(title);
 
@@ -1217,6 +1213,10 @@ function fillControls() {
 
     $('[data-attachments]').each(function (ix, el) {
         fillAttachments($(el));
+    });
+
+    $('[data-doclog]').each(function (ix) {
+        this._value(doc_id);
     });
 
     // Evento AfterRender
