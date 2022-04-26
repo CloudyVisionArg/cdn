@@ -834,8 +834,8 @@ var wapp = {
 		}
 
 		// Elimina los caracteres no numericos y da vuelta
-		var extNumberRev = extNumber.replace(/\D/g, '').reverse();
-		var intNumberRev = intNumber.replace(/\D/g, '').reverse();
+		var extNumberRev = extNumber.replace(/\D/g, '').reverse().substring(0, 10);
+		var intNumberRev = intNumber.replace(/\D/g, '').reverse().substring(0, 10);
 
 		var incLoad = false;
 		var lastLoad = pChat.attr('data-last-load');
@@ -858,7 +858,6 @@ var wapp = {
 		
 		wapp.serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
 		
-		debugger;
 		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 			function (res) {
 				var $loadMore = pChat.find('div.wapp-loadmore a');
