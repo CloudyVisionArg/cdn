@@ -161,7 +161,7 @@ function newSelect(pId, pLabel, pOptions) {
         }
     }
 
-    $sel[0].text = function (pText) {
+    $sel[0]._text = function (pText) {
         debugger;
         var $self = $(this);
 
