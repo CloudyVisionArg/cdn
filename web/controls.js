@@ -438,7 +438,7 @@ function newMapsAutocomplete(pId, pLabel) {
 
     return $ctl;
     /*
-    readonly??
+    todo: readonly
 
     $inp.on('placeChange', function (e) {
         var addrComp = e.originalEvent.detail.addressComponents;
@@ -452,27 +452,17 @@ function newMapsAutocomplete(pId, pLabel) {
 }
 
 // Devuelve una tabla con el DocLog del documento, mediante la funcion de Callback
-function newDocLog(pTitle, pDocId, pCallback) {
-	var $ctl, $cardHeader, $cardBody;
+function newDocLog(pId, pLabel) {
+	var $ctl, $fs;
 	var $table, $thead, $tbody, $tr;
 	
-	$ctl = $('<div/>', {
-		class: 'card',
-	});
+	var $ctl = newFieldset(pId, pLabel ? pLabel : 'Cambios de datos');
+    $ctl.attr('data-doclog', 1);
+    $fs = $ctl.find('fieldset');
 
-	$cardHeader = $('<div/>', {
-		class: 'card-header',
-	}).appendTo($ctl);
-
-    $cardHeader.append(pTitle ? pTitle : 'Cambios de datos')
-
-	$cardBody = $('<div/>', {
-		class: 'card-body',
-	}).appendTo($ctl);
-	
 	$table = $('<table/>', {
         class: 'table',
-    }).appendTo($cardBody);
+    }).appendTo($fs);
 
 	$thead = $('<thead/>').appendTo($table);
     $thead.append(`

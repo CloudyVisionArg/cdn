@@ -343,10 +343,7 @@ function renderPage() {
             id: 'tabHist',
         }).appendTo($tabs);
 
-        $('<div/>', {
-            class: 'mt-3',
-            'data-doclog': 1,
-        }).append('Cargando...').appendTo($tabHist);
+        newDocLog('docLog').addClass('mt-3').appendTo($tabHist);
 
     } else {
 
@@ -753,12 +750,8 @@ function renderControls(pCont, pParent) {
         // -- DocumentLog --
 
         } else if (type == 'DOCUMENTLOG') {
-            $this = $('<div/>', {
-                id: ctl['NAME'],
-                class: 'mt-3',
-                'data-doclog': 1,
-                'data-label': label,
-            }).append('Cargando...');
+            $this = newDocLog(ctl['NAME'], label);
+            $this.addClass('mt-3');
 
 
         // -- HtmlArea --
@@ -1027,18 +1020,13 @@ function fillControls() {
         } else {
             title = form + ' #' + doc.DocId;
         }
-
-        $('[data-doclog]').each(function (ix) {
-            var $self = $(this);
-            newDocLog($self.attr('data-label'), doc_id, function (ctl) {
-                $self.html(ctl);
-            });
-        });
-
     } else {
         title = 'Nuevo ' + form;
-        $('[data-doclog]').html('');
     }    
+
+    $('[data-doclog]').each(function (ix) {
+        this._value(doc_id);
+    });
 
     document.title = title;
     $('#title').html(title);
