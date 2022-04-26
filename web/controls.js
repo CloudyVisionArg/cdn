@@ -474,7 +474,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
 				dtAnt = dt;
 
 				$tr = $('<tr/>', {
-                    style: 'border-top: 1px solid currentColor;',
+                    style: 'border-top: 1px solid rgb(33, 37, 41);',
                 }).appendTo($tbody);
                 
 				$('<td/>', {
