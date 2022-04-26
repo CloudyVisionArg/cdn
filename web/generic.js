@@ -1029,7 +1029,7 @@ function fillControls() {
         }
 
         newDocLog(doc_id, function (ctl) {
-            $('[data-doclog]').each(ix => {
+            $('[data-doclog]').each(function (ix) {
                 debugger;
 
             });
