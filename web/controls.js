@@ -455,7 +455,14 @@ function newDocLog(pTitle, pDocId, pCallback) {
     }).appendTo($cardBody);
 
 	$thead = $('<thead/>').appendTo($table);
-    $thead.append('<tr><th>Campo</th><th>Valor nuevo <i class="bi bi-info-circle" title="Click en la fila para ver el valor anterior" data-bs-toggle="tooltip"></i></th></tr>');
+    $thead.append(`
+        <tr>
+            <th>Campo</th>
+            <th>Valor nuevo 
+                <i class="bi bi-info-circle" title="Click en la fila para ver el valor anterior" data-bs-toggle="tooltip"></i>
+            </th>
+        </tr>
+    `);
 
     $thead.find('i').tooltip({
         delay: {
@@ -473,7 +480,8 @@ function newDocLog(pTitle, pDocId, pCallback) {
         if ($td.length == 2) { // fila de campo
             var field = $td.first().html();
             var old = $this.attr('oldvalue');
-            toast('Valor anterior de ' + field + ': ' + (old ? htmlEncode(old) : '(vacio)'));
+            toast('Valor anterior de <b>' + field + '</b>: ' + 
+                (old ? htmlEncode(old) : '(vacio)'), { delay: 5000 });
         }
 	});
 
