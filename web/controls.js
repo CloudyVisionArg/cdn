@@ -483,7 +483,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
 
 			$('<td/>', {
                 style: 'word-break:break-all',
-            }).append(row['NewValue']).appendTo($tr);
+            }).append(htmlEncode(row['NewValue'])).appendTo($tr);
 
 			$tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
         })
