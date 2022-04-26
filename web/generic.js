@@ -344,6 +344,7 @@ function renderPage() {
         }).appendTo($tabs);
 
         $('<div/>', {
+            class: 'mt-3',
             'data-doclog': 1,
         }).append('Cargando...').appendTo($tabHist);
 
