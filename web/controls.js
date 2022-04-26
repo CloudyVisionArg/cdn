@@ -469,7 +469,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
 
 	$tbody.on('click', 'tr', function (e) {
 		var old = $(this).attr('oldvalue');
-		toast('Valor anterior: ' + (old ? old : '(vacio)'));
+		toast('Valor anterior: ' + (old ? htmlEncode(old) : '(vacio)'));
 	});
 
 	DoorsAPI.documentsFieldsLog(pDocId).then(function (log) {
