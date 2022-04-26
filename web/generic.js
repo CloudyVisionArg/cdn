@@ -1030,8 +1030,9 @@ function fillControls() {
 
         newDocLog(doc_id, function (ctl) {
             $('[data-doclog]').each(function (ix) {
-                debugger;
-
+                var $clon = ctl.clone();
+                $clon.find('.card-header').html($(this).attr('data-label'));
+                $(this).html($clon);
             });
         });
 
