@@ -72,22 +72,24 @@ function newDTPicker(pId, pLabel, pType) {
         format: f,
     });
 
-    return $div;
-}
-
-function setDTPickerVal(pInput, pValue) {
-    var type = pInput.attr('data-date-type');
-    if (pValue != null && pValue != '') {
-        if (type == 'date') {
-            pInput.val(moment(pValue).format('L'));
-        } else if (type == 'time') {
-            pInput.val(moment(pValue).format('LT'));
+    $inp[0]._value = function (pValue) {
+        debugger;
+        var self = this;
+        var type = pInput.attr('data-date-type');
+        if (pValue != null && pValue != '') {
+            if (type == 'date') {
+                pInput.val(moment(pValue).format('L'));
+            } else if (type == 'time') {
+                pInput.val(moment(pValue).format('LT'));
+            } else {
+                pInput.val(moment(pValue).format('L LT'));
+            }
         } else {
-            pInput.val(moment(pValue).format('L LT'));
+            pInput.val('');
         }
-    } else {
-        pInput.val('');
     }
+
+    return $div;
 }
 
 function inputDataList(pInput, pSource) {
