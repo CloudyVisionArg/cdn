@@ -158,11 +158,12 @@ function newSelect(pId, pLabel, pOptions) {
 
         } else {
             //set
+            if (typeof $(this).selectpicker == 'function') {
+            }
         }
     }
 
     $sel[0]._text = function (pText) {
-        debugger;
         var $self = $(this);
 
         if (pText == undefined) {
@@ -186,12 +187,6 @@ function newSelect(pId, pLabel, pOptions) {
             //set
         }
     }
-    
-    function getSelectText(pSelect) {
-    }
-
-    
-
 
     return $div;
 }
@@ -301,6 +296,7 @@ pNotFoundAction:
     0: Selecciona el 1ro
     1: Lo agrega (opcion por defecto)
 */
+// todo: pasar a property del select
 function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     pSelect.val(null);
 
