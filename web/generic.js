@@ -989,7 +989,7 @@ function renderControls(pCont, pParent) {
         }
         /*
         Objetos disponibles en este script:
-            doc: El objeto Document que se esta abriendo
+            doc: El objeto que se esta abriendo
             folder: La carpeta actual
             controlsFolder: La carpeta de controles
             controls: El search a la carpeta de controles completo
