@@ -499,8 +499,8 @@ var wapp = {
 			if (!extNumber || !intNumber) return;
 
 			// Elimina los caracteres no numericos y da vuelta
-			var extNumberRev = extNumber.replace(/\D/g, '').reverse();
-			var intNumberRev = intNumber.replace(/\D/g, '').reverse();
+			var extNumberRev = wapp.cleanNumber(extNumber);
+			var intNumberRev = wapp.cleanNumber(intNumber);
 
 			var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
 			
@@ -821,6 +821,11 @@ var wapp = {
 		pChat.removeAttr('data-last-load');
 	},
 
+	cleanNumber: function (pNumber) {
+		// Elimina los caracteres no numericos, da vuelta y toma los 1ros 10 digitos
+		return pNumber.replace(/\D/g, '').reverse().substring(0, 10);
+	},
+
 	loadMessages: function (pChat, pOlders) {
 		var msgLimit = 50;
 		
@@ -833,9 +838,8 @@ var wapp = {
 			return;
 		}
 
-		// Elimina los caracteres no numericos y da vuelta
-		var extNumberRev = extNumber.replace(/\D/g, '').reverse().substring(0, 10);
-		var intNumberRev = intNumber.replace(/\D/g, '').reverse().substring(0, 10);
+		var extNumberRev = wapp.cleanNumber(extNumber);
+		var intNumberRev = wapp.cleanNumber(intNumber);
 
 		var incLoad = false;
 		var lastLoad = pChat.attr('data-last-load');
