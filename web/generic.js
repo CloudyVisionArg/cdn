@@ -754,7 +754,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'DOCUMENTLOG') {
             $this = $('<div/>', {
                 id: ctl['NAME'],
-                //class: 'block',
+                class: 'mt-3',
                 'data-doclog': 1,
             }).append('Cargando...');
 
