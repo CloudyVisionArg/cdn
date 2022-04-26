@@ -455,8 +455,8 @@ function newDocLog(pTitle, pDocId, pCallback) {
     }).appendTo($cardBody);
 
 	$thead = $('<thead/>').appendTo($table);
-    $thead.append('<tr><th>Campo</th><th>Valor nuevo</th></tr>');
-    
+    $thead.append('<tr><th>Campo</th><th>Valor nuevo (click en la fila para ver el anterior)</th></tr>');
+
 	$tbody = $('<tbody/>').appendTo($table);
 
 	$tbody.on('click', 'tr', function (e) {
