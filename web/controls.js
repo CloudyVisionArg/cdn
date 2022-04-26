@@ -74,9 +74,13 @@ function newDTPicker(pId, pLabel, pType) {
 
     $inp[0]._value = function (pValue) {
         var $self = $(this);
+
         if (pValue == undefined) {
+            //get
             return $self.val();
+
         } else {
+            // set
             var type = $self.attr('data-date-type');
             if (pValue != null && pValue != '') {
                 if (type == 'date') {
@@ -130,20 +134,6 @@ function inputDataList(pInput, pSource) {
     )
 }
 
-/*
-Devuelve un folder por ID o PATH
-Si es por PATH hay que pasar el RootFolderId
-*/
-function getFolder(pFolder, pRootFolderId) {
-    return new Promise(function (resolve, reject) {
-        if (!isNaN(parseInt(pFolder))) {
-            DoorsAPI.foldersGetById(pFolder).then(resolve, reject);
-        } else {
-            DoorsAPI.foldersGetByPath(pRootFolderId, pFolder).then(resolve, reject);
-        }
-    });
-}
-
 function newSelect(pId, pLabel, pOptions) {
     var $div = $('<div/>');
 
@@ -157,6 +147,51 @@ function newSelect(pId, pLabel, pOptions) {
     if (pOptions && pOptions.multiple) $sel.attr('multiple', true);
 
     $sel.selectpicker(pOptions);
+
+    $sel[0]._value = function (pValue) {
+        var $self = $(this);
+
+        if (pValue == undefined) {
+            //get
+            var val = $self.val();
+            return val && val != '[NULL]' ? val : null;
+
+        } else {
+            //set
+        }
+    }
+
+    $sel[0].text = function (pText) {
+        debugger;
+        var $self = $(this);
+
+        if (pText == undefined) {
+            // get
+            var val = $self.val();
+            if (val && val != '[NULL]') {
+                if (Array.isArray(val)) {
+                    var arr = [];
+                    pSelect.find('option:selected').each(function (ix, el) {
+                        arr.push($(el).text());
+                    });
+                    return arr;
+                } else {
+                    return pSelect.find('option:selected').text();
+                };
+            } else {
+                return null;
+            }
+
+        } else {
+            //set
+        }
+    }
+    
+    function getSelectText(pSelect) {
+    }
+
+    
+
 
     return $div;
 }
@@ -257,28 +292,6 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
             resolve(true);
         }
     });
-}
-
-function getSelectVal(pSelect) {
-    var val = pSelect.val();
-    return val && val != '[NULL]' ? val : null;
-}
-
-function getSelectText(pSelect) {
-    var val = pSelect.val();
-    if (val && val != '[NULL]') {
-        if (Array.isArray(val)) {
-            var arr = [];
-            pSelect.find('option:selected').each(function (ix, el) {
-                arr.push($(el).text());
-            });
-            return arr;
-        } else {
-            return pSelect.find('option:selected').text();
-        };
-    } else {
-        return null;
-    }
 }
 
 /*

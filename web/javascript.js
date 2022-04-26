@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+getFolder(pFolder, pRootFolderId)
 htmlEncode(pText)
 sqlEncode(pValue, pType)
 Eventos show y hide en jQuery
@@ -38,6 +39,20 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+/*
+Devuelve un folder por ID o PATH
+Si es por PATH hay que pasar el RootFolderId
+*/
+function getFolder(pFolder, pRootFolderId) {
+    return new Promise(function (resolve, reject) {
+        if (!isNaN(parseInt(pFolder))) {
+            DoorsAPI.foldersGetById(pFolder).then(resolve, reject);
+        } else {
+            DoorsAPI.foldersGetByPath(pRootFolderId, pFolder).then(resolve, reject);
+        }
+    });
+}
 
 function htmlEncode(pText) {
     var sp = document.createElement('span');

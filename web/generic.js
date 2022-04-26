@@ -1284,7 +1284,7 @@ function saveDoc() {
                 }
 
             } else if (el.tagName == 'SELECT') {
-                var aux = getSelectText($el);
+                var aux = el._text();
                 field.Value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'DIV') {
@@ -1313,7 +1313,7 @@ function saveDoc() {
 
         if (field && field.Updatable) {
             if (el.tagName == 'SELECT') {
-                var aux = getSelectVal($el);
+                var aux = el._value();
                 field.Value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {

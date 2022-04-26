@@ -101,9 +101,11 @@ var maps = {
 
             el._value = function (value) {
                 if (value == undefined) {
+                    // get
                     return $(this).attr('data-place');
 
                 } else {
+                    //set
                     var self = this;
                     self.initializing = true;
                     self.mapsAutocomplete.set('place', undefined);
