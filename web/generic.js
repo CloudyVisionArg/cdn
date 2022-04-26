@@ -1102,8 +1102,8 @@ function fillControls() {
 
                 } else if ($el.hasClass('maps-autocomplete')) {
                     // Input maps
-                    el.mapsText(text);
-                    el.mapsValue(value);
+                    el._text(text);
+                    el._value(value);
         
                 } else {
                     if (textField && textField.Type == 2) {
@@ -1318,7 +1318,7 @@ function saveDoc() {
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = el.mapsValue();
+                    field.Value = el._value();
 
                 } else {
                     var type = $el.attr('type').toLowerCase();

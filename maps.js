@@ -57,7 +57,7 @@ var maps = {
                         // Setea el hidden como value
                         var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
                         if ($inputVal.val()) {
-                            this.mapsValue($inputVal.val());
+                            this._value($inputVal.val());
                         }
                     });
                 });
@@ -87,7 +87,7 @@ var maps = {
                 });
             }
 
-            el.mapsText = function (text) {
+            el._text = function (text) {
                 var self = this;
                 if (text == undefined) {
                     return self.value;
@@ -99,7 +99,7 @@ var maps = {
 
             };
 
-            el.mapsValue = function (value) {
+            el._value = function (value) {
                 if (value == undefined) {
                     return $(this).attr('data-place');
 
