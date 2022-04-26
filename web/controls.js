@@ -457,6 +457,14 @@ function newDocLog(pTitle, pDocId, pCallback) {
 	$thead = $('<thead/>').appendTo($table);
     $thead.append('<tr><th>Campo</th><th>Valor nuevo <i class="bi bi-info-circle" title="Click en la fila para ver el valor anterior" data-bs-toggle="tooltip"></i></th></tr>');
 
+    $thead.find('i').tooltip({
+        delay: {
+            show: 500,
+            hide: 100,
+        },
+        placement: 'auto',
+    });
+                
 	$tbody = $('<tbody/>').appendTo($table);
 
 	$tbody.on('click', 'tr', function (e) {
