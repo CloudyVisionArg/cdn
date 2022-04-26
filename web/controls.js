@@ -490,7 +490,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
 
         log.forEach(row => {
 			dt = new Date(row['LogDate']);
-			if (i == 0 || userAnt != row['AccName'] || Math.abs(dt.getTime() - dtAnt.getTime()) > 1000) {
+			if (i == 0 || userAnt != row['AccName'] || Math.abs(dt.getTime() - dtAnt.getTime()) > 60000) {
 				userAnt = row['AccName'];
 				dtAnt = dt;
 
