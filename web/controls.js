@@ -453,16 +453,14 @@ function newMapsAutocomplete(pId, pLabel) {
 
 // Devuelve una tabla con el DocLog del documento, mediante la funcion de Callback
 function newDocLog(pId, pLabel) {
-	var $ctl, $fs;
-	var $table, $thead, $tbody;
+	var $ctl, $table, $thead, $tbody;
 	
 	var $ctl = newFieldset(pId, pLabel ? pLabel : 'Cambios de datos');
     $ctl.attr('data-doclog', 1);
-    $fs = $ctl.find('fieldset');
 
 	$table = $('<table/>', {
         class: 'table',
-    }).appendTo($fs);
+    }).appendTo($ctl.find('fieldset'));
 
 	$thead = $('<thead/>').appendTo($table);
     $thead.append(`
@@ -494,6 +492,8 @@ function newDocLog(pId, pLabel) {
                 (old ? htmlEncode(old) : '(vacio)'), { delay: 5000 });
         }
 	});
+
+    $ctl.find('.collapse')[0].bscollapse.hide();
 
     $ctl[0]._value = function (pValue) {
         var $self = $(this);
