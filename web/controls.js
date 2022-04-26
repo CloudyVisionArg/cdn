@@ -477,8 +477,8 @@ function newDocLog(pTitle, pDocId, pCallback) {
                 
 				$('<td/>', {
 					colspan: 2,
-                }).append('<b>' + userAnt + ' el ' + dtAnt.toLocaleDateString() 
-                    + ' ' + ISOTime(dtAnt) + '</b>').appendTo($tr);
+                }).append(userAnt + ' el ' + dtAnt.toLocaleDateString() 
+                    + ' ' + ISOTime(dtAnt)).appendTo($tr);
             }
 
 			$tr = $('<tr/>').appendTo($tbody);
