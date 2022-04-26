@@ -748,7 +748,7 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'DOCUMENTLOG') {
             $this = newDocLog(ctl['NAME'], label);
-            $this.addClass('mt-5');
+            $this.addClass('mt-4');
 
 
         // -- HtmlArea --
