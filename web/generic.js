@@ -338,11 +338,8 @@ function renderPage() {
 
         // tabHist
 
-        $tabHist = $('<div/>', {
-            class: 'tab',
-            id: 'tabHist',
-        }).appendTo($tabs);
-
+        $tab = $cont.find('#tabHist');
+        $row = undefined;
         newDocLog('docLog').addClass('mt-3').appendTo($tabHist);
 
     } else {
