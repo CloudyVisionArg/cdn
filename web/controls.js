@@ -451,7 +451,6 @@ function newMapsAutocomplete(pId, pLabel) {
     */
 }
 
-// Devuelve una tabla con el DocLog del documento, mediante la funcion de Callback
 function newDocLog(pId, pLabel) {
 	var $ctl, $table, $thead, $tbody;
 	
