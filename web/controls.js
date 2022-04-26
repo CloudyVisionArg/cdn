@@ -480,7 +480,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
         if ($td.length == 2) { // fila de campo
             var field = $td.first().html();
             var old = $this.attr('oldvalue');
-            toast('Valor anterior de <b>' + field + '</b><br>' + 
+            toast('<p>Valor anterior de <b>' + field + '</b></p>' + 
                 (old ? htmlEncode(old) : '(vacio)'), { delay: 5000 });
         }
 	});
