@@ -340,7 +340,7 @@ function renderPage() {
 
         $tab = $cont.find('#tabHist');
         $row = undefined;
-        newDocLog('docLog').addClass('mt-3').appendTo($tabHist);
+        newDocLog('docLog').addClass('mt-3').appendTo($tab);
 
     } else {
 
