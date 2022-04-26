@@ -468,9 +468,13 @@ function newDocLog(pTitle, pDocId, pCallback) {
 	$tbody = $('<tbody/>').appendTo($table);
 
 	$tbody.on('click', 'tr', function (e) {
-        debugger;
-		var old = $(this).attr('oldvalue');
-		toast('Valor anterior: ' + (old ? htmlEncode(old) : '(vacio)'));
+        var $this = $(this);
+        var $td = $this.find('td');
+        if ($td.length == 2) { // fila de campo
+            var field = $td.first().html();
+            var old = $this.attr('oldvalue');
+            toast('Valor anterior de ' + field + ': ' + (old ? htmlEncode(old) : '(vacio)'));
+        }
 	});
 
 	DoorsAPI.documentsFieldsLog(pDocId).then(function (log) {
