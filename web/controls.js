@@ -468,6 +468,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
 	$tbody = $('<tbody/>').appendTo($table);
 
 	$tbody.on('click', 'tr', function (e) {
+        debugger;
 		var old = $(this).attr('oldvalue');
 		toast('Valor anterior: ' + (old ? htmlEncode(old) : '(vacio)'));
 	});
