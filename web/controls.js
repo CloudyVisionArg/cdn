@@ -539,4 +539,6 @@ function newDocLog(pId, pLabel) {
         });
     
     }
+
+    return $ctl;
 }
