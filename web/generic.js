@@ -753,6 +753,7 @@ function renderControls(pCont, pParent) {
         // -- DocumentLog --
 
         } else if (type == 'DOCUMENTLOG') {
+            debugger;
             $this = $('<div/>', {
                 id: ctl['NAME'],
                 class: 'mt-3',
