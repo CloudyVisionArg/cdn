@@ -472,7 +472,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
 				dtAnt = dt;
 
 				$tr = $('<tr/>', {
-                    class: 'table-primary',
+                    class: 'table-light',
                 }).appendTo($tbody);
                 
 				$('<td/>', {
