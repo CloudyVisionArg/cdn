@@ -454,7 +454,7 @@ function newDocLog(pDocId, pCallback) {
 
 	$tbody.on('click', 'tr', function (e) {
 		var old = $(this).attr('oldvalue');
-		if (old) { app7.dialog.alert(old, 'Valor anterior'); }
+		if (old) { alert(old, 'Valor anterior'); }
 	});
 
 	DoorsAPI.documentsFieldsLog(pDocId).then(function (log) {
