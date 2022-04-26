@@ -195,15 +195,6 @@ function renderPage() {
     var $d = $(document);
 
     $d.ready(function () {
-        // Tooltips
-        $('[data-bs-toggle="tooltip"]').tooltip({
-            delay: {
-                show: 500,
-                hide: 100,
-            },
-            placement: 'auto',
-        });
-
         // Validacion de numero
         $('[data-numeral]').change(function (e) {
             var $this = $(this);
@@ -463,6 +454,15 @@ function renderPage() {
             if (wt == 3000) debugger; // Para poder ver q corno pasa
             setTimeout(waiting, 100);
         } else {
+            // Tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                delay: {
+                    show: 500,
+                    hide: 100,
+                },
+                placement: 'auto',
+            });
+
             fillControls(doc);
             preloader.hide();
         }
