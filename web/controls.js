@@ -455,7 +455,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
     }).appendTo($cardBody);
 
 	$thead = $('<thead/>').appendTo($table);
-    $thead.append('<tr><th>Campo</th><th>Valor nuevo <i class="bi bi-info-circle"></i></th></tr>');
+    $thead.append('<tr><th>Campo</th><th>Valor nuevo <i class="bi bi-info-circle" title="Click en la fila para ver el valor anterior" data-bs-toggle="tooltip"></i></th></tr>');
 
 	$tbody = $('<tbody/>').appendTo($table);
 
