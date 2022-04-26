@@ -459,7 +459,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
 
     $thead.find('i').tooltip({
         delay: {
-            show: 500,
+            show: 200,
             hide: 100,
         },
         placement: 'auto',
