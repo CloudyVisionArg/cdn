@@ -27,6 +27,7 @@ function newTextarea(pId, pLabel) {
 
 function newDTPicker(pId, pLabel, pType) {
     // pType: date, time, datetime-local
+    // todo: agragar funcion value()
 
     var $div = $('<div/>');
 
@@ -428,4 +429,72 @@ function newMapsAutocomplete(pId, pLabel) {
         }
     })
     */
+}
+
+// Devuelve una tabla con el DocLog del documento, mediante la funcion de Callback
+function newDocLog(pDocId, pCallback) {
+	var $dataTable, $cardHeader, $tableTitle, $cardContent;
+	var $table, $thead, $tbody, $tr;
+	
+	$dataTable = $('<div/>', {
+		class: 'data-table card',
+	});
+
+	$cardHeader = $('<div/>', {
+		class: 'card-header',
+	}).appendTo($dataTable);
+
+	$tableTitle = $('<div/>', {
+		class: 'data-table-title',
+	}).appendTo($cardHeader);
+	
+	$tableTitle.append('Cambios de datos');
+	
+	$cardContent = $('<div/>', {
+		class: 'card-content',
+	}).appendTo($dataTable);
+	
+	$table = $('<table/>').appendTo($cardContent);
+	$thead = $('<thead/>').appendTo($table);
+	$tbody = $('<tbody/>').appendTo($table);
+
+	$tbody.on('click', 'tr', function (e) {
+		var old = $(this).attr('oldvalue');
+		if (old) { app7.dialog.alert(old, 'Valor anterior'); }
+	});
+
+	DoorsAPI.documentsFieldsLog(pDocId).then(function (log) {
+		var i, userAnt, dtAnt, dt;
+
+        log.forEach(row => {
+			dt = new Date(row['LogDate']);
+			if (i == 0 || userAnt != row['AccName'] || Math.abs(dt.getTime() - dtAnt.getTime()) > 1000) {
+				userAnt = row['AccName'];
+				dtAnt = dt;
+
+				$tr = $('<tr/>').appendTo($tbody);
+				$('<td/>', {
+					colspan: 2,
+                }).append('<b>' + userAnt + ' el ' + dtAnt.toLocaleDateString() 
+                    + ' ' + ISOTime(dtAnt) + '</b>').appendTo($tr);
+            }
+
+			$tr = $('<tr/>').appendTo($tbody);
+			$('<td/>').append(row['Field']).appendTo($tr);
+			$('<td/>').append(row['NewValue']).appendTo($tr);
+			$tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
+        })
+		
+		pCallback($dataTable);
+		
+	}, function (err) {
+		console.log(err);
+
+		$tr = $('<tr/>').appendTo($tbody);
+		$('<td/>', {
+			colspan: 2,
+		}).append('Error: ' + errMsg(err)).appendTo($tr);
+		
+		pCallback($dataTable);
+	});
 }

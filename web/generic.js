@@ -46,7 +46,7 @@ include(arrScripts, function () {
 
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
-	Doors.RESTFULL.AuthToken = '7084BEAFB5325CDDE55C6D89F876B3D20E215F9CD47D19881EF9D206B741A408';
+	Doors.RESTFULL.AuthToken = '12E36DA2A45DE2C8F5106A09D163837E9F1F0BCBC87AF036631AC5F8AE042B26';
 
     // todo: mensaje y terminar
     DoorsAPI.islogged().then(
@@ -1031,15 +1031,13 @@ function fillControls() {
             title = form + ' #' + doc.DocId;
         }
 
-        /*
-        getDocLog(doc_id, function (table) {
+        newDocLog(doc_id, function (table) {
             $('[data-doclog]').html(table);
         });
-        */
 
     } else {
         title = 'Nuevo ' + form;
-        //$('[data-doclog]').html('');
+        $('[data-doclog]').html('');
     }    
 
     document.title = title;
