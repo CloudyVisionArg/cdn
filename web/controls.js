@@ -459,7 +459,7 @@ function newDocLog(pTitle, pDocId, pCallback) {
         <tr>
             <th>Campo</th>
             <th>Valor nuevo 
-                <i class="bi bi-info-circle" title="Click en la fila para ver el valor anterior" data-bs-toggle="tooltip"></i>
+                <i class="bi bi-info" title="Click en la fila para ver el valor anterior" data-bs-toggle="tooltip"></i>
             </th>
         </tr>
     `);
