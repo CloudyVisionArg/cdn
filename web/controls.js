@@ -455,7 +455,9 @@ function newDocLog(pTitle, pDocId, pCallback) {
     }).appendTo($cardBody);
 
 	$thead = $('<thead/>').appendTo($table);
-	$tbody = $('<tbody/>').appendTo($table);
+	$tbody = $('<tbody/>', {
+        style: 'border-top: 1px;',
+    }).appendTo($table);
 
 	$tbody.on('click', 'tr', function (e) {
 		var old = $(this).attr('oldvalue');
