@@ -752,16 +752,11 @@ function renderControls(pCont, pParent) {
         // -- DocumentLog --
 
         } else if (type == 'DOCUMENTLOG') {
-            /*
-            $this = $('<li/>');
-            
-            $('<div/>', {
+            $this = $('<div/>', {
                 id: ctl['NAME'],
-                name: ctl['NAME'],
-                class: 'block',
+                //class: 'block',
                 'data-doclog': 1,
-            }).append('Cargando...').appendTo($this);
-            */
+            }).append('Cargando...');
 
 
         // -- HtmlArea --
