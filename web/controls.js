@@ -510,7 +510,7 @@ function newDocLog(pId, pLabel) {
                     dtAnt = dt;
     
                     $tr = $('<tr/>', {
-                        class: 'table-secondary',
+                        class: 'table-light',
                     }).appendTo($tbody);
                     
                     $('<td/>', {
