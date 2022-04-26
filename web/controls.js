@@ -446,7 +446,7 @@ function newDocLog(pDocId, pCallback) {
 
 	$cardBody = $('<div/>', {
 		class: 'card-body',
-	}).appendTo($dataTable);
+	}).appendTo($ctl);
 	
 	$table = $('<table/>').appendTo($cardBody);
 	$thead = $('<thead/>').appendTo($table);
