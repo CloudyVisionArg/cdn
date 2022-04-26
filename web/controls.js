@@ -525,8 +525,6 @@ function newDocLog(pId, pLabel) {
                 $tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
             })
             
-            pCallback($ctl);
-            
         }, function (err) {
             console.log(err);
     
@@ -534,8 +532,6 @@ function newDocLog(pId, pLabel) {
             $('<td/>', {
                 colspan: 2,
             }).append('Error: ' + errMsg(err)).appendTo($tr);
-            
-            pCallback($ctl);
         });
     
     }
