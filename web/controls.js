@@ -479,7 +479,7 @@ function newDocLog(pDocId, pCallback) {
 			$tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
         })
 		
-		pCallback($dataTable);
+		pCallback($ctl);
 		
 	}, function (err) {
 		console.log(err);
@@ -489,6 +489,6 @@ function newDocLog(pDocId, pCallback) {
 			colspan: 2,
 		}).append('Error: ' + errMsg(err)).appendTo($tr);
 		
-		pCallback($dataTable);
+		pCallback($ctl);
 	});
 }
