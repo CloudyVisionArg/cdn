@@ -73,7 +73,6 @@ function newDTPicker(pId, pLabel, pType) {
     });
 
     $inp[0]._value = function (pValue) {
-        debugger;
         var $self = $(this);
         if (pValue == undefined) {
             return $self.val();
@@ -267,7 +266,7 @@ function getSelectVal(pSelect) {
 
 function getSelectText(pSelect) {
     var val = pSelect.val();
-    if (val) {
+    if (val && val != '[NULL]') {
         if (Array.isArray(val)) {
             var arr = [];
             pSelect.find('option:selected').each(function (ix, el) {
