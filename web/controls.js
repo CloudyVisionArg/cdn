@@ -74,18 +74,23 @@ function newDTPicker(pId, pLabel, pType) {
 
     $inp[0]._value = function (pValue) {
         debugger;
-        var self = this;
-        var type = pInput.attr('data-date-type');
-        if (pValue != null && pValue != '') {
-            if (type == 'date') {
-                pInput.val(moment(pValue).format('L'));
-            } else if (type == 'time') {
-                pInput.val(moment(pValue).format('LT'));
-            } else {
-                pInput.val(moment(pValue).format('L LT'));
-            }
+        var $self = $(this);
+        if (pValue == undefined) {
+            return $self.val();
         } else {
-            pInput.val('');
+            var type = $self.attr('data-date-type');
+            if (pValue != null && pValue != '') {
+                if (type == 'date') {
+                    $self.val(moment(pValue).format('L'));
+                } else if (type == 'time') {
+                    $self.val(moment(pValue).format('LT'));
+                } else {
+                    $self.val(moment(pValue).format('L LT'));
+                }
+            } else {
+                $self.val('');
+            }
+            return $self.val();
         }
     }
 
