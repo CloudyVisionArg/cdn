@@ -454,7 +454,7 @@ function newMapsAutocomplete(pId, pLabel) {
 // Devuelve una tabla con el DocLog del documento, mediante la funcion de Callback
 function newDocLog(pId, pLabel) {
 	var $ctl, $fs;
-	var $table, $thead, $tbody, $tr;
+	var $table, $thead, $tbody;
 	
 	var $ctl = newFieldset(pId, pLabel ? pLabel : 'Cambios de datos');
     $ctl.attr('data-doclog', 1);
@@ -496,8 +496,12 @@ function newDocLog(pId, pLabel) {
 	});
 
     $ctl[0]._value = function (pValue) {
+        var $self = $(this);
+        var $tbody = $self.find('tbody');
+        $tbody.html('');
+
         DoorsAPI.documentsFieldsLog(pValue).then(function (log) {
-            var i, userAnt, dtAnt, dt;
+            var i, userAnt, dtAnt, dt, $tr;
     
             log.forEach(row => {
                 dt = new Date(row['LogDate']);
