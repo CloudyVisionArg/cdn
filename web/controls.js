@@ -495,45 +495,48 @@ function newDocLog(pId, pLabel) {
         }
 	});
 
-	DoorsAPI.documentsFieldsLog(pDocId).then(function (log) {
-		var i, userAnt, dtAnt, dt;
-
-        log.forEach(row => {
-			dt = new Date(row['LogDate']);
-			if (i == 0 || userAnt != row['AccName'] || Math.abs(dt.getTime() - dtAnt.getTime()) > 60000) {
-				userAnt = row['AccName'];
-				dtAnt = dt;
-
-				$tr = $('<tr/>', {
-                    class: 'table-light',
-                }).appendTo($tbody);
-                
-				$('<td/>', {
-					colspan: 2,
-                }).append(userAnt + ' el ' + dtAnt.toLocaleDateString() 
-                    + ' ' + ISOTime(dtAnt)).appendTo($tr);
-            }
-
-			$tr = $('<tr/>').appendTo($tbody);
-			$('<td/>').append(row['Field']).appendTo($tr);
-
-			$('<td/>', {
-                style: 'word-break:break-all',
-            }).append(htmlEncode(row['NewValue'])).appendTo($tr);
-
-			$tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
-        })
-		
-		pCallback($ctl);
-		
-	}, function (err) {
-		console.log(err);
-
-		$tr = $('<tr/>').appendTo($tbody);
-		$('<td/>', {
-			colspan: 2,
-		}).append('Error: ' + errMsg(err)).appendTo($tr);
-		
-		pCallback($ctl);
-	});
+    $ctl[0]._value = function (pValue) {
+        DoorsAPI.documentsFieldsLog(pValue).then(function (log) {
+            var i, userAnt, dtAnt, dt;
+    
+            log.forEach(row => {
+                dt = new Date(row['LogDate']);
+                if (i == 0 || userAnt != row['AccName'] || Math.abs(dt.getTime() - dtAnt.getTime()) > 60000) {
+                    userAnt = row['AccName'];
+                    dtAnt = dt;
+    
+                    $tr = $('<tr/>', {
+                        class: 'table-light',
+                    }).appendTo($tbody);
+                    
+                    $('<td/>', {
+                        colspan: 2,
+                    }).append(userAnt + ' el ' + dtAnt.toLocaleDateString() 
+                        + ' ' + ISOTime(dtAnt)).appendTo($tr);
+                }
+    
+                $tr = $('<tr/>').appendTo($tbody);
+                $('<td/>').append(row['Field']).appendTo($tr);
+    
+                $('<td/>', {
+                    style: 'word-break:break-all',
+                }).append(htmlEncode(row['NewValue'])).appendTo($tr);
+    
+                $tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
+            })
+            
+            pCallback($ctl);
+            
+        }, function (err) {
+            console.log(err);
+    
+            $tr = $('<tr/>').appendTo($tbody);
+            $('<td/>', {
+                colspan: 2,
+            }).append('Error: ' + errMsg(err)).appendTo($tr);
+            
+            pCallback($ctl);
+        });
+    
+    }
 }
