@@ -94,6 +94,11 @@ function newDTPicker(pId, pLabel, pType) {
         }
     }
 
+    // Sinonimo de _value
+    $inp[0]._text = function (pValue) {
+        return this._value(pValue);
+    }
+
     return $div;
 }
 

@@ -1098,7 +1098,7 @@ function fillControls() {
                     }
                 } else if ($el.attr('data-date-type')) {
                     // DTPicker
-                    el._value(text);
+                    el._text(text);
 
                 } else if ($el.hasClass('maps-autocomplete')) {
                     // Input maps
