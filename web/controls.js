@@ -480,7 +480,11 @@ function newDocLog(pTitle, pDocId, pCallback) {
 
 			$tr = $('<tr/>').appendTo($tbody);
 			$('<td/>').append(row['Field']).appendTo($tr);
-			$('<td/>').append(row['NewValue']).appendTo($tr);
+
+			$('<td/>', {
+                style: 'word-break:break-all',
+            }).append(row['NewValue']).appendTo($tr);
+
 			$tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
         })
 		
