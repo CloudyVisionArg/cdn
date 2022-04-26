@@ -753,11 +753,11 @@ function renderControls(pCont, pParent) {
         // -- DocumentLog --
 
         } else if (type == 'DOCUMENTLOG') {
-            debugger;
             $this = $('<div/>', {
                 id: ctl['NAME'],
                 class: 'mt-3',
                 'data-doclog': 1,
+                'data-label': label,
             }).append('Cargando...');
 
 
@@ -1028,8 +1028,11 @@ function fillControls() {
             title = form + ' #' + doc.DocId;
         }
 
-        newDocLog(doc_id, function (table) {
-            $('[data-doclog]').html(table);
+        newDocLog(doc_id, function (ctl) {
+            $('[data-doclog]').each(ix => {
+                debugger;
+
+            });
         });
 
     } else {
