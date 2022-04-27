@@ -585,7 +585,8 @@ function newAttachments(pId, pLabel) {
     }).appendTo($grp);
 
     $span.on('click', function () {
-        toast('adjuntar');
+        debugger;
+        $file.click();
     });
 
     $('<i/>', {
@@ -597,6 +598,21 @@ function newAttachments(pId, pLabel) {
         class: 'form-control',
         'data-attachments': 'all',
     }).appendTo($grp);
+
+    // El input para leer archivos
+    let $file = $('<input/>', {
+        type: 'file',
+        style: 'display: none;'
+    }).appendTo($ctl);
+
+    $file.change(function (e) {
+        let inp = e.target;
+        if (inp.files.length > 0) {
+            toast(inp.files[0]);
+            inp.value = '';
+        }
+    })
+
 
     /*
         sRet = sRet & " onclick='" & AttEnc(sClick) & "' style='cursor:pointer;'"
