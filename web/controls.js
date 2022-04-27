@@ -577,7 +577,7 @@ function newAttachments(pId, pLabel) {
 
     var $grp = $('<div/>', {
         class: 'input-group',
-    });
+    }).appendTo($ctl);
 
     var $span = $('<span/>', {
         class: 'input-group-text',
