@@ -585,7 +585,7 @@ function newAttachments(pId, pLabel) {
     }).appendTo($grp);
 
     $span.on('click', function () {
-        debugger;
+        var $file = $(this).closest('.input-group').find('input[type="file"]');
         $file.click();
     });
 
@@ -603,7 +603,7 @@ function newAttachments(pId, pLabel) {
     let $file = $('<input/>', {
         type: 'file',
         style: 'display: none;'
-    }).appendTo($ctl);
+    }).appendTo($grp);
 
     $file.change(function (e) {
         let inp = e.target;
