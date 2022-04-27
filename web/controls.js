@@ -581,7 +581,12 @@ function newAttachments(pId, pLabel) {
 
     var $span = $('<span/>', {
         class: 'input-group-text',
+        style: 'cursor: pointer;'
     }).appendTo($grp);
+
+    $span.on('click', function () {
+        toast('adjuntar');
+    });
 
     $('<i/>', {
         class: 'bi bi-paperclip',
