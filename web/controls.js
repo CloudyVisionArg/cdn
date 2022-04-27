@@ -561,9 +561,10 @@ function newDocLog(pId, pLabel) {
 
 function newAttachments(pId, pLabel) {
     var $ctl = newInputText(pId, pLabel);
-    var inp = $ctl.find('input');
+    var $inp = $ctl.find('input');
+    $inp.attr('data-attachments', 'all');
 
-    inp._value = function (pValue) {
+    $inp[0]._value = function (pValue) {
         var $self = $(this);
         var tag = pEl.attr('data-attachments').toLowerCase();
 

@@ -304,12 +304,12 @@ function renderPage() {
             }
         });
 
-        /*
-        $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
-        $ctl.find('.list').on('click', 'a', downloadAtt);
-        $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
-        $ctl.find('div.row').on('click', 'button', addAtt);
-        */
+        $row = getRow(undefined, $tab);
+        $col = $('<div/>', {
+            class: 'col-12 form-group',
+        }).appendTo($row);
+
+        newAttachments('attachments', 'Adjuntos').appendTo($col);
 
         // tabHeader
 
@@ -933,19 +933,16 @@ function renderControls(pCont, pParent) {
         // -- Attachments --
 
         } else if (type == 'ATTACHMENTS') {
-            /*
-            $this = getAttachments(ctl['NAME'], label);
-            $this.find('.list').on('click', 'a.item-content', downloadAtt);
-            $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
-            $this.find('div.row').on('click', 'button', addAtt);
+            $this = newAttachments(ctl['NAME'], label);
 
+            /*
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.attr('readonly', true);
                 $this.find('div.row').hide();
             }
 
-            // El TAG se setea en el APP7_SCRIPT asi:
-            // $this.attr('data-attachments', 'miTag');
+            El TAG se setea en el SBR asi:
+            $this.attr('data-attachments', 'miTag');
             */
 
         } else if (type == 'TIMEINTERVAL') {
@@ -1209,7 +1206,7 @@ function fillControls() {
     }
 
     $('[data-attachments]').each(function (ix, el) {
-        fillAttachments($(el));
+        this._value(doc_id);
     });
 
     $('[data-doc-log]').each(function (ix) {
