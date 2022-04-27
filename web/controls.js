@@ -608,9 +608,12 @@ function newAttachments(pId, pLabel) {
     }).appendTo($grp);
 
     $file.change(function (e) {
-        let inp = e.target;
-        debugger;
-        inp.files.forEach(f => toast(f.name));
+        var inp = e.target;
+        var file
+        for (var i = 0; i < inp.files.length; i++) {
+            file = inp.files[0];
+            toast(file.name);
+        }
     })
 
     /* 
