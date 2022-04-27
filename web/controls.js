@@ -560,11 +560,49 @@ function newDocLog(pId, pLabel) {
 }
 
 function newAttachments(pId, pLabel) {
-    var $ctl = newInputText(pId, pLabel);
-    var $inp = $ctl.find('input');
-    $inp.attr('data-attachments', 'all');
+    /*
+    bReadonly
+    bAddonly
+    sAcceptedFiles
+    sOrderAttribute
+    sOrderDirection
+    sOrderType
+    sTag
+    */
+    var $ctl = $('<div/>', {
+        class: 'input-group',
+    });
 
-    $inp[0]._value = function (pValue) {
+    $('<label/>', {
+        class: 'form-label',
+    }).append(pLabel).appendTo($ctl);
+
+    var $span = $('<span/>', {
+        class: 'input-group-text',
+    }).appendTo($ctl);
+
+    $('<i/>', {
+        class: 'bi bi-paperclip',
+    }).appendTo($span);
+
+    var $div = $('<div/>', {
+        id: pId,
+        class: 'form-control',
+        'data-attachments': 'all',
+    })
+
+    /*
+        sRet = sRet & " onclick='" & AttEnc(sClick) & "' style='cursor:pointer;'"
+    End If
+    
+    "' style='height:auto;min-height: 34px;' id='" & sName & "' name='" & sName & "' " 
+    If oTooltip & "" <> "" Then
+        sRet = sRet & GetAtt("data-toogle", "tooltip")
+        sRet = sRet & GetAtt("title", oTooltip)
+    End If
+    */
+
+    $div[0]._value = function (pValue) {
         var $self = $(this);
         var tag = $self.attr('data-attachments').toLowerCase();
 
@@ -601,7 +639,7 @@ function newAttachments(pId, pLabel) {
                 },
 
                 function (err) {
-                    console.log('newAttachments._value error: ' + errMsg(err));
+                    logAndToast('newAttachments._value error: ' + errMsg(err));
                 }
             );
 
@@ -611,7 +649,7 @@ function newAttachments(pId, pLabel) {
 
         function noAttachs() {
             // Agrega la leyenda Sin adjuntos
-            $self.val('Sin adjuntos');
+            $self.html('Sin adjuntos');
         }
 
     }
