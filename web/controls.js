@@ -545,11 +545,9 @@ function newDocLog(pId, pLabel) {
 
             $self.attr('data-filled', 1);
         }
-
     }
     
     cll._value = function (pValue) {
-        debugger;
         var $self = $(this);
         var $tbody = $self.find('tbody');
         $tbody.html('');
