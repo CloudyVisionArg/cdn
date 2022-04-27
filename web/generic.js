@@ -309,7 +309,7 @@ function renderPage() {
             class: 'col-12 form-group',
         }).appendTo($row);
 
-        newAttachments('attachments', 'Adjuntos').appendTo($col);
+        newAttachments('attachments', 'Adjuntos').addClass('mt-3').appendTo($col);
 
         // tabHeader
 
@@ -934,6 +934,7 @@ function renderControls(pCont, pParent) {
 
         } else if (type == 'ATTACHMENTS') {
             $this = newAttachments(ctl['NAME'], label);
+            $this.addClass('mt-3');
 
             /*
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
