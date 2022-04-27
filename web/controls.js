@@ -455,7 +455,6 @@ function newDocLog(pId, pLabel) {
 	var $ctl, $table, $thead, $tbody;
 	
 	var $ctl = newFieldset(pId, pLabel ? pLabel : 'Cambios de datos');
-    $ctl.attr('data-doclog', 1);
 
 	$table = $('<table/>', {
         class: 'table',
@@ -494,6 +493,7 @@ function newDocLog(pId, pLabel) {
 
     var cll = $ctl.find('.collapse')[0];
     cll.bscollapse.hide();
+    $(cll).attr('data-doclog', 1);
 
     cll.addEventListener('show.bs.collapse', function () {
         this.fill();
@@ -548,15 +548,14 @@ function newDocLog(pId, pLabel) {
 
     }
     
-    $ctl[0]._value = function (pValue) {
+    cll._value = function (pValue) {
         debugger;
         var $self = $(this);
         var $tbody = $self.find('tbody');
         $tbody.html('');
         $self.attr('data-doc-id', pValue);
         $self.removeAttr('data-filled');
-        var $cll = $self.find('.collapse');
-        if ($cll.hasClass('show')) $cll[0].fill();
+        if ($self.hasClass('show')) this.fill();
     }
 
     return $ctl;
