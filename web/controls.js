@@ -389,7 +389,6 @@ function newCheckbox(pId, pLabel) {
 
 function newFieldset(pId, pLabel) {
     var $div = $('<div/>', {
-        id: pId,
         class: 'card',
     });
 
@@ -405,6 +404,7 @@ function newFieldset(pId, pLabel) {
     }).append(pLabel).appendTo($header);
 
     var $body = $('<div/>', {
+        id: pId,
         class: 'card-body collapse show',
     }).appendTo($div);
 
