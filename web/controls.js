@@ -608,6 +608,7 @@ function newAttachments(pId, pLabel) {
     $file.change(function (e) {
         let inp = e.target;
         if (inp.files.length > 0) {
+            debugger;
             toast(inp.files[0]);
             inp.value = '';
         }
