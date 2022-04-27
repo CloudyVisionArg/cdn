@@ -496,6 +496,7 @@ function newDocLog(pId, pLabel) {
     cll.bscollapse.hide();
 
     cll.addEventListener('show.bs.collapse', function () {
+        debugger;
         this.fill();
     });
 
@@ -549,6 +550,7 @@ function newDocLog(pId, pLabel) {
     }
     
     $ctl[0]._value = function (pValue) {
+        debugger;
         var $self = $(this);
         var $tbody = $self.find('tbody');
         $tbody.html('');
