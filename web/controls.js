@@ -496,11 +496,10 @@ function newDocLog(pId, pLabel) {
     cll.bscollapse.hide();
 
     cll.addEventListener('show.bs.collapse', function () {
-        debugger;
         this.fill();
     });
 
-    $ctl[0].fill = function () {
+    cll.fill = function () {
         var $self = $(this);
         var docId = $self.attr('data-doc-id');
         if ($self.attr('data-filled') != 1 && docId) {
@@ -557,7 +556,7 @@ function newDocLog(pId, pLabel) {
         $self.attr('data-doc-id', pValue);
         $self.removeAttr('data-filled');
         var $cll = $self.find('.collapse');
-        if ($cll.hasClass('show')) this.fill();
+        if ($cll.hasClass('show')) $cll[0].fill();
     }
 
     return $ctl;
