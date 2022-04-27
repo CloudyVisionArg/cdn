@@ -566,7 +566,7 @@ function newAttachments(pId, pLabel) {
 
     $inp[0]._value = function (pValue) {
         var $self = $(this);
-        var tag = pEl.attr('data-attachments').toLowerCase();
+        var tag = $self.attr('data-attachments').toLowerCase();
 
         if (pValue) {
             DoorsAPI.attachments(pValue).then(
