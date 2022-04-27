@@ -568,6 +568,7 @@ function newAttachments(pId, pLabel) {
     sOrderDirection
     sOrderType
     sTag
+    tooltip
     */
     var $ctl = $('<div/>');
 
@@ -602,27 +603,32 @@ function newAttachments(pId, pLabel) {
     // El input para leer archivos
     let $file = $('<input/>', {
         type: 'file',
-        style: 'display: none;'
+        style: 'display: none;',
+        multiple: 'multiple',
     }).appendTo($grp);
 
     $file.change(function (e) {
         let inp = e.target;
-        if (inp.files.length > 0) {
-            toast(inp.files[0].name);
-            inp.value = '';
-        }
+        inp.files.forEach(f => toast(f.name));
     })
 
-
-    /*
-        sRet = sRet & " onclick='" & AttEnc(sClick) & "' style='cursor:pointer;'"
-    End If
-    
-    "' style='height:auto;min-height: 34px;' id='" & sName & "' name='" & sName & "' " 
-    If oTooltip & "" <> "" Then
-        sRet = sRet & GetAtt("data-toogle", "tooltip")
-        sRet = sRet & GetAtt("title", oTooltip)
-    End If
+    /* 
+    var reader = new FileReader();
+    reader.onloadend = function (e) {
+        var blobData = new Blob([this.result], { type: file2.type });
+        var formData = new FormData();
+        // todo: como subimos el Tag?
+        formData.append('attachment', blobData, file.name);
+        DoorsAPI.attachmentsSave(doc_id, formData).then(
+            function (res) {
+                endCall(attName, 'OK');
+            },
+            function (err) {
+                endCall(attName, 'attachmentsSave error: ' + errMsg(err));
+            }
+        )
+    };
+    reader.readAsArrayBuffer(file2);
     */
 
     $div[0]._value = function (pValue) {
@@ -674,7 +680,6 @@ function newAttachments(pId, pLabel) {
             // Agrega la leyenda Sin adjuntos
             $self.html('Sin adjuntos');
         }
-
     }
 
     return $ctl;
