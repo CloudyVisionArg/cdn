@@ -569,17 +569,19 @@ function newAttachments(pId, pLabel) {
     sOrderType
     sTag
     */
-    var $ctl = $('<div/>', {
-        class: 'input-group',
-    });
+    var $ctl = $('<div/>');
 
     $('<label/>', {
         class: 'form-label',
     }).append(pLabel).appendTo($ctl);
 
+    var $grp = $('<div/>', {
+        class: 'input-group',
+    });
+
     var $span = $('<span/>', {
         class: 'input-group-text',
-    }).appendTo($ctl);
+    }).appendTo($grp);
 
     $('<i/>', {
         class: 'bi bi-paperclip',
@@ -589,7 +591,7 @@ function newAttachments(pId, pLabel) {
         id: pId,
         class: 'form-control',
         'data-attachments': 'all',
-    })
+    }).appendTo($grp);
 
     /*
         sRet = sRet & " onclick='" & AttEnc(sClick) & "' style='cursor:pointer;'"
