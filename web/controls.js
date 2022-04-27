@@ -609,6 +609,7 @@ function newAttachments(pId, pLabel) {
 
     $file.change(function (e) {
         let inp = e.target;
+        debugger;
         inp.files.forEach(f => toast(f.name));
     })
 
