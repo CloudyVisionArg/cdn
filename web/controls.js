@@ -558,3 +558,62 @@ function newDocLog(pId, pLabel) {
 
     return $ctl;
 }
+
+function newAttachments(pId, pLabel) {
+    var $ctl = newInputText(pId, pLabel);
+    var inp = $ctl.find('input');
+
+    inp._value = function (pValue) {
+        var $self = $(this);
+        var tag = pEl.attr('data-attachments').toLowerCase();
+
+        if (pValue) {
+            DoorsAPI.attachments(pValue).then(
+                function (res) {
+                    // Filtra por el tag
+                    var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
+
+                    if (atts.length > 0) {
+                        // Ordena descendente
+                        atts.sort(function (a, b) {
+                            return a.AttId >= b.AttId ? -1 : 1;
+                        });
+
+                        // Arma un array de AccId
+                        var ids = atts.map(att => att.AccId);
+                        // Saca los repetidos
+                        ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                        // Levanta los accounts, completa el nombre y renderiza
+                        accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                            function (accs) {
+                                atts.forEach(att => {
+                                    att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
+
+                                    //{AttId, Name, AccName, Size, Created}
+                                });
+                            }
+                        )
+
+                    } else {
+                        noAttachs();
+                    }
+                },
+
+                function (err) {
+                    console.log('newAttachments._value error: ' + errMsg(err));
+                }
+            );
+
+        } else {
+            noAttachs();
+        }
+
+        function noAttachs() {
+            // Agrega la leyenda Sin adjuntos
+            $self.val('Sin adjuntos');
+        }
+
+    }
+
+    return $ctl;
+}

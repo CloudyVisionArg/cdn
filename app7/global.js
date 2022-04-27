@@ -6,6 +6,7 @@ Funciones varias de JavaScript del APP7
 
 Inventario de metodos:
 
+logAndToast(pMsg)
 dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback)
 dbRead(pSql, pArgs, pSuccessCallback, pErrorCallback)
 logDateTime(pDate)
@@ -59,6 +60,11 @@ cameraOptions(pSource)
 getFile(pFileURL)
 audioRecorder(pCallback)
 */
+
+function logAndToast(pMsg) {
+    console.log(pMsg);
+    toast(pMsg);
+}
 
 function dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback) {
     db.transaction(

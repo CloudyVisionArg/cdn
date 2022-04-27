@@ -7,6 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
+logAndToast(pMsg)
 getFolder(pFolder, pRootFolderId)
 htmlEncode(pText)
 sqlEncode(pValue, pType)
@@ -39,6 +40,11 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+function logAndToast(pMsg) {
+    console.log(pMsg);
+    toast(pMsg);
+}
 
 /*
 Devuelve un folder por ID o PATH

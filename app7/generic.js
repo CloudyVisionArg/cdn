@@ -105,11 +105,6 @@ if (device.platform != 'browser') {
     );
 }
 
-function logAndToast(pMsg) {
-    console.log(pMsg);
-    toast(pMsg);
-}
-
 function getControlsFolder() {
     var cf = objPropCI(doc.Tags, 'controlsFolder');
 
