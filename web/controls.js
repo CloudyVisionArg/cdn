@@ -389,6 +389,7 @@ function newCheckbox(pId, pLabel) {
 
 function newFieldset(pId, pLabel) {
     var $div = $('<div/>', {
+        id: pId,
         class: 'card',
     });
 
@@ -404,7 +405,6 @@ function newFieldset(pId, pLabel) {
     }).append(pLabel).appendTo($header);
 
     var $body = $('<div/>', {
-        id: pId,
         class: 'card-body collapse show',
     }).appendTo($div);
 
@@ -496,53 +496,66 @@ function newDocLog(pId, pLabel) {
     cll.bscollapse.hide();
 
     cll.addEventListener('show.bs.collapse', function () {
-        debugger;
-    })
+        this.fill();
+    });
 
+    $ctl[0].fill = function () {
+        var $self = $(this);
+        var docId = $self.attr('data-doc-id');
+        if ($self.attr('data-filled') != 1 && docId) {
+            var $tbody = $self.find('tbody');
+
+            DoorsAPI.documentsFieldsLog(docId).then(function (log) {
+                var i, userAnt, dtAnt, dt, $tr;
+        
+                log.forEach(row => {
+                    dt = new Date(row['LogDate']);
+                    if (i == 0 || userAnt != row['AccName'] || Math.abs(dt.getTime() - dtAnt.getTime()) > 60000) {
+                        userAnt = row['AccName'];
+                        dtAnt = dt;
+        
+                        $tr = $('<tr/>', {
+                            class: 'table-light',
+                        }).appendTo($tbody);
+                        
+                        $('<td/>', {
+                            colspan: 2,
+                        }).append(userAnt + ' el ' + dtAnt.toLocaleDateString() 
+                            + ' ' + ISOTime(dtAnt)).appendTo($tr);
+                    }
+        
+                    $tr = $('<tr/>').appendTo($tbody);
+                    $('<td/>').append(row['Field']).appendTo($tr);
+        
+                    $('<td/>', {
+                        style: 'word-break:break-all',
+                    }).append(htmlEncode(row['NewValue'])).appendTo($tr);
+        
+                    $tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
+                })
+                
+            }, function (err) {
+                console.log(err);
+        
+                $tr = $('<tr/>').appendTo($tbody);
+                $('<td/>', {
+                    colspan: 2,
+                }).append('Error: ' + errMsg(err)).appendTo($tr);
+            });
+
+            $self.attr('data-filled', 1);
+        }
+
+    }
     
     $ctl[0]._value = function (pValue) {
         var $self = $(this);
         var $tbody = $self.find('tbody');
         $tbody.html('');
-
-        DoorsAPI.documentsFieldsLog(pValue).then(function (log) {
-            var i, userAnt, dtAnt, dt, $tr;
-    
-            log.forEach(row => {
-                dt = new Date(row['LogDate']);
-                if (i == 0 || userAnt != row['AccName'] || Math.abs(dt.getTime() - dtAnt.getTime()) > 60000) {
-                    userAnt = row['AccName'];
-                    dtAnt = dt;
-    
-                    $tr = $('<tr/>', {
-                        class: 'table-light',
-                    }).appendTo($tbody);
-                    
-                    $('<td/>', {
-                        colspan: 2,
-                    }).append(userAnt + ' el ' + dtAnt.toLocaleDateString() 
-                        + ' ' + ISOTime(dtAnt)).appendTo($tr);
-                }
-    
-                $tr = $('<tr/>').appendTo($tbody);
-                $('<td/>').append(row['Field']).appendTo($tr);
-    
-                $('<td/>', {
-                    style: 'word-break:break-all',
-                }).append(htmlEncode(row['NewValue'])).appendTo($tr);
-    
-                $tr.attr('oldvalue', row['OldValue'] == null ? '(vacio)' : row['OldValue']);
-            })
-            
-        }, function (err) {
-            console.log(err);
-    
-            $tr = $('<tr/>').appendTo($tbody);
-            $('<td/>', {
-                colspan: 2,
-            }).append('Error: ' + errMsg(err)).appendTo($tr);
-        });
-    
+        $self.attr('data-doc-id', pValue);
+        $self.removeAttr('data-filled');
+        var $cll = $self.find('.collapse');
+        if ($cll.hasClass('show')) this.fill();
     }
 
     return $ctl;
