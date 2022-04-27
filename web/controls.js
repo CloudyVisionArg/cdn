@@ -492,8 +492,14 @@ function newDocLog(pId, pLabel) {
         }
 	});
 
-    $ctl.find('.collapse')[0].bscollapse.hide();
+    var cll = $ctl.find('.collapse')[0];
+    cll.bscollapse.hide();
 
+    cll.addEventListener('show.bs.collapse', function () {
+        debugger;
+    })
+
+    
     $ctl[0]._value = function (pValue) {
         var $self = $(this);
         var $tbody = $self.find('tbody');
