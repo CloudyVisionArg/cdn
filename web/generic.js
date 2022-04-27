@@ -1212,7 +1212,7 @@ function fillControls() {
         fillAttachments($(el));
     });
 
-    $('[data-doclog]').each(function (ix) {
+    $('[data-doc-log]').each(function (ix) {
         this._value(doc_id);
     });
 

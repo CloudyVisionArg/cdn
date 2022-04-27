@@ -493,7 +493,7 @@ function newDocLog(pId, pLabel) {
 
     var cll = $ctl.find('.collapse')[0];
     cll.bscollapse.hide();
-    $(cll).attr('data-doclog', 1);
+    $(cll).attr('data-doc-log', 1);
 
     cll.addEventListener('show.bs.collapse', function () {
         this.fill();
