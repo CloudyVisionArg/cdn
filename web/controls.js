@@ -623,9 +623,15 @@ function newAttachments(pId, pLabel) {
                 class: 'form-control',
             }).append(file.name).appendTo($grp);
 
+            /*
             $btn = $('<button/>', {
                 type: 'button',
                 class: 'btn btn-outline-secondary',
+            }).appendTo($grp);
+            */
+
+            $btn = $('<span/>', {
+                class: 'input-group-text',
             }).appendTo($grp);
 
             $btn.append('<i class="bi bi-x-lg"></i>');
