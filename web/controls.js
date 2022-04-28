@@ -632,9 +632,10 @@ function newAttachments(pId, pLabel) {
 
             $btn = $('<span/>', {
                 class: 'input-group-text',
+                style: 'cursor: pointer;'
             }).appendTo($grp);
 
-            $btn.append('<i class="bi bi-x-lg"></i>');
+            $btn.append('<i class="bi bi-x"></i>');
 
             $btn.click(function () {
                 debugger;
