@@ -612,7 +612,7 @@ function newAttachments(pId, pLabel) {
         var $att = $(inp).prevAll('.form-control');
         var file, $grp, $btn;
         for (var i = 0; i < inp.files.length; i++) {
-            file = inp.files[0];
+            file = inp.files[i];
 
             $grp = $('<div/>', {
                 class: 'input-group float-start me-2',
