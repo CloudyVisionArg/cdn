@@ -639,7 +639,7 @@ function newAttachments(pId, pLabel) {
             $btn.append('<i class="bi bi-x"></i>');
 
             $btn.click(function () {
-                var $att = $(this).closest('. input-group');
+                var $att = $(this).closest('.input-group');
                 $att.attr('data-att-action', 'delete');
                 $att.hide();
             })
