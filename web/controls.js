@@ -597,7 +597,7 @@ function newAttachments(pId, pLabel) {
     var $div = $('<div/>', {
         id: pId,
         class: 'form-control',
-        style: 'padding-bottom: 3px;',
+        style: 'padding-bottom: 2px;',
         'data-attachments': 'all',
     }).appendTo($grp);
 
