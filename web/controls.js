@@ -730,7 +730,7 @@ function newAttachments(pId, pLabel) {
 
         function noAttachs() {
             // Agrega la leyenda Sin adjuntos
-            $self.html('Sin adjuntos');
+            $self.html('');
         }
     }
 
