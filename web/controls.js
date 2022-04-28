@@ -628,7 +628,7 @@ function newAttachments(pId, pLabel) {
                 class: 'btn btn-outline-secondary',
             }).appendTo($grp);
 
-            $btn.append('<i class="bi bi-x"></i>');
+            $btn.append('<i class="bi bi-x-lg"></i>');
 
             $btn.click(function () {
                 debugger;
