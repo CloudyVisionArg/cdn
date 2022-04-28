@@ -615,7 +615,7 @@ function newAttachments(pId, pLabel) {
             file = inp.files[i];
 
             $grp = $('<div/>', {
-                class: 'input-group float-start me-2',
+                class: 'input-group float-start me-2 mb-1',
                 style: 'width: auto;',
             }).appendTo($att);
 
