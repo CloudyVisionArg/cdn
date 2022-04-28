@@ -609,14 +609,59 @@ function newAttachments(pId, pLabel) {
 
     $file.change(function (e) {
         var inp = e.target;
-        var file
+        var $att = $(inp).prevAll('.form-control');
+        var file, $grp, $btn;
         for (var i = 0; i < inp.files.length; i++) {
             file = inp.files[0];
+
+            $grp = $('<div/>', {
+                class: 'input-group',
+            }).appendTo($att);
+
+            $('<div/>', {
+                class: 'form-control',
+            }).append(file.name).appendTo($grp);
+
+            $btn = $('<button/>', {
+                type: 'button',
+                class: 'btn btn-outline-secondary',
+            }).appendTo($grp);
+
+            $btn.click(function () {
+                debugger;
+                toast('borrar');
+            })
+
+/*
+<div class="input-group mb-3">
+  <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+</div>
+*/
+
+
+
             toast(file.name);
         }
     })
 
-    /* 
+    /*  
+    para dibujar los attachs dentro del div
+
+    <div class="input-group pull-left">
+        <a class="btn btn-default btn-sm cls-attachments-item" title="2022-05 - Choque Sol - Contrato Cloudy CRM.pdf" target="_blank" href="/c/downloadfile.asp?docGuid=64AA0EA29AC347E6BA6E3E6FD67FCDB8&amp;filename=2022-05+-+Choque+Sol+-+Contrato+Cloudy+CRM.pdf">
+            <span>2022-05 - Choque Sol - Contrato Cloudy CRM.pdf (1316 Kb)</span>
+        </a>
+        <span class="input-group-btn" style="padding-top: 0px;display:inline;">
+            <button class="btn btn-default" onclick="deleteFile(&quot;2022-05 - Choque Sol - Contrato Cloudy CRM.pdf&quot;,&quot;64AA0EA29AC347E6BA6E3E6FD67FCDB8&quot;,&quot;attachs&quot;);" title="Quitar adjunto" type="button" style="padding-top: 0px;padding-bottom: 0px;height: 33px;box-shadow: none;border-left: none;">
+                <i class="fa fa-times text-danger"></i>
+            </button>
+        </span>
+    </div>
+
+
+    para guardar un attach
+
     var reader = new FileReader();
     reader.onloadend = function (e) {
         var blobData = new Blob([this.result], { type: file2.type });
@@ -633,6 +678,8 @@ function newAttachments(pId, pLabel) {
         )
     };
     reader.readAsArrayBuffer(file2);
+
+
     */
 
     $div[0]._value = function (pValue) {
