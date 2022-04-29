@@ -692,6 +692,7 @@ function newAttachments(pId, pLabel) {
     reader.readAsArrayBuffer(file2);
 
 
+    Para descargar ver saveAs, agregar opcion descargar todos
     */
 
     $div[0]._value = function (pValue) {
