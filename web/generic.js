@@ -49,6 +49,7 @@ include(arrScripts, function () {
     var tkn = getCookie('AuthToken');
     if (!tkn) {
         $.get('/c/tkn.asp', function (data) {
+            debugger;
             Doors.RESTFULL.AuthToken = data;
             resume();
         })
