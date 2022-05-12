@@ -45,7 +45,12 @@ include(arrScripts, function () {
     preloader.show();
 
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
-	//Doors.RESTFULL.AuthToken = getCookie('AuthToken');
+    var tkn = getCookie('AuthToken');
+    if (!tkn) {
+        $.get('/tkn.asp', function (data) {
+            debugger;
+        })
+    }
 	Doors.RESTFULL.AuthToken = 'B8D7957805C661E3AD435DBE7EA6BDD03A7B86252C92B501D3877D726B321B99';
 
     // todo: mensaje y terminar
