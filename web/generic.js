@@ -50,45 +50,47 @@ include(arrScripts, function () {
     if (!tkn) {
         $.get('/tkn.asp', function (data) {
             debugger;
+            resume();
         })
     }
 	Doors.RESTFULL.AuthToken = 'B8D7957805C661E3AD435DBE7EA6BDD03A7B86252C92B501D3877D726B321B99';
 
-    // todo: mensaje y terminar
-    DoorsAPI.islogged().then(
-		function (res) {
-		},
-		function (err) {
-			console.log(err);
-		}
-	);
+    function resume() {
+        // todo: mensaje y terminar
+        DoorsAPI.islogged().then(
+            function (res) {
+            },
+            function (err) {
+                console.log(err);
+            }
+        );
 
-    // todo: setar segun el LNG_ID
-    moment.locale('es');
-    numeral.locale('es'); // http://numeraljs.com/
-    numeral.defaultFormat('0,0.[00]');
+        // todo: setar segun el LNG_ID
+        moment.locale('es');
+        numeral.locale('es'); // http://numeraljs.com/
+        numeral.defaultFormat('0,0.[00]');
 
-	urlParams = new URLSearchParams(window.location.search);
-	fld_id = urlParams.get('fld_id');
-	doc_id = urlParams.get('doc_id');
-	
-	if (fld_id) {
-		DoorsAPI.foldersGetById(fld_id).then(
-			function (res) {
-				folder = res;
-                if (folder.Type == 1) {
-                    DoorsAPI.formsGetById(folder.FrmId).then(
-                        function (frm) {
-                            folder.Form = frm;
-                        }
-                    );
-                }
-				getDoc();
-			},
-			errMgr
-		)
-	}
-
+        urlParams = new URLSearchParams(window.location.search);
+        fld_id = urlParams.get('fld_id');
+        doc_id = urlParams.get('doc_id');
+        
+        if (fld_id) {
+            DoorsAPI.foldersGetById(fld_id).then(
+                function (res) {
+                    folder = res;
+                    if (folder.Type == 1) {
+                        DoorsAPI.formsGetById(folder.FrmId).then(
+                            function (frm) {
+                                folder.Form = frm;
+                            }
+                        );
+                    }
+                    getDoc();
+                },
+                errMgr
+            )
+        }
+    }
 });
 
 function errMgr(pErr) {
