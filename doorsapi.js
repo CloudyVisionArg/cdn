@@ -5797,3 +5797,14 @@ Doors.API.prototype.pushUnreg = function (registrationType, registrationId) {
 
     return Doors.RESTFULL.asyncCall(url, "DELETE", parameters, "");
 };
+
+Doors.API.prototype.runSyncEventsOnClientSet = function (runOnClient) {
+    var str = runOnClient === "true" || runOnClient === true || runOnClient === "1" ? "true" : "false";
+    var url = "session/syncevents/runOnClient/" + str;
+    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+};
+
+Doors.API.prototype.runSyncEventsOnClientGet = function () {
+    var url = "session/syncevents/runOnClient";
+    return Doors.RESTFULL.asyncCall(url, "GET", {}, "");
+};
