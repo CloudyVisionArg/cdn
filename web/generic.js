@@ -48,7 +48,7 @@ include(arrScripts, function () {
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
     var tkn = getCookie('AuthToken');
     if (!tkn) {
-        $.get('/tkn.asp', function (data) {
+        $.get('/c/tkn.asp', function (data) {
             debugger;
             resume();
         })
