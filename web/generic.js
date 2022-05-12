@@ -44,6 +44,7 @@ include(arrScripts, function () {
     console.log('Page init');
     preloader.show();
 
+    debugger;
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
     var tkn = getCookie('AuthToken');
     if (!tkn) {
