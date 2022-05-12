@@ -50,6 +50,16 @@ include(arrScripts, function () {
     if (!tkn) {
         $.get('/c/tkn.asp', function (data) {
             Doors.RESTFULL.AuthToken = data;
+
+            DoorsAPI.runSyncEventsOnClientGet().then(
+                function (res) {
+                    debugger;
+                },
+                function (err) {
+                    debugger;
+                }
+            )
+
             resume();
         })
     }
