@@ -49,11 +49,10 @@ include(arrScripts, function () {
     var tkn = getCookie('AuthToken');
     if (!tkn) {
         $.get('/c/tkn.asp', function (data) {
-            debugger;
+            Doors.RESTFULL.AuthToken = data;
             resume();
         })
     }
-	Doors.RESTFULL.AuthToken = 'B8D7957805C661E3AD435DBE7EA6BDD03A7B86252C92B501D3877D726B321B99';
 
     function resume() {
         // todo: mensaje y terminar
