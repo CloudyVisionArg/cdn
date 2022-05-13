@@ -1,4 +1,4 @@
-; //REQUIERE JQuery y Moment.js
+//REQUIERE JQuery y Moment.js
 Array.prototype.contains = function (v) {
     for (var i = 0; i < this.length; i++) {
         if (this[i].toString().trim().indexOf(v) !== -1 && this[i].toString().trim().length == v.length)
@@ -7,7 +7,7 @@ Array.prototype.contains = function (v) {
     return false;
 };
 
-Array.prototype.unique = function () {
+Array.prototype.unique = function() {
     var arr = [];
     for (var i = 0; i < this.length; i++) {
         if (!arr.contains(this[i].toString().trim())) {
@@ -16,6 +16,53 @@ Array.prototype.unique = function () {
     }
     return arr;
 };
+
+// https://tc39.github.io/ecma262/#sec-array.prototype.find
+if (!Array.prototype.find) {
+    Object.defineProperty(Array.prototype, 'find', {
+        value: function (predicate) {
+            // 1. Let O be ? ToObject(this value).
+            if (this == null) {
+                throw new TypeError('"this" is null or not defined');
+            }
+
+            var o = Object(this);
+
+            // 2. Let len be ? ToLength(? Get(O, "length")).
+            var len = o.length >>> 0;
+
+            // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+            if (typeof predicate !== 'function') {
+                throw new TypeError('predicate must be a function');
+            }
+
+            // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+            var thisArg = arguments[1];
+
+            // 5. Let k be 0.
+            var k = 0;
+
+            // 6. Repeat, while k < len
+            while (k < len) {
+                // a. Let Pk be ! ToString(k).
+                // b. Let kValue be ? Get(O, Pk).
+                // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                // d. If testResult is true, return kValue.
+                var kValue = o[k];
+                if (predicate.call(thisArg, kValue, k, o)) {
+                    return kValue;
+                }
+                // e. Increase k by 1.
+                k++;
+            }
+
+            // 7. Return undefined.
+            return undefined;
+        },
+        configurable: true,
+        writable: true
+    });
+}
 
 //DEFINICION DE LAS FUNCIONES STARTSWITH Y ENDSWITH, PARA MANEJO DE STRINGS
 if (typeof String.prototype.startsWith != 'function') {
@@ -48,9 +95,9 @@ if (/\D/.test((1).toLocaleString())) {
         // Regular expression to trim decimal places
         var re = new RegExp('\\' + _sep + '\\d+$');
 
-        return function () {
+        return function() {
 
-            // If number is an integer, call built-in function and trim decimal places
+            // If number is an integer, call built–in function and trim decimal places
             // if they're added
             if (parseInt(this) == this) {
                 return _toLocale.call(this).replace(re, '');
@@ -61,7 +108,6 @@ if (/\D/.test((1).toLocaleString())) {
         };
     }());
 }
-
 function toLocaleStringSupportsLocales() {
     var number = 0;
     try {
@@ -74,22 +120,22 @@ function toLocaleStringSupportsLocales() {
 if (typeof Number.prototype.toUserLocaleString !== 'function') {
     Number.prototype.toUserLocaleString = function () {
         var dsep = (1 / 2).toString().charAt(1);
-
+        
         var thousandsep, decimalsep, rexFindThousands, rexFindDecimal;
 
-        thousandsep = (1200).toLocaleString().replace(/\d/g, '').substring(0, 1);
+        thousandsep = (parseInt("12000")).toLocaleString().replace(/\d/g, '').substring(0, 1);
         decimalsep = (1.2).toLocaleString().replace(/\d/g, '').substring(0, 1);
-
+       
         var englishLocale = decimalsep === "." ? true : false;
 
         var matchesLocale = (englishLocale && (Gestar.Settings.UserState.LangId == 1033 || Gestar.Settings.UserState.LangId == 2052)) ||
             (!englishLocale && (Gestar.Settings.UserState.LangId == 3082 || Gestar.Settings.UserState.LangId == 2070));
 
         if (matchesLocale) {
-            if (toLocaleStringSupportsLocales()) {
+            if(toLocaleStringSupportsLocales()){
                 var locale = Gestar.Tools.getLocaleFromUserLngId(Gestar.Settings.UserState.LangId);
                 return this.toLocaleString(locale);
-            } else {
+            }else{
                 return this.toLocaleString();
             }
         }
@@ -98,7 +144,8 @@ if (typeof Number.prototype.toUserLocaleString !== 'function') {
         if (Gestar.Settings.UserState.LangId == 3082 || Gestar.Settings.UserState.LangId == 2070) {
             replaceThoud = ".";
             replaceDec = ",";
-        } else if (Gestar.Settings.UserState.LangId == 1033 || Gestar.Settings.UserState.LangId == 2052) {
+        }
+        else if (Gestar.Settings.UserState.LangId == 1033 || Gestar.Settings.UserState.LangId == 2052) {
             replaceThoud = ",";
             replaceDec = ".";
         }
@@ -110,7 +157,7 @@ if (typeof Number.prototype.toUserLocaleString !== 'function') {
         var numStr = this.toLocaleString();
         numStrSplit = numStr.split(decimalsep);
         var intPart = numStrSplit[0];
-
+        
         var decPart = "";
         if (numStrSplit.length > 1) {
             decPart = numStrSplit[1];
@@ -123,7 +170,7 @@ if (typeof Number.prototype.toUserLocaleString !== 'function') {
 
 if (typeof Date.prototype.toUserLocaleString !== 'function') {
     Date.prototype.toUserLocaleString = function (handleDateAndTime) {
-
+        
         value = this;
         /*dateString = "";
         var day = value.getDate() < 10 ? "0" + value.getDate() : value.getDate();
@@ -168,7 +215,7 @@ if (typeof String.prototype.trim !== 'function') {
 if (typeof String.prototype.removeHtml != 'function') {
     String.prototype.removeHtml = function () {
         //Reemplaza los <br> por nuevas lineas y quita el resto del html.
-        return this.replace(/<br\s*\/?>/mg, "\n").replace(/<\/?[^>]+(>|$)/g, "");
+        return this.replace(/<br\s*\/?>/mg,"\n").replace(/<\/?[^>]+(>|$)/g, "");
     };
 }
 if (typeof String.prototype.encodeHtml != 'function') {
@@ -184,8 +231,8 @@ if (typeof String.prototype.removeWhiteSpaces != 'function') {
     };
 }
 if (typeof String.prototype.capitalize != "function") {
-    String.prototype.capitalize = function () {
-        return this.charAt(0).toUpperCase() + this.slice(1);
+    String.prototype.capitalize = function() {
+        return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
     };
 }
 
@@ -196,12 +243,12 @@ function customDateToString() {
 //Date.prototype.toString = customDateToString;
 
 if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function (elt /*, from*/ ) {
+    Array.prototype.indexOf = function(elt /*, from*/) {
         var len = this.length >>> 0;
         var from = Number(arguments[1]) || 0;
-        from = (from < 0) ?
-            Math.ceil(from) :
-            Math.floor(from);
+        from = (from < 0)
+            ? Math.ceil(from)
+            : Math.floor(from);
         if (from < 0)
             from += len;
         for (; from < len; from++) {
@@ -224,32 +271,36 @@ if (!Array.prototype.indexOf) {
 
 //Definicion de namespaces
 var Gestar = Gestar || {};
+var Doors = Doors || {};
 window.Gestar = Gestar;
+window.Doors = Doors;
 
 Gestar = Gestar || {};
 Gestar.Tools = Gestar.Tools || {};
 Gestar.HtmlTools = Gestar.HtmlTools || {};
-Gestar.Tools.StringsHelper = Gestar.Tools.StringsHelper || {};
+Gestar.Tools.StringsHelper = Gestar.Tools.StringsHelper || { };
 Gestar.ErrorHandling = Gestar.ErrorHandling || {};
 
 (function () {
-    this.dp = function (message, obj) {
+    this.dp = function(message,obj) {
         try {
             //TODO DebugMode
             if (console != undefined && console.log != undefined) {
-                console.log(message, obj);
+                console.log(message,obj);
             }
-        } catch (ex) {}
+        } catch(ex) {
+        }
     };
     this.er = function (errMessage, obj) {
         try {
             if (console != undefined && console.error != undefined) {
                 console.error(this.dateTimeDoors(new Date()) + " - " + errMessage, obj);
             }
-        } catch (ex) {}
+        } catch (ex) {
+        }
     };
     this.Browser = {
-        Version: function () {
+        Version: function() {
             var version = 999;
             // we assume a sane browser    
             if (navigator.appVersion.indexOf("MSIE") != -1) {
@@ -275,30 +326,30 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
             return rv;
         }
     };
-    this.defer = function (fn, args) {
-        setTimeout(function () {
+    this.defer = function(fn,args) {
+        setTimeout(function() {
             fn(args);
         }, 0);
     };
-    this.inIframe = function () {
+    this.inIframe = function() {
         try {
             return window.self !== window.top;
-        } catch (e) {
+        } catch(e) {
             return true;
         }
     };
-    this.isNumber = function (n) {
+    this.isNumber = function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     };
-    this.cloneObject = function (obj) {
-        var newObject = jQuery.extend(true, {}, obj);
+    this.cloneObject = function(obj) {
+        var newObject = jQuery.extend(true, { }, obj);
         return newObject;
     };
-    this.cloneArray = function (arr) {
+    this.cloneArray = function(arr) {
         var newArray = jQuery.extend(true, [], arr);
         return newArray;
     };
-    this.url = function (relativeUrl) {
+    this.url = function(relativeUrl) {
         var completePath = "";
         var initialNexus = "";
         var middleNexus = "";
@@ -320,19 +371,20 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         completePath = locationPath + middleNexus + relativeUrl;
         return completePath;
     };
-    this.xmlToString = function (dom) {
+    this.xmlToString = function(dom) {
         var ret = null;
         if (dom != null) {
             if (dom.xml == undefined) {
                 var serializer = new XMLSerializer();
                 ret = serializer.serializeToString(dom);
-            } else {
+            }
+            else {
                 ret = dom.xml;
             }
         }
         return ret;
     };
-    this.stringToXml = function (xmlString) {
+    this.stringToXml = function(xmlString) {
         var oDom = null;
         //if (document.implementation.createDocument)
         // -->  Esta era la evaluacion que haciamos antes de IE9, ya que IE9 tiene document.implementation.createDocument
@@ -359,7 +411,7 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         }
         return oDom;
     };
-    this.getUrlParameterByName = function (name, url) {
+    this.getUrlParameterByName = function(name, url) {
         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
         var results = null;
@@ -373,12 +425,12 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
             var ss = results[1].replace(/\+/g, " ");
             try {
                 return decodeURIComponent(ss);
-            } catch (e) {
+            } catch(e) {
                 return Gestar.Tools.urlDecodeAdvanced(ss);
             }
         }
     };
-    this.urlDecodeAdvanced = function (val) {
+    this.urlDecodeAdvanced = function(val) {
         var state = "none"; //setRadio();
         var len = val.length;
         var backlen = len;
@@ -420,11 +472,11 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
                     backlen = 0;
                 } // if there is no %, just leave the value as-is
             } // end while
-        } // end 'state=none' conversion
-        else // value needs to be converted to URL encoded chars
+        }         // end 'state=none' conversion
+        else         // value needs to be converted to URL encoded chars
         {
             for (i = 0; i < len; i++) {
-                if (val.substring(i, i + 1).charCodeAt(0) < 255) // hack to eliminate the rest of unicode from this
+                if (val.substring(i, i + 1).charCodeAt(0) < 255)  // hack to eliminate the rest of unicode from this
                 {
                     if (isUnsafe(val.substring(i, i + 1)) == false) {
                         newStr = newStr + val.substring(i, i + 1);
@@ -444,7 +496,7 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         }
         return newStr;
     };
-    this.roundNumber = function (num, dec) {
+    this.roundNumber = function(num, dec) {
         var result = Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
         return result;
     };
@@ -458,35 +510,35 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         var seconds = value.getSeconds() < 10 ? "0" + value.getSeconds() : value.getSeconds();
         return value.getFullYear() + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     };
-    this.getDaysInAMonth = function (year, month) {
+    this.getDaysInAMonth = function(year, month) {
         return new Date(year, month, 0).getDate();
     };
-    this.compareByDescriptionAndName = function (a, b) {
+    this.compareByDescriptionAndName = function(a, b) {
         if (a.Description == null || a.Description == "") {
             if (b.Description == null || b.Description == "") {
-                if (a.Name < b.Name)
+                if (a.Name.toLowerCase() < b.Name.toLowerCase())
                     return -1;
-                if (a.Name > b.Name)
+                if (a.Name.toLowerCase() > b.Name.toLowerCase())
                     return 1;
                 return 0;
             } else {
-                if (a.Name < b.Description)
+                if (a.Name.toLowerCase() < b.Description.toLowerCase())
                     return -1;
-                if (a.Name > b.Description)
+                if (a.Name.toLowerCase() > b.Description.toLowerCase())
                     return 1;
                 return 0;
             }
         } else {
             if (b.Description == null || b.Description == "") {
-                if (a.Description < b.Name)
+                if (a.Description.toLowerCase() < b.Name.toLowerCase())
                     return -1;
-                if (a.Description > b.Name)
+                if (a.Description.toLowerCase() > b.Name.toLowerCase())
                     return 1;
                 return 0;
             } else {
-                if (a.Description < b.Description)
+                if (a.Description.toLowerCase() < b.Description.toLowerCase())
                     return -1;
-                if (a.Description > b.Description)
+                if (a.Description.toLowerCase() > b.Description.toLowerCase())
                     return 1;
                 return 0;
             }
@@ -520,6 +572,7 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
                 }
             }
         }
+        if (!found) throw "Campo no encontrado: " + fieldName;
     };
     this.getDocumentValue = function (doc, fieldName) {
         var found = false;
@@ -543,11 +596,11 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
             }
         }
         //TODO Langstring
-        if (!found) throw "Campo no encontrado";
+        if (!found) throw "Campo no encontrado: " + fieldName;
 
         return value;
     };
-    this.loadScript = function (scriptName, callback) {
+    this.loadScript = function(scriptName, callback) {
 
         if (!jsArray[scriptName]) {
             var promise = jQuery.Deferred();
@@ -560,7 +613,7 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
 
             // then bind the event to the callback function
             // there are several events for cross browser compatibility
-            script.onload = function () {
+            script.onload = function() {
                 promise.resolve();
             };
 
@@ -576,19 +629,25 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         } else if (debugState)
             root.root.console.log("This script was already loaded %c: " + scriptName, debugStyle_warning);
 
-        jsArray[scriptName].then(function () {
+        jsArray[scriptName].then(function() {
             if (typeof callback === 'function')
                 callback();
         });
     };
-    this.printHtmlContent = function (htmlContent, url, title, cssArray) {
+	this.loadCssFile = function(cssFile){
+		var link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = cssFile;
+		document.head.appendChild(link);
+	};
+    this.printHtmlContent = function(htmlContent,url,title, cssArray) {
         var windowUrl = "about:blank";
         if (url != undefined) {
             windowUrl = url;
         }
         var uniqueName = new Date();
         var windowName = 'Print' + uniqueName.getTime();
-        if (title != undefined) {
+        if(title!=undefined) {
             windowName = title;
             if (Gestar.Tools.Browser.Version() <= 9) {
                 windowName = windowName.removeWhiteSpaces();
@@ -667,2066 +726,1045 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         printWindow.document.write('</html>');
         printWindow.document.close();
     };
-    this.getFolderIcon = function (iconName) {
+    this.getFolderIcon = function (oFolder) {
+        if (oFolder == null) {
+            return "";
+        }
+        var iconVector = oFolder.IconVector;
+        if (iconVector != null && iconVector != "") {
+            return iconVector;    
+        }
+        var iconName = oFolder.Icon;
         switch (iconName) {
-            case "accept":
-                return "check-circle";
-            case "activity":
-                return "thumb-tack";
-            case "add":
-                return "plus-circle";
-            case "anchor":
-                return "anchor";
-            case "application-add":
-                return "plus-square";
-            case "application-cascade":
-                return "folder-o";
-            case "application-delete":
-                return "minus-square";
-            case "application-double":
-                return "folder-o";
-            case "application-edit":
-                return "desktop";
-            case "application-error":
-                return "desktop";
-            case "application-form-add":
-                return "desktop";
-            case "application-form-delete":
-                return "desktop";
-            case "application-form-edit":
-                return "desktop";
-            case "application-form-magnify":
-                return "desktop";
-            case "application-form":
-                return "desktop";
-            case "application-get":
-                return "desktop";
-            case "application-go":
-                return "desktop";
-            case "application-home":
-                return "desktop";
-            case "application-key":
-                return "desktop";
-            case "application-lightning":
-                return "desktop";
-            case "application-link":
-                return "desktop";
-            case "application-osx-terminal":
-                return "terminal";
-            case "application-osx":
-                return "apple";
-            case "application-put":
-                return "desktop";
-            case "application-side-boxes":
-                return "desktop";
-            case "application-side-contract":
-                return "desktop";
-            case "application-side-expand":
-                return "desktop";
-            case "application-side-list":
-                return "desktop";
-            case "application-side-tree":
-                return "desktop";
-            case "application-split":
-                return "desktop";
-            case "application-tile-horizontal":
-                return "desktop";
-            case "application-tile-vertical":
-                return "desktop";
-            case "application-view-columns":
-                return "desktop";
-            case "application-view-detail":
-                return "desktop";
-            case "application-view-gallery":
-                return "desktop";
-            case "application-view-icons":
-                return "desktop";
-            case "application-view-list":
-                return "desktop";
-            case "application-view-tile":
-                return "desktop";
-            case "application-xp-terminal":
-                return "terminal";
-            case "application-xp":
-                return "desktop";
-            case "application":
-                return "desktop";
-            case "arrow-branch":
-                return "folder-o";
-            case "arrow-divide":
-                return "folder-o";
-            case "arrow-down":
-                return "arrow-down";
-            case "arrow-inout":
-                return "folder-o";
-            case "arrow-in":
-                return "folder-o";
-            case "arrow-join":
-                return "folder-o";
-            case "arrow-left":
-                return "arrow-left";
-            case "arrow-merge":
-                return "folder-o";
-            case "arrow-out":
-                return "arrows-alt";
-            case "arrow-redo":
-                return "repeat";
-            case "arrow-refresh-small":
-                return "refresh";
-            case "arrow-refresh":
-                return "refresh";
-            case "arrow-right":
-                return "arrow-right";
-            case "arrow-rotate-anticlockwise":
-                return "folder-o";
-            case "arrow-rotate-clockwise":
-                return "folder-o";
-            case "arrow-switch":
-                return "folder-o";
-            case "arrow-turn-left":
-                return "folder-o";
-            case "arrow-turn-right":
-                return "folder-o";
-            case "arrow-undo":
-                return "undo";
-            case "arrow-up":
-                return "arrow-up";
-            case "asterisk-orange":
-                return "asterisk";
-            case "asterisk-yellow":
-                return "asterisk";
-            case "attach":
-                return "paperclip";
-            case "award-star-add":
-                return "star";
-            case "award-star-bronze-1":
-                return "star bronze";
-            case "award-star-bronze-2":
-                return "star bronze";
-            case "award-star-bronze-3":
-                return "star bronze";
-            case "award-star-delete":
-                return "star red";
-            case "award-star-gold-1":
-                return "star gold";
-            case "award-star-gold-2":
-                return "star gold";
-            case "award-star-gold-3":
-                return "star gold";
-            case "award-star-silver-1":
-                return "star silver";
-            case "award-star-silver-2":
-                return "star silver";
-            case "award-star-silver-3":
-                return "star silver";
-            case "basket-add":
-                return "cart-plus";
-            case "basket-delete":
-                return "cart";
-            case "basket-edit":
-                return "cart";
-            case "basket-error":
-                return "cart";
-            case "basket-go":
-                return "cart";
-            case "basket-put":
-                return "cart";
-            case "basket-remove":
-                return "cart-arrow-down";
-            case "basket":
-                return "folder-o";
-            case "bell-add":
-                return "bell";
-            case "bell-delete":
-                return "bell-slash";
-            case "bell-error":
-                return "bell";
-            case "bell-go":
-                return "bell";
-            case "bell-link":
-                return "bell";
-            case "bell":
-                return "bell";
-            case "bin-closed":
-                return "trash";
-            case "bin-empty":
-                return "trash";
-            case "bin":
-                return "trash";
-            case "bomb":
-                return "bomb";
-            case "book-addresses":
-                return "users";
-            case "book-add":
-                return "bookkey";
-            case "book-delete":
-                return "book";
-            case "book-edit":
-                return "book";
-            case "book-error":
-                return "book";
-            case "book-go":
-                return "book";
-            case "book-key":
-                return "book";
-            case "book-link":
-                return "book";
-            case "book-next":
-                return "book";
-            case "book-open":
-                return "book";
-            case "book-previous":
-                return "book";
-            case "book":
-                return "book";
-            case "box":
-                return "archive";
-            case "brick-add":
-                return "folder-o";
-            case "brick-delete":
-                return "folder-o";
-            case "brick-edit":
-                return "folder-o";
-            case "brick-error":
-                return "folder-o";
-            case "brick-go":
-                return "folder-o";
-            case "brick-link":
-                return "folder-o";
-            case "bricks":
-                return "folder-o";
-            case "brick":
-                return "folder-o";
-            case "briefcase":
-                return "briefcase";
-            case "bug-add":
-                return "bug";
-            case "bug-delete":
-                return "bug";
-            case "bug-edit":
-                return "bug";
-            case "bug-error":
-                return "bug";
-            case "bug-go":
-                return "bug";
-            case "bug-link":
-                return "bug";
-            case "bug":
-                return "bug";
-            case "building-add":
-                return "building";
-            case "building-delete":
-                return "building";
-            case "building-edit":
-                return "building";
-            case "building-error":
-                return "building";
-            case "building-go":
-                return "building";
-            case "building-key":
-                return "building";
-            case "building-link":
-                return "building";
-            case "building":
-                return "building";
-            case "bullet-add":
-                return "plus-circle";
-            case "bullet-arrow-bottom":
-                return "folder-o";
-            case "bullet-arrow-down":
-                return "caret-down";
-            case "bullet-arrow-top":
-                return "folder-o";
-            case "bullet-arrow-up":
-                return "caret-up";
-            case "bullet-black":
-                return "squarecircle";
-            case "bullet-blue":
-                return "dot-circle-o blue";
-            case "bullet-delete":
-                return "minus-circle red";
-            case "bullet-disk":
-                return "folder-o";
-            case "bullet-error":
-                return "folder-o";
-            case "bullet-feed":
-                return "folder-o";
-            case "bullet-go":
-                return "folder-o";
-            case "bullet-green":
-                return "dot-circle-o green";
-            case "bullet-key":
-                return "folder-o";
-            case "bullet-orange":
-                return "dot-circle-o orange";
-            case "bullet-picture":
-                return "folder-o";
-            case "bullet-pink":
-                return "dot-circle-o pink";
-            case "bullet-purple":
-                return "dot-circle-o purple";
-            case "bullet-red":
-                return "dot-circle-o red";
-            case "bullet-star":
-                return "star-o";
-            case "bullet-toggle-minus":
-                return "minus-square";
-            case "bullet-toggle-plus":
-                return "plus-square";
-            case "bullet-white":
-                return "dot-circle-o";
-            case "bullet-wrench":
-                return "dot-circle-o";
-            case "bullet-yellow":
-                return "dot-circle-o yellow";
-            case "cake":
-                return "birthday-cake";
-            case "calculator-add":
-                return "calculator";
-            case "calculator-delete":
-                return "calculator";
-            case "calculator-edit":
-                return "calculator";
-            case "calculator-error":
-                return "calculator";
-            case "calculator-link":
-                return "calculator";
-            case "calculator":
-                return "calculator";
-            case "calendar-add":
-                return "calendar";
-            case "calendar-delete":
-                return "calendar";
-            case "calendar-edit":
-                return "calendar";
-            case "calendar-link":
-                return "calendar";
-            case "calendar-view-day":
-                return "calendar";
-            case "calendar-view-month":
-                return "calendar";
-            case "calendar-view-week":
-                return "calendar";
-            case "calendar":
-                return "calendar";
-            case "camera-add":
-                return "camera";
-            case "camera-delete":
-                return "camera-retro";
-            case "camera-edit":
-                return "camera-retro";
-            case "camera-error":
-                return "camera-retro";
-            case "camera-go":
-                return "camera-retro";
-            case "camera-link":
-                return "camera-retro";
-            case "camera-small":
-                return "camera-retro";
-            case "camera":
-                return "camera-retro";
-            case "cancel":
-                return "times-circle";
-            case "car-add":
-                return "car";
-            case "car-delete":
-                return "car";
-            case "cart-add":
-                return "cart-plus";
-            case "cart-delete":
-                return "shopping-cart";
-            case "cart-edit":
-                return "shopping-cart";
-            case "cart-error":
-                return "shopping-cart";
-            case "cart-go":
-                return "shopping-cart";
-            case "cart-put":
-                return "cart-arrow-down";
-            case "cart-remove":
-                return "shopping-cart";
-            case "cart":
-                return "shopping-cart";
-            case "car":
-                return "car";
-            case "cd-add":
-                return "no hay";
-            case "cd-burn":
-                return "no hay";
-            case "cd-delete":
-                return "no hay";
-            case "cd-edit":
-                return "no hay";
-            case "cd-eject":
-                return "no hay";
-            case "cd-go":
-                return "no hay";
-            case "cd":
-                return "no hay";
-            case "chart-bar-add":
-                return "bar-chart";
-            case "chart-bar-delete":
-                return "bar-chart";
-            case "chart-bar-edit":
-                return "bar-chart";
-            case "chart-bar-error":
-                return "bar-chart";
-            case "chart-bar-link":
-                return "bar-chart";
-            case "chart-bar":
-                return "bar-chart";
-            case "chart-curve-add":
-                return "area-chart";
-            case "chart-curve-delete":
-                return "area-chart";
-            case "chart-curve-edit":
-                return "area-chart";
-            case "chart-curve-error":
-                return "area-chart";
-            case "chart-curve-go":
-                return "area-chart";
-            case "chart-curve-link":
-                return "area-chart";
-            case "chart-curve":
-                return "area-chart";
-            case "chart-line-add":
-                return "line-chart";
-            case "chart-line-delete":
-                return "line-chart";
-            case "chart-line-edit":
-                return "line-chart";
-            case "chart-line-error":
-                return "line-chart";
-            case "chart-line-link":
-                return "line-chart";
-            case "chart-line":
-                return "line-chart";
-            case "chart-organisation-add":
-                return "site-map";
-            case "chart-organisation-delete":
-                return "site-map";
-            case "chart-organisation":
-                return "site-map";
-            case "chart-pie-add":
-                return "pie-chart";
-            case "chart-pie-delete":
-                return "pie-chart";
-            case "chart-pie-edit":
-                return "pie-chart";
-            case "chart-pie-error":
-                return "pie-chart";
-            case "chart-pie-link":
-                return "pie-chart";
-            case "chart-pie":
-                return "pie-chart";
-            case "chpass":
-                return "key";
-            case "clock-add":
-                return "clock-o";
-            case "clock-delete":
-                return "clock-o";
-            case "clock-edit":
-                return "clock-o";
-            case "clock-error":
-                return "clock-o";
-            case "clock-go":
-                return "clock-o";
-            case "clock-link":
-                return "clock-o";
-            case "clock-pause":
-                return "clock-o";
-            case "clock-play":
-                return "clock-o";
-            case "clock-red":
-                return "clock-o";
-            case "clock-stop":
-                return "clock-o";
-            case "clock":
-                return "clock-o";
-            case "cog-add":
-                return "cog";
-            case "cog-delete":
-                return "cog";
-            case "cog-edit":
-                return "cog";
-            case "cog-error":
-                return "cog";
-            case "cog-go":
-                return "cog";
-            case "cog":
-                return "cog";
-            case "coins-add":
-                return "Ver para que se usa?";
-            case "coins-delete":
-                return "Ver para que se usa?";
-            case "coins":
-                return "Ver para que se usa?";
-            case "color-swatch":
-                return "no hay";
-            case "color-wheel":
-                return "bullseye";
-            case "comment-add":
-                return "comment";
-            case "comment-delete":
-                return "comment";
-            case "comment-edit":
-                return "comment";
-            case "comments-add":
-                return "comments";
-            case "comments-delete":
-                return "comments";
-            case "comments":
-                return "comments";
-            case "comment":
-                return "comment";
-            case "compress":
-                return "compress";
-            case "computer-add":
-                return "laptop";
-            case "computer-delete":
-                return "laptop";
-            case "computer-edit":
-                return "laptop";
-            case "computer-error":
-                return "laptop";
-            case "computer-go":
-                return "laptop";
-            case "computer-key":
-                return "laptop";
-            case "computer-link":
-                return "laptop";
-            case "computer":
-                return "laptop";
-            case "connect":
-                return "link";
-            case "contact":
-                return "users";
-            case "contrast-decrease":
-                return "adjust";
-            case "contrast-high":
-                return "adjust";
-            case "contrast-increase":
-                return "adjust";
-            case "contrast-low":
-                return "adjust";
-            case "contrast":
-                return "adjust";
-            case "control-eject-blue":
-                return "eject blue";
-            case "control-eject":
-                return "eject";
-            case "control-end-blue":
-                return "step-forward";
-            case "control-end":
-                return "step-forward";
-            case "control-equalizer-blue":
-                return "folder-o";
-            case "control-equalizer":
-                return "folder-o";
-            case "control-fastforward-blue":
-                return "forward";
-            case "control-fastforward":
-                return "forward";
-            case "control-pause-blue":
-                return "pause";
-            case "control-pause":
-                return "pause";
-            case "control-play-blue":
-                return "play";
-            case "control-play":
-                return "play";
-            case "control-repeat-blue":
-                return "repeat";
-            case "control-repeat":
-                return "repeat";
-            case "control-rewind-blue":
-                return "backward";
-            case "control-rewind":
-                return "backward";
-            case "control-start-blue":
-                return "step-backward";
-            case "control-start":
-                return "step-backward";
-            case "control-stop-blue":
-                return "stop";
-            case "control-stop":
-                return "stop";
-            case "controller-add":
-                return "gamepad";
-            case "controller-delete":
-                return "gamepad";
-            case "controller-error":
-                return "gamepad";
-            case "controller":
-                return "gamepad";
-            case "controlpanel":
-                return "tachometer";
-            case "creditcards":
-                return "credit-card";
-            case "cross":
-                return "times";
-            case "css-add":
-                return "css3";
-            case "css-delete":
-                return "css3";
-            case "css-go":
-                return "css3";
-            case "css-valid":
-                return "css3";
-            case "css":
-                return "css3";
-            case "ctrpanel":
-                return "tachometer";
-            case "cup-add":
-                return "coffee";
-            case "cup-delete":
-                return "coffee";
-            case "cup-edit":
-                return "coffee";
-            case "cup-error":
-                return "coffee";
-            case "cup-go":
-                return "coffee";
-            case "cup-key":
-                return "coffee";
-            case "cup-link":
-                return "coffee";
-            case "cup":
-                return "coffee";
-            case "cursor":
-                return "hand-o-up";
-            case "cut-red":
-                return "scissors";
-            case "cut":
-                return "scissors";
-            case "database-add":
-                return "database";
-            case "database-connect":
-                return "database";
-            case "database-delete":
-                return "database";
-            case "database-edit":
-                return "database";
-            case "database-error":
-                return "database";
-            case "database-gear":
-                return "database";
-            case "database-go":
-                return "database";
-            case "database-key":
-                return "database";
-            case "database-lightning":
-                return "database";
-            case "database-link":
-                return "database";
-            case "database-refresh":
-                return "database";
-            case "database-save":
-                return "database";
-            case "database-table":
-                return "database";
-            case "database":
-                return "database";
-            case "date-add":
-                return "calendar-o";
-            case "date-delete":
-                return "calendar-o";
-            case "date-edit":
-                return "calendar-o";
-            case "date-error":
-                return "calendar-o";
-            case "date-go":
-                return "calendar-o";
-            case "date-link":
-                return "calendar-o";
-            case "date-magnify":
-                return "calendar-o";
-            case "date-next":
-                return "calendar-o";
-            case "date-previous":
-                return "calendar-o";
-            case "date":
-                return "calendar-o";
-            case "deck":
-                return "folder-o";
-            case "default":
-                return "folder-o";
-            case "delete":
-                return "minus-circle";
-            case "disconnect":
-                return "chain-broken";
-            case "disk-multiple":
-                return "floppy-o";
-            case "disk":
-                return "floppy-o";
-            case "dms":
-                return "files-o";
-            case "documentblack":
-                return "folder";
-            case "document":
-                return "file-o";
-            case "door-in":
-                return "folder-o";
-            case "door-open":
-                return "folder-o";
-            case "door-out":
-                return "folder-o";
-            case "door":
-                return "folder-o";
-            case "drink-empty":
-                return "glass";
-            case "drink":
-                return "glass";
-            case "drive-add":
-                return "hdd-o";
-            case "drive-burn":
-                return "hdd-o";
-            case "drive-cd-empty":
-                return "hdd-o";
-            case "drive-cd":
-                return "hdd-o";
-            case "drive-delete":
-                return "hdd-o";
-            case "drive-disk":
-                return "hdd-o";
-            case "drive-edit":
-                return "hdd-o";
-            case "drive-error":
-                return "hdd-o";
-            case "drive-go":
-                return "hdd-o";
-            case "drive-key":
-                return "hdd-o";
-            case "drive-link":
-                return "hdd-o";
-            case "drive-magnify":
-                return "hdd-o";
-            case "drive-network":
-                return "hdd-o";
-            case "drive-rename":
-                return "hdd-o";
-            case "drive-user":
-                return "hdd-o";
-            case "drive-web":
-                return "hdd-o";
-            case "drive":
-                return "hdd-o";
-            case "dvd-add":
-                return "folder-o";
-            case "dvd-delete":
-                return "folder-o";
-            case "dvd-edit":
-                return "folder-o";
-            case "dvd-error":
-                return "folder-o";
-            case "dvd-go":
-                return "folder-o";
-            case "dvd-key":
-                return "folder-o";
-            case "dvd-link":
-                return "folder-o";
-            case "dvd":
-                return "folder-o";
-            case "email-add":
-                return "envelope";
-            case "email-attach":
-                return "envelope";
-            case "email-delete":
-                return "envelope";
-            case "email-edit":
-                return "envelope";
-            case "email-error":
-                return "envelope";
-            case "email-go":
-                return "envelope";
-            case "email-link":
-                return "envelope";
-            case "email-link_open":
-                return "envelope";
-            case "email-open-image":
-                return "envelope";
-            case "email-open":
-                return "envelope";
-            case "email":
-                return "envelope";
-            case "emoticon-evilgrin":
-                return "folder-o";
-            case "emoticon-grin":
-                return "folder-o";
-            case "emoticon-happy":
-                return "folder-o";
-            case "emoticon-smile":
-                return "smile-o";
-            case "emoticon-surprised":
-                return "folder-o";
-            case "emoticon-tongue":
-                return "folder-o";
-            case "emoticon-unhappy":
-                return "frown-o";
-            case "emoticon-waii":
-                return "folder-o";
-            case "emoticon-wink":
-                return "folder-o";
-            case "error-add":
-                return "exclamation-triangle";
-            case "error-delete":
-                return "exclamation-triangle";
-            case "error-go":
-                return "exclamation-triangle";
-            case "error":
-                return "exclamation-triangle";
-            case "exclamation":
-                return "exclamation-circle red";
-            case "eye":
-                return "eye";
-            case "feed-add":
-                return "rss-square";
-            case "feed-delete":
-                return "rss-square";
-            case "feed-disk":
-                return "rss-square";
-            case "feed-edit":
-                return "rss-square";
-            case "feed-error":
-                return "rss-square";
-            case "feed-go":
-                return "rss-square";
-            case "feed-key":
-                return "rss-square";
-            case "feed-link":
-                return "rss-square";
-            case "feed-magnify":
-                return "rss-square";
-            case "feed":
-                return "rss-square";
-            case "female":
-                return "venus";
-            case "film-add":
-                return "film";
-            case "film-delete":
-                return "film";
-            case "film-edit":
-                return "film";
-            case "film-error":
-                return "film";
-            case "film-key":
-                return "film";
-            case "film-link":
-                return "film";
-            case "film-save":
-                return "film";
-            case "film":
-                return "film";
-            case "find":
-                return "binoculars";
-            case "flag-blue":
-                return "flag";
-            case "flag-green":
-                return "flag";
-            case "flag-orange":
-                return "flag";
-            case "flag-pink":
-                return "flag";
-            case "flag-purple":
-                return "flag";
-            case "flag-red":
-                return "flag";
-            case "flag-yellow":
-                return "flag";
-            case "folder-add":
-                return "folder";
-            case "folder-bell":
-                return "folder";
-            case "folder-brick":
-                return "folder";
-            case "folder-bug":
-                return "folder";
-            case "folder-camera":
-                return "folder";
-            case "folder-database":
-                return "folder";
-            case "folder-delete":
-                return "folder";
-            case "folder-edit":
-                return "folder";
-            case "folder-error":
-                return "folder";
-            case "folder-explore":
-                return "folder";
-            case "folder-feed":
-                return "folder";
-            case "folder-find":
-                return "folder";
-            case "folder-go":
-                return "folder";
-            case "folder-heart":
-                return "folder";
-            case "folder-image":
-                return "folder";
-            case "folder-key":
-                return "folder";
-            case "folder-lightbulb":
-                return "folder";
-            case "folder-link":
-                return "folder";
-            case "folder-magnify":
-                return "folder";
-            case "folder-page-white":
-                return "folder";
-            case "folder-page":
-                return "folder";
-            case "folder-palette":
-                return "folder";
-            case "folder-picture":
-                return "folder";
-            case "folder-star":
-                return "folder";
-            case "folder-table":
-                return "folder";
-            case "folder-user":
-                return "folder";
-            case "folder-wrench":
-                return "folder";
-            case "folder":
-                return "folder";
-            case "font-add":
-                return "font";
-            case "font-delete":
-                return "font";
-            case "font-go":
-                return "font";
-            case "font":
-                return "font";
-            case "formal":
-                return "folder-o";
-            case "group-add":
-                return "users";
-            case "group-delete":
-                return "users";
-            case "group-edit":
-                return "users";
-            case "group-error":
-                return "users";
-            case "group-gear":
-                return "users";
-            case "group-go":
-                return "users";
-            case "group-key":
-                return "users";
-            case "group-link":
-                return "users";
-            case "group":
-                return "users";
-            case "heart-add":
-                return "heart";
-            case "heart-delete":
-                return "heart";
-            case "heart":
-                return "heart";
-            case "help":
-                return "question-circle";
-            case "hourglass-add":
-                return "folder-o";
-            case "hourglass-delete":
-                return "folder-o";
-            case "hourglass-go":
-                return "folder-o";
-            case "hourglass-link":
-                return "folder-o";
-            case "hourglass":
-                return "folder-o";
-            case "house-go":
-                return "home";
-            case "house-link":
-                return "home";
-            case "house":
-                return "home";
-            case "html-add":
-                return "html5";
-            case "html-delete":
-                return "html5";
-            case "html-go":
-                return "html5";
-            case "html-valid":
-                return "html5";
-            case "html":
-                return "html5";
-            case "image-add":
-                return "picture-o";
-            case "image-delete":
-                return "picture-o";
-            case "image-edit":
-                return "picture-o";
-            case "image-link":
-                return "picture-o";
-            case "images":
-                return "picture-o";
-            case "image":
-                return "picture-o";
-            case "information":
-                return "info-circle";
-            case "ipod-cast-add":
-                return "headphones";
-            case "ipod-cast-delete":
-                return "headphones";
-            case "ipod-cast":
-                return "headphones";
-            case "ipod-sound":
-                return "headphones";
-            case "ipod-sound_open":
-                return "headphones";
-            case "ipod":
-                return "headphones";
-            case "joystick-add":
-                return "gamepad";
-            case "joystick-delete":
-                return "gamepad";
-            case "joystick-error":
-                return "gamepad";
-            case "joystick":
-                return "gamepad";
-            case "key-add":
-                return "key";
-            case "key-delete":
-                return "key";
-            case "key-go":
-                return "key";
-            case "keyboard-add":
-                return "keyboard-o";
-            case "keyboard-delete":
-                return "keyboard-o";
-            case "keyboard-magnify":
-                return "keyboard-o";
-            case "keyboard":
-                return "keyboard-o";
-            case "key":
-                return "key";
-            case "layers":
-                return "folder-o";
-            case "layout-add":
-                return "file-text?";
-            case "layout-content":
-                return "file-text?";
-            case "layout-delete":
-                return "file-text?";
-            case "layout-edit":
-                return "file-text?";
-            case "layout-error":
-                return "file-text?";
-            case "layout-header":
-                return "file-text?";
-            case "layout-link":
-                return "file-text?";
-            case "layout-sidebar":
-                return "file-text?";
-            case "layout":
-                return "file-text?";
-            case "license":
-                return "certificate";
-            case "license_open":
-                return "certificate";
-            case "lightbulb-add":
-                return "certificate";
-            case "lightbulb-delete":
-                return "lightbulb-o";
-            case "lightbulb-off":
-                return "lightbulb-o";
-            case "lightbulb":
-                return "lightbulb-o";
-            case "lightning-add":
-                return "bolt";
-            case "lightning-delete":
-                return "bolt";
-            case "lightning-go":
-                return "bolt";
-            case "lightning":
-                return "bolt";
-            case "link-add":
-                return "link";
-            case "link-break":
-                return "link";
-            case "link-delete":
-                return "link";
-            case "link-edit":
-                return "link";
-            case "link-error":
-                return "link";
-            case "link-go":
-                return "link";
-            case "link":
-                return "link";
-            case "lock-add":
-                return "lock";
-            case "lock-break":
-                return "unlock-alt";
-            case "lock-delete":
-                return "lock";
-            case "lock-edit":
-                return "lock";
-            case "lock-go":
-                return "lock";
-            case "lock-open":
-                return "unlock";
-            case "lock":
-                return "lock";
-            case "lorry-add":
-                return "truck";
-            case "lorry-delete":
-                return "truck";
-            case "lorry-error":
-                return "truck";
-            case "lorry-flatbed":
-                return "truck";
-            case "lorry-go":
-                return "truck";
-            case "lorry-link":
-                return "truck";
-            case "lorry":
-                return "truck";
-            case "magifier-zoom-out":
-                return "search-minus";
-            case "magnifier-zoom-in":
-                return "search-plus";
-            case "magnifier":
-                return "search";
-            case "male":
-                return "mars";
-            case "map-add":
-                return "globe";
-            case "map-delete":
-                return "globe";
-            case "map-edit":
-                return "globe";
-            case "map-go":
-                return "globe";
-            case "map-magnify":
-                return "globe";
-            case "map":
-                return "globe";
-            case "medal-bronze-1":
-                return "certificate bronze";
-            case "medal-bronze-2":
-                return "certificate bronze";
-            case "medal-bronze-3":
-                return "certificate bronze";
-            case "medal-bronze-add":
-                return "certificate bronze";
-            case "medal-bronze-delete":
-                return "certificate bronze";
-            case "medal-gold-1":
-                return "certificate gold";
-            case "medal-gold-2":
-                return "certificate gold";
-            case "medal-gold-3":
-                return "certificate gold";
-            case "medal-gold-add":
-                return "certificate gold";
-            case "medal-gold-delete":
-                return "certificate gold";
-            case "medal-silver-1":
-                return "certificate silver";
-            case "medal-silver-2":
-                return "certificate silver";
-            case "medal-silver-3":
-                return "certificate silver";
-            case "medal-silver-add":
-                return "certificate silver";
-            case "medal-silver-delete":
-                return "certificate silver";
-            case "money-add":
-                return "money";
-            case "money-delete":
-                return "money";
-            case "money-dollar":
-                return "usd";
-            case "money-euro":
-                return "eur";
-            case "money-pound":
-                return "gbp";
-            case "money-yen":
-                return "yen";
-            case "money":
-                return "money green";
-            case "monitor-add":
-                return "desktop";
-            case "monitor-delete":
-                return "desktop";
-            case "monitor-edit":
-                return "desktop";
-            case "monitor-error":
-                return "desktop";
-            case "monitor-go":
-                return "desktop";
-            case "monitor-lightning":
-                return "desktop";
-            case "monitor-link":
-                return "desktop";
-            case "monitor":
-                return "desktop";
-            case "mouse-add":
-                return "folder-o";
-            case "mouse-delete":
-                return "folder-o";
-            case "mouse-error":
-                return "folder-o";
-            case "mouse":
-                return "folder-o";
-            case "music":
-                return "music";
-            case "newspaper-add":
-                return "newspaper-o";
-            case "newspaper-delete":
-                return "newspaper-o";
-            case "newspaper-go":
-                return "newspaper-o";
-            case "newspaper-link":
-                return "newspaper-o";
-            case "newspaper":
-                return "newspaper-o";
-            case "new":
-                return "?";
-            case "note-add":
-                return "?";
-            case "note-delete":
-                return "?";
-            case "note-edit":
-                return "pencil-square-o";
-            case "note-error":
-                return "?";
-            case "note-go":
-                return "file?";
-            case "note":
-                return "file";
-            case "opportunity":
-                return "folder-o";
-            case "overlays":
-                return "folder-o";
-            case "package-add":
-                return "archive";
-            case "package-delete":
-                return "archive";
-            case "package-go":
-                return "archive";
-            case "package-green":
-                return "archive green";
-            case "package-link":
-                return "archive";
-            case "package":
-                return "archive";
-            case "page-add":
-                return "file-o";
-            case "page-attach":
-                return "paperclip";
-            case "page-code":
-                return "file-code-o";
-            case "page-copy":
-                return "files-o";
-            case "page-delete":
-                return "file-o";
-            case "page-edit":
-                return "file-o";
-            case "page-error":
-                return "file-o";
-            case "page-excel":
-                return "file-excel-o";
-            case "page-find":
-                return "file-o";
-            case "page-gear":
-                return "file-o";
-            case "page-go":
-                return "file-o";
-            case "page-green":
-                return "file-o";
-            case "page-key":
-                return "file-o";
-            case "page-lightning":
-                return "file-o";
-            case "page-link":
-                return "file-o";
-            case "page-paintbrush":
-                return "file-o";
-            case "page-paste":
-                return "clipboard";
-            case "page-red":
-                return "file-o";
-            case "page-refresh":
-                return "file-o";
-            case "page-save":
-                return "floppy-o";
-            case "page-white-acrobat":
-                return "file-pdf-o";
-            case "page-white-actionscript":
-                return "file-code-o";
-            case "page-white-add":
-                return "folder-o";
-            case "page-white-camera":
-                return "file-video-o";
-            case "page-white-cd":
-                return "folder-o";
-            case "page-white-code-red":
-                return "file-code-o red";
-            case "page-white-code":
-                return "file-code-o blue";
-            case "page-white-coldfusion":
-                return "folder-o";
-            case "page-white-compressed":
-                return "file-archive-o";
-            case "page-white-copy":
-                return "folder-o";
-            case "page-white-cplusplus":
-                return "file-code-o";
-            case "page-white-csharp":
-                return "file-code-o";
-            case "page-white-cup":
-                return "folder-o";
-            case "page-white-c":
-                return "file-code-o";
-            case "page-white-database":
-                return "folder-o";
-            case "page-white-delete":
-                return "folder-o";
-            case "page-white-dvd":
-                return "folder-o";
-            case "page-white-edit":
-                return "folder-o";
-            case "page-white-error":
-                return "folder-o";
-            case "page-white-excel":
-                return "file-excel-o";
-            case "page-white-find":
-                return "folder-o";
-            case "page-white-flash":
-                return "folder-o";
-            case "page-white-freehand":
-                return "folder-o";
-            case "page-white-gear":
-                return "folder-o";
-            case "page-white-get":
-                return "folder-o";
-            case "page-white-go":
-                return "folder-o";
-            case "page-white-horizontal":
-                return "folder-o";
-            case "page-white-h":
-                return "folder-o";
-            case "page-white-key":
-                return "folder-o";
-            case "page-white-lightning":
-                return "folder-o";
-            case "page-white-link":
-                return "folder-o";
-            case "page-white-magnify":
-                return "folder-o";
-            case "page-white-medal":
-                return "folder-o";
-            case "page-white-office":
-                return "folder-o";
-            case "page-white-paintbrush":
-                return "folder-o";
-            case "page-white-paint":
-                return "folder-o";
-            case "page-white-paste":
-                return "clipboard";
-            case "page-white-php":
-                return "file-code-o";
-            case "page-white-picture":
-                return "file-image-o";
-            case "page-white-powerpoint":
-                return "file-powerpoint-o";
-            case "page-white-put":
-                return "folder-o";
-            case "page-white-ruby":
-                return "folder-o";
-            case "page-white-stack":
-                return "folder-o";
-            case "page-white-star":
-                return "folder-o";
-            case "page-white-swoosh":
-                return "folder-o";
-            case "page-white-text-width":
-                return "folder-o";
-            case "page-white-text":
-                return "folder-o";
-            case "page-white-tux":
-                return "folder-o";
-            case "page-white-vector":
-                return "folder-o";
-            case "page-white-visualstudio":
-                return "file-code-o";
-            case "page-white-width":
-                return "folder-o";
-            case "page-white-word":
-                return "file-word-o";
-            case "page-white-world":
-                return "folder-o";
-            case "page-white-wrench":
-                return "folder-o";
-            case "page-white-zip":
-                return "file-archive-o";
-            case "page-white":
-                return "file";
-            case "page-word":
-                return "file-word-o";
-            case "page-world":
-                return "folder-o";
-            case "page":
-                return "folder-o";
-            case "paintbrush":
-                return "paint-brush";
-            case "paintcan":
-                return "folder-o";
-            case "palette":
-                return "paint-brush";
-            case "paste-plain":
-                return "clipboard";
-            case "paste-word":
-                return "clipboard";
-            case "pencil-add":
-                return "pencil";
-            case "pencil-delete":
-                return "pencil";
-            case "pencil-go":
-                return "pencil";
-            case "pencil":
-                return "pencil";
-            case "people":
-                return "users";
-            case "phone-add":
-                return "phone-square";
-            case "phone-delete":
-                return "phone-square";
-            case "phone-sound":
-                return "phone-square";
-            case "phone":
-                return "phone-square";
-            case "photo-add":
-                return "picture-o";
-            case "photo-delete":
-                return "picture-o";
-            case "photo-link":
-                return "picture-o";
-            case "photos":
-                return "picture-o";
-            case "photo":
-                return "picture-o";
-            case "picture-add":
-                return "file-image-o";
-            case "picture-delete":
-                return "file-image-o";
-            case "picture-edit":
-                return "file-image-o";
-            case "picture-empty":
-                return "file-image-o";
-            case "picture-error":
-                return "file-image-o";
-            case "picture-go":
-                return "file-image-o";
-            case "picture-key":
-                return "file-image-o";
-            case "picture-link":
-                return "file-image-o";
-            case "picture-save":
-                return "file-image-o";
-            case "pictures":
-                return "file-image-o";
-            case "picture":
-                return "file-image-o";
-            case "pilcrow":
-                return "paragraph";
-            case "pill-add":
-                return "medkit";
-            case "pill-delete":
-                return "medkit";
-            case "pill-go":
-                return "medkit";
-            case "pill":
-                return "medkit";
-            case "plugin-add":
-                return "puzzle-piece";
-            case "plugin-delete":
-                return "puzzle-piece";
-            case "plugin-disabled":
-                return "puzzle-piece";
-            case "plugin-edit":
-                return "puzzle-piece";
-            case "plugin-error":
-                return "puzzle-piece";
-            case "plugin-go":
-                return "puzzle-piece";
-            case "plugin-link":
-                return "puzzle-piece";
-            case "plugin":
-                return "puzzle-piece";
-            case "printer-add":
-                return "print";
-            case "printer-delete":
-                return "print";
-            case "printer-empty":
-                return "print";
-            case "printer-error":
-                return "print";
-            case "printer":
-                return "print";
-            case "rainbow":
-                return "folder-o";
-            case "report-add":
-                return "list-alt";
-            case "report-delete":
-                return "list-alt";
-            case "report-disk":
-                return "list-alt";
-            case "report-edit":
-                return "list-alt";
-            case "report-go":
-                return "list-alt";
-            case "report-key":
-                return "list-alt";
-            case "report-link":
-                return "list-alt";
-            case "report-magnify":
-                return "list-alt";
-            case "report-picture":
-                return "list-alt";
-            case "report-user":
-                return "list-alt";
-            case "report-word":
-                return "list-alt";
-            case "report":
-                return "list-alt";
-            case "resultset-first":
-                return "step-backward";
-            case "resultset-last":
-                return "step-forward";
-            case "resultset-next":
-                return "chevron-circle-right";
-            case "resultset-previous":
-                return "chevron-circle-left";
-            case "rosette":
-                return "certificate";
-            case "rss-add":
-                return "rss";
-            case "rss-delete":
-                return "rss";
-            case "rss-go":
-                return "rss";
-            case "rss-valid":
-                return "rss";
-            case "rss":
-                return "rss";
-            case "ruby-add":
-                return "diamond red";
-            case "ruby-delete":
-                return "diamond red";
-            case "ruby-gear":
-                return "diamond red";
-            case "ruby-get":
-                return "diamond red";
-            case "ruby-go":
-                return "diamond red";
-            case "ruby-key":
-                return "diamond red";
-            case "ruby-link":
-                return "diamond red";
-            case "ruby-put":
-                return "diamond red";
-            case "ruby":
-                return "diamond red";
-            case "sales":
-                return "envelope";
-            case "script-add":
-                return "file-code-o";
-            case "script-code-red":
-                return "file-code-o";
-            case "script-code":
-                return "file-code-o";
-            case "script-delete":
-                return "file-code-o";
-            case "script-edit":
-                return "file-code-o";
-            case "script-error":
-                return "file-code-o";
-            case "script-gear":
-                return "file-code-o";
-            case "script-go":
-                return "file-code-o";
-            case "script-key":
-                return "file-code-o";
-            case "script-lightning":
-                return "file-code-o";
-            case "script-link":
-                return "file-code-o";
-            case "script-palette":
-                return "file-code-o";
-            case "script-save":
-                return "file-code-o";
-            case "script":
-                return "file-code-o";
-            case "server-add":
-                return "server";
-            case "server-chart":
-                return "server";
-            case "server-compressed":
-                return "server";
-            case "server-connect":
-                return "server";
-            case "server-database":
-                return "server";
-            case "server-delete":
-                return "server";
-            case "server-edit":
-                return "server";
-            case "server-error":
-                return "server";
-            case "server-go":
-                return "server";
-            case "server-key":
-                return "server";
-            case "server-lightning":
-                return "server";
-            case "server-link":
-                return "server";
-            case "server-uncompressed":
-                return "server";
-            case "server":
-                return "server";
-            case "service":
-                return "cogs";
-            case "shading":
-                return "folder-o";
-            case "shape-align-bottom":
-                return "folder-o";
-            case "shape-align-center":
-                return "align-center";
-            case "shape-align-left":
-                return "align-left";
-            case "shape-align-middle":
-                return "folder-o";
-            case "shape-align-right":
-                return "align-right";
-            case "shape-align-top":
-                return "folder-o";
-            case "shape-flip-horizontal":
-                return "folder-o";
-            case "shape-flip-vertical":
-                return "folder-o";
-            case "shape-group":
-                return "folder-o";
-            case "shape-handles":
-                return "folder-o";
-            case "shape-move-backwards":
-                return "folder-o";
-            case "shape-move-back":
-                return "folder-o";
-            case "shape-move-forwards":
-                return "folder-o";
-            case "shape-move-front":
-                return "folder-o";
-            case "shape-rotate-anticlockwise":
-                return "repeat";
-            case "shape-rotate-clockwise":
-                return "undo";
-            case "shape-square-add":
-                return "folder-o";
-            case "shape-square-delete":
-                return "folder-o";
-            case "shape-square-edit":
-                return "folder-o";
-            case "shape-square-error":
-                return "folder-o";
-            case "shape-square-go":
-                return "folder-o";
-            case "shape-square-key":
-                return "folder-o";
-            case "shape-square-link":
-                return "folder-o";
-            case "shape-square":
-                return "square";
-            case "shape-ungroup":
-                return "folder-o";
-            case "sharedfolder":
-                return "folder-open";
-            case "shield-add":
-                return "shield";
-            case "shield-delete":
-                return "shield";
-            case "shield-go":
-                return "shield";
-            case "shield":
-                return "shield";
-            case "shutdown":
-                return "power-off red";
-            case "sitemap-color":
-                return "sitemap";
-            case "sitemap":
-                return "sitemap";
-            case "sound-add":
-                return "volume-up";
-            case "sound-delete":
-                return "volume-down";
-            case "sound-low":
-                return "volume-down";
-            case "sound-mute":
-                return "volume-off";
-            case "sound-none":
-                return "volume-off";
-            case "sound":
-                return "volume-off";
-            case "spellcheck":
-                return "folder-o";
-            case "sport-8ball":
-                return "folder-o";
-            case "sport-basketball":
-                return "dribbble";
-            case "sport-football":
-                return "futbol-o";
-            case "sport-golf":
-                return "folder-o";
-            case "sport-raquet":
-                return "folder-o";
-            case "sport-shuttlecock":
-                return "folder-o";
-            case "sport-soccer":
-                return "futbol-o";
-            case "sport-tennis":
-                return "folder-o";
-            case "star":
-                return "star";
-            case "status-away":
-                return "folder-o";
-            case "status-busy":
-                return "user red";
-            case "status-offline":
-                return "user gray";
-            case "status-online":
-                return "user green";
-            case "stop":
-                return "times-circle";
-            case "style-add":
-                return "font";
-            case "style-delete":
-                return "font";
-            case "style-edit":
-                return "font";
-            case "style-go":
-                return "font";
-            case "style":
-                return "font";
-            case "sum":
-                return "folder-o";
-            case "systemasyncevent":
-                return "clock-o";
-            case "systemconnections":
-                return "link";
-            case "systemcustomfolder":
-                return "folder";
-            case "systemforms":
-                return "list-alt";
-            case "systemsettingsmanager":
-                return "wrench";
-            case "tab-add":
-                return "folder-o";
-            case "tab-delete":
-                return "folder-o";
-            case "tab-edit":
-                return "folder-o";
-            case "tab-go":
-                return "folder-o";
-            case "table-add":
-                return "table";
-            case "table-delete":
-                return "table";
-            case "table-edit":
-                return "table";
-            case "table-error":
-                return "table";
-            case "table-gear":
-                return "table";
-            case "table-go":
-                return "table";
-            case "table-key":
-                return "table";
-            case "table-lightning":
-                return "table";
-            case "table-link":
-                return "table";
-            case "table-multiple":
-                return "table";
-            case "table-refresh":
-                return "table";
-            case "table-relationship":
-                return "table";
-            case "table-row-delete":
-                return "table";
-            case "table-row-insert":
-                return "table";
-            case "table-save":
-                return "table";
-            case "table-sort":
-                return "table";
-            case "table":
-                return "table";
-            case "tab":
-                return "tag";
-            case "tag-blue-add":
-                return "tag blue";
-            case "tag-blue-delete":
-                return "tag blue";
-            case "tag-blue-edit":
-                return "tag blue";
-            case "tag-blue":
-                return "tag blue";
-            case "tag-green":
-                return "tag green";
-            case "tag-orange":
-                return "tag orange";
-            case "tag-pink":
-                return "tag pink";
-            case "tag-purple":
-                return "tag purple";
-            case "tag-red":
-                return "tag red";
-            case "tag-yellow":
-                return "tag yellow";
-            case "tag":
-                return "tag";
-            case "task":
-                return "pencil-square-o";
-            case "telephone-add":
-                return "phone";
-            case "telephone-delete":
-                return "phone";
-            case "telephone-edit":
-                return "phone";
-            case "telephone-error":
-                return "phone";
-            case "telephone-go":
-                return "phone";
-            case "telephone-key":
-                return "phone";
-            case "telephone-link":
-                return "phone";
-            case "telephone":
-                return "phone";
-            case "television-add":
-                return "desktop";
-            case "television-delete":
-                return "desktop";
-            case "television":
-                return "desktop";
-            case "text-align-center":
-                return "align-center";
-            case "text-align-justify":
-                return "align-justify";
-            case "text-align-left":
-                return "align-left";
-            case "text-align-right":
-                return "align-right";
-            case "text-allcaps":
-                return "folder-o";
-            case "text-bold":
-                return "bold";
-            case "text-columns":
-                return "columns";
-            case "text-dropcaps":
-                return "folder-o";
-            case "text-heading-1":
-                return "folder-o";
-            case "text-heading-2":
-                return "folder-o";
-            case "text-heading-3":
-                return "folder-o";
-            case "text-heading-4":
-                return "folder-o";
-            case "text-heading-5":
-                return "folder-o";
-            case "text-heading-6":
-                return "folder-o";
-            case "text-horizontalrule":
-                return "folder-o";
-            case "text-indent-remove":
-                return "outdent";
-            case "text-indent":
-                return "indent";
-            case "text-italic":
-                return "italic";
-            case "text-kerning":
-                return "folder-o";
-            case "text-letter-omega":
-                return "folder-o";
-            case "text-letterspacing":
-                return "text-width";
-            case "text-linespacing":
-                return "text-height";
-            case "text-list-bullets":
-                return "list";
-            case "text-list-numbers":
-                return "list-ol";
-            case "text-lowercase":
-                return "folder-o";
-            case "text-padding-bottom":
-                return "folder-o";
-            case "text-padding-left":
-                return "folder-o";
-            case "text-padding-right":
-                return "folder-o";
-            case "text-padding-top":
-                return "folder-o";
-            case "text-replace":
-                return "folder-o";
-            case "text-signature":
-                return "pencil-square";
-            case "text-smallcaps":
-                return "folder-o";
-            case "text-strikethrough":
-                return "strikethrough";
-            case "text-subscript":
-                return "subscript";
-            case "text-superscript":
-                return "superscript";
-            case "text-underline":
-                return "underline";
-            case "text-uppercase":
-                return "folder-o";
-            case "textfield-add":
-                return "folder-o";
-            case "textfield-delete":
-                return "folder-o";
-            case "textfield-key":
-                return "folder-o";
-            case "textfield-rename":
-                return "folder-o";
-            case "textfield":
-                return "folder-o";
-            case "textfield_open":
-                return "folder-o";
-            case "thumb-down":
-                return "thumbs-down";
-            case "thumb-up":
-                return "thumbs-up";
-            case "tick":
-                return "check";
-            case "time-add":
-                return "clock-o";
-            case "time-delete":
-                return "clock-o";
-            case "time-go":
-                return "clock-o";
-            case "timeline-marker":
-                return "folder-o";
-            case "time":
-                return "clock-o";
-            case "transmit-add":
-                return "wifi";
-            case "transmit-blue":
-                return "wifi";
-            case "transmit-delete":
-                return "wifi";
-            case "transmit-edit":
-                return "wifi";
-            case "transmit-error":
-                return "wifi";
-            case "transmit-go":
-                return "wifi";
-            case "transmit":
-                return "wifi";
-            case "tux":
-                return "linux";
-            case "user-add":
-                return "user-plus";
-            case "user-comment":
-                return "comment";
-            case "user-delete":
-                return "user-times";
-            case "user-edit":
-                return "user";
-            case "user-female":
-                return "female";
-            case "user-go":
-                return "user";
-            case "user-gray":
-                return "user";
-            case "user-green":
-                return "user";
-            case "user-orange":
-                return "user";
-            case "user-red":
-                return "user";
-            case "user-suit":
-                return "user";
-            case "user":
-                return "user";
-            case "vcard-add":
-                return "folder-o";
-            case "vcard-delete":
-                return "folder-o";
-            case "vcard-edit":
-                return "folder-o";
-            case "vcard":
-                return "folder-o";
-            case "vector-add":
-                return "folder-o";
-            case "vector-delete":
-                return "folder-o";
-            case "vector":
-                return "folder-o";
-            case "virtualfolder":
-                return "external-link???";
-            case "wand":
-                return "magic";
-            case "weather-clouds":
-                return "cloud";
-            case "weather-cloudy":
-                return "cloud";
-            case "weather-lightning":
-                return "bolt";
-            case "weather-rain":
-                return "tint blue";
-            case "weather-snow":
-                return "folder-o";
-            case "weather-sun":
-                return "sun-o";
-            case "webcam-add":
-                return "video-camera";
-            case "webcam-delete":
-                return "video-camera";
-            case "webcam-error":
-                return "video-camera";
-            case "webcam":
-                return "video-camera";
-            case "world-add":
-                return "globe";
-            case "world-delete":
-                return "globe";
-            case "world-edit":
-                return "globe";
-            case "world-go":
-                return "globe";
-            case "world-link":
-                return "globe";
-            case "world":
-                return "globe";
-            case "wrench-orange":
-                return "wrench";
-            case "wrench":
-                return "wrench";
-            case "xhtml-add":
-                return "code";
-            case "xhtml-delete":
-                return "code";
-            case "xhtml-go":
-                return "code";
-            case "xhtml-valid":
-                return "code";
-            case "xhtml":
-                return "code";
-            case "zoom-in":
-                return "search-plus";
-            case "zoom-out":
-                return "search-minus";
-            case "zoom":
-                return "search";
-            default:
-                return "folder-o";
+            case "accept": return "fa-check-circle";
+            case "activity": return "fa-thumb-tack";
+            case "add": return "fa-plus-circle";
+            case "anchor": return "fa-anchor";
+            case "application-add": return "fa-plus-square";
+            case "application-cascade": return "fa-folder";
+            case "application-delete": return "fa-minus-square";
+            case "application-double": return "fa-folder";
+            case "application-edit": return "fa-desktop";
+            case "application-error": return "fa-desktop";
+            case "application-form-add": return "fa-desktop";
+            case "application-form-delete": return "fa-desktop";
+            case "application-form-edit": return "fa-desktop";
+            case "application-form-magnify": return "fa-desktop";
+            case "application-form": return "fa-desktop";
+            case "application-get": return "fa-desktop";
+            case "application-go": return "fa-desktop";
+            case "application-home": return "fa-desktop";
+            case "application-key": return "fa-desktop";
+            case "application-lightning": return "fa-desktop";
+            case "application-link": return "fa-desktop";
+            case "application-osx-terminal": return "fa-terminal";
+            case "application-osx": return "fa-apple";
+            case "application-put": return "fa-desktop";
+            case "application-side-boxes": return "fa-desktop";
+            case "application-side-contract": return "fa-desktop";
+            case "application-side-expand": return "fa-desktop";
+            case "application-side-list": return "fa-desktop";
+            case "application-side-tree": return "fa-desktop";
+            case "application-split": return "fa-desktop";
+            case "application-tile-horizontal": return "fa-desktop";
+            case "application-tile-vertical": return "fa-desktop";
+            case "application-view-columns": return "fa-desktop";
+            case "application-view-detail": return "fa-desktop";
+            case "application-view-gallery": return "fa-desktop";
+            case "application-view-icons": return "fa-desktop";
+            case "application-view-list": return "fa-desktop";
+            case "application-view-tile": return "fa-desktop";
+            case "application-xp-terminal": return "fa-terminal";
+            case "application-xp": return "fa-desktop";
+            case "application": return "fa-desktop";
+            case "arrow-branch": return "fa-folder";
+            case "arrow-divide": return "fa-folder";
+            case "arrow-down": return "fa-arrow-down";
+            case "arrow-inout": return "fa-folder";
+            case "arrow-in": return "fa-folder";
+            case "arrow-join": return "fa-folder";
+            case "arrow-left": return "fa-arrow-left";
+            case "arrow-merge": return "fa-folder";
+            case "arrow-out": return "fa-arrows-alt";
+            case "arrow-redo": return "fa-repeat";
+            case "arrow-refresh-small": return "fa-refresh";
+            case "arrow-refresh": return "fa-refresh";
+            case "arrow-right": return "fa-arrow-right";
+            case "arrow-rotate-anticlockwise": return "fa-folder";
+            case "arrow-rotate-clockwise": return "fa-folder";
+            case "arrow-switch": return "fa-folder";
+            case "arrow-turn-left": return "fa-folder";
+            case "arrow-turn-right": return "fa-folder";
+            case "arrow-undo": return "fa-undo";
+            case "arrow-up": return "fa-arrow-up";
+            case "asterisk-orange": return "fa-asterisk";
+            case "asterisk-yellow": return "fa-asterisk";
+            case "attach": return "fa-paperclip";
+            case "award-star-add": return "fa-star";
+            case "award-star-bronze-1": return "fa-star bronze";
+            case "award-star-bronze-2": return "fa-star bronze";
+            case "award-star-bronze-3": return "fa-star bronze";
+            case "award-star-delete": return "fa-star red";
+            case "award-star-gold-1": return "fa-star gold";
+            case "award-star-gold-2": return "fa-star gold";
+            case "award-star-gold-3": return "fa-star gold";
+            case "award-star-silver-1": return "fa-star silver";
+            case "award-star-silver-2": return "fa-star silver";
+            case "award-star-silver-3": return "fa-star silver";
+            case "basket-add": return "fa-cart-plus";
+            case "basket-delete": return "fa-cart";
+            case "basket-edit": return "fa-cart";
+            case "basket-error": return "fa-cart";
+            case "basket-go": return "fa-cart";
+            case "basket-put": return "fa-cart";
+            case "basket-remove": return "fa-cart-arrow-down";
+            case "basket": return "fa-folder";
+            case "bell-add": return "fa-bell";
+            case "bell-delete": return "fa-bell-slash";
+            case "bell-error": return "fa-bell";
+            case "bell-go": return "fa-bell";
+            case "bell-link": return "fa-bell";
+            case "bell": return "fa-bell";
+            case "bin-closed": return "fa-trash";
+            case "bin-empty": return "fa-trash";
+            case "bin": return "fa-trash";
+            case "bomb": return "fa-bomb";
+            case "book-addresses": return "fa-users";
+            case "book-add": return "fa-bookkey";
+            case "book-delete": return "fa-book";
+            case "book-edit": return "fa-book";
+            case "book-error": return "fa-book";
+            case "book-go": return "fa-book";
+            case "book-key": return "fa-book";
+            case "book-link": return "fa-book";
+            case "book-next": return "fa-book";
+            case "book-open": return "fa-book";
+            case "book-previous": return "fa-book";
+            case "book": return "fa-book";
+            case "box": return "fa-archive";
+            case "brick-add": return "fa-folder";
+            case "brick-delete": return "fa-folder";
+            case "brick-edit": return "fa-folder";
+            case "brick-error": return "fa-folder";
+            case "brick-go": return "fa-folder";
+            case "brick-link": return "fa-folder";
+            case "bricks": return "fa-folder";
+            case "brick": return "fa-folder";
+            case "briefcase": return "fa-briefcase";
+            case "bug-add": return "fa-bug";
+            case "bug-delete": return "fa-bug";
+            case "bug-edit": return "fa-bug";
+            case "bug-error": return "fa-bug";
+            case "bug-go": return "fa-bug";
+            case "bug-link": return "fa-bug";
+            case "bug": return "fa-bug";
+            case "building-add": return "fa-building";
+            case "building-delete": return "fa-building";
+            case "building-edit": return "fa-building";
+            case "building-error": return "fa-building";
+            case "building-go": return "fa-building";
+            case "building-key": return "fa-building";
+            case "building-link": return "fa-building";
+            case "building": return "fa-building";
+            case "bullet-add": return "fa-plus-circle";
+            case "bullet-arrow-bottom": return "fa-folder";
+            case "bullet-arrow-down": return "fa-caret-down";
+            case "bullet-arrow-top": return "fa-folder";
+            case "bullet-arrow-up": return "fa-caret-up";
+            case "bullet-black": return "fa-squarecircle";
+            case "bullet-blue": return "fa-dot-circle-o blue";
+            case "bullet-delete": return "fa-minus-circle red";
+            case "bullet-disk": return "fa-folder";
+            case "bullet-error": return "fa-folder";
+            case "bullet-feed": return "fa-folder";
+            case "bullet-go": return "fa-folder";
+            case "bullet-green": return "fa-dot-circle-o green";
+            case "bullet-key": return "fa-folder";
+            case "bullet-orange": return "fa-dot-circle-o orange";
+            case "bullet-picture": return "fa-folder";
+            case "bullet-pink": return "fa-dot-circle-o pink";
+            case "bullet-purple": return "fa-dot-circle-o purple";
+            case "bullet-red": return "fa-dot-circle-o red";
+            case "bullet-star": return "fa-star-o";
+            case "bullet-toggle-minus": return "fa-minus-square";
+            case "bullet-toggle-plus": return "fa-plus-square";
+            case "bullet-white": return "fa-dot-circle-o";
+            case "bullet-wrench": return "fa-dot-circle-o";
+            case "bullet-yellow": return "fa-dot-circle-o yellow";
+            case "cake": return "fa-birthday-cake";
+            case "calculator-add": return "fa-calculator";
+            case "calculator-delete": return "fa-calculator";
+            case "calculator-edit": return "fa-calculator";
+            case "calculator-error": return "fa-calculator";
+            case "calculator-link": return "fa-calculator";
+            case "calculator": return "fa-calculator";
+            case "calendar-add": return "fa-calendar";
+            case "calendar-delete": return "fa-calendar";
+            case "calendar-edit": return "fa-calendar";
+            case "calendar-link": return "fa-calendar";
+            case "calendar-view-day": return "fa-calendar";
+            case "calendar-view-month": return "fa-calendar";
+            case "calendar-view-week": return "fa-calendar";
+            case "calendar": return "fa-calendar";
+            case "camera-add": return "fa-camera";
+            case "camera-delete": return "fa-camera-retro";
+            case "camera-edit": return "fa-camera-retro";
+            case "camera-error": return "fa-camera-retro";
+            case "camera-go": return "fa-camera-retro";
+            case "camera-link": return "fa-camera-retro";
+            case "camera-small": return "fa-camera-retro";
+            case "camera": return "fa-camera-retro";
+            case "cancel": return "fa-times-circle";
+            case "car-add": return "fa-car";
+            case "car-delete": return "fa-car";
+            case "cart-add": return "fa-cart-plus";
+            case "cart-delete": return "fa-shopping-cart";
+            case "cart-edit": return "fa-shopping-cart";
+            case "cart-error": return "fa-shopping-cart";
+            case "cart-go": return "fa-shopping-cart";
+            case "cart-put": return "fa-cart-arrow-down";
+            case "cart-remove": return "fa-shopping-cart";
+            case "cart": return "fa-shopping-cart";
+            case "car": return "fa-car";
+            case "cd-add": return "fa-no hay";
+            case "cd-burn": return "fa-no hay";
+            case "cd-delete": return "fa-no hay";
+            case "cd-edit": return "fa-no hay";
+            case "cd-eject": return "fa-no hay";
+            case "cd-go": return "fa-no hay";
+            case "cd": return "fa-no hay";
+            case "chart-bar-add": return "fa-bar-chart";
+            case "chart-bar-delete": return "fa-bar-chart";
+            case "chart-bar-edit": return "fa-bar-chart";
+            case "chart-bar-error": return "fa-bar-chart";
+            case "chart-bar-link": return "fa-bar-chart";
+            case "chart-bar": return "fa-bar-chart";
+            case "chart-curve-add": return "fa-area-chart";
+            case "chart-curve-delete": return "fa-area-chart";
+            case "chart-curve-edit": return "fa-area-chart";
+            case "chart-curve-error": return "fa-area-chart";
+            case "chart-curve-go": return "fa-area-chart";
+            case "chart-curve-link": return "fa-area-chart";
+            case "chart-curve": return "fa-area-chart";
+            case "chart-line-add": return "fa-line-chart";
+            case "chart-line-delete": return "fa-line-chart";
+            case "chart-line-edit": return "fa-line-chart";
+            case "chart-line-error": return "fa-line-chart";
+            case "chart-line-link": return "fa-line-chart";
+            case "chart-line": return "fa-line-chart";
+            case "chart-organisation-add": return "fa-sitemap";
+            case "chart-organisation-delete": return "fa-sitemap";
+            case "chart-organisation": return "fa-sitemap";
+            case "chart-pie-add": return "fa-pie-chart";
+            case "chart-pie-delete": return "fa-pie-chart";
+            case "chart-pie-edit": return "fa-pie-chart";
+            case "chart-pie-error": return "fa-pie-chart";
+            case "chart-pie-link": return "fa-pie-chart";
+            case "chart-pie": return "fa-pie-chart";
+            case "chpass": return "fa-key";
+            case "clock-add": return "fa-clock-o";
+            case "clock-delete": return "fa-clock-o";
+            case "clock-edit": return "fa-clock-o";
+            case "clock-error": return "fa-clock-o";
+            case "clock-go": return "fa-clock-o";
+            case "clock-link": return "fa-clock-o";
+            case "clock-pause": return "fa-clock-o";
+            case "clock-play": return "fa-clock-o";
+            case "clock-red": return "fa-clock-o";
+            case "clock-stop": return "fa-clock-o";
+            case "clock": return "fa-clock-o";
+            case "cog-add": return "fa-cog";
+            case "cog-delete": return "fa-cog";
+            case "cog-edit": return "fa-cog";
+            case "cog-error": return "fa-cog";
+            case "cog-go": return "fa-cog";
+            case "cog": return "fa-cog";
+            case "coins-add": return "fa-Ver para que se usa?";
+            case "coins-delete": return "fa-Ver para que se usa?";
+            case "coins": return "fa-Ver para que se usa?";
+            case "color-swatch": return "fa-no hay";
+            case "color-wheel": return "fa-bullseye";
+            case "comment-add": return "fa-comment";
+            case "comment-delete": return "fa-comment";
+            case "comment-edit": return "fa-comment";
+            case "comments-add": return "fa-comments";
+            case "comments-delete": return "fa-comments";
+            case "comments": return "fa-comments";
+            case "comment": return "fa-comment";
+            case "compress": return "fa-compress";
+            case "computer-add": return "fa-laptop";
+            case "computer-delete": return "fa-laptop";
+            case "computer-edit": return "fa-laptop";
+            case "computer-error": return "fa-laptop";
+            case "computer-go": return "fa-laptop";
+            case "computer-key": return "fa-laptop";
+            case "computer-link": return "fa-laptop";
+            case "computer": return "fa-laptop";
+            case "connect": return "fa-link";
+            case "contact": return "fa-users";
+            case "contrast-decrease": return "fa-adjust";
+            case "contrast-high": return "fa-adjust";
+            case "contrast-increase": return "fa-adjust";
+            case "contrast-low": return "fa-adjust";
+            case "contrast": return "fa-adjust";
+            case "control-eject-blue": return "fa-eject blue";
+            case "control-eject": return "fa-eject";
+            case "control-end-blue": return "fa-step-forward";
+            case "control-end": return "fa-step-forward";
+            case "control-equalizer-blue": return "fa-folder";
+            case "control-equalizer": return "fa-folder";
+            case "control-fastforward-blue": return "fa-forward";
+            case "control-fastforward": return "fa-forward";
+            case "control-pause-blue": return "fa-pause";
+            case "control-pause": return "fa-pause";
+            case "control-play-blue": return "fa-play";
+            case "control-play": return "fa-play";
+            case "control-repeat-blue": return "fa-repeat";
+            case "control-repeat": return "fa-repeat";
+            case "control-rewind-blue": return "fa-backward";
+            case "control-rewind": return "fa-backward";
+            case "control-start-blue": return "fa-step-backward";
+            case "control-start": return "fa-step-backward";
+            case "control-stop-blue": return "fa-stop";
+            case "control-stop": return "fa-stop";
+            case "controller-add": return "fa-gamepad";
+            case "controller-delete": return "fa-gamepad";
+            case "controller-error": return "fa-gamepad";
+            case "controller": return "fa-gamepad";
+            case "controlpanel": return "fa-tachometer";
+            case "creditcards": return "fa-credit-card";
+            case "cross": return "fa-times";
+            case "css-add": return "fa-css3";
+            case "css-delete": return "fa-css3";
+            case "css-go": return "fa-css3";
+            case "css-valid": return "fa-css3";
+            case "css": return "fa-css3";
+            case "ctrpanel": return "fa-tachometer";
+            case "cup-add": return "fa-coffee";
+            case "cup-delete": return "fa-coffee";
+            case "cup-edit": return "fa-coffee";
+            case "cup-error": return "fa-coffee";
+            case "cup-go": return "fa-coffee";
+            case "cup-key": return "fa-coffee";
+            case "cup-link": return "fa-coffee";
+            case "cup": return "fa-coffee";
+            case "cursor": return "fa-hand-o-up";
+            case "cut-red": return "fa-scissors";
+            case "cut": return "fa-scissors";
+            case "database-add": return "fa-database";
+            case "database-connect": return "fa-database";
+            case "database-delete": return "fa-database";
+            case "database-edit": return "fa-database";
+            case "database-error": return "fa-database";
+            case "database-gear": return "fa-database";
+            case "database-go": return "fa-database";
+            case "database-key": return "fa-database";
+            case "database-lightning": return "fa-database";
+            case "database-link": return "fa-database";
+            case "database-refresh": return "fa-database";
+            case "database-save": return "fa-database";
+            case "database-table": return "fa-database";
+            case "database": return "fa-database";
+            case "date-add": return "fa-calendar-o";
+            case "date-delete": return "fa-calendar-o";
+            case "date-edit": return "fa-calendar-o";
+            case "date-error": return "fa-calendar-o";
+            case "date-go": return "fa-calendar-o";
+            case "date-link": return "fa-calendar-o";
+            case "date-magnify": return "fa-calendar-o";
+            case "date-next": return "fa-calendar-o";
+            case "date-previous": return "fa-calendar-o";
+            case "date": return "fa-calendar-o";
+            case "deck": return "fa-folder";
+            case "default": return "fa-folder";
+            case "delete": return "fa-minus-circle";
+            case "disconnect": return "fa-chain-broken";
+            case "disk-multiple": return "fa-floppy-o";
+            case "disk": return "fa-floppy-o";
+            case "dms": return "fa-files-o";
+            case "documentblack": return "fa-folder";
+            case "document": return "fa-file-o";
+            case "door-in": return "fa-folder";
+            case "door-open": return "fa-folder";
+            case "door-out": return "fa-folder";
+            case "door": return "fa-folder";
+            case "drink-empty": return "fa-glass";
+            case "drink": return "fa-glass";
+            case "drive-add": return "fa-hdd-o";
+            case "drive-burn": return "fa-hdd-o";
+            case "drive-cd-empty": return "fa-hdd-o";
+            case "drive-cd": return "fa-hdd-o";
+            case "drive-delete": return "fa-hdd-o";
+            case "drive-disk": return "fa-hdd-o";
+            case "drive-edit": return "fa-hdd-o";
+            case "drive-error": return "fa-hdd-o";
+            case "drive-go": return "fa-hdd-o";
+            case "drive-key": return "fa-hdd-o";
+            case "drive-link": return "fa-hdd-o";
+            case "drive-magnify": return "fa-hdd-o";
+            case "drive-network": return "fa-hdd-o";
+            case "drive-rename": return "fa-hdd-o";
+            case "drive-user": return "fa-hdd-o";
+            case "drive-web": return "fa-hdd-o";
+            case "drive": return "fa-hdd-o";
+            case "dvd-add": return "fa-folder";
+            case "dvd-delete": return "fa-folder";
+            case "dvd-edit": return "fa-folder";
+            case "dvd-error": return "fa-folder";
+            case "dvd-go": return "fa-folder";
+            case "dvd-key": return "fa-folder";
+            case "dvd-link": return "fa-folder";
+            case "dvd": return "fa-folder";
+            case "email-add": return "fa-envelope";
+            case "email-attach": return "fa-envelope";
+            case "email-delete": return "fa-envelope";
+            case "email-edit": return "fa-envelope";
+            case "email-error": return "fa-envelope";
+            case "email-go": return "fa-envelope";
+            case "email-link": return "fa-envelope";
+            case "email-link_open": return "fa-envelope";
+            case "email-open-image": return "fa-envelope";
+            case "email-open": return "fa-envelope";
+            case "email": return "fa-envelope";
+            case "emoticon-evilgrin": return "fa-folder";
+            case "emoticon-grin": return "fa-folder";
+            case "emoticon-happy": return "fa-folder";
+            case "emoticon-smile": return "fa-smile-o";
+            case "emoticon-surprised": return "fa-folder";
+            case "emoticon-tongue": return "fa-folder";
+            case "emoticon-unhappy": return "fa-frown-o";
+            case "emoticon-waii": return "fa-folder";
+            case "emoticon-wink": return "fa-folder";
+            case "error-add": return "fa-exclamation-triangle";
+            case "error-delete": return "fa-exclamation-triangle";
+            case "error-go": return "fa-exclamation-triangle";
+            case "error": return "fa-exclamation-triangle";
+            case "exclamation": return "fa-exclamation-circle red";
+            case "eye": return "fa-eye";
+            case "feed-add": return "fa-rss-square";
+            case "feed-delete": return "fa-rss-square";
+            case "feed-disk": return "fa-rss-square";
+            case "feed-edit": return "fa-rss-square";
+            case "feed-error": return "fa-rss-square";
+            case "feed-go": return "fa-rss-square";
+            case "feed-key": return "fa-rss-square";
+            case "feed-link": return "fa-rss-square";
+            case "feed-magnify": return "fa-rss-square";
+            case "feed": return "fa-rss-square";
+            case "female": return "fa-venus";
+            case "film-add": return "fa-film";
+            case "film-delete": return "fa-film";
+            case "film-edit": return "fa-film";
+            case "film-error": return "fa-film";
+            case "film-key": return "fa-film";
+            case "film-link": return "fa-film";
+            case "film-save": return "fa-film";
+            case "film": return "fa-film";
+            case "find": return "fa-binoculars";
+            case "flag-blue": return "fa-flag";
+            case "flag-green": return "fa-flag";
+            case "flag-orange": return "fa-flag";
+            case "flag-pink": return "fa-flag";
+            case "flag-purple": return "fa-flag";
+            case "flag-red": return "fa-flag";
+            case "flag-yellow": return "fa-flag";
+            case "folder-add": return "fa-folder";
+            case "folder-bell": return "fa-folder";
+            case "folder-brick": return "fa-folder";
+            case "folder-bug": return "fa-folder";
+            case "folder-camera": return "fa-folder";
+            case "folder-database": return "fa-folder";
+            case "folder-delete": return "fa-folder";
+            case "folder-edit": return "fa-folder";
+            case "folder-error": return "fa-folder";
+            case "folder-explore": return "fa-folder";
+            case "folder-feed": return "fa-folder";
+            case "folder-find": return "fa-folder";
+            case "folder-go": return "fa-folder";
+            case "folder-heart": return "fa-folder";
+            case "folder-image": return "fa-folder";
+            case "folder-key": return "fa-folder";
+            case "folder-lightbulb": return "fa-folder";
+            case "folder-link": return "fa-folder";
+            case "folder-magnify": return "fa-folder";
+            case "folder-page-white": return "fa-folder";
+            case "folder-page": return "fa-folder";
+            case "folder-palette": return "fa-folder";
+            case "folder-picture": return "fa-folder";
+            case "folder-star": return "fa-folder";
+            case "folder-table": return "fa-folder";
+            case "folder-user": return "fa-folder";
+            case "folder-wrench": return "fa-folder";
+            case "folder": return "fa-folder";
+            case "font-add": return "fa-font";
+            case "font-delete": return "fa-font";
+            case "font-go": return "fa-font";
+            case "font": return "fa-font";
+            case "formal": return "fa-folder";
+            case "group-add": return "fa-users";
+            case "group-delete": return "fa-users";
+            case "group-edit": return "fa-users";
+            case "group-error": return "fa-users";
+            case "group-gear": return "fa-users";
+            case "group-go": return "fa-users";
+            case "group-key": return "fa-users";
+            case "group-link": return "fa-users";
+            case "group": return "fa-users";
+            case "heart-add": return "fa-heart";
+            case "heart-delete": return "fa-heart";
+            case "heart": return "fa-heart";
+            case "help": return "fa-question-circle";
+            case "hourglass-add": return "fa-folder";
+            case "hourglass-delete": return "fa-folder";
+            case "hourglass-go": return "fa-folder";
+            case "hourglass-link": return "fa-folder";
+            case "hourglass": return "fa-folder";
+            case "house-go": return "fa-home";
+            case "house-link": return "fa-home";
+            case "house": return "fa-home";
+            case "html-add": return "fa-html5";
+            case "html-delete": return "fa-html5";
+            case "html-go": return "fa-html5";
+            case "html-valid": return "fa-html5";
+            case "html": return "fa-html5";
+            case "image-add": return "fa-picture-o";
+            case "image-delete": return "fa-picture-o";
+            case "image-edit": return "fa-picture-o";
+            case "image-link": return "fa-picture-o";
+            case "images": return "fa-picture-o";
+            case "image": return "fa-picture-o";
+            case "information": return "fa-info-circle";
+            case "ipod-cast-add": return "fa-headphones";
+            case "ipod-cast-delete": return "fa-headphones";
+            case "ipod-cast": return "fa-headphones";
+            case "ipod-sound": return "fa-headphones";
+            case "ipod-sound_open": return "fa-headphones";
+            case "ipod": return "fa-headphones";
+            case "joystick-add": return "fa-gamepad";
+            case "joystick-delete": return "fa-gamepad";
+            case "joystick-error": return "fa-gamepad";
+            case "joystick": return "fa-gamepad";
+            case "key-add": return "fa-key";
+            case "key-delete": return "fa-key";
+            case "key-go": return "fa-key";
+            case "keyboard-add": return "fa-keyboard-o";
+            case "keyboard-delete": return "fa-keyboard-o";
+            case "keyboard-magnify": return "fa-keyboard-o";
+            case "keyboard": return "fa-keyboard-o";
+            case "key": return "fa-key";
+            case "layers": return "fa-folder";
+            case "layout-add": return "fa-file-text?";
+            case "layout-content": return "fa-file-text?";
+            case "layout-delete": return "fa-file-text?";
+            case "layout-edit": return "fa-file-text?";
+            case "layout-error": return "fa-file-text?";
+            case "layout-header": return "fa-file-text?";
+            case "layout-link": return "fa-file-text?";
+            case "layout-sidebar": return "fa-file-text?";
+            case "layout": return "fa-file-text?";
+            case "license": return "fa-certificate";
+            case "license_open": return "fa-certificate";
+            case "lightbulb-add": return "fa-certificate";
+            case "lightbulb-delete": return "fa-lightbulb-o";
+            case "lightbulb-off": return "fa-lightbulb-o";
+            case "lightbulb": return "fa-lightbulb-o";
+            case "lightning-add": return "fa-bolt";
+            case "lightning-delete": return "fa-bolt";
+            case "lightning-go": return "fa-bolt";
+            case "lightning": return "fa-bolt";
+            case "link-add": return "fa-link";
+            case "link-break": return "fa-link";
+            case "link-delete": return "fa-link";
+            case "link-edit": return "fa-link";
+            case "link-error": return "fa-link";
+            case "link-go": return "fa-link";
+            case "link": return "fa-link";
+            case "lock-add": return "fa-lock";
+            case "lock-break": return "fa-unlock-alt";
+            case "lock-delete": return "fa-lock";
+            case "lock-edit": return "fa-lock";
+            case "lock-go": return "fa-lock";
+            case "lock-open": return "fa-unlock";
+            case "lock": return "fa-lock";
+            case "lorry-add": return "fa-truck";
+            case "lorry-delete": return "fa-truck";
+            case "lorry-error": return "fa-truck";
+            case "lorry-flatbed": return "fa-truck";
+            case "lorry-go": return "fa-truck";
+            case "lorry-link": return "fa-truck";
+            case "lorry": return "fa-truck";
+            case "magifier-zoom-out": return "fa-search-minus";
+            case "magnifier-zoom-in": return "fa-search-plus";
+            case "magnifier": return "fa-search";
+            case "male": return "fa-mars";
+            case "map-add": return "fa-globe";
+            case "map-delete": return "fa-globe";
+            case "map-edit": return "fa-globe";
+            case "map-go": return "fa-globe";
+            case "map-magnify": return "fa-globe";
+            case "map": return "fa-globe";
+            case "medal-bronze-1": return "fa-certificate bronze";
+            case "medal-bronze-2": return "fa-certificate bronze";
+            case "medal-bronze-3": return "fa-certificate bronze";
+            case "medal-bronze-add": return "fa-certificate bronze";
+            case "medal-bronze-delete": return "fa-certificate bronze";
+            case "medal-gold-1": return "fa-certificate gold";
+            case "medal-gold-2": return "fa-certificate gold";
+            case "medal-gold-3": return "fa-certificate gold";
+            case "medal-gold-add": return "fa-certificate gold";
+            case "medal-gold-delete": return "fa-certificate gold";
+            case "medal-silver-1": return "fa-certificate silver";
+            case "medal-silver-2": return "fa-certificate silver";
+            case "medal-silver-3": return "fa-certificate silver";
+            case "medal-silver-add": return "fa-certificate silver";
+            case "medal-silver-delete": return "fa-certificate silver";
+            case "money-add": return "fa-money";
+            case "money-delete": return "fa-money";
+            case "money-dollar": return "fa-usd";
+            case "money-euro": return "fa-eur";
+            case "money-pound": return "fa-gbp";
+            case "money-yen": return "fa-yen";
+            case "money": return "fa-money green";
+            case "monitor-add": return "fa-desktop";
+            case "monitor-delete": return "fa-desktop";
+            case "monitor-edit": return "fa-desktop";
+            case "monitor-error": return "fa-desktop";
+            case "monitor-go": return "fa-desktop";
+            case "monitor-lightning": return "fa-desktop";
+            case "monitor-link": return "fa-desktop";
+            case "monitor": return "fa-desktop";
+            case "mouse-add": return "fa-folder";
+            case "mouse-delete": return "fa-folder";
+            case "mouse-error": return "fa-folder";
+            case "mouse": return "fa-folder";
+            case "music": return "fa-music";
+            case "newspaper-add": return "fa-newspaper-o";
+            case "newspaper-delete": return "fa-newspaper-o";
+            case "newspaper-go": return "fa-newspaper-o";
+            case "newspaper-link": return "fa-newspaper-o";
+            case "newspaper": return "fa-newspaper-o";
+            case "new": return "fa-?";
+            case "note-add": return "fa-?";
+            case "note-delete": return "fa-?";
+            case "note-edit": return "fa-pencil-square-o";
+            case "note-error": return "fa-?";
+            case "note-go": return "fa-file?";
+            case "note": return "fa-file";
+            case "opportunity": return "fa-folder";
+            case "overlays": return "fa-folder";
+            case "package-add": return "fa-archive";
+            case "package-delete": return "fa-archive";
+            case "package-go": return "fa-archive";
+            case "package-green": return "fa-archive green";
+            case "package-link": return "fa-archive";
+            case "package": return "fa-archive";
+            case "page-add": return "fa-file-o";
+            case "page-attach": return "fa-paperclip";
+            case "page-code": return "fa-file-code-o";
+            case "page-copy": return "fa-files-o";
+            case "page-delete": return "fa-file-o";
+            case "page-edit": return "fa-file-o";
+            case "page-error": return "fa-file-o";
+            case "page-excel": return "fa-file-excel-o";
+            case "page-find": return "fa-file-o";
+            case "page-gear": return "fa-file-o";
+            case "page-go": return "fa-file-o";
+            case "page-green": return "fa-file-o";
+            case "page-key": return "fa-file-o";
+            case "page-lightning": return "fa-file-o";
+            case "page-link": return "fa-file-o";
+            case "page-paintbrush": return "fa-file-o";
+            case "page-paste": return "fa-clipboard";
+            case "page-red": return "fa-file-o";
+            case "page-refresh": return "fa-file-o";
+            case "page-save": return "fa-floppy-o";
+            case "page-white-acrobat": return "fa-file-pdf-o";
+            case "page-white-actionscript": return "fa-file-code-o";
+            case "page-white-add": return "fa-folder";
+            case "page-white-camera": return "fa-file-video-o";
+            case "page-white-cd": return "fa-folder";
+            case "page-white-code-red": return "fa-file-code-o red";
+            case "page-white-code": return "fa-file-code-o blue";
+            case "page-white-coldfusion": return "fa-folder";
+            case "page-white-compressed": return "fa-file-archive-o";
+            case "page-white-copy": return "fa-folder";
+            case "page-white-cplusplus": return "fa-file-code-o";
+            case "page-white-csharp": return "fa-file-code-o";
+            case "page-white-cup": return "fa-folder";
+            case "page-white-c": return "fa-file-code-o";
+            case "page-white-database": return "fa-folder";
+            case "page-white-delete": return "fa-folder";
+            case "page-white-dvd": return "fa-folder";
+            case "page-white-edit": return "fa-folder";
+            case "page-white-error": return "fa-folder";
+            case "page-white-excel": return "fa-file-excel-o";
+            case "page-white-find": return "fa-folder";
+            case "page-white-flash": return "fa-folder";
+            case "page-white-freehand": return "fa-folder";
+            case "page-white-gear": return "fa-folder";
+            case "page-white-get": return "fa-folder";
+            case "page-white-go": return "fa-folder";
+            case "page-white-horizontal": return "fa-folder";
+            case "page-white-h": return "fa-folder";
+            case "page-white-key": return "fa-folder";
+            case "page-white-lightning": return "fa-folder";
+            case "page-white-link": return "fa-folder";
+            case "page-white-magnify": return "fa-folder";
+            case "page-white-medal": return "fa-folder";
+            case "page-white-office": return "fa-folder";
+            case "page-white-paintbrush": return "fa-folder";
+            case "page-white-paint": return "fa-folder";
+            case "page-white-paste": return "fa-clipboard";
+            case "page-white-php": return "fa-file-code-o";
+            case "page-white-picture": return "fa-file-image-o";
+            case "page-white-powerpoint": return "fa-file-powerpoint-o";
+            case "page-white-put": return "fa-folder";
+            case "page-white-ruby": return "fa-folder";
+            case "page-white-stack": return "fa-folder";
+            case "page-white-star": return "fa-folder";
+            case "page-white-swoosh": return "fa-folder";
+            case "page-white-text-width": return "fa-folder";
+            case "page-white-text": return "fa-folder";
+            case "page-white-tux": return "fa-folder";
+            case "page-white-vector": return "fa-folder";
+            case "page-white-visualstudio": return "fa-file-code-o";
+            case "page-white-width": return "fa-folder";
+            case "page-white-word": return "fa-file-word-o";
+            case "page-white-world": return "fa-folder";
+            case "page-white-wrench": return "fa-folder";
+            case "page-white-zip": return "fa-file-archive-o";
+            case "page-white": return "fa-file";
+            case "page-word": return "fa-file-word-o";
+            case "page-world": return "fa-folder";
+            case "page": return "fa-folder";
+            case "paintbrush": return "fa-paint-brush";
+            case "paintcan": return "fa-folder";
+            case "palette": return "fa-paint-brush";
+            case "paste-plain": return "fa-clipboard";
+            case "paste-word": return "fa-clipboard";
+            case "pencil-add": return "fa-pencil";
+            case "pencil-delete": return "fa-pencil";
+            case "pencil-go": return "fa-pencil";
+            case "pencil": return "fa-pencil";
+            case "people": return "fa-users";
+            case "phone-add": return "fa-phone-square";
+            case "phone-delete": return "fa-phone-square";
+            case "phone-sound": return "fa-phone-square";
+            case "phone": return "fa-phone-square";
+            case "photo-add": return "fa-picture-o";
+            case "photo-delete": return "fa-picture-o";
+            case "photo-link": return "fa-picture-o";
+            case "photos": return "fa-picture-o";
+            case "photo": return "fa-picture-o";
+            case "picture-add": return "fa-file-image-o";
+            case "picture-delete": return "fa-file-image-o";
+            case "picture-edit": return "fa-file-image-o";
+            case "picture-empty": return "fa-file-image-o";
+            case "picture-error": return "fa-file-image-o";
+            case "picture-go": return "fa-file-image-o";
+            case "picture-key": return "fa-file-image-o";
+            case "picture-link": return "fa-file-image-o";
+            case "picture-save": return "fa-file-image-o";
+            case "pictures": return "fa-file-image-o";
+            case "picture": return "fa-file-image-o";
+            case "pilcrow": return "fa-paragraph";
+            case "pill-add": return "fa-medkit";
+            case "pill-delete": return "fa-medkit";
+            case "pill-go": return "fa-medkit";
+            case "pill": return "fa-medkit";
+            case "plugin-add": return "fa-puzzle-piece";
+            case "plugin-delete": return "fa-puzzle-piece";
+            case "plugin-disabled": return "fa-puzzle-piece";
+            case "plugin-edit": return "fa-puzzle-piece";
+            case "plugin-error": return "fa-puzzle-piece";
+            case "plugin-go": return "fa-puzzle-piece";
+            case "plugin-link": return "fa-puzzle-piece";
+            case "plugin": return "fa-puzzle-piece";
+            case "printer-add": return "fa-print";
+            case "printer-delete": return "fa-print";
+            case "printer-empty": return "fa-print";
+            case "printer-error": return "fa-print";
+            case "printer": return "fa-print";
+            case "rainbow": return "fa-folder";
+            case "report-add": return "fa-list-alt";
+            case "report-delete": return "fa-list-alt";
+            case "report-disk": return "fa-list-alt";
+            case "report-edit": return "fa-list-alt";
+            case "report-go": return "fa-list-alt";
+            case "report-key": return "fa-list-alt";
+            case "report-link": return "fa-list-alt";
+            case "report-magnify": return "fa-list-alt";
+            case "report-picture": return "fa-list-alt";
+            case "report-user": return "fa-list-alt";
+            case "report-word": return "fa-list-alt";
+            case "report": return "fa-list-alt";
+            case "resultset-first": return "fa-step-backward";
+            case "resultset-last": return "fa-step-forward";
+            case "resultset-next": return "fa-chevron-circle-right";
+            case "resultset-previous": return "fa-chevron-circle-left";
+            case "rosette": return "fa-certificate";
+            case "rss-add": return "fa-rss";
+            case "rss-delete": return "fa-rss";
+            case "rss-go": return "fa-rss";
+            case "rss-valid": return "fa-rss";
+            case "rss": return "fa-rss";
+            case "ruby-add": return "fa-diamond red";
+            case "ruby-delete": return "fa-diamond red";
+            case "ruby-gear": return "fa-diamond red";
+            case "ruby-get": return "fa-diamond red";
+            case "ruby-go": return "fa-diamond red";
+            case "ruby-key": return "fa-diamond red";
+            case "ruby-link": return "fa-diamond red";
+            case "ruby-put": return "fa-diamond red";
+            case "ruby": return "fa-diamond red";
+            case "sales": return "fa-envelope";
+            case "script-add": return "fa-file-code-o";
+            case "script-code-red": return "fa-file-code-o";
+            case "script-code": return "fa-file-code-o";
+            case "script-delete": return "fa-file-code-o";
+            case "script-edit": return "fa-file-code-o";
+            case "script-error": return "fa-file-code-o";
+            case "script-gear": return "fa-file-code-o";
+            case "script-go": return "fa-file-code-o";
+            case "script-key": return "fa-file-code-o";
+            case "script-lightning": return "fa-file-code-o";
+            case "script-link": return "fa-file-code-o";
+            case "script-palette": return "fa-file-code-o";
+            case "script-save": return "fa-file-code-o";
+            case "script": return "fa-file-code-o";
+            case "server-add": return "fa-server";
+            case "server-chart": return "fa-server";
+            case "server-compressed": return "fa-server";
+            case "server-connect": return "fa-server";
+            case "server-database": return "fa-server";
+            case "server-delete": return "fa-server";
+            case "server-edit": return "fa-server";
+            case "server-error": return "fa-server";
+            case "server-go": return "fa-server";
+            case "server-key": return "fa-server";
+            case "server-lightning": return "fa-server";
+            case "server-link": return "fa-server";
+            case "server-uncompressed": return "fa-server";
+            case "server": return "fa-server";
+            case "service": return "fa-cogs";
+            case "shading": return "fa-folder";
+            case "shape-align-bottom": return "fa-folder";
+            case "shape-align-center": return "fa-align-center";
+            case "shape-align-left": return "fa-align-left";
+            case "shape-align-middle": return "fa-folder";
+            case "shape-align-right": return "fa-align-right";
+            case "shape-align-top": return "fa-folder";
+            case "shape-flip-horizontal": return "fa-folder";
+            case "shape-flip-vertical": return "fa-folder";
+            case "shape-group": return "fa-folder";
+            case "shape-handles": return "fa-folder";
+            case "shape-move-backwards": return "fa-folder";
+            case "shape-move-back": return "fa-folder";
+            case "shape-move-forwards": return "fa-folder";
+            case "shape-move-front": return "fa-folder";
+            case "shape-rotate-anticlockwise": return "fa-repeat";
+            case "shape-rotate-clockwise": return "fa-undo";
+            case "shape-square-add": return "fa-folder";
+            case "shape-square-delete": return "fa-folder";
+            case "shape-square-edit": return "fa-folder";
+            case "shape-square-error": return "fa-folder";
+            case "shape-square-go": return "fa-folder";
+            case "shape-square-key": return "fa-folder";
+            case "shape-square-link": return "fa-folder";
+            case "shape-square": return "fa-square";
+            case "shape-ungroup": return "fa-folder";
+            case "sharedfolder": return "fa-folderpen";
+            case "shield-add": return "fa-shield";
+            case "shield-delete": return "fa-shield";
+            case "shield-go": return "fa-shield";
+            case "shield": return "fa-shield";
+            case "shutdown": return "fa-power-off red";
+            case "sitemap-color": return "fa-sitemap";
+            case "sitemap": return "fa-sitemap";
+            case "sound-add": return "fa-volume-up";
+            case "sound-delete": return "fa-volume-down";
+            case "sound-low": return "fa-volume-down";
+            case "sound-mute": return "fa-volume-off";
+            case "sound-none": return "fa-volume-off";
+            case "sound": return "fa-volume-off";
+            case "spellcheck": return "fa-folder";
+            case "sport-8ball": return "fa-folder";
+            case "sport-basketball": return "fa-dribbble";
+            case "sport-football": return "fa-futbol-o";
+            case "sport-golf": return "fa-folder";
+            case "sport-raquet": return "fa-folder";
+            case "sport-shuttlecock": return "fa-folder";
+            case "sport-soccer": return "fa-futbol-o";
+            case "sport-tennis": return "fa-folder";
+            case "star": return "fa-star";
+            case "status-away": return "fa-folder";
+            case "status-busy": return "fa-user red";
+            case "status-offline": return "fa-user gray";
+            case "status-online": return "fa-user green";
+            case "stop": return "fa-times-circle";
+            case "style-add": return "fa-font";
+            case "style-delete": return "fa-font";
+            case "style-edit": return "fa-font";
+            case "style-go": return "fa-font";
+            case "style": return "fa-font";
+            case "sum": return "fa-folder";
+            case "systemasyncevent": return "fa-clock-o";
+            case "systemconnections": return "fa-link";
+            case "systemcustomfolder": return "fa-folder";
+            case "systemforms": return "fa-list-alt";
+            case "systemsettingsmanager": return "fa-wrench";
+            case "tab-add": return "fa-folder";
+            case "tab-delete": return "fa-folder";
+            case "tab-edit": return "fa-folder";
+            case "tab-go": return "fa-folder";
+            case "table-add": return "fa-table";
+            case "table-delete": return "fa-table";
+            case "table-edit": return "fa-table";
+            case "table-error": return "fa-table";
+            case "table-gear": return "fa-table";
+            case "table-go": return "fa-table";
+            case "table-key": return "fa-table";
+            case "table-lightning": return "fa-table";
+            case "table-link": return "fa-table";
+            case "table-multiple": return "fa-table";
+            case "table-refresh": return "fa-table";
+            case "table-relationship": return "fa-table";
+            case "table-row-delete": return "fa-table";
+            case "table-row-insert": return "fa-table";
+            case "table-save": return "fa-table";
+            case "table-sort": return "fa-table";
+            case "table": return "fa-table";
+            case "tab": return "fa-tag";
+            case "tag-blue-add": return "fa-tag blue";
+            case "tag-blue-delete": return "fa-tag blue";
+            case "tag-blue-edit": return "fa-tag blue";
+            case "tag-blue": return "fa-tag blue";
+            case "tag-green": return "fa-tag green";
+            case "tag-orange": return "fa-tag orange";
+            case "tag-pink": return "fa-tag pink";
+            case "tag-purple": return "fa-tag purple";
+            case "tag-red": return "fa-tag red";
+            case "tag-yellow": return "fa-tag yellow";
+            case "tag": return "fa-tag";
+            case "task": return "fa-pencil-square-o";
+            case "telephone-add": return "fa-phone";
+            case "telephone-delete": return "fa-phone";
+            case "telephone-edit": return "fa-phone";
+            case "telephone-error": return "fa-phone";
+            case "telephone-go": return "fa-phone";
+            case "telephone-key": return "fa-phone";
+            case "telephone-link": return "fa-phone";
+            case "telephone": return "fa-phone";
+            case "television-add": return "fa-desktop";
+            case "television-delete": return "fa-desktop";
+            case "television": return "fa-desktop";
+            case "text-align-center": return "fa-align-center";
+            case "text-align-justify": return "fa-align-justify";
+            case "text-align-left": return "fa-align-left";
+            case "text-align-right": return "fa-align-right";
+            case "text-allcaps": return "fa-folder";
+            case "text-bold": return "fa-bold";
+            case "text-columns": return "fa-columns";
+            case "text-dropcaps": return "fa-folder";
+            case "text-heading-1": return "fa-folder";
+            case "text-heading-2": return "fa-folder";
+            case "text-heading-3": return "fa-folder";
+            case "text-heading-4": return "fa-folder";
+            case "text-heading-5": return "fa-folder";
+            case "text-heading-6": return "fa-folder";
+            case "text-horizontalrule": return "fa-folder";
+            case "text-indent-remove": return "fa-outdent";
+            case "text-indent": return "fa-indent";
+            case "text-italic": return "fa-italic";
+            case "text-kerning": return "fa-folder";
+            case "text-letter-omega": return "fa-folder";
+            case "text-letterspacing": return "fa-text-width";
+            case "text-linespacing": return "fa-text-height";
+            case "text-list-bullets": return "fa-list";
+            case "text-list-numbers": return "fa-list-ol";
+            case "text-lowercase": return "fa-folder";
+            case "text-padding-bottom": return "fa-folder";
+            case "text-padding-left": return "fa-folder";
+            case "text-padding-right": return "fa-folder";
+            case "text-padding-top": return "fa-folder";
+            case "text-replace": return "fa-folder";
+            case "text-signature": return "fa-pencil-square";
+            case "text-smallcaps": return "fa-folder";
+            case "text-strikethrough": return "fa-strikethrough";
+            case "text-subscript": return "fa-subscript";
+            case "text-superscript": return "fa-superscript";
+            case "text-underline": return "fa-underline";
+            case "text-uppercase": return "fa-folder";
+            case "textfield-add": return "fa-folder";
+            case "textfield-delete": return "fa-folder";
+            case "textfield-key": return "fa-folder";
+            case "textfield-rename": return "fa-folder";
+            case "textfield": return "fa-folder";
+            case "textfield_open": return "fa-folder";
+            case "thumb-down": return "fa-thumbs-down";
+            case "thumb-up": return "fa-thumbs-up";
+            case "tick": return "fa-check";
+            case "time-add": return "fa-clock-o";
+            case "time-delete": return "fa-clock-o";
+            case "time-go": return "fa-clock-o";
+            case "timeline-marker": return "fa-folder";
+            case "time": return "fa-clock-o";
+            case "transmit-add": return "fa-wifi";
+            case "transmit-blue": return "fa-wifi";
+            case "transmit-delete": return "fa-wifi";
+            case "transmit-edit": return "fa-wifi";
+            case "transmit-error": return "fa-wifi";
+            case "transmit-go": return "fa-wifi";
+            case "transmit": return "fa-wifi";
+            case "tux": return "fa-linux";
+            case "user-add": return "fa-user-plus";
+            case "user-comment": return "fa-comment";
+            case "user-delete": return "fa-user-times";
+            case "user-edit": return "fa-user";
+            case "user-female": return "fa-female";
+            case "user-go": return "fa-user";
+            case "user-gray": return "fa-user";
+            case "user-green": return "fa-user";
+            case "user-orange": return "fa-user";
+            case "user-red": return "fa-user";
+            case "user-suit": return "fa-user";
+            case "user": return "fa-user";
+            case "vcard-add": return "fa-folder";
+            case "vcard-delete": return "fa-folder";
+            case "vcard-edit": return "fa-folder";
+            case "vcard": return "fa-folder";
+            case "vector-add": return "fa-folder";
+            case "vector-delete": return "fa-folder";
+            case "vector": return "fa-folder";
+            case "virtualfolder": return "fa-external-link???";
+            case "wand": return "fa-magic";
+            case "weather-clouds": return "fa-cloud";
+            case "weather-cloudy": return "fa-cloud";
+            case "weather-lightning": return "fa-bolt";
+            case "weather-rain": return "fa-tint blue";
+            case "weather-snow": return "fa-folder";
+            case "weather-sun": return "fa-sun-o";
+            case "webcam-add": return "fa-video-camera";
+            case "webcam-delete": return "fa-video-camera";
+            case "webcam-error": return "fa-video-camera";
+            case "webcam": return "fa-video-camera";
+            case "world-add": return "fa-globe";
+            case "world-delete": return "fa-globe";
+            case "world-edit": return "fa-globe";
+            case "world-go": return "fa-globe";
+            case "world-link": return "fa-globe";
+            case "world": return "fa-globe";
+            case "wrench-orange": return "fa-wrench";
+            case "wrench": return "fa-wrench";
+            case "xhtml-add": return "fa-code";
+            case "xhtml-delete": return "fa-code";
+            case "xhtml-go": return "fa-code";
+            case "xhtml-valid": return "fa-code";
+            case "xhtml": return "fa-code";
+            case "zoom-in": return "fa-search-plus";
+            case "zoom-out": return "fa-search-minus";
+            case "zoom": return "fa-search";
+            default: return "fa-folder";
         }
     };
     this.getFormattedValueString = function (format, value) {
@@ -2736,129 +1774,109 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
                     return "";
                 }
                 var n = value,
-                    c = 2, //isNaN(c = Math.abs(c)) ? 2 : c,
-                    d = ",", //d == undefined ? "." : d,
-                    t = ".", //t == undefined ? "," : t,
-                    s = n < 0 ? "-" : "",
-                    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
-                    j = (j = i.length) > 3 ? j % 3 : 0;
+                c = 2,//isNaN(c = Math.abs(c)) ? 2 : c,
+                d = ",", //d == undefined ? "." : d,
+                t = ".", //t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
                 return s + "$ " + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
                 //return "$ " + this.roundNumber(value, 2).toFixed(2).toLocaleString();
-            }
-            break;
-        case "numeric": {
-            if (!this.isNumber(value)) {
-                return "";
-            }
-            return this.roundNumber(value, 2).toLocaleString();
+            } break;
+            case "numeric": {
+                if (!this.isNumber(value)) {
+                    return "";
+                }
+                return this.roundNumber(value, 2).toLocaleString();
+            } break;
+            case "percentage": {
+                if (!this.isNumber(value)) {
+                    return "";
+                }
+                return this.roundNumber(value, 2).toLocaleString() + "%";
+            } break;
+            case "date": {
+                if (value == null || value == "") return "";
+                var day = value.getDate() < 10 ? "0" + value.getDate() : value.getDate();
+                var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+                var dateString = day + "/" + month + "/" + value.getFullYear();
+                return dateString;
+            } break;
+            case "dateinverted": {
+                if (value == null || value == "") return "";
+                var day = value.getDate() < 10 ? "0" + value.getDate() : value.getDate();
+                var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+                var dateString = value.getFullYear() + "/" + month + "/" + day;
+                return dateString;
+            } break;
+            case "monthyear": {
+                if (value == null || value == "") return "";
+                var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+                var dateString = month + "/" + value.getFullYear();
+                return dateString;
+            } break;
+            case "monthyeardash": {
+                if (value == null || value == "") return "";
+                var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+                var dateString = month + "-" + value.getFullYear();
+                return dateString;
+            } break;
+            case "yearmonth": {
+                if (value == null || value == "") return "";
+                var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+                var dateString = value.getFullYear() + "/" + month;
+                return dateString;
+            } break;
+            case "yearmonthdash": {
+                if (value == null || value == "") return "";
+                var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+                var dateString = value.getFullYear() + "-" + month;
+                return dateString;
+            } break;
+            case "year": {
+                if (value == null || value == "") return "";
+                var dateString = value.getFullYear();
+                return dateString;
+            } break;
+            case "timeonly": {
+                if (value == null || value == "") return "";
+                var hoursString = ("0" + value.getHours()).slice(-2) + ":" + ("0" + value.getMinutes()).slice(-2) + ":" + ("0" + value.getSeconds()).slice(-2);
+                return hoursString;
+            } break;
+            default:
+                {
+                    return value;
+                }
         }
-        break;
-        case "percentage": {
-            if (!this.isNumber(value)) {
-                return "";
-            }
-            return this.roundNumber(value, 2).toLocaleString() + "%";
-        }
-        break;
-        case "date": {
-            if (value == null || value == "") return "";
-            var day = value.getDate() < 10 ? "0" + value.getDate() : value.getDate();
-            var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
-            var dateString = day + "/" + month + "/" + value.getFullYear();
-            return dateString;
-        }
-        break;
-        case "dateinverted": {
-            if (value == null || value == "") return "";
-            var day = value.getDate() < 10 ? "0" + value.getDate() : value.getDate();
-            var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
-            var dateString = value.getFullYear() + "/" + month + "/" + day;
-            return dateString;
-        }
-        break;
-        case "monthyear": {
-            if (value == null || value == "") return "";
-            var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
-            var dateString = month + "/" + value.getFullYear();
-            return dateString;
-        }
-        break;
-        case "monthyeardash": {
-            if (value == null || value == "") return "";
-            var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
-            var dateString = month + "-" + value.getFullYear();
-            return dateString;
-        }
-        break;
-        case "yearmonth": {
-            if (value == null || value == "") return "";
-            var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
-            var dateString = value.getFullYear() + "/" + month;
-            return dateString;
-        }
-        break;
-        case "yearmonthdash": {
-            if (value == null || value == "") return "";
-            var month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
-            var dateString = value.getFullYear() + "-" + month;
-            return dateString;
-        }
-        break;
-        case "year": {
-            if (value == null || value == "") return "";
-            var dateString = value.getFullYear();
-            return dateString;
-        }
-        break;
-        case "timeonly": {
-            if (value == null || value == "") return "";
-            var hoursString = ("0" + value.getHours()).slice(-2) + ":" + ("0" + value.getMinutes()).slice(-2) + ":" + ("0" + value.getSeconds()).slice(-2);
-            return hoursString;
-        }
-        break;
-        default: {
-            return value;
-        }
-        }
-
+        
     };
-    //Obtiene el locale en base a la configuracion de idioma del usuario.
+    //Obtiene el locale en base a la configuración de idioma del usuario.
     //Por el momento 4 soportados, sino toma automaticamente es
     this.getLocaleFromUserLngId = function (lngId) {
         switch (lngId) {
-            case 3082:
-                return "es";
-            case 2052:
-                return "zh-cn";
-            case 1033:
-                return "en";
-            case 2070:
-                return "pt-br";
-            default:
-                return "es";
+            case 3082: return "es";
+            case 2052: return "zh-cn";
+            case 1033: return "en";
+            case 2070: return "pt-br";
+            default: return "es";
         }
     };
     this.getJqueryLocaleFromUserLngId = function (lngId) {
         switch (lngId) {
-            case 3082:
-                return "es";
-            case 2052:
-                return "zh-TW";
-            case 1033:
-                return "en";
-            case 2070:
-                return "pt-BR";
-            default:
-                return "es";
+            case 3082: return "es";
+            case 2052: return "zh-TW";
+            case 1033: return "en";
+            case 2070: return "pt-BR";
+            default: return "es";
         }
     };
-    this.setCookie = function (cname, cvalue, hours) {
+    this.setCookie = function(cname, cvalue, hours) {
         var d = new Date();
         d.setTime(d.getTime() + (hours * 60 * 60 * 1000));
         var expires = "expires=" + d.toUTCString();
         document.cookie = cname + "=" + cvalue + "; " + expires;
     }
-    this.getCookie = function (cname) {
+    this.getCookie = function(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -2868,6 +1886,15 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         }
         return "";
     }
+    this.newGuid = function () {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    };
 }).apply(Gestar.Tools);
 
 (function () {
@@ -2879,7 +1906,8 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
             var text = "";
             if (item.hasOwnProperty(valuePropery)) {
                 value = item[valuePropery];
-            } else {
+            }
+            else {
                 Gestar.Tools.dp("Object doesn't have the value property: " + valuePropery + ". Gestar.HtmlTools.getSelectOptions.");
             }
             if (Object.prototype.toString.call(textProperty) == "[object String]") {
@@ -2911,7 +1939,7 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
 }).apply(Gestar.HtmlTools);
 
 (function () {
-    this.ExceptionObject = function () {
+    this.ExceptionObject = function() {
         this.Type = Gestar.REST.ResponseResultEnum.Exception;
         this.Message = "";
         this.DoorsExceptionType = "";
@@ -2920,11 +1948,12 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
     this.handleSessionExpired = function () {
         top.location = Gestar.Tools.url("/auth/login");
     };
-    this.handledServiceError = function () {};
-    this.unhandledServiceError = function (exObj) {
+    this.handledServiceError = function() {
+    };
+    this.unhandledServiceError = function(exObj) {
         alert("Metodo: " + exObj.Method + " Mensaje: " + exObj.Message);
     };
-    this.displayHandledError = function (exObj) {
+    this.displayHandledError = function(exObj) {
         //TODO Hacer algo relativamente presentable
         alert("Error: " + exObj.Message);
     };
@@ -2933,14 +1962,14 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
 (function () {
     //Funcion que busca todos los elementos con el attributo [lang-str] y [lang-str-tt](para tooltips) 
     //y le da el valor del respectivo langstring que tenga como valor ese atributo
-    this.fillLangstrings = function () {
+    this.fillLangstrings = function() {
         resolveLangStrings(jQuery("[lang-str]"));
         resolveToolTips(jQuery("[lang-str-tt]"));
         resolvePlaceholders(jQuery("[lang-str-ph]"));
     };
     //Funcion que procesa los langstring de un elemento con el attributo [lang-str] y [lang-str-tt](para tooltips) 
     //y le da el valor del respectivo langstring que tenga como valor ese atributo
-    this.processLangStrings = function (element) {
+    this.processLangStrings = function(element) {
         var ele = element.find("[lang-str]");
         resolveLangStrings(ele);
         var eme = element.find("[lang-str-tt]");
@@ -2950,8 +1979,8 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
     };
     //Funcion que procesa los langstring de una x cantidad de elementos con el attributo [lang-str] 
     //y le da el valor del respectivo langstring que tenga como valor ese atributo
-    var resolveLangStrings = function (elements) {
-        jQuery.each(elements, function (index, elem) {
+    var resolveLangStrings = function(elements) {
+        jQuery.each(elements, function(index, elem) {
             var langStringId = jQuery(elem).attr("lang-str");
             var result = Gestar.Tools.StringsHelper.getLangstring(langStringId);
             try {
@@ -2960,18 +1989,20 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
                 } else {
                     jQuery(elem).text(result);
                 }
-            } catch (ex) {}
+            } catch(ex) {
+            }
         });
     };
     //Funcion que procesa los langstring de una x cantidad de elementos con el attributo [lang-str-tt](para tooltips) 
     //y le da el valor al tooltip del respectivo langstring que tenga como valor ese atributo
-    var resolveToolTips = function (tooltipElements) {
-        jQuery.each(tooltipElements, function (index, ttElem) {
+    var resolveToolTips = function(tooltipElements) {
+        jQuery.each(tooltipElements, function(index, ttElem) {
             var langStringId = jQuery(ttElem).attr("lang-str-tt");
             var result = Gestar.Tools.StringsHelper.getLangstring(langStringId);
             try {
                 jQuery(ttElem).attr("title", result);
-            } catch (ex) {}
+            } catch(ex) {
+            }
         });
     };
 
@@ -2981,25 +2012,26 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
             var result = Gestar.Tools.StringsHelper.getLangstring(langStringId);
             try {
                 jQuery(ttElem).attr("placeholder", result);
-            } catch (ex) {}
+            } catch (ex) {
+            }
         });
     };
 
     //Funcion que obtiene un string de la base de datos master. Sirve para obtener strings sin estar logueado
-    this.getMasterLangstring = function (stringId, success) {
+    this.getMasterLangstring = function(stringId,success) {
         var stringValue = "";
         Gestar.REST.asyncCall("GetMasterLangString", "GET", "stringId=" + stringId, "", success);
         return stringValue;
     };
     //Funcion que obtiene strings por el id de la base instancia
-    this.getLangstring = function (stringId) {
+    this.getLangstring = function(stringId) {
         var stringValue = "[String not found: " + stringId + "]";
         //var start = new Date().getTime();
         if (window.userLangStrings != undefined && window.userLangStrings != null) {
             if (window.userLangStrings[stringId]) {
                 stringValue = window.userLangStrings[stringId];
             }
-            /*var string = jQuery.grep(window.userLangStrings, function (sysString) { return sysString.StrId == stringId; });
+            /*var string = $.grep(window.userLangStrings, function (sysString) { return sysString.StrId == stringId; });
             //var end = new Date().getTime();
             //var span = end - start;
             if (string.length > 0) {
@@ -3014,8 +2046,8 @@ Gestar.View = Gestar.View || {};
 Gestar.View.DataProviderBase = function () {
     this.View = null;
     this.ViewId = -1;
-    this.getData = function (groupValues, success, error) {};
-    this.getParameter = function (groupValues) {};
+    this.getData = function (groupValues, success, error) { };
+    this.getParameter = function (groupValues) { };
     this.isGroupResult = function (result) {
         var propertyCount = 0;
         for (var prop in result[0]) {
@@ -3048,7 +2080,8 @@ Gestar.View.ViewDataProvider = function (view, filter) {
         var searchParameters = null;
         if (this.View.Type == Gestar.REST.Model.ViewTypeEnum.DataView) {
             searchParameters = new Gestar.REST.Model.DataViewSearchFilter();
-        } else {
+        }
+        else {
             searchParameters = new Gestar.REST.Model.ChartViewSearchFilter();
         }
         searchParameters.Formula = this.Filter;
@@ -3062,7 +2095,7 @@ Gestar.View.ViewDataProvider = function (view, filter) {
                 searchParameters.MaxDescValueLength = fiel.MaxLength;
             }
         }*/
-
+        
         if (groupValues != null) {
             //Array of groups
             for (var i = 0; i < groupValues.length; i++) {
@@ -3072,7 +2105,8 @@ Gestar.View.ViewDataProvider = function (view, filter) {
             }
             if (this.View.Type == Gestar.REST.Model.ViewTypeEnum.DataView) {
                 searchParameters.GroupValues = groupValues;
-            } else {
+            }
+            else {
                 searchParameters.Groups = groupValues;
             }
         }
@@ -3110,7 +2144,7 @@ Gestar.View.FolderDataProvider = function (view, filter) {
     this.Filters = filter || "";
     this.Groups = view.Definition.Groups ? view.Definition.Groups.Items : [];
     this.ErrFunct = function (exObj) {
-        alert("Error al buscar. Por favor envie este error al administrador de sistema. Detalle: " + exObj.Message);
+        alert("Error al buscar. Por favor envíe este error al administrador de sistema. Detalle: " + exObj.Message);
     };
     this.getData = function (groupValues, success, error) {
         var methodName = "FolderSearchByGroupsNewObj";
@@ -3146,7 +2180,7 @@ Gestar.View.FolderDataProvider = function (view, filter) {
             var fItem = this.View.Definition.Fields.Items[d];
             var nex = ",";
             if (d == 0) nex = "";
-            if (fItem.Field.toLowerCase() == "doc_id") {
+            if(fItem.Field.toLowerCase() == "doc_id") {
                 addDocId = false;
             }
             if (fItem.Field.toLowerCase() == "frm_id") {
@@ -3168,14 +2202,14 @@ Gestar.View.FolderDataProvider = function (view, filter) {
         extraFields += addFldId ? ",fld_id" : "";
         searchParam.Fields = fields + extraFields;
 
-
+       
         //LLENO LOS TOTALES
         totals = "SUM(1) as TOTAL";
         if (this.View.Definition.Groups.STotals != null && this.View.Definition.Groups.STotals != "") {
             totals = "SUM(" + this.View.Definition.Groups.STotals + ") as TOTAL";
         }
         searchParam.Totals = totals;
-
+        
         var formula = this.View.Definition.Formula != null ? this.View.Definition.Formula : "";
         if (this.Filters != "") {
             var nexo = "";
@@ -3183,10 +2217,11 @@ Gestar.View.FolderDataProvider = function (view, filter) {
                 nexo = " AND ";
             }
             filters = formula + nexo + this.Filters;
-        } else {
+        }
+        else {
             filters = formula;
         }
-
+        
         if (groupValues.length == this.Groups.length) {
             for (var l = 0; l < this.View.Definition.Orders.Items.length; l++) {
                 var orderItem = this.View.Definition.Orders.Items[l];
@@ -3195,13 +2230,15 @@ Gestar.View.FolderDataProvider = function (view, filter) {
                 if (l == 0) nexu = "";
                 orders += nexu + orderItem.Field + " " + order + " ";
             }
-        } else {
+        }
+        else {
             var currentGroup = null;
             currentGroup = this.View.Definition.Groups.Items[groupValues.length];
             searchParam.Groups = currentGroup.Field;
             if (currentGroup.OrderBy == 0) {
                 searchParam.GroupsOrder = currentGroup.Direction == 1 ? "DESC" : "ASC";
-            } else {
+            }
+            else {
                 searchParam.TotalsOrder = currentGroup.Direction == 1 ? "DESC" : "ASC";;
             }
             orders = currentGroup.Field + " " + (currentGroup.Direction == 1 ? "DESC" : "ASC");
@@ -3218,11 +2255,12 @@ Gestar.View.FolderDataProvider = function (view, filter) {
                 if (!isNumber(gValue)) {
                     if (Object.prototype.toString.call(gValue) == "[object Date]") {
                         gValue = "@DATECONVERT('" + Gestar.Tools.dateTimeDoors(gValue.getTime()) + "')";
-                    } else {
+                    }
+                    else {
                         gValue = "'" + gValue + "'";
                     }
                 }
-            } else {
+            }else {
                 operand = " IS NULL ";
                 gValue = "";
             }
@@ -3230,16 +2268,16 @@ Gestar.View.FolderDataProvider = function (view, filter) {
             addToFilter += nexus + this.View.Definition.Groups.Items[i].Field + operand + gValue;
         }
 
-
+        
         if (filters != "" && addToFilter != "") {
             addToFilter = " AND " + addToFilter;
         }
         searchParam.Formula = filters + addToFilter;
-
+        
         searchParam.Order = orders;
         searchParam.MaxDocs = this.View.Definition.MaxDocs || 200;
         searchParam.Recursive = false;
-
+        
 
         return searchParam;
     };
@@ -3251,7 +2289,7 @@ Gestar.View.CountMultiplesValuesProvider = function (view, filter, splitKey) {
     this.Filter = filter || "";
     this.SplitKey = splitKey || ",";
     this.ErrFunct = function (exObj) {
-        alert("Error al buscar. Por favor envie este error al administrador de sistema. Detalle: " + exObj.message);
+        alert("Error al buscar. Por favor envíe este error al administrador de sistema. Detalle: " + exObj.message);
     };
     this.getData = function (groupValues, success, error) {
         var searchParameters = this.getParameter(groupValues);
@@ -3259,7 +2297,6 @@ Gestar.View.CountMultiplesValuesProvider = function (view, filter, splitKey) {
         var self = this;
         var err = error != undefined ? error : this.ErrFunct;
         return Gestar.REST.asyncCall("ViewSearch", "POST", searchParameters, "viewSearchParam", function (result) {
-            debugger;
             if (result.length <= 0) {
                 successFn(processedResult);
                 return;
@@ -3281,9 +2318,10 @@ Gestar.View.CountMultiplesValuesProvider = function (view, filter, splitKey) {
                             eval('var obj = { "' + key + '": "' + item + '", "TOTAL": ' + fieldTotal + ' }');
                             //processedResult.push({ key: item, "TOTAL": fieldTotal });
                             processedResult.push(obj);
-                        } else {
+                        }
+                        else {
                             var encontro = false;
-                            for (var k = 0; k < processedResult.length; k++) { //Busco si ya esta cargado, si esta: Le sumo el total, si no esta: Lo agrego con el total
+                            for (var k = 0; k < processedResult.length; k++) { //Busco si ya esta cargado, si está: Le sumo el total, si no está: Lo agrego con el total
                                 var currentValue = processedResult[k][key];
                                 encontro = false;
                                 if (currentValue == item) { //Encuentra el campo, lo busca en el array, le suma la cantidad y sale del for
@@ -3295,13 +2333,14 @@ Gestar.View.CountMultiplesValuesProvider = function (view, filter, splitKey) {
                                     break;
                                 }
                             }
-                            if (!encontro) { //No encuentra el campo, lo agrego al array con el total
+                            if (!encontro) {//No encuentra el campo, lo agrego al array con el total
                                 eval('var currObj = { "' + key + '": "' + item + '", "TOTAL": ' + fieldTotal + ' }');
                                 processedResult.push(currObj);
                             }
                         }
                     });
-                } else {
+                }
+                else {
                     var item = "(ninguno)";
                     eval('var obj = { "' + key + '": "' + item + '", "TOTAL": ' + fieldTotal + ' }');
                     processedResult.push(obj);
@@ -3358,7 +2397,8 @@ Gestar.View.CountMultiplesValuesProvider = function (view, filter, splitKey) {
         var searchParameters = null;
         if (this.View.Type == Gestar.REST.Model.ViewTypeEnum.DataView) {
             searchParameters = new Gestar.REST.Model.DataViewSearchFilter();
-        } else {
+        }
+        else {
             searchParameters = new Gestar.REST.Model.ChartViewSearchFilter();
         }
         searchParameters.Formula = this.Filter;
@@ -3375,7 +2415,8 @@ Gestar.View.CountMultiplesValuesProvider = function (view, filter, splitKey) {
             }
             if (this.View.Type == Gestar.REST.Model.ViewTypeEnum.DataView) {
                 searchParameters.GroupValues = groupValues;
-            } else {
+            }
+            else {
                 searchParameters.Groups = groupValues;
             }
         }
@@ -3404,8 +2445,8 @@ Gestar.View.CountMultiplesValuesProvider = function (view, filter, splitKey) {
 Gestar.DataProviderBase = function () {
     this.View = null;
     this.ViewId = -1;
-    this.getData = function (groupValues, success, error) {};
-    this.getParameter = function (groupValues) {};
+    this.getData = function (groupValues, success, error) { };
+    this.getParameter = function (groupValues) { };
     this.isGroupResult = function (result) {
         var propertyCount = 0;
         for (var prop in result[0]) {
@@ -3428,7 +2469,7 @@ Gestar.FolderDataProvider = function (fldId, fieldsArr, groups, totals, filters,
     this.MaxDocs = maxDocs || 1000;
     this.MaxDescriptionLength = maxDescrLength || 200;
     this.ErrFunct = function (exObj) {
-        alert("Error al buscar. Por favor envie este error al administrador de sistema. Detalle: " + exObj.Message);
+        alert("Error al buscar. Por favor envíe este error al administrador de sistema. Detalle: " + exObj.Message);
     };
     this.getData = function (groupValues, success, error) {
         var methodName = "FolderSearchByGroupsNew";
@@ -3490,7 +2531,7 @@ Gestar.MultipleFieldsProvider = function (fldId, form, fields, filters, orders, 
     this.Orders = orders;
     this.MaxDocs = maxDocs || 1500;
     this.ErrFunct = function (exObj) {
-        alert("Error al buscar. Por favor envie este error al administrador de sistema. Detalle: " + exObj.Message);
+        alert("Error al buscar. Por favor envíe este error al administrador de sistema. Detalle: " + exObj.Message);
     };
     this.getData = function (groupValues, success, error) {
         var methodName = "FolderSearchNewObj";
@@ -3561,8 +2602,104 @@ Gestar.MultipleFieldsProvider = function (fldId, form, fields, filters, orders, 
             successFn(processedResult);
         }, err, true);
     };
+    this.isGroupResult = function (result) { return true; };
+};
+
+Doors.DataProviderBase = function () {
+    this.View = null;
+    this.ViewId = -1;
+    this.getData = function (groupValues, success, error) { };
+    this.getParameter = function (groupValues) { };
     this.isGroupResult = function (result) {
-        return true;
+        var propertyCount = 0;
+        for (var prop in result[0]) {
+            propertyCount++;
+        }
+        if (propertyCount == 2 && result[0].hasOwnProperty("TOTAL"))
+            return true;
+        return false;
+    };
+};
+Doors.FolderDataProvider = function (fldId, fieldsArr, groups, totals, filters, orders, maxDocs, maxDescrLength,recursive) {
+    this.Parent = Gestar.DataProviderBase;
+    this.Parent();
+    this.FldId = fldId;
+    this.Fields = fieldsArr;
+    this.Groups = groups;
+    this.Totals = totals;
+    this.Filters = filters || "";
+    this.Orders = orders;
+    this.MaxDocs = maxDocs || 1000;
+    this.Recursive = recursive || false;
+    this.MaxDescriptionLength = maxDescrLength || 200;
+    this.ErrFunct = function (exObj) {
+        alert("Error al buscar. Por favor envíe este error al administrador de sistema. Detalle: " + exObj.Message);
+    };
+    this.getData = function (groupValues, success, error) {
+        var methodName = DoorsAPI.folderSearchGroups;
+        if (groupValues != null && groupValues.length == this.Groups.length) {
+            methodName = DoorsAPI.folderSearch;
+        }
+        
+        var err = error != undefined ? error : this.ErrFunct;
+        var folderParams = this.getFnParameter(groupValues);
+
+        return methodName.apply(this, folderParams).then(success, err);
+    };
+    this.getFnParameter = function (groupValues) {
+
+        //folder search
+        //fldId, fields, formula, order, maxDocs, recursive, maxDescrLength
+
+        //folder search groups
+        //fldId, groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder
+
+        var args = [];
+        args.push(this.FldId);
+
+        var addToFilter = "";
+        for (var i = 0; i < groupValues.length; i++) {
+            var nexus = " AND ";
+            if (this.Filters == "") {
+                nexus = "";
+            }
+            var gValue = groupValues[i];
+            if (!isNumber(gValue)) {
+                gValue = "'" + gValue + "'";
+            }
+            addToFilter += nexus + this.Groups[i] + " = " + gValue;
+        }
+        //folder search
+        if (groupValues != null && groupValues.length == this.Groups.length) {
+            //Fields
+            args.push(fieldsArr);
+        }
+        else {
+            //Groups
+            if (groupValues.length < this.Groups.length) {
+                args.push(this.Groups[groupValues.length]);
+            }
+            //Totals
+            args.push(this.Totals);
+        }
+        //Formula
+        args.push(this.Filters + addToFilter);
+        args.push(this.Orders);
+        args.push(this.MaxDocs);
+        args.push(this.Recursive);
+        if (groupValues != null && groupValues.length == this.Groups.length) {
+            args.push(this.MaxDescriptionLength); //this.MaxDescriptionLength;
+        }
+        else {
+            //TODO
+            //GroupsOrder
+            args.push("");
+            //TotalsOrder
+            args.push("");
+        }
+        
+
+        return args;
     };
 };
 
@@ -3581,57 +2718,49 @@ var Browser = {
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
 function cloneObject(obj) {
     var newObject = jQuery.extend(true, {}, obj);
     return newObject;
 }
-
 function cloneArray(arr) {
     var newArray = jQuery.extend(true, [], arr);
     return newArray;
 }
-
 function handleSessionExpired() {
     window.location = Gestar.Tools.url("/auth/login");
 }
-
 function handledServiceError() {
-
+    
 }
-
 function unhandledServiceError(exObj) {
     alert("Metodo: " + exObj.Method + " Mensaje: " + exObj.Message);
 }
-
 function url(relativeUrl) {
     var completePath = "";
     var initialNexus = "";
     var middleNexus = "";
     var locationPath = globalSettings.baseUrl;
-
+    
     if (!locationPath.startsWith("/")) {
         initialNexus = "/";
     }
     if (!relativeUrl.startsWith("/")) {
-        if (!locationPath.endsWith("/")) {
+        if(!locationPath.endsWith("/")) {
             middleNexus = "/";
         }
     }
-    if (relativeUrl.startsWith("/") && locationPath.endsWith("/")) {
+    if(relativeUrl.startsWith("/") && locationPath.endsWith("/")) {
         locationPath = locationPath.substring(0, locationPath.length - 1);
         middleNexus = "";
     }
-
+    
     completePath = locationPath + middleNexus + relativeUrl;
     return completePath;
 }
-
 function fillLangstrings() {
     resolveLangStrings(jQuery("[lang-str]"));
     resolveToolTips(jQuery("[lang-str-tt]"));
 }
-
 function processLangStrings(element) {
     var ele = element.find("[lang-str]");
     resolveLangStrings(ele);
@@ -3640,7 +2769,7 @@ function processLangStrings(element) {
 }
 
 function resolveLangStrings(elements) {
-    jQuery.each(elements, function (index, elem) {
+    jQuery.each(elements, function(index, elem) {
         var langStringId = jQuery(elem).attr("lang-str");
         var result = getLangstring(langStringId);
         try {
@@ -3649,17 +2778,19 @@ function resolveLangStrings(elements) {
             } else {
                 jQuery(elem).text(result);
             }
-        } catch (ex) {}
+        } catch(ex) {
+        }
     });
 }
-
 function resolveToolTips(tooltipElements) {
     jQuery.each(tooltipElements, function (index, ttElem) {
         var langStringId = jQuery(ttElem).attr("lang-str-tt");
         var result = getLangstring(langStringId);
         try {
             jQuery(ttElem).attr("title", result);
-        } catch (ex) {}
+        }
+        catch (ex) {
+        }
     });
 }
 
@@ -3669,7 +2800,8 @@ function xmlToString(xmlData) {
         //IE9+, Chrome, Mozilla, Firefox, Opera, etc.
         xmlString = (new XMLSerializer()).serializeToString(xmlData[0]);
         return xmlString;
-    } catch (ex) {
+    }
+    catch (ex) {
         return null;
     }
 }
@@ -3681,18 +2813,17 @@ function displayHandledError(exObj) {
 
 function getMasterLangstring(stringId) {
     var stringValue = "";
-    Gestar.REST.call("GetMasterLangString", "GET", "stringId=" + stringId, "", function (result) {
+    Gestar.REST.call("GetMasterLangString", "GET", "stringId=" + stringId, "",function (result) {
         stringValue = result;
     });
     return stringValue;
 }
-
 function getLangstring(stringId) {
     var stringValue = "[String not found]";
     //var start = new Date().getTime();
     if (window.userLangStrings != undefined && window.userLangStrings != null) {
         stringValue = window.userLangStrings[stringId];
-        /*var string = jQuery.grep(window.userLangStrings, function (sysString) { return sysString.StrId == stringId; });
+        /*var string = $.grep(window.userLangStrings, function (sysString) { return sysString.StrId == stringId; });
         //var end = new Date().getTime();
         //var span = end - start;
         if (string.length > 0) {
@@ -3700,7 +2831,7 @@ function getLangstring(stringId) {
         }*/
         return stringValue;
     }
-    Gestar.REST.call("GetLangString", "GET", "stringId=" + stringId, "", function (result) {
+    Gestar.REST.call("GetLangString", "GET", "stringId=" + stringId,"" ,function (result) {
         stringValue = result;
     });
     return stringValue;
@@ -3771,8 +2902,8 @@ var globalSettings = {
     this.TimeDiff = 0;
 }).apply(Gestar.Settings.UserState);;
 var Doors = Doors || {};
-Doors.REST = Doors.REST || {};
-Doors.REST.Model = Doors.REST.Model || {};
+Doors.REST = Doors.REST || { };
+Doors.REST.Model = Doors.REST.Model || { };
 (function () {
     this.FolderSearchParam = function () {
         this.FldId = 0;
@@ -3863,6 +2994,11 @@ Doors.REST.Model = Doors.REST.Model || {};
         Folder: 3,
         View: 4
     };
+    this.FolderTypeEnum = {
+        DocumentFolder: 1,
+        LinkFolder: 2,
+        VirtualFolder: 3
+    };
     this.ViewTypeEnum = {
         DataView: 1,
         ScheduleView: 2,
@@ -3870,8 +3006,8 @@ Doors.REST.Model = Doors.REST.Model || {};
         ChartView: 4
     };
     this.ExportFormatEnum = {
-        ExcelXml: 0,
-        OpenXml: 1
+        ExcelXml : 0,
+        OpenXml : 1
     };
     this.AclParameter = function () {
         this.ObjectType = 0;
@@ -3974,12 +3110,12 @@ Doors.REST.Model = Doors.REST.Model || {};
         ViewAdmin: "vie_admin",
         ViewCreatePrivate: "vie_create_priv"
     };
-    this.PropertiesParameter = function () {
+    this.PropertiesParameter = function() {
         this.ObjectType = 0;
         this.ObjectId = 0;
         this.IsNew = false;
     };
-    this.SinglePropertyParameter = function () {
+    this.SinglePropertyParameter = function() {
         //Propiedad __type debe ser la primera del objeto.
         this.__type = "SinglePropertyParameter:#Gestar.Doors.Services.RestServices";
         this.parent = Doors.REST.Model.PropertiesParameter;
@@ -3987,42 +3123,42 @@ Doors.REST.Model = Doors.REST.Model || {};
         this.Name = "";
         this.Value = "";
     };
-    this.MultiplePropertiesParameter = function () {
+    this.MultiplePropertiesParameter = function() {
         //Propiedad __type debe ser la primera del objeto.
         this.__type = "MultiplePropertiesParameter:#Gestar.Doors.Services.RestServices";
         this.parent = Doors.REST.Model.PropertiesParameter;
         this.parent();
         this.Properties = [];
     };
-    this.ViewSinglePropertyParameter = function () {
+    this.ViewSinglePropertyParameter = function() {
         //Propiedad __type debe ser la primera del objeto.
         this.__type = "ViewSinglePropertyParameter:#Gestar.Doors.Services.RestServices";
         this.parent = Doors.REST.Model.SinglePropertyParameter;
         this.parent();
         this.FldId = 0;
     };
-    this.ViewMultiplePropertiesParameter = function () {
+    this.ViewMultiplePropertiesParameter = function() {
         //Propiedad __type debe ser la primera del objeto.
         this.__type = "ViewMultiplePropertiesParameter:#Gestar.Doors.Services.RestServices";
         this.parent = Doors.REST.Model.MultiplePropertiesParameter;
         this.parent();
         this.FldId = 0;
     };
-    this.FieldSinglePropertyParameter = function () {
+    this.FieldSinglePropertyParameter = function() {
         //Propiedad __type debe ser la primera del objeto.
         this.__type = "FieldSinglePropertyParameter:#Gestar.Doors.Services.RestServices";
         this.parent = Doors.REST.Model.SinglePropertyParameter;
         this.parent();
         this.Name = "";
     };
-    this.FieldMultiplePropertiesParameter = function () {
+    this.FieldMultiplePropertiesParameter = function() {
         //Propiedad __type debe ser la primera del objeto.
         this.__type = "FieldMultiplePropertiesParameter:#Gestar.Doors.Services.RestServices";
         this.parent = Doors.REST.Model.MultiplePropertiesParameter;
         this.parent();
         this.Name = "";
     };
-    this.ViewSearchFilter = function () {
+    this.ViewSearchFilter = function() {
         //this.__type = "ViewSearchFilter:#Gestar.Doors.API.ObjectModelW";
         this.FolderId = -1;
         this.ViewId = -1;
@@ -4030,14 +3166,14 @@ Doors.REST.Model = Doors.REST.Model || {};
         this.AdditionalFields = [];
         this.Formula = "";
     };
-    this.ChartViewSearchFilter = function () {
+    this.ChartViewSearchFilter = function() {
         this.__type = "ChartViewSearchFilter:#Gestar.Doors.API.ObjectModelW";
         this.parent = Doors.REST.Model.ViewSearchFilter;
         this.parent();
         this.Groups = [];
         this.Formula = "";
     };
-    this.DataViewSearchFilter = function () {
+    this.DataViewSearchFilter = function() {
         this.__type = "DataViewSearchFilter:#Gestar.Doors.API.ObjectModelW";
         this.parent = Doors.REST.Model.ViewSearchFilter;
         this.parent();
@@ -4047,7 +3183,7 @@ Doors.REST.Model = Doors.REST.Model || {};
         this.SettingName = "";
         this.SettingValue = "";
     };
-    this.ExportParameter = function () {
+    this.ExportParameter = function() {
         this.FldId = -1;
         this.VieId = -1;
         this.ExportFormat = 0;
@@ -4055,17 +3191,17 @@ Doors.REST.Model = Doors.REST.Model || {};
         this.Filter = null;
         this.ColumnsNamesOnly = false;
     };
-}).apply(Doors.REST.Model);; //Requiere GlobalFunctions y GlobalSettings
+}).apply(Doors.REST.Model);
+;//Requiere GlobalFunctions y GlobalSettings
 Doors = Doors || {};
 Doors.REST = Doors.REST || {};
 (function () {
-
+    
     this.ServerUrl = "";
     this.AuthToken = "";
-    this.ServiceUnhandledErrorFunction = function (err) {
-        alert(err);
-    };
-    this.ResponseResultEnum = {
+    this.ServiceUnhandledErrorFunction = function (err) { alert(err); };
+    this.ResponseResultEnum =
+    {
         Sucess: 0,
         SessionTimeOutError: 1,
         Exception: 2
@@ -4079,10 +3215,10 @@ Doors.REST = Doors.REST || {};
             }
         }
     };
-    //jQuery(document).ready(function() {
+    //$(document).ready(function() {
     try {
         document.body.onbeforeunload = Doors.REST.cancelPendingCalls;
-    } catch (e) {
+    } catch(e) {
 
     }
     try {
@@ -4091,10 +3227,41 @@ Doors.REST = Doors.REST || {};
 
     }
     //});
-
+    
     this.call = function (callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction) {
         return Doors.REST.asyncCall(callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction, false);
     };
+
+
+    this.asyncCallXmlHttp = function (callingMethod, httpMethod, data) {
+        var dataSend = null;
+        if (data) {
+            dataSend = data;
+        }
+        var completeUrl = Doors.RESTFULL.ServerUrl + "/" + callingMethod;
+
+        var prom = jQuery.Deferred();
+        var xhr = new XMLHttpRequest();
+        xhr.open(httpMethod, completeUrl, true);
+        xhr.setRequestHeader("AuthToken", Doors.RESTFULL.AuthToken);
+        (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
+        var _self = this;
+        xhr.onreadystatechange = function (event) {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    _self.decrementCurrentCalls(xhr);
+                    prom.resolve(this.response);
+                } else {
+                    _self.decrementCurrentCalls(xhr);
+                    prom.reject(this.statusText);
+                }
+            }
+        };
+        xhr.send(dataSend);
+        this.CurrentCalls.push(xhr);
+        return prom.promise()
+    };
+
     this.asyncCall = function (callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction, async) {
         var data = null;
         var completeUrl = Doors.REST.ServerUrl + "/" + callingMethod;
@@ -4120,7 +3287,7 @@ Doors.REST = Doors.REST || {};
         if (errorFunction == undefined) {
             errorFunction = Doors.REST.ServiceUnhandledErrorFunction;
         }
-
+        
         var req = jQuery.ajax({
             type: httpMethod,
             url: completeUrl,
@@ -4185,11 +3352,11 @@ Doors.REST = Doors.REST || {};
         this.CurrentCalls.push(req);
         return req;
     };
-    var handleResultObject = function (operationResult) {
+    var handleResultObject = function(operationResult) {
         if (Object.prototype.toString.call(operationResult) == "[object String]") {
             try {
                 return JSON.parse(operationResult);
-            } catch (ex) {
+            } catch(ex) {
                 return operationResult;
             }
         }
@@ -4219,7 +3386,7 @@ Doors.REST = Doors.REST || {};
         }
     };*/
     //TODO Revisar performance de tryParseDate
-    var tryParseDateComplex = function (arrayObject) {
+    var tryParseDateComplex = function(arrayObject) {
         //FIX para objetos que vienen del servidor como string pero son objetos JSON (SearchGroups x ej)
         if (Object.prototype.toString.call(arrayObject) == "[object String]" && (arrayObject.startsWith("{") || arrayObject.startsWith("["))) {
             arrayObject = JSON.parse(arrayObject);
@@ -4234,12 +3401,13 @@ Doors.REST = Doors.REST || {};
         }
         return arrayObject;
     };
-
-    var tryParseDateInArray = function (array) {
+    
+    var tryParseDateInArray = function(array) {
         for (var p = 0; p < array.length; p++) {
             if (Object.prototype.toString.call(array[p]) == "[object Object]") {
                 tryParseInObject(array[p]);
-            } else if (Object.prototype.toString.call(array[p]) == "[object Array]") {
+            }
+            else if (Object.prototype.toString.call(array[p]) == "[object Array]") {
                 tryParseDateInArray(array[p]);
             } else {
                 array[p] = parseDate(array[p]);
@@ -4263,7 +3431,7 @@ Doors.REST = Doors.REST || {};
             var minutes = d.getTimezoneOffset();
             var dtStringSplitted = dateString.split("-");
             var minus = -1;
-            if (dtStringSplitted.length == 1) {
+            if(dtStringSplitted.length == 1) {
                 dtStringSplitted = dateString.split("+");
                 minus = 1;
             }
@@ -4284,13 +3452,13 @@ Doors.REST = Doors.REST || {};
         }
         return result;
     };
-    this.hasException = function (responseObject, callingMethod, errorFunction) {
+    this.hasException = function(responseObject, callingMethod, errorFunction) {
         if (responseObject.ResponseResult == Doors.REST.ResponseResultEnum.SessionTimeOutError) {
             Gestar.ErrorHandling.handleSessionExpired();
             return true;
         }
         if (responseObject.ResponseResult == Doors.REST.ResponseResultEnum.Exception) {
-
+            
             var ex = new Gestar.ErrorHandling.ExceptionObject();
             ex.Message = responseObject.ExceptionMessage;
             ex.Type = Doors.REST.ResponseResultEnum.Exception;
@@ -4302,7 +3470,7 @@ Doors.REST = Doors.REST || {};
         return false;
     };
 
-    this.constructJSONParameter = function (param, parameterName) {
+    this.constructJSONParameter = function(param, parameterName) {
         //NOTE Se copia el objeto para no modificar la referencia al enviarse al server
         var clone = Gestar.Tools.cloneObject(param);
         if (Object.prototype.toString.call(param) === '[object Array]') {
@@ -4324,176 +3492,18 @@ var restCallOptions = {
     serverUrl: "",
     authToken: ""
 };
-//ResponseResultEnum =
-//    {
-//        Sucess: 0,
-//        SessionTimeOutError: 1,
-//        Exception: 2
-//    };
-//function RESTCall(callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction) {
-//	RESTCallAsync(callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction,false);
-//}
-//function RESTCallAsync(callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction, async) {
-//    var data = null;
-//    var completeUrl = restCallOptions.serverUrl + "/" + callingMethod;
-//    if (parameters != undefined && parameters != null) {
-//        //URL parameters
-//        if (Object.prototype.toString.call(parameters) == "[object String]") {
-//            var others = "";
-//            var nexus = "";
-//            //NOTE: Esto ya no aplica, ya que el token se pasa por header.
-//            //var token = "?authToken=" + restCallOptions.authToken;
-//            if (parameters != "") {
-//                nexus = "?";
-//                others = parameters;
-//            }
-//            completeUrl = completeUrl + nexus + others;
-//        } else {
-//            //Javascript parameters
-//            var restParam = constructJSONParameter(parameters, parameterName);
-//            data = restParam;
-//        }
-//    }
-//    //In case caller doesn't want to handle error.
-//    if (errorFunction == undefined) {
-//        errorFunction = globalSettings.serviceUnhandledErrorFunction;
-//    }
-//    
-//    jQuery.ajax({
-//        type: httpMethod,
-//        url: completeUrl,
-//        data: data,
-//        beforeSend: function (xhr, settings) {
-//            var tk = restCallOptions.authToken;
-//            //var encoded = encodeURIComponent(tk);
-//            xhr.setRequestHeader("AuthToken", tk);
-//        },
-//        contentType: "application/json; charset=utf-8",
-//        dataType: "json customJson",
-//        converters: {
-//            "json customJson": function (result) {
-//                //In case a complex object is received.
-//                if (result.InternalObject === undefined) {
-//                    result = result[callingMethod + "Result"];
-//                }
-//                tryParseDateComplex(result.InternalObject);
-//                return result;
-//            }
-//        },
-//        cache: false,
-//        async: async,
-//        processdata: false,
-//        success: function (result, textStatus, xhr) {
-//            //In case a complex object is received.
-//            if (result.InternalObject === undefined) {
-//                result = result[callingMethod + "Result"];
-//            }
-//            //If it still does not contains de correct structure, throw error;
-//            if (result.InternalObject === undefined) {
-//                var err = new ExceptionObject();
-//                err.Message = "Response object missformed. Method: " + callingMethod;
-//                err.Method = callingMethod;
-//                errorFunction(err);
-//                return;
-//            }
-//            if (hasException(result, callingMethod, errorFunction)) {
-//                return;
-//            }
-//            successFunction(handleResultObject(result.InternalObject));
-//        },
-//        error: function (xhr, textStatus, errorThrown) {
-//            var err = new ExceptionObject();
-//            err.DoorsExceptionType = null;
-//            err.Message = "REST Api Error - Method: " + callingMethod + " Status Code: " + xhr.status + " - Message: " + errorThrown;
-//            err.Type = ResponseResultEnum.Exception;
-//            err.Method = callingMethod;
-//            errorFunction(err);
-//        }
-//    });
-//}
 
-//function handleResultObject(operationResult) {
-//    if(Object.prototype.toString.call(operationResult) == "[object String]") {
-//        try {
-//            return JSON.parse(operationResult);
-//        }
-//        catch(ex) {
-//            return operationResult;
-//        }
-//    }
-//    return operationResult;
-//}
-
-//function tryParseDate(simpleObject) {
-//    for (var i in simpleObject) {
-//        if (typeof simpleObject[i] == "string" && simpleObject[i].substring(0, 6) == "/Date(") {
-//            simpleObject[i] = new Date(parseInt(simpleObject[i].substr(6)));
-//        } else if (Object.prototype.toString.call(simpleObject[i]) == "[object Date]") {
-//            var date = "\/Date(" + simpleObject[i].getTime() + "-0000)\/";
-//            simpleObject[i] = date;
-//        }
-//    }
-//}
-////TODO Revisar performance de tryParseDate
-//function tryParseDateComplex(arrayObject) {
-//    //FIX para objetos que vienen del servidor como string pero son objetos JSON (SearchGroups x ej)
-//    if (Object.prototype.toString.call(arrayObject) == "[object String]" && (arrayObject.startsWith("{") || arrayObject.startsWith("["))) {
-//        arrayObject = JSON.parse(arrayObject);
-//    }
-//    for (var i in arrayObject) {
-//        if(Object.prototype.toString.call(arrayObject[i])  == "[object Array]") {
-//            tryParseDateComplex(arrayObject[i]);
-//        }
-//        else {
-//            if (typeof arrayObject[i] == "string" && arrayObject[i].substring(0, 6) == "/Date(") {
-//                arrayObject[i] = new Date(parseInt(arrayObject[i].substr(6)));
-//            } else if (Object.prototype.toString.call(arrayObject[i]) == "[object Date]") {
-//                var date = "\/Date(" + arrayObject[i].getTime() + "-0000)\/";
-//                arrayObject[i] = date;
-//            }
-//        }
-//        tryParseDate(arrayObject[i]);
-//    }
-//}
-//function hasException(responseObject, callingMethod, errorFunction) {
-//    if(responseObject.ResponseResult == ResponseResultEnum.SessionTimeOutError) {
-//        handleSessionExpired();
-//        return true;
-//    }
-//    if (responseObject.ResponseResult == ResponseResultEnum.Exception) {
-//        
-//        var ex = new ExceptionObject();
-//        ex.Message = responseObject.ExceptionMessage;
-//        ex.Type = ResponseResultEnum.Exception;
-//        ex.DoorsExceptionType = responseObject.ExceptionType;
-//        ex.Method = callingMethod;
-//        errorFunction(ex);
-//        return true;
-//    }
-//    return false;
-//}
-
-//function constructJSONParameter(param, parameterName) {
-//    //NOTE Se copia el objeto para no modificar la referencia al enviarse al server
-//    var clone = cloneObject(param);
-//    tryParseDateComplex(clone);
-//    var paramName = param.ParameterName;
-//    if (param.ParameterName === undefined || param.ParameterName == undefined || param.ParameterName == null || param.ParameterName=="") {
-//        paramName = parameterName;
-//    }
-//    var stringParam = "{ \"" + paramName + "\": { \"AuthToken\":\"" + restCallOptions.authToken + "\", \"Param\": " + JSON.stringify(clone) +
-//        " } }";
-//    return stringParam;
-//}
-; //Requiere GlobalFunctions y GlobalSettings
+;//Requiere GlobalFunctions y GlobalSettings
 Doors = Doors || {};
 Doors.RESTFULL = Doors.RESTFULL || {};
 (function () {
-
+    
     this.ServerUrl = "";
     this.AuthToken = "";
+    this.ApiKey = null;
     this.ServiceUnhandledErrorFunction = null;
-    this.ResponseResultEnum = {
+    this.ResponseResultEnum =
+    {
         Sucess: 0,
         SessionTimeOutError: 1,
         Exception: 2
@@ -4507,11 +3517,13 @@ Doors.RESTFULL = Doors.RESTFULL || {};
             }
         }
     };
-    jQuery(document).ready(function () {
-        document.body.onbeforeunload = Doors.RESTFULL.cancelPendingCalls;
-        window.onbeforeunload = Doors.RESTFULL.cancelPendingCalls;
-    });
+    jQuery(document).ready(function() {
+        //document.body.onbeforeunload = Doors.RESTFULL.cancelPendingCalls;
+        //window.onbeforeunload = Doors.RESTFULL.cancelPendingCalls;
 
+        jQuery(window).on('beforeunload', Doors.RESTFULL.cancelPendingCalls);
+    });
+    
     /*this.call = function (callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction) {
         return Gestar.RESTFULL.asyncCall(callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction, false);
     };*/
@@ -4526,17 +3538,24 @@ Doors.RESTFULL = Doors.RESTFULL || {};
         var prom = jQuery.Deferred();
         var xhr = new XMLHttpRequest();
         xhr.open(httpMethod, completeUrl, true);
-        xhr.setRequestHeader("AuthToken", Doors.RESTFULL.AuthToken);
-        (httpMethod == "GET") ? xhr.responseType = "arraybuffer": null;
+        if (Doors.RESTFULL.ApiKey != null) {
+            xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
+        }
+        else {
+            xhr.setRequestHeader("AuthToken", Doors.RESTFULL.AuthToken);
+        }
+        (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
         var _self = this;
         xhr.onreadystatechange = function (event) {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    _self.decrementCurrentCalls(xhr);
                     prom.resolve(this.response);
                 } else {
-                    _self.decrementCurrentCalls(xhr);
                     prom.reject(this.statusText);
+                }
+                var index = Doors.RESTFULL.CurrentCalls.indexOf(xhr);
+                if (index !== -1) {
+                    Doors.RESTFULL.CurrentCalls.splice(index, 1);
                 }
             }
         };
@@ -4544,7 +3563,6 @@ Doors.RESTFULL = Doors.RESTFULL || {};
         this.CurrentCalls.push(xhr);
         return prom.promise()
     };
-
 
     this.asyncCall = function (callingMethod, httpMethod, parameters, parameterName) {
         var data = null;
@@ -4566,22 +3584,28 @@ Doors.RESTFULL = Doors.RESTFULL || {};
                 var restParam = Doors.RESTFULL.constructJSONParameter(parameters, parameterName);
                 data = restParam;
             }
-        }
-        var _self = this;
+        }        
+        
         var prom = jQuery.Deferred();
         var req = jQuery.ajax({
             type: httpMethod,
             url: completeUrl,
             data: data,
-            beforeSend: function (xhr, settings) {
+            beforeSend: function(xhr, settings) {
                 var tk = Doors.RESTFULL.AuthToken;
                 //var encoded = encodeURIComponent(tk);
-                xhr.setRequestHeader("AuthToken", tk);
+                //xhr.setRequestHeader("AuthToken", tk);
+                if (Doors.RESTFULL.ApiKey != null) {
+                    xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
+                }
+                else {
+                    xhr.setRequestHeader("AuthToken", Doors.RESTFULL.AuthToken);
+                }
             },
             contentType: "application/json",
             dataType: "json customJson",
             converters: {
-                "json customJson": function (result) {
+                "json customJson": function(result) {
 
                     //result = tryParseDateComplex(result);
                     return result;
@@ -4590,10 +3614,11 @@ Doors.RESTFULL = Doors.RESTFULL || {};
             cache: false,
             async: true,
             processdata: false,
-            success: function (result, textStatus, xhr) {
+            success: function(result, textStatus, xhr) {
                 //If does not contains de correct structure, throw error;
                 if (result.InternalObject === undefined) {
                     var err = {
+                        ExceptionMessage: "Response object missformed. Method: " + callingMethod,
                         Message: "Response object missformed. Method: " + callingMethod,
                         Method: callingMethod
                     }
@@ -4604,7 +3629,8 @@ Doors.RESTFULL = Doors.RESTFULL || {};
                     if (Doors.RESTFULL.ServiceUnhandledErrorFunction != null) {
                         Doors.RESTFULL.ServiceUnhandledErrorFunction(result);
                         Gestar.Tools.dp(result.ExceptionMessage, result);
-                    } else {
+                    }
+                    else {
                         Gestar.Tools.er(result.ExceptionMessage, result);
                     }
 
@@ -4614,14 +3640,20 @@ Doors.RESTFULL = Doors.RESTFULL || {};
                 prom.resolve(result.InternalObject);
 
             },
-            error: function (xhr, textStatus, errorThrown) {
-                if (xhr.readyState == 0 || !xhr.responseText || xhr.status == 404) {
-                    prom.reject({
-                        Message: "Request Error",
-                        Method: callingMethod,
-                        xhr: xhr
-                    });
-                    return;
+            error: function(xhr, textStatus, errorThrown) {
+                if (xhr.readyState == 0) {
+                    if (xhr.statusText === 'abort') {
+                        return;
+                    }
+                    else if (!xhr.responseText || xhr.status == 404) {
+                        prom.reject({
+                            ExceptionMessage: "Request Error",
+                            Message: "Request Error",
+                            Method: callingMethod,
+                            xhr: xhr
+                        });
+                        return;
+                    }
                 }
                 var responseObj = JSON.parse(xhr.responseText);
                 /*var err = new Gestar.ErrorHandling.ExceptionObject();
@@ -4633,35 +3665,38 @@ Doors.RESTFULL = Doors.RESTFULL || {};
                 if (responseObj.ResponseResult == Doors.RESTFULL.ResponseResultEnum.SessionTimeOutError) {
                     Gestar.ErrorHandling.handleSessionExpired();
                 }
+                jQuery.extend(responseObj, responseObj, {
+                    Message: responseObj.ExceptionMessage,
+                    Type: Doors.RESTFULL.ResponseResultEnum.Exception,
+                    DoorsExceptionType: responseObj.ExceptionType,
+                    Method: callingMethod
+                });
                 prom.reject(responseObj);
 
             },
             complete: function (xhr, textStatus) {
-                _self.decrementCurrentCalls(xhr);
+                /*var index = Gestar.REST.CurrentCalls.indexOf(xhr);
+                Gestar.REST.CurrentCalls.splice(index, 1);*/
+                var index = Doors.RESTFULL.CurrentCalls.indexOf(xhr);
+                if (index !== -1) {
+                    Doors.RESTFULL.CurrentCalls.splice(index, 1);
+                }
             }
         });
         this.CurrentCalls.push(req);
         return prom.promise();
     };
-
-    this.decrementCurrentCalls = function (xhr) {
-        var index = Doors.RESTFULL.CurrentCalls.indexOf(xhr);
-        if (index !== -1) {
-            Doors.RESTFULL.CurrentCalls.splice(index, 1);
-        }
-    }
-
-    var handleResultObject = function (operationResult) {
+    var handleResultObject = function(operationResult) {
         if (Object.prototype.toString.call(operationResult) == "[object String]") {
             try {
                 return JSON.parse(operationResult);
-            } catch (ex) {
+            } catch(ex) {
                 return operationResult;
             }
         }
         return operationResult;
     };
-
+    
     //TODO Revisar performance de tryParseDate
     var tryParseDateComplex = function (arrayObject) {
         //FIX para objetos que vienen del servidor como string pero son objetos JSON (SearchGroups x ej)
@@ -4683,7 +3718,8 @@ Doors.RESTFULL = Doors.RESTFULL || {};
         for (var p = 0; p < array.length; p++) {
             if (Object.prototype.toString.call(array[p]) == "[object Object]") {
                 tryParseInObject(array[p]);
-            } else if (Object.prototype.toString.call(array[p]) == "[object Array]") {
+            }
+            else if (Object.prototype.toString.call(array[p]) == "[object Array]") {
                 tryParseDateInArray(array[p]);
             } else {
                 array[p] = parseDate(array[p]);
@@ -4723,32 +3759,32 @@ Doors.RESTFULL = Doors.RESTFULL || {};
             result = new Date(d.getTime() + sum);
         } else if (Object.prototype.toString.call(string) == "[object Date]") {
             //TODO Change for correct UTC hours
-            var date = string.toISOString(); //"\/Date(" + string.getTime() + Gestar.Settings.ServerTimeZone + ")\/";
+            var date = string.toISOString();//"\/Date(" + string.getTime() + Gestar.Settings.ServerTimeZone + ")\/";
             result = date;
         }
         return result;
     };
-
-    this.hasException = function (responseObject, callingMethod) {
+    
+    this.hasException = function(responseObject, callingMethod) {
         if (responseObject.ResponseResult == Doors.RESTFULL.ResponseResultEnum.SessionTimeOutError) {
             Gestar.ErrorHandling.handleSessionExpired();
             return true;
         }
         if (responseObject.ResponseResult == Doors.RESTFULL.ResponseResultEnum.Exception) {
-
+            
             jQuery.extend(responseObject, responseObject, {
                 Message: responseObject.ExceptionMessage,
                 Type: Doors.RESTFULL.ResponseResultEnum.Exception,
                 DoorsExceptionType: responseObject.ExceptionType,
                 Method: callingMethod
             });
-
+            
             return true;
         }
         return false;
     };
 
-    this.constructJSONParameter = function (param, parameterName) {
+    this.constructJSONParameter = function(param, parameterName) {
         //NOTE Se copia el objeto para no modificar la referencia al enviarse al server
         var clone = Gestar.Tools.cloneObject(param);
         if (Object.prototype.toString.call(param) === '[object Array]') {
@@ -4766,8 +3802,8 @@ Doors.RESTFULL = Doors.RESTFULL || {};
         }
         return stringParam;
     };
-}).apply(Doors.RESTFULL);;
-Doors = Doors || {};
+}).apply(Doors.RESTFULL);
+;Doors = Doors || {};
 Doors.API = Doors.API || function () {};
 
 var DoorsAPI = new Doors.API();
@@ -4862,6 +3898,7 @@ Doors.API.prototype.loggedUser = function () {
 
 Doors.API.prototype.changePassword = function (login, oldPassword, newPassword, instanceName) {
     var url = "session/changepassword";
+
     var data = {
         login: login,
         oldPassword: oldPassword,
@@ -4871,9 +3908,24 @@ Doors.API.prototype.changePassword = function (login, oldPassword, newPassword, 
     return Doors.RESTFULL.asyncCall(url, "POST", data, "");
 };
 
-Doors.API.prototype.sessionTags = function () {
-    var url = "session/tags";
-    return Doors.RESTFULL.asyncCall(url, "GET", {}, "");
+Doors.API.prototype.clearInstanceCache = function (providerEnumValue) {
+    var url = "session/clearInstanceCache/" + providerEnumValue;
+    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+};
+
+Doors.API.prototype.connections = function () {
+    var url = "session/connections";
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.connectionsRemove = function (sessionGuid) {
+    var url = "session/connections/remove/" + encodeURIComponent(sessionGuid);
+    return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
+};
+
+Doors.API.prototype.connectionsLog = function (maxResults) {
+    var url = "session/connections/logs?maxResults=" + encodeURIComponent(maxResults);
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
 Doors.API.prototype.currentInstance = function () {
@@ -4906,9 +3958,57 @@ Doors.API.prototype.instanceSettingsGet = function (settingName) {
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
+Doors.API.prototype.masterSettingsGet = function (settingName) {
+    var url = "mastersettings/" + encodeURIComponent(settingName);
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.masterSettingsSet = function (settingName, settingValue) {
+    var url = "mastersettings";
+    var setting = {
+        Setting: settingName,
+        Value: settingValue,
+        Description: ""
+    };
+    return Doors.RESTFULL.asyncCall(url, "POST", setting, "setting");
+};
+
 Doors.API.prototype.instanceSettingsRemove = function (settingName) {
     var url = "settings/" + encodeURIComponent(settingName);
     return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
+};
+
+Doors.API.prototype.sessionTags = function () {
+    var url = "session/tags";
+    return Doors.RESTFULL.asyncCall(url, "GET", {}, "");
+};
+
+Doors.API.prototype.tokensReplace = function (inputString) {
+    var str = inputString ? inputString : "";
+    var url = "session/tokens/replaced?text=" + encodeURIComponent(str);
+    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+};
+
+Doors.API.prototype.runSyncEventsOnClientSet = function (runOnClient) {
+    var str = runOnClient === "true" || runOnClient === true || runOnClient === "1" ? "true" : "false";
+    var url = "session/syncevents/runOnClient/" + str;
+    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+};
+
+Doors.API.prototype.runSyncEventsOnClientGet = function () {
+    var url = "session/syncevents/runOnClient";
+    return Doors.RESTFULL.asyncCall(url, "GET", {}, "");
+};
+
+Doors.API.prototype.syncEventsDisabledSet = function (disabled) {
+    var str = disabled === "true" || disabled === true || disabled === "1" ? "true" : "false";
+    var url = "session/syncevents/disabled/" + str;
+    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+};
+
+Doors.API.prototype.syncEventsDisabledGet = function () {
+    var url = "session/syncevents/disabled";
+    return Doors.RESTFULL.asyncCall(url, "GET", {}, "");
 };
 
 /*Directory Functions*/
@@ -4919,6 +4019,27 @@ Doors.API.prototype.usersGetById = function (accId) {
 
 Doors.API.prototype.accountsGetById = function (accId) {
     var url = "accounts/" + accId;
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.accountSetPicture = function (accId, imageByteArray) {
+    var url = "accounts/" + accId + "/picture";
+    return Doors.RESTFULL.asyncCall(url, "POST", "imageByteArray", imageByteArray);
+};
+
+Doors.API.prototype.accountSetPictureData = function (accId, data, contentType) {
+    var pictureProfile = {
+        Data: data,
+        File: null,
+        Extension: null,
+        Name: ""
+    };
+    var url = "accounts/" + accId + "/picture/data";
+    return Doors.RESTFULL.asyncCall(url, "POST", pictureProfile, "pictureProfile");
+};
+
+Doors.API.prototype.accountGetPicture = function (accId) {
+    var url = "accounts/" + accId + "/picture/data";
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
@@ -4933,8 +4054,9 @@ Doors.API.prototype.accountChildsRecursive = function (accId) {
 };
 
 Doors.API.prototype.accountDelete = function (accId, expropiateObjects) {
-    var url = "accounts/" + encodeURIComponent(accId) + "";
-    return Doors.RESTFULL.asyncCall(url, "DELETE", expropiateObjects, "expropiateObjects");
+    if (!expropiateObjects) expropiateObjects = false;
+    var url = "accounts/" + encodeURIComponent(accId) + "?expropiateObjects=" + expropiateObjects;
+    return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
 };
 
 Doors.API.prototype.accountChildsAdd = function (accId, arrayChildAccounts) {
@@ -4970,7 +4092,7 @@ Doors.API.prototype.newAccount = function (accountType) {
 Doors.API.prototype.userSave = function (user) {
     var url = "users/" + user.AccId;
     var operation = "POST";
-    if (user.AccId === undefined || user.IsNew) {
+    if (user.AccId === undefined || user.AccId == null || user.IsNew) {
         operation = "PUT";
         url = "users";
     }
@@ -4978,9 +4100,26 @@ Doors.API.prototype.userSave = function (user) {
 
 };
 
+Doors.API.prototype.groupSave = function (account) {
+    var url = "accounts/" + account.AccId;
+    var operation = "POST";
+    if (account.AccId === undefined || account.AccId == null) {
+        operation = "PUT";
+        url = "accounts";
+    }
+    return Doors.RESTFULL.asyncCall(url, operation, account, "account");
+
+};
+
 Doors.API.prototype.accountSave = function (account) {
     var url = "accounts/" + account.AccId + "";
     return Doors.RESTFULL.asyncCall(url, "POST", account, "account");
+};
+
+Doors.API.prototype.accountParentsRecursive = function (accId) {
+
+    var url = "accounts/" + encodeURIComponent(accId) + "/parentAccountsRecursive";
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
 Doors.API.prototype.accountParents = function (accId) {
@@ -5001,12 +4140,6 @@ Doors.API.prototype.accountParentsRemove = function (accId, arrParentAccounts) {
     return Doors.RESTFULL.asyncCall(url, "DELETE", arrParentAccounts, "arrayParentAccounts");
 };
 
-Doors.API.prototype.accountParentsRecursive = function (accId) {
-
-    var url = "accounts/" + encodeURIComponent(accId) + "/parentAccountsRecursive";
-    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
-};
-
 Doors.API.prototype.accountsGetById = function (accountsIds) {
     var url = "accounts?accIds=" + accountsIds;
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
@@ -5018,16 +4151,25 @@ Doors.API.prototype.accountsGetByName = function (accName) {
 };
 
 Doors.API.prototype.accountsSearch = function (filter, order) {
-    var url = "/accounts/search?filter=";
-    if (filter) url += encodeURIComponent(filter);
-    url += "&order=";
-    if (order) url += encodeURIComponent(order);
+    var url = "/accounts/search?filter={filter}&order={order}";
+    url = url.replace("{filter}", encodeURIComponent(filter))
+        .replace("{order}", encodeURIComponent(order));
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
 Doors.API.prototype.accounts = function () {
     var url = "accounts";
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.generateApiKey = function (accId) {
+    var url = "accounts/" + accId + "/apikey";
+    return Doors.RESTFULL.asyncCall(url, "POST", "", "");
+};
+
+Doors.API.prototype.deleteApiKey = function (accId) {
+    var url = "accounts/" + accId + "/apikey";
+    return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
 };
 
 /*Folders Functions*/
@@ -5043,6 +4185,11 @@ Doors.API.prototype.folderParents = function (fldId) {
 
 Doors.API.prototype.foldersGetByName = function (parentFolderId, folderName) {
     var url = "folders/" + parentFolderId + "/children?foldername=" + encodeURIComponent(folderName);
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.foldersGetByPath = function (parentFolderId, folderPath) {
+    var url = "folders/" + parentFolderId + "/children?folderpath=" + encodeURIComponent(folderPath);
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
@@ -5098,8 +4245,9 @@ Doors.API.prototype.viewCopy = function (fldId, viewId, targetFldId, asPrivate, 
     return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
 };
 
-Doors.API.prototype.viewDelete = function (fldId, viewId) {
-    var url = "folders/" + fldId + "/views/" + viewId;
+Doors.API.prototype.viewDelete = function (fldId, viewId, sendRecycleBin) {
+    sendRecycleBin = (sendRecycleBin === undefined ? true : sendRecycleBin);
+    var url = "folders/" + fldId + "/views/" + viewId + "?tobin=" + encodeURIComponent(sendRecycleBin);
     return Doors.RESTFULL.asyncCall(url, "DELETE", {}, "");
 };
 
@@ -5146,6 +4294,25 @@ Doors.API.prototype.forms = function () {
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
+Doors.API.prototype.formsNew = function () {
+    var url = "forms/new";
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.formSave = function (form) {
+    var url = "forms";
+    var action = "PUT";
+    if (!form.IsNew) {
+        action = "POST";
+        url += "/" + form.FrmId;
+    }
+    return Doors.RESTFULL.asyncCall(url, action, form, "form");
+};
+Doors.API.prototype.formDelete = function (frmId) {
+    var url = "forms/" + frmId;
+    return Doors.RESTFULL.asyncCall(url, "DELETE", {}, "");
+};
+
 Doors.API.prototype.formsGetById = function (frmId) {
     var url = "forms/" + frmId;
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
@@ -5156,14 +4323,69 @@ Doors.API.prototype.formsGetByFolderId = function (fldId) {
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
-/*Folder Functions*/
-Doors.API.prototype.foldersGetById = function (fldId) {
-    var url = "folders/" + fldId + "";
+Doors.API.prototype.formsGetFullTextIndexed = function () {
+    var url = "forms/fulltextindexed"
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
-Doors.API.prototype.foldersGetByPath = function (parentFolderId, folderPath) {
-    var url = "folders/" + parentFolderId + "/children?folderpath=" + encodeURIComponent(folderPath);
+Doors.API.prototype.formsSearch = function (frmId, folders, fields, formula, order, maxDocs, recursive, maxDescriptionLength) {
+
+    if (!frmId || !folders || !fields) {
+        throw "frmId, folders and fields parameters are required";
+    }
+
+    if (!formula) formula = "";
+    if (!order) order = "";
+    if (!maxDocs) maxDocs = 1000;
+    if (recursive === undefined) recursive = false;
+    if (!maxDescriptionLength) maxDescriptionLength = 150;
+
+    var url = "forms/" + frmId + "/documents?folders=" + folders +
+        "&fields=" + fields + "&formula=" + formula + "&order=" + order +
+        "&maxDocs=" + maxDocs + "&recursive=" + recursive + "&maxDescrLength=" + maxDescriptionLength;
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.formsSearchGroups = function (frmId, folders, groups, totals, formula, maxDocs, recursive, groupsOrder, totalsOrder) {
+
+    if (!frmId || !folders || !groups || !totals) {
+        throw "frmId, folders, groups and totals parameters are required";
+    }
+    var fldIds = folders;
+    if (Object.prototype.toString.call(folders) === "[object Array]") {
+        fldIds = folders.join(",");
+    }
+
+    if (!formula) formula = "";
+    if (!groupsOrder) groupsOrder = "";
+    if (!totalsOrder) totalsOrder = "";
+    if (!maxDocs) maxDocs = 1000;
+    if (recursive === undefined) recursive = false;
+
+    var url = "forms/" + frmId + "/documents/grouped?folders=" + fldIds +
+        "&groups=" + groups + "&totals=" + totals + "&formula=" + formula + "&order=" +
+        "&maxDocs=" + maxDocs + "&recursive=" + recursive + "&groupsOrder=" + groupsOrder +
+        "&totalsOrder=" + totalsOrder;
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.formsEvents = function (frmId) {
+    var url = "forms/" + frmId + "/syncevents";
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.formEventsSave = function (frmId, syncEvents) {
+    var url = "form/" + frmId + "/syncevents";
+    return Doors.RESTFULL.asyncCall(url, "POST", syncEvents, "syncEvents");
+};
+
+Doors.API.prototype.formEventSave = function (frmId, syncEvent) {
+    var url = "form/" + frmId + "/syncevent";
+    return Doors.RESTFULL.asyncCall(url, "POST", syncEvent, "syncEvent");
+};
+/*Folder Functions*/
+Doors.API.prototype.foldersGetById = function (fldId) {
+    var url = "folders/" + fldId + "";
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
@@ -5204,12 +4426,22 @@ Doors.API.prototype.folderMove = function (fldId, destinationParentFolderId) {
 
 Doors.API.prototype.folderDelete = function (fldId) {
     var url = "folders/" + fldId;
-    return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
+    return Doors.RESTFULL.asyncCall(url, "DELETE", {}, "");
 };
 
 Doors.API.prototype.folderEvents = function (fldId) {
     var url = "folders/" + fldId + "/syncevents";
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.folderEventSave = function (fldId, syncEvent) {
+    var url = "folders/" + fldId + "/syncevent";
+    return Doors.RESTFULL.asyncCall(url, "POST", syncEvent, "syncEvent");
+};
+
+Doors.API.prototype.folderEventsSave = function (fldId, syncEvents) {
+    var url = "folders/" + fldId + "/syncevents";
+    return Doors.RESTFULL.asyncCall(url, "POST", syncEvents, "syncEvents");
 };
 
 Doors.API.prototype.folderAsyncEventsNew = function (fldId, eventType) {
@@ -5224,6 +4456,78 @@ Doors.API.prototype.folderAsyncEvents = function (fldId) {
 
 Doors.API.prototype.folderSearch = function (fldId, fields, formula, order, maxDocs, recursive, maxDescrLength) {
     var url = "folders/" + fldId + "/documents";
+    var rec = false;
+    var maxLength = 100;
+    if (recursive)
+        rec = recursive;
+    if (maxDescrLength !== undefined)
+        maxLength = maxDescrLength;
+    if (!maxDocs) {
+        maxDocs = 1000;
+    }
+    if (!order) {
+        order = "";
+    }
+    var parameters = "fields=" + encodeURIComponent(fields) +
+        "&formula=" + encodeURIComponent(formula) + "&order=" + encodeURIComponent(order) +
+        "&maxDocs=" + maxDocs + "&recursive=" + rec + "&maxDescrLength=" + maxLength;
+    return Doors.RESTFULL.asyncCall(url, "GET", parameters, "");
+};
+
+Doors.API.prototype.folderSearchByPath = function (rootFolderId, folderPath, fields, formula, order, maxDocs, recursive, maxDescrLength) {
+    folderPath = (folderPath.indexOf("/") >= 0) ? encodeURIComponent(folderPath) : folderPath
+    var url = "folders/" + rootFolderId + "/" + encodeURIComponent(folderPath) + "/documents";
+    var rec = false;
+    var maxLength = 100;
+    if (recursive)
+        rec = recursive;
+    if (maxDescrLength !== undefined)
+        maxLength = maxDescrLength;
+    if (!maxDocs) {
+        maxDocs = 1000;
+    }
+    if (!order) {
+        order = "";
+    }
+    var parameters = "fields=" + encodeURIComponent(fields) +
+        "&formula=" + encodeURIComponent(formula) + "&order=" + encodeURIComponent(order) +
+        "&maxDocs=" + maxDocs + "&recursive=" + rec + "&maxDescrLength=" + maxLength;
+    return Doors.RESTFULL.asyncCall(url, "GET", parameters, "");
+};
+
+Doors.API.prototype.folderAsyncEventsSearch = function (filter, order) {
+    var url = "folders/asyncevents/search";
+    if (!order) {
+        order = "created asc";
+    }
+    var parameters = "filter=" + encodeURIComponent(filter) +
+        "&order=" + encodeURIComponent(order);
+    return Doors.RESTFULL.asyncCall(url, "GET", parameters, "");
+};
+
+Doors.API.prototype.folderSyncEventsSearch = function (filter, order) {
+    var url = "folders/syncevents/search";
+    if (!order) {
+        order = "created asc";
+    }
+    var parameters = "filter=" + encodeURIComponent(filter) +
+        "&order=" + encodeURIComponent(order);
+    return Doors.RESTFULL.asyncCall(url, "GET", parameters, "");
+};
+
+
+Doors.API.prototype.folderSearchDeleted = function (fields, formula, order, maxDocs, recursive, maxDescrLength) {
+    /*
+     Campos para formula:
+        deleteDate = p.modified
+        deleteUser = a2.name
+        folder = f.root_fld_path
+        doc_id = d.doc_id
+        subject = d.subject
+        modified = d.modified
+        owner = a.name
+     */
+    var url = "folders/0/documents";
     var rec = false;
     var maxLength = 100;
     if (recursive)
@@ -5259,7 +4563,7 @@ Doors.API.prototype.folderSearchGroups = function (fldId, groups, totals, formul
     return Doors.RESTFULL.asyncCall(url, "GET", parameters, "");
 };
 
-Doors.API.prototype.folderSearchPivot = function (fldId, pivotField, crossField, formula, totalsField, totalsFunc, totalsOrder, maxDocs) {
+Doors.API.prototype.folderSearchPivot = function (fldId, pivotField, crossField, formula, totalsField, totalsFunc, totalsOrder, crossFieldOrder, maxDocs) {
     var url = "folders/" + fldId + "/documents/pivot";
     var parameters = "pivotField=" + encodeURIComponent(pivotField) +
         "&crossField=" + encodeURIComponent(crossField) +
@@ -5267,9 +4571,12 @@ Doors.API.prototype.folderSearchPivot = function (fldId, pivotField, crossField,
         "&totalsField=" + (totalsField === undefined ? "" : encodeURIComponent(totalsField)) +
         "&totalsFunc=" + (totalsFunc === undefined ? "" : encodeURIComponent(totalsFunc)) +
         "&totalsOrder=" + (totalsOrder === undefined ? "" : encodeURIComponent(totalsOrder)) +
+        "&crossFieldOrder=" + (crossFieldOrder === undefined ? "" : encodeURIComponent(crossFieldOrder)) +
         "&maxDocs=" + (maxDocs === undefined ? 30 : maxDocs);
     return Doors.RESTFULL.asyncCall(url, "GET", parameters, "");
 };
+
+/*Documents Functions*/
 
 Doors.API.prototype.documentsNew = function (fldId) {
 
@@ -5287,7 +4594,6 @@ Doors.API.prototype.documentsFieldsLog = function (docId) {
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
-
 Doors.API.prototype.documentSave = function (document) {
     var url = "documents";
     return Doors.RESTFULL.asyncCall(url, "PUT", document, "document");
@@ -5295,7 +4601,7 @@ Doors.API.prototype.documentSave = function (document) {
 
 Doors.API.prototype.documentDelete = function (fldId, docId, sendRecycleBin) {
     var sendRecycleBin = (sendRecycleBin === undefined ? true : sendRecycleBin);
-    var url = "folders/" + fldId + "/documents?tobin=" + encodeURIComponent(sendRecycleBin);
+    var url = "folders/" + fldId + "/documents/?tobin=" + encodeURIComponent(sendRecycleBin);
     return Doors.RESTFULL.asyncCall(url, "DELETE", [docId], "docIds");
 };
 
@@ -5307,6 +4613,27 @@ Doors.API.prototype.documentsDeleteByFormula = function (fldId, formula) {
 Doors.API.prototype.documentCurrentAccess = function (docId, access) {
     var url = "documents/" + docId + "/acl/" + encodeURIComponent(access);
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.documentCopy = function (destFldId, docId) {
+    var url = "documents/" + docId + "/copy/" + destFldId;
+    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+};
+
+Doors.API.prototype.documentsRestore = function (docIds) {
+    var url = "/folders/0/documents/restore";
+    if (typeof (docIds) === "string") {
+        docIds = docIds.split(",");
+    }
+    return Doors.RESTFULL.asyncCall(url, "POST", docIds, "docIds");
+};
+
+Doors.API.prototype.documentsPurge = function (docIds) {
+    var url = "/folders/0/documents/purge";
+    if (typeof (docIds) === "string") {
+        docIds = docIds.split(",");
+    }
+    return Doors.RESTFULL.asyncCall(url, "POST", docIds, "docIds");
 };
 
 /*Attachments Functions*/
@@ -5322,7 +4649,7 @@ Doors.API.prototype.attachmentsGetById = function (docId, attId) {
 };
 
 Doors.API.prototype.attachmentsGetByName = function (docId, attName) {
-    var url = "documents/" + docId + "/attachments/" + encodeURIComponent(attName);
+    var url = "documents/" + docId + "/attachments?name=" + encodeURIComponent(attName);
     return Doors.RESTFULL.asyncCallXmlHttp(url, "GET", "");
 };
 
@@ -5571,8 +4898,8 @@ Doors.API.prototype.userPropertiesRemove = function (objId, objType, objParentId
     if (!objName) {
         objName = "";
     }
-    var url = "userproperties?objId=" + objId + "&objType=" + objType +
-        "&objParentId=" + objParentId + "&objName=" + encodeURIComponent(objName);
+    var url = "userproperties?objectId=" + objId + "&objectType=" + objType +
+        "&objectParentId=" + objParentId + "&objectName=" + encodeURIComponent(objName);
     return Doors.RESTFULL.asyncCall(url, "DELETE", arrProperties, "arrProperties");
 };
 
@@ -5584,8 +4911,8 @@ Doors.API.prototype.userPropertiesSet = function (objId, objType, objParentId, o
     if (!objName) {
         objName = "";
     }
-    var url = "userproperties?objId=" + objId + "&objType=" + objType +
-        "&objParentId=" + objParentId + "&objName=" + encodeURIComponent(objName);
+    var url = "userproperties?objectId=" + objId + "&objectType=" + objType +
+        "&objectParentId=" + objParentId + "&objectName=" + encodeURIComponent(objName);
     return Doors.RESTFULL.asyncCall(url, "PUT", arrProperties, "arrProperties");
 };
 
@@ -5610,14 +4937,17 @@ Doors.API.prototype.documentAclInherits = function (docId, inherits) {
     return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
 };
 
-
 Doors.API.prototype.documentAclGrant = function (docId, access, accId) {
     var url = "documents/" + docId + "/acl/" + access + "/grant/" + accId;
     return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
 };
-Doors.API.prototype.documentAclSave = function (docId, aclInformation) {
+
+Doors.API.prototype.documentAclSave = function (docId, acl) {
     var url = "documents/" + docId + "/acl";
-    return Doors.RESTFULL.asyncCall(url, "POST", aclInformation, "");
+    var aclObj = {
+        aclInformation: acl
+    };
+    return Doors.RESTFULL.asyncCall(url, "POST", aclObj, "");
 };
 
 Doors.API.prototype.documentAclRevoke = function (docId, access, accId) {
@@ -5693,6 +5023,11 @@ Doors.API.prototype.folderAclInherited = function (fldId) {
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
+Doors.API.prototype.folderAclInherits = function (fldId, inherits) {
+    var url = "folders/" + fldId + "/aclinherits/" + inherits;
+    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+};
+
 Doors.API.prototype.folderAclGrant = function (fldId, access, accId) {
     var url = "folders/" + fldId + "/acl/" + access + "/grant/" + accId;
     return Doors.RESTFULL.asyncCall(url, "POST", "", "");
@@ -5711,6 +5046,11 @@ Doors.API.prototype.folderAclRevokeAll = function (fldId, accId) {
         url += "/account/" + accId;
     }
     return Doors.RESTFULL.asyncCall(url, "DELETE", {}, "");
+};
+
+Doors.API.prototype.folderAclSave = function (fldId, aclInformation) {
+    var url = "folders/" + fldId + "/acl";
+    return Doors.RESTFULL.asyncCall(url, "POST", aclInformation, "");
 };
 
 Doors.API.prototype.folderCurrentAccess = function (fldId, access, explicit) {
@@ -5744,6 +5084,14 @@ Doors.API.prototype.formAclRevokeAll = function (frmGuid, accId) {
         url += "/" + accId;
     }
     return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
+};
+
+Doors.API.prototype.formAclSave = function (frmGuid, acl) {
+    var url = "forms/" + frmGuid + "/acl";
+    var aclObj = {
+        aclInformation: acl
+    };
+    return Doors.RESTFULL.asyncCall(url, "POST", aclObj, "");
 };
 
 Doors.API.prototype.formCurrentAccess = function (frmId, access, explicit) {
@@ -5783,6 +5131,23 @@ Doors.API.prototype.GlobalSearch = function (searchForms, searchText, fromDate, 
     return Doors.RESTFULL.asyncCall(url, "POST", searchFilter, "searchFilter");
 }
 
+Doors.API.prototype.formSyncEventsSearch = function (filter, order) {
+    var url = "forms/syncevents/search";
+    if (!order) {
+        order = "created asc";
+    }
+    var parameters = "filter=" + encodeURIComponent(filter) +
+        "&order=" + encodeURIComponent(order);
+    return Doors.RESTFULL.asyncCall(url, "GET", parameters, "");
+};
+
+/*Notifications Functions*/
+
+Doors.API.prototype.notificationDeviceRegister = function (notificationReceiver) {
+    var url = "notifications/devices";
+    return Doors.RESTFULL.asyncCall(url, "POST", notificationReceiver, "");
+};
+
 Doors.API.prototype.pushRegistration = function (regSettings) {
     var url = "notifications/devices";
     return Doors.RESTFULL.asyncCall(url, "POST", regSettings, "notificationReceiver");
@@ -5790,21 +5155,109 @@ Doors.API.prototype.pushRegistration = function (regSettings) {
 
 Doors.API.prototype.pushUnreg = function (registrationType, registrationId) {
     var url = "notifications/devices";
-
     var parameters =
         "providerType=" + encodeURIComponent(registrationType) +
         "&registrationId=" + encodeURIComponent(registrationId);
-
     return Doors.RESTFULL.asyncCall(url, "DELETE", parameters, "");
 };
 
-Doors.API.prototype.runSyncEventsOnClientSet = function (runOnClient) {
-    var str = runOnClient === "true" || runOnClient === true || runOnClient === "1" ? "true" : "false";
-    var url = "session/syncevents/runOnClient/" + str;
-    return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+Doors.API.prototype.notifications = function (devicePlatform, limit, lastDeliveryDate) {
+    if (!limit) {
+        limit = "100";
+    }
+    if (!lastDeliveryDate) {
+        lastDeliveryDate = "";
+    }
+    var url = "notifications/loggeduser?devicePlatform=" + devicePlatform +"&limit=" + limit + "&lastDeliveryDate=" + lastDeliveryDate;
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
-Doors.API.prototype.runSyncEventsOnClientGet = function () {
-    var url = "session/syncevents/runOnClient";
-    return Doors.RESTFULL.asyncCall(url, "GET", {}, "");
+Doors.API.prototype.notificationsByAccId = function (accId) {
+    var url = "notifications/accounts/" + encodeURIComponent(accId);
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.notificationsByLogin = function (login) {
+    var url = "notifications/accounts?login=" + encodeURIComponent(login);
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+
+Doors.API.prototype.notificationsRead = function (notificationId) {
+    var url = "notifications/" + encodeURIComponent(notificationId) + "/status/read";
+    return Doors.RESTFULL.asyncCall(url, "POST", "", "");
+};
+
+Doors.API.prototype.notificationsUnRead = function (notificationId) {
+    var url = "notifications/" + encodeURIComponent(notificationId) + "/status/unread";
+    return Doors.RESTFULL.asyncCall(url, "POST", "", "");
+};
+
+Doors.API.prototype.notificationsDelete = function (notificationId) {
+    var url = "notifications/" + encodeURIComponent(notificationId) + "/status/erase";
+    return Doors.RESTFULL.asyncCall(url, "POST", "", "");
+};
+
+Doors.API.prototype.notificationsReadAll = function () {
+    var url = "notifications/loggeduser/status/readall";
+    return Doors.RESTFULL.asyncCall(url, "POST", "", "");
+};
+
+Doors.API.prototype.notificationsDeleteAll = function () {
+    var url = "notifications/loggeduser/status/eraseall";
+    return Doors.RESTFULL.asyncCall(url, "POST", "", "");
+};
+
+
+
+Doors.API.prototype.notificationsSearch = function (to, status, devicePlatform, deliveryDateFrom, deliveryDateTo, readDateFrom, readDateTo, eraseDateFrom, eraseDateTo) {
+    if (!to) {
+        to = "";
+    }
+    if (!status) {
+        status = "";
+    }
+    if (!devicePlatform) {
+        devicePlatform = "";
+    }
+    if (!deliveryDateFrom) {
+        deliveryDateFrom = "";
+    }
+    if (!deliveryDateTo) {
+        deliveryDateTo = "";
+    }
+    if (!readDateFrom) {
+        readDateFrom = "";
+    }
+    if (!readDateTo) {
+        readDateTo = "";
+    }
+    if (!eraseDateFrom) {
+        eraseDateFrom = "";
+    }
+    if (!eraseDateTo) {
+        eraseDateTo = "";
+    }
+    const url =  "notifications?to="+ to + "&status="+ status + "&devicePlatform="+ devicePlatform + "&deliveryDateFrom="+ deliveryDateFrom + "" +
+    "&deliveryDateTo="+ deliveryDateTo + "&readDateFrom="+ readDateFrom + "&readDateTo="+ readDateTo + "&eraseDateFrom="+ eraseDateFrom + "&eraseDateTo"+ eraseDateTo + "";
+    return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+;Doors = Doors || {};
+Doors.Session = Doors.Session || {};
+
+var _loggedUser;
+
+Doors.Session.init = function () {
+    DoorsAPI.loggedUser()
+        .then(
+            function (obj) {
+                _loggedUser = obj;
+            },
+            function (obj) {
+                console.log("Error al cargar el usuario logueado Doors.Session.init");
+            }
+        );
+};
+
+Doors.Session.LoggedUser = function () {
+    return _loggedUser;
 };
