@@ -60,6 +60,9 @@ include(arrScripts, function () {
                 }
             )
         })
+    } else {
+        Doors.RESTFULL.AuthToken = data;
+        resume();
     }
 
     function resume() {
