@@ -84,9 +84,9 @@ function registeredScripts() {
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 
 	// Backward compatibility
-	scripts.push({ id: 'app7-doorsapi', path: '/doorsapi.js', version: 68 });
-	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 76 });
-	scripts.push({ id: 'qrcode', path: 'lib/qrcode.js', version: 55 });
+	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
+	scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
+	scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
 
 	return scripts;
 }
@@ -248,13 +248,18 @@ function scriptSrc(scriptId, version) {
 	var script = scripts.find(el => el.id == scriptId.toLowerCase());
 
 	if (script) {
-		var v = (version != undefined ? version : script.version);
+        if (script.aliasOf) {
+            return scriptSrc(script.aliasOf, version);
 
-		if (v == 0) {
-			src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
-		} else {
-			src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
-		}
+        } else {
+            var v = (version != undefined ? version : script.version);
+
+            if (v == 0) {
+                src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+            } else {
+                src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
+            }
+        }
 
 	} else {
 		src = undefined;
