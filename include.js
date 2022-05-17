@@ -162,7 +162,7 @@ function include() {
 
         if (script && script.aliasOf) {
             debugger;
-            aerguments[0] = script.aliasOf;
+            arguments[0] = script.aliasOf;
             include.apply(null, arguments); 
 
         } else {
