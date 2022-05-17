@@ -250,7 +250,12 @@ function scriptLoaded(scriptName, callback) {
     } else {
         id = scriptName.toLowerCase();
     }
-    document.getElementById('script_' + id).loaded(callback);
+    var el = document.getElementById('script_' + id)
+    if (el) {
+        el.loaded(callback);
+    } else {
+        console.log('script_' + id + ' node not found');
+    }
 };
 
 function scriptSrc(scriptId, version) {
