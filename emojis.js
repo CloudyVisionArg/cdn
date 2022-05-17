@@ -13,13 +13,11 @@ emojis.createPicker({
 }());
 
 $(document).ready(function () {
-	debugger;
 	$.ajax({
 		url: 'https://cloudycrm.net/c/emojis.asp',
 		dataType: 'jsonp',
 	})
 		.done(function (data, textStatus, jqXHR) {
-			debugger;
 			emojis.emojisJSON = data;
 
 			// El DIV para mostrar los emojis
