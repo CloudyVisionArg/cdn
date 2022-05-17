@@ -662,7 +662,7 @@ function renderControls(pCont, pParent) {
                 });
             }
 
-            /*
+            /* todo:
             if (ctl.attr('buttons').indexOf('email') >= 0) addEmailButton($this);
             if (ctl.attr('buttons').indexOf('phone') >= 0) addPhoneButton($this);
             if (ctl.attr('buttons').indexOf('whatsapp') >= 0) addWappButton($this);

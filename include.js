@@ -85,7 +85,7 @@ function registeredScripts() {
 
 	// Backward compatibility
 	scripts.push({ id: 'app7-doorsapi', path: '/doorsapi.js', version: 68 });
-	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 57 });
+	scripts.push({ id: 'javascript', path: '/web/javascript.js', version: 76 });
 	scripts.push({ id: 'qrcode', path: 'lib/qrcode.js', version: 55 });
 
 	return scripts;
