@@ -19,6 +19,7 @@ $(document).ready(function () {
 		dataType: 'jsonp',
 	})
 		.done(function (data, textStatus, jqXHR) {
+			debugger;
 			emojis.emojisJSON = data;
 
 			// El DIV para mostrar los emojis
