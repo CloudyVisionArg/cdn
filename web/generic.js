@@ -469,6 +469,7 @@ function renderPage() {
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
+    debugger;
     setTimeout(function waiting() {
         if ($('[data-filling]').length > 0) {
             wt += 100;
