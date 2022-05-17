@@ -16,12 +16,6 @@ Tambien puedo verificar si la biblioteca se termino de cargar con el metodo scri
 		// emojis loaded
 	});
 
-O mediante el metodo loaded del elemento script (hay que poner el prefijo script_)
-
-	document.getElementById('script_emojis').loaded(function () {
-		// emojis loaded
-	});
-
 Puedo especificar la version (tag del commit)
 
 	include('emojis', 15, function () {
