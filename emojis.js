@@ -13,6 +13,7 @@ emojis.createPicker({
 }());
 
 $(document).ready(function () {
+	debugger;
 	$.ajax({
 		url: 'https://cloudycrm.net/c/emojis.asp',
 		dataType: 'jsonp',
