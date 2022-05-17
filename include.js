@@ -248,7 +248,15 @@ function includeJs() {
 }
 
 function scriptLoaded(scriptName, callback) {
-	document.getElementById('script_' + scriptName.toLowerCase()).loaded(callback);
+	var scripts = registeredScripts();
+    var script = scripts.find(el => el.id.toLowerCase() == scriptName.toLowerCase());
+    var id;
+    if (script && script.aliasOf) {
+        id = script.aliasOf.toLowerCase();
+    } else {
+        id = scriptName.toLowerCase();
+    }
+    document.getElementById('script_' + id).loaded(callback);
 };
 
 function scriptSrc(scriptId, version) {
