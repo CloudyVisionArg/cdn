@@ -130,7 +130,6 @@ function getDoc() {
 }
 
 function getControlsFolder() {
-    debugger;
 	var cf = objPropCI(doc.Tags, 'controlsFolder');
 	
 	if (cf) {
