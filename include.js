@@ -158,76 +158,85 @@ function include() {
     } else if (typeof arguments[0] == 'string') {
         var pId = arguments[0].toLowerCase();
 
-        if (typeof arguments[1] == 'string') {
-            pSrc = arguments[1];
-        } else if (typeof arguments[1] == 'number') {
-            pVer = arguments[1]
-        } else if (typeof arguments[1] == 'function') {
-            pCallback = arguments[1];
-        }
+        var script = scripts.find(el => el.id == pId);
 
-        if (typeof arguments[2] == 'function') {
-            pCallback = arguments[2];
-        }
+        if (script && script.aliasOf) {
+            debugger;
+            aerguments[0] = script.aliasOf;
+            include.apply(null, arguments); 
 
-        var src = scriptSrc(pId, pVer);
-        if (!src) {
-            if (pSrc) {
-                src = pSrc;
-            } else {
-                throw pId + ' not registered and no src specified';
+        } else {
+            if (typeof arguments[1] == 'string') {
+                pSrc = arguments[1];
+            } else if (typeof arguments[1] == 'number') {
+                pVer = arguments[1]
+            } else if (typeof arguments[1] == 'function') {
+                pCallback = arguments[1];
             }
-        }
 
-        if (src) {
-			var scriptNode = document.getElementById('script_' + pId);
-            if (!scriptNode) {
-                //console.log(pId + ' loading');
-                var D = document;
-                
-				if (src.substring(src.length - 4).toLowerCase() == '.css') {
-					scriptNode = D.createElement('link');
-					scriptNode.rel = 'stylesheet';
-					scriptNode.href = src;
-				} else {
-					scriptNode = D.createElement('script');
-					scriptNode.type = 'text/javascript';
-					scriptNode.async = true;
-					scriptNode.src = src;
-				}
-                scriptNode.id = 'script_' + pId;
-                
-                scriptNode.loaded = function (callback) {
-                    var self = this;
-                    var waiting = 0;
-                    var interv = setInterval(function () {
-                        waiting += 10;
-                        if (self._loaded || waiting > 3000) {
-                            clearInterval(interv);
-                            if (waiting > 3000) console.log('include(' + pId + ') timeout');
-                            if (callback) callback(self);
-                            
-                            /* Cuando se esta depurando y hay un debugger en la carga de la pagina,
-                            el evento load no se dispara, en ese caso loaded llama igual al
-                            callback luego de 3 segundos */
-                        }
-                    }, 10)
-                };
-                
-                scriptNode.addEventListener('load', function () {
-                    this._loaded = true;
-                    console.log(this.id.substring(7) + ' loaded' + ' - ' + src);
-                });
+            if (typeof arguments[2] == 'function') {
+                pCallback = arguments[2];
+            }
 
-                var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
-                cont.appendChild(scriptNode);
+            var src = scriptSrc(pId, pVer);
+            if (!src) {
+                if (pSrc) {
+                    src = pSrc;
+                } else {
+                    throw pId + ' not registered and no src specified';
+                }
+            }
 
-                if (pCallback) scriptNode.loaded(pCallback);
-                return scriptNode;
-                
-            } else {
-                if (pCallback) scriptNode.loaded(pCallback);
-                return scriptNode;
+            if (src) {
+                var scriptNode = document.getElementById('script_' + pId);
+                if (!scriptNode) {
+                    //console.log(pId + ' loading');
+                    var D = document;
+                    
+                    if (src.substring(src.length - 4).toLowerCase() == '.css') {
+                        scriptNode = D.createElement('link');
+                        scriptNode.rel = 'stylesheet';
+                        scriptNode.href = src;
+                    } else {
+                        scriptNode = D.createElement('script');
+                        scriptNode.type = 'text/javascript';
+                        scriptNode.async = true;
+                        scriptNode.src = src;
+                    }
+                    scriptNode.id = 'script_' + pId;
+                    
+                    scriptNode.loaded = function (callback) {
+                        var self = this;
+                        var waiting = 0;
+                        var interv = setInterval(function () {
+                            waiting += 10;
+                            if (self._loaded || waiting > 3000) {
+                                clearInterval(interv);
+                                if (waiting > 3000) console.log('include(' + pId + ') timeout');
+                                if (callback) callback(self);
+                                
+                                /* Cuando se esta depurando y hay un debugger en la carga de la pagina,
+                                el evento load no se dispara, en ese caso loaded llama igual al
+                                callback luego de 3 segundos */
+                            }
+                        }, 10)
+                    };
+                    
+                    scriptNode.addEventListener('load', function () {
+                        this._loaded = true;
+                        console.log(this.id.substring(7) + ' loaded' + ' - ' + src);
+                    });
+
+                    var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
+                    cont.appendChild(scriptNode);
+
+                    if (pCallback) scriptNode.loaded(pCallback);
+                    return scriptNode;
+                    
+                } else {
+                    if (pCallback) scriptNode.loaded(pCallback);
+                    return scriptNode;
+                }
             }
         }
     }
