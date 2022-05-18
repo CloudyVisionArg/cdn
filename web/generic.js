@@ -58,8 +58,6 @@ include(arrScripts, function () {
     }
 
     function resume() {
-        // todo: mensaje y terminar
-        debugger;
         DoorsAPI.islogged().then(
             function (res) {
                 if (res) {

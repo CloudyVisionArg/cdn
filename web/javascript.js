@@ -7,7 +7,7 @@ Funciones varias de JavaScript
 
 Inventario de metodos:
 
-logAndToast(pMsg)
+logAndToast(pMsg, pToastOptions)
 getFolder(pFolder, pRootFolderId)
 htmlEncode(pText)
 sqlEncode(pValue, pType)
@@ -41,9 +41,9 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
-function logAndToast(pMsg) {
+function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);
-    toast(pMsg);
+    toast(pMsg, pToastOptions);
 }
 
 /*
