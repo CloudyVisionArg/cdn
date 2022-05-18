@@ -106,7 +106,7 @@ include(arrScripts, function () {
 });
 
 function end(pErr) {
-    logAndToast(pErr);
+    logAndToast(errMsg(pErr));
     preloader.hide();
 }
 
