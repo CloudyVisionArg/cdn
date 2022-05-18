@@ -226,7 +226,7 @@ function renderPage() {
             }
         });
 
-        // Kb shortcuts
+        // Key shortcuts
         $d.keypress(function (e) {
             if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
                 e.preventDefault();
