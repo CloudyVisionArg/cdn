@@ -46,35 +46,38 @@ include(arrScripts, function () {
 
 	Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 
-    var tkn = getCookie('AuthToken');
-    if (!tkn) {
+    let tkn = getCookie('AuthToken');
+    if (tkn) {
+        Doors.RESTFULL.AuthToken = tkn;
+        resume();
+    } else {
         $.get('/c/tkn.asp', function (data) {
             Doors.RESTFULL.AuthToken = data;
-
-            DoorsAPI.runSyncEventsOnClientSet(false).then(
-                function () {
-                    resume();
-                },
-                function (err) {
-                    logAndToast(err);
-                }
-            )
+            resume();
         })
-    } else {
-        Doors.RESTFULL.AuthToken = data;
-        resume();
     }
 
     function resume() {
         // todo: mensaje y terminar
         DoorsAPI.islogged().then(
             function (res) {
+                debugger;
+                DoorsAPI.runSyncEventsOnClientSet(false).then(
+                    function () {
+                        resume2();
+                    },
+                    function (err) {
+                        logAndToast(err);
+                    }
+                )
             },
             function (err) {
                 console.log(err);
             }
         );
+    };
 
+    function resume2() {
         // todo: setar segun el LNG_ID
         moment.locale('es');
         numeral.locale('es'); // http://numeraljs.com/
@@ -671,7 +674,7 @@ function renderControls(pCont, pParent) {
         // -- DTPicker --
 
         } else if (type == 'DTPICKER') {
-            var mode = 'date';
+            let mode = 'date';
             if (ctl.attr('mode') == '2') {
                 mode = 'datetime-local';
             } else if (ctl.attr('mode') == '3') {
@@ -738,7 +741,7 @@ function renderControls(pCont, pParent) {
                     ' and (DISABLED = 0 OR DISABLED is NULL)');
                 aux = ctl.attr('order');
                 $input.attr('data-fill-order', (aux ? aux : 'DESCRIPTION'));
-                $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
+                $input.attr('data-fill-withoutnothing', ctl.attr('withoutnull') == '1' ? '1' : '0');
                 /*
                 Si hacen falta los XFIELD agregarlos en el SBF asi:
                     $input.attr('data-fill-fields', $input.attr('data-fill-fields') + ', xfield1') 
@@ -749,7 +752,7 @@ function renderControls(pCont, pParent) {
                 $input.attr('data-fill-fields', ctl.attr('fieldlist'));
                 $input.attr('data-fill-formula', ctl.attr('searchfilter'));
                 $input.attr('data-fill-order', ctl.attr('searchorder'));
-                $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' || type == 'SELECTMULTIPLEFOLDER' ? '1' : '0');
+                $input.attr('data-fill-withoutnothing', ctl.attr('withoutnull') == '1' || type == 'SELECTMULTIPLEFOLDER' ? '1' : '0');
 
             } else if (type == 'LOOKUPBOXACCOUNTS') {
                 $input.attr('data-fill-folder', 'accounts');
@@ -760,7 +763,7 @@ function renderControls(pCont, pParent) {
                 $input.attr('data-fill-formula', aux);
                 $input.attr('data-fill-order', 'name');
                 $input.attr('data-fill-withoutnothing',
-                    (ctl.attr('allownull') == '0' || ctl.attr('mode') == '2') ? '1' : '0');
+                    (ctl.attr('withoutnull') == '1' || ctl.attr('mode') == '2') ? '1' : '0');
             }
 
 
@@ -774,7 +777,7 @@ function renderControls(pCont, pParent) {
         // -- HtmlArea --
 
         } else if (type == 'HTMLAREA') {
-            var aux = parseInt(ctl.attr('height'));
+            let aux = parseInt(ctl.attr('height'));
             $this = newCKEditor(ctl['NAME'], label, {
                 readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
                 height: !isNaN(aux) ? aux : 150,
@@ -927,7 +930,7 @@ function renderControls(pCont, pParent) {
         // -- Maps Autocomplete --
 
         } else if (type == 'MAPSAUTOCOMPLETE') {
-            var $this = newMapsAutocomplete(ctl['NAME'], label);
+            $this = newMapsAutocomplete(ctl['NAME'], label);
             $this.addClass('mt-3');
             $input = $this.find('.maps-autocomplete');
 
@@ -1050,7 +1053,7 @@ function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(doc, tf);
+            textField = getDocField(doc, tf);
             if (textField) {
                 text = textField.Value;
             } else {
@@ -1061,7 +1064,7 @@ function fillControls() {
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(doc, vf);
+            valueField = getDocField(doc, vf);
             if (valueField) {
                 value = valueField.Value;
             } else {
@@ -1072,7 +1075,7 @@ function fillControls() {
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            var xmlField = getDocField(doc, xf);
+            xmlField = getDocField(doc, xf);
             if (xmlField) {
                 xml = xmlField.Value;
             } else {
@@ -1083,13 +1086,13 @@ function fillControls() {
 
         if (el.tagName == 'INPUT') {
             
-            var type = $el.attr('type').toLowerCase();
+            let type = $el.attr('type').toLowerCase();
 
             if (type == 'text') {
                 var format = $el.attr('data-numeral');
                 if (format) {
                     // Input numeric
-                    var n = numeral(text);
+                    let n = numeral(text);
                     if (n.value() != null) {
                         $el.val(n.format(format));
                     } else {
@@ -1138,8 +1141,8 @@ function fillControls() {
 
         } else if (el.tagName == 'SELECT') {
             if ($el.attr('multiple')) {
-                var t = text ? text.split(';') : null;
-                var v = value ? value.split(';') : null;
+                let t = text ? text.split(';') : null;
+                let v = value ? value.split(';') : null;
                 setSelectVal($el, t, v);
             } else {
                 setSelectVal($el, text, value);
@@ -1203,12 +1206,12 @@ function fillControls() {
     })
 
     // Inicializa los chats de Whatsapp
-    var $wappChats = $('div.wapp-chat');
+    let $wappChats = $('div.wapp-chat');
     if ($wappChats.length > 0) {
         include('whatsapp', function () {
             wapp.ready(function () {
                 $wappChats.each(function () {
-                    var $this = $(this);
+                    let $this = $(this);
                     setFieldAttr($this, 'data-internal-name');
                     setFieldAttr($this, 'data-internal-number');
                     setFieldAttr($this, 'data-external-name');
@@ -1216,7 +1219,7 @@ function fillControls() {
                     wapp.init($this);
 
                     function setFieldAttr(pCont, pAttr) {
-                        var field = pCont.attr(pAttr + '-field');
+                        let field = pCont.attr(pAttr + '-field');
                         if (field) {
                             pCont.attr(pAttr, getDocField(doc, field).Value);
                         }
@@ -1235,7 +1238,7 @@ function fillControls() {
     });
 
     // Evento AfterRender
-    var ev = getEvent('AfterRender');
+    let ev = getEvent('AfterRender');
     if (ev) {
         try {
             eval(ev);
@@ -1248,7 +1251,7 @@ function fillControls() {
 
 function getEvent(pEvent) {
     if (controls) {
-        var ev = controls.find(el => el['NAME'] && el['NAME'].toUpperCase() == pEvent.toUpperCase());
+        let ev = controls.find(el => el['NAME'] && el['NAME'].toUpperCase() == pEvent.toUpperCase());
         if (ev) return ev['SCRIPTBEFORERENDER'];
     }
 }
@@ -1269,7 +1272,7 @@ function saveDoc() {
                     if ($el.attr('data-numeral') || field.Type == 3) {
                         field.Value = numeral($el.val()).value();
                     } else if (field.Type == 2) {
-                        var mom = moment($el.val(), 'L LT');
+                        let mom = moment($el.val(), 'L LT');
                         if (mom.isValid()) {
                             field.Value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
                         } else {
@@ -1287,7 +1290,7 @@ function saveDoc() {
                 }
 
             } else if (el.tagName == 'SELECT') {
-                var aux = el._text();
+                let aux = el._text();
                 field.Value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'DIV') {
@@ -1316,7 +1319,7 @@ function saveDoc() {
 
         if (field && field.Updatable) {
             if (el.tagName == 'SELECT') {
-                var aux = el._value();
+                let aux = el._value();
                 field.Value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
@@ -1324,7 +1327,7 @@ function saveDoc() {
                     field.Value = el._value();
 
                 } else {
-                    var type = $el.attr('type').toLowerCase();
+                    let type = $el.attr('type').toLowerCase();
                     if (type == 'hidden') {
                         if (field.Type == 3) {
                             field.Value = numeral($el.val()).value();
@@ -1343,7 +1346,7 @@ function saveDoc() {
 
         if (field && field.Updatable) {
             if (el.tagName == 'INPUT') {
-                var type = $el.attr('type').toLowerCase();
+                let type = $el.attr('type').toLowerCase();
                 if (type == 'hidden') {
                     field.Value = $el.val();
                 }
@@ -1352,7 +1355,7 @@ function saveDoc() {
     });
 
     // Evento BeforeSave
-    var ev = getEvent('BeforeSave');
+    let ev = getEvent('BeforeSave');
     if (ev) {
         try {
             eval(ev);
@@ -1369,7 +1372,7 @@ function saveDoc() {
             saveAtt().then(
                 function (res) {
                     // Evento AfterSave
-                    var ev = getEvent('AfterSave');
+                    let ev = getEvent('AfterSave');
                     if (ev) {
                         try {
                             eval(ev);
@@ -1502,7 +1505,7 @@ function accountsSearch(pFormula, pOrder) {
 
 function getCache(pKey) {
     if (Array.isArray(cache)) {
-        var f = cache.find(el => el.key == pKey);
+        let f = cache.find(el => el.key == pKey);
         if (f) {
             console.log('Cache hit: ' + pKey);
             return f.value;
@@ -1512,7 +1515,7 @@ function getCache(pKey) {
 
 function setCache(pKey, pValue) {
     if (Array.isArray(cache)) {
-        var f = cache.find(el => el.key == pKey);
+        let f = cache.find(el => el.key == pKey);
         if (f) {
             f.value = pValue;
         } else {

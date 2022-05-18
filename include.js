@@ -10,7 +10,7 @@ Ej:
 		// emojis loaded
 	});
 	
-Tambien puedo verificar si la biblioteca se termino de cargar con el metodo scriptLoaded:
+Puedo verificar si la biblioteca se termino de cargar con el metodo scriptLoaded:
 
 	scriptLoaded('emojis', function () {
 		// emojis loaded
@@ -77,7 +77,7 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 
-	// Backward compatibility
+	// Aliases (for backward compatibility)
 	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
 	scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
 	scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });

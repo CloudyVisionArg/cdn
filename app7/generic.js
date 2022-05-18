@@ -6,7 +6,7 @@ XmlAttributes:
     - readonly: Textbox, DTPicker, Select, SelectFolder, SelectKeywords
         Checkbox, SelectMultiple, SelectMultipleFolder, SelectAccounts
         HtmlArea, Attachments
-    - allownull: SelectFolder, SelectKeywords, SelectAccounts
+    - withoutnull: SelectFolder, SelectKeywords, SelectAccounts
     - order: SelectKeywords         
     - searchbar: SelectFolder, SelectKeywords, SelectMultiple,
         SelectMultipleFolder, SelectAccounts
@@ -29,7 +29,7 @@ En el BeforeRender:
 
     pStuff.myVar = 5;
     pStuff.myFunc = function () {
-        alert('myVar is ' + pageTings.myVar.toString());
+        alert('myVar is ' + pageStuff.myVar.toString());
     }
 
 Y luego en el app7_script de un textbox:
@@ -555,7 +555,7 @@ function renderControls(pCont, pParent) {
             $input.attr('data-fill-fields', ctl.attr('fieldlist'));
             $input.attr('data-fill-formula', ctl.attr('searchfilter'));
             $input.attr('data-fill-order', ctl.attr('searchorder'));
-            $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
+            $input.attr('data-fill-withoutnothing', ctl.attr('withoutnull') == '1' ? '1' : '0');
 
             if (ctl.attr('searchbar') == '1') {
                 f7ctl.params.openIn = 'popup';
@@ -584,7 +584,7 @@ function renderControls(pCont, pParent) {
                 ' and (DISABLED = 0 OR DISABLED is NULL)');
             aux = ctl.attr('order');
             $input.attr('data-fill-order', (aux ? aux : 'DESCRIPTION'));
-            $input.attr('data-fill-withoutnothing', ctl.attr('allownull') == '0' ? '1' : '0');
+            $input.attr('data-fill-withoutnothing', ctl.attr('withoutnull') == '1' ? '1' : '0');
             /*
             Si hacen falta los XFIELD agregarlos en el script asi:
                 $input.attr('data-fill-fields', $input.attr('data-fill-fields') + ', xfield1') 
@@ -729,7 +729,7 @@ function renderControls(pCont, pParent) {
             $input.attr('data-fill-formula', aux);
             $input.attr('data-fill-order', 'name');
             $input.attr('data-fill-withoutnothing',
-                (ctl.attr('allownull') == '0' || ctl.attr('mode') == '2') ? '1' : '0');
+                (ctl.attr('withoutnull') == '1' || ctl.attr('mode') == '2') ? '1' : '0');
 
             if (ctl.attr('searchbar') == '1') {
                 f7ctl.params.openIn = 'popup';
