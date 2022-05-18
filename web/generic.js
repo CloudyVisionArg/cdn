@@ -59,22 +59,20 @@ include(arrScripts, function () {
 
     function resume() {
         // todo: mensaje y terminar
-        debugger;
         DoorsAPI.islogged().then(
             function (res) {
-                debugger;
-                DoorsAPI.runSyncEventsOnClientSet(false).then(
-                    function () {
-                        resume2();
-                    },
-                    function (err) {
-                        logAndToast(err);
-                    }
-                )
+                if (res) {
+                    DoorsAPI.runSyncEventsOnClientSet(false).then(
+                        function () {
+                            resume2();
+                        },
+                        end
+                    )
+                } else {
+                    end('La sesion no ha sido iniciada');
+                }
             },
-            function (err) {
-                console.log(err);
-            }
+            end
         );
     };
 
@@ -101,16 +99,16 @@ include(arrScripts, function () {
                     }
                     getDoc();
                 },
-                errMgr
+                end
             )
         }
     }
 });
 
-function errMgr(pErr) {
-	console.log(pErr);
-	alert(errMsg(pErr));
-};
+function end(pErr) {
+    logAndToast(pErr);
+    preloader.hide();
+}
 
 function getDoc() {
 	if (doc_id) {
@@ -119,7 +117,7 @@ function getDoc() {
 				doc = res;
 				getControlsFolder();
 			},
-			errMgr
+			end
 		);
 
 	} else {
@@ -128,7 +126,7 @@ function getDoc() {
 				doc = res;
 				getControlsFolder();
 			},
-			errMgr
+			end
 		);
 	}
 }
