@@ -258,11 +258,11 @@ function renderPage() {
                 <i class="bi bi-cloudy-fill"></i>
                 <span class="d-none d-md-inline-block"> Guardar</span>
             </button>
-            <button type="button" id="saveexit" class="btn btn-primary" onclick="submitForm('saveexit');">
+            <button type="button" id="saveexit" class="btn btn-primary" onclick="saveDoc(true);">
                 <i class="bi bi-cloud-check-fill"></i>
                 <span class="d-none d-md-inline-block"> Guardar y salir</span>
             </button>
-            <button type="button" id="cancel" class="btn btn-primary" onclick="exitForm(false);">
+            <button type="button" id="cancel" class="btn btn-primary" onclick="exitForm();">
                 <i class="bi bi-caret-right-fill"></i>
                 <span class="d-none d-md-inline-block"> Salir</span>
             </button>
@@ -1255,7 +1255,7 @@ function getEvent(pEvent) {
     }
 }
 
-function saveDoc() {
+function saveDoc(pExit) {
     if (saving) return;
     saving = true;
     preloader.show();
@@ -1383,7 +1383,11 @@ function saveDoc() {
                     saving = false;
                     preloader.hide();
                     toast('Cambios guardados');
-                    fillControls();
+                    if (pExit) {
+                        exitForm();
+                    } else {
+                        fillControls();
+                    }
                 },
                 errMgr
             );
