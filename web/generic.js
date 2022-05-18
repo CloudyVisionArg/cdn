@@ -662,11 +662,12 @@ function renderControls(pCont, pParent) {
                 });
             }
 
-            /* todo:
-            if (ctl.attr('buttons').indexOf('email') >= 0) addEmailButton($this);
-            if (ctl.attr('buttons').indexOf('phone') >= 0) addPhoneButton($this);
-            if (ctl.attr('buttons').indexOf('whatsapp') >= 0) addWappButton($this);
-            */
+            let buttons = ctl.attr('buttons');
+            if (buttons) {
+                if (buttons.indexOf('email') >= 0) addEmailButton($this);
+                if (buttons.indexOf('phone') >= 0) addPhoneButton($this);
+                if (buttons.indexOf('whatsapp') >= 0) addWappButton($this);
+            }
 
 
         // -- DTPicker --
