@@ -93,10 +93,13 @@ include(arrScripts, function () {
                         DoorsAPI.formsGetById(folder.FrmId).then(
                             function (frm) {
                                 folder.Form = frm;
-                            }
+                                getDoc();
+                            },
+                            end
                         );
+                    } else {
+                        end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
                     }
-                    getDoc();
                 },
                 end
             )
@@ -1382,10 +1385,10 @@ function saveDoc(pExit) {
 
                     saving = false;
                     preloader.hide();
-                    toast('Cambios guardados');
                     if (pExit) {
                         exitForm();
                     } else {
+                        toast('Cambios guardados');
                         fillControls();
                     }
                 },
