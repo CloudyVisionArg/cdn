@@ -298,7 +298,7 @@ pNotFoundAction:
 */
 // todo: pasar a property del select
 function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
-    pSelect.val(null);
+    pSelect.val('[NULL]');
 
     if (pSelect.attr('multiple')) {
         if (pValue) {
