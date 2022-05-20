@@ -1142,6 +1142,7 @@ function fillControls() {
             }
 
         } else if (el.tagName == 'SELECT') {
+            debugger;
             if ($el.attr('multiple')) {
                 let t = text ? text.split(';') : null;
                 let v = value ? value.split(';') : null;
