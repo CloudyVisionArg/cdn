@@ -5,7 +5,7 @@ todo:
 
 (function() {
 	include('whatsapp-css');
-	include('javascript');
+	include('jslib');
 	include('emojis');
 
 	var root = document.documentElement;
