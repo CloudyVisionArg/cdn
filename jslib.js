@@ -97,7 +97,7 @@ elem.on('show', function () {
 	// elem visible
 })
 */
-if (jQuery) {
+if (typeof jQuery != 'undefined') {
     (function($) {
         $.each(['show', 'hide'], function(i, ev) {
             var el = $.fn[ev];
