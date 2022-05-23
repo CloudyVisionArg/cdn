@@ -3,7 +3,7 @@ Changelog:
 2022-03-28: JP - getCookie
 2022-01-11: JP - ChangeLog e Inventario de metodos
 
-Funciones varias de JavaScript
+Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
 Inventario de metodos:
 
