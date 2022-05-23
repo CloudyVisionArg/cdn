@@ -130,16 +130,18 @@ Muestra/oculta un spinner que tapa toda la pagina:
 preloader.show();
 preloader.hide();
 */
-var preloader = $('<div/>', {
-	style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
-}).appendTo($('body'));
-preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
-preloader.on('show', function () {
-	$(this).css({
-		'height': $(document).height(),
-		'width': $(document).width(),
-	});
-})
+if (typeof jQuery != 'undefined') {
+	var preloader = $('<div/>', {
+		style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
+	}).appendTo($('body'));
+	preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
+	preloader.on('show', function () {
+		$(this).css({
+			'height': $(document).height(),
+			'width': $(document).width(),
+		});
+	})
+}
 
 // Requiere bootstrap 5
 function toast(pText, pOptions) {
