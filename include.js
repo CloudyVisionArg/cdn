@@ -56,7 +56,7 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 87, depends: true });
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 88, depends: true });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 85, depends: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 84 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 84 });
