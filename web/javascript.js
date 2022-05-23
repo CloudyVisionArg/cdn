@@ -43,9 +43,13 @@ wappNumber(pPhone)
 *errMsg(pErr)
 */
 
-var n = document.getElementById('script_web-javascript');
-n._wait = true;
-console.log('wait set');
+(function () {
+	var n = document.getElementById('script_web-javascript');
+	n._depends = true;
+	include('jslib', function () {
+		n._depends = false;
+	});
+}());
 
 function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);
