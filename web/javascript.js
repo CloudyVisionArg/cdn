@@ -45,6 +45,7 @@ wappNumber(pPhone)
 
 var n = document.getElementById('script_web-javascript');
 n._wait = true;
+console.log('wait set');
 
 function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);
