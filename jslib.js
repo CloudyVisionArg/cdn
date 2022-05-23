@@ -1,0 +1,410 @@
+/*
+Changelog:
+2022-05-23: JP - Creacion
+
+Funciones varias de JavaScript para web y app
+
+Inventario de metodos:
+
+/*
+Changelog:
+2022-05-23: JP - Creacion
+
+Funciones varias de JavaScript para web y app
+
+Inventario de metodos:
+
+asyncLoop(iterations, func, callback)
+getFolder(pFolder, pRootFolderId)
+htmlEncode(pText)
+sqlEncode(pValue, pType)
+jQuery: soporte para eventos show y hide
+formatDate(pDate, pOptions)
+fechaTexto(pFecha, pSinAnio, pSinHora)
+objPropCI(pObj, pProp)
+getCookie(pName)
+string.reverse
+string.repeat
+encryptAsync(pString, pPass, pCallback)
+decryptAsync(pString, pPass, pCallback)
+insertAtCaret(pInput, pValue)
+string.replaceAll
+addOption(ctl, option, value)
+xmlDecodeDate(pDate)
+xmlEncodeDate(pDate)
+timeZone()
+ISODate(pDate)
+ISOTime(pDate, pSeconds)
+leadingZeros(pString, pLength)
+getDocField(pDoc, pFieldName)
+errMsg(pErr)
+*/
+
+/*
+Loop asincrono:
+
+asyncLoop(10,
+    function (loop) {
+        console.log(loop.iteration());
+        loop.next();
+        //loop.break();
+    },
+    function() {
+        console.log('cycle ended')
+    }
+);
+*/
+function asyncLoop(iterations, func, callback) {
+	var index = 0;
+	var done = false;
+	var loop = {
+	    next: function() {
+	        if (done) {
+            	return;
+	        }
+	
+	        if (index < iterations) {
+	            index++;
+	            func(loop);
+	        } else {
+	            done = true;
+	            if (callback) callback();
+	        }
+	    },
+	
+	    iteration: function() {
+        	return index - 1;
+	    },
+	
+	    break: function() {
+	        done = true;
+	        if (callback) callback();
+	    }
+	};
+	loop.next();
+	return loop;
+}
+
+/*
+Devuelve un folder por ID o PATH
+Si es por PATH hay que pasar el RootFolderId
+*/
+function getFolder(pFolder, pRootFolderId) {
+    return new Promise(function (resolve, reject) {
+        if (!isNaN(parseInt(pFolder))) {
+            DoorsAPI.foldersGetById(pFolder).then(resolve, reject);
+        } else {
+            DoorsAPI.foldersGetByPath(pRootFolderId, pFolder).then(resolve, reject);
+        }
+    });
+}
+
+function htmlEncode(pText) {
+    var sp = document.createElement('span');
+    sp.textContent = pText;
+    return sp.innerHTML;
+}
+
+function sqlEncode(pValue, pType) {
+    if (pValue == null) {
+        return 'NULL';
+    } else {
+        if (pType == 1) {
+            return '\'' + pValue.replaceAll('\'', '\'\'') + '\'';
+
+        } else if (pType == 2) {
+            var ret = ISODate(pValue);
+            if (ret == null) {
+                return 'NULL';
+            } else {
+                return '\'' + ret + ' ' + ISOTime(pValue, true) + '\''; 
+            }
+
+        } else if (pType == 3) {
+            if (typeof pValue == 'number') {
+                return pValue.toString();
+            } else {
+                var n = numeral(pValue).value();
+                if (n != null) {
+                    return n.toString();
+                } else {
+                    return 'NULL';
+                }
+            };
+
+        } else {
+            throw 'Unknown type: ' + pType;
+        }
+    };
+}
+
+/*
+Agrega a jQuery soporte para eventos show y hide
+
+elem.on('show', function () {
+	// elem visible
+})
+*/
+if (typeof jQuery != 'undefined') {
+    (function($) {
+        $.each(['show', 'hide'], function(i, ev) {
+            var el = $.fn[ev];
+            $.fn[ev] = function() {
+                this.trigger(ev);
+                return el.apply(this, arguments);
+            };
+        });
+    })(jQuery);
+}
+
+function formatDate(pDate, pOptions) {
+    var dt, ret, opt;
+
+    var opt = {
+        year: true,
+        hour: true,
+        shortYear: false,
+    };
+    Object.assign(opt, pOptions);
+
+    if (Object.prototype.toString.call(pDate) === '[object Date]') {
+        dt = pDate;
+    } else {
+        dt = new Date(pDate);
+    }
+    if (dt != 'Invalid Date') {
+        if (opt.year && !opt.shortYear) {
+            ret = dt.toLocaleDateString();
+        } else {
+            var ret = dt.getDate() + '/' + (dt.getMonth() + 1);
+            if (opt.year) {
+                let y = dt.getFullYear().toString();
+                if (opt.shortYear) y = y.slice(-2);
+                ret += '/' + y;
+            }
+        }
+        if (opt.hour) {
+            var t = ISOTime(dt);
+            if (t != '00:00') ret += ' ' + t;
+        }
+        return ret;
+
+    } else {
+        return 'Invalid Date';
+    }
+}
+
+function fechaTexto(pFecha, pSinAnio, pSinHora) {
+    return formatDate(pFecha, { year: !pSinAnio, hour: !pSinHora });
+}
+
+// Devuelve una property de un objeto (Case Insensitive)
+function objPropCI(pObj, pProp) {
+    var keys = Object.keys(pObj);
+    for (var i = 0; i < keys.length; i++) {
+        if (keys[i].toLowerCase() == pProp.toLowerCase()) {
+            return pObj[keys[i]];
+        }
+    }
+}
+
+function getCookie(pName) {
+	var cookies = decodeURIComponent(document.cookie).split('; ');
+	var key = pName + '=';
+	var ret;
+	cookies.forEach(val => {
+		if (val.indexOf(key) === 0) {
+			ret = val.substring(key.length);
+		}
+	})
+	return ret;
+}
+
+// string.reverse
+if (typeof String.prototype.reverse !== 'function') {
+	String.prototype.reverse = function () {
+		return this.split('').reverse().join('');
+	};
+}
+
+// CryptoJS
+// https://code.google.com/archive/p/crypto-js/
+// https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
+function encryptAsync(pString, pPass, pCallback) {
+	include('lib-cryptojs-aes', function () {
+		if (pCallback) {
+			pCallback(CryptoJS.AES.encrypt(pString, pPass).toString());
+		}
+	})
+}
+function decryptAsync(pString, pPass, pCallback) {
+	include('lib-cryptojs-aes', function () {
+		if (pCallback) {
+			pCallback(CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8));
+		}
+	})
+}
+
+// Inserta pValue en pInput, en la posicion del cursor 
+function insertAtCaret(pInput, pValue) {
+	try {
+		var inp = $(pInput)[0];
+		if (document.all && inp.createTextRange && inp.caretPos) {
+			var cPos = inp.caretPos;
+			cPos.text = '' == cPos.text.charAt(cPos.text.length - 1) ? pValue + '' : pValue
+		} else if (inp.setSelectionRange) {
+			var selStart = inp.selectionStart,
+				selEnd = inp.selectionEnd,
+				left = inp.value.substring(0, selStart),
+				right = inp.value.substring(selEnd);
+			inp.value = left + pValue + right;
+			var len = pValue.length;
+			inp.setSelectionRange(selStart + len, selStart + len);
+			//inp.blur()
+		} else {
+			inp.value += pValue;
+		}
+		inp.focus();
+		$(pInput).change();
+	} catch (err) {
+		debugger;
+	}
+}	
+
+// string.replaceAll
+if (typeof String.prototype.replaceAll !== 'function') {
+	String.prototype.replaceAll = function (search, replacement) {
+		var target = this;
+		return target.replace(new RegExp(search, 'g'), replacement);
+	};
+}
+
+// string.repeat
+if (typeof String.prototype.repeat !== 'function') {
+	String.prototype.repeat = function (count) {
+        var target = this;
+        var ret = '';
+        for (var i = 0; i < count; i++) {
+            ret += target;
+        }
+		return ret;
+	};
+}
+
+function addOption(ctl, option, value) {
+	var opt = document.createElement('option');
+	if (value != undefined) {
+		opt.value = value;
+	} else {
+		if (option == '(ninguno)') {
+			opt.value = '[NULL]';
+		} else {
+			opt.value = option;
+		}
+	}
+	opt.innerHTML = option;
+	ctl.appendChild(opt);
+	return opt;
+}
+
+function xmlDecodeDate(pDate) {
+	return new Date(pDate.replace(' ', 'T') + timeZone());
+}
+
+function xmlEncodeDate(pDate) {
+	var d = ISODate(pDate);
+	if (d) {
+		return d + ' ' + ISOTime(pDate);
+	} else {
+		return null;
+	}	
+}
+
+function timeZone() {
+	var ret = '';
+	var dif = new Date().getTimezoneOffset();
+	if (dif == 0) {
+		return 'Z';
+	} else if (dif > 0) {
+		ret += '-';
+	} else {
+		ret += '+';
+	}
+	
+	dif = Math.abs(dif);
+	var h = parseInt(dif / 60);
+	ret += leadingZeros(h, 2) + ':' + leadingZeros(dif - (h * 60), 2);
+
+	return ret;	
+}
+
+function ISODate(pDate) {
+    var dt;
+    if (Object.prototype.toString.call(pDate) === '[object Date]') {
+        dt = pDate;
+    } else {
+        dt = new Date(pDate);
+    }
+    if(!isNaN(dt.getTime())) {
+        return dt.getFullYear() + '-' + leadingZeros(dt.getMonth() + 1, 2) + '-' +
+            leadingZeros(dt.getDate(), 2);
+    } else {
+        return null;
+    }
+}
+
+function ISOTime(pDate, pSeconds) {
+    if (Object.prototype.toString.call(pDate) === '[object Date]') {
+        dt = pDate;
+    } else {
+        var dt = new Date(pDate);
+    }
+    if(!isNaN(dt.getTime())) {
+        return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
+            (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
+    } else {
+        return null;
+    }
+}
+
+function leadingZeros(pString, pLength) {
+    return ('0'.repeat(pLength) + pString).slice(-pLength);
+}
+
+// Busca y devuelve un Field
+function getDocField(pDoc, pFieldName) {
+    var fie, i;
+    for (i = 0; i < pDoc.CustomFields.length; i++) {
+        fie = pDoc.CustomFields[i];
+        if (fie['Name'].toLowerCase() == pFieldName.toLowerCase()) {
+            return fie;
+        }
+    }
+    for (i = 0; i < pDoc.HeadFields.length; i++) {
+        fie = pDoc.HeadFields[i];
+        if (fie['Name'].toLowerCase() == pFieldName.toLowerCase()) {
+            return fie;
+        }
+    }
+    return null;
+}
+
+// Devuelve el mensaje de un objeto err
+function errMsg(pErr) {
+    if (typeof(pErr) == 'string') {
+        return pErr;
+    } else if (typeof(pErr) == 'object') {
+        if (pErr instanceof Error) {
+            return pErr.constructor.name + ': ' + pErr.message;
+        } else if (pErr.constructor.name == 'SQLError') {
+            return 'SQLError {code: ' + pErr.code + ', message: \'' + pErr.message + '\'}';
+        } else if (pErr.ExceptionMessage) {
+            // error de Doors
+            return pErr.ExceptionMessage;            
+        } else if (pErr.xhr) {
+            return 'Error de conexion (readyState: ' + pErr.xhr.readyState 
+                + ', status: ' + pErr.xhr.status + ' - ' + pErr.xhr.statusText + ')';
+        }
+    }
+    return JSON.stringify(pErr);
+}

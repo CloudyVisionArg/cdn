@@ -8,9 +8,9 @@ emojis.createPicker({
 });
 */
 
-(function(){
-	include('javascript');
-}());
+(function () {
+	include('jslib');
+})();
 
 $(document).ready(function () {
 	$.ajax({

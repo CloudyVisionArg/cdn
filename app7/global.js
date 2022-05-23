@@ -1,5 +1,6 @@
 /*
 Changelog:
+2022-05-23: JP - Se eliminan las funciones de jslib y se agrega la dependencia
 2022-02-11: JP - ChangeLog e Inventario de metodos
 
 Funciones varias de JavaScript del APP7
@@ -18,48 +19,44 @@ errPage(err)
 cleanDb(pCallback)
 pushRegistration(pPushSetings, pCallback)
 pushUnreg(pCallback)
-getDocField(pDoc, pFieldName)
 getFormField(pForm, pFieldName)
-asyncLoop(iterations, func, callback)
 saveDoc(pTable, pFields, pCallback, pSkipServer)
 saveDoc2(pTable, pKeyName, pKeyVal, pCallback)
-errMsg(pErr)
 encrypt(pString, pPass)
 decrypt(pString, pPass)
-String.prototype.replaceAll(search, replacement)
-String.prototype.repeat(count)
 executeCode(pCode, pSuccess, pFailure)
 getCodelib(pCode)
 statusBar(pShow)
 formatNumber(pValue)
 formatPesos(pValue)
-formatDate(pDate)
 scalablePage(scalable)
 goTop()
 toast(message, duration, position)
 getURLParameter(name, url)
 getGuid()
 ifNull(pValue, pDefault)
-ISODate(pDate)
-ISOTime(pDate, pSeconds)
-leadingZeros(pString, pLength)
 getObjProp(pObj, pProp)
 f7AppEvents()
 getFolderElements(pFolder)
-sqlEncode(pValue, pType)
 folderSearch(fldId, fields, formula, order, limit, maxLen, forceOnline)
 folderSearchGroups(fldId, groups, totals, formula, order, limit, forceOnline)
 accountsSearch(filter, order, forceOnline)
 convertSqliteResultSet(pRes)
 convertSqliteAccounts(pRes)
 clearTextSelection()
-objPropCI(pObj, pProp)
-htmlEncode(text)
 fileSize(size)
 cameraOptions(pSource)
 getFile(pFileURL)
 audioRecorder(pCallback)
 */
+
+// Incluye jslib como dependencia
+(function () {
+	include('jslib', function () {
+		var n = document.getElementById('script_app7-global');
+		n._depends = false;
+	});
+})();
 
 function logAndToast(pMsg) {
     console.log(pMsg);
@@ -635,24 +632,6 @@ function pushUnreg(pCallback) {
     }
 }
 
-// Busca y devuelve un Field de un objeto Document
-function getDocField(pDoc, pFieldName) {
-    var fie, i;
-    for (i = 0; i < pDoc.CustomFields.length; i++) {
-        fie = pDoc.CustomFields[i];
-        if (fie['Name'].toLowerCase() == pFieldName.toLowerCase()) {
-            return fie;
-        }
-    }
-    for (i = 0; i < pDoc.HeadFields.length; i++) {
-        fie = pDoc.HeadFields[i];
-        if (fie['Name'].toLowerCase() == pFieldName.toLowerCase()) {
-            return fie;
-        }
-    }
-    return null;
-}
-
 // Busca y devuelve un Field de un objeto Form
 function getFormField(pForm, pFieldName) {
     var fie, i;
@@ -663,51 +642,6 @@ function getFormField(pForm, pFieldName) {
         }
     }
     return null;
-}
-
-// loop asincrono
-function asyncLoop(iterations, func, callback) {
-	/*
-	asyncLoop(10,
-		function (loop) {
-		    console.log(loop.iteration());
-		    loop.next();
-		    //loop.break();
-		},
-		function() {
-			console.log('cycle ended')
-		}
-	);
-	*/
-
-	var index = 0;
-	var done = false;
-	var loop = {
-	    next: function() {
-	        if (done) {
-            	return;
-	        }
-	
-	        if (index < iterations) {
-	            index++;
-	            func(loop);
-	        } else {
-	            done = true;
-	            if (callback) callback();
-	        }
-	    },
-	
-	    iteration: function() {
-        	return index - 1;
-	    },
-	
-	    break: function() {
-	        done = true;
-	        if (callback) callback();
-	    }
-	};
-	loop.next();
-	return loop;
 }
 
 function saveDoc(pTable, pFields, pCallback, pSkipServer) {
@@ -860,37 +794,14 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
         // Llamada al log estandar
         exLog.apply(this, arguments);
 
-        var log = window.localStorage.getItem('consoleLog');
-        if (!log) log = '';
-        log = logDateTime(new Date()) + ' - ' + errMsg(msg) + '\n' + log.substr(0, 1024*64);
-        window.localStorage.setItem('consoleLog', log);
+        scriptLoaded('jslib', function () {
+            var log = window.localStorage.getItem('consoleLog');
+            if (!log) log = '';
+            log = logDateTime(new Date()) + ' - ' + errMsg(msg) + '\n' + log.substring(0, 1024*64);
+            window.localStorage.setItem('consoleLog', log);
+        });
     }
-})()
-
-// Devuelve el mensaje de un objeto err
-function errMsg(pErr) {
-    if (typeof(pErr) == 'string') {
-        return pErr;
-    } else if (typeof(pErr) == 'object') {
-        if (pErr instanceof Error) {
-            return pErr.constructor.name + ': ' + pErr.message;
-        } else if (pErr.constructor.name == 'SQLError') {
-            return 'SQLError {code: ' + pErr.code + ', message: \'' + pErr.message + '\', sqlStatement: \'' + pErr.sqlStatement + '\'}';
-        } else if (pErr.ExceptionMessage) {
-            // error de Doors
-            return pErr.ExceptionMessage;            
-        } else if (pErr.xhr) {
-            if (pErr.xhr.responseJSON) {
-                if (pErr.xhr.responseJSON.ExceptionMessage) {
-                    return pErr.xhr.responseJSON.ExceptionMessage;
-                }
-            }
-            return 'Error de conexion (readyState: ' + pErr.xhr.readyState 
-                + ', status: ' + pErr.xhr.status + ' - ' + pErr.xhr.statusText + ')';
-        }
-    }
-    return JSON.stringify(pErr);
-}
+})();
 
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
@@ -900,26 +811,6 @@ function encrypt(pString, pPass) {
 }
 function decrypt(pString, pPass) {
     return CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8)
-}
-
-// string.replaceAll
-if (typeof String.prototype.replaceAll !== 'function') {
-	String.prototype.replaceAll = function (search, replacement) {
-		var target = this;
-		return target.replace(new RegExp(search, 'g'), replacement);
-	};
-}
-
-// string.repeat
-if (typeof String.prototype.repeat !== 'function') {
-	String.prototype.repeat = function (count) {
-        var target = this;
-        var ret = '';
-        for (var i = 0; i < count; i++) {
-            ret += target;
-        }
-		return ret;
-	};
 }
 
 function executeCode(pCode, pSuccess, pFailure) {
@@ -1006,23 +897,6 @@ function formatPesos(pValue) {
     return formatNumber(pValue);
 }
 
-function formatDate(pDate) {
-    var dt, ret;
-    if (Object.prototype.toString.call(pDate) === '[object Date]') {
-        dt = pDate;
-    } else {
-        dt = new Date(pDate);
-    }
-    if (dt != 'Invalid Date') {
-        ret = dt.toLocaleDateString()
-        var t = ISOTime(dt);
-        if (t != '00:00') ret += ' ' + t;
-        return ret;
-    } else {
-        return 'Invalid Date';
-    }
-}
-
 function scalablePage(scalable) {
     // https://forum.jquery.com/topic/jqm-hijacking-meta-viewport-sets-user-scalable-no-how-to-set-this-so-user-scalable-yes
     $('meta[name=viewport]').remove();
@@ -1076,40 +950,6 @@ function getGuid() {
 
 function ifNull(pValue, pDefault) {
     return (pValue ? pValue : pDefault);
-}
-
-function ISODate(pDate) {
-    var dt;
-    if (Object.prototype.toString.call(pDate) === '[object Date]') {
-        dt = pDate;
-    } else {
-        dt = moment(pDate).toDate()
-    }
-    if(!isNaN(dt.getTime())) {
-        return dt.getFullYear() + '-' + leadingZeros(dt.getMonth() + 1, 2) + '-' +
-            leadingZeros(dt.getDate(), 2);
-    } else {
-        return null;
-    }
-}
-
-function ISOTime(pDate, pSeconds) {
-    var dt;
-    if (Object.prototype.toString.call(pDate) === '[object Date]') {
-        dt = pDate;
-    } else {
-        dt = moment(pDate).toDate()
-    }
-    if(!isNaN(dt.getTime())) {
-        return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
-            (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
-    } else {
-        return null;
-    }
-}
-
-function leadingZeros(pString, pLength) {
-    return ('0'.repeat(pLength) + pString).slice(-pLength);
 }
 
 function getObjProp(pObj, pProp) {
@@ -1224,40 +1064,6 @@ function getFolderElements(pFolder) {
     };
 }
 
-
-function sqlEncode(pValue, pType) {
-    if (pValue == null) {
-        return 'NULL';
-    } else {
-        if (pType == 1) {
-            return '\'' + pValue.replaceAll('\'', '\'\'') + '\'';
-
-        } else if (pType == 2) {
-            // todo: En SQLite la fecha es un campo TEXT y se almacena como JSON
-            var ret = ISODate(pValue);
-            if (ret == null) {
-                return 'NULL';
-            } else {
-                return '\'' + ret + ' ' + ISOTime(pValue, true) + '\''; 
-            }
-
-        } else if (pType == 3) {
-            if (typeof pValue == 'number') {
-                return pValue.toString();
-            } else {
-                var n = numeral(pValue).value();
-                if (n != null) {
-                    return n.toString();
-                } else {
-                    return 'NULL';
-                }
-            };
-
-        } else {
-            throw 'Unknown type: ' + pType;
-        }
-    };
-}
 
 function folderSearch(fldId, fields, formula, order, limit, maxLen, forceOnline) {
     return new Promise(function (resolve, reject) {
@@ -1431,22 +1237,6 @@ function clearTextSelection() {
             window.getSelection().removeAllRanges();
         }
     }
-}
-
-// Devuelve una property de un objeto Case Insensitive
-function objPropCI(pObj, pProp) {
-    var keys = Object.keys(pObj);
-    for (var i = 0; i < keys.length; i++) {
-        if (keys[i].toLowerCase() == pProp.toLowerCase()) {
-            return pObj[keys[i]];
-        }
-    }
-}
-
-function htmlEncode(text) {
-    var sp = document.createElement('span');
-    sp.textContent = text;
-    return sp.innerHTML;
 }
 
 function fileSize(size) {

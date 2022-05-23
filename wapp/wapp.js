@@ -3,9 +3,9 @@ todo:
 - Enviar media
 */
 
-(function() {
+(function () {
 	include('whatsapp-css');
-	include('javascript');
+	include('jslib');
 	include('emojis');
 
 	var root = document.documentElement;
@@ -22,7 +22,7 @@ todo:
 		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
 		root.style.setProperty('--wapp-button-size', '25px');
 	};
-}());
+})();
 
 $(document).ready(function () {
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
