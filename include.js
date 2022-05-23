@@ -56,6 +56,7 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
+	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 90, depends: true });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 85, depends: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 84 });
@@ -76,7 +77,6 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
-	scripts.push({ id: 'emojis', path: '/emojis.js', version: 20 });
 
 	// Aliases (for backward compatibility)
 	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
