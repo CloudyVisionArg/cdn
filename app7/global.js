@@ -794,7 +794,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
         // Llamada al log estandar
         exLog.apply(this, arguments);
 
-        scriptLoaded(jslib, function () {
+        scriptLoaded('jslib', function () {
             var log = window.localStorage.getItem('consoleLog');
             if (!log) log = '';
             log = logDateTime(new Date()) + ' - ' + errMsg(msg) + '\n' + log.substring(0, 1024*64);
