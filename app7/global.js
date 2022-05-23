@@ -116,6 +116,7 @@ function logDateTime(pDate) {
     }
     return dt.getDate() + '/' + (dt.getMonth() + 1) + ' ' + ISOTime(dt, true);
 
+    // Incluyo estas funciones aca para hacerla autosuficiente
     function ISOTime(pDate, pSeconds) {
         if(!isNaN(dt.getTime())) {
             return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
@@ -123,7 +124,11 @@ function logDateTime(pDate) {
         } else {
             return null;
         }
-    }    
+    }
+
+    function leadingZeros(pString, pLength) {
+        return ('0'.repeat(pLength) + pString).slice(-pLength);
+    }
 }
 
 // Cierra la Consola
