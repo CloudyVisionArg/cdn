@@ -55,6 +55,7 @@ function registeredScripts() {
 
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
+	scripts.push({ id: 'jslib', path: '/jslib.js', version: 0 });
 
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 83 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 82 });
