@@ -34,7 +34,6 @@ addEmailButton(pControl)
 wappNumber(pPhone)
 *xmlDecodeDate(pDate)
 *xmlEncodeDate(pDate)
-*timeZone()
 *fechaTexto(pFecha, pSinAnio, pSinHora)
 *ISODate(pDate)
 *ISOTime(pDate, pSeconds)
@@ -419,24 +418,6 @@ function xmlEncodeDate(pDate) {
 	} else {
 		return null;
 	}	
-}
-
-function timeZone() {
-	var ret = '';
-	var dif = new Date().getTimezoneOffset();
-	if (dif == 0) {
-		return 'Z';
-	} else if (dif > 0) {
-		ret += '-';
-	} else {
-		ret += '+';
-	}
-	
-	dif = Math.abs(dif);
-	var h = parseInt(dif / 60);
-	ret += leadingZeros(h, 2) + ':' + leadingZeros(dif - (h * 60), 2);
-
-	return ret;	
 }
 
 function fechaTexto(pFecha, pSinAnio, pSinHora) {
