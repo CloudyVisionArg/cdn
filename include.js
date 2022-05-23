@@ -56,12 +56,12 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
+	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 85, depends: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 84 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 84 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 83 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 82 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 77 });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 76, depends: true });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 74 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 73 });
