@@ -44,9 +44,8 @@ wappNumber(pPhone)
 */
 
 (function () {
-	var n = document.getElementById('script_web-javascript');
-	n._depends = true;
 	include('jslib', function () {
+		var n = document.getElementById('script_web-javascript');
 		n._depends = false;
 	});
 }());

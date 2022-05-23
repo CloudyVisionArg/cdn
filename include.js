@@ -61,7 +61,7 @@ function registeredScripts() {
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 83 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 82 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 77 });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 76 });
+	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 76, depends: true });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 74 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 73 });
@@ -199,6 +199,7 @@ function include() {
                         scriptNode.src = src;
                     }
                     scriptNode.id = 'script_' + pId;
+                    if (script && script.depends) scriptNode._depends = true;
                     
                     scriptNode.loaded = function (callback) {
                         var self = this;
