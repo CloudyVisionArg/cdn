@@ -111,15 +111,17 @@ elem.on('show', function () {
 	// elem visible
 })
 */
-(function($) {
-	$.each(['show', 'hide'], function(i, ev) {
-		var el = $.fn[ev];
-		$.fn[ev] = function() {
-			this.trigger(ev);
-			return el.apply(this, arguments);
-		};
-	});
-})(jQuery);
+if (typeof jQuery != 'undefined') {
+    (function($) {
+        $.each(['show', 'hide'], function(i, ev) {
+            var el = $.fn[ev];
+            $.fn[ev] = function() {
+                this.trigger(ev);
+                return el.apply(this, arguments);
+            };
+        });
+    })(jQuery);
+}
 
 /*
 Requiere bootstrap 5
