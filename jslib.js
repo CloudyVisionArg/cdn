@@ -131,7 +131,7 @@ function formatDate(pDate, pOptions) {
             var ret = dt.getDate() + '/' + (dt.getMonth() + 1);
             if (opt.year) {
                 let y = dt.getFullYear().toString();
-                if (opt.shortYear) y.slice(-2);
+                if (opt.shortYear) y = y.slice(-2);
                 ret += '/' + y;
             }
         }
