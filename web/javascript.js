@@ -7,22 +7,24 @@ Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
 Inventario de metodos:
 
+todo: sacar metodos con el * e incluir jslib
+
 logAndToast(pMsg, pToastOptions)
-getFolder(pFolder, pRootFolderId)
-htmlEncode(pText)
-sqlEncode(pValue, pType)
-Eventos show y hide en jQuery
+*getFolder(pFolder, pRootFolderId)
+*htmlEncode(pText)
+*sqlEncode(pValue, pType)
+*Eventos show y hide en jQuery
 preloader
 toast(pText, pOptions)
-formatDate(pDate)
-objPropCI(pObj, pProp, pCI)
-getCookie(pName)
-string.reverse()
-encryptAsync(pString, pPass, pCallback)
-decryptAsync(pString, pPass, pCallback)
-insertAtCaret(pInput, pValue)
-string.replaceAll(search, replacement)
-addOption(ctl, option, value)
+*formatDate(pDate)
+*objPropCI(pObj, pProp, pCI)
+*getCookie(pName)
+*string.reverse()
+*encryptAsync(pString, pPass, pCallback)
+*decryptAsync(pString, pPass, pCallback)
+*insertAtCaret(pInput, pValue)
+*string.replaceAll(search, replacement)
+*addOption(ctl, option, value)
 addInputButton(pControl, pIcon, pAction, pPrepend)
 addPhoneButton(pControl)
 addWappButton(pControl)
@@ -30,16 +32,19 @@ wappButtonClick(pButton)
 wappUrl()
 addEmailButton(pControl)
 wappNumber(pPhone)
-xmlDecodeDate(pDate)
-xmlEncodeDate(pDate)
-timeZone()
-fechaTexto(pFecha, pSinAnio, pSinHora)
-ISODate(pDate)
-ISOTime(pDate, pSeconds)
-leadingZeros(pString, pLength)
-getDocField(pDoc, pFieldName)
-errMsg(pErr)
+*xmlDecodeDate(pDate)
+*xmlEncodeDate(pDate)
+*timeZone()
+*fechaTexto(pFecha, pSinAnio, pSinHora)
+*ISODate(pDate)
+*ISOTime(pDate, pSeconds)
+*leadingZeros(pString, pLength)
+*getDocField(pDoc, pFieldName)
+*errMsg(pErr)
 */
+
+var n = document.getElementById('script_web-javascript');
+console.log('lib ' + n._loaded);
 
 function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);
