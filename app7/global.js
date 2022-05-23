@@ -115,6 +115,15 @@ function logDateTime(pDate) {
         dt = new Date(pDate);
     }
     return dt.getDate() + '/' + (dt.getMonth() + 1) + ' ' + ISOTime(dt, true);
+
+    function ISOTime(pDate, pSeconds) {
+        if(!isNaN(dt.getTime())) {
+            return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
+                (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
+        } else {
+            return null;
+        }
+    }    
 }
 
 // Cierra la Consola
@@ -796,7 +805,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
 
         var log = window.localStorage.getItem('consoleLog');
         if (!log) log = '';
-        log = logDateTime(new Date()) + ' - ' + errMsg(msg) + '\n' + log.substr(0, 1024*64);
+        log = logDateTime(new Date()) + ' - ' + errMsg(msg) + '\n' + log.substring(0, 1024*64);
         window.localStorage.setItem('consoleLog', log);
     }
 })()
