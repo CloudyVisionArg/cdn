@@ -44,7 +44,7 @@ wappNumber(pPhone)
 */
 
 var n = document.getElementById('script_web-javascript');
-console.log('lib ' + n._loaded);
+n._wait = true;
 
 function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);
@@ -124,7 +124,7 @@ if (typeof jQuery != 'undefined') {
 }
 
 /*
-Requiere bootstrap 5
+Requiere bootstrap 5 y jQuery
 Muestra/oculta un spinner que tapa toda la pagina:
 
 preloader.show();
@@ -143,7 +143,7 @@ if (typeof jQuery != 'undefined') {
 	})
 }
 
-// Requiere bootstrap 5
+// Requiere bootstrap 5 y jQuery
 function toast(pText, pOptions) {
 	var bsver = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
 

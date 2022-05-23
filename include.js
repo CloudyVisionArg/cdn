@@ -204,6 +204,7 @@ function include() {
                         var self = this;
                         var waiting = 0;
                         var interv = setInterval(function () {
+                            console.log('wait ' + self._wait);
                             waiting += 10;
                             if (self._loaded || waiting > 3000) {
                                 clearInterval(interv);
