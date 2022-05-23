@@ -6,30 +6,31 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+/*
+Changelog:
+2022-05-23: JP - Creacion
+
+Funciones varias de JavaScript para web y app
+
+Inventario de metodos:
+
 getFolder(pFolder, pRootFolderId)
 htmlEncode(pText)
 sqlEncode(pValue, pType)
-Eventos show y hide en jQuery
-formatDate(pDate)
-objPropCI(pObj, pProp, pCI)
+jQuery: soporte para eventos show y hide
+formatDate(pDate, pOptions)
+fechaTexto(pFecha, pSinAnio, pSinHora)
+objPropCI(pObj, pProp)
 getCookie(pName)
-string.reverse()
+string.reverse
 encryptAsync(pString, pPass, pCallback)
 decryptAsync(pString, pPass, pCallback)
 insertAtCaret(pInput, pValue)
-string.replaceAll(search, replacement)
+string.replaceAll
 addOption(ctl, option, value)
-addInputButton(pControl, pIcon, pAction, pPrepend)
-addPhoneButton(pControl)
-addWappButton(pControl)
-wappButtonClick(pButton)
-wappUrl()
-addEmailButton(pControl)
-wappNumber(pPhone)
 xmlDecodeDate(pDate)
 xmlEncodeDate(pDate)
 timeZone()
-fechaTexto(pFecha, pSinAnio, pSinHora)
 ISODate(pDate)
 ISOTime(pDate, pSeconds)
 leadingZeros(pString, pLength)
