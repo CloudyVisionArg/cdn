@@ -20,6 +20,7 @@ addEmailButton(pControl)
 wappNumber(pPhone)
 */
 
+// Incluye jslib como dependencia
 (function () {
 	include('jslib', function () {
 		var n = document.getElementById('script_web-javascript');
