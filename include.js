@@ -206,7 +206,7 @@ function include() {
                         var waiting = 0;
                         var interv = setInterval(function () {
                             waiting += 10;
-                            if ((self._loaded || waiting > 3000) && !self._depends) {
+                            if ((self._loaded && !self._depends) || waiting > 3000) {
                                 clearInterval(interv);
                                 if (waiting > 3000) console.log('include(' + pId + ') timeout');
                                 if (callback) callback(self);
