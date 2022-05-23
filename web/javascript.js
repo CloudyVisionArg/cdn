@@ -26,7 +26,7 @@ wappNumber(pPhone)
 		var n = document.getElementById('script_web-javascript');
 		n._depends = false;
 	});
-}());
+})();
 
 function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);

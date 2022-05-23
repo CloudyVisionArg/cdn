@@ -56,7 +56,7 @@ audioRecorder(pCallback)
 		var n = document.getElementById('script_app7-global');
 		n._depends = false;
 	});
-}());
+})();
 
 function logAndToast(pMsg) {
     console.log(pMsg);
@@ -801,7 +801,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
             window.localStorage.setItem('consoleLog', log);
         });
     }
-})()
+})();
 
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
