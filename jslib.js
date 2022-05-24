@@ -28,6 +28,7 @@ string.repeat
 encryptAsync(pString, pPass, pCallback)
 decryptAsync(pString, pPass, pCallback)
 insertAtCaret(pInput, pValue)
+insertAtCursor(pInput, pValue)
 string.replaceAll
 addOption(ctl, option, value)
 xmlDecodeDate(pDate)
@@ -270,6 +271,11 @@ function insertAtCaret(pInput, pValue) {
 		debugger;
 	}
 }	
+
+// Alias
+function insertAtCursor(pInput, pValue) {
+    insertAtCaret(pInput, pValue)
+}
 
 // string.replaceAll
 if (typeof String.prototype.replaceAll !== 'function') {
