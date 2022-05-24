@@ -40,7 +40,7 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 	scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
 	scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
 	scripts.push({ id: 'doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
-	scripts.push({ id: 'javascript', version: 0 });
+	scripts.push({ id: 'web-javascript', version: 0 });
 	
 	include(scripts, function () {
 		// all scripts loaded
@@ -57,8 +57,8 @@ function registeredScripts() {
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 90, depends: true });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 85, depends: true });
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 90, hasdep: true });
+	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 85, hasdep: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 84 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 84 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 83 });
@@ -199,14 +199,14 @@ function include() {
                         scriptNode.src = src;
                     }
                     scriptNode.id = 'script_' + pId;
-                    if (script && script.depends) scriptNode._depends = true;
+                    if (script && script.hasdep) scriptNode._hasdep = true;
                     
                     scriptNode.loaded = function (callback) {
                         var self = this;
                         var waiting = 0;
                         var interv = setInterval(function () {
                             waiting += 10;
-                            if ((self._loaded && !self._depends) || waiting > 3000) {
+                            if ((self._loaded && !self._hasdep) || waiting > 3000) {
                                 clearInterval(interv);
                                 if (waiting > 3000) console.log('include(' + pId + ') timeout');
                                 if (callback) callback(self);
