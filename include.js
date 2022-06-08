@@ -100,6 +100,7 @@ Argumentos:
 */
 
 function include() {
+    debugger;
 	var src, pSrc, pVer, pCallback;
 	var scripts = registeredScripts();
 
