@@ -24,7 +24,7 @@ wappNumber(pPhone)
 (function () {
 	include('jslib', function () {
 		var n = document.getElementById('script_web-javascript');
-		n._depends = false;
+		n._hasdep = false;
 	});
 })();
 

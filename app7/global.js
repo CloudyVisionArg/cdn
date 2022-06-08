@@ -54,7 +54,7 @@ audioRecorder(pCallback)
 (function () {
 	include('jslib', function () {
 		var n = document.getElementById('script_app7-global');
-		n._depends = false;
+		n._hasdep = false;
 	});
 })();
 
