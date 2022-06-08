@@ -56,9 +56,9 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 92, hasdep: true });
+	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 92, hasdep: true });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 90, hasdep: true });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 85, hasdep: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 84 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 84 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 83 });
