@@ -56,6 +56,21 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
+    /*
+    hasdep se pone en true cdo la biblioteca tiene dependencias que resuelve ella misma
+    Ej (ver web-javascript):
+
+    // Incluye jslib como dependencia
+    (function () {
+        include('jslib', function () {
+            var n = document.getElementById('script_web-javascript');
+            n._hasdep = false;
+        });
+    })();
+
+    Incluye la dependencia y setea el _hasdep del nodo a false
+    */
+   
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 92, hasdep: true });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 92, hasdep: true });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
@@ -100,7 +115,6 @@ Argumentos:
 */
 
 function include() {
-    debugger;
 	var src, pSrc, pVer, pCallback;
 	var scripts = registeredScripts();
 
