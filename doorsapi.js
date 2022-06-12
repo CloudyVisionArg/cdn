@@ -2918,7 +2918,8 @@ Gestar.ErrorHandling = Gestar.ErrorHandling || {};
         this.Method = "";
     };
     this.handleSessionExpired = function () {
-        top.location = Gestar.Tools.url("/auth/login");
+        //top.location = Gestar.Tools.url("/auth/login");
+        jQuery(document).trigger("session_expired");
     };
     this.handledServiceError = function () {};
     this.unhandledServiceError = function (exObj) {
