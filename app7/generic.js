@@ -1,18 +1,4 @@
-/*
-Datos para agregar en controls:
-
-Campos: APP7_SCRIPT, HIDEINAPP
-XmlAttributes:
-    - readonly: Textbox, DTPicker, Select, SelectFolder, SelectKeywords
-        Checkbox, SelectMultiple, SelectMultipleFolder, SelectAccounts
-        HtmlArea, Attachments
-    - withoutnull: SelectFolder, SelectKeywords, SelectAccounts
-    - order: SelectKeywords         
-    - searchbar: SelectFolder, SelectKeywords, SelectMultiple,
-        SelectMultipleFolder, SelectAccounts
-    - textfield: Hidden
-    - buttons (phone / email): Textbox
-*/
+// generic del APP7
 
 var fld_id, doc_id, doc, folder, cacheDir;
 var controlsFolder, controls, controlsRights;

@@ -70,7 +70,8 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
-   
+
+	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 92, hasdep: true });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 92, hasdep: true });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
@@ -105,7 +106,7 @@ function registeredScripts() {
 Argumentos:
 0:
 	- string -> Id del script
-	- array -> Inclusion multiple [{ id, version / src, depends[id] }] (version se considera antes que src)
+	- array -> Inclusion multiple [{ id, version o src, depends[id] }] (version se considera antes que src)
 1: 
 	- string -> SRC del script custom
 	- number -> Version (0 = lastCommit)
