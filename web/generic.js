@@ -6,7 +6,7 @@
 Documentacion de componentes:
 
 Bootstrap: https://getbootstrap.com/docs/5.1/getting-started/introduction/
-Iconos: https://icons.getbootstrap.com
+Iconos: https://icons.getbootstrap.com / https://fontawesome.com/v4/icons/
 DTPicker: https://getdatepicker.com/5-4/
 bootstrap-select: https://developer.snapappointments.com/bootstrap-select/
 jQuery: https://api.jquery.com

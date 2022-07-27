@@ -1614,7 +1614,7 @@ function saveDoc() {
                 toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion', 5000);
             }
         } else {
-            toast(errMsg(pErr), 5000);
+            toast(errMsg(pErr).replaceAll('\r\n', '<br>'), 5000);
         }
         console.log(pErr);
     }

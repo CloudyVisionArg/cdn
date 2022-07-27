@@ -2072,7 +2072,7 @@ renderMediaListItem({
 	text:
 })
 */
-function _renderMediaListItem(pItem) {
+function renderMediaListItem(pItem) {
 	var $li = $('<li/>', {
     	id: pItem.id,
 	});

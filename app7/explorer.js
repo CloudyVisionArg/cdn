@@ -198,7 +198,7 @@ DoorsAPI.foldersGetById(fld_id).then(
 
         // Seleccion de Folder en el Titulo
         $title = $page.find('.title');
-        if (routeTo.query.fixed != '1') {
+        if (routeTo.query.fixed == '0') {
             $title.css('cursor', 'pointer');
             $title.click(function () {
                 var fld = prompt('Ingrese el fldId'); // todo: mostrar popup con el treeview para elegir la carpeta
