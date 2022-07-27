@@ -71,15 +71,16 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
+	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 94 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 94 });
+	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 94 });
 	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 92, hasdep: true });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 92, hasdep: true });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 84 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 84 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 83 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 82 });
-	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 77 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 73 });
 	scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 73 });
@@ -90,7 +91,6 @@ function registeredScripts() {
 	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
 	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
-	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 47 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 
