@@ -93,6 +93,7 @@ var maps = {
                     return self.value;
                 } else {
                     self.value = text;
+                    if (typeof(cordova) == 'object') app7.input.checkEmptyState(self);
                     $(self).change();
                     return text;
                 }
