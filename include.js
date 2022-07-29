@@ -71,6 +71,7 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
+	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 95 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 94 });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 94 });
@@ -80,7 +81,6 @@ function registeredScripts() {
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 84 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 84 });
-	scripts.push({ id: 'maps', path: '/maps.js', version: 82 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 73 });
 	scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 73 });
