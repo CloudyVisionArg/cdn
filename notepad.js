@@ -1,3 +1,4 @@
+
 renderItem({
     /* media: '<img src="..." width="50px" />', */
     title: row['CLIENTE'],

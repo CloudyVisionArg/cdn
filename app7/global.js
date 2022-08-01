@@ -241,7 +241,8 @@ function loadLoginCustomJS() {
 
 // Muestra la pantalla de Login como popup
 function showLogin(allowClose) {
-    $.get(scriptSrc('app7-login'), function (data) {
+    //undo
+    $.get(scriptSrc('app7-login', 0), function (data) {
         var popup = app7.popup.create({
             content: data,
             closeByBackdropClick: false,
