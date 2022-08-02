@@ -187,9 +187,11 @@ function showConsole(allowClose) {
                     });
 
                     $get('#support').click(function (e) {
+                        debugger;
                         cordova.plugins.email.open({
                             to: 'soporte@cloudycrm.net',
                             subject: 'Cloudy CRM Debug Info',
+                            body: 'Describanos su problema',
                             attachments: [
                                 'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
                                 'base64:localStorage.txt//' + localStorageBase64(),
