@@ -187,7 +187,6 @@ function showConsole(allowClose) {
                     });
 
                     $get('#support').click(function (e) {
-                        debugger;
                         cordova.plugins.email.open({
                             to: 'soporte@cloudycrm.net',
                             subject: 'Cloudy CRM - App issue',
