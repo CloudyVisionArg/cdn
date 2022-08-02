@@ -191,7 +191,7 @@ function showConsole(allowClose) {
                         cordova.plugins.email.open({
                             to: 'soporte@cloudycrm.net',
                             subject: 'Cloudy CRM - App issue',
-                            body: 'Pro favor describanos su problema',
+                            body: 'Por favor describanos su problema',
                             attachments: [
                                 'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
                                 'base64:localStorage.txt//' + localStorageBase64(),
