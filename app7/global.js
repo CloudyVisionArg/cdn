@@ -275,7 +275,10 @@ function showLogin(allowClose) {
                     });
 
                     $get('#freeversion').click(function () {
-                        setInputVal($get('#instance'), this.checked ? 'FREEVERSION' : '');
+                        var $inst = $get('#instance');
+                        setInputVal($inst, this.checked ? 'FREEVERSION' : '');
+                        $inst.change()
+
 
                     });
 
