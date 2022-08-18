@@ -338,6 +338,8 @@ function showLogin(allowClose) {
                         $get('#signin').closest('li').hide();
                         $get('#resetpass').closest('li').hide();
                         setInputVal($get('#instance'), window.localStorage.getItem('instance'));
+                        //todo: marcar el toggle free si instancia == freeversion
+                        debugger;
                         setInputVal($get('#endpoint'), endPoint);
                         var val = window.localStorage.getItem('appName');
                         setInputVal($get('#appname'), val ? val : 'default');
