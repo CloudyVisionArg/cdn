@@ -265,6 +265,13 @@ function showLogin(allowClose) {
                     
                     var freeToggle = app7.toggle.create({ el: $get('#freeversion').parent() });
                     freeToggle.on('change', function () {
+                        if (this.checked) {
+                            setInputVal($get('#instance'), 'FREEVERSION');
+                            setInputVal($get('#endpoint'), 'https://freeversion.cloudycrm.net/restful');
+                            setInputVal($get('#appname'), 'default');
+                        }
+                        //SEGUIR DE ACA: Esconder el boton registrarme segun el toggle
+
                         debugger;
                     });
 
@@ -278,14 +285,6 @@ function showLogin(allowClose) {
                             $(this).html('eye');
                         }
                         debugger;
-                    });
-
-                    $get('#freeversion').click(function () {
-                        if (this.checked) {
-                            setInputVal($get('#instance'), 'FREEVERSION');
-                            setInputVal($get('#endpoint'), 'https://freeversion.cloudycrm.net/restful');
-                            setInputVal($get('#appname'), 'default');
-                        }
                     });
 
                     $get('#instance').change(function () {
