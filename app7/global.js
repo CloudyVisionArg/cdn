@@ -249,7 +249,6 @@ function showLogin(allowClose) {
             closeByBackdropClick: false,
             on: {
                 open: function (popup) {
-                    app7.toggle.create({ el: $get('#freeversion').parent() });
                     if (!allowClose) $get('#cancel').closest('li').hide();
 
                     var view = app7.views.create($get('.view'), {
@@ -264,6 +263,11 @@ function showLogin(allowClose) {
                         ],
                     });
                     
+                    var freeToggle = app7.toggle.create({ el: $get('#freeversion').parent() });
+                    freeToggle.on('change', function () {
+                        debugger;
+                    });
+
                     $get('#showpwd').click(function () {
                         var t = $('#password').attr('type');
                         if (t == 'password') {
@@ -344,7 +348,6 @@ function showLogin(allowClose) {
                         if (inst) {
                             app7.toggle.get($get('#freeversion').parent()).checked = inst.toLowerCase() == 'freeversion';
                         };
-                        debugger;
                         setInputVal($get('#endpoint'), endPoint);
                         var val = window.localStorage.getItem('appName');
                         setInputVal($get('#appname'), val ? val : 'default');
