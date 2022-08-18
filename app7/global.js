@@ -274,6 +274,11 @@ function showLogin(allowClose) {
                         }
                     });
 
+                    $get('#freeversion').click(function () {
+                        alert('free');
+
+                    });
+
                     $get('#instance').change(function () {
                         if ($(this).val()) {
                             $(this).val($(this).val().trim()); /* quita espacios en blanco */
