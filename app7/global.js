@@ -341,7 +341,9 @@ function showLogin(allowClose) {
                         $get('#resetpass').closest('li').hide();
                         var inst = window.localStorage.getItem('instance');
                         setInputVal($get('#instance'), inst);
-                        app7.toggle.get($get('#freeversion').parent()).checked = inst.toLowerCase() == 'freeversion';
+                        if (inst) {
+                            app7.toggle.get($get('#freeversion').parent()).checked = inst.toLowerCase() == 'freeversion';
+                        };
                         debugger;
                         setInputVal($get('#endpoint'), endPoint);
                         var val = window.localStorage.getItem('appName');
