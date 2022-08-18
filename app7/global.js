@@ -426,7 +426,8 @@ function showLogin(allowClose) {
                         inputDisabled($get('#appname'), pDisable);
                         inputDisabled($get('#username'), pDisable);
                         inputDisabled($get('#password'), pDisable);
-                        $get('#freeversion').addClass('disabled');
+
+                        $get('#freeversion').parent().addClass('disabled');
                         debugger;
                     }
 
