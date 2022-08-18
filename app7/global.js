@@ -272,6 +272,7 @@ function showLogin(allowClose) {
                             $('#password').attr('type', 'password');
                             $(this).html('eye');
                         }
+                        debugger;
                     });
 
                     $get('#freeversion').click(function () {
@@ -325,11 +326,6 @@ function showLogin(allowClose) {
                     function $get(pSelector) {
                         return $(pSelector, popup.el);
                     }
-
-
-                    $get('#instance').click(function () {
-                        debugger;
-                    });
 
                     function fillControls() {
                         $get('#message').hide()
