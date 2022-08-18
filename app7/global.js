@@ -249,8 +249,8 @@ function showLogin(allowClose) {
             closeByBackdropClick: false,
             on: {
                 open: function (popup) {
-                    var freeVersion = app7.toggle.create({ el: $get('#freeversion') });
                     debugger;
+                    var freeVersion = app7.toggle.create({ el: $get('#freeversion').parent() });
                     
                     if (!allowClose) $get('#cancel').closest('li').hide();
 
