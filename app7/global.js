@@ -331,6 +331,7 @@ function showLogin(allowClose) {
 
                         var endPoint = window.localStorage.getItem('endPoint');
                 
+                        $get('#freeversion').parent().addClass('disabled');
                         $get('#logon').closest('li').hide();
                         $get('#logoff').closest('li').hide();
                         $get('#chpass').closest('li').hide();
@@ -347,7 +348,7 @@ function showLogin(allowClose) {
                                 // token valido
                                 disableInputs(true);
                                 $get('#logoff').closest('li').show();
-                                $get('#chpass').closest("li").show();
+                                $get('#chpass').closest('li').show();
                                 
                             }, function (err) {
                                 setMessage(errMsg(err));
@@ -356,10 +357,12 @@ function showLogin(allowClose) {
                                 }
                                 disableInputs(false);
                                 $get('#logon').closest('li').show();
+                                $get('#freeversion').parent().removeClass('disabled');
                             })
                         } else {
                             disableInputs(false);
                             $get('#logon').closest('li').show();
+                            $get('#freeversion').parent().removeClass('disabled');
                         }
                     }
 
@@ -426,9 +429,6 @@ function showLogin(allowClose) {
                         inputDisabled($get('#appname'), pDisable);
                         inputDisabled($get('#username'), pDisable);
                         inputDisabled($get('#password'), pDisable);
-
-                        $get('#freeversion').parent().addClass('disabled');
-                        debugger;
                     }
 
                     function setMessage(pMessage) {
