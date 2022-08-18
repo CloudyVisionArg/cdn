@@ -275,6 +275,7 @@ function showLogin(allowClose) {
                     });
 
                     $get('#freeversion').click(function () {
+                        debugger;
                         alert('free');
 
                     });
