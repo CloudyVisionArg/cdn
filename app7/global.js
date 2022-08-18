@@ -275,11 +275,11 @@ function showLogin(allowClose) {
                     });
 
                     $get('#freeversion').click(function () {
-                        var $inst = $get('#instance');
-                        setInputVal($inst, this.checked ? 'FREEVERSION' : '');
-                        $inst.change()
-
-
+                        if (this.checked) {
+                            setInputVal($get('#instance'), 'FREEVERSION');
+                            setInputVal($get('#endpoint'), 'https://freeversion.cloudycrm.net/restful');
+                            setInputVal($get('#appname'), 'deafault');
+                        }
                     });
 
                     $get('#instance').change(function () {
