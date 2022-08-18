@@ -278,7 +278,7 @@ function showLogin(allowClose) {
                         if (this.checked) {
                             setInputVal($get('#instance'), 'FREEVERSION');
                             setInputVal($get('#endpoint'), 'https://freeversion.cloudycrm.net/restful');
-                            setInputVal($get('#appname'), 'deafault');
+                            setInputVal($get('#appname'), 'default');
                         }
                     });
 
