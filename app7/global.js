@@ -249,9 +249,7 @@ function showLogin(allowClose) {
             closeByBackdropClick: false,
             on: {
                 open: function (popup) {
-                    debugger;
-                    var freeVersion = app7.toggle.create({ el: $get('#freeversion').parent() });
-                    
+                    app7.toggle.create({ el: $get('#freeversion').parent() });
                     if (!allowClose) $get('#cancel').closest('li').hide();
 
                     var view = app7.views.create($get('.view'), {
@@ -341,8 +339,9 @@ function showLogin(allowClose) {
                         $get('#chpass').closest('li').hide();
                         $get('#signin').closest('li').hide();
                         $get('#resetpass').closest('li').hide();
-                        setInputVal($get('#instance'), window.localStorage.getItem('instance'));
-                        //todo: marcar el toggle free si instancia == freeversion
+                        var inst = window.localStorage.getItem('instance');
+                        setInputVal($get('#instance'), inst);
+                        app7.toggle.get($get('#freeversion').parent()).checked = inst.toLocaleLowerCase() == 'freeversion';
                         debugger;
                         setInputVal($get('#endpoint'), endPoint);
                         var val = window.localStorage.getItem('appName');
