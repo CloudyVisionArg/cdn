@@ -326,6 +326,11 @@ function showLogin(allowClose) {
                         return $(pSelector, popup.el);
                     }
 
+
+                    $get('#instance').click(function () {
+                        debugger;
+                    });
+
                     function fillControls() {
                         $get('#message').hide()
 
