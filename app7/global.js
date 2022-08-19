@@ -375,11 +375,15 @@ function showLogin(allowClose) {
                                 }
                                 disableInputs(false);
                                 $get('#logon').closest('li').show();
+                                $get('#signin').closest('li').show();
+                                $get('#resetpass').closest('li').show();
                                 $get('#freeversion').parent().removeClass('disabled');
                             })
                         } else {
                             disableInputs(false);
                             $get('#logon').closest('li').show();
+                            $get('#signin').closest('li').show();
+                            $get('#resetpass').closest('li').show();
                             $get('#freeversion').parent().removeClass('disabled');
                         }
                     }
