@@ -643,27 +643,31 @@ function pushRegistration(pPushSetings, pCallback) {
 }
 
 function pushUnreg(pCallback) {
-    if (app.pushData) {
-        app.push.unregister(
-            function () {
-                console.log('pushUnreg ok');
-                DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
-                    function (res) {
-                        if (pCallback) pCallback();
-                    },
-                    function (err) {
-                        console.log(err);
-                        if (pCallback) pCallback();
-                    }
-                );
-            },
-            function () {
-                console.log('pushUnreg error');
-                if (pCallback) pCallback();
-            }
-        );
-    } else {
-        if (pCallback) pCallback();
+    try {
+        if (app.pushData) {
+            app.push.unregister(
+                function () {
+                    console.log('pushUnreg ok');
+                    DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
+                        function (res) {
+                            if (pCallback) pCallback();
+                        },
+                        function (err) {
+                            console.log(err);
+                            if (pCallback) pCallback();
+                        }
+                    );
+                },
+                function () {
+                    console.log('pushUnreg error');
+                    if (pCallback) pCallback();
+                }
+            );
+        } else {
+            if (pCallback) pCallback();
+        }
+    } catch(e) {
+        debugger;
     }
 }
 
