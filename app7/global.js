@@ -274,8 +274,8 @@ function showLogin(allowClose) {
                     popup.pStuff.freeToggle = app7.toggle.create({ el: $get('#freeversion').parent() });
                     popup.pStuff.freeToggle.on('change', function () {
                         if (this.checked) {
-                            setInputVal($get('#instance'), 'FREEVERSION');
-                            setInputVal($get('#endpoint'), 'https://freeversion.cloudycrm.net/restful');
+                            setInputVal($get('#instance'), dSession.freeVersion.instance);
+                            setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
                             setInputVal($get('#appname'), 'default');
                             $get('#freebuttons').show();
                         } else {
@@ -359,7 +359,7 @@ function showLogin(allowClose) {
                         $get('#resetpass').closest('li').hide();
                         var inst = window.localStorage.getItem('instance');
                         setInputVal($get('#instance'), inst);
-                        if (inst && inst.toLowerCase() == 'freeversion') {
+                        if (inst && inst.toLowerCase() == dSession.freeVersion.instance.toLowerCase()) {
                             popup.pStuff.freeToggle.checked = true;
                         };
                         if (popup.pStuff.freeToggle.checked) {
