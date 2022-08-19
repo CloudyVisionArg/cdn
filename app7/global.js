@@ -518,40 +518,9 @@ function showLogin(allowClose) {
                     }
                     
                     function signinInit(e, page) {
-                        $get('#chpass').click(function (e) {
-                            var $new = $get('#newpass');
-                    
-                            if ($new.val().length < 4) {
-                                app7.dialog.alert('La contraseña debe tener al menos 4 caracteres', function (dialog, e) {
-                                    $new.focus();
-                                    app7.input.focus($new);
-                                });
-                                return false;
-                            }
-                            if ($new.val() != $get('#newpass2').val()) {
-                                app7.dialog.alert('Las contraseñas nuevas no coinciden', function (dialog, e) {
-                                    $new.focus();
-                                    app7.input.focus($new);
-                                });
-                                return false;
-                            }
-                        
-                            $get('#chpass').addClass('disabled');
-                        
-                            var userName = window.localStorage.getItem('userName');
-                            var instance = window.localStorage.getItem('instance');
-                        
-                            DoorsAPI.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(function () {
-                                window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
-                                app7.dialog.alert('Se ha cambiado su contraseña', function (dialog, e) {
-                                    page.router.back();
-                                });
-                        
-                            }, function (err) {
-                                console.log(err);
-                                app7.dialog.alert(errMsg(err));
-                                $get('#chpass').removeClass('disabled');
-                            });
+                        $get('#signin').click(function (e) {
+                            disableInputs(true);
+
                         });
 
                         $get('#cancel').click(function (e) {
@@ -561,6 +530,12 @@ function showLogin(allowClose) {
                         function $get(pSelector) {
                             return $(pSelector, page.el);
                         };
+
+                        function disableInputs(pDisable) {
+                            inputDisabled($get('#email'), pDisable);
+                            inputDisabled($get('#nombre'), pDisable);
+                            inputDisabled($get('#empresa'), pDisable);
+                        }
                     }
 
                 },
