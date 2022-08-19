@@ -53,9 +53,6 @@ Si el src termina en '.css' se creara un <link>, sino un <script>
 function registeredScripts() {
 	var scripts = [];
 
-	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
-	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
-
     /*
     hasdep se pone en true cdo la biblioteca tiene dependencias que resuelve ella misma
     Ej (ver web-javascript):
@@ -70,6 +67,10 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
+
+	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 0 });
+	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
+	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 95 });

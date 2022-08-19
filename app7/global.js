@@ -260,6 +260,13 @@ function showLogin(allowClose) {
                                     pageInit: chpassInit,
                                 },
                             },
+                            {
+                                path: '/signin/',
+                                url: scriptSrc('app7-signin'),
+                                on: {
+                                    pageInit: signinInit,
+                                },
+                            },
                         ],
                     });
                     
@@ -506,6 +513,52 @@ function showLogin(allowClose) {
                         };
                     }
                     
+                    function signinInit(e, page) {
+                        $get('#chpass').click(function (e) {
+                            var $new = $get('#newpass');
+                    
+                            if ($new.val().length < 4) {
+                                app7.dialog.alert('La contraseña debe tener al menos 4 caracteres', function (dialog, e) {
+                                    $new.focus();
+                                    app7.input.focus($new);
+                                });
+                                return false;
+                            }
+                            if ($new.val() != $get('#newpass2').val()) {
+                                app7.dialog.alert('Las contraseñas nuevas no coinciden', function (dialog, e) {
+                                    $new.focus();
+                                    app7.input.focus($new);
+                                });
+                                return false;
+                            }
+                        
+                            $get('#chpass').addClass('disabled');
+                        
+                            var userName = window.localStorage.getItem('userName');
+                            var instance = window.localStorage.getItem('instance');
+                        
+                            DoorsAPI.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(function () {
+                                window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
+                                app7.dialog.alert('Se ha cambiado su contraseña', function (dialog, e) {
+                                    page.router.back();
+                                });
+                        
+                            }, function (err) {
+                                console.log(err);
+                                app7.dialog.alert(errMsg(err));
+                                $get('#chpass').removeClass('disabled');
+                            });
+                        });
+
+                        $get('#cancel').click(function (e) {
+                            page.router.back();
+                        });
+                    
+                        function $get(pSelector) {
+                            return $(pSelector, page.el);
+                        };
+                    }
+
                 },
             }
         });
