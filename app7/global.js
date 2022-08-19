@@ -519,6 +519,7 @@ function showLogin(allowClose) {
                     
                     function signinInit(e, page) {
                         $get('#signin').click(function (e) {
+                            debugger;
                             disableInputs(true);
 
                         });
