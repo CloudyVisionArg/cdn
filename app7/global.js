@@ -346,7 +346,6 @@ function showLogin(allowClose) {
                     }
 
                     function fillControls() {
-                        debugger;
                         $get('#message').hide()
 
                         var endPoint = window.localStorage.getItem('endPoint');
@@ -444,15 +443,14 @@ function showLogin(allowClose) {
                     }
 
                     function logoff() {
-                        pushUnreg(function () {
-                            cleanDb(function () {
-                                dSession.logoff();
-                                app7.dialog.alert('Se ha cerrado la sesion y eliminado los datos locales',
-                                    function () {
-                                        location.href = 'index.html';
-                                    }
-                                );
-                            });
+                        pushUnreg();
+                        cleanDb(function () {
+                            dSession.logoff();
+                            app7.dialog.alert('Se ha cerrado la sesion y eliminado los datos locales',
+                                function () {
+                                    location.href = 'index.html';
+                                }
+                            );
                         });
                     }
 
@@ -515,12 +513,64 @@ function showLogin(allowClose) {
                         function $get(pSelector) {
                             return $(pSelector, page.el);
                         };
+
+                        function setMessage(pMessage) {
+                            var $msg = $get('#message');
+                            $msg.html(pMessage);
+                            if (pMessage) $msg.show();
+                            else $msg.hide();
+                        }
                     }
                     
                     function signinInit(e, page) {
                         $get('#signin').click(function (e) {
-                            debugger;
+                            $get('#signin').closest('li').addClass('disabled');
+
                             disableInputs(true);
+
+                            var fv = dSession.freeVersion;
+                            Doors.RESTFULL.ServerUrl = fv.endpoint;
+
+                            DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
+                                Doors.RESTFULL.AuthToken = token;
+                                
+                                DoorsAPI.documentsNew(5217).then(function(doc) {
+                                    var field;
+                        
+                                    getDocField(doc, 'empresa').Value = $get('#empresa').val();
+                                    getDocField(doc, 'creator_email').Value = $get('#email').val();
+                                    getDocField(doc, 'creator_nombre').Value = $get('#nombre').val();
+                        
+                                    DoorsAPI.documentSave(doc).then(function (doc) {
+                                        //$("#login").closest(".ui-btn").show();
+                                        setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso.');
+                        
+                                        DoorsAPI.logoff();
+                                        Doors.RESTFULL.AuthToken = '';
+                                    
+                                    }, function (err) {
+                                        onError('documentSave error', err);
+                                    });
+                        
+                        
+                                }, function(err) {
+                                    onError('documentsNew error', err);
+                                });
+                        
+                            }, function (err) {
+                                onError('logon error', err);
+                            });
+                        
+                            function onError(pMsg, pErr) {
+                                console.log(pErr);
+                                var msg = pMsg;
+                                if (pErr) msg += '<br>' + errMsg(pErr);
+                                setMessage(msg);
+                                disableInputs(false);
+                                $get('#signin').closest('li').removeClass('disabled');
+                                DoorsAPI.logoff();
+                                Doors.RESTFULL.AuthToken = '';
+                            }
 
                         });
 
@@ -537,6 +587,14 @@ function showLogin(allowClose) {
                             inputDisabled($get('#nombre'), pDisable);
                             inputDisabled($get('#empresa'), pDisable);
                         }
+
+                        function setMessage(pMessage) {
+                            var $msg = $get('#message');
+                            $msg.html(pMessage);
+                            if (pMessage) $msg.show();
+                            else $msg.hide();
+                        }
+    
                     }
 
                 },
