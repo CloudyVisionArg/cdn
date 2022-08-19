@@ -338,7 +338,6 @@ function showLogin(allowClose) {
 
                     $get('#resetpass').click(function (e) {
                         view.router.navigate('/resetpass/');
-                        
                     });
 
                     $get('#console').click(function (e) {

@@ -68,6 +68,7 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
+	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 0 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 0 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
