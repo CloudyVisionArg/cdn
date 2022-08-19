@@ -9,6 +9,20 @@
             <!-- Login form -->
             <div class="list">
                 <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">Usar version free</div>
+                                <div class="item-after">
+                                    <label class="toggle color-white">
+                                        <input type="checkbox" id="freeversion">
+                                        <span class="toggle-icon"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+    
                 <li class="item-content item-input">
                     <div class="item-inner">
                     <div class="item-title item-floating-label">Usuario</div>
@@ -29,20 +43,6 @@
                     </div>
                     <div class="item-media" style="min-width: 40px; align-self: flex-end;">
                         <i id="showpwd" class="f7-icons" style="color: rgb(255, 255, 255, 0.7);">eye</i>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">Usar version free</div>
-                            <div class="item-after">
-                                <label class="toggle color-white">
-                                    <input type="checkbox" id="freeversion">
-                                    <span class="toggle-icon"></span>
-                                </label>
-                            </div>
-                        </div>
                     </div>
                 </li>
 
@@ -104,12 +104,14 @@
                 <li>
                     <button id="chpass" class="button button-large">Cambiar contrase&ntilde;a</button>
                 </li>
-                <li>
-                    <button id="signin" class="button button-large">Registrarme</button>
-                </li>
-                <li>
-                    <button id="resetpass" class="button button-large">Olvide mi contrase&ntilde;a</button>
-                </li>
+                <div id="freeButtons">
+                    <li>
+                        <button id="signin" class="button button-large">Registrarme</button>
+                    </li>
+                    <li>
+                        <button id="resetpass" class="button button-large">Olvide mi contrase&ntilde;a</button>
+                    </li>
+                </div>
                 <li>
                     <button id="console" class="button button-large">Consola</button>
                 </li>
