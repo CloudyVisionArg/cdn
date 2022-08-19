@@ -270,6 +270,9 @@ function showLogin(allowClose) {
                             setInputVal($get('#instance'), 'FREEVERSION');
                             setInputVal($get('#endpoint'), 'https://freeversion.cloudycrm.net/restful');
                             setInputVal($get('#appname'), 'default');
+                            $get('#freeButtons').show();
+                        } else {
+                            $get('#freeButtons').hide();
                         }
                         //SEGUIR DE ACA: Esconder el boton registrarme segun el toggle
 
@@ -345,8 +348,8 @@ function showLogin(allowClose) {
                         $get('#resetpass').closest('li').hide();
                         var inst = window.localStorage.getItem('instance');
                         setInputVal($get('#instance'), inst);
-                        if (inst) {
-                            popup.pStuff.freeToggle.checked = inst.toLowerCase() == 'freeversion';
+                        if (inst && inst.toLowerCase() == 'freeversion') {
+                            popup.pStuff.freeToggle.checked = true;
                         };
                         setInputVal($get('#endpoint'), endPoint);
                         var val = window.localStorage.getItem('appName');
