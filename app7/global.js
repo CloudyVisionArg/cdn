@@ -263,8 +263,9 @@ function showLogin(allowClose) {
                         ],
                     });
                     
-                    var freeToggle = app7.toggle.create({ el: $get('#freeversion').parent() });
-                    freeToggle.on('change', function () {
+                    popup.pStuff = {};
+                    popup.pStuff.freeToggle = app7.toggle.create({ el: $get('#freeversion').parent() });
+                    popup.pStuff.freeToggle.on('change', function () {
                         if (this.checked) {
                             setInputVal($get('#instance'), 'FREEVERSION');
                             setInputVal($get('#endpoint'), 'https://freeversion.cloudycrm.net/restful');
@@ -345,7 +346,7 @@ function showLogin(allowClose) {
                         var inst = window.localStorage.getItem('instance');
                         setInputVal($get('#instance'), inst);
                         if (inst) {
-                            app7.toggle.get($get('#freeversion').parent()).checked = inst.toLowerCase() == 'freeversion';
+                            popup.pStuff.freeToggle.checked = inst.toLowerCase() == 'freeversion';
                         };
                         setInputVal($get('#endpoint'), endPoint);
                         var val = window.localStorage.getItem('appName');

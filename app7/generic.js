@@ -15,7 +15,7 @@ En el BeforeRender:
 
     pStuff.myVar = 5;
     pStuff.myFunc = function () {
-        alert('myVar is ' + pageStuff.myVar.toString());
+        alert('myVar is ' + pStuff.myVar.toString());
     }
 
 Y luego en el app7_script de un textbox:
