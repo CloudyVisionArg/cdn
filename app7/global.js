@@ -345,6 +345,7 @@ function showLogin(allowClose) {
                         $get('#logoff').closest('li').hide();
                         $get('#chpass').closest('li').hide();
                         $get('#signin').closest('li').hide();
+                        $get('#resetpass').closest('li').hide();
                         var inst = window.localStorage.getItem('instance');
                         setInputVal($get('#instance'), inst);
                         if (inst && inst.toLowerCase() == 'freeversion') {
