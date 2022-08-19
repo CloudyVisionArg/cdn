@@ -1,11 +1,12 @@
-var freeEndPoint = 'https://cloudycrm.net/restful';
-var freeAnonUserName = 'anonimo';
-var freeAnonUserPass = 'gTfy4#j0/x';
-var freeInstance = 'TemplateFree';
-
 var dSession = new DSession();
 
 function DSession() {
+    this.freeVersion = {}
+    this.freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';
+    this.freeVersion.login = 'anonimo';
+    this.freeVersion.password = 'gTfy4#j0/x';
+    this.freeVersion.instance = 'FREEVERSION';
+    
     var tokenTimeout = 120; //minutos
     Doors.RESTFULL.ServerUrl = window.localStorage.getItem('endPoint');
     
