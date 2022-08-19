@@ -325,6 +325,10 @@ function showLogin(allowClose) {
                         view.router.navigate('/chpass/');
                     });
 
+                    $get('#signin').click(function (e) {
+                        view.router.navigate('/signin/');
+                    });
+
                     $get('#console').click(function (e) {
                         showConsole(true);
                     });
