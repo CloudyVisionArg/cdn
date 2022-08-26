@@ -401,7 +401,7 @@ function newFieldset(pId, pLabel) {
         class: 'link-secondary',
         style: 'text-decoration: none;',
         href: '#' + pId,
-    }).append(pLabel).appendTo($header);
+    }).append(pLabel + 'holaa').appendTo($header);
 
     var $body = $('<div/>', {
         id: pId,
