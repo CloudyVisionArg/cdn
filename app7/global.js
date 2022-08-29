@@ -662,7 +662,7 @@ function showLogin(allowClose) {
                             setMessage('message', '');
 
                             if (!$get('#email').val() || !$get('#code').val()) {
-                                setMessage('message', 'Ingrese el email y c&oacute;digo de confirmaci&oacute;n');
+                                setMessage('message', 'Ingrese email y c&oacute;digo de confirmaci&oacute;n');
                                 return false;
                             }
 
@@ -681,7 +681,7 @@ function showLogin(allowClose) {
                             
                                         } else {
                                             if (res[0]['CODIGO'] != $('#code').val().toUpperCase()) {
-                                                onError('Código incorrecto');
+                                                onError('C&oacute;digo incorrecto');
                             
                                             } else {
                                                 DoorsAPI.documentsGetById(res[0]['DOC_ID']).then(
@@ -690,9 +690,8 @@ function showLogin(allowClose) {
 
                                                         DoorsAPI.documentSave(doc).then(
                                                             function (doc) {
-                                                                $('#instrucciones2').html('Recibir&aacute; por email su nueva contraseña. ' +
+                                                                setMessage('instrucciones2', 'Recibir&aacute; por email su nueva contraseña. ' +
                                                                     'Presione SALIR para regresar a la pantalla de Login.').show();
-                                                                setMessage('message', '');
                                 
                                                                 DoorsAPI.logoff();
                                                                 Doors.RESTFULL.AuthToken = '';
