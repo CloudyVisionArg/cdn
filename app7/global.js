@@ -680,6 +680,7 @@ function showLogin(allowClose) {
                         }
 
                         function setMessage(pId, pMessage) {
+                            debugger;
                             var $msg = $get('#' + pId);
                             $msg.html(pMessage);
                             if (pMessage) $msg.parent().show();
