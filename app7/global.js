@@ -545,7 +545,7 @@ function showLogin(allowClose) {
                             DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
                                 Doors.RESTFULL.AuthToken = token;
                                 
-                                DoorsAPI.documentsNew(5217).then(function(doc) {
+                                DoorsAPI.documentsNew(fv.signinFolder).then(function(doc) {
                                     var field;
                         
                                     getDocField(doc, 'empresa').Value = $get('#empresa').val();
@@ -608,54 +608,8 @@ function showLogin(allowClose) {
                     }
 
                     function resetpassInit(e, page) {
-                        $get('#signin').click(function (e) {
-                            $get('#signin').closest('li').addClass('disabled');
-
-                            disableInputs(true);
-
-                            var fv = dSession.freeVersion;
-                            Doors.RESTFULL.ServerUrl = fv.endpoint;
-
-                            DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
-                                Doors.RESTFULL.AuthToken = token;
-                                
-                                DoorsAPI.documentsNew(5217).then(function(doc) {
-                                    var field;
-                        
-                                    getDocField(doc, 'empresa').Value = $get('#empresa').val();
-                                    getDocField(doc, 'creator_email').Value = $get('#email').val();
-                                    getDocField(doc, 'creator_nombre').Value = $get('#nombre').val();
-                        
-                                    DoorsAPI.documentSave(doc).then(function (doc) {
-                                        setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso.');
-                        
-                                        DoorsAPI.logoff();
-                                        Doors.RESTFULL.AuthToken = '';
-                                    
-                                    }, function (err) {
-                                        onError('documentSave error', err);
-                                    });
-                        
-                        
-                                }, function(err) {
-                                    onError('documentsNew error', err);
-                                });
-                        
-                            }, function (err) {
-                                onError('logon error', err);
-                            });
-                        
-                            function onError(pMsg, pErr) {
-                                console.log(pErr);
-                                var msg = pMsg;
-                                if (pErr) msg += '<br>' + errMsg(pErr);
-                                setMessage(msg);
-                                disableInputs(false);
-                                $get('#signin').closest('li').removeClass('disabled');
-                                DoorsAPI.logoff();
-                                Doors.RESTFULL.AuthToken = '';
-                            }
-
+                        $get('#sendcode').click(function (e) {
+                            $get('#sendcode').closest('li').addClass('disabled');
                         });
 
                         $get('#cancel').click(function (e) {
@@ -668,8 +622,6 @@ function showLogin(allowClose) {
 
                         function disableInputs(pDisable) {
                             inputDisabled($get('#email'), pDisable);
-                            inputDisabled($get('#nombre'), pDisable);
-                            inputDisabled($get('#empresa'), pDisable);
                         }
 
                         function setMessage(pMessage) {
