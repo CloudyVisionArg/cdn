@@ -634,9 +634,9 @@ function showLogin(allowClose) {
                                     getDocField(doc, 'email').Value = $get('#email').val();
                         
                                     DoorsAPI.documentSave(doc).then(function (doc) {
-                                        $("#instrucciones").html("Recibira por email un codigo de confirmacion. " + 
-                                        "Ingreselo a continuacion. Si no ha recibido el email puede enviar el codigo nuevamente. " +
-                                        "Si ha enviado su codigo varias veces ingrese el ultimo recibido.").show();
+                                        setMessage('instrucciones').html('Recibira por email un codigo de confirmacion.' + 
+                                            'Ingreselo a continuacion. Si no ha recibido el email puede enviar el codigo nuevamente. ' +
+                                            'Si ha enviado su codigo varias veces ingrese el ultimo recibido.');
                                             
                                         DoorsAPI.logoff();
                                         Doors.RESTFULL.AuthToken = '';
@@ -658,7 +658,7 @@ function showLogin(allowClose) {
                                 console.log(pErr);
                                 var msg = pMsg;
                                 if (pErr) msg += '<br>' + errMsg(pErr);
-                                setMessage(msg);
+                                setMessage('message', msg);
                                 disableInputs(false);
                                 $get('#sendcode').closest('li').removeClass('disabled');
                                 DoorsAPI.logoff();
