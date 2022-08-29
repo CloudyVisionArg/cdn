@@ -625,6 +625,7 @@ function showLogin(allowClose) {
                         
                             $get('#sendcode').closest('li').addClass('disabled');
                             inputDisabled($get('#email'), true);
+                            $get('#confirmcode').closest('li').addClass('disabled');
 
                             var fv = dSession.freeVersion;
                             Doors.RESTFULL.ServerUrl = fv.endpoint;
@@ -645,7 +646,7 @@ function showLogin(allowClose) {
                                         inputDisabled($get('#email'), false);
                                         $get('#sendcode').html('Reenviar c&oacute;digo').closest('li').removeClass('disabled');
                                         $get('#code').closest('li').show();
-                                        $get('#confirmcode').closest('li').show();
+                                        $get('#confirmcode').closest('li').removeClass('disabled');.show();
                 
                                         DoorsAPI.logoff();
                                         Doors.RESTFULL.AuthToken = '';
