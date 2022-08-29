@@ -638,9 +638,9 @@ function showLogin(allowClose) {
                                     getDocField(doc, 'email').Value = $get('#email').val();
                         
                                     DoorsAPI.documentSave(doc).then(function (doc) {
-                                        setMessage('instrucciones', 'Recibirá por email un código de confirmación. ' + 
-                                            'Ingréselo a continuación. Si no ha recibido el email puede enviar el código nuevamente. ' +
-                                            'Si ha enviado su código varias veces ingrese el último recibido.');
+                                        setMessage('instrucciones', 'Recibir&aacute; por email un c&oacute;digo de confirmaci&oacute;n. ' + 
+                                            'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el email puede enviar el c&oacute;digo nuevamente. ' +
+                                            'Si ha enviado su c&oacute;digo varias veces ingrese el &uacute;ltimo recibido.');
                                         
                                         inputDisabled($get('#email'), false);
                                         $get('#sendcode').html('Reenviar c&oacute;digo').closest('li').removeClass('disabled');
