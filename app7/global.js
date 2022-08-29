@@ -643,7 +643,7 @@ function showLogin(allowClose) {
                                             'Si ha enviado su codigo varias veces ingrese el ultimo recibido.');
                                         
                                         inputDisabled($get('#email'), false);
-                                        $get('#sendcode').html('Reenviar código').closest('li').removeClass('disabled');
+                                        $get('#sendcode').html('Reenviar c&oacute;digo').closest('li').removeClass('disabled');
                                         $get('#code').closest('li').hide();
                                         $get('#confirmcode').closest('li').hide();
                 
