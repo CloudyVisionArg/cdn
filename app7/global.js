@@ -661,9 +661,8 @@ function showLogin(allowClose) {
                         $get('#confirmcode').click(function (e) {
                             setMessage('message', '');
 
-                            if (!$get('#code').val()) {
-                                setMessage('message', 'Ingrese el código de confirmación');
-                                $get('#code').focus();
+                            if (!$get('#email').val() || !$get('#code').val()) {
+                                setMessage('message', 'Ingrese el email y c&oacute;digo de confirmaci&oacute;n');
                                 return false;
                             }
 
@@ -672,12 +671,49 @@ function showLogin(allowClose) {
                             var fv = dSession.freeVersion;
                             Doors.RESTFULL.ServerUrl = fv.endpoint;
 
-                            /*
                             DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
                                 Doors.RESTFULL.AuthToken = token;
-                            });
-                            */
 
+                                DoorsAPI.folderSearch(fv.resetPassFolder, 'doc_id, codigo', 'confirmado is null and email = \'' + $('#email').val() + '\'', 'doc_id desc', 1).then(
+                                    function (res) {
+                                        if (!res.length) {
+                                            onError('No se encontraron solicitudes de desbloqueo pendientes para este email');
+                            
+                                        } else {
+                                            if (res[0]['CODIGO'] != $('#code').val().toUpperCase()) {
+                                                onError('Código incorrecto');
+                            
+                                            } else {
+                                                DoorsAPI.documentsGetById(res[0]['DOC_ID']).then(
+                                                    function (doc) {
+                                                        getDocField(doc, 'confirmado').Value = 1;
+
+                                                        DoorsAPI.documentSave(doc).then(
+                                                            function (doc) {
+                                                                $('#instrucciones2').html('Recibir&aacute; por email su nueva contraseña. ' +
+                                                                    'Presione SALIR para regresar a la pantalla de Login.').show();
+                                                                setMessage('message', '');
+                                
+                                                                DoorsAPI.logoff();
+                                                                Doors.RESTFULL.AuthToken = '';
+                                                            },
+                                                            function (err) {
+                                                                onError('documentSave error', err);
+                                                            },
+                                                        );
+                                                    },
+                                                    function(err) {
+                                                        onError('documentsGetById error', err);
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    },
+                                    function (err) {
+                                        onError('folderSearch error', err);
+                                    },
+                                );
+                            });
                         });
 
                         $get('#cancel').click(function (e) {
