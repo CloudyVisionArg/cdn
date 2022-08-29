@@ -618,7 +618,7 @@ function showLogin(allowClose) {
                             setMessage('message', '');
 
                             if (!$get('#email').val()) {
-                                setMessage('Ingrese su Email');
+                                setMessage('message', 'Ingrese su Email');
                                 $get('#email').focus();
                                 return false;
                             }
@@ -674,6 +674,10 @@ function showLogin(allowClose) {
                                 DoorsAPI.logoff();
                                 Doors.RESTFULL.AuthToken = '';
                             }
+
+                        });
+
+                        $get('#confirmcode').click(function (e) {
 
                         });
 
