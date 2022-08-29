@@ -656,20 +656,27 @@ function showLogin(allowClose) {
                             }, function (err) {
                                 onError('logon error', err);
                             });
-                        
-                            function onError(pMsg, pErr) {
-                                console.log(pErr);
-                                var msg = pMsg;
-                                if (pErr) msg += '<br>' + errMsg(pErr);
-                                setMessage('message', msg);
-                                disableInputs(false);
-                                DoorsAPI.logoff();
-                                Doors.RESTFULL.AuthToken = '';
-                            }
-
                         });
 
                         $get('#confirmcode').click(function (e) {
+                            setMessage('message', '');
+
+                            if (!$get('#code').val()) {
+                                setMessage('message', 'Ingrese el código de confirmación');
+                                $get('#code').focus();
+                                return false;
+                            }
+
+                            disableInputs(true);
+                        
+                            var fv = dSession.freeVersion;
+                            Doors.RESTFULL.ServerUrl = fv.endpoint;
+
+                            /*
+                            DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
+                                Doors.RESTFULL.AuthToken = token;
+                            });
+                            */
 
                         });
 
@@ -680,6 +687,16 @@ function showLogin(allowClose) {
                         function $get(pSelector) {
                             return $(pSelector, page.el);
                         };
+
+                        function onError(pMsg, pErr) {
+                            console.log(pErr);
+                            var msg = pMsg;
+                            if (pErr) msg += '<br>' + errMsg(pErr);
+                            setMessage('message', msg);
+                            disableInputs(false);
+                            DoorsAPI.logoff();
+                            Doors.RESTFULL.AuthToken = '';
+                        }
 
                         function disableInputs(pDisable) {
                             inputDisabled($get('#email'), pDisable);
