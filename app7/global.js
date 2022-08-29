@@ -608,6 +608,10 @@ function showLogin(allowClose) {
                     }
 
                     function resetpassInit(e, page) {
+                        setMessage('instrucciones', '');
+                        setMessage('instrucciones2', '');
+                        setMessage('message', '');
+
                         $get('#sendcode').click(function (e) {
                             if (!$get('#email').val()) {
                                 setMessage('Ingrese su Email');
@@ -675,11 +679,11 @@ function showLogin(allowClose) {
                             inputDisabled($get('#email'), pDisable);
                         }
 
-                        function setMessage(pMessage) {
-                            var $msg = $get('#message');
+                        function setMessage(pId, pMessage) {
+                            var $msg = $get('#' + pId);
                             $msg.html(pMessage);
-                            if (pMessage) $msg.show();
-                            else $msg.hide();
+                            if (pMessage) $msg.parent().show();
+                            else $msg.parent().hide();
                         }
     
                     }
