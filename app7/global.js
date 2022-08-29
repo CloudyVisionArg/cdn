@@ -611,8 +611,8 @@ function showLogin(allowClose) {
                         setMessage('instrucciones', '');
                         setMessage('instrucciones2', '');
                         setMessage('message', '');
-                        $get('$code').closest('li').hide();
-                        $get('$confirmcode').closest('li').hide();
+                        $get('#code').closest('li').hide();
+                        $get('#confirmcode').closest('li').hide();
 
                         $get('#sendcode').click(function (e) {
                             setMessage('message', '');
