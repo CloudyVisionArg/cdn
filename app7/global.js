@@ -684,7 +684,7 @@ function showLogin(allowClose) {
                         function disableInputs(pDisable) {
                             inputDisabled($get('#email'), pDisable);
                             inputDisabled($get('#code'), pDisable);
-                            if (pDisabled) {
+                            if (pDisable) {
                                 $get('#sendcode').closest('li').addClass('disabled');
                                 $get('#confirmcode').closest('li').addClass('disabled').show();
                             } else {
