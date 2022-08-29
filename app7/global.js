@@ -609,7 +609,14 @@ function showLogin(allowClose) {
 
                     function resetpassInit(e, page) {
                         $get('#sendcode').click(function (e) {
+                            if (!$get('#email').val()) {
+                                $get('#message').html('Ingrese su Email').show();
+                                $get('#email').focus();
+                                return false;
+                            }
+                        
                             $get('#sendcode').closest('li').addClass('disabled');
+                            inputDisabled($get('#email'), true);
                         });
 
                         $get('#cancel').click(function (e) {
