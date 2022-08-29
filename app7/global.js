@@ -610,13 +610,57 @@ function showLogin(allowClose) {
                     function resetpassInit(e, page) {
                         $get('#sendcode').click(function (e) {
                             if (!$get('#email').val()) {
-                                $get('#message').html('Ingrese su Email').show();
+                                setMessage('Ingrese su Email');
                                 $get('#email').focus();
                                 return false;
                             }
                         
                             $get('#sendcode').closest('li').addClass('disabled');
                             inputDisabled($get('#email'), true);
+
+                            var fv = dSession.freeVersion;
+                            Doors.RESTFULL.ServerUrl = fv.endpoint;
+
+                            DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
+                                Doors.RESTFULL.AuthToken = token;
+                                
+                                DoorsAPI.documentsNew(fv.resetPassFolder).then(function(doc) {
+                                    var field;
+                        
+                                    getDocField(doc, 'email').Value = $get('#email').val();
+                        
+                                    DoorsAPI.documentSave(doc).then(function (doc) {
+                                        $("#instrucciones").html("Recibira por email un codigo de confirmacion. " + 
+                                        "Ingreselo a continuacion. Si no ha recibido el email puede enviar el codigo nuevamente. " +
+                                        "Si ha enviado su codigo varias veces ingrese el ultimo recibido.").show();
+                                            
+                                        DoorsAPI.logoff();
+                                        Doors.RESTFULL.AuthToken = '';
+                                    
+                                    }, function (err) {
+                                        onError('documentSave error', err);
+                                    });
+                        
+                        
+                                }, function(err) {
+                                    onError('documentsNew error', err);
+                                });
+                        
+                            }, function (err) {
+                                onError('logon error', err);
+                            });
+                        
+                            function onError(pMsg, pErr) {
+                                console.log(pErr);
+                                var msg = pMsg;
+                                if (pErr) msg += '<br>' + errMsg(pErr);
+                                setMessage(msg);
+                                disableInputs(false);
+                                $get('#sendcode').closest('li').removeClass('disabled');
+                                DoorsAPI.logoff();
+                                Doors.RESTFULL.AuthToken = '';
+                            }
+
                         });
 
                         $get('#cancel').click(function (e) {
