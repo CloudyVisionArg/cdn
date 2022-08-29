@@ -644,8 +644,8 @@ function showLogin(allowClose) {
                                         
                                         inputDisabled($get('#email'), false);
                                         $get('#sendcode').html('Reenviar código').closest('li').removeClass('disabled');
-                                        $get('$code').closest('li').hide();
-                                        $get('$confirmcode').closest('li').hide();
+                                        $get('#code').closest('li').hide();
+                                        $get('#confirmcode').closest('li').hide();
                 
                                         DoorsAPI.logoff();
                                         Doors.RESTFULL.AuthToken = '';
