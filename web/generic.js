@@ -240,12 +240,17 @@ function renderPage() {
         });
 
         // Tooltips
-        $('[data-bs-toggle="tooltip"]').tooltip({
-            delay: {
-                show: 500,
-                hide: 100,
-            },
-            placement: 'auto',
+        $('[data-bs-toggle="tooltip"]').each(function (ix) {
+            let $this = $(this);
+            if ($this.tooltip) {
+                $this.tooltip({
+                    delay: {
+                        show: 500,
+                        hide: 100,
+                    },
+                    placement: 'auto',
+                });
+            }
         });
     });
 
