@@ -646,7 +646,7 @@ function showLogin(allowClose) {
                                         inputDisabled($get('#email'), false);
                                         $get('#sendcode').html('Reenviar c&oacute;digo').closest('li').removeClass('disabled');
                                         $get('#code').closest('li').show();
-                                        $get('#confirmcode').closest('li').removeClass('disabled');.show();
+                                        $get('#confirmcode').closest('li').removeClass('disabled').show();
                 
                                         DoorsAPI.logoff();
                                         Doors.RESTFULL.AuthToken = '';
