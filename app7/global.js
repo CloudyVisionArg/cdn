@@ -611,8 +611,6 @@ function showLogin(allowClose) {
                         setMessage('instrucciones', '');
                         setMessage('instrucciones2', '');
                         setMessage('message', '');
-                        $get('#code').closest('li').hide();
-                        $get('#confirmcode').closest('li').hide();
 
                         $get('#sendcode').click(function (e) {
                             setMessage('message', '');
@@ -622,11 +620,9 @@ function showLogin(allowClose) {
                                 $get('#email').focus();
                                 return false;
                             }
-                        
-                            $get('#sendcode').closest('li').addClass('disabled');
-                            inputDisabled($get('#email'), true);
-                            $get('#confirmcode').closest('li').addClass('disabled');
 
+                            disableInputs(true);
+                        
                             var fv = dSession.freeVersion;
                             Doors.RESTFULL.ServerUrl = fv.endpoint;
 
@@ -643,14 +639,11 @@ function showLogin(allowClose) {
                                             'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el email puede enviar el c&oacute;digo nuevamente. ' +
                                             'Si ha enviado su c&oacute;digo varias veces ingrese el &uacute;ltimo recibido.');
                                         
-                                        inputDisabled($get('#email'), false);
-                                        $get('#sendcode').html('Reenviar c&oacute;digo').closest('li').removeClass('disabled');
-                                        $get('#code').closest('li').show();
-                                        $get('#confirmcode').closest('li').removeClass('disabled').show();
-                
+                                        disableInputs(false);
+
                                         DoorsAPI.logoff();
                                         Doors.RESTFULL.AuthToken = '';
-                                    
+
                                     }, function (err) {
                                         onError('documentSave error', err);
                                     });
@@ -670,7 +663,6 @@ function showLogin(allowClose) {
                                 if (pErr) msg += '<br>' + errMsg(pErr);
                                 setMessage('message', msg);
                                 disableInputs(false);
-                                $get('#sendcode').closest('li').removeClass('disabled');
                                 DoorsAPI.logoff();
                                 Doors.RESTFULL.AuthToken = '';
                             }
@@ -691,6 +683,14 @@ function showLogin(allowClose) {
 
                         function disableInputs(pDisable) {
                             inputDisabled($get('#email'), pDisable);
+                            inputDisabled($get('#code'), pDisable);
+                            if (pDisabled) {
+                                $get('#sendcode').closest('li').addClass('disabled');
+                                $get('#confirmcode').closest('li').addClass('disabled').show();
+                            } else {
+                                $get('#sendcode').closest('li').removeClass('disabled');
+                                $get('#confirmcode').closest('li').removeClass('disabled').show();
+                            }
                         }
 
                         function setMessage(pId, pMessage) {
