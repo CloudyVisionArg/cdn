@@ -690,8 +690,8 @@ function showLogin(allowClose) {
 
                                                         DoorsAPI.documentSave(doc).then(
                                                             function (doc) {
-                                                                setMessage('instrucciones2', 'Recibir&aacute; por email su nueva contraseña. ' +
-                                                                    'Presione SALIR para regresar a la pantalla de Login.').show();
+                                                                setMessage('instrucciones2', 'Recibir&aacute; por email su nueva contrase&ntilde;a. ' +
+                                                                    'Presione SALIR para regresar a la pantalla de Login.');
                                 
                                                                 DoorsAPI.logoff();
                                                                 Doors.RESTFULL.AuthToken = '';
