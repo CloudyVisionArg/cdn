@@ -73,10 +73,10 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
+	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 97 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 95 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 94 });
-	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 94 });
 	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 92, hasdep: true });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 92, hasdep: true });
