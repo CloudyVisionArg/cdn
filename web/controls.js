@@ -620,16 +620,11 @@ function newAttachments(pId, pLabel) {
                 style: 'width: auto;',
             }).appendTo($att);
 
+            $grp[0].file = file;
+
             $('<div/>', {
                 class: 'form-control',
             }).append(file.name).appendTo($grp);
-
-            /*
-            $btn = $('<button/>', {
-                type: 'button',
-                class: 'btn btn-outline-secondary',
-            }).appendTo($grp);
-            */
 
             $btn = $('<span/>', {
                 class: 'input-group-text',
@@ -640,8 +635,31 @@ function newAttachments(pId, pLabel) {
 
             $btn.click(function () {
                 var $att = $(this).closest('.input-group');
+                var file = $att[0].file;
+                /*
                 $att.attr('data-att-action', 'delete');
                 $att.hide();
+                */
+
+
+                var reader = new FileReader();
+                reader.onloadend = function (e) {
+                    var blobData = new Blob([this.result], { type: file2.type });
+                    var formData = new FormData();
+                    // todo: como subimos el Tag?
+                    formData.append('attachment', blobData, file.name);
+                    /*
+                    DoorsAPI.attachmentsSave(doc_id, formData).then(
+                        function (res) {
+                            endCall(attName, 'OK');
+                        },
+                        function (err) {
+                            endCall(attName, 'attachmentsSave error: ' + errMsg(err));
+                        }
+                    )
+                    */
+                };
+                reader.readAsArrayBuffer(file);
             })
 
 /*

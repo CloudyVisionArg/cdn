@@ -537,7 +537,7 @@ function printForm() {
 }
 
 function exitForm() {
-    history.back();
+    history.back(); // todo: cerrar si es popup
 }
 
 function getDefaultControl(pField) {
@@ -1165,6 +1165,7 @@ function fillControls() {
     });
 
     $('[data-autocomplete]').each(function (ix, el) {
+        // todo: todo esto hay q reemplazarlo segun el nuevo autocomplete
         var $el = $(el);
         var ac = app7.autocomplete.get($el);
         var $li = $el.closest('li');
