@@ -732,13 +732,16 @@ function newAttachments(pId, pLabel) {
             DoorsAPI.attachmentsGetById(doc_id, attId).then(
                 function (res) {
                     preloader.hide();
-                    debugger;
                     var blob = new Blob([res]);
+                    saveAs(blob, attName);
+
+                    /*
+                    Esto es para abrir directo, funciona bien solo con algunas extensiones
+                    Hay q crear el blob con type, ej: blob = new Blob([res], {type : 'application/pdf'})
 
                     var fileURL = URL.createObjectURL(blob);
                     window.open(fileURL);
-
-                    //saveAs(blob, attName);
+                    */
                 },
                 function (err) {
                     preloader.hide();
