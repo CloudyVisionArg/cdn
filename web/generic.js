@@ -1434,7 +1434,6 @@ function saveAtt() {
             
         } else {
             $attsToSave.each(function () {
-                debugger;
                 var $this = $(this);
                 var tag = $this.closest('input-group').attr('data-attachments');
                 var attName = $this.attr('data-att-name');

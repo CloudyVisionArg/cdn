@@ -645,17 +645,6 @@ function newAttachments(pId, pLabel) {
                     $att.hide();
                 };
             })
-
-/*
-<div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
-</div>
-*/
-
-
-
-            toast(file.name);
         }
     })
 
@@ -674,24 +663,6 @@ function newAttachments(pId, pLabel) {
     </div>
 
 
-    para guardar un attach
-
-    var reader = new FileReader();
-    reader.onloadend = function (e) {
-        var blobData = new Blob([this.result], { type: file2.type });
-        var formData = new FormData();
-        // todo: como subimos el Tag?
-        formData.append('attachment', blobData, file.name);
-        DoorsAPI.attachmentsSave(doc_id, formData).then(
-            function (res) {
-                endCall(attName, 'OK');
-            },
-            function (err) {
-                endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-            }
-        )
-    };
-    reader.readAsArrayBuffer(file2);
 
 
     Para descargar ver saveAs, agregar opcion descargar todos
@@ -704,6 +675,8 @@ function newAttachments(pId, pLabel) {
         if (pValue) {
             DoorsAPI.attachments(pValue).then(
                 function (res) {
+                    debugger;
+                    
                     // Filtra por el tag
                     var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
 
