@@ -17,7 +17,8 @@ var selectionMode = false;
 var propEditPage = 'App7_editPage';
 var propViewItemRenderer = 'App7_viewItemRenderer';
 var propDocActions = 'App7_docActions';
-var propViewsFilter = 'App7_viewsFilter'
+var propViewsFilter = 'App7_viewsFilter';
+var propInit = 'App7_explorerInit';
 var maxLen = 200;
 
 DoorsAPI.foldersGetById(fld_id).then(
@@ -231,63 +232,6 @@ DoorsAPI.foldersGetById(fld_id).then(
     }
 );
 
-
-function taphold(e) {
-    var $list = $(this).closest('div.list');
-    if ($list.hasClass('media-list')) {
-        var $li = $(this).closest('li');
-        toggleSelectionMode();
-        $li.find('input:checkbox').prop('checked', true);
-    };
-};
-
-function toggleSelectionMode() {
-    var $itemContent;
-
-    if (selectionMode) {
-        // Desactivar
-        selectionMode = false;
-
-        $get('.media-list label').replaceWith(function () {
-            var $itemContent = getItemContent();
-            $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
-            return $itemContent;
-        });
-
-        if (searchBar.enabled) {
-            $navbar.addClass('with-searchbar-expandable-enabled');
-            searchBar.$el.show();
-        }
-        $views.parent().removeClass('disabled');
-        $navbar.find('#buttonSearch').show();
-        $navbar.find('#buttonAdd').show();
-        $navbar.find('#buttonActions').hide();
-        $navbar.find('#buttonCancel').hide();
-
-    } else {
-        // Activar
-        selectionMode = true;
-
-        $get('.media-list a').replaceWith(function () {
-            $itemContent = getItemContent();
-            $itemContent.append($(this).contents());
-            return $itemContent;
-        });
-
-        if (searchBar.enabled) {
-            searchBar.$el.hide();
-            $navbar.removeClass('with-searchbar-expandable-enabled');
-        }
-        $views.parent().addClass('disabled');
-        $navbar.find('#buttonSearch').hide();
-        $navbar.find('#buttonAdd').hide();
-        $navbar.find('#buttonActions').show();
-        $navbar.find('#buttonCancel').show();
-    }
-
-    app7.navbar.size($navbar);
-}
-
 function pageInit(e, page) {
     f7Page = page;
 	// En ios el navbar esta fuera del page
@@ -357,6 +301,17 @@ function pageInit(e, page) {
             docActions = app7.actions.create({ buttons: stdActions });
         }
 
+        // Evento Init
+        var prop = findProp(folder.Properties, propInit);
+        if (!prop) prop = findProp(folder.Form.Properties, propInit);
+        if (prop) {
+            try {
+                eval(prop);
+            } catch (err) {
+                console.log('Error in explorerInit: ' + errMsg(err));
+            }
+        };
+
     } else if (folder.Type == 2) {
 
         // todo: ver como pasamos las credenciales
@@ -370,6 +325,62 @@ function pageInit(e, page) {
             //debugger;
         })
     }
+}
+
+function taphold(e) {
+    var $list = $(this).closest('div.list');
+    if ($list.hasClass('media-list')) {
+        var $li = $(this).closest('li');
+        toggleSelectionMode();
+        $li.find('input:checkbox').prop('checked', true);
+    };
+};
+
+function toggleSelectionMode() {
+    var $itemContent;
+
+    if (selectionMode) {
+        // Desactivar
+        selectionMode = false;
+
+        $get('.media-list label').replaceWith(function () {
+            var $itemContent = getItemContent();
+            $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
+            return $itemContent;
+        });
+
+        if (searchBar.enabled) {
+            $navbar.addClass('with-searchbar-expandable-enabled');
+            searchBar.$el.show();
+        }
+        $views.parent().removeClass('disabled');
+        $navbar.find('#buttonSearch').show();
+        $navbar.find('#buttonAdd').show();
+        $navbar.find('#buttonActions').hide();
+        $navbar.find('#buttonCancel').hide();
+
+    } else {
+        // Activar
+        selectionMode = true;
+
+        $get('.media-list a').replaceWith(function () {
+            $itemContent = getItemContent();
+            $itemContent.append($(this).contents());
+            return $itemContent;
+        });
+
+        if (searchBar.enabled) {
+            searchBar.$el.hide();
+            $navbar.removeClass('with-searchbar-expandable-enabled');
+        }
+        $views.parent().addClass('disabled');
+        $navbar.find('#buttonSearch').hide();
+        $navbar.find('#buttonAdd').hide();
+        $navbar.find('#buttonActions').show();
+        $navbar.find('#buttonCancel').show();
+    }
+
+    app7.navbar.size($navbar);
 }
 
 function searchLimit() {
