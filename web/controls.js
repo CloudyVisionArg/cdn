@@ -619,6 +619,7 @@ function newAttachments(pId, pLabel) {
                 class: 'input-group float-start me-2 mb-1',
                 style: 'width: auto;',
                 'data-att-action': 'save',
+                'data-att-name': file.name,
             }).appendTo($att);
 
             $grp[0].file = file;

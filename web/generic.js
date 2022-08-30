@@ -1434,6 +1434,7 @@ function saveAtt() {
             
         } else {
             $attsToSave.each(function () {
+                debugger;
                 var $this = $(this);
                 var tag = $this.closest('input-group').attr('data-attachments');
                 var attName = $this.attr('data-att-name');
@@ -1449,7 +1450,6 @@ function saveAtt() {
                         var formData = new FormData();
                         // todo: como subimos el Tag?
                         formData.append('attachment', blobData, file.name);
-                        /*
                         DoorsAPI.attachmentsSave(doc_id, formData).then(
                             function (res) {
                                 endCall(attName, 'OK');
@@ -1458,10 +1458,8 @@ function saveAtt() {
                                 endCall(attName, 'attachmentsSave error: ' + errMsg(err));
                             }
                         )
-                        */
                     };
                     reader.readAsArrayBuffer(file);
-    
                     
                 } else if (attAction == 'delete') {
                     // todo: borrar $this.attr('data-att-id')
