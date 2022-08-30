@@ -615,7 +615,6 @@ function newAttachments(pId, pLabel) {
         for (var i = 0; i < inp.files.length; i++) {
             file = inp.files[i];
 
-            debugger;
             var $att = renderAtt({
                 Name: file.name,
                 Size: file.size,
@@ -627,22 +626,6 @@ function newAttachments(pId, pLabel) {
     })
 
     /*  
-    para dibujar los attachs dentro del div
-
-    <div class="input-group pull-left">
-        <a class="btn btn-default btn-sm cls-attachments-item" title="2022-05 - Choque Sol - Contrato Cloudy CRM.pdf" target="_blank" href="/c/downloadfile.asp?docGuid=64AA0EA29AC347E6BA6E3E6FD67FCDB8&amp;filename=2022-05+-+Choque+Sol+-+Contrato+Cloudy+CRM.pdf">
-            <span>2022-05 - Choque Sol - Contrato Cloudy CRM.pdf (1316 Kb)</span>
-        </a>
-        <span class="input-group-btn" style="padding-top: 0px;display:inline;">
-            <button class="btn btn-default" onclick="deleteFile(&quot;2022-05 - Choque Sol - Contrato Cloudy CRM.pdf&quot;,&quot;64AA0EA29AC347E6BA6E3E6FD67FCDB8&quot;,&quot;attachs&quot;);" title="Quitar adjunto" type="button" style="padding-top: 0px;padding-bottom: 0px;height: 33px;box-shadow: none;border-left: none;">
-                <i class="fa fa-times text-danger"></i>
-            </button>
-        </span>
-    </div>
-
-
-
-
     Para descargar ver saveAs, agregar opcion descargar todos
     */
 
@@ -671,7 +654,6 @@ function newAttachments(pId, pLabel) {
                             function (accs) {
                                 atts.forEach(att => {
                                     att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
-                                    debugger;
                                     renderAtt(att).appendTo($self);
                                 });
                             }
