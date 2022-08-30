@@ -1442,7 +1442,7 @@ function saveAtt() {
                 beginCall(attName, attAction);
                 
                 if (attAction == 'save') {
-                    var file = this.file;
+                    var file = this.File;
                     var reader = new FileReader();
                     reader.onloadend = function (e) {
                         var blobData = new Blob([this.result], { type: file.type });
