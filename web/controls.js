@@ -734,7 +734,11 @@ function newAttachments(pId, pLabel) {
                     preloader.hide();
                     debugger;
                     var blob = new Blob([res]);
-                    saveAs(blob, attName);
+
+                    var fileURL = URL.createObjectURL(blob);
+                    window.open(fileURL);
+
+                    //saveAs(blob, attName);
                 },
                 function (err) {
                     preloader.hide();
