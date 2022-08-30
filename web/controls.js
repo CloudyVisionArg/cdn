@@ -694,10 +694,7 @@ function newAttachments(pId, pLabel) {
             style: 'cursor: pointer;',
         }).append(pAtt.Name).appendTo($grp);
 
-        $div.click(function () {
-            debugger;
-
-        });
+        $div.click(downloadAtt);
 
         var $btn = $('<span/>', {
             class: 'input-group-text',
@@ -718,6 +715,36 @@ function newAttachments(pId, pLabel) {
 
         return $grp;
     };
+
+    function downloadAtt() {
+        debugger;
+
+        var $att = $(this).closest('.input-group');
+
+        var attId = $att.attr('data-att-id');
+        var attName = $att.attr('data-att-name');
+        var attURL = $att.attr('data-att-url');
+    
+        if (attURL) {
+            // Ya se descargo antes o es nuevo
+            openAtt(attURL);
+    
+        } else {
+            preloader.show();
+    
+            DoorsAPI.attachmentsGetById(doc_id, attId).then(
+                function (res) {
+                    preloader.hide();
+                    var blob = new Blob([res]);
+                    saveAs(blob, attName);
+                },
+                function (err) {
+                    preloader.hide();
+                    logAndToast('attachmentsGetById error: ' + errMsg(err))
+                }
+            )
+        }
+        };
 
     return $ctl;
 }
