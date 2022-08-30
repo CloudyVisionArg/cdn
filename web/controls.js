@@ -645,7 +645,7 @@ function newAttachments(pId, pLabel) {
 
                 var reader = new FileReader();
                 reader.onloadend = function (e) {
-                    var blobData = new Blob([this.result], { type: file2.type });
+                    var blobData = new Blob([this.result], { type: file.type });
                     var formData = new FormData();
                     // todo: como subimos el Tag?
                     formData.append('attachment', blobData, file.name);
