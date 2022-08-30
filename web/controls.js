@@ -618,6 +618,7 @@ function newAttachments(pId, pLabel) {
             debugger;
             var $att = renderAtt({
                 Name: file.name,
+                Size: file.size,
             });
             $att.attr('data-att-action', 'save');
             $att[0].File = file;
@@ -670,6 +671,7 @@ function newAttachments(pId, pLabel) {
                             function (accs) {
                                 atts.forEach(att => {
                                     att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
+                                    debugger;
                                     renderAtt(att).appendTo($self);
                                 });
                             }
@@ -689,45 +691,45 @@ function newAttachments(pId, pLabel) {
             noAttachs();
         };
 
-        function renderAtt(pAtt) {
-            // pAtt = { AttId, Name, AccName, Size, Created }
-
-            var $grp = $('<div/>', {
-                class: 'input-group float-start me-2 mb-1',
-                style: 'width: auto;',
-                'data-att-id': pAtt.AttId,
-                'data-att-name': pAtt.Name,
-            });
-
-            $('<div/>', {
-                class: 'form-control',
-            }).append(pAtt.Name).appendTo($grp);
-
-            var $btn = $('<span/>', {
-                class: 'input-group-text',
-                style: 'cursor: pointer;'
-            }).appendTo($grp);
-
-            $btn.append('<i class="bi bi-x"></i>');
-
-            $btn.click(function () {
-                var $att = $(this).closest('.input-group');
-                if ($att.attr('data-att-action') == 'save') {
-                    $att.remove();
-                } else {
-                    $att.attr('data-att-action', 'delete');
-                    $att.hide();
-                };
-            });
-
-            return $grp;
-        };
-
         function noAttachs() {
             // Agrega la leyenda Sin adjuntos
             $self.html('');
         };
     }
+
+    function renderAtt(pAtt) {
+        // pAtt = { AttId, Name, AccName, Size, Created }
+
+        var $grp = $('<div/>', {
+            class: 'input-group float-start me-2 mb-1',
+            style: 'width: auto;',
+            'data-att-id': pAtt.AttId,
+            'data-att-name': pAtt.Name,
+        });
+
+        $('<div/>', {
+            class: 'form-control',
+        }).append(pAtt.Name).appendTo($grp);
+
+        var $btn = $('<span/>', {
+            class: 'input-group-text',
+            style: 'cursor: pointer;'
+        }).appendTo($grp);
+
+        $btn.append('<i class="bi bi-x"></i>');
+
+        $btn.click(function () {
+            var $att = $(this).closest('.input-group');
+            if ($att.attr('data-att-action') == 'save') {
+                $att.remove();
+            } else {
+                $att.attr('data-att-action', 'delete');
+                $att.hide();
+            };
+        });
+
+        return $grp;
+    };
 
     return $ctl;
 }
