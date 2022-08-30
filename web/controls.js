@@ -717,10 +717,7 @@ function newAttachments(pId, pLabel) {
     };
 
     function downloadAtt() {
-        debugger;
-
         var $att = $(this).closest('.input-group');
-
         var attId = $att.attr('data-att-id');
         var attName = $att.attr('data-att-name');
         var attURL = $att.attr('data-att-url');
@@ -735,6 +732,7 @@ function newAttachments(pId, pLabel) {
             DoorsAPI.attachmentsGetById(doc_id, attId).then(
                 function (res) {
                     preloader.hide();
+                    debugger;
                     var blob = new Blob([res]);
                     saveAs(blob, attName);
                 },
@@ -744,7 +742,7 @@ function newAttachments(pId, pLabel) {
                 }
             )
         }
-        };
+    };
 
     return $ctl;
 }
