@@ -1376,7 +1376,7 @@ function deleteAtt(e) {
     
     if ($att.attr('data-att-action') == 'save') {
         // Era uno nuevo, lo vuelo
-        $this.remove()
+        $this.remove();
     } else {
         $att.attr('data-att-action', 'delete');
     }

@@ -1426,12 +1426,8 @@ function saveDoc(pExit) {
 
 function saveAtt() {
     return new Promise(function (resolve, reject) {
-
-        resolve('OK');
-        return;
-
         var calls = [];
-        var $attsToSave = $('li[data-attachments] [data-att-action]');
+        var $attsToSave = $('div[data-attachments] [data-att-action]');
 
         if ($attsToSave.length == 0) {
             resolve('OK');
@@ -1439,37 +1435,33 @@ function saveAtt() {
         } else {
             $attsToSave.each(function () {
                 var $this = $(this);
-                var tag = $this.closest('li.accordion-item').attr('data-attachments');
+                var tag = $this.closest('input-group').attr('data-attachments');
                 var attName = $this.attr('data-att-name');
                 var attAction = $this.attr('data-att-action');
                 
                 beginCall(attName, attAction);
                 
                 if (attAction == 'save') {
-                    getFile($this.attr('data-att-url')).then(
-                        function (file) {
-                            var reader = new FileReader();
-                            reader.onloadend = function (e) {
-                                var blobData = new Blob([this.result], { type: file.type });
-                                var formData = new FormData();
-                                // todo: como subimos el Tag?
-                                formData.append('attachment', blobData, file.name);
-                                DoorsAPI.attachmentsSave(doc_id, formData).then(
-                                    function (res) {
-                                        endCall(attName, 'OK');
-                                    },
-                                    function (err) {
-                                        endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-                                    }
-                                )
-                            };
-                            reader.readAsArrayBuffer(file);
+                    var file = $att[0].file;
+                    var reader = new FileReader();
+                    reader.onloadend = function (e) {
+                        var blobData = new Blob([this.result], { type: file.type });
+                        var formData = new FormData();
+                        // todo: como subimos el Tag?
+                        formData.append('attachment', blobData, file.name);
+                        /*
+                        DoorsAPI.attachmentsSave(doc_id, formData).then(
+                            function (res) {
+                                endCall(attName, 'OK');
+                            },
+                            function (err) {
+                                endCall(attName, 'attachmentsSave error: ' + errMsg(err));
+                            }
+                        )
+                        */
+                    };
+                    reader.readAsArrayBuffer(file);
     
-                        },
-                        function (err) {
-                            endCall(attName, 'file error: ' + errMsg(err));
-                        }
-                    )
                     
                 } else if (attAction == 'delete') {
                     // todo: borrar $this.attr('data-att-id')
