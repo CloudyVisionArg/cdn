@@ -634,6 +634,7 @@ function newAttachments(pId, pLabel) {
             $btn.append('<i class="bi bi-x"></i>');
 
             $btn.click(function () {
+                debugger;
                 var $att = $(this).closest('.input-group');
                 var file = $att[0].file;
                 /*
