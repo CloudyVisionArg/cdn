@@ -611,40 +611,15 @@ function newAttachments(pId, pLabel) {
     $file.change(function (e) {
         var inp = e.target;
         var $att = $(inp).prevAll('.form-control');
-        var file, $grp, $btn;
+        var file;
         for (var i = 0; i < inp.files.length; i++) {
             file = inp.files[i];
 
-            $grp = $('<div/>', {
-                class: 'input-group float-start me-2 mb-1',
-                style: 'width: auto;',
-                'data-att-action': 'save',
-                'data-att-name': file.name,
+            renderAtt({
+                Name: file.name,
+                Action: 'save',
+                File: file,
             }).appendTo($att);
-
-            $grp[0].file = file;
-
-            $('<div/>', {
-                class: 'form-control',
-            }).append(file.name).appendTo($grp);
-
-            $btn = $('<span/>', {
-                class: 'input-group-text',
-                style: 'cursor: pointer;'
-            }).appendTo($grp);
-
-            $btn.append('<i class="bi bi-x"></i>');
-
-            $btn.click(function () {
-                debugger;
-                var $att = $(this).closest('.input-group');
-                if ($att.attr('data-att-action') == 'save') {
-                    $att.remove();
-                } else {
-                    $att.attr('data-att-action', 'delete');
-                    $att.hide();
-                };
-            })
         }
     })
 
@@ -675,8 +650,6 @@ function newAttachments(pId, pLabel) {
         if (pValue) {
             DoorsAPI.attachments(pValue).then(
                 function (res) {
-                    debugger;
-                    
                     // Filtra por el tag
                     var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
 
@@ -695,6 +668,7 @@ function newAttachments(pId, pLabel) {
                             function (accs) {
                                 atts.forEach(att => {
                                     att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
+                                    renderAtt(att).appendTo($self);
 
                                     //{AttId, Name, AccName, Size, Created}
                                 });
@@ -713,12 +687,53 @@ function newAttachments(pId, pLabel) {
 
         } else {
             noAttachs();
-        }
+        };
+
+        function renderAtt(pAtt) {
+            /*
+            pAtt = {
+                Name: 'miattach.jpg',
+                Action: 'save',
+                File: obj_file,
+            }
+            */
+            var $grp = $('<div/>', {
+                class: 'input-group float-start me-2 mb-1',
+                style: 'width: auto;',
+                'data-att-action': pAtt.Action,
+                'data-att-name': pAtt.Name,
+            });
+
+            $grp[0].file = pAtt.File;
+
+            $('<div/>', {
+                class: 'form-control',
+            }).append(pAtt.Name).appendTo($grp);
+
+            var $btn = $('<span/>', {
+                class: 'input-group-text',
+                style: 'cursor: pointer;'
+            }).appendTo($grp);
+
+            $btn.append('<i class="bi bi-x"></i>');
+
+            $btn.click(function () {
+                var $att = $(this).closest('.input-group');
+                if ($att.attr('data-att-action') == 'save') {
+                    $att.remove();
+                } else {
+                    $att.attr('data-att-action', 'delete');
+                    $att.hide();
+                };
+            });
+
+            return $grp;
+        };
 
         function noAttachs() {
             // Agrega la leyenda Sin adjuntos
             $self.html('');
-        }
+        };
     }
 
     return $ctl;
