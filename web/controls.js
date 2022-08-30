@@ -610,16 +610,18 @@ function newAttachments(pId, pLabel) {
 
     $file.change(function (e) {
         var inp = e.target;
-        var $att = $(inp).prevAll('.form-control');
+        var $atts = $(inp).prevAll('.form-control');
         var file;
         for (var i = 0; i < inp.files.length; i++) {
             file = inp.files[i];
 
-            renderAtt({
+            debugger;
+            var $att = renderAtt({
                 Name: file.name,
-                Action: 'save',
-                File: file,
-            }).appendTo($att);
+            });
+            $att.attr('data-att-action', 'save');
+            $att[0].File = file;
+            $att.appendTo($atts);
         }
     })
 
@@ -669,8 +671,6 @@ function newAttachments(pId, pLabel) {
                                 atts.forEach(att => {
                                     att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
                                     renderAtt(att).appendTo($self);
-
-                                    //{AttId, Name, AccName, Size, Created}
                                 });
                             }
                         )
@@ -690,21 +690,14 @@ function newAttachments(pId, pLabel) {
         };
 
         function renderAtt(pAtt) {
-            /*
-            pAtt = {
-                Name: 'miattach.jpg',
-                Action: 'save',
-                File: obj_file,
-            }
-            */
+            // pAtt = { AttId, Name, AccName, Size, Created }
+
             var $grp = $('<div/>', {
                 class: 'input-group float-start me-2 mb-1',
                 style: 'width: auto;',
-                'data-att-action': pAtt.Action,
+                'data-att-id': pAtt.AttId,
                 'data-att-name': pAtt.Name,
             });
-
-            $grp[0].file = pAtt.File;
 
             $('<div/>', {
                 class: 'form-control',
