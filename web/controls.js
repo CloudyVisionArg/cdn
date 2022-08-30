@@ -665,7 +665,7 @@ function newAttachments(pId, pLabel) {
                 },
 
                 function (err) {
-                    logAndToast('newAttachments._value error: ' + errMsg(err));
+                    logAndToast('Attachments._value error: ' + errMsg(err));
                 }
             );
 
@@ -689,9 +689,15 @@ function newAttachments(pId, pLabel) {
             'data-att-name': pAtt.Name,
         });
 
-        $('<div/>', {
+        var $div = $('<div/>', {
             class: 'form-control',
+            style: 'cursor: pointer;',
         }).append(pAtt.Name).appendTo($grp);
+
+        $div.click(function () {
+            debugger;
+
+        });
 
         var $btn = $('<span/>', {
             class: 'input-group-text',
