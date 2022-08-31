@@ -685,9 +685,11 @@ function newAttachments(pId, pLabel) {
         if (pAtt.AttId) {
             $div.css('cursor', 'pointer');
             $div.click(downloadAtt);
-        }
+            $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
+        } else {
+            $div.attr('title', 'Agregado ahora, pendiente de guardar');
+        };
 
-        $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
         $div.attr('data-bs-toggle', 'tooltip');
         $div.tooltip({
             delay: {
