@@ -44,7 +44,6 @@ accountsSearch(filter, order, forceOnline)
 convertSqliteResultSet(pRes)
 convertSqliteAccounts(pRes)
 clearTextSelection()
-fileSize(size)
 cameraOptions(pSource)
 getFile(pFileURL)
 audioRecorder(pCallback)
@@ -1521,22 +1520,6 @@ function clearTextSelection() {
         }
     }
 }
-
-function fileSize(size) {
-    var cutoff, i, selectedSize, selectedUnit;
-    var units = ['Tb', 'Gb', 'Mb', 'Kb', 'b'];
-
-    for (i = 0; i < units.length; i++) {
-        cutoff = Math.pow(1024, 4 - i);
-        if (size + 1 >= cutoff) {
-            selectedSize = size / cutoff;
-            selectedUnit = units[i];
-            break;
-        }
-    }
-    selectedSize = Math.round(10 * selectedSize) / 10;
-    return selectedSize + ' ' + selectedUnit;
-};
 
 function cameraOptions(pSource) {
 	return {
