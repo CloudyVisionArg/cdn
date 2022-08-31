@@ -687,7 +687,7 @@ function newAttachments(pId, pLabel) {
             $div.click(downloadAtt);
         }
 
-        $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created));
+        $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id: ' + pAtt.AttId + ')');
         $div.attr('data-bs-toggle', 'tooltip');
         $div.tooltip({
             delay: {
