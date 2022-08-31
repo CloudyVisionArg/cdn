@@ -695,6 +695,7 @@ function newAttachments(pId, pLabel) {
                 hide: 100,
             },
             placement: 'auto',
+            html: true,
         });
 
         var $btn = $('<span/>', {
