@@ -627,6 +627,7 @@ function newAttachments(pId, pLabel) {
 
     $div[0]._value = function (pValue) {
         var $self = $(this);
+        $self.html('');
         var tag = $self.attr('data-attachments').toLowerCase();
 
         if (pValue) {
@@ -664,14 +665,6 @@ function newAttachments(pId, pLabel) {
                     logAndToast('Attachments._value error: ' + errMsg(err));
                 }
             );
-
-        } else {
-            noAttachs();
-        };
-
-        function noAttachs() {
-            // Agrega la leyenda Sin adjuntos
-            $self.html('');
         };
     }
 
@@ -720,7 +713,6 @@ function newAttachments(pId, pLabel) {
         var attName = $att.attr('data-att-name');
         var blob = $att[0].Blob;
     
-        debugger;
         if (blob) {
             // Ya se descargo antes
             saveAs(blob, attName);
