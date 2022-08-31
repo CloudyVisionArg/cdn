@@ -625,10 +625,6 @@ function newAttachments(pId, pLabel) {
         }
     })
 
-    /*  
-    Para descargar ver saveAs, agregar opcion descargar todos
-    */
-
     $div[0]._value = function (pValue) {
         var $self = $(this);
         var tag = $self.attr('data-attachments').toLowerCase();
@@ -691,10 +687,12 @@ function newAttachments(pId, pLabel) {
 
         var $div = $('<div/>', {
             class: 'form-control',
-            style: 'cursor: pointer;',
         }).append(pAtt.Name).appendTo($grp);
 
-        $div.click(downloadAtt);
+        if (pAtt.AttId) {
+            $div.css('cursor', 'pointer');
+            $div.click(downloadAtt);
+        }
 
         var $btn = $('<span/>', {
             class: 'input-group-text',
