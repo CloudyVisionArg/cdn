@@ -718,11 +718,12 @@ function newAttachments(pId, pLabel) {
         var $att = $(this).closest('.input-group');
         var attId = $att.attr('data-att-id');
         var attName = $att.attr('data-att-name');
-        var attURL = $att.attr('data-att-url');
+        var blob = $att[0].Blob;
     
-        if (attURL) {
-            // Ya se descargo antes o es nuevo
-            openAtt(attURL);
+        debugger;
+        if (blob) {
+            // Ya se descargo antes
+            saveAs(blob, attName);
     
         } else {
             preloader.show();
@@ -731,6 +732,7 @@ function newAttachments(pId, pLabel) {
                 function (res) {
                     preloader.hide();
                     var blob = new Blob([res]);
+                    $att[0].Blob = blob;
                     saveAs(blob, attName);
 
                     /*
