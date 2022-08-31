@@ -688,7 +688,7 @@ function newAttachments(pId, pLabel) {
         }
 
         $div.attr('title', pAtt.AccName);
-        $div.attr('data-bs-toggle', tooltip);
+        $div.attr('data-bs-toggle', 'tooltip');
         $div.tooltip({
             delay: {
                 show: 500,
