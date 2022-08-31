@@ -680,7 +680,7 @@ function newAttachments(pId, pLabel) {
 
         var $div = $('<div/>', {
             class: 'form-control',
-        }).append(pAtt.Name).appendTo($grp);
+        }).append(pAtt.Name + ' (' + fileSize(pAtt.Size) + ')').appendTo($grp);
 
         if (pAtt.AttId) {
             $div.css('cursor', 'pointer');
