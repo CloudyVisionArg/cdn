@@ -637,9 +637,9 @@ function newAttachments(pId, pLabel) {
                     var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
 
                     if (atts.length > 0) {
-                        // Ordena descendente
+                        // Ordena por attId
                         atts.sort(function (a, b) {
-                            return a.AttId >= b.AttId ? -1 : 1;
+                            return a.AttId >= b.AttId ? 1 : -1;
                         });
 
                         // Arma un array de AccId
