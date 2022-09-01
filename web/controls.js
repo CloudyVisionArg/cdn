@@ -470,13 +470,16 @@ function newDocLog(pId, pLabel) {
         </tr>
     `);
 
-    $thead.find('i').tooltip({
-        delay: {
-            show: 100,
-            hide: 100,
-        },
-        placement: 'auto',
-    });
+    var $i = $thead.find('i');
+    if ($i.tooltip) {
+        $thead.find('i').tooltip({
+            delay: {
+                show: 100,
+                hide: 100,
+            },
+            placement: 'auto',
+        });
+    }
                 
 	$tbody = $('<tbody/>').appendTo($table);
 
