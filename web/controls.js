@@ -658,9 +658,6 @@ function newAttachments(pId, pLabel) {
                                 });
                             }
                         )
-
-                    } else {
-                        noAttachs();
                     }
                 },
 
