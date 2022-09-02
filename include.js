@@ -73,6 +73,7 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
+	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 100 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 99, hasdep: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 99 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
@@ -87,7 +88,6 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 73 });
 	scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 73 });
-	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 68 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
 	scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
