@@ -1,5 +1,5 @@
 var Doors = Doors || {};
-Doors.RESTFUL = Doors.RESTFUL || {};
+Doors.RESTFULL = Doors.RESTFULL || {};
 Doors.API = Doors.API || function () {};
 
 var DoorsAPI = new Doors.API();
