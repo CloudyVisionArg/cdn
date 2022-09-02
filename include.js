@@ -73,7 +73,7 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 
-	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 100 });
+	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 99 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 99, hasdep: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 99 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
