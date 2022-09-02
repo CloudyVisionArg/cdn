@@ -691,13 +691,15 @@ function newAttachments(pId, pLabel) {
         };
 
         $div.attr('data-bs-toggle', 'tooltip');
-        $div.tooltip({
-            delay: {
-                show: 500,
-                hide: 100,
-            },
-            placement: 'auto',
-        });
+        if ($div.tooltip) {
+            $div.tooltip({
+                delay: {
+                    show: 500,
+                    hide: 100,
+                },
+                placement: 'auto',
+            });    
+        }
 
         var $btn = $('<span/>', {
             class: 'input-group-text',
