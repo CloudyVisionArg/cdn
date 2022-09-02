@@ -678,12 +678,12 @@ function newAttachments(pId, pLabel) {
             'data-att-name': pAtt.Name,
         });
 
-        var $div = $('<div/>', {
-            class: 'form-control',
+        var $div = $('<a/>', {
+            class: 'link-primary form-control',
         }).append(pAtt.Name + ' (' + fileSize(pAtt.Size) + ')').appendTo($grp);
 
         if (pAtt.AttId) {
-            $div.css('cursor', 'pointer');
+            //$div.css('cursor', 'pointer');
             $div.click(downloadAtt);
             $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
         } else {
