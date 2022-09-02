@@ -1,4 +1,4 @@
-Doors = Doors || {};
+var Doors = Doors || {};
 Doors.API = Doors.API || function () {};
 
 var DoorsAPI = new Doors.API();
