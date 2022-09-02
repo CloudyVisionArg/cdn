@@ -4186,7 +4186,7 @@ Doors.API.prototype.accountsGetByName = function (accName) {
 Doors.API.prototype.accountsSearch = function (filter, order) {
     var url = "/accounts/search?filter={filter}&order={order}";
     url = url.replace("{filter}", encodeURIComponent(filter))
-        .replace("{order}", encodeURIComponent(order));
+        .replace("{order}", order ? encodeURIComponent(order) : "");
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
 };
 
