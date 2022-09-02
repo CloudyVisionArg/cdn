@@ -1,5 +1,905 @@
-var Doors = Doors || {};
+;var Doors = Doors || {};
+Doors.REST = Doors.REST || { };
+Doors.REST.Model = Doors.REST.Model || { };
+(function () {
+    this.FolderSearchParam = function () {
+        this.FldId = 0;
+        this.Fields = "";
+        this.Formula = "";
+        this.Totals = "";
+        this.Groups = "";
+        this.Order = "";
+        this.MaxDocs = 0;
+        this.Recursive = false;
+        this.GroupsOrder = "";
+        this.TotalsOrder = "";
+        this.MaxDescriptionLenght = 0;
+    };
+    this.GlobalSearchFilter = function () {
+        this.SearchByModified = true;
+        this.SearchText = "";
+        this.SearchForms = [0, 1];
+        this.FromDate = new Date();
+        this.ToDate = new Date();
+        this.Orders = [new Doors.REST.Model.SearchOrderItem()];
+        this.Formula = "";
+        this.ParseQuery = true;
+    };
+    this.SearchOrderItem = function () {
+        this.Field = "";
+        this.Direction = 0;
+    };
+    this.DataViewSearchFilter = function () {
+        this.FolderId = 0;
+        this.ViewId = 0;
+        this.MaxDescValueLength = 0;
+        this.AdditionalFields = ["", ""];
+        this.Formula = "";
+        this.GroupValues = [null];
+        this.MaxDocs = null;
+    };
+    this.ViewDefinitionFieldItem = function () {
+        this.Field = "";
+        this.Width = 0;
+        this.MaxLength = null;
+        this.Format = new Doors.REST.Model.ViewDefinitionFieldFormat();
+        this.IsVisible = true;
+        this.Description = "";
+        this.FormDescription = "";
+        this.IsImage = false;
+        this.FieldAlias = "";
+    };
+    this.ViewDefinitionFieldFormat = function () {
+        this.FormatId = 0;
+        this.FormatValue = "None";
+    };
+    this.ViewDefinitionFieldFormatEnum = function () {
+        this.NONE = 0;
+        this.REMOVEHTML = 1;
+        this.REMOVETAGS = 2;
+        this.MASK = 3;
+    };
+    this.ViewDefinitionFilterItem = function () {
+        this.Field = "";
+        this.Operator = "";
+        this.Value = "";
+    };
+    this.ViewDefinitionGroupItem = function () {
+        this.Field = "";
+        this.Description = "";
+    };
+    this.ViewDefinitionOrderItem = function () {
+        this.Field = "";
+        this.Direction = 0;
+    };
+    this.DataDocument = function () {
+        this.Values = [];
+        this.Add = function (key, value) {
+            this.Values.push(new Doors.REST.Model.DictionaryItem(key, value));
+        };
+        this.AddItem = function (dictionaryItem) {
+            this.Values.push(dictionaryItem);
+        };
+    };
+    this.DictionaryItem = function (key, value) {
+        this.Key = key;
+        this.Value = value;
+    };
+    this.DoorsObjectTypesEnum = {
+        CustomForm: 1,
+        Document: 2,
+        Folder: 3,
+        View: 4
+    };
+    this.FolderTypeEnum = {
+        DocumentFolder: 1,
+        LinkFolder: 2,
+        VirtualFolder: 3
+    };
+    this.ViewTypeEnum = {
+        DataView: 1,
+        ScheduleView: 2,
+        CustomView: 3,
+        ChartView: 4
+    };
+    this.ExportFormatEnum = {
+        ExcelXml : 0,
+        OpenXml : 1
+    };
+    this.AclParameter = function () {
+        this.ObjectType = 0;
+        this.AccountId = null;
+        this.Access = "";
+        this.Inherits = null;
+    };
+    this.AclSaveParameter = function () {
+        this.parent = Doors.REST.Model.AclParameter;
+        this.parent();
+        this.Acl = null;
+    };
+    this.AclCustomFormParameter = function () {
+        //Propiedad __type debe ser la primera del objeto.
+        this.__type = "AclCustomFormParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.CustomForm;
+        this.FrmId = -1;
+    };
+    this.AclViewParameter = function () {
+        this.__type = "AclViewParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.View;
+        this.FldId = -1;
+        this.ViewId = -1;
+    };
+    this.AclFolderParameter = function () {
+        this.__type = "AclFolderParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.Folder;
+        this.FldId = -1;
+    };
+    this.AclDocumentParameter = function () {
+        this.__type = "AclDocumentParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.Document;
+        this.DocId = -1;
+    };
+    this.AclSaveCustomFormParameter = function () {
+        this.__type = "AclSaveCustomFormParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclSaveParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.CustomForm;
+        this.FrmId = -1;
+    };
+    this.AclSaveViewParameter = function () {
+        this.__type = "AclSaveViewParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclSaveParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.View;
+        this.FldId = -1;
+        this.ViewId = -1;
+    };
+    this.AclSaveFolderParameter = function () {
+        this.__type = "AclSaveFolderParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclSaveParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.Folder;
+        this.FldId = -1;
+    };
+    this.AclSaveDocumentParameter = function () {
+        this.__type = "AclSaveDocumentParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.AclSaveParameter;
+        this.parent();
+        this.ObjectType = Doors.REST.Model.DoorsObjectTypesEnum.Document;
+        this.DocId = -1;
+    };
+    this.AclItem = function () {
+        this.AccountId = -4;
+        this.Permissions = [];
+    };
+    this.AclPermissionItem = function () {
+        this.OwnedValue = false;
+        this.InheritedValue = false;
+        this.Name = "";
+        this.Description = "";
+    };
+    this.AclPermissions = {
+        Admin: "admin",
+        Read: "read",
+        Delete: "delete",
+        Modify: "modify",
+        FolderCreate: "fld_create",
+        FolderRead: "fld_read",
+        FolderView: "fld_view",
+        FolderAdmin: "fld_admin",
+        DocCreate: "doc_create",
+        DocRead: "doc_read",
+        DocModify: "doc_modify",
+        DocDelete: "doc_delete",
+        DocAdmin: "doc_admin",
+        ViewCreate: "vie_create",
+        ViewRead: "vie_read",
+        ViewModify: "vie_modify",
+        ViewDelete: "vie_delete",
+        ViewAdmin: "vie_admin",
+        ViewCreatePrivate: "vie_create_priv"
+    };
+    this.PropertiesParameter = function() {
+        this.ObjectType = 0;
+        this.ObjectId = 0;
+        this.IsNew = false;
+    };
+    this.SinglePropertyParameter = function() {
+        //Propiedad __type debe ser la primera del objeto.
+        this.__type = "SinglePropertyParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.PropertiesParameter;
+        this.parent();
+        this.Name = "";
+        this.Value = "";
+    };
+    this.MultiplePropertiesParameter = function() {
+        //Propiedad __type debe ser la primera del objeto.
+        this.__type = "MultiplePropertiesParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.PropertiesParameter;
+        this.parent();
+        this.Properties = [];
+    };
+    this.ViewSinglePropertyParameter = function() {
+        //Propiedad __type debe ser la primera del objeto.
+        this.__type = "ViewSinglePropertyParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.SinglePropertyParameter;
+        this.parent();
+        this.FldId = 0;
+    };
+    this.ViewMultiplePropertiesParameter = function() {
+        //Propiedad __type debe ser la primera del objeto.
+        this.__type = "ViewMultiplePropertiesParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.MultiplePropertiesParameter;
+        this.parent();
+        this.FldId = 0;
+    };
+    this.FieldSinglePropertyParameter = function() {
+        //Propiedad __type debe ser la primera del objeto.
+        this.__type = "FieldSinglePropertyParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.SinglePropertyParameter;
+        this.parent();
+        this.Name = "";
+    };
+    this.FieldMultiplePropertiesParameter = function() {
+        //Propiedad __type debe ser la primera del objeto.
+        this.__type = "FieldMultiplePropertiesParameter:#Gestar.Doors.Services.RestServices";
+        this.parent = Doors.REST.Model.MultiplePropertiesParameter;
+        this.parent();
+        this.Name = "";
+    };
+    this.ViewSearchFilter = function() {
+        //this.__type = "ViewSearchFilter:#Gestar.Doors.API.ObjectModelW";
+        this.FolderId = -1;
+        this.ViewId = -1;
+        this.MaxDescValueLength = 0;
+        this.AdditionalFields = [];
+        this.Formula = "";
+    };
+    this.ChartViewSearchFilter = function() {
+        this.__type = "ChartViewSearchFilter:#Gestar.Doors.API.ObjectModelW";
+        this.parent = Doors.REST.Model.ViewSearchFilter;
+        this.parent();
+        this.Groups = [];
+        this.Formula = "";
+    };
+    this.DataViewSearchFilter = function() {
+        this.__type = "DataViewSearchFilter:#Gestar.Doors.API.ObjectModelW";
+        this.parent = Doors.REST.Model.ViewSearchFilter;
+        this.parent();
+        this.GroupValues = [];
+    };
+    this.RestSessionParameter = function () {
+        this.SettingName = "";
+        this.SettingValue = "";
+    };
+    this.ExportParameter = function() {
+        this.FldId = -1;
+        this.VieId = -1;
+        this.ExportFormat = 0;
+        this.SelectedDocs = null;
+        this.Filter = null;
+        this.ColumnsNamesOnly = false;
+    };
+}).apply(Doors.REST.Model);
+;//Requiere GlobalFunctions y GlobalSettings
+Doors = Doors || {};
+Doors.REST = Doors.REST || {};
+(function () {
+    
+    this.ServerUrl = "";
+    this.AuthToken = "";
+    this.ServiceUnhandledErrorFunction = function (err) { alert(err); };
+    this.ResponseResultEnum =
+    {
+        Sucess: 0,
+        SessionTimeOutError: 1,
+        Exception: 2
+    };
+    this.CurrentCalls = [];
+    this.cancelPendingCalls = function () {
+        for (var i = 0; i < Doors.REST.CurrentCalls.length; i++) {
+            var xhr = Doors.REST.CurrentCalls[i];
+            if (xhr && xhr.readyState != 4) {
+                xhr.abort();
+            }
+        }
+    };
+    //$(document).ready(function() {
+    try {
+        $(window).on('beforeunload', Doors.REST.cancelPendingCalls);
+    } catch(e) {
+
+    }
+    try {
+        $(window).on('beforeunload', Doors.REST.cancelPendingCalls);
+    } catch (e) {
+
+    }
+    //});
+    
+    this.call = function (callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction) {
+        return Doors.REST.asyncCall(callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction, false);
+    };
+
+
+    this.asyncCallXmlHttp = function (callingMethod, httpMethod, data) {
+        var dataSend = null;
+        if (data) {
+            dataSend = data;
+        }
+        var completeUrl = Doors.RESTFULL.ServerUrl + "/" + callingMethod;
+
+        var prom = jQuery.Deferred();
+        var xhr = new XMLHttpRequest();
+        xhr.open(httpMethod, completeUrl, true);
+        xhr.setRequestHeader("AuthToken", Doors.RESTFULL.AuthToken);
+        (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
+        var _self = this;
+        xhr.onreadystatechange = function (event) {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    _self.decrementCurrentCalls(xhr);
+                    prom.resolve(this.response);
+                } else {
+                    _self.decrementCurrentCalls(xhr);
+                    prom.reject(this.statusText);
+                }
+            }
+        };
+        xhr.send(dataSend);
+        this.CurrentCalls.push(xhr);
+        return prom.promise()
+    };
+
+    this.asyncCall = function (callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction, async) {
+        var data = null;
+        var completeUrl = Doors.REST.ServerUrl + "/" + callingMethod;
+        if (parameters != undefined && parameters != null) {
+            //URL parameters
+            if (Object.prototype.toString.call(parameters) == "[object String]") {
+                var others = "";
+                var nexus = "";
+                //NOTE: Esto ya no aplica, ya que el token se pasa por header.
+                //var token = "?authToken=" + restCallOptions.authToken;
+                if (parameters != "") {
+                    nexus = "?";
+                    others = parameters;
+                }
+                completeUrl = completeUrl + nexus + others;
+            } else {
+                //Javascript parameters
+                var restParam = Doors.REST.constructJSONParameter(parameters, parameterName);
+                data = restParam;
+            }
+        }
+        //In case caller doesn't want to handle error.
+        if (errorFunction == undefined) {
+            errorFunction = Doors.REST.ServiceUnhandledErrorFunction;
+        }
+        
+        var req = $.ajax({
+            type: httpMethod,
+            url: completeUrl,
+            data: data,
+            beforeSend: function (xhr, settings) {
+                var tk = Doors.REST.AuthToken;
+                //var encoded = encodeURIComponent(tk);
+                xhr.setRequestHeader("AuthToken", tk);
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json customJson",
+            converters: {
+                "json customJson": function (result) {
+                    //In case a complex object is received.
+                    if (result.InternalObject === undefined) {
+                        result = result[callingMethod + "Result"];
+                    }
+                    result.InternalObject = tryParseDateComplex(result.InternalObject);
+                    return result;
+                }
+            },
+            cache: false,
+            async: async,
+            processdata: false,
+            success: function (result, textStatus, xhr) {
+                //In case a complex object is received.
+                if (result.InternalObject === undefined) {
+                    result = result[callingMethod + "Result"];
+                }
+                //If it still does not contains de correct structure, throw error;
+                if (result.InternalObject === undefined) {
+                    var err = new Gestar.ErrorHandling.ExceptionObject();
+                    err.Message = "Response object missformed. Method: " + callingMethod;
+                    err.Method = callingMethod;
+                    errorFunction(err);
+                    return;
+                }
+                if (Doors.REST.hasException(result, callingMethod, errorFunction)) {
+                    return;
+                }
+                successFunction(handleResultObject(result.InternalObject));
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if (textStatus != "abort") {
+                    var err = new Gestar.ErrorHandling.ExceptionObject();
+                    err.DoorsExceptionType = null;
+                    err.Message = "REST Api Error - Method: " + callingMethod + " Status Code: " + xhr.status + " - Message: " + errorThrown;
+                    err.Type = Doors.REST.ResponseResultEnum.Exception;
+                    err.Method = callingMethod;
+                    errorFunction(err);
+                }
+            },
+            complete: function (xhr, textStatus) {
+                /*var index = Gestar.REST.CurrentCalls.indexOf(xhr);
+                Gestar.REST.CurrentCalls.splice(index, 1);*/
+                var index = Doors.REST.CurrentCalls.indexOf(xhr);
+                if (index !== -1) {
+                    Doors.REST.CurrentCalls.splice(index, 1);
+                }
+            }
+        });
+        this.CurrentCalls.push(req);
+        return req;
+    };
+    var handleResultObject = function(operationResult) {
+        if (Object.prototype.toString.call(operationResult) == "[object String]") {
+            try {
+                return JSON.parse(operationResult);
+            } catch(ex) {
+                return operationResult;
+            }
+        }
+        return operationResult;
+    };
+
+    /*var tryParseDate = function(simpleObject) {
+        for (var i in simpleObject) {
+            if (Gestar.Tools.isNumber(parseInt(i))) {
+                tryParseDate(simpleObject[0]);
+            } else {
+                if (Object.prototype.toString.call(simpleObject[i]) == "[object Array]") {
+                    tryParseDate(simpleObject[i]);
+                } else {
+                    if (typeof simpleObject[i] == "string" && simpleObject[i].substring(0, 6) == "/Date(") {
+                        var d = new Date(parseInt(simpleObject[i].replace("/Date(", "").replace(")/", ""), 10));
+                        var minutes = d.getTimezoneOffset();
+                        simpleObject[i] = new Date(d.getTime()); // + minutes * 60000);
+                        //simpleObject[i] = new Date(parseInt(simpleObject[i].substr(6)));
+                    } else if (Object.prototype.toString.call(simpleObject[i]) == "[object Date]") {
+                        //TODO ZONA HORARIA
+                        var date = "\/Date(" + simpleObject[i].getTime() + "-0000)\/";
+                        simpleObject[i] = date;
+                    }
+                }
+            }
+        }
+    };*/
+    //TODO Revisar performance de tryParseDate
+    var tryParseDateComplex = function(arrayObject) {
+        //FIX para objetos que vienen del servidor como string pero son objetos JSON (SearchGroups x ej)
+        if (Object.prototype.toString.call(arrayObject) == "[object String]" && (arrayObject.startsWith("{") || arrayObject.startsWith("["))) {
+            arrayObject = JSON.parse(arrayObject);
+        }
+
+        if (Object.prototype.toString.call(arrayObject) == "[object Array]") {
+            tryParseDateInArray(arrayObject);
+        } else if (Object.prototype.toString.call(arrayObject) == "[object Object]") {
+            tryParseInObject(arrayObject);
+        } else {
+            arrayObject = parseDate(arrayObject);
+        }
+        return arrayObject;
+    };
+    
+    var tryParseDateInArray = function(array) {
+        for (var p = 0; p < array.length; p++) {
+            if (Object.prototype.toString.call(array[p]) == "[object Object]") {
+                tryParseInObject(array[p]);
+            }
+            else if (Object.prototype.toString.call(array[p]) == "[object Array]") {
+                tryParseDateInArray(array[p]);
+            } else {
+                array[p] = parseDate(array[p]);
+            }
+        }
+    };
+    var tryParseInObject = function (simpleObject) {
+        for (var i in simpleObject) {
+            if (Object.prototype.toString.call(simpleObject[i]) == "[object Array]") {
+                tryParseDateInArray(simpleObject[i]);
+            } else {
+                simpleObject[i] = parseDate(simpleObject[i]);
+            }
+        }
+    };
+    var parseDate = function (string) {
+        var result = string;
+        if (typeof string == "string" && string.substring(0, 6) == "/Date(") {
+            var dateString = string.replace("/Date(", "").replace(")/", "");
+            var d = new Date(parseInt(dateString, 10));
+            var minutes = d.getTimezoneOffset();
+            var dtStringSplitted = dateString.split("-");
+            var minus = -1;
+            if(dtStringSplitted.length == 1) {
+                dtStringSplitted = dateString.split("+");
+                minus = 1;
+            }
+            var spltIndx = 1;
+            if (dtStringSplitted.length == 3) {
+                spltIndx = 2;
+            }
+            var offset = dtStringSplitted[spltIndx];
+            var dateMinutesOffset = parseInt(offset.substring(0, 2)) * 60;
+            dateMinutesOffset *= minus;
+            minutes = dateMinutesOffset + minutes;
+            var sum = minutes * 60000;
+            result = new Date(d.getTime() + sum);
+        } else if (Object.prototype.toString.call(string) == "[object Date]") {
+            //TODO Change for correct UTC hours
+            var date = "\/Date(" + string.getTime() + Gestar.Settings.ServerTimeZone + ")\/";
+            result = date;
+        }
+        return result;
+    };
+    this.hasException = function(responseObject, callingMethod, errorFunction) {
+        if (responseObject.ResponseResult == Doors.REST.ResponseResultEnum.SessionTimeOutError) {
+            Gestar.ErrorHandling.handleSessionExpired();
+            return true;
+        }
+        if (responseObject.ResponseResult == Doors.REST.ResponseResultEnum.Exception) {
+            
+            var ex = new Gestar.ErrorHandling.ExceptionObject();
+            ex.Message = responseObject.ExceptionMessage;
+            ex.Type = Doors.REST.ResponseResultEnum.Exception;
+            ex.DoorsExceptionType = responseObject.ExceptionType;
+            ex.Method = callingMethod;
+            errorFunction(ex);
+            return true;
+        }
+        return false;
+    };
+
+    this.constructJSONParameter = function(param, parameterName) {
+        //NOTE Se copia el objeto para no modificar la referencia al enviarse al server
+        var clone = Gestar.Tools.cloneObject(param);
+        if (Object.prototype.toString.call(param) === '[object Array]') {
+            clone = Gestar.Tools.cloneArray(param);
+        }
+
+        clone = tryParseDateComplex(clone);
+        var paramName = param.ParameterName;
+        if (param.ParameterName === undefined || param.ParameterName == undefined || param.ParameterName == null || param.ParameterName == "") {
+            paramName = parameterName;
+        }
+        var stringParam = "{ \"" + paramName + "\": { \"AuthToken\":\"" + Doors.REST.AuthToken + "\", \"Param\": " + JSON.stringify(clone) +
+            " } }";
+        return stringParam;
+    };
+}).apply(Doors.REST);
+
+var restCallOptions = {
+    serverUrl: "",
+    authToken: ""
+};
+
+;//Requiere GlobalFunctions y GlobalSettings
+Doors = Doors || {};
 Doors.RESTFULL = Doors.RESTFULL || {};
+(function () {
+    
+    this.ServerUrl = "";
+    this.AuthToken = "";
+    this.ApiKey = null;
+    this.ServiceUnhandledErrorFunction = null;
+    this.ResponseResultEnum =
+    {
+        Sucess: 0,
+        SessionTimeOutError: 1,
+        Exception: 2
+    };
+    this.CurrentCalls = [];
+    this.cancelPendingCalls = function () {
+        for (var i = 0; i < Doors.RESTFULL.CurrentCalls.length; i++) {
+            var xhr = Doors.RESTFULL.CurrentCalls[i];
+            if (xhr && xhr.readyState != 4) {
+                xhr.abort();
+            }
+        }
+    };
+    $(document).ready(function() {
+        //document.body.onbeforeunload = Doors.RESTFULL.cancelPendingCalls;
+        //window.onbeforeunload = Doors.RESTFULL.cancelPendingCalls;
+
+        $(window).on('beforeunload', Doors.RESTFULL.cancelPendingCalls);
+    });
+    
+    /*this.call = function (callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction) {
+        return Gestar.RESTFULL.asyncCall(callingMethod, httpMethod, parameters, parameterName, successFunction, errorFunction, false);
+    };*/
+
+    this.asyncCallXmlHttp = function (callingMethod, httpMethod, data) {
+        var dataSend = null;
+        if (data) {
+            dataSend = data;
+        }
+        var completeUrl = Doors.RESTFULL.ServerUrl + "/" + callingMethod;
+
+        var prom = jQuery.Deferred();
+        var xhr = new XMLHttpRequest();
+        xhr.open(httpMethod, completeUrl, true);
+        if (Doors.RESTFULL.ApiKey != null) {
+            xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
+        }
+        else {
+            xhr.setRequestHeader("AuthToken", Doors.RESTFULL.AuthToken);
+        }
+        (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
+        var _self = this;
+        xhr.onreadystatechange = function (event) {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    prom.resolve(this.response);
+                } else {
+                    prom.reject(this.statusText);
+                }
+                var index = Doors.RESTFULL.CurrentCalls.indexOf(xhr);
+                if (index !== -1) {
+                    Doors.RESTFULL.CurrentCalls.splice(index, 1);
+                }
+            }
+        };
+        xhr.send(dataSend);
+        this.CurrentCalls.push(xhr);
+        return prom.promise()
+    };
+
+    this.asyncCall = function (callingMethod, httpMethod, parameters, parameterName) {
+        var data = null;
+        var completeUrl = Doors.RESTFULL.ServerUrl + "/" + callingMethod;
+        if (parameters != undefined && parameters != null) {
+            //URL parameters
+            if (Object.prototype.toString.call(parameters) == "[object String]") {
+                var others = "";
+                var nexus = "";
+                //NOTE: Esto ya no aplica, ya que el token se pasa por header.
+                //var token = "?authToken=" + restCallOptions.authToken;
+                if (parameters != "") {
+                    nexus = "?";
+                    others = parameters;
+                }
+                completeUrl = completeUrl + nexus + others;
+            } else {
+                //Javascript parameters
+                var restParam = Doors.RESTFULL.constructJSONParameter(parameters, parameterName);
+                data = restParam;
+            }
+        }        
+        
+        var prom = $.Deferred();
+        var req = $.ajax({
+            type: httpMethod,
+            url: completeUrl,
+            data: data,
+            beforeSend: function(xhr, settings) {
+                var tk = Doors.RESTFULL.AuthToken;
+                //var encoded = encodeURIComponent(tk);
+                //xhr.setRequestHeader("AuthToken", tk);
+                if (Doors.RESTFULL.ApiKey != null) {
+                    xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
+                }
+                else {
+                    xhr.setRequestHeader("AuthToken", Doors.RESTFULL.AuthToken);
+                }
+            },
+            contentType: "application/json",
+            dataType: "json customJson",
+            converters: {
+                "json customJson": function(result) {
+
+                    //result = tryParseDateComplex(result);
+                    return result;
+                }
+            },
+            cache: false,
+            async: true,
+            processdata: false,
+            success: function(result, textStatus, xhr) {
+                //If does not contains de correct structure, throw error;
+                if (result.InternalObject === undefined) {
+                    var err = {
+                        ExceptionMessage: "Response object missformed. Method: " + callingMethod,
+                        Message: "Response object missformed. Method: " + callingMethod,
+                        Method: callingMethod
+                    }
+                    prom.reject(err);
+                    return;
+                }
+                if (Doors.RESTFULL.hasException(result, callingMethod)) {
+                    if (Doors.RESTFULL.ServiceUnhandledErrorFunction != null) {
+                        Doors.RESTFULL.ServiceUnhandledErrorFunction(result);
+                        Gestar.Tools.dp(result.ExceptionMessage, result);
+                    }
+                    else {
+                        Gestar.Tools.er(result.ExceptionMessage, result);
+                    }
+
+                    prom.reject(result);
+                    return;
+                }
+                prom.resolve(result.InternalObject);
+
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                if (xhr.readyState == 0) {
+                    if (xhr.statusText === 'abort') {
+                        return;
+                    }
+                    else if (!xhr.responseText || xhr.status == 404) {
+                        prom.reject({
+                            ExceptionMessage: "Request Error",
+                            Message: "Request Error",
+                            Method: callingMethod
+                        });
+                        return;
+                    }
+                }
+                var responseObj = JSON.parse(xhr.responseText);
+                /*var err = new Gestar.ErrorHandling.ExceptionObject();
+                err.DoorsExceptionType = null;
+                err.Message = "REST Api Error - Method: " + callingMethod + " Status Code: " + xhr.status + " - Message: " + errorThrown;
+                err.Type = Gestar.REST.ResponseResultEnum.Exception;
+                err.Method = callingMethod;*/
+
+                if (responseObj.ResponseResult == Doors.RESTFULL.ResponseResultEnum.SessionTimeOutError) {
+                    Gestar.ErrorHandling.handleSessionExpired();
+                }
+                $.extend(responseObj, responseObj, {
+                    Message: responseObj.ExceptionMessage,
+                    Type: Doors.RESTFULL.ResponseResultEnum.Exception,
+                    DoorsExceptionType: responseObj.ExceptionType,
+                    Method: callingMethod
+                });
+                prom.reject(responseObj);
+
+            },
+            complete: function (xhr, textStatus) {
+                /*var index = Gestar.REST.CurrentCalls.indexOf(xhr);
+                Gestar.REST.CurrentCalls.splice(index, 1);*/
+                var index = Doors.RESTFULL.CurrentCalls.indexOf(xhr);
+                if (index !== -1) {
+                    Doors.RESTFULL.CurrentCalls.splice(index, 1);
+                }
+            }
+        });
+        this.CurrentCalls.push(req);
+        return prom.promise();
+    };
+    var handleResultObject = function(operationResult) {
+        if (Object.prototype.toString.call(operationResult) == "[object String]") {
+            try {
+                return JSON.parse(operationResult);
+            } catch(ex) {
+                return operationResult;
+            }
+        }
+        return operationResult;
+    };
+    
+    //TODO Revisar performance de tryParseDate
+    var tryParseDateComplex = function (arrayObject) {
+        //FIX para objetos que vienen del servidor como string pero son objetos JSON (SearchGroups x ej)
+        if (Object.prototype.toString.call(arrayObject) == "[object String]" && (arrayObject.startsWith("{") || arrayObject.startsWith("["))) {
+            arrayObject = JSON.parse(arrayObject);
+        }
+
+        if (Object.prototype.toString.call(arrayObject) == "[object Array]") {
+            tryParseDateInArray(arrayObject);
+        } else if (Object.prototype.toString.call(arrayObject) == "[object Object]") {
+            tryParseInObject(arrayObject);
+        } else {
+            arrayObject = parseDate(arrayObject);
+        }
+        return arrayObject;
+    };
+
+    var tryParseDateInArray = function (array) {
+        for (var p = 0; p < array.length; p++) {
+            if (Object.prototype.toString.call(array[p]) == "[object Object]") {
+                tryParseInObject(array[p]);
+            }
+            else if (Object.prototype.toString.call(array[p]) == "[object Array]") {
+                tryParseDateInArray(array[p]);
+            } else {
+                array[p] = parseDate(array[p]);
+            }
+        }
+    };
+    var tryParseInObject = function (simpleObject) {
+        for (var i in simpleObject) {
+            if (Object.prototype.toString.call(simpleObject[i]) == "[object Array]") {
+                tryParseDateInArray(simpleObject[i]);
+            } else {
+                simpleObject[i] = parseDate(simpleObject[i]);
+            }
+        }
+    };
+    var parseDate = function (string) {
+        var result = string;
+        if (typeof string == "string" && string.substring(0, 6) == "/Date(") {
+            var dateString = string.replace("/Date(", "").replace(")/", "");
+            var d = new Date(parseInt(dateString, 10));
+            var minutes = d.getTimezoneOffset();
+            var dtStringSplitted = dateString.split("-");
+            var minus = -1;
+            if (dtStringSplitted.length == 1) {
+                dtStringSplitted = dateString.split("+");
+                minus = 1;
+            }
+            var spltIndx = 1;
+            if (dtStringSplitted.length == 3) {
+                spltIndx = 2;
+            }
+            var offset = dtStringSplitted[spltIndx];
+            var dateMinutesOffset = parseInt(offset.substring(0, 2)) * 60;
+            dateMinutesOffset *= minus;
+            minutes = dateMinutesOffset + minutes;
+            var sum = minutes * 60000;
+            result = new Date(d.getTime() + sum);
+        } else if (Object.prototype.toString.call(string) == "[object Date]") {
+            //TODO Change for correct UTC hours
+            var date = string.toISOString();//"\/Date(" + string.getTime() + Gestar.Settings.ServerTimeZone + ")\/";
+            result = date;
+        }
+        return result;
+    };
+    
+    this.hasException = function(responseObject, callingMethod) {
+        if (responseObject.ResponseResult == Doors.RESTFULL.ResponseResultEnum.SessionTimeOutError) {
+            Gestar.ErrorHandling.handleSessionExpired();
+            return true;
+        }
+        if (responseObject.ResponseResult == Doors.RESTFULL.ResponseResultEnum.Exception) {
+            
+            $.extend(responseObject, responseObject, {
+                Message: responseObject.ExceptionMessage,
+                Type: Doors.RESTFULL.ResponseResultEnum.Exception,
+                DoorsExceptionType: responseObject.ExceptionType,
+                Method: callingMethod
+            });
+            
+            return true;
+        }
+        return false;
+    };
+
+    this.constructJSONParameter = function(param, parameterName) {
+        //NOTE Se copia el objeto para no modificar la referencia al enviarse al server
+        var clone = Gestar.Tools.cloneObject(param);
+        if (Object.prototype.toString.call(param) === '[object Array]') {
+            clone = Gestar.Tools.cloneArray(param);
+        }
+
+        clone = tryParseDateComplex(clone);
+        var paramName = param.ParameterName;
+        if (param.ParameterName === undefined || param.ParameterName == undefined || param.ParameterName == null || param.ParameterName == "") {
+            paramName = parameterName;
+        }
+        var stringParam = "{ \"" + paramName + "\": " + JSON.stringify(clone) + " }";
+        if (paramName == "") {
+            stringParam = JSON.stringify(clone);
+        }
+        return stringParam;
+    };
+}).apply(Doors.RESTFULL);
+;Doors = Doors || {};
 Doors.API = Doors.API || function () {};
 
 var DoorsAPI = new Doors.API();
@@ -1447,4 +2347,24 @@ Doors.API.prototype.notificationsSearch = function (to, status, devicePlatform, 
     const url =  "notifications?to="+ to + "&status="+ status + "&devicePlatform="+ devicePlatform + "&deliveryDateFrom="+ deliveryDateFrom + "" +
     "&deliveryDateTo="+ deliveryDateTo + "&readDateFrom="+ readDateFrom + "&readDateTo="+ readDateTo + "&eraseDateFrom="+ eraseDateFrom + "&eraseDateTo"+ eraseDateTo + "";
     return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+};
+;Doors = Doors || {};
+Doors.Session = Doors.Session || {};
+
+var _loggedUser;
+
+Doors.Session.init = function () {
+    DoorsAPI.loggedUser()
+        .then(
+            function (obj) {
+                _loggedUser = obj;
+            },
+            function (obj) {
+                console.log("Error al cargar el usuario logueado Doors.Session.init");
+            }
+        );
+};
+
+Doors.Session.LoggedUser = function () {
+    return _loggedUser;
 };
