@@ -678,17 +678,24 @@ function newAttachments(pId, pLabel) {
             'data-att-name': pAtt.Name,
         });
 
-        var $div = $('<a/>', {
-            class: 'link-primary form-control',
-        }).append(pAtt.Name + ' (' + fileSize(pAtt.Size) + ')').appendTo($grp);
+        var $div;
 
         if (pAtt.AttId) {
+            var $div = $('<a/>', {
+                class: 'link-primary form-control',
+            });
             $div.css('cursor', 'pointer');
             $div.click(downloadAtt);
             $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
         } else {
+            var $div = $('<div/>', {
+                class: 'form-control',
+            });
+    
             $div.attr('title', 'Agregado ahora, pendiente de guardar');
         };
+
+        $div.append(pAtt.Name + ' (' + fileSize(pAtt.Size) + ')').appendTo($grp);
 
         $div.attr('data-bs-toggle', 'tooltip');
         if ($div.tooltip) {
