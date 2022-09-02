@@ -683,7 +683,7 @@ function newAttachments(pId, pLabel) {
         }).append(pAtt.Name + ' (' + fileSize(pAtt.Size) + ')').appendTo($grp);
 
         if (pAtt.AttId) {
-            //$div.css('cursor', 'pointer');
+            $div.css('cursor', 'pointer');
             $div.click(downloadAtt);
             $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
         } else {
