@@ -563,8 +563,6 @@ function newDocLog(pId, pLabel) {
 
 function newAttachments(pId, pLabel) {
     /*
-    bReadonly
-    bAddonly
     sAcceptedFiles
     sOrderAttribute
     sOrderDirection

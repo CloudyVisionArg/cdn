@@ -1444,6 +1444,7 @@ function saveAtt() {
                 var attAction = $this.attr('data-att-action');
                 
                 if (attAction == 'save') {
+                    toast('Subiendo archivo ' + attName);
                     beginCall(attName, attAction);
                 
                     var file = this._file;
