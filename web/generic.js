@@ -970,7 +970,7 @@ function renderControls(pCont, pParent) {
             $input = $this.find('div[data-attachments]');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input[0]._readonly(true);
+                $input[0]._addonly(true);
             }
 
             /*
