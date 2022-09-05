@@ -1623,6 +1623,7 @@ function saveDoc() {
 function saveAtt() {
     return new Promise(function (resolve, reject) {
         var calls = [];
+        var arrDel = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
 
         if ($attsToSave.length == 0) {
@@ -1635,9 +1636,9 @@ function saveAtt() {
                 var attName = $this.attr('data-att-name');
                 var attAction = $this.attr('data-att-action');
                 
-                beginCall(attName, attAction);
-                
                 if (attAction == 'save') {
+                    beginCall(attName, attAction);
+
                     getFile($this.attr('data-att-url')).then(
                         function (file) {
                             var reader = new FileReader();
@@ -1664,25 +1665,37 @@ function saveAtt() {
                     )
                     
                 } else if (attAction == 'delete') {
-                    // todo: borrar $this.attr('data-att-id')
-                    setTimeout(function () { endCall(attName, 'No implementado') }, 0);
-                }
-            
-                function beginCall(pName, pAction) {
-                    calls.push({ name: pName, action: pAction, result: 'pending' });
-                }
-                
-                function endCall(pName, pResult) {
-                    calls.find(el => el.name == pName).result = pResult;
-                    if (!calls.find(el => el.result == 'pending')) {
-                        if (calls.find(el => el.result != 'OK')) {
-                            reject(calls.filter(el => el.result != 'OK'));
-                        } else {
-                            resolve('OK');
-                        }
-                    }
+                    arrDel.push($this.attr('data-att-id'));
                 }
             });
+
+            if (arrDel.length > 0) {
+                var sDel = arrDel.join(',');
+                beginCall(sDel, 'delete')
+                DoorsAPI.attachmentsDelete(doc_id, arrDel).then(
+                    function (res) {
+                        endCall(sDel, 'OK');
+                    },
+                    function (err) {
+                        endCall(sDel, 'attachmentsDelete error: ' + errMsg(err));
+                    }
+                );
+            }
+        }
+
+        function beginCall(pName, pAction) {
+            calls.push({ name: pName, action: pAction, result: 'pending' });
+        }
+        
+        function endCall(pName, pResult) {
+            calls.find(el => el.name == pName).result = pResult;
+            if (!calls.find(el => el.result == 'pending')) {
+                if (calls.find(el => el.result != 'OK')) {
+                    reject(calls.filter(el => el.result != 'OK'));
+                } else {
+                    resolve('OK');
+                }
+            }
         }
     });
 }
