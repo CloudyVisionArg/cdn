@@ -40,7 +40,7 @@ arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/a
 arrScripts.push({ id: 'lib-moment' });
 arrScripts.push({ id: 'bootstrap-select', depends: ['jquery', 'bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js' });
 arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
-// todo: esto deberia ser segun el lenguaje
+// todo: esto deberia ser segun el lng_id
 arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
 
 include(arrScripts, function () {
@@ -662,8 +662,7 @@ function renderControls(pCont, pParent) {
             }
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                //todo: revisar
-                inputReadonly($input, true);
+                $input.attr({ 'readonly': 'readonly' });
             }
 
             if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
@@ -695,8 +694,7 @@ function renderControls(pCont, pParent) {
             $input = $this.find('input');
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                //todo: revisar
-                inputReadonly($input, true);
+                $input.attr({ 'readonly': 'readonly' });
             }
 
 
@@ -719,7 +717,7 @@ function renderControls(pCont, pParent) {
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr('disabled', true);
+                $input.attr('disabled', 'disabled');
                 $input.selectpicker('refresh');
             }
 
@@ -735,7 +733,7 @@ function renderControls(pCont, pParent) {
             $input = $this.find('select');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr('disabled', true);
+                $input.attr('disabled', 'disabled');
                 $input.selectpicker('refresh');
             }
 
@@ -817,7 +815,7 @@ function renderControls(pCont, pParent) {
 
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr('disabled', true);
+                $input.attr('disabled', 'disabled');
             }
 
 
@@ -844,7 +842,7 @@ function renderControls(pCont, pParent) {
             renderControls($this.find('fieldset'), ctl['NAME']);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.find('fieldset').attr('disabled', true);
+                $this.find('fieldset').attr('disabled', 'disabled');
             }
 
             /*
@@ -948,7 +946,7 @@ function renderControls(pCont, pParent) {
             $input.attr('data-valuefield', vf);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                // todo: inputReadonly($input, true);
+                $input.attr({ 'readonly': 'readonly' });
             }
 
             /*
@@ -1463,7 +1461,14 @@ function saveAtt() {
                     
                 } else if (attAction == 'delete') {
                     // todo: borrar $this.attr('data-att-id')
-                    setTimeout(function () { endCall(attName, 'No implementado') }, 0);
+                    DoorsAPI.attachmentsDelete(doc_id, $this.attr('data-att-id')).then(
+                        function (res) {
+                            endCall(attName, 'OK');
+                        },
+                        function (err) {
+                            endCall(attName, 'attachmentsSave error: ' + errMsg(err));
+                        }
+                    );
                 }
             
                 function beginCall(pName, pAction) {

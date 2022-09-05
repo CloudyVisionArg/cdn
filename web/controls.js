@@ -687,11 +687,11 @@ function newAttachments(pId, pLabel) {
             $div.css('cursor', 'pointer');
             $div.click(downloadAtt);
             $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
+            
         } else {
             var $div = $('<div/>', {
                 class: 'form-control',
             });
-    
             $div.attr('title', 'Agregado ahora, pendiente de guardar');
         };
 
