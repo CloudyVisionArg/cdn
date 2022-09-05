@@ -765,7 +765,7 @@ function newAttachments(pId, pLabel) {
 
     $div[0]._readonly = function (pValue) {
         var $cont = $(this).closest('div.input-group');
-        var $clip = $cony.children('span.input-group-text');
+        var $clip = $cont.children('span.input-group-text');
 
         if (pValue) {
             $clip.addClass('disabled');
