@@ -1437,10 +1437,11 @@ function saveAtt() {
                 var tag = $this.closest('input-group').attr('data-attachments');
                 var attName = $this.attr('data-att-name');
                 var attAction = $this.attr('data-att-action');
-                
-                beginCall(attName, attAction);
+                var arrDel = [];
                 
                 if (attAction == 'save') {
+                    beginCall(attName, attAction);
+                
                     var file = this.File;
                     var reader = new FileReader();
                     reader.onloadend = function (e) {
@@ -1460,34 +1461,39 @@ function saveAtt() {
                     reader.readAsArrayBuffer(file);
                     
                 } else if (attAction == 'delete') {
-                    // todo: borrar $this.attr('data-att-id')
-                    DoorsAPI.attachmentsDelete(doc_id, [$this.attr('data-att-id')]).then(
-                        function (res) {
-                            endCall(attName, 'OK');
-                        },
-                        function (err) {
-                            endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-                        }
-                    );
-                }
-            
-                function beginCall(pName, pAction) {
-                    calls.push({ name: pName, action: pAction, result: 'pending' });
-                }
-                
-                function endCall(pName, pResult) {
-                    calls.find(el => el.name == pName).result = pResult;
-                    if (!calls.find(el => el.result == 'pending')) {
-                        if (calls.find(el => el.result != 'OK')) {
-                            reject(calls.filter(el => el.result != 'OK'));
-                        } else {
-                            resolve('OK');
-                        }
-                    }
+                    arrDel.push($this.attr('data-att-id'));
                 }
             });
+
+            if (arrDel.length > 0) {
+                var sDel = arrDel.join(',');
+                beginCall(sDel, 'delete')
+                DoorsAPI.attachmentsDelete(doc_id, [$this.attr('data-att-id')]).then(
+                    function (res) {
+                        endCall(sDel, 'OK');
+                    },
+                    function (err) {
+                        endCall(sDel, 'attachmentsDelete error: ' + errMsg(err));
+                    }
+                );
+            }
         }
     });
+
+    function beginCall(pName, pAction) {
+        calls.push({ name: pName, action: pAction, result: 'pending' });
+    }
+    
+    function endCall(pName, pResult) {
+        calls.find(el => el.name == pName).result = pResult;
+        if (!calls.find(el => el.result == 'pending')) {
+            if (calls.find(el => el.result != 'OK')) {
+                reject(calls.filter(el => el.result != 'OK'));
+            } else {
+                resolve('OK');
+            }
+        }
+    }
 }
 
 // accountsSearch con cache
