@@ -1688,7 +1688,7 @@ function saveAtt() {
         }
         
         function endCall(pName, pResult) {
-            calls.find(el => el.name == pName).result = pResult;
+            calls.find(el => el.name == pName && el.result == 'pending').result = pResult;
             if (!calls.find(el => el.result == 'pending')) {
                 if (calls.find(el => el.result != 'OK')) {
                     reject(calls.filter(el => el.result != 'OK'));
