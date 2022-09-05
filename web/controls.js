@@ -764,17 +764,18 @@ function newAttachments(pId, pLabel) {
     };
 
     $div[0]._readonly = function (pValue) {
-        var $cont = $(this).closest('div.input-group');
+        var $this = $(this);
+        var $cont = $this.closest('div.input-group');
         var $clip = $cont.children('span.input-group-text');
 
         if (pValue) {
             $clip.css('opacity', 0.4);
             $clip.css('pointer-events', 'none');
-            $cont.attr('readonly', true);
+            $this.attr('readonly', true);
         } else {
             $clip.css('opacity', 1)
             $clip.css('pointer-events', 'auto');
-            $cont.removeAttr('readonly');
+            $this.removeAttr('readonly');
         }
     }
 
