@@ -764,8 +764,11 @@ function newAttachments(pId, pLabel) {
     };
 
     $div[0]._readonly = function (pValue) {
-        debugger;
+        var $cont = $(this).closest('div.input-group');
+        var $clip = $cony.children('span.input-group-text');
+
         if (pValue) {
+            $clip.addClass('disabled');
     
         } else {
 
