@@ -620,6 +620,7 @@ function newAttachments(pId, pLabel) {
             var $att = renderAtt({
                 Name: file.name,
                 Size: file.size,
+                Readonly: $atts.attr('readonly');
             });
             $att.attr('data-att-action', 'save');
             $att[0]._file = file;
@@ -653,6 +654,7 @@ function newAttachments(pId, pLabel) {
                             function (accs) {
                                 atts.forEach(att => {
                                     att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
+                                    att.Readonly = $self.attr('readonly');
                                     renderAtt(att).appendTo($self);
                                 });
                             }
@@ -668,7 +670,9 @@ function newAttachments(pId, pLabel) {
     }
 
     function renderAtt(pAtt) {
-        // pAtt = { AttId, Name, AccName, Size, Created }
+        // pAtt = { AttId, Name, AccName, Size, Created, Readonly }
+
+        debugger;
 
         var $grp = $('<div/>', {
             class: 'input-group float-start me-2 mb-1',
