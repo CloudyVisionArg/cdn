@@ -768,10 +768,13 @@ function newAttachments(pId, pLabel) {
         var $clip = $cont.children('span.input-group-text');
 
         if (pValue) {
-            $clip.addClass('disabled');
-    
+            $clip.css('opacity', 0.4);
+            $clip.css('pointer-events', 'none');
+            $cont.attr('readonly', true);
         } else {
-
+            $clip.css('opacity', 1)
+            $clip.css('pointer-events', 'auto');
+            $cont.removeAttr('readonly');
         }
     }
 
