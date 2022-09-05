@@ -620,7 +620,7 @@ function newAttachments(pId, pLabel) {
             var $att = renderAtt({
                 Name: file.name,
                 Size: file.size,
-                Readonly: $atts.attr('readonly');
+                Readonly: $atts.attr('readonly'),
             });
             $att.attr('data-att-action', 'save');
             $att[0]._file = file;
