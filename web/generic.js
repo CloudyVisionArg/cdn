@@ -1478,22 +1478,22 @@ function saveAtt() {
                 );
             }
         }
-    });
 
-    function beginCall(pName, pAction) {
-        calls.push({ name: pName, action: pAction, result: 'pending' });
-    }
-    
-    function endCall(pName, pResult) {
-        calls.find(el => el.name == pName).result = pResult;
-        if (!calls.find(el => el.result == 'pending')) {
-            if (calls.find(el => el.result != 'OK')) {
-                reject(calls.filter(el => el.result != 'OK'));
-            } else {
-                resolve('OK');
+        function beginCall(pName, pAction) {
+            calls.push({ name: pName, action: pAction, result: 'pending' });
+        }
+        
+        function endCall(pName, pResult) {
+            calls.find(el => el.name == pName).result = pResult;
+            if (!calls.find(el => el.result == 'pending')) {
+                if (calls.find(el => el.result != 'OK')) {
+                    reject(calls.filter(el => el.result != 'OK'));
+                } else {
+                    resolve('OK');
+                }
             }
         }
-    }
+    });
 }
 
 // accountsSearch con cache
