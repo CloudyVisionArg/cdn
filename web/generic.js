@@ -1461,7 +1461,7 @@ function saveAtt() {
                     
                 } else if (attAction == 'delete') {
                     // todo: borrar $this.attr('data-att-id')
-                    DoorsAPI.attachmentsDelete(doc_id, $this.attr('data-att-id')).then(
+                    DoorsAPI.attachmentsDelete(doc_id, [$this.attr('data-att-id')]).then(
                         function (res) {
                             endCall(attName, 'OK');
                         },
