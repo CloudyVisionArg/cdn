@@ -538,6 +538,7 @@ function printForm() {
 }
 
 function exitForm() {
+    debugger;
     history.back(); // todo: cerrar si es popup
 }
 
