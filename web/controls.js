@@ -624,7 +624,8 @@ function newAttachments(pId, pLabel) {
             $att.attr('data-att-action', 'save');
             $att[0]._file = file;
             $att.appendTo($atts);
-        }
+        };
+        inp.value = '';
     })
 
     $div[0]._value = function (pValue) {
