@@ -969,7 +969,7 @@ function renderControls(pCont, pParent) {
             $this.addClass('mt-3');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this[0]._readonly(true);
+                //$this[0]._readonly(true);
             }
 
             /*
