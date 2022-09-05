@@ -967,9 +967,10 @@ function renderControls(pCont, pParent) {
         } else if (type == 'ATTACHMENTS') {
             $this = newAttachments(ctl['NAME'], label);
             $this.addClass('mt-3');
+            $input = $this.find('div[data-attachments]');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                //$this[0]._readonly(true);
+                $input[0]._readonly(true);
             }
 
             /*
