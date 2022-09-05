@@ -27,7 +27,6 @@ function newTextarea(pId, pLabel) {
 
 function newDTPicker(pId, pLabel, pType) {
     // pType: date, time, datetime-local
-    // todo: agragar funcion value()
 
     var $div = $('<div/>');
 
@@ -623,7 +622,7 @@ function newAttachments(pId, pLabel) {
                 Size: file.size,
             });
             $att.attr('data-att-action', 'save');
-            $att[0].File = file;
+            $att[0]._file = file;
             $att.appendTo($atts);
         }
     })
@@ -687,7 +686,7 @@ function newAttachments(pId, pLabel) {
             $div.css('cursor', 'pointer');
             $div.click(downloadAtt);
             $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
-            
+
         } else {
             var $div = $('<div/>', {
                 class: 'form-control',
@@ -732,7 +731,7 @@ function newAttachments(pId, pLabel) {
         var $att = $(this).closest('.input-group');
         var attId = $att.attr('data-att-id');
         var attName = $att.attr('data-att-name');
-        var blob = $att[0].Blob;
+        var blob = $att[0]._blob;
     
         if (blob) {
             // Ya se descargo antes
@@ -745,7 +744,7 @@ function newAttachments(pId, pLabel) {
                 function (res) {
                     preloader.hide();
                     var blob = new Blob([res]);
-                    $att[0].Blob = blob;
+                    $att[0]._blob = blob;
                     saveAs(blob, attName);
 
                     /*
@@ -763,6 +762,15 @@ function newAttachments(pId, pLabel) {
             )
         }
     };
+
+    $div[0]._readonly = function (pValue) {
+        debugger;
+        if (pValue) {
+    
+        } else {
+
+        }
+    }
 
     return $ctl;
 }

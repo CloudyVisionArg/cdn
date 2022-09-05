@@ -946,6 +946,7 @@ function renderControls(pCont, pParent) {
             $input.attr('data-valuefield', vf);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                //todo: falta el pick
                 $input.attr({ 'readonly': 'readonly' });
             }
 
@@ -967,12 +968,11 @@ function renderControls(pCont, pParent) {
             $this = newAttachments(ctl['NAME'], label);
             $this.addClass('mt-3');
 
-            /*
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.attr('readonly', true);
-                $this.find('div.row').hide();
+                $this[0]._readonly(true);
             }
 
+            /*
             El TAG se setea en el SBR asi:
             $this.attr('data-attachments', 'miTag');
             */
@@ -1442,7 +1442,7 @@ function saveAtt() {
                 if (attAction == 'save') {
                     beginCall(attName, attAction);
                 
-                    var file = this.File;
+                    var file = this._file;
                     var reader = new FileReader();
                     reader.onloadend = function (e) {
                         var blobData = new Blob([this.result], { type: file.type });
