@@ -672,8 +672,6 @@ function newAttachments(pId, pLabel) {
     function renderAtt(pAtt) {
         // pAtt = { AttId, Name, AccName, Size, Created, Readonly }
 
-        debugger;
-
         var $grp = $('<div/>', {
             class: 'input-group float-start me-2 mb-1',
             style: 'width: auto;',
@@ -715,6 +713,8 @@ function newAttachments(pId, pLabel) {
             class: 'input-group-text',
             style: 'cursor: pointer;'
         }).appendTo($grp);
+
+        if(pAtt.Readonly) $btn.css({ 'opacity': 0.4, 'pointer-events': 'none' });
 
         $btn.append('<i class="bi bi-x"></i>');
 
