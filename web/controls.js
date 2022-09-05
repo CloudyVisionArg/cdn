@@ -620,7 +620,6 @@ function newAttachments(pId, pLabel) {
             var $att = renderAtt({
                 Name: file.name,
                 Size: file.size,
-                Readonly: $atts.attr('readonly'),
             });
             $att.attr('data-att-action', 'save');
             $att[0]._file = file;
@@ -654,7 +653,7 @@ function newAttachments(pId, pLabel) {
                             function (accs) {
                                 atts.forEach(att => {
                                     att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
-                                    att.Readonly = $self.attr('readonly');
+                                    att.Readonly = $self.attr('readonly') || $self.attr('addonly');
                                     renderAtt(att).appendTo($self);
                                 });
                             }
@@ -779,6 +778,18 @@ function newAttachments(pId, pLabel) {
         } else {
             $clip.css({ 'opacity': 1, 'pointer-events': 'auto' });
             $this.removeAttr('readonly');
+            $this.find('span.input-group-text').css({ 'opacity': 1, 'pointer-events': 'auto' });
+        }
+    }
+
+    $div[0]._addonly = function (pValue) {
+        var $this = $(this);
+
+        if (pValue) {
+            $this.attr('addonly', true);
+            $this.find('span.input-group-text').css({ 'opacity': 0.4, 'pointer-events': 'none' });
+        } else {
+            $this.removeAttr('addonly');
             $this.find('span.input-group-text').css({ 'opacity': 1, 'pointer-events': 'auto' });
         }
     }
