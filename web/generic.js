@@ -1426,6 +1426,7 @@ function saveDoc(pExit) {
 function saveAtt() {
     return new Promise(function (resolve, reject) {
         var calls = [];
+        var arrDel = [];
         var $attsToSave = $('div[data-attachments] [data-att-action]');
 
         if ($attsToSave.length == 0) {
@@ -1437,7 +1438,6 @@ function saveAtt() {
                 var tag = $this.closest('input-group').attr('data-attachments');
                 var attName = $this.attr('data-att-name');
                 var attAction = $this.attr('data-att-action');
-                var arrDel = [];
                 
                 if (attAction == 'save') {
                     beginCall(attName, attAction);
