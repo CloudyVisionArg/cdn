@@ -769,13 +769,13 @@ function newAttachments(pId, pLabel) {
         var $clip = $cont.children('span.input-group-text');
 
         if (pValue) {
-            $clip.css('opacity', 0.4);
-            $clip.css('pointer-events', 'none');
+            $clip.css({ 'opacity': 0.4, 'pointer-events': 'none' });
             $this.attr('readonly', true);
+            $this.find('span.input-group-text').css({ 'opacity': 0.4, 'pointer-events': 'none' });
         } else {
-            $clip.css('opacity', 1)
-            $clip.css('pointer-events', 'auto');
+            $clip.css({ 'opacity': 1, 'pointer-events': 'auto' });
             $this.removeAttr('readonly');
+            $this.find('span.input-group-text').css({ 'opacity': 1, 'pointer-events': 'auto' });
         }
     }
 
