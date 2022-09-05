@@ -1468,7 +1468,7 @@ function saveAtt() {
             if (arrDel.length > 0) {
                 var sDel = arrDel.join(',');
                 beginCall(sDel, 'delete')
-                DoorsAPI.attachmentsDelete(doc_id, [$this.attr('data-att-id')]).then(
+                DoorsAPI.attachmentsDelete(doc_id, arrDel).then(
                     function (res) {
                         endCall(sDel, 'OK');
                     },
