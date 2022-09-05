@@ -970,12 +970,15 @@ function renderControls(pCont, pParent) {
             $input = $this.find('div[data-attachments]');
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input[0]._addonly(true);
+                $input[0]._readonly(true);
             }
 
             /*
             El TAG se setea en el SBR asi:
-            $this.attr('data-attachments', 'miTag');
+                $input.attr('data-attachments', 'miTag');
+
+            El addonly:
+                $input[0]._addonly(true);
             */
 
         } else if (type == 'TIMEINTERVAL') {
@@ -1023,7 +1026,7 @@ function renderControls(pCont, pParent) {
             folder: La carpeta actual
             controlsFolder: La carpeta de controles
             controls: El search a la carpeta de controles completo
-            ctl: El control que se esta dibujando
+            ctl: El row del control que se esta dibujando
             ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
             $this: El control completo JQuery (inluido el <div/>)
             $input: El input, textarea, select, etc, dentro del control

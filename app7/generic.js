@@ -865,7 +865,7 @@ function renderControls(pCont, pParent) {
             folder: La carpeta actual
             controlsFolder: La carpeta de controles
             controls: El search a la carpeta de controles completo
-            ctl: El row del control actual
+            ctl: El row del control que se esta dibujando
             ctl.attr: Function que devuelve un atributo de XMLATTRIBUTES
             $this: El control completo JQuery (inluido el <li>)
             $input: El input, textarea, select, etc, dentro del control
