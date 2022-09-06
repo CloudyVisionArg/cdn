@@ -1697,7 +1697,7 @@ function addDefaultOptions(pContainer) {
 
     $itemCont.click(function () {
         var view = app7.views.get($(this).closest('.view'));
-        view.router.navigate('/cdn/?script=app7-scriptsversion');
+        view.router.navigate('/cdn/?script=app7-scrversions');
     });
 
     $itemInner = $('<div/>', {

@@ -70,7 +70,7 @@ function registeredScripts() {
 
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 0 });
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
-	scripts.push({ id: 'app7-scriptsversion', path: '/app7/scriptsversion.js', version: 0 });
+	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 0 });
 
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 102 });
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 102 });
