@@ -1695,7 +1695,7 @@ function addDefaultOptions(pContainer) {
         class: 'item-link item-content',
     }).appendTo($li);
 
-    $itemCont.click(showConsole);
+    $itemCont.click(function () { debugger; });
 
     $itemInner = $('<div/>', {
         class: 'item-inner',
