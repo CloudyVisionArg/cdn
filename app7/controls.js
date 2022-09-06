@@ -1695,7 +1695,10 @@ function addDefaultOptions(pContainer) {
         class: 'item-link item-content',
     }).appendTo($li);
 
-    $itemCont.click(function () { debugger; });
+    $itemCont.click(function () {
+        var view = app7.views.get($(this).closest('.view'));
+        view.router.navigate('/cdn/?script=app7-scriptsversion');
+    });
 
     $itemInner = $('<div/>', {
         class: 'item-inner',
