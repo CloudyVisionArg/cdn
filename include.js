@@ -76,6 +76,7 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 102 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
 	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 102, hasdep: true });
+	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 102 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 99 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
@@ -94,7 +95,6 @@ function registeredScripts() {
 	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
 	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
-	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 41 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 
 	// Aliases (for backward compatibility)
