@@ -1686,6 +1686,24 @@ function addDefaultOptions(pContainer) {
     $('<div/>', {
         class: 'item-title',
     }).append('Consola').appendTo($itemInner);
+
+    // Version de los scripts
+    $li = $('<li/>').appendTo(pContainer);
+
+    $itemCont = $('<a/>', {
+        href: '#',
+        class: 'item-link item-content',
+    }).appendTo($li);
+
+    $itemCont.click(showConsole);
+
+    $itemInner = $('<div/>', {
+        class: 'item-inner',
+    }).appendTo($itemCont);
+
+    $('<div/>', {
+        class: 'item-title',
+    }).append('Version de los scripts').appendTo($itemInner);
 }
 
 /*
