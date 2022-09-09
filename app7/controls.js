@@ -677,7 +677,6 @@ function getToggle(pId, pLabel) {
     }).appendTo($toggle);
 
     app7.toggle.create({ el: $toggle[0] });
-    debugger;
     return $li;
 }
 
@@ -1625,7 +1624,7 @@ function addDefaultOptions(pContainer) {
 
     // Status bar
     $ctl = getToggle('statusbar', 'Status bar').appendTo(pContainer);
-    var toggle = app7.toggle.get($ctl.find('.toggle'));
+    var toggle = app7.toggle.get($ctl.find('.toggle')[0]);
     debugger;
     toggle.on('change', function (t) {
         statusBar(t.checked);
