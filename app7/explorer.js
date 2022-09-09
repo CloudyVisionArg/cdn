@@ -482,7 +482,7 @@ function loadViewSection(pContainer, pCallback) {
                 if (arrFields.indexOf(field) == -1) arrFields.push(field);
             };
         }
-        if (arrFields.indexOf("DOC_ID") == -1) arrFields.push("DOC_ID");
+        if (arrFields.indexOf('DOC_ID') == -1) arrFields.push('DOC_ID');
 
         order = '';
         for (i = 0; i < view.Definition.Orders.Items.length; i++) {

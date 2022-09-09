@@ -1779,7 +1779,7 @@ function getTabbedViewsLayout(pTabs) {
             class: 'view tab' + (i == 0 ? ' view-main tab-active' : ''),
         }).appendTo($tabs);
         
-        app7.views.create($view, {
+        app7.views.create($view[0], {
             url: tab.url,
         });
     };
