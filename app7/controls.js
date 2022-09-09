@@ -497,6 +497,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
 
     if (pSelect.parent().hasClass('smart-select')) {
         var ss = app7.smartSelect.get(pSelect.parent()[0]);
+        debugger;
         if (pSelect[0].selectedIndex < 0) {
             ss.unsetValue();    
         } else {
