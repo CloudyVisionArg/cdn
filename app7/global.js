@@ -154,7 +154,7 @@ function showConsole(allowClose) {
         ]
     });
 
-    $.get(scriptSrc('app7-console'), function (data) {
+    $.get(scriptSrc('app7-console', lsScriptsVersion('app7-console')), function (data) {
         var popup = app7.popup.create({
             content: data,
             closeByBackdropClick: false,
@@ -241,7 +241,7 @@ function loadLoginCustomJS() {
 
 // Muestra la pantalla de Login como popup
 function showLogin(allowClose) {
-    $.get(scriptSrc('app7-login', 102), function (data) {
+    $.get(scriptSrc('app7-login', lsScriptsVersion('app7-login')), function (data) {
         var popup = app7.popup.create({
             content: data,
             closeByBackdropClick: false,
@@ -253,21 +253,21 @@ function showLogin(allowClose) {
                         routes: [
                             {
                                 path: '/chpass/',
-                                url: scriptSrc('app7-chpass'),
+                                url: scriptSrc('app7-chpass', lsScriptsVersion('app7-chpass')),
                                 on: {
                                     pageInit: chpassInit,
                                 },
                             },
                             {
                                 path: '/signin/',
-                                url: scriptSrc('app7-signin'),
+                                url: scriptSrc('app7-signin', lsScriptsVersion('app7-signin')),
                                 on: {
                                     pageInit: signinInit,
                                 },
                             },
                             {
                                 path: '/resetpass/',
-                                url: scriptSrc('app7-resetpass'),
+                                url: scriptSrc('app7-resetpass', lsScriptsVersion('app7-resetpass')),
                                 on: {
                                     pageInit: resetpassInit,
                                 },

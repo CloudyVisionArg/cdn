@@ -1660,7 +1660,6 @@ function addDefaultOptions(pContainer) {
     // Explorer limit
     $ctl = getStepper('explorerLimit', 'Explorer limit').appendTo(pContainer);
     var stepper = app7.stepper.get($ctl.find('.stepper')[0]);
-    debugger;
     stepper.min = 50;
     stepper.max = 200;
     stepper.step = 10;
