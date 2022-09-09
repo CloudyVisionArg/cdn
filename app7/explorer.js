@@ -213,7 +213,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                 setTimeout(waiting, 100);
             } else {
                 resolve({ component: function (props, context) {
-                    $on('pageInit', pageInit);
+                    context.$on('pageInit', pageInit);
                     return () => $page[0];
                     //context.$el = $page[0];
                     //return $render;
