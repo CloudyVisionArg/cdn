@@ -496,7 +496,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     app7.input.checkEmptyState(pSelect);
 
     if (pSelect.parent().hasClass('smart-select')) {
-        var ss = app7.smartSelect.get(pSelect.parent());
+        var ss = app7.smartSelect.get(pSelect.parent()[0]);
         if (pSelect[0].selectedIndex < 0) {
             ss.unsetValue();    
         } else {
@@ -1625,7 +1625,6 @@ function addDefaultOptions(pContainer) {
     // Status bar
     $ctl = getToggle('statusbar', 'Status bar').appendTo(pContainer);
     var toggle = app7.toggle.get($ctl.find('.toggle')[0]);
-    debugger;
     toggle.on('change', function (t) {
         statusBar(t.checked);
         window.localStorage.setItem('statusBar', t.checked ? 'on' : 'off');
