@@ -677,6 +677,7 @@ function getToggle(pId, pLabel) {
     }).appendTo($toggle);
 
     app7.toggle.create({ el: $toggle });
+    debugger;
     return $li;
 }
 
