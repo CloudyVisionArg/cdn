@@ -676,7 +676,7 @@ function getToggle(pId, pLabel) {
         class: 'toggle-icon',
     }).appendTo($toggle);
 
-    app7.toggle.create({ el: $toggle });
+    app7.toggle.create({ el: $toggle[0] });
     debugger;
     return $li;
 }
