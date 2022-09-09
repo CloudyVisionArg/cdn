@@ -694,8 +694,9 @@ function getCheckbox(pId, pLabel) {
 Devuelve un Stepper
 
 $ctl = getStepper('myStepper', 'Etiqueta');
-var stp = app7.stepper.get($ctl.find('.stepper'));
-stp.min = 50;
+var stp = app7.stepper.get($ctl.find('.stepper')[0]);
+stp.min = 50;/
+
 stp.max = 200;
 stp.step = 10;
 stp.setValue(200);
@@ -1659,7 +1660,7 @@ function addDefaultOptions(pContainer) {
 
     // Explorer limit
     $ctl = getStepper('explorerLimit', 'Explorer limit').appendTo(pContainer);
-    var stepper = app7.stepper.get($ctl.find('.stepper'));
+    var stepper = app7.stepper.get($ctl.find('.stepper')[0]);
     stepper.min = 50;
     stepper.max = 200;
     stepper.step = 10;
