@@ -293,7 +293,7 @@ function getSmartSelect(pId, pLabel, pMultiple) {
     }).append(pLabel).appendTo($itemInner);
 
     app7.smartSelect.create({
-        el: $a,
+        el: $a[0],
         openIn: 'sheet',
         scrollToSelectedItem: true,
         closeOnSelect: !pMultiple,
