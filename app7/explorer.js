@@ -212,7 +212,9 @@ DoorsAPI.foldersGetById(fld_id).then(
             if (folder.pendingCalls) {
                 setTimeout(waiting, 100);
             } else {
-                resolve({ content: $page[0] });
+                resolve({ component: function (props, context) {
+                    debugger;
+                } });
                 /*
                 resolve({
                     component: {
