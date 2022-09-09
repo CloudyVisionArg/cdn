@@ -748,7 +748,7 @@ function getStepper(pId, pLabel) {
     }).appendTo($stepper);
 
     app7.stepper.create({
-        el: $stepper,
+        el: $stepper[0],
         autorepeat: true,
     });
     return $li;
