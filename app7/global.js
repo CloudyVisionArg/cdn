@@ -249,7 +249,7 @@ function showLogin(allowClose) {
                 open: function (popup) {
                     if (!allowClose) $get('#cancel').closest('li').hide();
 
-                    var view = app7.views.create($get('.view'), {
+                    var view = app7.views.create($get('.view')[0], {
                         routes: [
                             {
                                 path: '/chpass/',
