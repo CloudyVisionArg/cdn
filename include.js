@@ -72,11 +72,11 @@ function registeredScripts() {
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 0 });
 
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 104, hasdep: true });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 102 });
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 102 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 102 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 102, hasdep: true });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 102 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 99 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
