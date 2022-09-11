@@ -213,6 +213,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                 setTimeout(waiting, 100);
             } else {
                 debugger;
+                routeTo.on = { pageInit: pageInit }
                 resolve({ content: $page[0] });
                 /*
                 resolve({
@@ -238,6 +239,8 @@ DoorsAPI.foldersGetById(fld_id).then(
 );
 
 function pageInit(e, page) {
+    debugger;
+    
     f7Page = page;
 	// En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'));
