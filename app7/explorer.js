@@ -216,7 +216,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                 //F7 v6
                 //routeTo.on = { pageInit: pageInit }
                 resolve({ component: function (props, context) {
-                    return () => context.$h`${$page[0].outerHTML}`);
+                    return () => context.$h`${$page[0].outerHTML}`;
 
                 }});
                 
