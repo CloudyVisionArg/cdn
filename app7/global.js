@@ -59,7 +59,7 @@ audioRecorder(pCallback)
 })();
 
 function globalScriptsVersion(pId) {
-    if (lsScriptsVersion) {
+    if (typeof lsScriptsVersion == 'function') {
         return lsScriptsVersion(pId);
     } else {
         return undefined;
