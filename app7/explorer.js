@@ -569,7 +569,7 @@ function loadViewSection(pContainer, pCallback) {
                             if (arrFields.length > 2) {
                                 text = fieldToString(arrFields[2], row[arrFields[2]]);
                                 if (arrFields.length > 3) {
-                                    text += '<br>' + fieldToString(arrFields[3], row[arrFields[3]]);
+                                    text += '<br/>' + fieldToString(arrFields[3], row[arrFields[3]]);
                                 }
                                 item.text = text;
                             }
@@ -970,18 +970,18 @@ function deleteClick() {
                     $block.append('Borrando docId ' + selected[loop.iteration()] + ': ');
                     DoorsAPI.documentDelete(fld_id, selected[loop.iteration()]).then(
                         function (res) {
-                            $block.append('ok<br>');
+                            $block.append('ok<br/>');
                             loop.next();
                         },
                         function (err) {
                             debugger;
-                            $block.append(errMsg(err) + '<br>');
+                            $block.append(errMsg(err) + '<br/>');
                             loop.next();
                         }
                     )
                 },
                 function() {
-                    $block.append('Proceso finalizado<br>');
+                    $block.append('Proceso finalizado<br/>');
                     $closeBtn.removeClass('disabled');
                 }
             );
