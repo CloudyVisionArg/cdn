@@ -60,7 +60,7 @@ DoorsAPI.foldersGetById(fld_id).then(
             // Inicializa el Searchbar
             var timeout;
             searchBar = app7.searchbar.create({
-                el: $page.find('form.searchbar'),
+                el: $page.find('form.searchbar')[0],
                 customSearch: true,
                 on: {
                     search: function (e, query, previousQuery) {
@@ -906,7 +906,7 @@ function getActionsPopup() {
     }).appendTo($page);
     
     var popup = app7.popup.create({
-        el: $popup,
+        el: $popup[0],
         on: {
             closed: function () {
                 $pageCont.html('');

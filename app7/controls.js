@@ -150,7 +150,7 @@ function inputDataList(pInput, pSource) {
     pInput.attr('autocomplete', 'off');
 
     var ac = app7.autocomplete.create({
-        inputEl: pInput,
+        inputEl: $(pInput)[0],
         openIn: 'dropdown',
         typeahead: true,
         limit: 50,
@@ -910,7 +910,6 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
             style: 'max-width: 70%; white-space: normal;',
         }).appendTo($itemInner);
 
-        debugger;
         ac = app7.autocomplete.create({
             openIn: 'popup',
             openerEl: $acEl[0],
@@ -930,7 +929,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
 
         ac = app7.autocomplete.create({
             openIn: 'dropdown',
-            inputEl: $acEl,
+            inputEl: $acEl[0],
             limit: 50,
             source: acSource,
         });
@@ -1461,7 +1460,7 @@ function getTextEditor(pId, pLabel, pValue) {
     }).appendTo($te);
 
     app7.textEditor.create({
-        el: $te,
+        el: $te[0],
         value: pValue,
         placeholder: pLabel,
         mode: 'toolbar',
@@ -1792,7 +1791,7 @@ function getTabbedViewsLayout(pTabs) {
 // todo: refactorizar y documentar (ver Turin contactos_old)
 function getVirtualList(pListElement) {
 	var vList = app7.virtualList.create({
-		el: pListElement,
+		el: $(pListElement)[0],
 		
 		rowsBefore: 100,
 		rowsAfter: 100,

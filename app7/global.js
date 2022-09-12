@@ -307,7 +307,7 @@ function showLogin(allowClose) {
                     });
                     
                     popup.pStuff = {};
-                    popup.pStuff.freeToggle = app7.toggle.create({ el: $get('#freeversion').parent() });
+                    popup.pStuff.freeToggle = app7.toggle.create({ el: $get('#freeversion').parent()[0] });
                     popup.pStuff.freeToggle.on('change', function () {
                         if (this.checked) {
                             setInputVal($get('#instance'), dSession.freeVersion.instance);
@@ -1640,7 +1640,7 @@ function audioRecorder(pCallback) {
     // Abre el sheet
     var sheet = app7.sheet.create({
         swipeToClose: true,
-        content: $sheet,
+        content: $sheet[0],
     }).open();
     
     function record() {
