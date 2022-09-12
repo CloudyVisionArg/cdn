@@ -214,9 +214,7 @@ DoorsAPI.foldersGetById(fld_id).then(
             } else {
                 resolve({
                     component: {
-                        render: function () {
-                            return $page;
-                        },
+                        render: () => $page,
                         on: {
                             pageInit: pageInit,
                         },        
