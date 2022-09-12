@@ -1,4 +1,12 @@
-// generic del APP7
+/*
+generic del APP7
+
+Documentacion:
+Cordova: https://cordova.apache.org/docs/en/latest/
+Framework7: https://v5.framework7.io/docs/
+F7 icons: https://framework7.io/icons/
+MD icons: https://fonts.google.com/icons?selected=Material+Icons
+*/
 
 var fld_id, doc_id, doc, folder, cacheDir;
 var controlsFolder, controls, controlsRights;
@@ -31,7 +39,7 @@ Y usar la misma function en el AfterRender (que se dispara al finalizar el abrir
 
 Una variable almacenada en pStuff no se modifica si abro otra ventana con los mismos
 nombres de variables, o incluso nuevas instancias de la misma ventana, tener en cuenta
-que en el modelo SPA la pagina es siempre UNA SOLA
+que en el modelo SPA la pagina web es siempre UNA SOLA
 */
 
 // Parametros del query string
