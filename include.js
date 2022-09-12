@@ -293,6 +293,10 @@ function scriptSrc(scriptId, version) {
             var v = (version != undefined ? version : script.version);
 
             if (v == 0) {
+                /*
+                todo: soportar el uso de branch, agregarlo asi a la peticion:
+                http://cloudycrm.net/c/gitcdn.asp?branch=master&path=/jslib.js
+                */
                 src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
             } else {
                 src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
