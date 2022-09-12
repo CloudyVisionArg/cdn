@@ -60,18 +60,18 @@ audioRecorder(pCallback)
 
 function resolveRoute(pArgs) {
     var options = {};
-    
+
     if (app7.f7version == 6) {
         options.on = {};
         if (typeof pArgs.pageInit == 'function') {
             options.on.pageInit = pArgs.pageInit;
         }
-        pArgs.resolve({ content: pArgs.pageEl[0] }, options);
+        pArgs.resolve({ content: $(pArgs.pageEl)[0] }, options);
 
     } else {
         options.component = {};
         options.component.on = {}
-        options.component.render = () => pArgs.pageEl[0];
+        options.component.render = () => $(pArgs.pageEl)[0];
         if (typeof pArgs.pageInit == 'function') {
             options.component.on.pageInit = pArgs.pageInit;
         }
