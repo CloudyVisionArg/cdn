@@ -8,7 +8,7 @@ function DSession() {
     this.freeVersion.instance = 'FREEVERSION';
     this.freeVersion.signinFolder = 5217;
     this.freeVersion.resetPassFolder = 5269;
-    this.freeVersion.minPasswordLen = 6;
+    this.freeVersion.minPasswordLen = 8;
     
     var tokenTimeout = 120; //minutos
     Doors.RESTFULL.ServerUrl = window.localStorage.getItem('endPoint');
