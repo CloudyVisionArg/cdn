@@ -450,12 +450,6 @@ function showLogin(allowClose) {
                         window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                         
                         dSession.logon(function () {
-                            /*
-                            if (version == "free") {
-                                // En el Description del User va el appName (va a ser la empresa)
-                                window.localStorage.setItem("appName", dSession.loggedUser().Description);
-                            }
-                            */
                            setMessage('Sincronizando datos... aguarde por favor');
 
                             try {
@@ -510,9 +504,10 @@ function showLogin(allowClose) {
                     function chpassInit(e, page) {
                         $get('#chpass').click(function (e) {
                             var $new = $get('#newpass');
+                            var pwdLen = dSession.freeVersion.minPasswordLen;
                     
-                            if ($new.val().length < 4) {
-                                app7.dialog.alert('La contraseña debe tener al menos 4 caracteres', function (dialog, e) {
+                            if ($new.val().length < pwdLen) {
+                                app7.dialog.alert('La contraseña debe tener al menos ' + pwdLen + ' caracteres', function (dialog, e) {
                                     $new.focus();
                                     app7.input.focus($new);
                                 });
