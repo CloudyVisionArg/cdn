@@ -912,7 +912,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
 
         ac = app7.autocomplete.create({
             openIn: 'popup',
-            openerEl: $acEl,
+            openerEl: $acEl[0],
             multiple: true,
             limit: 100,
             source: acSource,
