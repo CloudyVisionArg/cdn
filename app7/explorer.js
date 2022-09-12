@@ -213,26 +213,6 @@ DoorsAPI.foldersGetById(fld_id).then(
                 setTimeout(waiting, 100);
             } else {
                 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
-                /*
-                if (app7.f7version == 6) {
-                    resolve({ content: $page[0] },
-                        {
-                            on: {
-                                pageInit: pageInit
-                            }
-                        }
-                    );
-                } else {
-                    resolve({
-                        component: {
-                            render: () => $page,
-                            on: {
-                                pageInit: pageInit,
-                            },        
-                        }
-                    });
-                }
-                */
             }
         }, 0);
     },

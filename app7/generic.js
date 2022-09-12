@@ -384,18 +384,6 @@ function renderPage() {
     }
 
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
-    /*
-    resolve({
-        component: {
-            render: function () {
-                return $page;
-            },
-            on: {
-                pageInit: pageInit,
-            },
-        }
-    });
-    */
 }
 
 function renderControls(pCont, pParent) {
