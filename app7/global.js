@@ -7,6 +7,7 @@ Funciones varias de JavaScript del APP7
 
 Inventario de metodos:
 
+resolveRoute(pArgs)
 globalScriptsVersion(pId)
 logAndToast(pMsg)
 dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback)
@@ -70,7 +71,7 @@ function resolveRoute(pArgs) {
 
     } else {
         options.component = {};
-        options.component.on = {}
+        options.component.on = {};
         options.component.render = () => $(pArgs.pageEl)[0];
         if (typeof pArgs.pageInit == 'function') {
             options.component.on.pageInit = pArgs.pageInit;
