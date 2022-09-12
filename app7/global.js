@@ -507,14 +507,14 @@ function showLogin(allowClose) {
                             var pwdLen = dSession.freeVersion.minPasswordLen || 6;
                     
                             if ($new.val().length < pwdLen) {
-                                app7.dialog.alert('La contraseña debe tener al menos ' + pwdLen + ' caracteres', function (dialog, e) {
+                                app7.dialog.alert('La contrase&ntilde;a debe tener al menos ' + pwdLen + ' caracteres', function (dialog, e) {
                                     $new.focus();
                                     app7.input.focus($new);
                                 });
                                 return false;
                             }
                             if ($new.val() != $get('#newpass2').val()) {
-                                app7.dialog.alert('Las contraseñas nuevas no coinciden', function (dialog, e) {
+                                app7.dialog.alert('Las contrase&ntilde;as nuevas no coinciden', function (dialog, e) {
                                     $new.focus();
                                     app7.input.focus($new);
                                 });
@@ -528,7 +528,7 @@ function showLogin(allowClose) {
                         
                             DoorsAPI.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(function () {
                                 window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
-                                app7.dialog.alert('Se ha cambiado su contraseña', function (dialog, e) {
+                                app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
                                     page.router.back();
                                 });
                         
