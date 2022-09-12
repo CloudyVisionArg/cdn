@@ -636,7 +636,7 @@ $inp.prop('checked', true);
 o con el control F7:
 
 $ctl = getToggle('myToggle', 'Etiqueta');
-var toggle = app7.toggle.get($ctl.find('.toggle'));
+var toggle = app7.toggle.get($ctl.find('.toggle')[0]);
 toggle.on('change', function (t) {
     alert(t.checked);
 })
@@ -681,7 +681,7 @@ function getToggle(pId, pLabel) {
 }
 
 function setToggleVal(pCtrl, pValue){
-    let toogle = app7.toggle.get(pCtrl.closest('.toggle'));
+    let toogle = app7.toggle.get(pCtrl.closest('.toggle')[0]);
     toogle.checked = pValue;
 }
 
@@ -835,12 +835,12 @@ Ej con pMultiple = false
 
     // Con un array de Strings
     $li = getAutocomplete('acId', 'Etiqueta', ['Item 1', 'Item 2']);
-    ac = app7.autocomplete.get($li.find('input'));
+    ac = app7.autocomplete.get($li.find('input')[0]);
     ac.params.allValues = true; // Muestra los valores al tomar el foco
 
     // Con un array de Objetos
     $li = getAutocomplete('acId', 'Etiqueta', [{ nombre: 'Jorge', id: 1}, {nombre: 'Pedro', id: 2}]);
-    ac = app7.autocomplete.get($li.find('input'));
+    ac = app7.autocomplete.get($li.find('input')[0]);
     ac.params.allValues = true;
     // Hay que especificar las properties 
     ac.params.textProperty = 'nombre';
@@ -856,7 +856,7 @@ Ej con pMultiple = false
         order: 'description',
         preload: true,
     });
-    ac = app7.autocomplete.get($li.find('input'));
+    ac = app7.autocomplete.get($li.find('input')[0]);
     ac.params.allValues = true;
     ac.params.limit = 100; // Limite de sugerencias (50 en modo single)
 
@@ -867,7 +867,7 @@ Ej con pMultiple = false
         formula: 'vehiculo is not null and vehiculo <> \'\'',
         grouped: true,
     });
-    ac = app7.autocomplete.get($li.find('input'));
+    ac = app7.autocomplete.get($li.find('input')[0]);
     ac.params.allValues = true;
 
     ac.on('change', function (value) {
@@ -1697,7 +1697,7 @@ function addDefaultOptions(pContainer) {
     }).appendTo($li);
 
     $itemCont.click(function () {
-        var view = app7.views.get($(this).closest('.view'));
+        var view = app7.views.get($(this).closest('.view')[0]);
         view.router.navigate('/cdn/?script=app7-scrversions');
     });
 
@@ -1889,7 +1889,7 @@ function getVirtualList(pListElement) {
 				};
 			};
 
-			return $li.get(0).outerHTML;
+			return $li[0].outerHTML;
 		},
 	});
 	

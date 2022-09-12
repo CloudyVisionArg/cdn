@@ -514,7 +514,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'SELECT') {
             $this = getSmartSelect(ctl['NAME'], label, ctl.attr('multiple') == '1');
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+            f7ctl = app7.smartSelect.get($this.find('.smart-select')[0]);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('.smart-select').addClass('disabled');
@@ -526,7 +526,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'SELECTFOLDER') {
             $this = getSmartSelect(ctl['NAME'], label);
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+            f7ctl = app7.smartSelect.get($this.find('.smart-select')[0]);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('.smart-select').addClass('disabled');
@@ -553,7 +553,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'SELECTKEYWORDS') {
             $this = getSmartSelect(ctl['NAME'], label);
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+            f7ctl = app7.smartSelect.get($this.find('.smart-select')[0]);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('.smart-select').addClass('disabled');
@@ -612,7 +612,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'CHECKBOX') {
             $this = getToggle(ctl['NAME'], label);
             $input = $this.find('input');
-            f7ctl = app7.toggle.get($this.find('.toggle'));
+            f7ctl = app7.toggle.get($this.find('.toggle')[0]);
 
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
@@ -652,7 +652,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'SELECTMULTIPLE') {
             $this = getSmartSelect(ctl['NAME'], label, true);
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+            f7ctl = app7.smartSelect.get($this.find('.smart-select')[0]);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('.smart-select').addClass('disabled');
@@ -669,7 +669,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'SELECTMULTIPLEFOLDER') {
             $this = getSmartSelect(ctl['NAME'], label, true);
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+            f7ctl = app7.smartSelect.get($this.find('.smart-select')[0]);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('.smart-select').addClass('disabled');
@@ -696,7 +696,7 @@ function renderControls(pCont, pParent) {
         } else if (type == 'LOOKUPBOXACCOUNTS') {
             $this = getSmartSelect(ctl['NAME'], label, ctl.attr('mode') == '2');
             $input = $this.find('select');
-            f7ctl = app7.smartSelect.get($this.find('.smart-select'));
+            f7ctl = app7.smartSelect.get($this.find('.smart-select')[0]);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('.smart-select').addClass('disabled');
@@ -737,7 +737,7 @@ function renderControls(pCont, pParent) {
             }, ctl.attr('mode') == '1');
 
             $input = $this.find('[data-autocomplete]');
-            f7ctl = app7.autocomplete.get($input);
+            f7ctl = app7.autocomplete.get($input[0]);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 if ($input[0].tagName == 'INPUT') {
@@ -1116,7 +1116,7 @@ function fillControls() {
 
         } else if (el.tagName == 'DIV') {
             if ($el.hasClass('text-editor')) {
-                app7.textEditor.get($el).setValue(text);
+                app7.textEditor.get($el[0]).setValue(text);
             }
 
         } else if (el.tagName == 'A') {
@@ -1128,7 +1128,7 @@ function fillControls() {
 
     $get('[data-autocomplete]').each(function (ix, el) {
         var $el = $(el);
-        var ac = app7.autocomplete.get($el);
+        var ac = app7.autocomplete.get($el[0]);
         var $li = $el.closest('li');
         var $v = $li.find('[data-valuefield]');
         var $x = $li.find('[data-xmlfield]');
@@ -1507,7 +1507,7 @@ function saveDoc() {
 
             } else if (el.tagName == 'DIV') {
                 if ($el.hasClass('text-editor')) {
-                    field.Value = app7.textEditor.get($el).getValue();
+                    field.Value = app7.textEditor.get($el[0]).getValue();
                 }
 
             } else if (el.tagName == 'A') {
