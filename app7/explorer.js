@@ -212,27 +212,24 @@ DoorsAPI.foldersGetById(fld_id).then(
             if (folder.pendingCalls) {
                 setTimeout(waiting, 100);
             } else {
-                /*
-                resolve({
-                    component: {
-                        render: () => $page,
-                        on: {
-                            pageInit: pageInit,
-                        },        
-                    }
-                    
-                });
-                */
-                resolve(
-                    {
-                        content: $page[0],
-                    },
-                    {
-                        on: {
-                            pageInit: pageInit
+                if (app7.f7version == 6) {
+                    resolve({ content: $page[0] },
+                        {
+                            on: {
+                                pageInit: pageInit
+                            }
                         }
-                    }
-                );
+                    );
+                } else {
+                    resolve({
+                        component: {
+                            render: () => $page,
+                            on: {
+                                pageInit: pageInit,
+                            },        
+                        }
+                    });
+                }
             }
         }, 0);
     },
@@ -244,7 +241,6 @@ DoorsAPI.foldersGetById(fld_id).then(
 );
 
 function pageInit(e, page) {
-    debugger;
     f7Page = page;
 	// En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'));
