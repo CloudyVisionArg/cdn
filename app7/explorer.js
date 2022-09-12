@@ -212,6 +212,8 @@ DoorsAPI.foldersGetById(fld_id).then(
             if (folder.pendingCalls) {
                 setTimeout(waiting, 100);
             } else {
+                resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
+                /*
                 if (app7.f7version == 6) {
                     resolve({ content: $page[0] },
                         {
@@ -230,6 +232,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                         }
                     });
                 }
+                */
             }
         }, 0);
     },

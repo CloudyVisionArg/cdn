@@ -58,6 +58,27 @@ audioRecorder(pCallback)
 	});
 })();
 
+function resolveRoute(pOptions) {
+    if (app7.f7version == 6) {
+        pOptions.resolve({ content: pOptions.pageEl[0] },
+            {
+                on: {
+                    pageInit: pOptions.pageInit
+                }
+            }
+        );
+    } else {
+        pOptions.resolve({
+            component: {
+                render: () => pOptions.pageEl[0],
+                on: {
+                    pageInit: pOptions.pageInit,
+                },        
+            }
+        });
+    }
+}
+
 function globalScriptsVersion(pId) {
     if (typeof lsScriptsVersion == 'function') {
         return lsScriptsVersion(pId);
