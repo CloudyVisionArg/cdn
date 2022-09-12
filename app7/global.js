@@ -1117,6 +1117,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
 /*
 todo: agregar el console.error y pasar al jslib
 Asi la web trabaja con el mismmo concepto
+Cerrar este issue: https://github.com/CloudyVisionArg/Cloudy-CRM-App7/issues/3
 
 console.error = function(){
    console.log("Disparando error...");
