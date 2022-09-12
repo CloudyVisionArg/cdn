@@ -223,7 +223,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                     
                 });
                 */
-                context.resolve(
+                resolve(
                     {
                         content: $page[0],
                     },
