@@ -504,7 +504,7 @@ function showLogin(allowClose) {
                     function chpassInit(e, page) {
                         $get('#chpass').click(function (e) {
                             var $new = $get('#newpass');
-                            var pwdLen = dSession.freeVersion.minPasswordLen;
+                            var pwdLen = dSession.freeVersion.minPasswordLen || 6;
                     
                             if ($new.val().length < pwdLen) {
                                 app7.dialog.alert('La contraseña debe tener al menos ' + pwdLen + ' caracteres', function (dialog, e) {
