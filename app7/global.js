@@ -149,7 +149,7 @@ function logDateTime(pDate) {
 
 // Cierra la Consola
 function closeConsole() {
-    var popupConsole = app7.popup.get($('#popupConsole').last());
+    var popupConsole = app7.popup.get($('#popupConsole').last()[0]);
     if (popupConsole) popupConsole.close();
 }
 
