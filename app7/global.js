@@ -58,24 +58,24 @@ audioRecorder(pCallback)
 	});
 })();
 
-function resolveRoute(pOptions) {
+function resolveRoute(pArgs) {
+    var options = {};
+    
     if (app7.f7version == 6) {
-        pOptions.resolve({ content: pOptions.pageEl[0] },
-            {
-                on: {
-                    pageInit: pOptions.pageInit
-                }
-            }
-        );
+        options.on = {};
+        if (typeof pArgs.pageInit == 'function') {
+            options.on.pageInit = pArgs.pageInit;
+        }
+        pArgs.resolve({ content: pArgs.pageEl[0] }, options);
+
     } else {
-        pOptions.resolve({
-            component: {
-                render: () => pOptions.pageEl[0],
-                on: {
-                    pageInit: pOptions.pageInit,
-                },        
-            }
-        });
+        options.component = {};
+        options.component.on = {}
+        options.component.render = () => pArgs.pageEl[0];
+        if (typeof pArgs.pageInit == 'function') {
+            options.component.on.pageInit = pArgs.pageInit;
+        }
+        pArgs.resolve(options);
     }
 }
 
