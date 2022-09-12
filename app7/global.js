@@ -317,8 +317,6 @@ function showLogin(allowClose) {
                         } else {
                             $get('#freebuttons').hide();
                         }
-                        //SEGUIR DE ACA: Esconder el boton registrarme segun el toggle
-
                     });
 
                     $get('#showpwd').click(function () {
