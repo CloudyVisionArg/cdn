@@ -383,6 +383,8 @@ function renderPage() {
         }
     }
 
+    resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
+    /*
     resolve({
         component: {
             render: function () {
@@ -393,6 +395,7 @@ function renderPage() {
             },
         }
     });
+    */
 }
 
 function renderControls(pCont, pParent) {
