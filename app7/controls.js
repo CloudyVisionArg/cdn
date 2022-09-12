@@ -910,6 +910,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
             style: 'max-width: 70%; white-space: normal;',
         }).appendTo($itemInner);
 
+        debugger;
         ac = app7.autocomplete.create({
             openIn: 'popup',
             openerEl: $acEl[0],
