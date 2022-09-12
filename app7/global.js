@@ -1114,6 +1114,20 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
         });
     }
 })();
+/*
+todo: agregar el console.error y pasar al jslib
+Asi la web trabaja con el mismmo concepto
+
+console.error = function(){
+   console.log("Disparando error...");
+    if(arguments.length == 0){ //si se envía un solo parametro y es object, lo pasa a json para tener el detalle, sino imprimiría "[object Object]"
+        if(typeof(arguments[0]) == "object"){
+            arguments[0] = JSON.stringify(arguments[0]);
+        }
+    }
+    console.log(...arguments);//Expande los argumentos para pasarselos al console.log
+}
+*/
 
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
