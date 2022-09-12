@@ -852,7 +852,7 @@ function errPage(err) {
 function cleanDb(pCallback) {
     for (var key in localStorage) {
         if (localStorage.hasOwnProperty(key)) {
-            if (key != 'consoleLog') localStorage.removeItem(key);
+            if (key != 'consoleLog' && key != 'scripts') localStorage.removeItem(key);
         }
     }
 
