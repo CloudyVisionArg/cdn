@@ -67,6 +67,9 @@ function resolveRoute(pArgs) {
         if (typeof pArgs.pageInit == 'function') {
             options.on.pageInit = pArgs.pageInit;
         }
+        if (typeof pArgs.pageBeforeOut == 'function') {
+            options.on.pageBeforeOut = pArgs.pageBeforeOut;
+        }
         pArgs.resolve({ content: $(pArgs.pageEl)[0] }, options);
 
     } else {
