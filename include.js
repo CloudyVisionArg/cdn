@@ -72,8 +72,10 @@ function registeredScripts() {
 	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
 	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 0 });
 
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 106, hasdep: true });
-	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 102 });
+	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 108 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 108 });
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 108, hasdep: true });
+	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 108 });
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 102 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 102 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
@@ -81,8 +83,6 @@ function registeredScripts() {
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 99 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
-	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 95 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 94 });
 	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 92, hasdep: true });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
