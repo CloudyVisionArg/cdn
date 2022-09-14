@@ -1709,55 +1709,27 @@ function addDefaultOptions(pContainer) {
         class: 'item-title',
     }).append('Version de los scripts').appendTo($itemInner);
 
-    // F7 Icons
-    $li = $('<li/>').appendTo(pContainer);
+    if (device.platform !== 'browser') {
+        // F7 Icons
+        $li = $('<li/>').appendTo(pContainer);
 
-    $itemCont = $('<a/>', {
-        href: '#',
-        class: 'item-link item-content',
-    }).appendTo($li);
+        $itemCont = $('<a/>', {
+            href: '#',
+            class: 'item-link item-content',
+        }).appendTo($li);
 
-    $itemCont.click(function () {
-        if (device.platform !== 'browser') {
+        $itemCont.click(function () {
             window.open('/lib/framework7/css/cheatsheet.htm');
-        } else {
-            $.get('/lib/framework7/css/cheatsheet.htm', function (data) {
-                var popup = app7.popup.create({
-                    content: data,
-                    closeByBackdropClick: false,
-                    on: {
-                        open: function (popup) {
-                            /*
-                            if (!allowClose) {
-                                $get('#close').remove();
-                            } else {
-                                $get('#close').click(function () {
-                                    popup.close();
-                                });
-                            }
-                            */
-        
-                            $get('#support').click(function (e) {
-                            });
-        
-                            function $get(pSelector) {
-                                return $(pSelector, popup.el);
-                            }
-                        },
-                    }
-                });
-                popup.open();
-            });
-        }
-    });
+        });
 
-    $itemInner = $('<div/>', {
-        class: 'item-inner',
-    }).appendTo($itemCont);
+        $itemInner = $('<div/>', {
+            class: 'item-inner',
+        }).appendTo($itemCont);
 
-    $('<div/>', {
-        class: 'item-title',
-    }).append('F7 Icons Cheatsheet').appendTo($itemInner);
+        $('<div/>', {
+            class: 'item-title',
+        }).append('F7 Icons Cheatsheet').appendTo($itemInner);
+    }
 }
 
 /*
