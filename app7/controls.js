@@ -1709,7 +1709,7 @@ function addDefaultOptions(pContainer) {
         class: 'item-title',
     }).append('Version de los scripts').appendTo($itemInner);
 
-    if (device.platform !== 'browser') {
+    if (device.platform == 'browser') {
         // F7 Icons
         $li = $('<li/>').appendTo(pContainer);
 
