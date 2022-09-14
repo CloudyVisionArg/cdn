@@ -1709,8 +1709,8 @@ function addDefaultOptions(pContainer) {
         class: 'item-title',
     }).append('Version de los scripts').appendTo($itemInner);
 
+    // F7 Icons
     if (device.platform == 'browser') {
-        // F7 Icons
         $li = $('<li/>').appendTo(pContainer);
 
         $itemCont = $('<a/>', {
