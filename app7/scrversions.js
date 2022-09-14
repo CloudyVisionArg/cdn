@@ -13,6 +13,7 @@ $page.find('.navbar-inner .left .button').on('click', function (e) {
 
 $page.find('.navbar-inner .right .button').on('click', function (e) {
     var value = $get('#scripts').val();
+    debugger;
     if (value) {
         try {
             var json = JSON.parse(value);
