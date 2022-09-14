@@ -1721,6 +1721,35 @@ function addDefaultOptions(pContainer) {
         if (device.platform == 'browser') {
             window.open('/lib/framework7/css/cheatsheet.htm');
         } else {
+            $.get('/lib/framework7/css/cheatsheet.htm', function (data) {
+                var popup = app7.popup.create({
+                    content: data,
+                    closeByBackdropClick: false,
+                    on: {
+                        open: function (popup) {
+                            if (!allowClose) {
+                                $get('#close').remove();
+                            } else {
+                                $get('#close').click(function () {
+                                    popup.close();
+                                });
+                            }
+        
+                            $get('#support').click(function (e) {
+                            });
+        
+                            function $get(pSelector) {
+                                return $(pSelector, popup.el);
+                            }
+                        },
+        
+                        close: function (popup) {
+                            clearInterval(this.intervalId);
+                        },
+                    }
+                });
+                popup.open();
+            });
         }
     });
 
