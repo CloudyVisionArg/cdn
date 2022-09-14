@@ -45,6 +45,51 @@ $('<div/>', {
 }).append($ul).appendTo($pageCont);
 
 getTextarea('scripts').appendTo($ul);
+var btn = getButton('Reiniciar').appendTo($ul);
+
+/*
+var $li = $('<li/>').appendTo($ul);
+var $div = $('<div/>', {
+    class: 'block',
+    style: 'margin-top: 20px; margin-bottom: 20px;',
+}).appendTo($li);
+
+let $p = $('<p/>', { class: 'row' }).appendTo($div);
+
+let $btnActivar = getBtnHtml('Activa', 'Reactivar', 'light-blue', 'arrow_counterclockwise');
+let $btnGanar = getBtnHtml('Ganada', 'Ganar', 'green', 'hand_thumbsup');
+let $btnPerder = getBtnHtml('Perdida', 'Perder', 'red', 'hand_thumbsdown');
+
+let est = getDocField(doc, 'ESTADO').Value;
+if (est == 'Activa') {
+    $p.append($btnGanar);
+    $p.append($btnPerder);
+} else if (est == 'Ganada' || est == 'Perdida') {
+    $p.append($btnActivar);
+}
+
+function getBtnHtml(estado, label, color, icon) {
+	var $btn = $('<button/>', {
+        class: 'col button button-fill color-' + color,
+        estado: estado,
+    });
+    $btn.click(actionClick);
+
+    var $i = $('<i/>', {
+        class: 'f7-icons',
+        style: 'font-size: 18px;',
+    }).appendTo($btn);
+
+    $i.html(icon);
+    $('<span/>').html(label).appendTo($btn);
+
+    return $btn;
+}
+*/
+
+
+
+
 
 function pageInit(e, page) {
     f7Page = page;
