@@ -3,6 +3,8 @@ var f7Page;
 var $page = getPage({
     id: 'scrversions',
     title: 'Versiones de los scripts',
+    leftbutton: 'exit',
+	rightbutton: 'save',
 });
 
 var $pageCont = $page.find('.page-content');
