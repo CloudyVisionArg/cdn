@@ -1710,7 +1710,7 @@ function addDefaultOptions(pContainer) {
     }).append('Version de los scripts').appendTo($itemInner);
 
     // F7 Icons
-    if (device.platform == 'browser') {
+    //if (device.platform == 'browser') {
         $li = $('<li/>').appendTo(pContainer);
 
         $itemCont = $('<a/>', {
@@ -1730,7 +1730,7 @@ function addDefaultOptions(pContainer) {
         $('<div/>', {
             class: 'item-title',
         }).append('F7 Icons Cheatsheet').appendTo($itemInner);
-    }
+    //}
 }
 
 /*
