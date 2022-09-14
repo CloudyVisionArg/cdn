@@ -14,6 +14,7 @@ $page.find('.navbar-inner .left .button').on('click', function (e) {
 $page.find('.navbar-inner .right .button').on('click', function (e) {
     var value = $get('#scripts').val();
     value = value.replaceAll(String.fromCharCode(8220), '"');
+    value = value.replaceAll(String.fromCharCode(8221), '"');
     debugger;
     if (value) {
         try {
