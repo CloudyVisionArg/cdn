@@ -1,17 +1,21 @@
+var f7Page;
+
 var $page = getPage({
-    id: 'scriptsversion',
+    id: 'scrversions',
     title: 'Versiones de los scripts',
 });
 
-var $pageCont = $('.page-content', $page);
+var $pageCont = $page.find('.page-content');
 
-$pageCont.append('holaa');
+getTextarea('scripts').appendTo($pageCont);
 
+function pageInit(e, page) {
+    f7Page = page;
+}
 
-resolve({
-    component: {
-    	render: function () {
-    		return $page;
-    	},
-    }
-});
+// Usar solo despues del pageInit
+function $get(pSelector) {
+    return $(pSelector, f7Page.pageEl);
+}
+
+resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });

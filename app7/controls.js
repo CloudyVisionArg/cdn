@@ -1,4 +1,54 @@
-// Controls version beta
+/*
+Changelog:
+2022-09-14: JP - ChangeLog e Inventario de metodos
+
+controls del APP7
+
+Inventario de metodos:
+
+getControlFolder(pFolder, pRootFolderId)
+getInputText(pId, pLabel, pValue)
+setInputVal(pInput, pVal)
+inputReadonly(pInput, pReadonly)
+inputDisabled(pInput, pDisabled)
+addPhoneButtons(pInput)
+wappNumber(pPhone)
+getInputPhone(pId, pLabel, pValue)
+addEmailButton(pInput)
+getInputEmail(pId, pLabel, pValue)
+inputDataList(pInput, pSource)
+getInputAddress(pId, pLabel, pValue)
+getSelect(pId, pLabel)
+getSmartSelect(pId, pLabel, pMultiple)
+fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, dataFields)
+getSelectVal(pSelect)
+getSelectText(pSelect)
+setSelectVal(pSelect, pText, pValue, pNotFoundAction)
+getDTPicker(pId, pLabel, pType, pValue)
+getDTPickerVal(pInput, pJSON)
+timeZone()
+setDTPickerVal(pInput, pValue)
+getTextarea(pId, pLabel, pValue)
+getToggle(pId, pLabel)
+setToggleVal(pCtrl, pValue){
+getCheckbox(pId, pLabel)
+getStepper(pId, pLabel)
+getPopup(pTitle)
+getAutocomplete(pId, pLabel, pSource, pMultiple)
+getButton(pTitle)
+getDocLog(pDocId, pCallback)
+getPage(params)
+getLink(params)
+getSearchBar()
+getCollapsible(pId, pTitle)
+getTextEditor(pId, pLabel, pValue)
+getAttachments(pId, pTitle, pTag)
+getAttachment(pAttach, pReadonly)
+addDefaultOptions(pContainer)
+getTabbedViewsLayout(pTabs)
+getVirtualList(pListElement)
+renderMediaListItem(pItem)
+*/
 
 /*
 Devuelve un folder por ID o PATH
