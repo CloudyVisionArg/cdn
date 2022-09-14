@@ -2,7 +2,7 @@ var f7Page;
 
 var $page = getPage({
     id: 'scrversions',
-    title: 'Versiones de los scripts',
+    title: 'Version de los scripts',
     leftbutton: 'exit',
 	rightbutton: 'save',
 });
@@ -25,7 +25,6 @@ $page.find('.navbar-inner .right .button').on('click', function (e) {
         toast(errMsg(e));
         console.log(e);
     };
-
 });
 
 var $pageCont = $page.find('.page-content');
