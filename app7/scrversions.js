@@ -45,7 +45,10 @@ $('<div/>', {
 }).append($ul).appendTo($pageCont);
 
 getTextarea('scripts').appendTo($ul);
-var btn = getButton('Reiniciar').appendTo($ul);
+var $btn = getButton('Reiniciar').appendTo($ul).find('.button');
+$btn.click(function () {
+    toast('reiniciar');
+});
 
 /*
 var $li = $('<li/>').appendTo($ul);
