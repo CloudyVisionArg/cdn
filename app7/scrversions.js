@@ -15,12 +15,12 @@ $page.find('.navbar-inner .right .button').on('click', function (e) {
     var value = $get('#scripts').val();
     value = value.replaceAll(String.fromCharCode(8220), '"');
     value = value.replaceAll(String.fromCharCode(8221), '"');
-    debugger;
     if (value) {
         try {
             var json = JSON.parse(value);
             if (Array.isArray(json)) {
                 localStorage.setItem('scripts', JSON.stringify(json));
+                $get('#scripts').val(localStorage.getItem('scripts'));
                 toast('Cambios guardados');
             } else {
                 toast('Error: El valor debe ser un array de objetos');
