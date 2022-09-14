@@ -1727,6 +1727,7 @@ function addDefaultOptions(pContainer) {
                     closeByBackdropClick: false,
                     on: {
                         open: function (popup) {
+                            /*
                             if (!allowClose) {
                                 $get('#close').remove();
                             } else {
@@ -1734,6 +1735,7 @@ function addDefaultOptions(pContainer) {
                                     popup.close();
                                 });
                             }
+                            */
         
                             $get('#support').click(function (e) {
                             });
@@ -1741,10 +1743,6 @@ function addDefaultOptions(pContainer) {
                             function $get(pSelector) {
                                 return $(pSelector, popup.el);
                             }
-                        },
-        
-                        close: function (popup) {
-                            clearInterval(this.intervalId);
                         },
                     }
                 });
