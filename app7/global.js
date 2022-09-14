@@ -79,6 +79,9 @@ function resolveRoute(pArgs) {
         if (typeof pArgs.pageInit == 'function') {
             options.component.on.pageInit = pArgs.pageInit;
         }
+        if (typeof pArgs.pageBeforeOut == 'function') {
+            options.component.on.pageBeforeOut = pArgs.pageBeforeOut;
+        }
         pArgs.resolve(options);
     }
 }

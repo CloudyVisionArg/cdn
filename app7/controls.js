@@ -1708,6 +1708,27 @@ function addDefaultOptions(pContainer) {
     $('<div/>', {
         class: 'item-title',
     }).append('Version de los scripts').appendTo($itemInner);
+
+    // F7 Icons
+    $li = $('<li/>').appendTo(pContainer);
+
+    $itemCont = $('<a/>', {
+        href: '#',
+        class: 'item-link item-content',
+    }).appendTo($li);
+
+    $itemCont.click(function () {
+        var view = app7.views.get($(this).closest('.view')[0]);
+        view.router.navigate('/cdn/?script=app7-scrversions');
+    });
+
+    $itemInner = $('<div/>', {
+        class: 'item-inner',
+    }).appendTo($itemCont);
+
+    $('<div/>', {
+        class: 'item-title',
+    }).append('F7 Icons Cheatsheet').appendTo($itemInner);
 }
 
 /*
