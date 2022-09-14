@@ -12,19 +12,24 @@ $page.find('.navbar-inner .left .button').on('click', function (e) {
 });
 
 $page.find('.navbar-inner .right .button').on('click', function (e) {
-    try {
-        var value = $get('#scripts').val();
-        var json = JSON.parse(value);
-        if (Array.isArray(json)) {
-            localStorage.setItem('scripts', JSON.stringify(json));
-            toast('Cambios guardados');
-        } else {
-            toast('Error: El valor debe ser un array de objetos');
-        }
-    } catch (e) {
-        toast(errMsg(e));
-        console.log(e);
-    };
+    var value = $get('#scripts').val();
+    if (value) {
+        try {
+            var json = JSON.parse(value);
+            if (Array.isArray(json)) {
+                localStorage.setItem('scripts', JSON.stringify(json));
+                toast('Cambios guardados');
+            } else {
+                toast('Error: El valor debe ser un array de objetos');
+            }
+        } catch (e) {
+            toast(errMsg(e));
+            console.log(e);
+        };
+    } else {
+        localStorage.setItem('scripts', '');
+        toast('Cambios guardados');
+    }
 });
 
 var $pageCont = $page.find('.page-content');
