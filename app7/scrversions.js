@@ -7,7 +7,14 @@ var $page = getPage({
 
 var $pageCont = $page.find('.page-content');
 
-getTextarea('scripts').appendTo($pageCont);
+var $ul = $('<ul/>');
+
+$('<div/>', {
+    class: 'list no-hairlines-md',
+    style: 'margin-top: 0;',
+}).append($ul).appendTo($pageCont);
+
+getTextarea('scripts').appendTo($ul);
 
 function pageInit(e, page) {
     f7Page = page;
