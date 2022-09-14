@@ -1718,8 +1718,10 @@ function addDefaultOptions(pContainer) {
     }).appendTo($li);
 
     $itemCont.click(function () {
-        var view = app7.views.get($(this).closest('.view')[0]);
-        view.router.navigate('/cdn/?script=app7-scrversions');
+        if (device.platform == 'browser') {
+            window.open('/lib/framework7/css/cheatsheet.htm');
+        } else {
+        }
     });
 
     $itemInner = $('<div/>', {
