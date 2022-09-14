@@ -18,6 +18,8 @@ getTextarea('scripts').appendTo($ul);
 
 function pageInit(e, page) {
     f7Page = page;
+
+    setInputVal($get('#scripts'), localStorage.getItem('scripts'));
 }
 
 // Usar solo despues del pageInit
