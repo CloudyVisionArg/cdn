@@ -1719,7 +1719,8 @@ function addDefaultOptions(pContainer) {
         }).appendTo($li);
 
         $itemCont.click(function () {
-            window.open('/lib/framework7/css/cheatsheet.htm');
+            //window.open('/lib/framework7/css/cheatsheet.htm');
+            cordova.InAppBrowser.open('/lib/framework7/css/cheatsheet.htm', '_system');
         });
 
         $itemInner = $('<div/>', {
