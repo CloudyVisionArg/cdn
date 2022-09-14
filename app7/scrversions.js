@@ -12,7 +12,20 @@ $page.find('.navbar-inner .left .button').on('click', function (e) {
 });
 
 $page.find('.navbar-inner .right .button').on('click', function (e) {
-    localStorage.setItem('scripts', $get('#scripts').val());
+    try {
+        var value = $get('#scripts').val();
+        var json = JSON.parse(value);
+        if (Array.isArray(json)) {
+            localStorage.setItem('scripts', JSON.stringify(json));
+            toast('Cambios guardados');
+        } else {
+            toast('Error: El valor debe ser un array de objetos');
+        }
+    } catch (e) {
+        toast(errMsg(e));
+        console.log(e);
+    };
+
 });
 
 var $pageCont = $page.find('.page-content');
