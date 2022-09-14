@@ -27,7 +27,6 @@ arrScriptsPre.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://
 arrScriptsPre.push({ id: 'web-javascript', version: 0, depends: ['jquery', 'bootstrap'] });
 
 include(arrScriptsPre, function () {
-    console.log('Page init');
     preloader.show();
 
     // Includes que tienen que estar antes de dibujar la pag
