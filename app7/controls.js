@@ -1770,6 +1770,7 @@ function addDefaultOptions(pContainer) {
 
         $itemCont.click(function () {
             //window.open('/lib/framework7/css/cheatsheet.htm');
+            debugger;
             cordova.InAppBrowser.open('/lib/framework7/css/cheatsheet.htm', '_system');
         });
 
