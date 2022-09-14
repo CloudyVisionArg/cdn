@@ -44,12 +44,6 @@ include(arrScriptsPre, function () {
     arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
 
     include(arrScripts, function () {
-        // Includes que no es necesario esperar
-        include('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css');
-        include('font-awesome', 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css');
-        include('ckeditor', '/c/inc/ckeditor-nov2016/ckeditor.js');
-        include('lib-filesaver');
-
         Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 
         let tkn = getCookie('AuthToken');
@@ -62,6 +56,12 @@ include(arrScriptsPre, function () {
                 resume();
             })
         }
+
+        // Includes que no es necesario esperar
+        include('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css');
+        include('font-awesome', 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css');
+        include('ckeditor', '/c/inc/ckeditor-nov2016/ckeditor.js');
+        include('lib-filesaver');
     });
 
     function resume() {
