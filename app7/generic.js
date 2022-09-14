@@ -1002,8 +1002,6 @@ function $get(pSelector) {
 }
 
 function fillControls() {
-    pSuff;
-
     if (!doc.IsNew) {
         var title = getDocField(doc, 'subject').Value;
         if (!title) title = 'Doc Id ' + doc.DocId;
