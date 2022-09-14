@@ -1718,7 +1718,7 @@ function addDefaultOptions(pContainer) {
     }).appendTo($li);
 
     $itemCont.click(function () {
-        if (device.platform == 'browser') {
+        if (device.platform !== 'browser') {
             window.open('/lib/framework7/css/cheatsheet.htm');
         } else {
             $.get('/lib/framework7/css/cheatsheet.htm', function (data) {
