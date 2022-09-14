@@ -1760,7 +1760,7 @@ function addDefaultOptions(pContainer) {
     }).append('Version de los scripts').appendTo($itemInner);
 
     // F7 Icons
-    //if (device.platform == 'browser') {
+    if (device.platform == 'browser') {
         $li = $('<li/>').appendTo(pContainer);
 
         $itemCont = $('<a/>', {
@@ -1769,9 +1769,7 @@ function addDefaultOptions(pContainer) {
         }).appendTo($li);
 
         $itemCont.click(function () {
-            //window.open('/lib/framework7/css/cheatsheet.htm');
-            debugger;
-            cordova.InAppBrowser.open('/lib/framework7/css/cheatsheet.htm', '_blank');
+            cordova.InAppBrowser.open('/lib/framework7/css/cheatsheet.htm', '_system');
         });
 
         $itemInner = $('<div/>', {
@@ -1781,7 +1779,7 @@ function addDefaultOptions(pContainer) {
         $('<div/>', {
             class: 'item-title',
         }).append('F7 Icons Cheatsheet').appendTo($itemInner);
-    //}
+    }
 }
 
 /*
