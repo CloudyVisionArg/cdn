@@ -13,6 +13,7 @@ $page.find('.navbar-inner .left .button').on('click', function (e) {
 
 $page.find('.navbar-inner .right .button').on('click', function (e) {
     var value = $get('#scripts').val();
+    value.replaceAll('“', '"');
     debugger;
     if (value) {
         try {
