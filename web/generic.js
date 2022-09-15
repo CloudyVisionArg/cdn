@@ -28,6 +28,7 @@ arrScriptsPre.push({ id: 'web-javascript', version: 0, depends: ['jquery', 'boot
 
 include(arrScriptsPre, function () {
     preloader.show();
+    console.log('preloader');
 
     // Includes que tienen que estar antes de dibujar la pag
     var arrScripts = [];
