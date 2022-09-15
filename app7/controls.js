@@ -1,8 +1,9 @@
 /*
+app7-controls
+Controles del APP7
+
 Changelog:
 2022-09-14: JP - ChangeLog e Inventario de metodos
-
-controls del APP7
 
 Inventario de metodos:
 
