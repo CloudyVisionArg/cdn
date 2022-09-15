@@ -1,8 +1,7 @@
-// generic de la web
-
-'use strict';
-
 /*
+web-generic
+Generic de la web
+
 Documentacion de componentes:
 
 Bootstrap: https://getbootstrap.com/docs/5.1/getting-started/introduction/
@@ -14,6 +13,8 @@ Numeral: http://numeraljs.com
 Moment: https://momentjs.com
 CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 */
+
+'use strict';
 
 var urlParams, fld_id, folder, doc_id, doc;
 var controlsFolder, controls, controlsRights;
