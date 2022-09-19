@@ -1,3 +1,27 @@
+/*
+web-controls
+Controles de la web
+
+Changelog:
+2022-09-15: JP - ChangeLog e Inventario de metodos
+
+Inventario de metodos:
+
+newInputText(pId, pLabel)
+newTextarea(pId, pLabel)
+newDTPicker(pId, pLabel, pType)
+inputDataList(pInput, pSource)
+newSelect(pId, pLabel, pOptions)
+fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, dataFields)
+setSelectVal(pSelect, pText, pValue, pNotFoundAction)
+newCKEditor(pId, pLabel, pOptions)
+newCheckbox(pId, pLabel)
+newFieldset(pId, pLabel)
+newMapsAutocomplete(pId, pLabel)
+newDocLog(pId, pLabel)
+newAttachments(pId, pLabel)
+*/
+
 function newInputText(pId, pLabel) {
     var $div = $('<div/>');
 

@@ -1,6 +1,5 @@
 /*
 web-javascript
-
 Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
 Changelog:
