@@ -68,8 +68,8 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
+	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 110 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 108 });
-	scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 109 });
 	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 108 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 108 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
