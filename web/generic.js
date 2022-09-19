@@ -53,7 +53,7 @@ include(arrScriptsPre, function () {
             resume();
         } else {
             $.get('/c/tkn.asp', function (data) {
-                Doors.RESTFULL.AuthToken = data;
+                if (data.length < 100) Doors.RESTFULL.AuthToken = data;
                 resume();
             })
         }
