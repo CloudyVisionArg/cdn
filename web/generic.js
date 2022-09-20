@@ -27,23 +27,56 @@ arrScriptsPre.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstr
 arrScriptsPre.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
 arrScriptsPre.push({ id: 'web-javascript', depends: ['jquery', 'bootstrap'] });
 
+// Includes que tienen que estar antes de dibujar la pag
+var arrScripts = [];
+arrScripts.push({ id: 'doorsapi', depends: ['jquery'] });
+arrScripts.push({ id: 'web-controls' });
+arrScripts.push({ id: 'lib-numeral' });
+arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
+arrScripts.push({ id: 'tempus-dominus', depends: ['jquery', 'lib-moment'], src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js' });
+arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
+arrScripts.push({ id: 'lib-moment' });
+arrScripts.push({ id: 'bootstrap-select', depends: ['jquery', 'bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js' });
+arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
+// todo: esto deberia ser segun el lng_id
+arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
+
+// Includes que no es necesario esperar
+var arrScriptsPos = [];
+arrScriptsPos.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
+arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
+arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
+arrScriptsPos.push({ id: 'lib-filesaver' });
+
+/*
+Puedo especificar la version de los scripts en el localStorage, en un item asi:
+    scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": 0 }]
+*/
+debugger;
+try {
+    lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
+    if (Array.isArray(lsScripts)) {
+        var iScr;
+        lsScripts.forEach(function (el, ix) {
+            if (el.version != 'undefined') {
+                iScr = arrScriptsPre.find(iEl => iEl.id == el.id);
+                if (iScr) iScr.version = el.version;
+
+                iScr = arrScripts.find(iEl => iEl.id == el.id);
+                if (iScr) iScr.version = el.version;
+
+                iScr = arrScriptsPos.find(iEl => iEl.id == el.id);
+                if (iScr) iScr.version = el.version;
+            }
+        });
+    };
+} catch (e) {
+    console.log(e);
+};
+
 include(arrScriptsPre, function () {
     preloader.show();
     
-    // Includes que tienen que estar antes de dibujar la pag
-    var arrScripts = [];
-    arrScripts.push({ id: 'doorsapi', depends: ['jquery'] });
-    arrScripts.push({ id: 'web-controls' });
-    arrScripts.push({ id: 'lib-numeral' });
-    arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
-    arrScripts.push({ id: 'tempus-dominus', depends: ['jquery', 'lib-moment'], src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js' });
-    arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
-    arrScripts.push({ id: 'lib-moment' });
-    arrScripts.push({ id: 'bootstrap-select', depends: ['jquery', 'bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js' });
-    arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
-    // todo: esto deberia ser segun el lng_id
-    arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
-
     include(arrScripts, function () {
         Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
 
@@ -58,11 +91,7 @@ include(arrScriptsPre, function () {
             })
         }
 
-        // Includes que no es necesario esperar
-        include('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css');
-        include('font-awesome', 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css');
-        include('ckeditor', '/c/inc/ckeditor-nov2016/ckeditor.js');
-        include('lib-filesaver');
+        include(arrScriptsPos);
     });
 
     function resume() {
