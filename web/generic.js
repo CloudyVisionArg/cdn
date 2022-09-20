@@ -18,7 +18,7 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 
 var urlParams, fld_id, folder, doc_id, doc;
 var controlsFolder, controls, controlsRights;
-var saving, cache;
+var saving, cache, lsScripts;
 
 // Includes para mostrar el preloader
 var arrScriptsPre = [];
