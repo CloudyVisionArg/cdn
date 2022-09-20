@@ -1749,6 +1749,7 @@ function addDefaultOptions(pContainer) {
 
     $itemCont.click(function () {
         var view = app7.views.get($(this).closest('.view')[0]);
+        debugger;
         view.router.navigate('/cdn/?script=app7-scrversions');
     });
 
