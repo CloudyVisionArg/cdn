@@ -52,7 +52,6 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 Puedo especificar la version de los scripts en el localStorage, en un item asi:
     scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": 0 }]
 */
-debugger;
 try {
     lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
     if (Array.isArray(lsScripts)) {
