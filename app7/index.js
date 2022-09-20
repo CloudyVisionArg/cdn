@@ -146,6 +146,7 @@ var app = {
                 {
                     path: '/cdn/',
                     async: function (routeTo, routeFrom, resolve, reject) {
+                        debugger;
                         var script = routeTo.query.script;
                         loadJS(scriptSrc(script, lsScriptsVersion(script)), routeTo, routeFrom, resolve, reject);
                     }
