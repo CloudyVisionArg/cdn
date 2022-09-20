@@ -334,7 +334,7 @@ function toggleSelectionMode() {
         // Desactivar
         selectionMode = false;
 
-        $get('.media-list label').replaceWith(function () {
+        $get('.media-list label.item-checkbox.item-content').replaceWith(function () {
             var $itemContent = getItemContent();
             $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
             return $itemContent;
@@ -354,7 +354,7 @@ function toggleSelectionMode() {
         // Activar
         selectionMode = true;
 
-        $get('.media-list a').replaceWith(function () {
+        $get('.media-list a.item-link.item-content').replaceWith(function () {
             $itemContent = getItemContent();
             $itemContent.append($(this).contents());
             return $itemContent;
