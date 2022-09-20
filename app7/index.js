@@ -1,0 +1,350 @@
+'use strict';
+
+var initScripts = [];
+var lsScripts;
+
+initScripts.push({ id: 'doorsapi' });
+initScripts.push({ id: 'app7-global' });
+initScripts.push({ id: 'app7-controls' });
+initScripts.push({ id: 'app7-dsession', depends: ['doorsapi'] });
+initScripts.push({ id: 'app7-sync', depends: ['jslib', 'app7-global', 'app7-doorsapi'] });
+initScripts.push({ id: 'lib-numeral' });
+initScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
+initScripts.push({ id: 'lib-moment' });
+initScripts.push({ id: 'lib-cryptojs-aes' });
+initScripts.push({ id: 'lib-filesaver' });
+
+/*
+Puedo especificar la version de los scripts en el localStorage, en un item asi:
+    scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": 0 }]
+*/
+
+try {
+    lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
+    if (Array.isArray(lsScripts)) {
+        var iScr;
+        lsScripts.forEach(function (el, ix) {
+            if (el.version != 'undefined') {
+                iScr = initScripts.find(iEl => iEl.id == el.id);
+                if (iScr) iScr.version = el.version;
+            }
+        });
+    };
+} catch (e) {
+    console.log(e);
+};
+
+function lsScriptsVersion(pId) {
+    if (lsScripts) {
+        var scr = lsScripts.find(el => el.id == pId);
+        if (scr) return scr.version;
+    }
+    return undefined;
+};
+
+include(initScripts, function () {
+    console.log('app.init');
+    app.initialize();
+});
+
+// If we need to use custom DOM library, let's save it to $$ variable:
+var $$ = Dom7;
+var app7;
+var db;
+
+var app = {
+    self: undefined,
+
+    // Application Constructor
+    initialize: function() {
+        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    },
+
+    onDeviceReady: function() {
+        document.addEventListener('pause', this.onPause.bind(this), false);
+        document.addEventListener('resume', this.onResume.bind(this), false);
+
+        self = this;
+
+        var theme = window.localStorage.getItem('theme');
+        if (!theme) theme = 'auto';
+
+        //todo: deberian setearse al loguearse, segun el lngId del User
+        moment.locale('es');
+        numeral.locale('es'); // http://numeraljs.com/
+        numeral.defaultFormat('0,0.[00]');
+
+        // Verificacion de plugins
+        if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
+        if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
+        if (!navigator.contacts) console.log('Plugin error: cordova-plugin-contacts');
+        if (!device) console.log('Plugin error: cordova-plugin-device');
+        if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
+        if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+        if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
+        if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
+        if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
+        if (typeof PushNotification == 'undefined') console.log('Plugin error: phonegap-plugin-push');
+        if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
+        // Fin verificacion de plugins
+
+        // Custom
+        self.custom = new URLSearchParams(window.location.search).get('custom');
+        if (!self.custom) {
+            if (BuildInfo.packageName == 'net.cloudycrm7.promaps') {
+                self.custom = 'promaps';
+            } else if (BuildInfo.packageName == 'net.cloudycrm7.agd') {
+                self.custom = 'agd';
+            } else if (BuildInfo.packageName == 'net.cloudycrm7.sade') {
+                self.custom = 'sade';
+            } else {
+                self.custom = 'cloudy';
+            }
+        }
+
+        // Agrega el index.css y el index.js custom
+        var el = document.createElement('link');
+        el.setAttribute('rel', 'stylesheet');
+        el.setAttribute('type', 'text/css');
+        el.setAttribute('href', 'custom/' + self.custom + '/index.css');
+        document.getElementsByTagName('head')[0].appendChild(el);
+
+        el = document.createElement('script');
+        el.setAttribute('type', 'text/javascript');
+        el.setAttribute('src', 'custom/' + self.custom + '/index.js');
+        document.getElementsByTagName('head')[0].appendChild(el);
+
+        // Initialize Framework7 app
+        app7 = new Framework7({
+            // App root element
+            root: '#app',
+            // App Name
+            name: BuildInfo.name,
+            // App id
+            id: BuildInfo.packageName,
+            version: BuildInfo.version,
+            theme: theme,
+            touch: {
+                tapHold: true, // enable tap hold events
+            },
+            swipeout: {
+                removeElements: false,
+            },
+            routes: [
+                {
+                    path: '/explorer/',
+                    async: function (routeTo, routeFrom, resolve, reject) {
+                        loadJS(scriptSrc('app7-explorer', lsScriptsVersion('app7-explorer')), routeTo, routeFrom, resolve, reject);
+                    }
+                },
+                {
+                    path: '/generic/',
+                    async: function (routeTo, routeFrom, resolve, reject) {
+                        loadJS(scriptSrc('app7-generic', lsScriptsVersion('app7-generic')), routeTo, routeFrom, resolve, reject);
+                    }
+                },
+                {
+                    path: '/cdn/',
+                    async: function (routeTo, routeFrom, resolve, reject) {
+                        var script = routeTo.query.script;
+                        loadJS(scriptSrc(script, lsScriptsVersion(script)), routeTo, routeFrom, resolve, reject);
+                    }
+                },
+                {
+                    path: '/codelib/',
+                    async: function (routeTo, routeFrom, resolve, reject) {
+                        var code = routeTo.query.code;
+                        dbRead(
+                            'select code from ' + sync.tableName('codelib7') + ' where name = ?',
+                            [code],
+                            function (rs) {
+                                if (rs.rows.length) {
+                                    var row = rs.rows.item(0);
+                                    if (device.platform == 'browser') {
+                                        // No lo atrapo para verlo mas facil en desa
+                                        eval(row['code']);
+                                    } else {
+                                        try {
+                                            eval(row['code']);
+                                        } catch(err) {
+                                            console.log(err);
+                                            resolve({ content: errPage(err) });
+                                        }
+                                    }
+                                } else {
+                                    resolve({ content: errPage('Codelib not found: ' + page) });
+                                }
+                            },
+                            function (err) {
+                                resolve({ content: errPage(err) });
+                            }
+                        );
+                    }
+                },
+            ]
+        });
+
+        function loadJS(url, routeTo, routeFrom, resolve, reject) {
+            $.ajax({
+                url: url,
+                dataType: 'text',
+                success: function (data, textStatus, jqXHR) {
+                    if (device.platform == 'browser') {
+                        eval(data);
+                    } else {
+                        try {
+                            eval(data);
+                        } catch(err) {
+                            console.log(err);
+                            resolve({ content: errPage(err) });
+                        }
+                    }
+                },
+            });
+        }
+
+        showConsole();
+
+        var path = location.pathname;
+        self.rootPath = path.substring(0, path.lastIndexOf('/'));
+
+        console.log(
+            'device.cordova: ' + device.cordova + ' / ' +
+            'device.platform: ' + device.platform + ' / ' +
+            'device.model: ' + device.model + ' / ' +
+            'device.version: ' + device.version + ' / ' +
+            'device.uuid: ' + device.uuid);
+
+        if (device.platform == 'browser'){
+            db = window.openDatabase(
+                'DbName', '', 'Db Display Name', 5*1024*1024,
+                function (db) { console.log('invoked on creation'); }
+            );
+        } else {
+            db = window.sqlitePlugin.openDatabase({
+                name: 'DbName',
+                location: 'default',
+                },
+                function(db) {
+                    console.log('openDatabase OK');
+                },
+                function(err) {
+                    console.log('openDatabase Err: ' + JSON.stringify(err));        
+                }
+            );
+        };
+    
+        if (device.platform == 'iOS') {
+            // https://github.com/transistorsoft/cordova-plugin-background-fetch
+
+            // Your background-fetch handler.
+            var fetchFunctionIos = function () {
+                console.log('bgFetch initiated');
+                executeCode('bgFetch');
+            }
+
+            var fetchFailureIos = function (error) {
+                console.log('bgFetch failed', error);
+            };
+
+            window.BackgroundFetch.configure(fetchFunctionIos, fetchFailureIos, {
+                stopOnTerminate: false  // <-- true is default
+            });
+
+        } else if (device.platform == 'Android') {
+            var androidServiceReference = AndroidSingleton.getInstance();
+            androidServiceReference.fetchSuccessFunction(fetchFunctionAndroid);
+            //androidServiceReference.fetchFailure(fetchFailure);
+
+            androidServiceReference.initialize();
+
+            function fetchFunctionAndroid(data) {
+                console.log('bgFetch initiated');
+                if (data.LatestResult != null) {
+                    console.log('bgFetch before exec');
+                    executeCode('bgFetch',
+                        function (){
+                            console.log('bgFetch exec success');
+                        },
+                        function (err){
+                            console.log('bgFetch exec failure');
+                        }
+                    );
+                }
+            }
+    
+            // todo: monky, esto no se usa?
+            //todo: todavia no pero tenemos que manejar el error al menos para saber, yo lo completo.
+            function fetchFailureAndroid(data) {
+                if (data.LatestResult != null) {
+                    console.log('bgFetch failure');
+                }
+            }
+        }
+
+        // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
+        var val = window.localStorage.getItem('statusBar');
+        statusBar(val != 'off');
+
+        f7AppEvents();
+
+        // Muestra la pantalla de Login o ejecuta onDeviceReady
+        if (!window.localStorage.getItem('userName')) {
+            showLogin();
+        } else {
+            if (app7.online) {
+                dSession.checkToken(
+                    execOnDeviceReady,
+                    function (err) {
+                        showLogin();
+                    }
+                );
+            } else {
+                execOnDeviceReady();
+            }
+        };
+
+        function execOnDeviceReady() {
+            executeCode('onDeviceReady', 
+                function () {
+                    sync.sync(false);
+                },
+                function (err) {
+                    // Sincroniza full y despues inicia
+                    console.log('onDeviceReady error, full syncing...');
+                    sync.sync(true, function () {
+                        // todo: aca seria mejor recargar el app con un parametro para que si vuelve a fallar haga un stop
+                        executeCode('onDeviceReady',
+                            function () {
+                            },
+                            function (err) {
+                                console.log('onDeviceReady error, app stopped');
+                            }
+                        );
+                    });
+                }
+            );
+        };
+    },
+
+    onPause: function() {
+        executeCode('onPause');
+    },
+
+    onResume: function() {
+        if (app7.online) {
+            dSession.checkToken(
+                function () {
+                    executeCode('onResume');
+                },
+                function (err) {
+                    console.log(err);
+                    toast(errMsg(err));
+                    showLogin();
+                }
+            )
+        } else {
+            executeCode('onResume');
+        };
+    },
+};
