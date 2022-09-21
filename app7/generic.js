@@ -1008,9 +1008,12 @@ function fillControls() {
         $navbar.find('.title').html(title);
 
         debugger;
-        getDocLog(doc_id, function (table) {
-            $get('[data-doclog]').html(table);
-        });
+        var $docLog = $get('[data-doclog]');
+        if ($docLog.length > 0) {
+            getDocLog(doc_id, function (table) {
+                $docLog.html(table);
+            });
+        }
 
     } else {
         $navbar.find('.title').html('Nuevo documento');
