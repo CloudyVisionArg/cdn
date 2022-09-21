@@ -1,9 +1,10 @@
 /*
+app7-global
+Funciones varias de JavaScript del APP7
+
 Changelog:
 2022-05-23: JP - Se eliminan las funciones de jslib y se agrega la dependencia
 2022-02-11: JP - ChangeLog e Inventario de metodos
-
-Funciones varias de JavaScript del APP7
 
 Inventario de metodos:
 
