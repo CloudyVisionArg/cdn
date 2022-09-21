@@ -68,6 +68,7 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
+	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 114, hasdep: true });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 113 });
 	scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 112 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 111 });
@@ -78,7 +79,6 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 108 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
 	scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 108 });
-	scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 108, hasdep: true });
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 102 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 102 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
