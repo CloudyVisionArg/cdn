@@ -1118,7 +1118,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
         scriptLoaded('jslib', function () {
             var log = window.localStorage.getItem('consoleLog');
             if (!log) log = '';
-            log = logDateTime(new Date()) + ' - ' + (isErr ? 'ERROR: ' : '') + errMsg(msg) + '\n' + log.substring(0, 1024*64);
+            log = logDateTime(new Date()) + ' - ' + (isErr ? 'ERR: ' : '') + errMsg(msg) + '\n' + log.substring(0, 1024*64);
             window.localStorage.setItem('consoleLog', log);
         });
     }
