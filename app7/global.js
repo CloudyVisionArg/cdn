@@ -60,6 +60,37 @@ audioRecorder(pCallback)
 	});
 })();
 
+/*
+Utilizar esta funcion para resolver la Promise de una ruta
+Soporta las versiones 5 y 6 de F7
+
+En F7 v5 se resuelve asi:
+
+resolve({
+    component: {
+    	render: function () {
+    		return $page;
+    	},
+    	on: {
+	        pageInit: function(e, page){
+                globalPage = page;
+                pageInitMembers(e, page);
+            },
+    	},        
+    }
+});
+
+Usando la funcion:
+
+resolveRoute({
+    resolve: resolve,
+    pageEl: $page,
+    pageInit: function (e, page) {
+	    globalPage = page;
+	    pageInitMembers(e, page);
+    }
+});
+*/
 function resolveRoute(pArgs) {
     var options = {};
 
