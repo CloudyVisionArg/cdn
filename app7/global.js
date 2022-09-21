@@ -1111,14 +1111,14 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
     console.error = function (msg) {
         // Llamada al metodo estandar
         exErr.apply(this, arguments);
-        appendLog(msg);
+        appendLog(msg, true);
     }
 
-    function appendLog(msg) {
+    function appendLog(msg, isErr) {
         scriptLoaded('jslib', function () {
             var log = window.localStorage.getItem('consoleLog');
             if (!log) log = '';
-            log = logDateTime(new Date()) + ' - ' + errMsg(msg) + '\n' + log.substring(0, 1024*64);
+            log = logDateTime(new Date()) + ' - ' + (isErr ? 'ERROR: ' : '') + errMsg(msg) + '\n' + log.substring(0, 1024*64);
             window.localStorage.setItem('consoleLog', log);
         });
     }
