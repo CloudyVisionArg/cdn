@@ -1098,7 +1098,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
     }
 }
 
-// Sobrecarga el console.log para dejar guardado el log en el localStorage
+// Sobrecarga el console.log para dejarlo guardado en el localStorage
 (function() {
     var exLog = console.log;
     console.log = function (msg) {
@@ -1114,12 +1114,11 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
     }
 })();
 
-// Sobrecarga el console.error para dejar guardado el log en el localStorage
+// Sobrecarga el console.error para dejarlo guardado en el localStorage
 (function() {
     var exErr = console.error;
     console.error = function (msg) {
-        debugger;
-        // Llamada al log estandar
+        // Llamada al metodo estandar
         exErr.apply(this, arguments);
 
         scriptLoaded('jslib', function () {
@@ -1130,20 +1129,6 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
         });
     }
 })();
-/*
-todo: agregar el console.error y pasar al jslib, asi la web trabaja con el mismmo concepto
-Cerrar este issue: https://github.com/CloudyVisionArg/Cloudy-CRM-App7/issues/3
-
-console.error = function(){
-   console.log("Disparando error...");
-    if(arguments.length == 0){ //si se envía un solo parametro y es object, lo pasa a json para tener el detalle, sino imprimiría "[object Object]"
-        if(typeof(arguments[0]) == "object"){
-            arguments[0] = JSON.stringify(arguments[0]);
-        }
-    }
-    console.log(...arguments);//Expande los argumentos para pasarselos al console.log
-}
-*/
 
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
