@@ -1007,7 +1007,6 @@ function fillControls() {
         if (!title) title = 'Doc Id ' + doc.DocId;
         $navbar.find('.title').html(title);
 
-        debugger;
         var $docLog = $get('[data-doclog]');
         if ($docLog.length > 0) {
             getDocLog(doc_id, function (table) {
