@@ -1117,7 +1117,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
 // Sobrecarga el console.error para dejar guardado el log en el localStorage
 (function() {
     var exErr = console.error;
-    console.error = function () {
+    console.error = function (msg) {
         debugger;
         // Llamada al log estandar
         exErr.apply(this, arguments);
@@ -1125,7 +1125,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
         scriptLoaded('jslib', function () {
             var log = window.localStorage.getItem('consoleLog');
             if (!log) log = '';
-            log = logDateTime(new Date()) + ' - ' + errMsg(arguments[0]) + '\n' + log.substring(0, 1024*64);
+            log = logDateTime(new Date()) + ' - ERROR: ' + errMsg(msg) + '\n' + log.substring(0, 1024*64);
             window.localStorage.setItem('consoleLog', log);
         });
     }
