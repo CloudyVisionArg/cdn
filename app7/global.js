@@ -1116,6 +1116,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
 
 // Sobrecarga el console.error para dejar guardado el log en el localStorage
 (function() {
+    debugger;
     var exErr = console.error;
     console.error = function () {
         // Llamada al log estandar
