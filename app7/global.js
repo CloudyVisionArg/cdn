@@ -1101,7 +1101,7 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
 // Sobrecarga el console.log para dejar guardado el log en el localStorage
 (function() {
     var exLog = console.log;
-    console.log = function(msg) {
+    console.log = function (msg) {
         // Llamada al log estandar
         exLog.apply(this, arguments);
 
@@ -1109,6 +1109,22 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
             var log = window.localStorage.getItem('consoleLog');
             if (!log) log = '';
             log = logDateTime(new Date()) + ' - ' + errMsg(msg) + '\n' + log.substring(0, 1024*64);
+            window.localStorage.setItem('consoleLog', log);
+        });
+    }
+})();
+
+// Sobrecarga el console.error para dejar guardado el log en el localStorage
+(function() {
+    var exErr = console.error;
+    console.error = function () {
+        // Llamada al log estandar
+        exErr.apply(this, arguments);
+
+        scriptLoaded('jslib', function () {
+            var log = window.localStorage.getItem('consoleLog');
+            if (!log) log = '';
+            log = logDateTime(new Date()) + ' - ' + errMsg(arguments[0]) + '\n' + log.substring(0, 1024*64);
             window.localStorage.setItem('consoleLog', log);
         });
     }
