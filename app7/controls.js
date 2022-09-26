@@ -58,12 +58,17 @@ Si es por PATH hay que pasar el RootFolderId
 function getControlFolder(pFolder, pRootFolderId) {
     return new Promise(function (resolve, reject) {
         debugger;
-        var key;
-        if (!isNaN(parseInt(pFolder))) {
-            DoorsAPI.foldersGetById(pFolder).then(resolve, reject);
-        } else {
-            DoorsAPI.foldersGetByPath(pRootFolderId, pFolder).then(resolve, reject);
-        }
+        var key = 'getControlFolder(' + pFolder + ', ' + pRootFolderId + ')';
+        var cache = getCache(key);
+        if (cache == undefined) {
+            if (!isNaN(parseInt(pFolder))) {
+                cache = DoorsAPI.foldersGetById(pFolder);
+            } else {
+                cache = DoorsAPI.foldersGetByPath(pRootFolderId, pFolder);
+            }
+            setCache(key, cache, 60); // Cachea el folder por 60 segundos
+        };
+        cache.then(resolve, reject);
     });
 }
 
