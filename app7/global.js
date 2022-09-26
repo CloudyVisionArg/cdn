@@ -1540,11 +1540,12 @@ function folderSearchGroups(fldId, groups, totals, formula, order, limit, forceO
 
 function accountsSearch(filter, order, forceOnline) {
     return new Promise(function (resolve, reject) {
+        debugger;
         var key = 'accountsSearch|' + filter + '|' + order + '|' + forceOnline;
         var cache = getCache(key);
         if (cache == undefined) {
             if (forceOnline) {
-                cache = DoorsAPI.accountsSearch(filter, order);
+                onlineSearch();
 
             } else {
                 sync.tableExist('accounts', function (res) {
@@ -1574,15 +1575,19 @@ function accountsSearch(filter, order, forceOnline) {
                         });
 
                     } else {
-                        cache = DoorsAPI.accountsSearch(filter, order);
+                        onlineSearch();
                     }
                 });
             }
-            debugger;
-            if (cache != undefined) {
+
+            function onlineSearch() {
+                cache = DoorsAPI.accountsSearch(filter, order);
                 setCache(key, cache, 60); // Cachea por 60 segundos
                 cache.then(resolve, reject);
             }
+
+        } else {
+            cache.then(resolve, reject);
         }
     });
 }
