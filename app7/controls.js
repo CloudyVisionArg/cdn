@@ -57,6 +57,8 @@ Si es por PATH hay que pasar el RootFolderId
 */
 function getControlFolder(pFolder, pRootFolderId) {
     return new Promise(function (resolve, reject) {
+        debugger;
+        var key;
         if (!isNaN(parseInt(pFolder))) {
             DoorsAPI.foldersGetById(pFolder).then(resolve, reject);
         } else {
