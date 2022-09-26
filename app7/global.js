@@ -1540,10 +1540,12 @@ function folderSearchGroups(fldId, groups, totals, formula, order, limit, forceO
 
 function accountsSearch(filter, order, forceOnline) {
     return new Promise(function (resolve, reject) {
-        debugger;
         var key = 'accountsSearch|' + filter + '|' + order + '|' + forceOnline;
         var cache = getCache(key);
-        if (cache == undefined) {
+        if (cache != undefined) {
+            cache.then(resolve, reject);
+
+        } else {
             if (forceOnline) {
                 onlineSearch();
 
@@ -1585,9 +1587,6 @@ function accountsSearch(filter, order, forceOnline) {
                 setCache(key, cache, 60); // Cachea por 60 segundos
                 cache.then(resolve, reject);
             }
-
-        } else {
-            cache.then(resolve, reject);
         }
     });
 }
