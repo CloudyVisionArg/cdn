@@ -58,7 +58,7 @@ Si es por PATH hay que pasar el RootFolderId
 function getControlFolder(pFolder, pRootFolderId) {
     return new Promise(function (resolve, reject) {
         debugger;
-        var key = 'getControlFolder(' + pFolder + ', ' + pRootFolderId + ')';
+        var key = 'getControlFolder|' + pFolder + '|' + pRootFolderId;
         var cache = getCache(key);
         if (cache == undefined) {
             if (!isNaN(parseInt(pFolder))) {
