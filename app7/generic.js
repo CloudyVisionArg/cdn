@@ -1228,8 +1228,6 @@ function fillAttachments(pEl) {
     if (doc_id) {
         DoorsAPI.attachments(doc_id).then(
             function (res) {
-                var $li, $itemCont, $itemInner, $itemTitle;
-                
                 // Filtra por el tag
                 var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
 
