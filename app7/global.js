@@ -8,6 +8,8 @@ Changelog:
 
 Inventario de metodos:
 
+getCache(pKey)
+setCache(pKey, pValue, pSeconds)
 resolveRoute(pArgs)
 globalScriptsVersion(pId)
 logAndToast(pMsg)
