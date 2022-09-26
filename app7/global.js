@@ -61,6 +61,41 @@ audioRecorder(pCallback)
 })();
 
 /*
+Cache de uso gral
+setCache('myKey', myValue, 60); // Almacena por 60 segundos
+myVar = getCache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+*/
+var _cache;
+
+function getCache(pKey) {
+    if (Array.isArray(_cache)) {
+        let f = _cache.find(el => el.key == pKey);
+        if (f) {
+            if (!f.expires || f.expires < Date.now()) {
+                console.log('Cache hit: ' + pKey);
+                return f.value;
+            }
+        }
+    }
+}
+
+function setCache(pKey, pValue, pSeconds) {
+    if (!Array.isArray(_cache)) _cache = [];
+
+    var exp, sec = parseInt(pSeconds);
+    if (!isNaN(sec)) {
+        exp = Date.now() + sec * 1000;
+    }
+    let f = _cache.find(el => el.key == pKey);
+    if (f) {
+        f.value = pValue;
+        f.expires = exp;
+    } else {
+        _cache.push({ key: pKey, value: pValue, expires: exp });
+    }
+}
+
+/*
 Utilizar esta funcion para resolver la Promise de una ruta
 Soporta las versiones 5 y 6 de F7
 
@@ -72,9 +107,8 @@ resolve({
     		return $page;
     	},
     	on: {
-	        pageInit: function(e, page){
-                globalPage = page;
-                pageInitMembers(e, page);
+	        pageInit: function(e, page) {
+                ...
             },
     	},        
     }
@@ -86,8 +120,7 @@ resolveRoute({
     resolve: resolve,
     pageEl: $page,
     pageInit: function (e, page) {
-	    globalPage = page;
-	    pageInitMembers(e, page);
+        ...
     }
 });
 */
