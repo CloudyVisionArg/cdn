@@ -72,7 +72,7 @@ function getCache(pKey) {
     if (Array.isArray(_cache)) {
         let f = _cache.find(el => el.key == pKey);
         if (f) {
-            if (!f.expires || f.expires < Date.now()) {
+            if (!f.expires || f.expires > Date.now()) {
                 console.log('Cache hit: ' + pKey);
                 return f.value;
             }
