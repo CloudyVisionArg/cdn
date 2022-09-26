@@ -68,6 +68,7 @@ myVar = getCache('myKey'); // Obtiene el valor almacenado en el cache, devuelve 
 var _cache;
 
 function getCache(pKey) {
+    debugger;
     if (Array.isArray(_cache)) {
         let f = _cache.find(el => el.key == pKey);
         if (f) {
@@ -80,6 +81,7 @@ function getCache(pKey) {
 }
 
 function setCache(pKey, pValue, pSeconds) {
+    debugger;
     if (!Array.isArray(_cache)) _cache = [];
 
     var exp, sec = parseInt(pSeconds);
