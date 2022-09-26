@@ -12,7 +12,6 @@ var fld_id, doc_id, doc, folder, cacheDir;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, saving;
 
-debugger;
 var pStuff = {};
 
 /*
