@@ -1207,6 +1207,7 @@ function fillControls() {
     });
 
     // Evento AfterRender
+    debugger;
     var ev = getEvent('AfterRender');
     if (ev) {
         try {
