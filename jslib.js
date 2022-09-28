@@ -146,13 +146,20 @@ Si es por PATH hay que pasar el RootFolderId
 */
 function getFolder(pFolder, pRootFolderId) {
     return new Promise(function (resolve, reject) {
-        if (!isNaN(parseInt(pFolder))) {
-            DoorsAPI.foldersGetById(pFolder).then(resolve, reject);
-        } else {
-            DoorsAPI.foldersGetByPath(pRootFolderId, pFolder).then(resolve, reject);
-        }
+        var key = 'getFolder|' + pFolder + '|' + pRootFolderId;
+        var cache = getCache(key);
+        if (cache == undefined) {
+            if (!isNaN(parseInt(pFolder))) {
+                cache = DoorsAPI.foldersGetById(pFolder);
+            } else {
+                cache = DoorsAPI.foldersGetByPath(pRootFolderId, pFolder);
+            }
+            setCache(key, cache, 60); // Cachea el folder por 60 segundos
+        };
+        cache.then(resolve, reject);
     });
 }
+
 
 function htmlEncode(pText) {
     var sp = document.createElement('span');
