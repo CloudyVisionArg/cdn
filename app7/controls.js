@@ -95,6 +95,7 @@ function getInputText(pId, pLabel, pValue) {
         id: pId,
         placeholder: pLabel,
         value: pValue,
+        autocomplete: 'off',
     }).appendTo($inputWrap);
 
     $('<span/>', {
