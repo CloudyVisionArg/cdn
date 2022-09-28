@@ -14,6 +14,8 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+getCache(pKey)
+setCache(pKey, pValue, pSeconds)
 fileSize(size)
 asyncLoop(iterations, func, callback)
 getFolder(pFolder, pRootFolderId)
@@ -41,6 +43,41 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+/*
+Cache de uso gral
+setCache('myKey', myValue, 60); // Almacena por 60 segundos
+myVar = getCache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+*/
+var _cache;
+
+function getCache(pKey) {
+    if (Array.isArray(_cache)) {
+        let f = _cache.find(el => el.key == pKey);
+        if (f) {
+            if (!f.expires || f.expires > Date.now()) {
+                console.log('Cache hit: ' + pKey);
+                return f.value;
+            }
+        }
+    }
+}
+
+function setCache(pKey, pValue, pSeconds) {
+    if (!Array.isArray(_cache)) _cache = [];
+
+    var exp, sec = parseInt(pSeconds);
+    if (!isNaN(sec)) {
+        exp = Date.now() + sec * 1000;
+    }
+    let f = _cache.find(el => el.key == pKey);
+    if (f) {
+        f.value = pValue;
+        f.expires = exp;
+    } else {
+        _cache.push({ key: pKey, value: pValue, expires: exp });
+    }
+}
 
 function fileSize(size) {
     var cutoff, i, selectedSize, selectedUnit;
