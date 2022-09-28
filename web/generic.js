@@ -465,6 +465,7 @@ function renderPage() {
         }
     };
 
+    $('<hr/>').appendTo($cont);
     $cont.append('Powered by CloudyVision');
 
     // Llena controles Select
