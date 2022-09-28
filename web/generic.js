@@ -1544,37 +1544,6 @@ function accountsSearch(pFormula, pOrder) {
             prom = DoorsAPI.accountsSearch(pFormula, pOrder);
             setCache(key, prom);
         }
-        prom.then(
-            function (res) {
-                resolve(res);
-            },
-            function (err) {
-                console.log(err);
-                reject(err);
-            }
-        )
+        prom.then(resolve, reject);
     });
-}
-
-function getCache(pKey) {
-    if (Array.isArray(cache)) {
-        let f = cache.find(el => el.key == pKey);
-        if (f) {
-            console.log('Cache hit: ' + pKey);
-            return f.value;
-        }
-    }
-}
-
-function setCache(pKey, pValue) {
-    if (Array.isArray(cache)) {
-        let f = cache.find(el => el.key == pKey);
-        if (f) {
-            f.value = pValue;
-        } else {
-            cache.push({ key: pKey, value: pValue });
-        }
-    } else {
-        cache = [{ key: pKey, value: pValue }];
-    }
 }
