@@ -465,6 +465,8 @@ function renderPage() {
         }
     };
 
+    $cont.append('Powered by CloudyVision');
+
     // Llena controles Select
     $('[data-fill]').each(function (ix, el) {
         var $el = $(el);
