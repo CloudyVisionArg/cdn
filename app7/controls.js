@@ -52,23 +52,10 @@ renderMediaListItem(pItem)
 */
 
 /*
-Devuelve un folder por ID o PATH
-Si es por PATH hay que pasar el RootFolderId
+Backward compat, ver getFolder en jslib
 */
 function getControlFolder(pFolder, pRootFolderId) {
-    return new Promise(function (resolve, reject) {
-        var key = 'getControlFolder|' + pFolder + '|' + pRootFolderId;
-        var cache = getCache(key);
-        if (cache == undefined) {
-            if (!isNaN(parseInt(pFolder))) {
-                cache = DoorsAPI.foldersGetById(pFolder);
-            } else {
-                cache = DoorsAPI.foldersGetByPath(pRootFolderId, pFolder);
-            }
-            setCache(key, cache, 60); // Cachea el folder por 60 segundos
-        };
-        cache.then(resolve, reject);
-    });
+    return getFolder(pFolder, pRootFolderId);
 }
 
 function getInputText(pId, pLabel, pValue) {
