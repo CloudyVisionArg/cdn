@@ -474,7 +474,7 @@ function renderPage() {
     var $delBtn = $('<button/>', {
         type: 'button',
         id: 'deleteDoc',
-        class: 'btn btn-default',
+        class: 'btn btn-light',
         title: 'Enviar a la papelera',
     });
 
