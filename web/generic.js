@@ -60,8 +60,12 @@ include(arrScriptsPre, function () {
             resume();
         } else {
             $.get('/c/tkn.asp', function (data) {
-                if (data.length < 100) Doors.RESTFULL.AuthToken = data;
-                resume();
+                if (data.length < 100) {
+                    Doors.RESTFULL.AuthToken = data;
+                    resume();
+                } else {
+                    end('La sesion no ha sido iniciada');
+                }
             })
         }
 
