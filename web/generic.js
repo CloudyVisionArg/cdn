@@ -487,7 +487,7 @@ function renderPage() {
                     function (res) {
                         debugger;
                         toast('El documento ha sido enviado a la papelera');
-                        history.go(-2);
+                        exitForm();
                     },
                     function (err) {
                         console.error(err);
@@ -605,8 +605,11 @@ function printForm() {
 }
 
 function exitForm() {
-    debugger;
-    history.go(-2);
+    if (window.top == window.self) {
+        window.close();
+    } else {
+        history.back();
+    }
 }
 
 function getDefaultControl(pField) {
