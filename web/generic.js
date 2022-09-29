@@ -471,20 +471,32 @@ function renderPage() {
     $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
 
     // Boton Borrar
-    var $delBtn = $('<button/>', {
-        type: 'button',
-        id: 'deleteDoc',
-        class: 'btn btn-outline-danger',
-        title: 'Enviar a la papelera',
-        style: 'float: right;',
-    }).appendTo($cont);
+    if (!doc.IsNew) {
+        var $delBtn = $('<button/>', {
+            type: 'button',
+            id: 'deleteDoc',
+            class: 'btn btn-outline-danger',
+            title: 'Enviar a la papelera',
+            style: 'float: right;',
+        }).appendTo($cont);
 
-    $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
-    $delBtn.click(function () {
-        if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
-            toast('todo: borrar');
-        }
-    });
+        $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
+        $delBtn.click(function () {
+            if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
+                DoorsAPI.documentDelete(fld_id, selected[loop.iteration()]).then(
+                    function (res) {
+                        $block.append('ok<br/>');
+                        loop.next();
+                    },
+                    function (err) {
+                        debugger;
+                        $block.append(errMsg(err) + '<br/>');
+                        loop.next();
+                    }
+                )
+            }
+        });
+    }
 
     // Llena controles Select
     $('[data-fill]').each(function (ix, el) {
