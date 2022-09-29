@@ -36,7 +36,7 @@ errMsg(pErr)
 */
 
 /*
-forceOnline se utiliza solo en el APP, pasar true en caso que accounts
+forceOnline se utiliza solo en el APP. Pasar true en caso que accounts
 este sincronizado y se necesite una busqueda online
 */
 function accountsSearch(filter, order, forceOnline) {

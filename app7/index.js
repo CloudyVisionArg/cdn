@@ -1,7 +1,6 @@
 'use strict';
 
 var initScripts = [];
-var lsScripts;
 
 initScripts.push({ id: 'doorsapi' });
 initScripts.push({ id: 'app7-global' });
@@ -13,34 +12,6 @@ initScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 initScripts.push({ id: 'lib-moment' });
 initScripts.push({ id: 'lib-cryptojs-aes' });
 initScripts.push({ id: 'lib-filesaver' });
-
-/*
-Puedo especificar la version de los scripts en el localStorage, en un item asi:
-    scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": 0 }]
-*/
-
-try {
-    lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
-    if (Array.isArray(lsScripts)) {
-        var iScr;
-        lsScripts.forEach(function (el, ix) {
-            if (el.version != 'undefined') {
-                iScr = initScripts.find(iEl => iEl.id == el.id);
-                if (iScr) iScr.version = el.version;
-            }
-        });
-    };
-} catch (e) {
-    console.log(e);
-};
-
-function lsScriptsVersion(pId) {
-    if (lsScripts) {
-        var scr = lsScripts.find(el => el.id == pId);
-        if (scr) return scr.version;
-    }
-    return undefined;
-};
 
 include(initScripts, function () {
     console.log('app.init');
@@ -134,13 +105,13 @@ var app = {
                 {
                     path: '/explorer/',
                     async: function (routeTo, routeFrom, resolve, reject) {
-                        loadJS(scriptSrc('app7-explorer', lsScriptsVersion('app7-explorer')), routeTo, routeFrom, resolve, reject);
+                        loadJS(scriptSrc('app7-explorer'), routeTo, routeFrom, resolve, reject);
                     }
                 },
                 {
                     path: '/generic/',
                     async: function (routeTo, routeFrom, resolve, reject) {
-                        loadJS(scriptSrc('app7-generic', lsScriptsVersion('app7-generic')), routeTo, routeFrom, resolve, reject);
+                        loadJS(scriptSrc('app7-generic'), routeTo, routeFrom, resolve, reject);
                     }
                 },
                 {
@@ -148,7 +119,7 @@ var app = {
                     async: function (routeTo, routeFrom, resolve, reject) {
                         debugger;
                         var script = routeTo.query.script;
-                        loadJS(scriptSrc(script, lsScriptsVersion(script)), routeTo, routeFrom, resolve, reject);
+                        loadJS(scriptSrc(script), routeTo, routeFrom, resolve, reject);
                     }
                 },
                 {

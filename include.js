@@ -290,7 +290,23 @@ function scriptSrc(scriptId, version) {
             return scriptSrc(script.aliasOf, version);
 
         } else {
-            var v = (version != undefined ? version : script.version);
+            var v = version;
+            if (v == undefined) {
+                v = script.version;
+                try {
+                    /*
+                    Puedo especificar la version de los scripts en el localStorage, en un item asi:
+                        scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": 0 }]
+                    */
+                    var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
+                    if (Array.isArray(lsScripts)) {
+                        var scr = lsScripts.find(el => el.id == scriptId);
+                        if (scr) v = scr.version;
+                    };
+                } catch (e) {
+                    // Nothing to do
+                };
+            };
 
             if (v == 0) {
                 /*

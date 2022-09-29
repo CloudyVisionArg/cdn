@@ -5,7 +5,6 @@ Funciones varias de JavaScript del APP7
 Inventario de metodos:
 
 resolveRoute(pArgs)
-globalScriptsVersion(pId)
 logAndToast(pMsg)
 dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback)
 dbRead(pSql, pArgs, pSuccessCallback, pErrorCallback)
@@ -111,14 +110,6 @@ function resolveRoute(pArgs) {
     }
 }
 
-function globalScriptsVersion(pId) {
-    if (typeof lsScriptsVersion == 'function') {
-        return lsScriptsVersion(pId);
-    } else {
-        return undefined;
-    }
-}
-
 function logAndToast(pMsg) {
     console.log(pMsg);
     toast(pMsg);
@@ -216,7 +207,7 @@ function showConsole(allowClose) {
         ]
     });
 
-    $.get(scriptSrc('app7-console', globalScriptsVersion('app7-console')), function (data) {
+    $.get(scriptSrc('app7-console'), function (data) {
         var popup = app7.popup.create({
             content: data,
             closeByBackdropClick: false,
@@ -303,7 +294,7 @@ function loadLoginCustomJS() {
 
 // Muestra la pantalla de Login como popup
 function showLogin(allowClose) {
-    $.get(scriptSrc('app7-login', globalScriptsVersion('app7-login')), function (data) {
+    $.get(scriptSrc('app7-login'), function (data) {
         var popup = app7.popup.create({
             content: data,
             closeByBackdropClick: false,
@@ -315,21 +306,21 @@ function showLogin(allowClose) {
                         routes: [
                             {
                                 path: '/chpass/',
-                                url: scriptSrc('app7-chpass', globalScriptsVersion('app7-chpass')),
+                                url: scriptSrc('app7-chpass'),
                                 on: {
                                     pageInit: chpassInit,
                                 },
                             },
                             {
                                 path: '/signin/',
-                                url: scriptSrc('app7-signin', globalScriptsVersion('app7-signin')),
+                                url: scriptSrc('app7-signin'),
                                 on: {
                                     pageInit: signinInit,
                                 },
                             },
                             {
                                 path: '/resetpass/',
-                                url: scriptSrc('app7-resetpass', globalScriptsVersion('app7-resetpass')),
+                                url: scriptSrc('app7-resetpass'),
                                 on: {
                                     pageInit: resetpassInit,
                                 },

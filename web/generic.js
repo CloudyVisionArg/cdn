@@ -48,31 +48,6 @@ arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/f
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
 
-/*
-Puedo especificar la version de los scripts en el localStorage, en un item asi:
-    scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": 0 }]
-*/
-try {
-    lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
-    if (Array.isArray(lsScripts)) {
-        var iScr;
-        lsScripts.forEach(function (el, ix) {
-            if (el.version != 'undefined') {
-                iScr = arrScriptsPre.find(iEl => iEl.id == el.id);
-                if (iScr) iScr.version = el.version;
-
-                iScr = arrScripts.find(iEl => iEl.id == el.id);
-                if (iScr) iScr.version = el.version;
-
-                iScr = arrScriptsPos.find(iEl => iEl.id == el.id);
-                if (iScr) iScr.version = el.version;
-            }
-        });
-    };
-} catch (e) {
-    console.log(e);
-};
-
 include(arrScriptsPre, function () {
     preloader.show();
     
