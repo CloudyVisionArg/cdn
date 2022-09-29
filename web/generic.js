@@ -474,12 +474,11 @@ function renderPage() {
     var $delBtn = $('<button/>', {
         type: 'button',
         id: 'deleteDoc',
-        class: 'btn btn-light',
+        class: 'btn btn-outline-danger',
         title: 'Enviar a la papelera',
     });
 
-    //$delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
-    $delBtn.append('borrar');
+    $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
     $delBtn.appendTo($cont);
 
     /*
