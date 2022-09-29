@@ -487,7 +487,7 @@ function renderPage() {
                     function (res) {
                         debugger;
                         toast('El documento ha sido enviado a la papelera');
-                        history.back();
+                        history.go(-2);
                     },
                     function (err) {
                         console.error(err);
