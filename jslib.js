@@ -45,6 +45,10 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+/*
+forceOnline se utiliza solo en el APP, pasar true en caso que accounts
+este sincronizado y se necesite una busqueda online
+*/
 function accountsSearch(filter, order, forceOnline) {
     return new Promise(function (resolve, reject) {
         var key = 'accountsSearch|' + filter + '|' + order;
@@ -135,6 +139,9 @@ function setCache(pKey, pValue, pSeconds) {
     }
 }
 
+/*
+Convierte un nro de bytes en un texto con la unidad conveniente
+*/
 function fileSize(size) {
     var cutoff, i, selectedSize, selectedUnit;
     var units = ['Tb', 'Gb', 'Mb', 'Kb', 'b'];
@@ -152,13 +159,17 @@ function fileSize(size) {
 };
 
 /*
-Loop asincrono:
+Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
+que debo esperar antes de realizar la prox iteracion
 
 asyncLoop(10,
     function (loop) {
         console.log(loop.iteration());
-        loop.next();
-        //loop.break();
+        setTimeout(function () {
+            loop.next();
+        }, 0);
+        
+        //loop.break(); // Para finalizar el loop
     },
     function() {
         console.log('cycle ended')
@@ -199,6 +210,7 @@ function asyncLoop(iterations, func, callback) {
 /*
 Devuelve un folder por ID o PATH
 Si es por PATH hay que pasar el RootFolderId
+Cachea por 60 segundos
 */
 function getFolder(pFolder, pRootFolderId) {
     return new Promise(function (resolve, reject) {
