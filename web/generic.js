@@ -467,7 +467,7 @@ function renderPage() {
 
     $('<hr/>').appendTo($cont);
     //todo: linkear a la web y agregar boton de borrado
-    $cont.append('<span>Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
+    $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
     /*
     <button type="button" id="delete" name="delete" class="btn btn-default" title="Enviar a la papelera" onclick="deleteDoc();">
 <span class="fa fa-trash-o" aria-hidden="true"></span></button>
