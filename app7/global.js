@@ -43,7 +43,6 @@ f7AppEvents()
 getFolderElements(pFolder)
 folderSearch(fldId, fields, formula, order, limit, maxLen, forceOnline)
 folderSearchGroups(fldId, groups, totals, formula, order, limit, forceOnline)
-accountsSearch(filter, order, forceOnline)
 convertSqliteResultSet(pRes)
 convertSqliteAccounts(pRes)
 clearTextSelection()
@@ -1497,59 +1496,6 @@ function folderSearchGroups(fldId, groups, totals, formula, order, limit, forceO
                     DoorsAPI.folderSearchGroups(fldId, groups, totals, formula, order, limit).then(resolve, reject);
                 }
             });
-        }
-    });
-}
-
-function accountsSearch(filter, order, forceOnline) {
-    return new Promise(function (resolve, reject) {
-        var key = 'accountsSearch|' + filter + '|' + order + '|' + forceOnline;
-        var cache = getCache(key);
-        if (cache != undefined) {
-            cache.then(resolve, reject);
-
-        } else {
-            if (forceOnline) {
-                onlineSearch();
-
-            } else {
-                sync.tableExist('accounts', function (res) {
-                    if (res) {
-                        sync.getDbFields('accounts', function (cols) {
-                            // Delimita los campos con doble comilla
-                            var arr = [];
-                            for (var i = 0; i < cols.length; i++) {
-                                arr.push('\\b' + cols[i].name + '\\b');
-                            }
-                            // Este regExp reemplaza palabras completas fuera de comillas
-                            var regEx = new RegExp('(' + arr.join('|') + ')(?=(?:[^\']|\'[^\']*\')*$)', 'gi');
-                            // con la misma palabra delimitada con doble comilla
-                            var rep = '"$&"';
-
-                            var sql = 'select * from accounts';
-                            if (filter) sql += ' where ' + filter.replace(regEx, rep);
-                            if (order) sql += ' order by ' + order.replace(regEx, rep);
-                            dbRead(sql, [],
-                                function (rs) {
-                                    resolve(convertSqliteAccounts(rs));
-                                },
-                                function (err) {
-                                    reject(err);
-                                }
-                            )
-                        });
-
-                    } else {
-                        onlineSearch();
-                    }
-                });
-            }
-
-            function onlineSearch() {
-                cache = DoorsAPI.accountsSearch(filter, order);
-                setCache(key, cache, 60); // Cachea por 60 segundos
-                cache.then(resolve, reject);
-            }
         }
     });
 }

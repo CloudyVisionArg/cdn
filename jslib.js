@@ -14,6 +14,7 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+accountsSearch(filter, order, forceOnline)
 getCache(pKey)
 setCache(pKey, pValue, pSeconds)
 fileSize(size)
@@ -44,6 +45,59 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+function accountsSearch(filter, order, forceOnline) {
+    return new Promise(function (resolve, reject) {
+        var key = 'accountsSearch|' + filter + '|' + order;
+        var cache = getCache(key);
+        if (cache != undefined) {
+            cache.then(resolve, reject);
+
+        } else {
+            if (typeof(cordova) != 'object' || forceOnline) {
+                onlineSearch();
+
+            } else {
+                sync.tableExist('accounts', function (res) {
+                    if (res) {
+                        sync.getDbFields('accounts', function (cols) {
+                            // Delimita los campos con doble comilla
+                            var arr = [];
+                            for (var i = 0; i < cols.length; i++) {
+                                arr.push('\\b' + cols[i].name + '\\b');
+                            }
+                            // Este regExp reemplaza palabras completas fuera de comillas
+                            var regEx = new RegExp('(' + arr.join('|') + ')(?=(?:[^\']|\'[^\']*\')*$)', 'gi');
+                            // con la misma palabra delimitada con doble comilla
+                            var rep = '"$&"';
+
+                            var sql = 'select * from accounts';
+                            if (filter) sql += ' where ' + filter.replace(regEx, rep);
+                            if (order) sql += ' order by ' + order.replace(regEx, rep);
+                            dbRead(sql, [],
+                                function (rs) {
+                                    resolve(convertSqliteAccounts(rs));
+                                },
+                                function (err) {
+                                    reject(err);
+                                }
+                            )
+                        });
+
+                    } else {
+                        onlineSearch();
+                    }
+                });
+            }
+
+            function onlineSearch() {
+                cache = DoorsAPI.accountsSearch(filter, order);
+                setCache(key, cache, 60); // Cachea por 60 segundos
+                cache.then(resolve, reject);
+            }
+        }
+    });
+}
+
 /*
 Cache de uso gral
 setCache('myKey', myValue, 60); // Almacena por 60 segundos
@@ -69,6 +123,8 @@ function setCache(pKey, pValue, pSeconds) {
     var exp, sec = parseInt(pSeconds);
     if (!isNaN(sec)) {
         exp = Date.now() + sec * 1000;
+    } else {
+        exp = Date.now() + 300000; // 5' por defecto
     }
     let f = _cache.find(el => el.key == pKey);
     if (f) {
