@@ -479,6 +479,7 @@ function renderPage() {
     });
 
     //$delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
+    $delBtn.append('borrar');
     $delBtn.appendTo($cont);
 
     /*
