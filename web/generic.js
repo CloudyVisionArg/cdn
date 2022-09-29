@@ -1574,7 +1574,7 @@ function saveAtt() {
 function accountsSearch(pFormula, pOrder) {
     return new Promise(function (resolve, reject) {
         var key, prom;
-        key = 'accSearch / ' + pFormula + ' / ' + pOrder;
+        key = 'accountsSearch|' + pFormula + '|' + pOrder;
         prom = getCache(key);
         if (prom == undefined) {
             prom = DoorsAPI.accountsSearch(pFormula, pOrder);
