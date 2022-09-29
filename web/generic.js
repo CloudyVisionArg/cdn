@@ -605,7 +605,7 @@ function printForm() {
 }
 
 function exitForm() {
-    history.back();
+    history.go(-2);
 }
 
 function getDefaultControl(pField) {
