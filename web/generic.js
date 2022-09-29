@@ -465,9 +465,22 @@ function renderPage() {
         }
     };
 
+    // Footer
     $('<hr/>').appendTo($cont);
     //todo: linkear a la web y agregar boton de borrado
     $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
+
+    // Boton Borrar
+    var $delBtn = $('<button/>', {
+        type: 'button',
+        id: 'deleteDoc',
+        class: 'btn btn-default',
+        title: 'Enviar a la papelera',
+    });
+
+    $delBtn.append('<span class="fa fa-trash-o" />');
+    $delBtn.appendTo($cont);
+
     /*
     <button type="button" id="delete" name="delete" class="btn btn-default" title="Enviar a la papelera" onclick="deleteDoc();">
 <span class="fa fa-trash-o" aria-hidden="true"></span></button>
