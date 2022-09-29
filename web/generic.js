@@ -481,7 +481,7 @@ function renderPage() {
 
     $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
     $delBtn.click(function () {
-        if (confirm('ATENCION!! Esta a punto de enviar este documento de Oportunidad a la papelera, desea continuar?')) {
+        if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
             toast('todo: borrar');
         }
     });
