@@ -471,32 +471,28 @@ function renderPage() {
     $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
 
     // Boton Borrar
-    if (!doc.IsNew) {
-        var $delBtn = $('<button/>', {
-            type: 'button',
-            id: 'deleteDoc',
-            class: 'btn btn-outline-danger',
-            title: 'Enviar a la papelera',
-            style: 'float: right;',
-        }).appendTo($cont);
+    var $delBtn = $('<button/>', {
+        type: 'button',
+        id: 'deleteDoc',
+        class: 'btn btn-outline-danger',
+        title: 'Enviar a la papelera',
+        style: 'float: right;',
+    }).appendTo($cont);
 
-        $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
-        $delBtn.click(function () {
-            if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
-                DoorsAPI.documentDelete(fld_id, doc_id).then(
-                    function (res) {
-                        debugger;
-                        toast('El documento ha sido enviado a la papelera');
-                        exitForm();
-                    },
-                    function (err) {
-                        console.error(err);
-                        logAndToast(errMsg(err));
-                    }
-                )
-            }
-        });
-    }
+    $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
+    $delBtn.click(function () {
+        if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
+            DoorsAPI.documentDelete(fld_id, doc_id).then(
+                function (res) {
+                    toast('El documento ha sido enviado a la papelera');
+                    exitForm();
+                },
+                function (err) {
+                    logAndToast(errMsg(err));
+                }
+            )
+        }
+    });
 
     // Llena controles Select
     $('[data-fill]').each(function (ix, el) {
@@ -592,7 +588,7 @@ function getRow(pRow, pCont, pCol) {
 }
 
 function printForm() {
-    debugger;
+    debugger; // Utilizar este boton para activar el debugger
 
 	var frm = top.window.frames['frameDer'];
 	if (!frm) frm = window;
@@ -1120,9 +1116,12 @@ function fillControls() {
             title += ' - ' + form;
         } else {
             title = form + ' #' + doc.DocId;
-        }
+        };
+
+        $('#deleteDoc').show();
     } else {
         title = 'Nuevo ' + form;
+        $('#deleteDoc').hide();
     }    
 
     document.title = title;
