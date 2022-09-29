@@ -1,15 +1,5 @@
 /*
-Changelog:
-2022-05-23: JP - Creacion
-
-Funciones varias de JavaScript para web y app
-
-Inventario de metodos:
-
-/*
-Changelog:
-2022-05-23: JP - Creacion
-
+jslib
 Funciones varias de JavaScript para web y app
 
 Inventario de metodos:

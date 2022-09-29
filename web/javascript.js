@@ -2,11 +2,6 @@
 web-javascript
 Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
-Changelog:
-2022-05-23: JP - Se eliminan las funciones de jslib y se agrega la dependencia
-2022-03-28: JP - getCookie
-2022-01-11: JP - ChangeLog e Inventario de metodos
-
 Inventario de metodos:
 
 logAndToast(pMsg, pToastOptions)

@@ -2,9 +2,6 @@
 web-controls
 Controles de la web
 
-Changelog:
-2022-09-15: JP - ChangeLog e Inventario de metodos
-
 Inventario de metodos:
 
 newInputText(pId, pLabel)
