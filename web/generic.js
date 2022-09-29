@@ -605,6 +605,7 @@ function printForm() {
 }
 
 function exitForm() {
+    debugger;
     history.go(-2);
 }
 
