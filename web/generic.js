@@ -478,7 +478,7 @@ function renderPage() {
         title: 'Enviar a la papelera',
     });
 
-    $delBtn.append('<span class="fa fa-trash-o" />');
+    $delBtn.append('<i class="bi bi-trash"></i>');
     $delBtn.appendTo($cont);
 
     /*
