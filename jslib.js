@@ -537,7 +537,7 @@ function errMsg(pErr) {
             // error de Doors
             return pErr.ExceptionMessage;            
         } else if (pErr.xhr) {
-            return 'Error de conexion (readyState: ' + pErr.xhr.readyState 
+            return 'XHRError (readyState: ' + pErr.xhr.readyState 
                 + ', status: ' + pErr.xhr.status + ' - ' + pErr.xhr.statusText + ')';
         }
     }
