@@ -477,15 +477,14 @@ function renderPage() {
         class: 'btn btn-outline-danger',
         title: 'Enviar a la papelera',
         style: 'float: right;',
-    });
+    }).appendTo($cont);
 
     $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
-    $delBtn.appendTo($cont);
-
-    /*
-    <button type="button" id="delete" name="delete" class="btn btn-default" title="Enviar a la papelera" onclick="deleteDoc();">
-<span class="fa fa-trash-o" aria-hidden="true"></span></button>
-*/
+    $delBtn.click(function () {
+        if (confirm('ATENCION!! Esta a punto de enviar este documento de Oportunidad a la papelera, desea continuar?')) {
+            toast('todo: borrar');
+        }
+    });
 
     // Llena controles Select
     $('[data-fill]').each(function (ix, el) {
