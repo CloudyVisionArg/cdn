@@ -483,15 +483,15 @@ function renderPage() {
         $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
         $delBtn.click(function () {
             if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
-                DoorsAPI.documentDelete(fld_id, selected[loop.iteration()]).then(
+                DoorsAPI.documentDelete(fld_id, doc_id).then(
                     function (res) {
-                        $block.append('ok<br/>');
-                        loop.next();
+                        debugger;
+                        toast('El documento ha sido enviado a la papelera');
+                        history.back();
                     },
                     function (err) {
-                        debugger;
-                        $block.append(errMsg(err) + '<br/>');
-                        loop.next();
+                        console.error(err);
+                        logAndToast(errMsg(err));
                     }
                 )
             }
