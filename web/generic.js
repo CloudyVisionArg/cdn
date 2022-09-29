@@ -466,7 +466,12 @@ function renderPage() {
     };
 
     $('<hr/>').appendTo($cont);
-    $cont.append('Powered by CloudyVision');
+    //todo: linkear a la web y agregar boton de borrado
+    $cont.append('<span>Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
+    /*
+    <button type="button" id="delete" name="delete" class="btn btn-default" title="Enviar a la papelera" onclick="deleteDoc();">
+<span class="fa fa-trash-o" aria-hidden="true"></span></button>
+*/
 
     // Llena controles Select
     $('[data-fill]').each(function (ix, el) {
