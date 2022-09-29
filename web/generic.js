@@ -476,6 +476,7 @@ function renderPage() {
         id: 'deleteDoc',
         class: 'btn btn-outline-danger',
         title: 'Enviar a la papelera',
+        style: 'float: right;',
     });
 
     $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
