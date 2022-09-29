@@ -1569,17 +1569,3 @@ function saveAtt() {
         }
     });
 }
-
-// accountsSearch con cache
-function accountsSearch(pFormula, pOrder) {
-    return new Promise(function (resolve, reject) {
-        var key, prom;
-        key = 'accountsSearch|' + pFormula + '|' + pOrder;
-        prom = getCache(key);
-        if (prom == undefined) {
-            prom = DoorsAPI.accountsSearch(pFormula, pOrder);
-            setCache(key, prom);
-        }
-        prom.then(resolve, reject);
-    });
-}
