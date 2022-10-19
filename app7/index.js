@@ -106,21 +106,21 @@ var app = {
                 {
                     path: '/explorer/',
                     async: function () {
-                        var context = getContext(arguments);
+                        var context = getRouterContext(arguments);
                         loadJS(scriptSrc('app7-explorer'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/generic/',
                     async: function () {
-                        var context = getContext(arguments);
+                        var context = getRouterContext(arguments);
                         loadJS(scriptSrc('app7-generic'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/cdn/',
                     async: function () {
-                        var context = getContext(arguments);
+                        var context = getRouterContext(arguments);
                         var script = context.to.query.script;
                         loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
                     }
@@ -128,7 +128,7 @@ var app = {
                 {
                     path: '/codelib/',
                     async: function () {
-                        var context = getContext(arguments);
+                        var context = getRouterContext(arguments);
                         var routeTo = context.to;
                         var routeFrom = context.from;
                         var resolve = context.resolve;
@@ -165,18 +165,19 @@ var app = {
             ]
         });
 
-        function getContext(pArgs) {
+        function getRouterContext(pArgs) {
             if (pArgs.length == 1) {
                 // F7 v7
                 return pArgs[0];
             } else {
                 // F7 v5
-                debugger;
                 return {
-
+                    to: pArgs[0],
+                    from: pArgs[1],
+                    resolve: pArgs[2],
+                    reject: pArgs[3]
                 };
             }
-
         };
 
         function loadJS(url, routeTo, routeFrom, resolve, reject) {
