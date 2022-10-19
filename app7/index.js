@@ -88,6 +88,7 @@ var app = {
         // Initialize Framework7 app
         app7 = new Framework7({
             // App root element
+            el: '#app',
             root: '#app',
             // App Name
             name: BuildInfo.name,
