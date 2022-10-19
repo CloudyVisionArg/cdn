@@ -107,25 +107,33 @@ var app = {
                     path: '/explorer/',
                     async: function () {
                         var context = getContext(arguments);
-                        loadJS(scriptSrc('app7-explorer'), routeTo, routeFrom, resolve, reject);
+                        loadJS(scriptSrc('app7-explorer'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/generic/',
-                    async: function (routeTo, routeFrom, resolve, reject) {
-                        loadJS(scriptSrc('app7-generic'), routeTo, routeFrom, resolve, reject);
+                    async: function () {
+                        var context = getContext(arguments);
+                        loadJS(scriptSrc('app7-generic'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/cdn/',
-                    async: function (routeTo, routeFrom, resolve, reject) {
-                        var script = routeTo.query.script;
-                        loadJS(scriptSrc(script), routeTo, routeFrom, resolve, reject);
+                    async: function () {
+                        var context = getContext(arguments);
+                        var script = context.to.query.script;
+                        loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/codelib/',
-                    async: function (routeTo, routeFrom, resolve, reject) {
+                    async: function () {
+                        var context = getContext(arguments);
+                        var routeTo = context.to;
+                        var routeFrom = context.from;
+                        var resolve = context.resolve;
+                        var reject = context.reject;
+
                         var code = routeTo.query.code;
                         dbRead(
                             'select code from ' + sync.tableName('codelib7') + ' where name = ?',
