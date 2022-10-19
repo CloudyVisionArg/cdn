@@ -106,6 +106,7 @@ var app = {
                 {
                     path: '/explorer/',
                     async: function () {
+                        var context = getContext(arguments);
                         loadJS(scriptSrc('app7-explorer'), routeTo, routeFrom, resolve, reject);
                     }
                 },
@@ -155,6 +156,20 @@ var app = {
                 },
             ]
         });
+
+        function getContext(pArgs) {
+            if (pArgs.length == 1) {
+                // F7 v7
+                return pArgs[0];
+            } else {
+                // F7 v5
+                debugger;
+                return {
+
+                };
+            }
+
+        };
 
         function loadJS(url, routeTo, routeFrom, resolve, reject) {
             $.ajax({
