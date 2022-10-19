@@ -105,7 +105,7 @@ var app = {
             routes: [
                 {
                     path: '/explorer/',
-                    async: function (routeTo, routeFrom, resolve, reject) {
+                    async: function () {
                         loadJS(scriptSrc('app7-explorer'), routeTo, routeFrom, resolve, reject);
                     }
                 },
