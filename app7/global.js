@@ -86,7 +86,7 @@ resolveRoute({
 function resolveRoute(pArgs) {
     var options = {};
 
-    if (document._f7version >= 6) {
+    if (document._f7version >= 6 || f7version >= 6) {
         options.on = {};
         if (typeof pArgs.pageInit == 'function') {
             options.on.pageInit = pArgs.pageInit;
