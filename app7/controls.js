@@ -852,7 +852,7 @@ function getPopup(pTitle) {
         class: 'block',
     }).appendTo($pageCont);
 
-    return app7.popup.create({content: $popup});
+    return app7.popup.create({content: $popup[0]});
 }
 
 /*
