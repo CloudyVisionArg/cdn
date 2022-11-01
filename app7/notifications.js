@@ -271,7 +271,7 @@ function renderMembers(notificationsArr){
         let msjNoHayNotif = $("<div />", {"class":"list simple-list","style":"margin-top: 0;margin-bottom: 0;"}).appendTo($divActions);
         let ul = $("<ul />").appendTo(msjNoHayNotif);
         let li =  $("<li />")
-        li.text("Sin notificaciones para mostrar").appendTo(ul);
+        li.text("Sin notificaciones para mostrarrrr").appendTo(ul);
     }
     listItems.deleteAllItems();
     listItems.appendItems(notificationsArr); 
