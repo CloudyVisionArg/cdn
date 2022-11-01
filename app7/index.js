@@ -57,6 +57,7 @@ var app = {
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
         if (typeof PushNotification == 'undefined') console.log('Plugin error: phonegap-plugin-push');
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
+        if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
         // Fin verificacion de plugins
 
         // Custom
