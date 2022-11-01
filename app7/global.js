@@ -863,7 +863,7 @@ function errPage(err) {
     
     $button.on('click', showConsole);
 
-    return $page;
+    return $page[0];
 }
 
 // Borra los datos locales

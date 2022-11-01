@@ -1,3 +1,18 @@
+/*
+Panel de notificaciones del APP
+Para incluirlo, agregar la opcion de menu de la sig forma:
+
+    tabs.push({
+        viewid: 'view-notifications',
+        label: 'Notificaciones',
+        url: '/cdn/?script=app7-notifications',
+        iosicon: '<div class="menu-icon">bell</div>',
+        mdicon: '<div class="menu-icon">notifications</div>',
+    });
+
+IMPORTANTE: Los iconos deben estar wrappeados en el DIV para que funcione la animacion
+*/
+
 class CustomAppNotification {
     constructor(Id,DevicePlatform,ReadDate,EraseDate,DeliveryDate,Title,Body,ExtraData) {
         this.Id=Id;
@@ -271,7 +286,7 @@ function renderMembers(notificationsArr){
         let msjNoHayNotif = $("<div />", {"class":"list simple-list","style":"margin-top: 0;margin-bottom: 0;"}).appendTo($divActions);
         let ul = $("<ul />").appendTo(msjNoHayNotif);
         let li =  $("<li />")
-        li.text("Sin notificaciones para mostrarrrr").appendTo(ul);
+        li.text("Sin notificaciones para mostrar").appendTo(ul);
     }
     listItems.deleteAllItems();
     listItems.appendItems(notificationsArr); 
