@@ -106,7 +106,7 @@ function DSession() {
         } else {
             found = grp.find(el => el['Name'].toUpperCase() == pGroup.toUpperCase());
         }
-        return false;
+        return !(found == undefined);
     }
 
     function getToken() {
