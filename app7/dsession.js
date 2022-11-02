@@ -101,7 +101,7 @@ function DSession() {
         debugger;
         var grp = this.loggedUser().ParentAccountsRecursive;
         var found;
-        if (typeof(pGroup == 'number')) {
+        if (typeof(pGroup) == 'number') {
             found = grp.find(el => el['AccId'] == pGroup);
         } else {
             found = grp.find(el => el['Name'].toUpperCase() == pGroup.toUpperCase());
