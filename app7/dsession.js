@@ -98,6 +98,7 @@ function DSession() {
     }
 
     this.hasGroup = function (pGroup) {
+        debugger;
         var grp = this.loggedUser().ParentAccountsRecursive;
         for (var i = 0; i < grp.length; i++) {
             if (grp[i]['Name'].toUpperCase() == pGroup.toUpperCase()) {
