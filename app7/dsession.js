@@ -100,10 +100,11 @@ function DSession() {
     this.hasGroup = function (pGroup) {
         debugger;
         var grp = this.loggedUser().ParentAccountsRecursive;
-        for (var i = 0; i < grp.length; i++) {
-            if (grp[i]['Name'].toUpperCase() == pGroup.toUpperCase()) {
-                return true;
-            }
+        var found;
+        if (typeof(pGroup == 'number')) {
+            found = grp.find(el => el['AccId'] == pGroup);
+        } else {
+            found = grp.find(el => el['Name'].toUpperCase() == pGroup.toUpperCase());
         }
         return false;
     }
