@@ -342,5 +342,7 @@ var app = {
         } else {
             executeCode('onResume');
         };
+        
+        sync.sync(false);
     },
 };
