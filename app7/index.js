@@ -48,7 +48,6 @@ var app = {
         // Verificacion de plugins
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
-        if (!navigator.contacts) console.log('Plugin error: cordova-plugin-contacts');
         if (!device) console.log('Plugin error: cordova-plugin-device');
         if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
         if (!cordova.file) console.log('Plugin error: cordova-plugin-file');

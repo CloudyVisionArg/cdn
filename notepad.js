@@ -9,3 +9,16 @@ renderItem({
 
 
 getCodelib('contactos_actions').then(res => eval(res));
+
+if (row['ESTADO'] == 'Ganada') {
+    style = 'color: #4cd964'; // Verde
+} else if (row['ESTADO'] == 'Perdida') {
+    style = 'color: #ff3b30'; // Rojo
+} else if (row['ESTADO'] == 'Activa') {
+    if (row['FECHAPROXACCION']) {
+        var now = new Date;
+        if (new Date(row['FECHAPROXACCION']) < now) {
+            style = 'color: #ff9500'; // Azul
+        }
+    }
+}
