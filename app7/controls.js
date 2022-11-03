@@ -535,7 +535,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
         }
     }
 
-    app7.input.checkEmptyState(pSelect);
+    app7.input.checkEmptyState(pSelect[0]);
 
     if (pSelect.parent().hasClass('smart-select')) {
         var ss = app7.smartSelect.get(pSelect.parent()[0]);
