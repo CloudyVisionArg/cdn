@@ -90,6 +90,91 @@ class CustomAppNotification {
 
 console.log("notifications")
 
+const injectCSS = css => {
+    let el = document.createElement('style');
+    el.innerText = css;
+    document.head.appendChild(el);
+    return el;
+};
+  
+injectCSS(`
+.accordion-item .item-content div.item-title,
+.list.media-list div.item-title,
+.list.media-list div.item-subtitle,
+.list.media-list div.item-text { 
+    overflow:visible !important; 
+    white-space:pre-wrap !important;
+}
+.simple-list li{
+    justify-content: center !important;
+    background: #5097feb8 !important;
+    color: white !important;
+}
+.msgunread{
+    background: #f7f7f8;
+}
+.msgread{
+    background-color: transparent;
+}
+.msgdeleted{
+    background-color: lightcoral;
+}
+.btnRead, .btnDelete{
+    margin-left: 1rem;
+    color: var(--f7-tabbar-link-inactive-color);
+}
+.animated-bell div.menu-icon{
+    animation: ring 4s .7s ease-in-out infinite;
+}
+@keyframes ring {
+  0% { transform: rotate(0); }
+  1% { transform: rotate(30deg); }
+  3% { transform: rotate(-28deg); }
+  5% { transform: rotate(34deg); }
+  7% { transform: rotate(-32deg); }
+  9% { transform: rotate(30deg); }
+  11% { transform: rotate(-28deg); }
+  13% { transform: rotate(26deg); }
+  15% { transform: rotate(-24deg); }
+  17% { transform: rotate(22deg); }
+  19% { transform: rotate(-20deg); }
+  21% { transform: rotate(18deg); }
+  23% { transform: rotate(-16deg); }
+  25% { transform: rotate(14deg); }
+  27% { transform: rotate(-12deg); }
+  29% { transform: rotate(10deg); }
+  31% { transform: rotate(-8deg); }
+  33% { transform: rotate(6deg); }
+  35% { transform: rotate(-4deg); }
+  37% { transform: rotate(2deg); }
+  39% { transform: rotate(-1deg); }
+  41% { transform: rotate(1deg); }
+
+  43% { transform: rotate(0); }
+  100% { transform: rotate(0); }
+}
+.popover-title{
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.sticky-custom {
+position: sticky;
+position: -webkit-sticky;
+position: -moz-sticky;
+position: -o-sticky;
+position: -ms-sticky;
+top: 20px;
+z-index: 9999999;
+transform-style: preserver-3d;
+backface-visibility: hidden;
+padding-top: 5px;
+transform: translate3d(0,0,0);
+transform: translateZ(0);
+-webkit-transform: translateZ(0);
+}
+`);
+
 var $page =   getPage({
                 id: 'notifications' + getGuid(),
                 title: "Notificaciones",
