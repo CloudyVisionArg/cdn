@@ -40,6 +40,8 @@ var app = {
         var theme = window.localStorage.getItem('theme');
         if (!theme) theme = 'auto';
 
+        if (window.localStorage.getItem('darkTheme') == 'on') $(document.body).addClass('dark');
+
         //todo: deberian setearse al loguearse, segun el lngId del User
         moment.locale('es');
         numeral.locale('es'); // http://numeraljs.com/
@@ -342,7 +344,7 @@ var app = {
         } else {
             executeCode('onResume');
         };
-        
+
         sync.sync(false);
     },
 };
