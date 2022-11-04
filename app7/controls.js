@@ -1710,7 +1710,7 @@ function addDefaultOptions(pContainer) {
         };
         window.localStorage.setItem('darkTheme', t.checked ? 'on' : 'off');
     })
-    toggle.checked = $(document.body).hasClass('dark')
+    toggle.checked = $(document.body).hasClass('dark');
 
     // Explorer limit
     $ctl = getStepper('explorerLimit', 'Explorer limit').appendTo(pContainer);
