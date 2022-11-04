@@ -1699,6 +1699,19 @@ function addDefaultOptions(pContainer) {
         });
     });
 
+    // Modo oscuro
+    $ctl = getToggle('darktheme', 'Modo oscuro').appendTo(pContainer);
+    var toggle = app7.toggle.get($ctl.find('.toggle')[0]);
+    toggle.on('change', function (t) {
+        if (t.checked) {
+            $(document.body).addClass('dark');
+        } else {
+            $(document.body).removeClass('dark');
+        };
+        window.localStorage.setItem('darkTheme', t.checked ? 'on' : 'off');
+    })
+    toggle.checked = $(document.body).hasClass('dark')
+
     // Explorer limit
     $ctl = getStepper('explorerLimit', 'Explorer limit').appendTo(pContainer);
     var stepper = app7.stepper.get($ctl.find('.stepper')[0]);
