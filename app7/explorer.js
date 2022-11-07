@@ -736,7 +736,7 @@ function textSearch(pQuery) {
             var arr = q.split(' ')
             q = '';
             arr.forEach(el => {
-                if (el) q += ' or ' + el;
+                if (el) q += ' and ' + el;
             });
             if (q) q = q.substring(5);
         }
