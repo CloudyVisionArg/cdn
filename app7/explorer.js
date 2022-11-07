@@ -726,21 +726,20 @@ function loadViewSection(pContainer, pCallback) {
 }
 
 function textSearch(pQuery) {
-    debugger;
     var q;
     q = pQuery;
+    
     if (forceOnline || !arrOfflineCols) {
         if (q.indexOf(' ') == -1) {
             q = '"' + q + '*"';
         } else {
-            var arr = q.split(' ')
+            var arr = q.split(' ');
             q = '';
-            arr.forEach(el => {
-                if (el) q += ' | ' + el;
-            });
+            arr.forEach(el => { if (el) q += ' | ' + el; });
             if (q) q = q.substring(3);
         }
         return 'contains(sys_fields.*, ' + sqlEncode(q, 1) + ')'
+
     } else {
         var arrTextCols = arrOfflineCols.filter(item => item.type == 'text').map(item => 'ifnull(' + item.name + ', \'\')');
         return '(' + arrTextCols.join(' || ') + ') like ' + sqlEncode('%' + q + '%', 1);
