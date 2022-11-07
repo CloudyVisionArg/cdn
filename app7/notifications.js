@@ -455,6 +455,7 @@ function clickOnAnchor(ev) {
     if($(ev.target).closest("a").hasClass("msgunread")){
         $(ev.target).closest("a").removeClass("msgunread");
         $(ev.target).closest("a").addClass("msgread");
+        setNotificationUnReadCounter($(".msgunread").length);
     }
     DoorsAPI.notificationsRead($(ev.target).closest("a").attr("id"));
     searchNotifications()
