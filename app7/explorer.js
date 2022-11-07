@@ -738,7 +738,7 @@ function textSearch(pQuery) {
             arr.forEach(el => {
                 if (el) q += ' & "' + el + '*"';
             });
-            if (q) q = q.substring(5);
+            if (q) q = q.substring(3);
         }
         return 'contains(sys_fields.*, ' + sqlEncode(q, 1) + ')'
     } else {
