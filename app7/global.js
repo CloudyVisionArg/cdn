@@ -1324,7 +1324,7 @@ function f7AppEvents() {
         debugger;
         if (el.$pageEl.attr('id').substring(0, 9) == 'explorer_') {
             if (el.$navbarEl.hasClass('with-searchbar-expandable-enabled')) {
-                $navbar.removeClass('with-searchbar-expandable-enabled');
+                el.$navbarEl.removeClass('with-searchbar-expandable-enabled');
             }
         }
     })
