@@ -1325,8 +1325,10 @@ function f7AppEvents() {
             if (el.$navbarEl.hasClass('with-searchbar-expandable-enabled')) {
                 var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar'));
                 debugger;
-
-                el.$navbarEl.removeClass('with-searchbar-expandable-enabled');
+                if (searchbar.enabled) {
+                    el.$navbarEl.removeClass('with-searchbar-expandable-enabled');
+                    searchBar.$el.show();
+                }
             }
         }
     })
