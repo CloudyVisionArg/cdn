@@ -1321,12 +1321,11 @@ function f7AppEvents() {
     });
 
     /*
-    En ios, antes de salir del explorer, oculto la searchbar xq sino
-    queda arriba de la pagina nueva
+    En ios, antes de salir y entrar del explorer, oculto y muestro la searchbar a pata
+    xq sino queda arriba de la pagina nueva
     */
     app7.on('pageBeforeOut', function (el) {
         if (app7.theme == 'ios' && el.$pageEl.attr('id').substring(0, 9) == 'explorer_') {
-            debugger;
             var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
                 el.$navbarEl.removeClass('with-searchbar-expandable-enabled');
@@ -1337,9 +1336,8 @@ function f7AppEvents() {
 
     app7.on('pageBeforeIn', function (el) {
         if (app7.theme == 'ios' && el.$pageEl.attr('id').substring(0, 9) == 'explorer_') {
-            var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar'));
-            debugger;
-            if (searchbar.enabled) {
+            var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
+            if (searchbar && searchbar.enabled) {
                 el.$navbarEl.addClass('with-searchbar-expandable-enabled');
                 searchbar.$el.show();
             }
