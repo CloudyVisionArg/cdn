@@ -475,8 +475,6 @@ function showLogin(allowClose) {
                         window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                         
                         dSession.logon(function () {
-                            debugger;
-
                             setMessage('Sincronizando datos... aguarde por favor', 'white');
 
                             try {
