@@ -1320,8 +1320,13 @@ function f7AppEvents() {
         }
     });
 
-    app7.on('pageBeforeOut', function (a,b,c) {
+    app7.on('pageBeforeOut', function (el) {
         debugger;
+        el.$pageEl.attr('id').substring(0, 9) = 'explorer_' {
+            if (el.$navbarEl.hasClass('with-searchbar-expandable-enabled')) {
+                $navbar.removeClass('with-searchbar-expandable-enabled');
+            }
+        }
     })
 }
 
