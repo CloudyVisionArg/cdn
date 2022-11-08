@@ -475,7 +475,7 @@ function showLogin(allowClose) {
                         window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                         
                         dSession.logon(function () {
-                           setMessage('Sincronizando datos... aguarde por favor');
+                           setMessage('Sincronizando datos... aguarde por favor', 'white');
 
                             try {
                                 sync.sync(true, function() {
@@ -645,9 +645,10 @@ function showLogin(allowClose) {
                             inputDisabled($get('#empresa'), pDisable);
                         }
 
-                        function setMessage(pMessage) {
+                        function setMessage(pMessage, pColor) {
                             var $msg = $get('#message');
                             $msg.html(pMessage);
+                            $msg.css('color', pColor ? pColor : '');
                             if (pMessage) $msg.show();
                             else $msg.hide();
                         }
