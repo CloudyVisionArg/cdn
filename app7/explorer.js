@@ -726,7 +726,6 @@ function loadViewSection(pContainer, pCallback) {
 }
 
 function textSearch(pQuery) {
-    debugger;
     var q;
     
     if (forceOnline || !arrOfflineCols) {
