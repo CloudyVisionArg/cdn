@@ -1326,6 +1326,7 @@ function f7AppEvents() {
     */
     app7.on('pageBeforeOut', function (el) {
         if (app7.theme == 'ios' && el.$pageEl.attr('id').substring(0, 9) == 'explorer_') {
+            debugger;
             var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
                 el.$navbarEl.removeClass('with-searchbar-expandable-enabled');
