@@ -1334,7 +1334,7 @@ function f7AppEvents() {
         }
     })
 
-    app7.on('pageBeforeIn', function (el) {
+    app7.on('pageAfterIn', function (el) {
         if (app7.theme == 'ios' && el.$pageEl.attr('id').substring(0, 9) == 'explorer_') {
             var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
