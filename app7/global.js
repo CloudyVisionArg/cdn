@@ -521,9 +521,10 @@ function showLogin(allowClose) {
                         inputDisabled($get('#password'), pDisable);
                     }
 
-                    function setMessage(pMessage) {
+                    function setMessage(pMessage, pColor) {
                         var $msg = $get('#message');
                         $msg.html(pMessage);
+                        $msg.css('color', pColor ? pColor + ' !important' : '');
                         if (pMessage) $msg.show();
                         else $msg.hide();
                     }
@@ -647,14 +648,12 @@ function showLogin(allowClose) {
                             inputDisabled($get('#empresa'), pDisable);
                         }
 
-                        function setMessage(pMessage, pColor) {
+                        function setMessage(pMessage) {
                             var $msg = $get('#message');
                             $msg.html(pMessage);
-                            $msg.css('color', pColor ? pColor + ' !important' : '');
                             if (pMessage) $msg.show();
                             else $msg.hide();
                         }
-    
                     }
 
                     function resetpassInit(e, page) {
