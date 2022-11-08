@@ -524,9 +524,13 @@ function showLogin(allowClose) {
                     function setMessage(pMessage, pColor) {
                         var $msg = $get('#message');
                         $msg.html(pMessage);
+                        if (pColor) {
+                            $msg.attr('style', 'color: ' + pColor + ' !important;');
+                        } else {
+                            $msg.removeAttr('style');
+                        }
                         if (pMessage) $msg.show();
                         else $msg.hide();
-                        $msg.css('color', pColor ? pColor + ' !important' : '');
                     }
 
                     function chpassInit(e, page) {
