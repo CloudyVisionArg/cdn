@@ -1319,6 +1319,10 @@ function f7AppEvents() {
             $(el).children('div.accordion-item-content').html('');
         }
     });
+
+    app7.on('pageBeforeOut', function (a,b,c) {
+        debugger;
+    })
 }
 
 /*
