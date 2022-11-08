@@ -727,22 +727,21 @@ function loadViewSection(pContainer, pCallback) {
 
 function textSearch(pQuery) {
     var q;
-    q = pQuery;
     
     if (forceOnline || !arrOfflineCols) {
-        if (q.indexOf(' ') == -1) {
-            q = '"' + q + '*"';
+        if (pQuery.indexOf(' ') == -1) {
+            q = 'contains(sys_fields.*, ' + sqlEncode('"' + pQuery + '*"', 1) + ')';
         } else {
-            var arr = q.split(' ');
+            var arr = pQuery.split(' ');
             q = '';
-            arr.forEach(el => { if (el) q += ' | ' + el; });
-            if (q) q = q.substring(3);
+            arr.forEach(el => { if (el) q += ' and contains(sys_fields.*, ' + sqlEncode('"' + el + '*"', 1) + ')'; });
+            if (q) q = q.substring(5);
         }
-        return 'contains(sys_fields.*, ' + sqlEncode(q, 1) + ')'
+        return q;
 
     } else {
         var arrTextCols = arrOfflineCols.filter(item => item.type == 'text').map(item => 'ifnull(' + item.name + ', \'\')');
-        return '(' + arrTextCols.join(' || ') + ') like ' + sqlEncode('%' + q + '%', 1);
+        return '(' + arrTextCols.join(' || ') + ') like ' + sqlEncode('%' + pQuery + '%', 1);
     }
 }
 
