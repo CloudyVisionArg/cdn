@@ -1325,7 +1325,8 @@ function f7AppEvents() {
     xq sino queda arriba de la pagina nueva
     */
     app7.on('pageBeforeOut', function (el) {
-        if (app7.theme == 'ios' && el.$pageEl.attr('id').substring(0, 9) == 'explorer_') {
+        var pageId = el.$pageEl.attr('id');
+        if (app7.theme == 'ios' && pageId && pageId.substring(0, 9) == 'explorer_') {
             var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
                 el.$navbarEl.removeClass('with-searchbar-expandable-enabled');
@@ -1335,7 +1336,8 @@ function f7AppEvents() {
     })
 
     app7.on('pageAfterIn', function (el) {
-        if (app7.theme == 'ios' && el.$pageEl.attr('id').substring(0, 9) == 'explorer_') {
+        var pageId = el.$pageEl.attr('id');
+        if (app7.theme == 'ios' && pageId && pageId.substring(0, 9) == 'explorer_') {
             var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
                 el.$navbarEl.addClass('with-searchbar-expandable-enabled');
