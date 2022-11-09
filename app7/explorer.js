@@ -153,11 +153,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                         var prop = findProp(folder.Properties, propEditPage);
                         if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
                         if (prop) {
-                            if (prop.indexOf('?') >= 0) {
-                                prop += '&';
-                            } else {
-                                prop += '?';
-                            }
+                            prop += (prop.indexOf('?') >= 0 ? '&' : '?');
                             if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
                             f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
                         } else {
