@@ -988,9 +988,7 @@ function refreshOnFocus() {
         var $cont = $(el).closest('div.accordion-item-content');
         if ($cont.length) {
             $cont.empty();
-            loadViewSection($cont, function () {
-                debugger;
-            });
+            loadViewSection($cont);
             // todo: en este caso faltaria actualizar los totales
         } else {
             $viewDiv.empty();
