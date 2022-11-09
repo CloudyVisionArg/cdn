@@ -1325,30 +1325,37 @@ function f7AppEvents() {
         }
     });
 
-    /*
-    En ios, antes de salir y entrar del explorer, oculto y muestro la searchbar a pata
-    xq sino queda arriba de la pagina nueva
-    */
     app7.on('pageBeforeOut', function (el) {
         var pageId = el.$pageEl.attr('id');
+
+        /*
+        En ios, antes de salir y entrar del explorer, oculto la searchbar a pata
+        xq sino queda arriba de la pagina nueva
+        */
         if (app7.theme == 'ios' && pageId && pageId.substring(0, 9) == 'explorer_') {
             var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
                 el.$navbarEl.removeClass('with-searchbar-expandable-enabled');
                 searchbar.$el.hide();
             }
-        }
+        };
     })
 
     app7.on('pageAfterIn', function (el) {
         var pageId = el.$pageEl.attr('id');
+
+        // Muestro la searchbar
         if (app7.theme == 'ios' && pageId && pageId.substring(0, 9) == 'explorer_') {
             var searchbar = app7.searchbar.get(el.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
                 el.$navbarEl.addClass('with-searchbar-expandable-enabled');
                 searchbar.$el.show();
             }
-        }
+        };
+
+        if (pageId && pageId.substring(0, 9) == 'explorer_') {
+            debugger;
+        };
     })
 }
 
