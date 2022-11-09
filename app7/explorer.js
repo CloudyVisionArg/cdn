@@ -319,8 +319,9 @@ function pageInit(e, page) {
     page.pageEl.cloudy = {
         reloadView: reloadView,
         toggleSelectionMode: toggleSelectionMode,
-        refreshOnfocus: refreshOnfocus,
+        refreshOnFocus: refreshOnFocus,
         folder: folder,
+        $navbar: $navbar,
 
     };
 }
