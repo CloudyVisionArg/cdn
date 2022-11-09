@@ -984,7 +984,10 @@ function deleteClick() {
 }
 
 function refreshOnFocus() {
-    debugger;
-    console.log($get('li.refresh-on-focus').length);
+    $get('li.refresh-on-focus').each(function (index, el) {
+        debugger;
+        
+
+    });
 
 }
