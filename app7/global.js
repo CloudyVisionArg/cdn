@@ -1303,6 +1303,7 @@ function getObjProp(pObj, pProp) {
 
 // Eventos de aplicacion de Framework7
 function f7AppEvents() {
+    // Acordion ajax
     app7.on('accordionBeforeOpen', function (el, prevent) {
         var $accAjax = $(el).closest('.accordion-ajax');
         if ($accAjax.length > 0) {
