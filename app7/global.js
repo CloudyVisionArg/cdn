@@ -1321,7 +1321,7 @@ function f7AppEvents() {
 
     app7.on('accordionClosed', function (el) {
         if ($(el).closest('.accordion-ajax').length > 0) {
-            $(el).children('div.accordion-item-content').html('');
+            $(el).children('div.accordion-item-content').empty();
         }
     });
 

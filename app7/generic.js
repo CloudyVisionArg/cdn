@@ -799,7 +799,7 @@ function renderControls(pCont, pParent) {
                 } else {
                     $v.val('');
                     $x.val('');
-                    if ($t) $t.html('');
+                    if ($t) $t.empty();
                 };
             });
 
@@ -1016,7 +1016,7 @@ function fillControls() {
 
     } else {
         $navbar.find('.title').html('Nuevo documento');
-        $get('[data-doclog]').html('');
+        $get('[data-doclog]').empty();
     }
 
     app7.navbar.size($navbar); // Para que se ajuste bien el titulo
@@ -1220,7 +1220,7 @@ function fillControls() {
 
 function fillAttachments(pEl) {
     var $ul = pEl.find('ul');
-    $ul.html('');
+    $ul.empty();
 
     var readonly = pEl.attr('readonly') ? true : false;
     var tag = pEl.attr('data-attachments').toLowerCase();

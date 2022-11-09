@@ -975,7 +975,7 @@ function renderControls(pCont, pParent) {
                 } else {
                     $v.val('');
                     $x.val('');
-                    if ($t) $t.html('');
+                    if ($t) $t.empty();
                 };
             });
             */

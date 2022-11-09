@@ -397,7 +397,7 @@ function $get(pSelector) {
 }
 
 function reloadView(pCallback) {
-    $viewDiv.html('');
+    $viewDiv.empty();
 
     DoorsAPI.viewsGetById(fld_id, $views.val()).then(
         function (view) {
@@ -923,7 +923,7 @@ function getActionsPopup() {
         el: $popup[0],
         on: {
             closed: function () {
-                $pageCont.html('');
+                $pageCont.empty();
             }
         }
     });
@@ -987,10 +987,13 @@ function refreshOnFocus() {
     $get('li.refresh-on-focus').each(function (index, el) {
         var $cont = $(el).closest('div.accordion-item-content');
         if ($cont.length) {
-            $cont.html('');
-            loadViewSection($cont);
+            $cont.empty();
+            loadViewSection($cont, function () {
+                debugger;
+            });
+            // todo: en este caso faltaria actualizar los totales
         } else {
-            $viewDiv.html('');
+            $viewDiv.empty();
             loadViewSection($viewDiv);
         }
     });

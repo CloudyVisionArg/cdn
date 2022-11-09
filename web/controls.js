@@ -573,7 +573,7 @@ function newDocLog(pId, pLabel) {
     cll._value = function (pValue) {
         var $self = $(this);
         var $tbody = $self.find('tbody');
-        $tbody.html('');
+        $tbody.empty();
         $self.attr('data-doc-id', pValue);
         $self.removeAttr('data-filled');
         if ($self.hasClass('show')) this.fill();
@@ -649,7 +649,7 @@ function newAttachments(pId, pLabel) {
 
     $div[0]._value = function (pValue) {
         var $self = $(this);
-        $self.html('');
+        $self.empty();
         var tag = $self.attr('data-attachments').toLowerCase();
 
         if (pValue) {
