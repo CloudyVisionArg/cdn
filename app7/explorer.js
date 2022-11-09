@@ -314,6 +314,8 @@ function pageInit(e, page) {
             //debugger;
         })
     }
+
+    debugger;
 }
 
 function taphold(e) {
