@@ -315,14 +315,12 @@ function pageInit(e, page) {
         })
     }
 
-    debugger;
     page.pageEl.cloudy = {
         reloadView: reloadView,
         toggleSelectionMode: toggleSelectionMode,
         refreshOnFocus: refreshOnFocus,
         folder: folder,
         $navbar: $navbar,
-
     };
 }
 
