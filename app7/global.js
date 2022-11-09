@@ -1354,7 +1354,7 @@ function f7AppEvents() {
         };
 
         if (pageId && pageId.substring(0, 9) == 'explorer_') {
-            console.log($('li.refresh-on-focus', el.pageEl).length);
+            el.pageEl.cloudy.refreshOnFocus();
         };
     })
 }

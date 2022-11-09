@@ -316,6 +316,13 @@ function pageInit(e, page) {
     }
 
     debugger;
+    page.pageEl.cloudy = {
+        reloadView: reloadView,
+        toggleSelectionMode: toggleSelectionMode,
+        refreshOnfocus: refreshOnfocus,
+        folder: folder,
+
+    };
 }
 
 function taphold(e) {
@@ -975,4 +982,10 @@ function deleteClick() {
             );
         }
     );
+}
+
+function refreshOnFocus() {
+    debugger;
+    console.log($get('li.refresh-on-focus').length);
+
 }
