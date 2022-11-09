@@ -107,7 +107,7 @@ injectCSS(`
     }
 
     .msgunread{
-        background: #f7f7f8;
+        background: rgba(var(--f7-theme-color-rgb), 0.3);
     }
 
     .msgread{
@@ -162,19 +162,19 @@ injectCSS(`
     }
 
     .sticky-custom {
-    position: sticky;
-    position: -webkit-sticky;
-    position: -moz-sticky;
-    position: -o-sticky;
-    position: -ms-sticky;
-    top: 20px;
-    z-index: 9999999;
-    transform-style: preserver-3d;
-    backface-visibility: hidden;
-    padding-top: 5px;
-    transform: translate3d(0,0,0);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+        position: sticky;
+        position: -webkit-sticky;
+        position: -moz-sticky;
+        position: -o-sticky;
+        position: -ms-sticky;
+        top: 20px;
+        z-index: 9999999;
+        transform-style: preserver-3d;
+        backface-visibility: hidden;
+        padding-top: 5px;
+        transform: translate3d(0,0,0);
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 `);
 
@@ -241,11 +241,11 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "I"){
-         if(ev.target.classList.contains("btnRead")){
+        if(ev.target.classList.contains("btnRead")){
             clickOnEnvelope(ev);
         }else if(ev.target.classList.contains("btnDelete")){
             clickOnTrash(ev);
-       }
+        }
     }else{
         clickOnAnchor(ev);
     }
