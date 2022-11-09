@@ -990,9 +990,9 @@ function refreshOnFocus() {
         if ($cont.length) {
             $cont.html('');
             loadViewSection($cont);
-
+        } else {
+            $viewDiv.html('');
+            loadViewSection($viewDiv);
         }
-
     });
-
 }
