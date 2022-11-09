@@ -153,13 +153,13 @@ DoorsAPI.foldersGetById(fld_id).then(
                         var prop = findProp(folder.Properties, propEditPage);
                         if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
                         if (prop) {
-                            debugger;
                             prop += (prop.indexOf('?') >= 0 ? '&' : '?');
                             if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
                             f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
                         } else {
                             f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
                         }
+                        $li.addClass('refresh-on-focus');
                         $list.removeAttr('clicked');
                     }
                 }
