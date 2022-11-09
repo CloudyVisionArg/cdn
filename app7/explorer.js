@@ -985,7 +985,6 @@ function deleteClick() {
 
 function refreshOnFocus() {
     $get('li.refresh-on-focus').each(function (index, el) {
-        debugger;
         var $cont = $(el).closest('div.accordion-item-content');
         if ($cont.length) {
             $cont.html('');
