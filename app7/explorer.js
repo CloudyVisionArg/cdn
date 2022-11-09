@@ -158,6 +158,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                             } else {
                                 prop += '?';
                             }
+                            debugger;
                             if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
                             f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
                         } else {
