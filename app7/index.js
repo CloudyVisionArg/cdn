@@ -75,17 +75,8 @@ var app = {
             }
         }
 
-        // Agrega el index.css y el index.js custom
-        var el = document.createElement('link');
-        el.setAttribute('rel', 'stylesheet');
-        el.setAttribute('type', 'text/css');
-        el.setAttribute('href', 'custom/' + self.custom + '/index.css');
-        document.getElementsByTagName('head')[0].appendChild(el);
-
-        el = document.createElement('script');
-        el.setAttribute('type', 'text/javascript');
-        el.setAttribute('src', 'custom/' + self.custom + '/index.js');
-        document.getElementsByTagName('head')[0].appendChild(el);
+        include('app7-' + this.self.custom + '-index.css');
+        include('app7-' + this.self.custom + '-index');
 
         // Initialize Framework7 app
         app7 = new Framework7({

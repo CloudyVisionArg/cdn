@@ -1,0 +1,18 @@
+.item-instance {
+    display: none !important;
+}
+
+.item-options {
+    display: none;
+}
+
+.login-screen .login-screen-logo img {
+    content: url('./login-logo.png');
+    max-width: 40%;
+    border-radius: 50%;
+    
+}
+
+.login-screen .login-screen-logo {
+    text-align: center;
+}
