@@ -180,112 +180,131 @@ function closeConsole() {
 
 // Muestra la Consola como popup
 function showConsole(allowClose) {
-    //  Sync actions
-    var syncActions = app7.actions.create({
-        buttons: [
-            {
-                text: 'Quick sync',
-                onClick: function () {
-                    sync.sync();
-                }
-            },
-            {
-                text: 'Full sync',
-                onClick: function () {
-                    sync.sync(true);
-                }
-            },
-            {
-                text: 'Reset sync status',
-                onClick: function () {
-                    sync.syncing(false);
-                    toast("Sync status reseted");
-                }
-            },
-            {
-                text: 'Cancel',
-                color: 'red',
-                close: true,
-            },
-        ]
-    });
+    var popup;
+    var $console = $('#popupConsole');
 
-    $.get(scriptSrc('app7-console'), function (data) {
-        var popup = app7.popup.create({
-            content: data,
-            closeByBackdropClick: false,
-            on: {
-                open: function (popup) {
-                    if (!allowClose) {
-                        $get('#close').remove();
-                    } else {
+    if ($console.length > 0) {
+        popup = app7.popup.get($console[0]);
+
+        if (!allowClose) {
+            $console.find('#close').hide();
+        } else {
+            $console.find('#close').show();
+        }
+
+        popup.open();
+        return popup;
+
+    } else {
+        //  Sync actions
+        var syncActions = app7.actions.create({
+            buttons: [
+                {
+                    text: 'Quick sync',
+                    onClick: function () {
+                        sync.sync();
+                    }
+                },
+                {
+                    text: 'Full sync',
+                    onClick: function () {
+                        sync.sync(true);
+                    }
+                },
+                {
+                    text: 'Reset sync status',
+                    onClick: function () {
+                        sync.syncing(false);
+                        toast("Sync status reseted");
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    color: 'red',
+                    close: true,
+                },
+            ]
+        });
+
+        $.get(scriptSrc('app7-console'), function (data) {
+            popup = app7.popup.create({
+                content: data,
+                closeByBackdropClick: false,
+                on: {
+                    open: function (popup) {
                         $get('#close').click(function () {
                             popup.close();
                         });
-                    }
 
-                    this.intervalId = setInterval(function () {
-                        if (popup.opened) {
-                            var log = window.localStorage.getItem('consoleLog');
-                            if ($get('#log').html() != log) {
-                                $get('#log').html(log);
-                            }
+                        if (!allowClose) {
+                            $get('#close').hide();
+                        } else {
+                            $get('#close').show();
                         }
-                    }, 250);
-        
-                    $get('#credentials').click(function (e) {
-                        showLogin(true);
-                    });
 
-                    $get('#sync').click(function (e) {
-                        syncActions.open();
-                    });
-
-                    $get('#support').click(function (e) {
-                        cordova.plugins.email.open({
-                            to: 'soporte@cloudycrm.net',
-                            subject: 'Cloudy CRM - App issue',
-                            body: 'Por favor describanos su problema',
-                            attachments: [
-                                'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
-                                'base64:localStorage.txt//' + localStorageBase64(),
-                            ],
-                        });
-            
-                        function localStorageBase64() {
-                            var arr = new Array();
-                            for (var i = 0; i < localStorage.length; i++) {
-                                if (localStorage.key(i) != 'consoleLog') {
-                                    arr.push(localStorage.key(i));
+                        this.intervalId = setInterval(function () {
+                            if (popup.opened) {
+                                var log = window.localStorage.getItem('consoleLog');
+                                if ($get('#log').html() != log) {
+                                    $get('#log').html(log);
                                 }
                             }
-                            var arrOrd = arr.sort();
-                    
-                            var ret = '';
-                            for (var i = 0; i < arrOrd.length; i++) {
-                                ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                        }, 250);
+            
+                        $get('#credentials').click(function (e) {
+                            showLogin(true);
+                        });
+
+                        $get('#sync').click(function (e) {
+                            syncActions.open();
+                        });
+
+                        $get('#support').click(function (e) {
+                            cordova.plugins.email.open({
+                                to: 'soporte@cloudycrm.net',
+                                subject: 'Cloudy CRM - App issue',
+                                body: 'Por favor describanos su problema',
+                                attachments: [
+                                    'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
+                                    'base64:localStorage.txt//' + localStorageBase64(),
+                                ],
+                            });
+                
+                            function localStorageBase64() {
+                                var arr = new Array();
+                                for (var i = 0; i < localStorage.length; i++) {
+                                    if (localStorage.key(i) != 'consoleLog') {
+                                        arr.push(localStorage.key(i));
+                                    }
+                                }
+                                var arrOrd = arr.sort();
+                        
+                                var ret = '';
+                                for (var i = 0; i < arrOrd.length; i++) {
+                                    ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                                }
+                                return window.btoa(ret);
                             }
-                            return window.btoa(ret);
+                        });
+
+                        $get('#restart').click(function (e) {
+                            location.href = 'index.html';
+                        });
+
+                        function $get(pSelector) {
+                            return $(pSelector, popup.el);
                         }
-                    });
+                    },
 
-                    $get('#restart').click(function (e) {
-                        location.href = 'index.html';
-                    });
-
-                    function $get(pSelector) {
-                        return $(pSelector, popup.el);
-                    }
-                },
-
-                close: function (popup) {
-                    clearInterval(this.intervalId);
-                },
-            }
+                    close: function (popup) {
+                        clearInterval(this.intervalId);
+                    },
+                }
+            });
+            popup.open();
+            return popup;
         });
-        popup.open();
-        return popup;
-    });
+    }
 }
 
 function loadLoginCustomJS() {
