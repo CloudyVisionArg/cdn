@@ -63,6 +63,10 @@
     color: rgb(75, 168, 223);
     padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right) - var(--menu-list-offset));
 }
+.login-screen .list .button #console {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.8);
+}
 .login-screen #message {
     color: #cb265e !important;
     font-size: medium;
