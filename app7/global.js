@@ -252,6 +252,7 @@ function showConsole(allowClose) {
                         }, 250);
             
                         $get('#credentials').click(function (e) {
+                            popup.close();
                             showLogin(true);
                         });
 
@@ -426,6 +427,7 @@ function showLogin(allowClose) {
                         });
 
                         $get('#console').click(function (e) {
+                            popup.close();
                             showConsole(true);
                         });
 
