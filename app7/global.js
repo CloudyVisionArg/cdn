@@ -11,7 +11,6 @@ dbRead(pSql, pArgs, pSuccessCallback, pErrorCallback)
 logDateTime(pDate)
 closeConsole()
 showConsole(allowClose)
-loadLoginCustomJS()
 showLogin(allowClose)
 errPage(err)
 cleanDb(pCallback)
@@ -308,13 +307,6 @@ function showConsole(allowClose) {
     }
 }
 
-function loadLoginCustomJS() {
-    var el = document.createElement('script');
-    el.setAttribute('type', 'text/javascript');
-    el.setAttribute('src', 'custom/' + self.custom + '/login.js');
-    document.getElementsByTagName('head')[0].appendChild(el);
-}
-
 // Muestra la pantalla de Login como popup
 function showLogin(allowClose) {
     var popup;
@@ -437,7 +429,6 @@ function showLogin(allowClose) {
                         });
 
                         fillControls();
-                        loadLoginCustomJS();
 
                         function $get(pSelector) {
                             return $(pSelector, popup.el);
