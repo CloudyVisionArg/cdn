@@ -60,13 +60,8 @@
 }
 .login-screen .list .button {
     background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 15px;
     color: rgb(75, 168, 223);
-    font-size: 18px;
-    font-weight: bold;
-    text-transform: capitalize;
-    margin: 7px 15px;
-    width: calc(100% - 30px);
+    padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right) - var(--menu-list-offset));
 }
 .login-screen #message {
     color: #cb265e !important;
