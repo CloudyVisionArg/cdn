@@ -12,6 +12,7 @@ initScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
 initScripts.push({ id: 'lib-moment' });
 initScripts.push({ id: 'lib-cryptojs-aes' });
 initScripts.push({ id: 'lib-filesaver' });
+initScripts.push({ id: 'app7-index.css' });
 
 include(initScripts, function () {
     console.log('app.init');
