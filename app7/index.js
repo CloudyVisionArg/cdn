@@ -201,7 +201,7 @@ var app = {
             });
         }
 
-        showConsole();
+        //showConsole();
 
         var path = location.pathname;
         self.rootPath = path.substring(0, path.lastIndexOf('/'));
