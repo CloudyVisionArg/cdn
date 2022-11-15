@@ -62,7 +62,7 @@
     background-color: rgba(255, 255, 255, 0.8);
     color: rgb(75, 168, 223);
     padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right) - var(--menu-list-offset));
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 .login-screen .list button#console {
     background-color: transparent;
