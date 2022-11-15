@@ -302,7 +302,9 @@ function showLogin(allowClose) {
     debugger;
     if ($login.length > 0) {
         popup = app7.popup.get($login[0]);
-
+        popup.open();
+        return popup;
+    
     } else {
         $.get(scriptSrc('app7-login'), function (data) {
             popup = app7.popup.create({
@@ -815,11 +817,10 @@ function showLogin(allowClose) {
                     },
                 }
             });
+            popup.open();
+            return popup;
         });
     }
-
-    popup.open();
-    return popup;
 }
 
 // Devuelve un nodo JQuery page con un msj de error (se usa para la ruta generic)
