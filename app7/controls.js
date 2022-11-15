@@ -1713,7 +1713,7 @@ function addDefaultOptions(pContainer) {
     toggle.checked = $(document.body).hasClass('dark');
 
     // Explorer limit
-    $ctl = getStepper('explorerLimit', 'Explorer limit').appendTo(pContainer);
+    $ctl = getStepper('explorerLimit', 'Cant de registros').appendTo(pContainer);
     var stepper = app7.stepper.get($ctl.find('.stepper')[0]);
     stepper.min = 50;
     stepper.max = 200;
