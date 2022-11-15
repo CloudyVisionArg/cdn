@@ -7,7 +7,7 @@
 }
 
 .login-screen .login-screen-logo img {
-    content: url('./login-logo.png');
+    content: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@148/app7/sade/login-logo.png');
     max-width: 40%;
     border-radius: 50%;
     
