@@ -68,9 +68,13 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 0 });
-    scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 0 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 0 });
+    scripts.push({ id: 'app7-cloudy-login-back', path: '/app7/cloudy/login-back.png', version: 148 });
+    scripts.push({ id: 'app7-cloudy-login-logo', path: '/app7/cloudy/login-logo.png', version: 148 });
+
+    scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 0 });
     scripts.push({ id: 'app7-sade-index', path: '/app7/sade/index.js', version: 0 });
+    scripts.push({ id: 'app7-sade-login-logo', path: '/app7/sade/login-logo.png', version: 148 });
 
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 147 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 146 });
