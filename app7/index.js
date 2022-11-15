@@ -334,6 +334,7 @@ var app = {
             if (window.localStorage.getItem('endPoint')) {
                 dSession.checkToken(
                     function () {
+                        sync.sync(false);
                         executeCode('onResume');
                     },
                     function (err) {
@@ -346,7 +347,5 @@ var app = {
         } else {
             executeCode('onResume');
         };
-
-        sync.sync(false);
     },
 };
