@@ -75,8 +75,8 @@ var app = {
             }
         }
 
-        include('app7-' + this.self.custom + '-index.css');
-        include('app7-' + this.self.custom + '-index');
+        include('app7-' + self.custom + '-index.css');
+        include('app7-' + self.custom + '-index');
 
         // Initialize Framework7 app
         app7 = new Framework7({
