@@ -331,16 +331,18 @@ var app = {
 
     onResume: function() {
         if (app7.online) {
-            dSession.checkToken(
-                function () {
-                    executeCode('onResume');
-                },
-                function (err) {
-                    console.log(err);
-                    toast(errMsg(err));
-                    showLogin();
-                }
-            )
+            if (window.localStorage.getItem('endPoint')) {
+                dSession.checkToken(
+                    function () {
+                        executeCode('onResume');
+                    },
+                    function (err) {
+                        console.log(err);
+                        toast(errMsg(err));
+                        showLogin();
+                    }
+                )
+            }
         } else {
             executeCode('onResume');
         };
