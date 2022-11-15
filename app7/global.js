@@ -299,6 +299,7 @@ function loadLoginCustomJS() {
 function showLogin(allowClose) {
     var popup;
     var $login = $('div.login-screen');
+    debugger;
     if ($login.length > 0) {
         popup = app7.popup.get($login[0]);
 
@@ -816,7 +817,7 @@ function showLogin(allowClose) {
             });
         });
     }
-    
+
     popup.open();
     return popup;
 }
