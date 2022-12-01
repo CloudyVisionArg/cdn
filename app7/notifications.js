@@ -358,8 +358,8 @@ function renderMembers(notificationsArr){
     }else{
         let msjNoHayNotif = $("<div />", {"class":"list simple-list","style":"margin-top: 0;margin-bottom: 0;"}).appendTo($divActions);
         let ul = $("<ul />").appendTo(msjNoHayNotif);
-        let li =  $("<li />")
-        li.text("Sin notificaciones para mostrar").appendTo(ul);
+        let li =  $("<li class='no-results' />")
+        li.text("Sin notificaciones").appendTo(ul);
     }
     listItems.deleteAllItems();
     listItems.appendItems(notificationsArr); 

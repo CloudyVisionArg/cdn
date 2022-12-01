@@ -83,6 +83,6 @@
 
 .no-results{
     justify-content: center !important;
-    background: rgba(var(--f7-theme-color-rgb), 0.3) !important;
+    background: rgba(var(--f7-theme-color-rgb), 0.6) !important;
     color: white !important;
 }
