@@ -106,6 +106,10 @@ function DSession() {
         }
     }
 
+    this.appsFolder = function () {
+        return window.localStorage.getItem('appsFolder');
+    }
+
     function getToken() {
         var tk = window.localStorage.getItem('authToken');
         if (!tk) {
