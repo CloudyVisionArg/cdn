@@ -6,8 +6,8 @@ Para incluirlo, agregar la opcion de menu de la sig forma:
         viewid: 'view-notifications',
         label: 'Notificaciones',
         url: '/cdn/?script=app7-notifications',
-        iosicon: '<div class="menu-icon">bell</div>',
-        mdicon: '<div class="menu-icon">notifications</div>',
+        iosicon: '<div class="icon">bell</div>',
+        mdicon: '<div class="icon">notifications</div>',
     });
 
 IMPORTANTE: Los iconos deben estar wrappeados en el DIV para que funcione la animacion
@@ -104,7 +104,7 @@ injectCSS(`
         color: var(--f7-tabbar-link-inactive-color);
     }
 
-    .animated-bell div.menu-icon{
+    .animated-bell div.icon{
         animation: ring 4s .7s ease-in-out infinite;
     }
 
