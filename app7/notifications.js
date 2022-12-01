@@ -105,10 +105,10 @@ injectCSS(`
     }
 
     .animated-bell div.icon{
-        animation: ring 4s .7s ease-in-out infinite;
+        animation: ringing-bell 4s .7s ease-in-out infinite;
     }
 
-    @keyframes ring {
+    @keyframes ringing-bell {
     0% { transform: rotate(0); }
     1% { transform: rotate(30deg); }
     3% { transform: rotate(-28deg); }
@@ -131,31 +131,8 @@ injectCSS(`
     37% { transform: rotate(2deg); }
     39% { transform: rotate(-1deg); }
     41% { transform: rotate(1deg); }
-
     43% { transform: rotate(0); }
     100% { transform: rotate(0); }
-    }
-
-    .popover-title{
-        display:flex;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    .sticky-custom {
-        position: sticky;
-        position: -webkit-sticky;
-        position: -moz-sticky;
-        position: -o-sticky;
-        position: -ms-sticky;
-        top: 20px;
-        z-index: 9999999;
-        transform-style: preserver-3d;
-        backface-visibility: hidden;
-        padding-top: 5px;
-        transform: translate3d(0,0,0);
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
     }
 `);
 
