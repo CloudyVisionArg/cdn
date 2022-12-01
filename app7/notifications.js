@@ -99,10 +99,6 @@ injectCSS(`
         background-color: transparent;
     }
 
-    .msgdeleted{
-        background-color: lightcoral;
-    }
-
     .btnRead, .btnDelete{
         margin-left: 1rem;
         color: var(--f7-tabbar-link-inactive-color);
@@ -169,8 +165,10 @@ var $page =   getPage({
                 leftbutton: 'search',
                 searchbar: 2,
                 subnavbar: false,
-                pulltorefresh: true
+                pulltorefresh: true,
             });
+
+$page.addClass('notifications');
 
 $pageCont = $page.find('.page-content');
 //todo: cargar la pag en iframe (ver codelib pruebas)
