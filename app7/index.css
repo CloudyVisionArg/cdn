@@ -33,3 +33,17 @@
 .pac-container {
     z-index: 20000;
 }
+
+.accordion-item .item-content div.item-title,
+.list.media-list div.item-title,
+.list.media-list div.item-subtitle,
+.list.media-list div.item-text { 
+    overflow: visible !important; 
+    white-space: pre-wrap !important;
+}
+
+.no-results{
+    justify-content: center !important;
+    background: rgba(var(--f7-theme-color-rgb), 0.6) !important;
+    color: white !important;
+}

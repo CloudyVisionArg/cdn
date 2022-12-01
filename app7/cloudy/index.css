@@ -72,17 +72,3 @@
     color: #cb265e !important;
     font-size: medium;
 }
-
-.accordion-item .item-content div.item-title,
-.list.media-list div.item-title,
-.list.media-list div.item-subtitle,
-.list.media-list div.item-text { 
-    overflow:visible !important; 
-    white-space:pre-wrap !important;
-}
-
-.no-results{
-    justify-content: center !important;
-    background: rgba(var(--f7-theme-color-rgb), 0.6) !important;
-    color: white !important;
-}
