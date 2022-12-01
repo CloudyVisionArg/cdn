@@ -91,15 +91,15 @@ class CustomAppNotification {
 console.log("notifications")
 
 injectCSS(`
-    .msgunread{
+    .notifications .msgunread{
         background: rgba(var(--f7-theme-color-rgb), 0.3);
     }
 
-    .msgread{
+    .notifications .msgread{
         background-color: transparent;
     }
 
-    .btnRead, .btnDelete{
+    .notifications .btnRead, .notifications .btnDelete{
         margin-left: 1rem;
         color: var(--f7-tabbar-link-inactive-color);
     }
