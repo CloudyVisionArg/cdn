@@ -91,14 +91,6 @@ class CustomAppNotification {
 console.log("notifications")
 
 injectCSS(`
-    .accordion-item .item-content div.item-title,
-    .list.media-list div.item-title,
-    .list.media-list div.item-subtitle,
-    .list.media-list div.item-text { 
-        overflow:visible !important; 
-        white-space:pre-wrap !important;
-    }
-
     /*li:contains("Sin resultados"){*/
     .simple-list li{
         justify-content: center !important;
