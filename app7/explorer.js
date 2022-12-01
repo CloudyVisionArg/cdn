@@ -781,7 +781,7 @@ function noResults() {
     var $list = $('<div/>', {
         class: 'list simple-list',
         style: 'margin-top: 0;',
-    }).append('<ul><li>Sin resultados</li></ul>');
+    }).append('<ul><li class="no-results">Sin resultados</li></ul>');
     return $list;
 }
 

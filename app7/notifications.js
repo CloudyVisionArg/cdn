@@ -91,13 +91,6 @@ class CustomAppNotification {
 console.log("notifications")
 
 injectCSS(`
-    /*li:contains("Sin resultados"){*/
-    .simple-list li{
-        justify-content: center !important;
-        background: #5097feb8 !important;
-        color: white !important;
-    }
-
     .msgunread{
         background: rgba(var(--f7-theme-color-rgb), 0.3);
     }
