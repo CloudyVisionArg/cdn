@@ -104,6 +104,10 @@ DoorsAPI.foldersGetById(fld_id).then(
             }).appendTo($fab);
 
             $btn.append('<i class="icon f7-icons">plus</i>');
+            $btn.on('click', function (e) {
+                toast('holaaa');
+
+            });
             
             // Boton Cancelar Selection Mode
             $btn = getLink({ text: 'Cancelar' });
