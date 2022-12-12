@@ -84,15 +84,7 @@ DoorsAPI.foldersGetById(fld_id).then(
             // Boton Nuevo - navbar
             $btn = $page.find('.navbar-inner .right .link')
             $btn.attr('id', 'buttonAdd');
-            $btn.on('click', function (e) {
-                var prop = findProp(folder.Properties, propEditPage);
-                if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
-                if (prop) {
-                    f7Page.view.router.navigate(prop);
-                } else {
-                    f7Page.view.router.navigate('/generic/?fld_id=' + fld_id);
-                }
-            });
+            $btn.on('click', newClick);
 
             // Boton Nuevo - fab
             var $fab = $('<div/>', {
@@ -106,9 +98,16 @@ DoorsAPI.foldersGetById(fld_id).then(
             $btn.append('<i class="icon f7-icons">plus</i>');
             $btn.on('click', newClick);
 
+            // Funcion Nuevo
             function newClick(e) {
                 debugger;
-                toast('holaa');
+                var prop = findProp(folder.Properties, propEditPage);
+                if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
+                if (prop) {
+                    f7Page.view.router.navigate(prop);
+                } else {
+                    f7Page.view.router.navigate('/generic/?fld_id=' + fld_id);
+                }
             }
             
             // Boton Cancelar Selection Mode
