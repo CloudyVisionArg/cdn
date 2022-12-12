@@ -88,6 +88,7 @@ DoorsAPI.foldersGetById(fld_id).then(
 
             // Boton Nuevo - fab
             var $fab = $('<div/>', {
+                id: 'fabAdd',
                 class: 'fab fab-right-bottom',
             }).appendTo($page);
 
