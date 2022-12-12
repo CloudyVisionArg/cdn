@@ -81,7 +81,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                 }
             });
             
-            // Boton Nuevo
+            // Boton Nuevo - navbar
             $btn = $page.find('.navbar-inner .right .link')
             $btn.attr('id', 'buttonAdd');
             $btn.on('click', function (e) {
@@ -93,6 +93,17 @@ DoorsAPI.foldersGetById(fld_id).then(
                     f7Page.view.router.navigate('/generic/?fld_id=' + fld_id);
                 }
             });
+
+            // Boton Nuevo - fab
+            var $fab = $('<div/>', {
+                class: 'fab fab-right-bottom',
+            }).appendTo($page);
+
+            $btn = $('<a/>', {
+                href: '#',
+            }).appendTo($fab);
+
+            $btn.append('<i class="icon f7-icons">plus</i>');
             
             // Boton Cancelar Selection Mode
             $btn = getLink({ text: 'Cancelar' });
