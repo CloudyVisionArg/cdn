@@ -100,7 +100,6 @@ DoorsAPI.foldersGetById(fld_id).then(
 
             // Funcion Nuevo
             function newClick(e) {
-                debugger;
                 var prop = findProp(folder.Properties, propEditPage);
                 if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
                 if (prop) {
