@@ -67,13 +67,12 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 156 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 155 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 155 });
-
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 154 });
 	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 154 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 154 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 154 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 153 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 152, hasdep: true });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 149 });
