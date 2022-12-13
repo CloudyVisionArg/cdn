@@ -116,7 +116,7 @@ function renderPopovers(pArrPopovers){
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
         arrCartelesVista[i].on('closed', function (popover) {
             app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
-            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
+            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["VIEW"] + " " + arrCartelesVista[i+1]["SELECTOR"]);
         });
     } 
     //después cuando ya arme el array de lo que tengo que 
@@ -142,7 +142,7 @@ function crearPopoversFijos(){
         {        
             CARTEL_ID: 100000001,
             VIEW: "#" + obtenerVistaExplorer(),
-            SELECTOR: "#" + obtenerVistaExplorer() + " .subnavbar",
+            SELECTOR: ".subnavbar",
             TEXT: ` <h3 class="popover-title">
                         <i class="material-icons md-only">arrow-up</i> 
                         <i class="f7-icons ios-only">arrow-up</i>
