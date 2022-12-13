@@ -109,7 +109,7 @@ function renderPopovers(pArrPopovers){
     const arrRead = read ? read.split(",") : [];
 
     const arrFiltrados = pArrPopovers.filter((item)=>{
-        return arrRead.indexOf(item["CARTEL_ID"]) < 0;
+        return arrRead.findIndex((x)=>x==item["CARTEL_ID"]) < 0;
     });
 
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
@@ -155,3 +155,9 @@ function crearPopoversFijos(){
     
     return arrPopoversfijos;
 }
+
+
+
+
+
+
