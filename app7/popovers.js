@@ -116,14 +116,14 @@ function renderPopovers(pArrPopovers){
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
         arrCartelesVista[i].on('closed', function (popover) {
             app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
-            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["VIEW"] + " " + arrCartelesVista[i+1]["SELECTOR"]);
+            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
         });
     } 
     //después cuando ya arme el array de lo que tengo que 
     //mostrar lo dibujo en orden
     if(arrCartelesVista.length > 0){
         app7.tab.show(arrCartelesVista[0]["VIEW"])
-        arrCartelesVista[0].open(arrCartelesVista[0]["VIEW"] + " " + arrCartelesVista[0]["SELECTOR"]);
+        arrCartelesVista[0].open(arrCartelesVista[0]["SELECTOR"]);
     }
 }
 
@@ -142,7 +142,7 @@ function crearPopoversFijos(){
         {        
             CARTEL_ID: 100000001,
             VIEW: "#" + obtenerVistaExplorer(),
-            SELECTOR: ".subnavbar",
+            SELECTOR: "#" + obtenerVistaExplorer() + " " + ".subnavbar",
             TEXT: ` <h3 class="popover-title">
                         <i class="material-icons md-only">arrow_upward</i> 
                         <i class="f7-icons ios-only">arrow_up</i>
