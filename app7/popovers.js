@@ -110,6 +110,7 @@ function renderPopovers(pArrPopovers){
     const arrRead = read ? read.split(",") : [];
 
     const arrFiltrados = pArrPopovers.filter((item)=>{
+        console.log(item)
         arrRead.indexOf(item) < 0;
     });
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
