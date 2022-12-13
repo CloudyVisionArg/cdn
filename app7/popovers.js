@@ -120,8 +120,10 @@ function renderPopovers(pArrPopovers){
     } 
     //después cuando ya arme el array de lo que tengo que 
     //mostrar lo dibujo en orden
-    app7.tab.show(arrCartelesVista[0]["VIEW"])
-    arrCartelesVista[0].open(arrCartelesVista[0]["VIEW"] + " " + arrCartelesVista[0]["SELECTOR"]);
+    if(arrCartelesVista.length > 0){
+        app7.tab.show(arrCartelesVista[0]["VIEW"])
+        arrCartelesVista[0].open(arrCartelesVista[0]["VIEW"] + " " + arrCartelesVista[0]["SELECTOR"]);
+    }
 }
 
 function obtenerVistaExplorer(){
