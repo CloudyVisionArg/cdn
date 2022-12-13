@@ -105,13 +105,11 @@ function generarCartelesVista(pVista){
 
 
 function renderPopovers(pArrPopovers){
-    debugger;
     var read = window.localStorage.getItem("popoversLeidos");
     const arrRead = read ? read.split(",") : [];
 
     const arrFiltrados = pArrPopovers.filter((item)=>{
-        console.log(item);
-        console.log(arrRead.indexOf(item));
+        debugger;
         arrRead.indexOf(item["CARTEL_ID"]) < 0;
     });
 
