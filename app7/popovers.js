@@ -1,3 +1,4 @@
+//se está llamando a generarCartelesVista antes de que esto esté resuelto
 var popoversFolder;
 DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     function (res) {
@@ -113,6 +114,7 @@ function renderPopovers(pArrPopovers){
     });
 
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
+
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
         arrCartelesVista[i].on('closed', function (popover) {
             app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
@@ -148,7 +150,7 @@ function crearPopoversFijos(){
                         <i class="f7-icons ios-only">arrow_up</i>
                         <span> Vistas</span>
                     </h3>
-                    <p>Pulse aquí para elegir la vista</p>`,
+                    <p>Pulse aqu&iacute; para elegir la vista</p>`,
             ORDEN: "1"
         },  
     ]
