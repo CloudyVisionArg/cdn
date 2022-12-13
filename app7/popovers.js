@@ -81,7 +81,7 @@ function crearCarteles(pCartel,index,array){
 
 
 function generarCartelesVista(pVista){
-    const vistaformula =  !isNullOrEmptyOrZero(pVista) ? "view LIKE '" + pVista + "'" : "";
+    const vistaformula =  pVista ? "view LIKE '" + pVista + "'" : "";
 
     var read = window.localStorage.getItem("popoversLeidos");
     const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
@@ -105,9 +105,11 @@ function generarCartelesVista(pVista){
 
 
 function renderPopovers(pArrPopovers){
-    const read = window.localStorage.getItem("popoversLeidos").split(",");
+    var read = window.localStorage.getItem("popoversLeidos");
+    const arrRead = read ? read.split(",") : [];
+
     const arrFiltrados = pArrPopovers.filter((item)=>{
-        read.indexOf(item) < 0;
+        arrRead.indexOf(item) < 0;
     });
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
