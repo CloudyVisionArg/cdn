@@ -105,6 +105,7 @@ function generarCartelesVista(pVista){
 
 
 function renderPopovers(pArrPopovers){
+    debugger;
     var read = window.localStorage.getItem("popoversLeidos");
     const arrRead = read ? read.split(",") : [];
 
