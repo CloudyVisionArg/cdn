@@ -144,8 +144,8 @@ function crearPopoversFijos(){
             VIEW: "#" + obtenerVistaExplorer(),
             SELECTOR: ".subnavbar",
             TEXT: ` <h3 class="popover-title">
-                        <i class="material-icons md-only">arrow-upward</i> 
-                        <i class="f7-icons ios-only">arrow-up</i>
+                        <i class="material-icons md-only">arrow_upward</i> 
+                        <i class="f7-icons ios-only">arrow_up</i>
                         <span> Vistas</span>
                     </h3>
                     <p>Pulse aquí para elegir la vista</p>`,
