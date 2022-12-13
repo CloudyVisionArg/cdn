@@ -31,7 +31,10 @@ function iniciarTour() {
 }
 
 function iniciarTourFijo() {
-    renderPopovers(crearPopoversFijos());
+    const arrPopoverFijos = crearPopoversFijos();
+    if(arrPopoverFijos.length > 0){
+        renderPopovers(arrPopoverFijos);
+    }    
 }
 
 function crearCarteles(pCartel,index,array){
