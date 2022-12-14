@@ -360,20 +360,7 @@ function showLogin(allowClose) {
                         popup.pStuff = {};
                         popup.pStuff.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
                         popup.pStuff.corpToggle.on('change', function () {
-                            if (this.checked) {
-                                var $inst = $get('#instance');
-                                if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
-                                var $endp = $get('#endpoint');
-                                if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
-                                $get('.free-item').hide();
-                                $get('.corp-item').show();
-                            } else {
-                                setInputVal($get('#instance'), dSession.freeVersion.instance);
-                                setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
-                                setInputVal($get('#appname'), 'default');
-                                $get('.free-item').show();
-                                $get('.corp-item').hide();
-                            }
+                            setCorpVersion(this.checked);
                         });
 
                         $get('#showpwd').click(function () {
@@ -457,16 +444,12 @@ function showLogin(allowClose) {
                             $get('#resetpass').closest('li').hide();
                             var inst = window.localStorage.getItem('instance');
                             setInputVal($get('#instance'), inst);
+
                             if (inst && inst.toLowerCase() == dSession.freeVersion.instance.toLowerCase()) {
                                 popup.pStuff.corpToggle.checked = false;
                             };
-                            if (popup.pStuff.corpToggle.checked) {
-                                $get('.free-item').hide();
-                                $get('.corp-item').show();
-                            } else {
-                                $get('.free-item').show();
-                                $get('.corp-item').hide();
-                            }
+                            setCorpVersion(popup.pStuff.corpToggle.checked);
+
                             setInputVal($get('#endpoint'), endPoint);
                             var val = window.localStorage.getItem('appName');
                             setInputVal($get('#appname'), val ? val : 'default');
@@ -498,6 +481,24 @@ function showLogin(allowClose) {
                                 $get('#corpversion').parent().removeClass('disabled');
                             }
                         }
+
+                        function setCorpVersion(set) {
+                            if (set) {
+                                var $inst = $get('#instance');
+                                if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
+                                var $endp = $get('#endpoint');
+                                if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
+                                $get('.free-item').hide();
+                                $get('.corp-item').show();
+                            } else {
+                                setInputVal($get('#instance'), dSession.freeVersion.instance);
+                                setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
+                                setInputVal($get('#appname'), 'default');
+                                $get('.free-item').show();
+                                $get('.corp-item').hide();
+                            }
+
+                        };
 
                         function logon() {
                             disableInputs(true);
