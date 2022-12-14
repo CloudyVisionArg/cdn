@@ -375,10 +375,6 @@ function showLogin(allowClose) {
                             debugger;
                         });
 
-                        setInputVal($get('#instance'), dSession.freeVersion.instance);
-                        setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
-                        setInputVal($get('#appname'), 'default');
-
                         $get('#instance').change(function () {
                             if ($(this).val()) {
                                 $(this).val($(this).val().trim()); /* quita espacios en blanco */
@@ -433,7 +429,7 @@ function showLogin(allowClose) {
 
                         function fillControls() {
                             debugger;
-                            
+
                             $get('#message').hide()
 
                             var endPoint = window.localStorage.getItem('endPoint');
@@ -446,13 +442,13 @@ function showLogin(allowClose) {
                             $get('#resetpass').closest('li').hide();
                             var inst = window.localStorage.getItem('instance');
                             setInputVal($get('#instance'), inst);
+                            setInputVal($get('#endpoint'), endPoint);
 
                             if (inst && inst.toLowerCase() == dSession.freeVersion.instance.toLowerCase()) {
                                 popup.pStuff.corpToggle.checked = false;
                             };
                             setCorpVersion(popup.pStuff.corpToggle.checked);
 
-                            setInputVal($get('#endpoint'), endPoint);
                             var val = window.localStorage.getItem('appName');
                             setInputVal($get('#appname'), val ? val : 'default');
                             setInputVal($get('#username'), window.localStorage.getItem('userName'));
