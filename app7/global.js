@@ -1385,10 +1385,6 @@ function f7AppEvents() {
             page.pageEl.cloudy.refreshOnFocus();
         };
     })
-
-    app7.on('tabShow', function (a,b,c) {
-        debugger;
-    });
 }
 
 /*
