@@ -361,6 +361,10 @@ function showLogin(allowClose) {
                         popup.pStuff.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
                         popup.pStuff.corpToggle.on('change', function () {
                             if (this.checked) {
+                                var $inst = $get('#instance');
+                                if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
+                                var $endp = $get('#endpoint');
+                                if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
                                 $get('.free-item').hide();
                                 $get('.corp-item').show();
                             } else {
@@ -383,6 +387,10 @@ function showLogin(allowClose) {
                             }
                             debugger;
                         });
+
+                        setInputVal($get('#instance'), dSession.freeVersion.instance);
+                        setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
+                        setInputVal($get('#appname'), 'default');
 
                         $get('#instance').change(function () {
                             if ($(this).val()) {
@@ -450,7 +458,7 @@ function showLogin(allowClose) {
                             var inst = window.localStorage.getItem('instance');
                             setInputVal($get('#instance'), inst);
                             if (inst && inst.toLowerCase() == dSession.freeVersion.instance.toLowerCase()) {
-                                popup.pStuff.corpToggle.checked = true;
+                                popup.pStuff.corpToggle.checked = false;
                             };
                             if (popup.pStuff.corpToggle.checked) {
                                 $get('.free-item').hide();
