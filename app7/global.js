@@ -1390,6 +1390,10 @@ function f7AppEvents() {
 
 
     });
+
+    $(document).on('page:tabshow', function (e) {
+        debugger;
+    });
 }
 
 /*
