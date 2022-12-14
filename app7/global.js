@@ -1369,6 +1369,7 @@ function f7AppEvents() {
     })
 
     app7.on('pageAfterIn', function (el) {
+        debugger;
         var pageId = el.$pageEl.attr('id');
 
         // Muestro la searchbar
