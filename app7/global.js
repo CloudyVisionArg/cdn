@@ -1386,8 +1386,8 @@ function f7AppEvents() {
         };
     })
 
-    app7.on('tabShow', function (tab) {
-        //debugger;
+    app7.on('tabShow', function (a,b,c) {
+        debugger;
     });
 }
 
