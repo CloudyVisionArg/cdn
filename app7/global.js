@@ -1391,7 +1391,7 @@ function f7AppEvents() {
 
     });
 
-    $(document).on('page:tabinit', function (e) {
+    $(document).on('tab:init', function (e) {
         debugger;
     });
 }
