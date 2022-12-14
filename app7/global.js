@@ -358,15 +358,17 @@ function showLogin(allowClose) {
                         });
                         
                         popup.pStuff = {};
-                        popup.pStuff.freeToggle = app7.toggle.create({ el: $get('#freeversion').parent()[0] });
-                        popup.pStuff.freeToggle.on('change', function () {
+                        popup.pStuff.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
+                        popup.pStuff.corpToggle.on('change', function () {
                             if (this.checked) {
+                                $get('.free-item').hide();
+                                $get('.corp-item').show();
+                            } else {
                                 setInputVal($get('#instance'), dSession.freeVersion.instance);
                                 setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
                                 setInputVal($get('#appname'), 'default');
-                                $get('#freebuttons').show();
-                            } else {
-                                $get('#freebuttons').hide();
+                                $get('.free-item').show();
+                                $get('.corp-item').hide();
                             }
                         });
 
@@ -439,7 +441,7 @@ function showLogin(allowClose) {
 
                             var endPoint = window.localStorage.getItem('endPoint');
                     
-                            $get('#freeversion').parent().addClass('disabled');
+                            $get('#corpversion').parent().addClass('disabled');
                             $get('#logon').closest('li').hide();
                             $get('#logoff').closest('li').hide();
                             $get('#chpass').closest('li').hide();
@@ -448,12 +450,14 @@ function showLogin(allowClose) {
                             var inst = window.localStorage.getItem('instance');
                             setInputVal($get('#instance'), inst);
                             if (inst && inst.toLowerCase() == dSession.freeVersion.instance.toLowerCase()) {
-                                popup.pStuff.freeToggle.checked = true;
+                                popup.pStuff.corpToggle.checked = true;
                             };
-                            if (popup.pStuff.freeToggle.checked) {
-                                $get('#freebuttons').show();
+                            if (popup.pStuff.corpToggle.checked) {
+                                $get('.free-item').hide();
+                                $get('.corp-item').show();
                             } else {
-                                $get('#freebuttons').hide();
+                                $get('.free-item').show();
+                                $get('.corp-item').hide();
                             }
                             setInputVal($get('#endpoint'), endPoint);
                             var val = window.localStorage.getItem('appName');
@@ -476,14 +480,14 @@ function showLogin(allowClose) {
                                     $get('#logon').closest('li').show();
                                     $get('#signin').closest('li').show();
                                     $get('#resetpass').closest('li').show();
-                                    $get('#freeversion').parent().removeClass('disabled');
+                                    $get('#corpversion').parent().removeClass('disabled');
                                 })
                             } else {
                                 disableInputs(false);
                                 $get('#logon').closest('li').show();
                                 $get('#signin').closest('li').show();
                                 $get('#resetpass').closest('li').show();
-                                $get('#freeversion').parent().removeClass('disabled');
+                                $get('#corpversion').parent().removeClass('disabled');
                             }
                         }
 
