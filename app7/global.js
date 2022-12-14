@@ -1391,7 +1391,7 @@ function f7AppEvents() {
 
     });
 
-    app7.on('tabInit', function (e) {
+    app7.on('tabMounted', function (e) {
         debugger;
     });
 }
