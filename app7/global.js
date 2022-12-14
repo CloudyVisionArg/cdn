@@ -1369,6 +1369,7 @@ function f7AppEvents() {
     })
 
     app7.on('pageAfterIn', function (page) {
+        debugger;
         var pageId = page.$pageEl.attr('id');
 
         // Muestro la searchbar
@@ -1386,13 +1387,7 @@ function f7AppEvents() {
     })
 
     app7.on('tabShow', function (tab) {
-        debugger;
-
-
-    });
-
-    app7.on('tabMounted', function (e) {
-        debugger;
+        //debugger;
     });
 }
 
