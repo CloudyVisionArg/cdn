@@ -1391,7 +1391,7 @@ function f7AppEvents() {
 
     });
 
-    $(document).on('tab:init', function (e) {
+    app7.on('tabInit', function (e) {
         debugger;
     });
 }
