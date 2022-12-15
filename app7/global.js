@@ -308,16 +308,18 @@ function showConsole(allowClose) {
 }
 
 // Muestra la pantalla de Login como popup
-function showLogin(allowClose) {
+function showLogin() {
     var popup;
     var $login = $('div.login-screen');
     
     if ($login.length > 0) {
         popup = app7.popup.get($login[0]);
 
+        /*
         var $cancel = $login.find('#cancel').closest('li');
         if (allowClose) $cancel.show();
         else $cancel.hide();
+        */
 
         popup.open();
         return popup;
@@ -329,7 +331,7 @@ function showLogin(allowClose) {
                 closeByBackdropClick: false,
                 on: {
                     open: function (popup) {
-                        if (!allowClose) $get('#cancel').closest('li').hide();
+                        //if (!allowClose) $get('#cancel').closest('li').hide();
 
                         var view = app7.views.create($get('.view')[0], {
                             routes: [
