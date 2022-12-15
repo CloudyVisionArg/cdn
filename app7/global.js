@@ -434,7 +434,6 @@ function showLogin(allowClose) {
 
                             var endPoint = window.localStorage.getItem('endPoint');
                     
-                            $get('#corpversion').parent().addClass('disabled');
                             $get('#logon').closest('li').hide();
                             $get('#logoff').closest('li').hide();
                             $get('#chpass').closest('li').hide();
@@ -457,8 +456,7 @@ function showLogin(allowClose) {
                                 dSession.checkToken(function () {
                                     // token valido
                                     disableInputs(true);
-                                    $get('#logoff').closest('li').show();
-                                    $get('#chpass').closest('li').show();
+                                    setIsLogged(true);
                                     
                                 }, function (err) {
                                     setMessage(errMsg(err));
@@ -466,37 +464,13 @@ function showLogin(allowClose) {
                                         $get('#chpass').closest('li').show();
                                     }
                                     disableInputs(false);
-                                    $get('#logon').closest('li').show();
-                                    $get('#signin').closest('li').show();
-                                    $get('#resetpass').closest('li').show();
-                                    $get('#corpversion').parent().removeClass('disabled');
+                                    setIsLogged(false);
                                 })
                             } else {
                                 disableInputs(false);
-                                $get('#logon').closest('li').show();
-                                $get('#signin').closest('li').show();
-                                $get('#resetpass').closest('li').show();
-                                $get('#corpversion').parent().removeClass('disabled');
+                                setIsLogged(false);
                             }
                         }
-
-                        function setCorpVersion(set) {
-                            if (set) {
-                                var $inst = $get('#instance');
-                                if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
-                                var $endp = $get('#endpoint');
-                                if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
-                                $get('.free-item').hide();
-                                $get('.corp-item').show();
-                            } else {
-                                setInputVal($get('#instance'), dSession.freeVersion.instance);
-                                setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
-                                setInputVal($get('#appname'), 'default');
-                                $get('.free-item').show();
-                                $get('.corp-item').hide();
-                            }
-
-                        };
 
                         function logon() {
                             disableInputs(true);
@@ -549,11 +523,43 @@ function showLogin(allowClose) {
                         }
 
                         function disableInputs(pDisable) {
+                            if (pDisable) {
+                                $get('#corpversion').parent().addClass('disabled');
+                            } else {
+                                $get('#corpversion').parent().removeClass('disabled');
+                            }
                             inputDisabled($get('#instance'), pDisable);
                             inputDisabled($get('#endpoint'), pDisable);
                             inputDisabled($get('#appname'), pDisable);
                             inputDisabled($get('#username'), pDisable);
                             inputDisabled($get('#password'), pDisable);
+                        }
+
+                        function setCorpVersion(set) {
+                            if (set) {
+                                var $inst = $get('#instance');
+                                if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
+                                var $endp = $get('#endpoint');
+                                if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
+                                $get('.free-item').hide();
+                                $get('.corp-item').show();
+                            } else {
+                                setInputVal($get('#instance'), dSession.freeVersion.instance);
+                                setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
+                                setInputVal($get('#appname'), 'default');
+                                $get('.free-item').show();
+                                $get('.corp-item').hide();
+                            }
+                        };
+
+                        function setIsLogged(logged) {
+                            if (logged) {
+                                $get('.logged-item').show();
+                                $get('.not-logged-item').hide();
+                            } else {
+                                $get('.logged-item').hide();
+                                $get('.not-logged-item').show();
+                            }
                         }
 
                         function setMessage(pMessage, pColor) {
