@@ -428,8 +428,6 @@ function showLogin(allowClose) {
                         }
 
                         function fillControls() {
-                            debugger;
-
                             $get('#message').hide()
 
                             var endPoint = window.localStorage.getItem('endPoint');
