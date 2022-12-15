@@ -441,9 +441,7 @@ function showLogin(allowClose) {
                             setInputVal($get('#instance'), inst);
                             setInputVal($get('#endpoint'), endPoint);
 
-                            if (inst && inst.toLowerCase() == dSession.freeVersion.instance.toLowerCase()) {
-                                popup.pStuff.corpToggle.checked = false;
-                            };
+                            popup.pStuff.corpToggle.checked = !(inst && inst.toLowerCase() == dSession.freeVersion.instance.toLowerCase());
                             setCorpVersion(popup.pStuff.corpToggle.checked);
 
                             var val = window.localStorage.getItem('appName');
