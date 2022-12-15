@@ -412,7 +412,6 @@ function showLogin(allowClose) {
                         });
 
                         $get('#console').click(function (e) {
-                            popup.close();
                             showConsole(true);
                         });
 
