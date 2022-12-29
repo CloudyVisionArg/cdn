@@ -310,7 +310,10 @@ var app = {
                     push.on('notification', function (data) {
                         debugger;
 
-                        var clickEvent = new CustomEvent('pushClick', { detail: { data } });
+                        var notifEv = new CustomEvent('pushNotification', { detail: { data } });
+                        window.dispatchEvent(notifEv)
+
+                        var clickEv = new CustomEvent('pushClick', { detail: { data } });
 
                         if (data.additionalData.foreground) {
                             app7.notification.create({
@@ -321,13 +324,13 @@ var app = {
                                 on: {
                                     click: function (notif) {
                                         notif.close();
-                                        window.dispatchEvent(clickEvent);
+                                        window.dispatchEvent(clickEv);
                                     }
                                 }
                             }).open();
                             
                         } else {
-                            window.dispatchEvent(clickEvent);
+                            window.dispatchEvent(clickEv);
                         }
                     });
                 }	
