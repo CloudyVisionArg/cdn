@@ -4,44 +4,44 @@ generic del APP7
 
 Documentacion:
 Cordova: https://cordova.apache.org/docs/en/latest/
-Framework7: https://v5.framework7.io/docs/
-F7 icons: Ver pag /lib/framework7/css/cheatsheet.html del app
+Framework7: https://framework7.io/docs/
+F7 icons: Boton F7 Icons Cheatsheet de las opciones (solo web)
 MD icons: https://fonts.google.com/icons?selected=Material+Icons
 */
 
 var fld_id, doc_id, doc, folder, cacheDir;
 var controlsFolder, controls, controlsRights;
-var $page, $navbar, f7Page, saving;
+var $page, $navbar, f7Page, pageEl, saving;
 
-var pStuff = {}; // Deprecado, usar pageNode.cloudy
+var pStuff = {}; // Deprecado, usar pageEl.cloudy
 
 /*
-pageNode.cloudy sirve para guardar cosas (funciones y variables) de UNA INSTANCIA de pagina,
-que se exponen para el acceso externo. Ej:
+pageEl.cloudy sirve para guardar variables y funciones de UNA INSTANCIA de pagina.
+Al estar guardadas en el nodo de la pagina se pueden acceder desde otras paginas. Ej:
 
 En el BeforeRender:
 
-    f7Page.pageEl.cloudy.myVar = 5;
-    f7Page.pageEl.cloudy.myFunc = function () {
-        alert('myVar is ' + f7Page.pageEl.cloudy.myVar.toString());
+    pageEl.cloudy.myVar = 5;
+    pageEl.cloudy.myFunc = function () {
+        alert('myVar is ' + pageEl.cloudy.myVar.toString());
     }
 
 Y luego en el app7_script de un textbox:
 
     $input.change(function () {
-        f7Page.pageEl.cloudy.myVar = $(this).val()
-        f7Page.pageEl.cloudy.myFunc();
+        pageEl.cloudy.myVar = $(this).val()
+        pageEl.cloudy.myFunc();
     });
 
 Y usar la misma function en el AfterRender (que se dispara al finalizar el abrir o guardar)
 
-    f7Page.pageEl.cloudy.myFunc();
+    pageEl.cloudy.myFunc();
 
-Tambien llamarlo desde otra pagina de esta forma:
+Y tambien llamarla desde otra pagina de esta forma:
 
     $('#view-oportunidades .page[id*="generic_"]')[0].cloudy.myFunc()
 
-pageNode.cloudy tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
+pageEl.cloudy tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
 */
 
 // Parametros del query string
@@ -912,6 +912,8 @@ function getDefaultControl(pField) {
 
 function pageInit(e, page) {
     f7Page = page;
+    pageEl = page.pageEl;
+
     // En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
 
@@ -997,7 +999,7 @@ function pageInit(e, page) {
         }
     }, 0);
 
-    page.pageEl.cloudy = {
+    pageEl.cloudy = {
         fillControls,
         saveDoc,
         fld_id,
@@ -1587,10 +1589,10 @@ function saveDoc() {
     DoorsAPI.documentSave(doc).then(
         function (doc2) {
             doc = doc2;
-            f7Page.pageEl.cloudy.doc = doc;
+            pageEl.cloudy.doc = doc;
 
             doc_id = getDocField(doc, 'doc_id').Value;
-            f7Page.pageEl.cloudy.doc_id = doc_id;
+            pageEl.cloudy.doc_id = doc_id;
 
             saveAtt().then(
                 function (res) {

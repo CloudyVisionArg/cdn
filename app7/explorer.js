@@ -1,6 +1,6 @@
 // todo: recibir una señal de refresh, dps de modif un doc
 
-var folder, f7Page;
+var folder, f7Page, pageEl;
 var $page, $navbar, $subnavbar, $title, $views, $pageCont, $viewDiv;
 var searchBar, docActions, actionsPopup;
 
@@ -239,6 +239,8 @@ function newDoc(e) {
             
 function pageInit(e, page) {
     f7Page = page;
+    pageEl = page.pageEl;
+
 	// En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'));
 
@@ -331,12 +333,12 @@ function pageInit(e, page) {
         })
     }
 
-    page.pageEl.cloudy = {
-        reloadView: reloadView,
-        toggleSelectionMode: toggleSelectionMode,
-        refreshOnFocus: refreshOnFocus,
-        folder: folder,
-        $navbar: $navbar,
+    pageEl.cloudy = {
+        reloadView,
+        toggleSelectionMode,
+        refreshOnFocus,
+        folder,
+        $navbar,
     };
 }
 
