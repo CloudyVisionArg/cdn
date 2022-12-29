@@ -958,7 +958,7 @@ function cleanDb(pCallback) {
 }
 
 // Registra el dispositivo para notificaciones Push
-// https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/API.md
+// https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md
 function pushRegistration(pPushSetings, pCallback) {
     app.push = PushNotification.init(pPushSetings);
     
@@ -1353,6 +1353,7 @@ function f7AppEvents() {
             if (!$cont.html()) {
                 prevent();
                 if ($accAjax[0].loadAccordionContent) {
+                    // Llama la funcion q carga el contenido del accordion (hay q programarla)
                     $accAjax[0].loadAccordionContent($cont, function () {
                         app7.accordion.open(el);
                     });
@@ -1363,17 +1364,17 @@ function f7AppEvents() {
 
     app7.on('accordionClosed', function (el) {
         if ($(el).closest('.accordion-ajax').length > 0) {
+            // Borra el contenido del accordion
             $(el).children('div.accordion-item-content').empty();
         }
     });
 
     app7.on('pageBeforeOut', function (page) {
+        // Se ejecuta antes de salir de una pagina
+
         var pageId = page.$pageEl.attr('id');
 
-        /*
-        En ios, antes de salir y entrar del explorer, oculto la searchbar a pata
-        xq sino queda arriba de la pagina nueva
-        */
+        // En ios, antes de salir del explorer, oculto la searchbar a pata xq sino queda arriba de la pagina nueva
         if (app7.theme == 'ios' && pageId && pageId.substring(0, 9) == 'explorer_') {
             var searchbar = app7.searchbar.get(page.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
@@ -1384,9 +1385,11 @@ function f7AppEvents() {
     })
 
     app7.on('pageAfterIn', function (page) {
+        // Se ejecuta despues de entrar a una pagina
+
         var pageId = page.$pageEl.attr('id');
 
-        // Muestro la searchbar
+        // En ios, despues de entrar al explorer muestro la searchbar si estaba activa
         if (app7.theme == 'ios' && pageId && pageId.substring(0, 9) == 'explorer_') {
             var searchbar = app7.searchbar.get(page.$navbarEl.find('.searchbar')[0]);
             if (searchbar && searchbar.enabled) {
@@ -1395,6 +1398,7 @@ function f7AppEvents() {
             }
         };
 
+        // Ejecuto el metodo refresh del explorer
         if (pageId && pageId.substring(0, 9) == 'explorer_') {
             page.pageEl.cloudy.refreshOnFocus();
         };

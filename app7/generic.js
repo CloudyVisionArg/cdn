@@ -13,11 +13,11 @@ var fld_id, doc_id, doc, folder, cacheDir;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, saving;
 
-var pStuff = {}; // Deprecado, usar la property cloudy del nodo page
+var pStuff = {}; // Deprecado, usar pageNode.cloudy
 
 /*
 pageNode.cloudy sirve para guardar cosas (funciones y variables) de UNA INSTANCIA de pagina,
-que se comparten exponen para el acceso externo. Ej:
+que se exponen para el acceso externo. Ej:
 
 En el BeforeRender:
 
@@ -37,11 +37,11 @@ Y usar la misma function en el AfterRender (que se dispara al finalizar el abrir
 
     f7Page.pageEl.cloudy.myFunc();
 
-Esta funcion puede ser llamada desde otra pagina
+Tambien llamarlo desde otra pagina de esta forma:
 
-Una variable almacenada en pStuff no se modifica si abro otra ventana con los mismos
-nombres de variables, o incluso nuevas instancias de la misma ventana, tener en cuenta
-que en el modelo SPA la pagina web es siempre UNA SOLA
+    $('#view-oportunidades .page[id*="generic_"]')[0].cloudy.myFunc()
+
+pageNode.cloudy tendra precargadas algunas variables y funciones de la pagina como el documento, el folder, etc
 */
 
 // Parametros del query string
