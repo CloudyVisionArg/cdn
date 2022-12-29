@@ -308,12 +308,10 @@ var app = {
             pushRegistration(pushSettings, function (push) {
                 if (push) {
                     push.on('notification', function (data) {
-                        debugger;
-
                         var notifEv = new CustomEvent('pushNotification', { detail: { data } });
                         window.dispatchEvent(notifEv)
 
-                        var clickEv = new CustomEvent('pushClick', { detail: { data } });
+                        var clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
 
                         if (data.additionalData.foreground) {
                             app7.notification.create({

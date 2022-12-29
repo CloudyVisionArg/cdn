@@ -1,5 +1,6 @@
 .login-screen .page {
-    background-image: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@161/app7/cloudy/background.jpg');
+    /* background-image: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@161/app7/cloudy/background.jpg'); */
+    background-image: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@161/app7/cloudy/login-back.jpg');
     background-size: cover;
 }
 .login-screen .page-content {
