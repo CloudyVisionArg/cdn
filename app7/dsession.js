@@ -47,8 +47,18 @@ function DSession() {
         };
 
         var instance = window.localStorage.getItem('instance');
-        Doors.RESTFULL.ServerUrl = endPoint;
+        if (!instance) {
+            if (pFailure) pFailure('Falta la instancia');
+            return;
+        };
+
         var userName = window.localStorage.getItem('userName');
+        if (!userName) {
+            if (pFailure) pFailure('Falta el usuario');
+            return;
+        };
+
+        Doors.RESTFULL.ServerUrl = endPoint;
         var password = this.decryptPass(window.localStorage.getItem('userPassword'));
 
         DoorsAPI.logon(userName, password, instance).then(function (token) {
