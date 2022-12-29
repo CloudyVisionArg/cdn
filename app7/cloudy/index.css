@@ -73,3 +73,6 @@
     color: #cb265e !important;
     font-size: medium;
 }
+.login-screen #showpwd {
+    color: color: rgb(255, 255, 255, 0.9);
+}
