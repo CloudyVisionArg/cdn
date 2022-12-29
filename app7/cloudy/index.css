@@ -12,7 +12,7 @@
     text-align: center;
 }
 .login-screen .login-screen-logo img {
-    content: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@148/app7/cloudy/login-logo.png');
+    content: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@162/app7/cloudy/logo.png');
     max-width: 80%;
 }
 .login-screen .list {
