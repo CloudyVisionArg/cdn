@@ -41,7 +41,7 @@ Tambien llamarlo desde otra pagina de esta forma:
 
     $('#view-oportunidades .page[id*="generic_"]')[0].cloudy.myFunc()
 
-pageNode.cloudy tendra precargadas algunas variables y funciones de la pagina como el documento, el folder, etc
+pageNode.cloudy tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
 */
 
 // Parametros del query string
@@ -999,7 +999,6 @@ function pageInit(e, page) {
 
     page.pageEl.cloudy = {
         fillControls,
-        fillAttachments,
         saveDoc,
         fld_id,
         folder,
