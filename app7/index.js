@@ -295,6 +295,34 @@ var app = {
         };
 
         function execOnDeviceReady() {
+            pushRegistration(pushSettings, function (push) {
+                if (push) {
+                    push.on('notification', function (data) {
+                        var clickEvent = new CustomEvent('notification_click', { detail: { data } });
+
+                        if (data.additionalData.foreground) {
+                            app7.notification.create({
+                                title: 'CLOUDY CRM7',
+                                subtitle: data.title,
+                                text: data.message,
+                                closeTimeout: 10000,
+                                on: {
+                                    click: function (notif) {
+                                        notif.close();
+                                        push.dispatchEvent(clickEvent);
+                                    }
+                                }
+                            }).open();
+                            
+                        } else {
+                            push.dispatchEvent(clickEvent);
+                        }
+                    });
+                }	
+            });
+            
+            
+
             executeCode('onDeviceReady', 
                 function () {
                     sync.sync(false);
