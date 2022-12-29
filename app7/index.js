@@ -323,7 +323,8 @@ var app = {
 
     onResume: function() {
         if (app7.online) {
-            if (window.localStorage.getItem('endPoint')) {
+            var ls = window.localStorage;
+            if (ls.getItem('userName') && ls.getItem('instance') && ls.getItem('endPoint')) {
                 dSession.checkToken(
                     function () {
                         sync.sync(false);
