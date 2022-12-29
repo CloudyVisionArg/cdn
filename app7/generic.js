@@ -39,7 +39,7 @@ Y usar la misma function en el AfterRender (que se dispara al finalizar el abrir
 
 Y tambien llamarla desde otra pagina de esta forma:
 
-    $('#view-oportunidades .page[id*="generic_"]')[0].cloudy.myFunc()
+    $('#view-myview .page[id*="generic_"]')[0].cloudy.myFunc()
 
 pageEl.cloudy tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
 */
