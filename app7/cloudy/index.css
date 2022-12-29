@@ -23,24 +23,24 @@
     font-size: 20px;
 }
 .login-screen .list input::placeholder {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 20px;
 }
 .login-screen .list .item-floating-label {
-    color: rgba(255, 255, 255, 0.85) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
     font-size: 15px !important;
 }
 .login-screen .list .input-clear-button {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
 }
 .login-screen .list .item-title {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 20px;
 }
 /* linea inferior */
 .login-screen .list .item-inner:after,
 .login-screen .list .item-input-wrap:after {
-    background-color: rgba(255, 255, 255, 0.85) !important;
+    background-color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .login-screen .list .item-inner:after {
@@ -48,18 +48,18 @@
 }
 
 .login-screen .accordion-item .item-title {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 20px;
 }
 /* chevron */
 .login-screen .accordion-item .item-inner:before {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
 }
 .login-screen .accordion-item .list {
     max-width: 100%;
 }
 .login-screen .list .button {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.8);
     color: rgb(75, 168, 223);
     padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right) - var(--menu-list-offset));
     margin-bottom: 10px;
@@ -67,12 +67,12 @@
 }
 .login-screen .list button#console {
     background-color: transparent;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
 }
 .login-screen #message {
     color: #cb265e !important;
     font-size: medium;
 }
 .login-screen #showpwd {
-    color: rgb(255, 255, 255, 0.85);
+    color: rgb(255, 255, 255, 0.8);
 }
