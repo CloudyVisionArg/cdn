@@ -13,29 +13,31 @@ var fld_id, doc_id, doc, folder, cacheDir;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, saving;
 
-var pStuff = {};
+var pStuff = {}; // Deprecado, usar la property cloudy del nodo page
 
 /*
-pStuff sirve para guardar cosas (funciones y variables) de UNA INSTANCIA de pagina,
-que se comparten con los distintos eventos custom de la pagina. Ej:
+pageNode.cloudy sirve para guardar cosas (funciones y variables) de UNA INSTANCIA de pagina,
+que se comparten exponen para el acceso externo. Ej:
 
 En el BeforeRender:
 
-    pStuff.myVar = 5;
-    pStuff.myFunc = function () {
-        alert('myVar is ' + pStuff.myVar.toString());
+    f7Page.pageEl.cloudy.myVar = 5;
+    f7Page.pageEl.cloudy.myFunc = function () {
+        alert('myVar is ' + f7Page.pageEl.cloudy.myVar.toString());
     }
 
 Y luego en el app7_script de un textbox:
 
     $input.change(function () {
-        pStuff.myVar = $(this).val()
-        pStuff.myFunc();
+        f7Page.pageEl.cloudy.myVar = $(this).val()
+        f7Page.pageEl.cloudy.myFunc();
     });
 
 Y usar la misma function en el AfterRender (que se dispara al finalizar el abrir o guardar)
 
-    pStuff.myFunc();
+    f7Page.pageEl.cloudy.myFunc();
+
+Esta funcion puede ser llamada desde otra pagina
 
 Una variable almacenada en pStuff no se modifica si abro otra ventana con los mismos
 nombres de variables, o incluso nuevas instancias de la misma ventana, tener en cuenta
@@ -994,6 +996,17 @@ function pageInit(e, page) {
             app7.preloader.hide();
         }
     }, 0);
+
+    page.pageEl.cloudy = {
+        fillControls,
+        fillAttachments,
+        saveDoc,
+        fld_id,
+        folder,
+        doc_id,
+        doc,
+        $navbar,
+    };
 }
 
 // Usar solo despues del pageInit
@@ -1575,7 +1588,10 @@ function saveDoc() {
     DoorsAPI.documentSave(doc).then(
         function (doc2) {
             doc = doc2;
+            f7Page.pageEl.cloudy.doc = doc;
+
             doc_id = getDocField(doc, 'doc_id').Value;
+            f7Page.pageEl.cloudy.doc_id = doc_id;
 
             saveAtt().then(
                 function (res) {
