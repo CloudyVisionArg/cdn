@@ -295,6 +295,16 @@ var app = {
         };
 
         function execOnDeviceReady() {
+            var pushSettings = {
+                android: {
+                },
+                ios: {
+                    alert: true,
+                    badge: true,
+                    sound: true,
+                },
+            };
+            
             pushRegistration(pushSettings, function (push) {
                 if (push) {
                     push.on('notification', function (data) {
