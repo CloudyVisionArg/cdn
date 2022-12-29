@@ -960,6 +960,8 @@ function cleanDb(pCallback) {
 // Registra el dispositivo para notificaciones Push
 // https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/API.md
 function pushRegistration(pPushSetings, pCallback) {
+    debugger;
+    
     app.push = PushNotification.init(pPushSetings);
     
     app.push.on('registration', function (data) {
