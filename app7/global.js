@@ -431,25 +431,26 @@ function showLogin() {
                         function fillControls() {
                             $get('#message').hide()
 
+                            var userName = window.localStorage.getItem('userName');
+                            var instance = window.localStorage.getItem('instance');
                             var endPoint = window.localStorage.getItem('endPoint');
+                            var appName = window.localStorage.getItem('appName');
                     
                             $get('#logon').closest('li').hide();
                             $get('#logoff').closest('li').hide();
                             $get('#chpass').closest('li').hide();
                             $get('#signin').closest('li').hide();
                             $get('#resetpass').closest('li').hide();
-                            var inst = window.localStorage.getItem('instance');
-                            setInputVal($get('#instance'), inst);
+
+                            setInputVal($get('#username'), userName);
+                            setInputVal($get('#instance'), instance);
                             setInputVal($get('#endpoint'), endPoint);
+                            setInputVal($get('#appname'), appName ? appName : 'default');
 
-                            popup.pStuff.corpToggle.checked = (inst && inst.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
+                            popup.pStuff.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
                             setCorpVersion(popup.pStuff.corpToggle.checked);
-
-                            var val = window.localStorage.getItem('appName');
-                            setInputVal($get('#appname'), val ? val : 'default');
-                            setInputVal($get('#username'), window.localStorage.getItem('userName'));
                         
-                            if (endPoint) {
+                            if (userName && instance && endPoint) {
                                 dSession.checkToken(function () {
                                     // token valido
                                     disableInputs(true);
