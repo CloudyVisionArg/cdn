@@ -308,6 +308,8 @@ var app = {
             pushRegistration(pushSettings, function (push) {
                 if (push) {
                     push.on('notification', function (data) {
+                        debugger;
+                        
                         var clickEvent = new CustomEvent('notification_click', { detail: { data } });
 
                         if (data.additionalData.foreground) {
@@ -330,8 +332,6 @@ var app = {
                     });
                 }	
             });
-            
-            
 
             executeCode('onDeviceReady', 
                 function () {
