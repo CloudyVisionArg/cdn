@@ -1266,7 +1266,7 @@ function statusBar(pShow) {
             StatusBar.styleDefault();
             debugger;
             //StatusBar.backgroundColorByHexString('12A0D8');
-            StatusBar.backgroundColorByHexString('2C9FD9'); 
+            StatusBar.backgroundColorByHexString('2EA4DE');
             StatusBar.overlaysWebView(false);
         } else {
             StatusBar.styleLightContent();
