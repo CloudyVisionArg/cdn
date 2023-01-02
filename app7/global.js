@@ -1264,8 +1264,8 @@ function statusBar(pShow) {
         StatusBar.show();
         if (device.platform == 'iOS') {
             StatusBar.styleDefault();
-            StatusBar.backgroundColorByHexString('12A0D8');
-            //StatusBar.backgroundColorByHexString('2BA0DA');
+            //StatusBar.backgroundColorByHexString('12A0D8');
+            StatusBar.backgroundColorByHexString('2BA0DA');
             StatusBar.overlaysWebView(false);
         } else {
             StatusBar.styleLightContent();
