@@ -163,7 +163,7 @@ app7.on('pageAfterIn', function (e) {
     if(e.el.closest('.tab-active')){
         console.log("AFTERIN", e.el, e.el.closest('.view'));
         generarCartelesVista("#" + e.el.closest('.view').id)
-        generarCarteles(obtenerScope(e.el));
+        //generarCarteles(obtenerScope(e.el));
     }
 })
 
@@ -171,7 +171,7 @@ app7.on('pageTabShow', function (e) {
     if(e.className.includes("page-current")){
         console.log("TabShow", e, e.closest('.view'));
         generarCartelesVista("#" + e.closest('.view').id)
-        generarCarteles(obtenerScope(e));
+        //generarCarteles(obtenerScope(e));
     }
 })  
 
@@ -187,6 +187,7 @@ function obtenerScope(page){
 }
 
 function generarCarteles(pScope){
+    console.log("generar carteles por scope")
     const scopeformula =  pScope ? "scope LIKE '" + pScope + "'" : "";
 
     var read = window.localStorage.getItem("popoversLeidos");
