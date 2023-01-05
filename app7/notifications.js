@@ -296,7 +296,7 @@ function searchNotifications(){
 /**
  * Expone la funcion refrehnotification para ser llamada cuando se recibe una nueva notificacion
  */
-window.refreshNotificacions = searchNotifications;
+window.refreshNotifications = searchNotifications;
 console.log("refreshNotificacions defined" );
 
 function renderMembers(notificationsArr){

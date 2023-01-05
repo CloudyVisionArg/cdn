@@ -308,6 +308,9 @@ var app = {
             pushRegistration(pushSettings, function (push) {
                 if (push) {
                     push.on('notification', function (data) {
+                        debugger;
+                        if (window.refreshNotifications) window.refreshNotifications();
+
                         var notifEv = new CustomEvent('pushNotification', { detail: { data } });
                         window.dispatchEvent(notifEv)
 
@@ -367,6 +370,8 @@ var app = {
                 dSession.checkToken(
                     function () {
                         sync.sync(false);
+                        debugger;
+                        if (window.refreshNotifications) window.refreshNotifications();
                         executeCode('onResume');
                     },
                     function (err) {
