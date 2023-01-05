@@ -960,6 +960,8 @@ function cleanDb(pCallback) {
 // Registra el dispositivo para notificaciones Push
 // https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md
 function pushRegistration(pPushSetings, pCallback) {
+    console.log('pushRegistration begin');
+
     app.push = PushNotification.init(pPushSetings);
     
     app.push.on('registration', function (data) {
@@ -978,6 +980,7 @@ function pushRegistration(pPushSetings, pCallback) {
             'RegistrationType': data.registrationType,
 
         }).then(function (res) {
+            console.log('pushRegistration end');
             if (pCallback) pCallback(app.push);
         });
     });
