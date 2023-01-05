@@ -158,19 +158,41 @@ function crearPopoversFijos(){
     return arrPopoversfijos;
 }
 
-
-
-
-
 app7.on('pageAfterIn', function (e) {
     if(e.el.closest('.tab-active')){
         console.log("AFTERIN", e.el, e.el.closest('.view'));
+        generarCartelesVista("#" + e.el.closest('.view').id)
+
     }
 })
 
 app7.on('pageTabShow', function (e) {
     if(e.className.includes("page-current")){
         console.log("TabShow", e, e.closest('.view'));
+        generarCartelesVista("#" + e.closest('.view').id)
     }
 })  
 
+
+function generarCarteles(pScope){
+    const scopeformula =  pScope ? "scope LIKE '" + pScope + "'" : "";
+
+    var read = window.localStorage.getItem("popoversLeidos");
+    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
+    let conector = ""
+    if(scopeformula !== "" && cartelFormula !== ""){
+        conector = " and "
+    }
+    const finalFormula = scopeformula + conector + cartelFormula
+
+    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
+        function(res){            
+            if(res.length > 0){
+                renderPopovers(res)
+            }
+        },
+        function(err){
+            console.log(err);
+        }
+    );
+}
