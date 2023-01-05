@@ -169,6 +169,8 @@ app7.on('pageAfterIn', function (e) {
 })
 
 app7.on('pageTabShow', function (e) {
-    console.log("TabShow", e, e.closest('.view'));
+    if(e.className.includes("page-current")){
+        console.log("TabShow", e, e.closest('.view'));
+    }
 })  
 
