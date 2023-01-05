@@ -92,7 +92,7 @@ function generarCartelesVista(pVista){
     }
     const finalFormula = vistaformula + conector + cartelFormula
 
-    DoorsAPI.folderSearch(popoversFolder.FldId, "doc_id,cartel_id,view,selector,text,orden", finalFormula, "orden", 0, false, 0).then(
+    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
             if(res.length > 0){
                 renderPopovers(res)
@@ -117,14 +117,14 @@ function renderPopovers(pArrPopovers){
 
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
         arrCartelesVista[i].on('closed', function (popover) {
-            app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
+            //app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
         });
     } 
     //después cuando ya arme el array de lo que tengo que 
     //mostrar lo dibujo en orden
     if(arrCartelesVista.length > 0){
-        app7.tab.show(arrCartelesVista[0]["VIEW"])
+        //app7.tab.show(arrCartelesVista[0]["VIEW"])
         arrCartelesVista[0].open(arrCartelesVista[0]["SELECTOR"]);
     }
 }
@@ -161,5 +161,17 @@ function crearPopoversFijos(){
 
 
 
+app7.on('pageMounted', function (e) {
+    console.log("pageMounted", e.el);
+})
 
+app7.on('pageAfterIn', function (e) {
+    console.log("AFTERIN", e.el);
+})
+app7.on('pageTabShow', function (e) {
+    console.log("TabShow", e);
+})  
 
+app7.on('routeChanged', function (nueva,prev,rout) {
+    console.log("RouteChanged", nueva,prev,rout);
+})
