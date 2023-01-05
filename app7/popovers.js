@@ -116,7 +116,7 @@ function renderPopovers(pArrPopovers){
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
 
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
-        arrCartelesVist .a[i].on('closed', function (popover) {
+        arrCartelesVista[i].on('closed', function (popover) {
             //app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
         });
