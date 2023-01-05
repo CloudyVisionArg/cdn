@@ -116,7 +116,7 @@ function renderPopovers(pArrPopovers){
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
 
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
-        arrCartelesVista[i].on('closed', function (popover) {
+        arrCartelesVist .a[i].on('closed', function (popover) {
             //app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
         });
@@ -147,7 +147,7 @@ function crearPopoversFijos(){
             SELECTOR: "#" + obtenerVistaExplorer() + " " + ".subnavbar",
             TEXT: ` <h3 class="popover-title">
                         <i class="material-icons md-only">arrow_upward</i> 
-                        <i class="f7-icons ios-only">arrow_up</i>
+                        <i class= "f7-icons ios-only">arrow_up</i>
                         <span> Vistas</span>
                     </h3>
                     <p>Pulse aqu&iacute; para elegir la vista</p>`,
@@ -158,11 +158,12 @@ function crearPopoversFijos(){
     return arrPopoversfijos;
 }
 
+
 app7.on('pageAfterIn', function (e) {
     if(e.el.closest('.tab-active')){
         console.log("AFTERIN", e.el, e.el.closest('.view'));
         generarCartelesVista("#" + e.el.closest('.view').id)
-
+        generarCarteles(obtenerScope(e.el));
     }
 })
 
@@ -170,9 +171,20 @@ app7.on('pageTabShow', function (e) {
     if(e.className.includes("page-current")){
         console.log("TabShow", e, e.closest('.view'));
         generarCartelesVista("#" + e.closest('.view').id)
+        generarCarteles(obtenerScope(e));
     }
 })  
 
+
+function obtenerScope(page){
+    if(page.id.includes('explorer')){
+        return 'explorer';
+    }else if(page.id.includes('generic')){
+        return 'generic';
+    }else{
+        return 'custom';
+    }
+}
 
 function generarCarteles(pScope){
     const scopeformula =  pScope ? "scope LIKE '" + pScope + "'" : "";
