@@ -6,30 +6,30 @@ DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     }
 );
 
-function iniciarTour() {
+/* function iniciarTour() {
     var read = window.localStorage.getItem("popoversLeidos");
     const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
     DoorsAPI.folderSearch(popoversFolder.FldId, "doc_id,cartel_id,view,selector,text,orden", cartelFormula, "orden", 0, false, 0).then(
-        function(res){
-            if(res.length > 0){
+        function (res) {
+            if (res.length > 0) {
                 const arrCarteles = res.map(crearCarteles)
-                for (let i = 0; i < arrCarteles.length-1; i++) {                
+                for (let i = 0; i < arrCarteles.length - 1; i++) {
                     arrCarteles[i].on('closed', function (popover) {
-                        app7.tab.show(arrCarteles[i+1]["VIEW"]);
-                        arrCarteles[i+1].open(arrCarteles[i+1]["SELECTOR"]);
+                        app7.tab.show(arrCarteles[i + 1]["VIEW"]);
+                        arrCarteles[i + 1].open(arrCarteles[i + 1]["SELECTOR"]);
                     });
-                } 
+                }
                 //después cuando ya arme el array de lo que tengo que 
                 //mostrar lo dibujo en orden
                 app7.tab.show(arrCarteles[0]["VIEW"])
                 arrCarteles[0].open(arrCarteles[0]["SELECTOR"]);
             }
         },
-        function(err){
+        function (err) {
             console.log(err);
         }
     );
-}
+} */
 
 function iniciarTourFijo() {
     const arrPopoverFijos = crearPopoversFijos();
@@ -163,8 +163,11 @@ function crearPopoversFijos(){
 
 
 app7.on('pageAfterIn', function (e) {
-    console.log("AFTERIN", e.el, e.el.closest('.view'));
+    if(e.el.closest('.tab-active')){
+        console.log("AFTERIN", e.el, e.el.closest('.view'));
+    }
 })
+
 app7.on('pageTabShow', function (e) {
     console.log("TabShow", e, e.closest('.view'));
 })  
