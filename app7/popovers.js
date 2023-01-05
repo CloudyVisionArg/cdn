@@ -161,17 +161,11 @@ function crearPopoversFijos(){
 
 
 
-app7.on('pageMounted', function (e) {
-    console.log("pageMounted", e.el);
-})
 
 app7.on('pageAfterIn', function (e) {
-    console.log("AFTERIN", e.el);
+    console.log("AFTERIN", e.el, e.el.closest('.view'));
 })
 app7.on('pageTabShow', function (e) {
-    console.log("TabShow", e);
+    console.log("TabShow", e, e.closest('.view'));
 })  
 
-app7.on('routeChanged', function (nueva,prev,rout) {
-    console.log("RouteChanged", nueva,prev,rout);
-})
