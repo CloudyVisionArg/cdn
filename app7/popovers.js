@@ -232,7 +232,7 @@ function crearPopoversFijos(){
             ORDEN: "4"
         },  
         {        
-            CARTEL_ID: 100000004,
+            CARTEL_ID: 100000005,
             SCOPE: "toolbar",
             VIEW: null,
             SELECTOR: "a[href='#view-opciones']",
