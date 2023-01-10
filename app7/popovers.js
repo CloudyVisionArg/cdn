@@ -6,37 +6,32 @@ DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     }
 );
 
-/* function iniciarTour() {
-    var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
-    DoorsAPI.folderSearch(popoversFolder.FldId, "doc_id,cartel_id,view,selector,text,orden", cartelFormula, "orden", 0, false, 0).then(
-        function (res) {
-            if (res.length > 0) {
-                const arrCarteles = res.map(crearCarteles)
-                for (let i = 0; i < arrCarteles.length - 1; i++) {
-                    arrCarteles[i].on('closed', function (popover) {
-                        app7.tab.show(arrCarteles[i + 1]["VIEW"]);
-                        arrCarteles[i + 1].open(arrCarteles[i + 1]["SELECTOR"]);
-                    });
-                }
-                //después cuando ya arme el array de lo que tengo que 
-                //mostrar lo dibujo en orden
-                app7.tab.show(arrCarteles[0]["VIEW"])
-                arrCarteles[0].open(arrCarteles[0]["SELECTOR"]);
-            }
-        },
-        function (err) {
-            console.log(err);
-        }
-    );
-} */
+app7.on('pageAfterIn', function (e) {
+    if(e.el.closest('.tab-active')){
+        let scope = obtenerScope(e.el);
+        if(scope == 'custom'){
+            generarCartelesVista("#" + e.el.closest('.view').id)
+            generarCarteles("toolbar");
+        }else{
+            generarCarteles(scope);
+            generarCarteles("toolbar");
+        }        
+    }
+})
 
-function iniciarTourFijo() {
-    const arrPopoverFijos = crearPopoversFijos();
-    if(arrPopoverFijos.length > 0){
-        renderPopovers(arrPopoverFijos);
-    }    
-}
+app7.on('pageTabShow', function (e) {
+    if(e.className.includes("page-current")){
+        let scope = obtenerScope(e);
+        if(scope == 'custom'){
+            generarCartelesVista("#" + e.closest('.view').id)
+            generarCarteles("toolbar");
+        }else{
+            generarCarteles(scope);
+            generarCarteles("toolbar");
+        }        
+    }
+})  
+
 
 function crearCarteles(pCartel,index,array){
     //pId,pView,pSelector,pTexto
@@ -118,8 +113,13 @@ function generarCartelesVista(pVista){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
+            const arrCartelesFijos = crearPopoversFijos().filter((item)=>{
+                return item["VIEW"] == pVista;
+            });
             if(res.length > 0){
-                renderPopovers(res)
+                renderPopovers([...res, ...arrCartelesFijos]);
+            }else{
+                renderPopovers(arrCartelesFijos);
             }
         },
         function(err){
@@ -141,64 +141,13 @@ function renderPopovers(pArrPopovers){
 
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
         arrCartelesVista[i].on('closed', function (popover) {
-            //app7.tab.show(arrCartelesVista[i+1]["VIEW"]);
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
         });
     } 
-    //después cuando ya arme el array de lo que tengo que 
-    //mostrar lo dibujo en orden
     if(arrCartelesVista.length > 0){
-        //app7.tab.show(arrCartelesVista[0]["VIEW"])
         arrCartelesVista[0].open(arrCartelesVista[0]["SELECTOR"]);
     }
 }
-
-function obtenerVistaExplorer(){
-    //encuentra la primera vista explorer
-    for(var idx = 0; idx < app7.views.length; idx++){
-        if(app7.views[idx].router.currentPageEl.id.startsWith("explorer")){
-            return app7.views[idx].el.id;
-        }
-    }
-    return undefined;
-}
-
-function crearPopoversFijos(){
-    const arrPopoversfijos = [
-        {        
-            CARTEL_ID: 100000001,
-            VIEW: "#" + obtenerVistaExplorer(),
-            SELECTOR: "#" + obtenerVistaExplorer() + " " + ".subnavbar",
-            TEXT: ` <h3 class="popover-title">
-                        <i class="material-icons md-only">arrow_upward</i> 
-                        <i class= "f7-icons ios-only">arrow_up</i>
-                        <span> Vistas</span>
-                    </h3>
-                    <p>Pulse aqu&iacute; para elegir la vista</p>`,
-            ORDEN: "1"
-        },  
-    ]
-    
-    return arrPopoversfijos;
-}
-
-
-app7.on('pageAfterIn', function (e) {
-    if(e.el.closest('.tab-active')){
-        console.log("AFTERIN", e.el, e.el.closest('.view'));
-        generarCartelesVista("#" + e.el.closest('.view').id)
-        //generarCarteles(obtenerScope(e.el));
-    }
-})
-
-app7.on('pageTabShow', function (e) {
-    if(e.className.includes("page-current")){
-        console.log("TabShow", e, e.closest('.view'));
-        generarCartelesVista("#" + e.closest('.view').id)
-        //generarCarteles(obtenerScope(e));
-    }
-})  
-
 
 function obtenerScope(page){
     if(page.id.includes('explorer')){
@@ -224,9 +173,13 @@ function generarCarteles(pScope){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
+            const arrCartelesFijos = crearPopoversFijos().filter((item)=>{
+                return item["SCOPE"] == pScope;
+            });
             if(res.length > 0){
-                console.log(res);
-                renderPopovers(res);
+                renderPopovers([...res, ...arrCartelesFijos]);
+            }else{
+                renderPopovers(arrCartelesFijos);
             }
         },
         function(err){
@@ -234,3 +187,82 @@ function generarCarteles(pScope){
         }
     );
 }
+
+
+function crearPopoversFijos(){
+    const arrPopoversfijos = [
+        {        
+            CARTEL_ID: 100000001,
+            SCOPE: "explorer",
+            VIEW: null,
+            SELECTOR: ".subnavbar",
+            TITLE: " Vistas",
+            ICON_MD: "arrow_upward",
+            ICON_IOS: "arrow_up",
+            TEXT: "Presione aqu&iacute; para elegir la vista",
+            ORDEN: "1"
+        },  
+        {        
+            CARTEL_ID: 100000002,
+            SCOPE: "explorer",
+            VIEW: null,
+            SELECTOR: "#buttonSearch",
+            TITLE: " Buscar Contactos",
+            ICON_MD: "search",
+            ICON_IOS: "search",
+            TEXT: "Presione aqu&iacute; para buscar",
+            ORDEN: "2"
+        },  
+        {        
+            CARTEL_ID: 100000003,
+            SCOPE: "explorer",
+            VIEW: null,
+            SELECTOR: "#fabAdd",
+            TITLE: " Agregar",
+            ICON_MD: "add",
+            ICON_IOS: "plus",
+            TEXT: "Presione aquí para agregar o importar",
+            ORDEN: "3"
+        },  
+        {        
+            CARTEL_ID: 100000004,
+            SCOPE: "toolbar",
+            VIEW: null,
+            SELECTOR: "a[href='#view-notifications']",
+            TITLE: " Notificaciones",
+            ICON_MD: "notifications",
+            ICON_IOS: "bell",
+            TEXT: "Aqui podra consultar notificaciones acerca de los contactos asignados",
+            ORDEN: "4"
+        },  
+    ]
+    
+    return arrPopoversfijos;
+}
+
+
+
+/* function iniciarTour() {
+    var read = window.localStorage.getItem("popoversLeidos");
+    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
+    DoorsAPI.folderSearch(popoversFolder.FldId, "doc_id,cartel_id,view,selector,text,orden", cartelFormula, "orden", 0, false, 0).then(
+        function (res) {
+            if (res.length > 0) {
+                const arrCarteles = res.map(crearCarteles)
+                for (let i = 0; i < arrCarteles.length - 1; i++) {
+                    arrCarteles[i].on('closed', function (popover) {
+                        app7.tab.show(arrCarteles[i + 1]["VIEW"]);
+                        arrCarteles[i + 1].open(arrCarteles[i + 1]["SELECTOR"]);
+                    });
+                }
+                //después cuando ya arme el array de lo que tengo que 
+                //mostrar lo dibujo en orden
+                app7.tab.show(arrCarteles[0]["VIEW"])
+                arrCarteles[0].open(arrCarteles[0]["SELECTOR"]);
+            }
+        },
+        function (err) {
+            console.log(err);
+        }
+    );
+} */
