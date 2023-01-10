@@ -231,6 +231,17 @@ function crearPopoversFijos(){
             TEXT: "Aqui podra consultar notificaciones acerca de los contactos asignados",
             ORDEN: "4"
         },  
+        {        
+            CARTEL_ID: 100000004,
+            SCOPE: "toolbar",
+            VIEW: null,
+            SELECTOR: "a[href='#view-opciones']",
+            TITLE: " Opciones",
+            ICON_MD: "settings",
+            ICON_IOS: "gear_alt_fill",
+            TEXT: "Aqui podra configurar sus opciones",
+            ORDEN: "5"
+        },  
     ]
     
     return arrPopoversfijos;
