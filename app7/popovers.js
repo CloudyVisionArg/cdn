@@ -48,10 +48,39 @@ function crearCarteles(pCartel,index,array){
     divInner.classList.add("popover-inner");
     div.append(divInner);
 
+    <h3 class='popover-title'>
+        <i class="material-icons md-only">add</i>
+        <i class="f7-icons ios-only">plus</i>
+        <span>Agregar Contactos</span>
+        </h3>
+    <p>Pulse aquí para agregar o importar contactos </p>
+
     const divBlock = document.createElement("div");
     divBlock.classList.add("block");
-    divBlock.innerHTML = pCartel["TEXT"];
+    //divBlock.innerHTML = pCartel["TEXT"];
     divInner.append(divBlock);
+
+    const elTitle = document.createElement("h3");
+    elTitle.classList.add("popover-title");    
+    divBlock.append(elTitle);
+
+    const elIconMD = document.createElement("i");
+    elIconMD.classList.add("material-icons", "md-only");    
+    elIconMD.innerText = pCartel["ICON_MD"]
+    elTitle.append(elIconMD);
+
+    const elIconIOS = document.createElement("i");
+    elIconIOS.classList.add("f7-icons", "ios-only");    
+    elIconIOS.innerText = pCartel["ICON_IOS"]
+    elTitle.append(elIconIOS);
+
+    const elTitleText = document.createElement("span");
+    elTitleText.innerText = pCartel["TITLE"]
+    elTitle.append(elTitleText);
+
+    const elTextCartel = document.createElement("p");      
+    elTextCartel.innerHTML = pCartel["TEXT"];
+    divBlock.append(elTextCartel);
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
@@ -73,6 +102,8 @@ function crearCarteles(pCartel,index,array){
             },  
         }
     });
+    
+    dynamicPopover["SCOPE"] = pCartel["SCOPE"]
     dynamicPopover["VIEW"] = pCartel["VIEW"]
     dynamicPopover["SELECTOR"] = pCartel["SELECTOR"]
 
