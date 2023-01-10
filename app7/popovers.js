@@ -48,13 +48,6 @@ function crearCarteles(pCartel,index,array){
     divInner.classList.add("popover-inner");
     div.append(divInner);
 
-    <h3 class='popover-title'>
-        <i class="material-icons md-only">add</i>
-        <i class="f7-icons ios-only">plus</i>
-        <span>Agregar Contactos</span>
-        </h3>
-    <p>Pulse aquí para agregar o importar contactos </p>
-
     const divBlock = document.createElement("div");
     divBlock.classList.add("block");
     //divBlock.innerHTML = pCartel["TEXT"];
