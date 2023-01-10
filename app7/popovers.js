@@ -11,10 +11,8 @@ app7.on('pageAfterIn', function (e) {
         let scope = obtenerScope(e.el);
         if(scope == 'custom'){
             generarCartelesVista("#" + e.el.closest('.view').id)
-            generarCarteles("toolbar");
         }else{
             generarCarteles(scope);
-            generarCarteles("toolbar");
         }        
     }
 })
@@ -24,10 +22,8 @@ app7.on('pageTabShow', function (e) {
         let scope = obtenerScope(e);
         if(scope == 'custom'){
             generarCartelesVista("#" + e.closest('.view').id)
-            generarCarteles("toolbar");
         }else{
             generarCarteles(scope);
-            generarCarteles("toolbar");
         }        
     }
 })  
@@ -161,7 +157,7 @@ function obtenerScope(page){
 
 function generarCarteles(pScope){
     console.log("generar carteles por scope")
-    const scopeformula =  pScope ? "scope LIKE '" + pScope + "'" : "";
+    const scopeformula =  pScope ? "scope LIKE '" + pScope + "' OR scope LIKE 'toolbar'" : "scope LIKE 'toolbar'";
 
     var read = window.localStorage.getItem("popoversLeidos");
     const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
@@ -174,7 +170,7 @@ function generarCarteles(pScope){
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
             const arrCartelesFijos = crearPopoversFijos().filter((item)=>{
-                return item["SCOPE"] == pScope;
+                return (item["SCOPE"] == pScope || item["SCOPE"] == 'toolbar');
             });
             if(res.length > 0){
                 renderPopovers([...res, ...arrCartelesFijos]);
