@@ -201,7 +201,8 @@ function generarCarteles(pScope){
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
             if(res.length > 0){
-                renderPopovers(res)
+                console.log(res);
+                renderPopovers(res);
             }
         },
         function(err){
