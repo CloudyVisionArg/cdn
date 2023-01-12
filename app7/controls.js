@@ -1784,6 +1784,26 @@ function addDefaultOptions(pContainer) {
         $('<div/>', {
             class: 'item-title',
         }).append('F7 Icons Cheatsheet').appendTo($itemInner);
+    
+        // MD Icons
+        $li = $('<li/>').appendTo(pContainer);
+
+        $itemCont = $('<a/>', {
+            href: '#',
+            class: 'item-link item-content',
+        }).appendTo($li);
+
+        $itemCont.click(function () {
+            cordova.InAppBrowser.open('https://fonts.google.com/icons?selected=Material+Icons', '_system');
+        });
+
+        $itemInner = $('<div/>', {
+            class: 'item-inner',
+        }).appendTo($itemCont);
+
+        $('<div/>', {
+            class: 'item-title',
+        }).append('Material Icons').appendTo($itemInner);
     }
 }
 
@@ -1802,8 +1822,7 @@ getTabbedViewsLayout([
         viewid: 'view-opciones',
         label: 'Opciones',
         url: '/codelib/?code=opciones',
-        iosicon: 'gear_alt_fill',
-        mdicon: 'settings',
+        iosicon: 'gear_alt_fill', // Como no especifico mdicon se usa este en los 2
     }
 ]).appendTo($('#app'));
 */
