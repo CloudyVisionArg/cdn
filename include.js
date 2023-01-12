@@ -67,8 +67,8 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 173 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 172, hasdep: true });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 171 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
 
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
