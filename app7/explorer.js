@@ -39,14 +39,25 @@ DoorsAPI.foldersGetById(fld_id).then(
                 pulltorefresh: true,
             });
 
-            debugger;
+            var $nbLeft = $page.find('.navbar-inner .left');
             
             // Boton Buscar
             var $btn = $page.find('.navbar-inner .left .link')
             $btn.attr('id', 'buttonSearch');
             $btn.click(function (e) {
                 searchBar.enable();
-            })
+            });
+
+            // Boton Back
+            var $backBtn = $('<a/>', {
+                href: '#',
+                class: 'link icon-only',
+            }).prependTo($nbLeft);
+            $backBtn.append('<i class="icon icon-back"></i>');
+
+            $backBtn.click(function () {
+                f7Page.view.router.back();
+            });
             
             // Boton Acciones
             $btn = getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
