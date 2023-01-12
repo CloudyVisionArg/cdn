@@ -38,6 +38,8 @@ DoorsAPI.foldersGetById(fld_id).then(
                 subnavbar: true,
                 pulltorefresh: true,
             });
+
+            debugger;
             
             // Boton Buscar
             var $btn = $page.find('.navbar-inner .left .link')
