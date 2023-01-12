@@ -48,16 +48,20 @@ DoorsAPI.foldersGetById(fld_id).then(
                 searchBar.enable();
             });
 
-            // Boton Back
-            var $backBtn = $('<a/>', {
-                href: '#',
-                class: 'link icon-only',
-            }).prependTo($nbLeft);
-            $backBtn.append('<i class="icon icon-back"></i>');
+            if (routeTo.query.back == '1') {
+                $btn.css('margin-left', '0px');
+                
+                // Boton Back
+                var $backBtn = $('<a/>', {
+                    href: '#',
+                    class: 'link icon-only',
+                }).prependTo($nbLeft);
+                $backBtn.append('<i class="icon icon-back"></i>');
 
-            $backBtn.click(function () {
-                f7Page.view.router.back();
-            });
+                $backBtn.click(function () {
+                    f7Page.view.router.back();
+                });
+            }
             
             // Boton Acciones
             $btn = getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
