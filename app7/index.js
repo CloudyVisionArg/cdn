@@ -147,7 +147,7 @@ var app = {
                                         }
                                     }
                                 } else {
-                                    resolve({ content: errPage('Codelib not found: ' + page) });
+                                    resolve({ content: errPage('Codelib not found: ' + code) });
                                 }
                             },
                             function (err) {
