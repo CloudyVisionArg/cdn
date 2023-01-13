@@ -46,6 +46,7 @@ addDefaultOptions(pContainer)
 getTabbedViewsLayout(pTabs)
 getVirtualList(pListElement)
 renderMediaListItem(pItem)
+getListLink(pLink)
 */
 
 /*
@@ -1379,8 +1380,8 @@ function getPage(params) {
 Para botones de la Navbar
 {
     text: miBoton,
-    iosicon: https://framework7.io/icons/,
-    mdicon: https://material.io/resources/icons,
+    iosicon: miIcono,
+    mdicon: miIcono, // Puede pasarse solo uno, en ese caso se usa el mismo en ambos temas
 }
 */
 function getLink(params) {
@@ -2264,3 +2265,57 @@ function renderMediaListItem(pItem) {
     
     return $li;
 };
+
+/*
+Devuelve un li para el ListView que funciona como link
+
+getListLink({
+    title: 'Productos',
+    iosicon: 'cart',
+    mdicon: 'shopping_cart', // Puede pasarse solo uno, en ese caso se usa el mismo en ambos temas
+    click: function () {
+        app7.preloader.show();
+        f7Page.view.router.navigate('/explorer/?fld_id=999&back=1');
+    },
+}).appendTo(ul);
+*/
+function getListLink(pLink) {
+    var $li = $('<li/>');
+
+    var $itemCont = $('<a/>', {
+        href: '#',
+        class: 'item-link item-content',
+    }).appendTo($li);
+
+    $itemCont.click(pLink.click);
+
+    if (pLink.iosicon || pLink.mdicon) {
+        var $itemMedia = $('<div/>', {
+            class: 'item-media',
+        }).appendTo($itemCont);
+
+        if (pLink.iosicon) {
+            var $i = $('<i/>', {
+                class: 'f7-icons',
+            }).append(pLink.iosicon).appendTo($itemMedia);
+            if (pLink.mdicon) $i.addClass('ios-only');
+        }
+        
+        if (pLink.mdicon) {
+            var $i = $('<i/>', {
+                class: 'material-icons',
+            }).append(pLink.mdicon).appendTo($itemMedia);
+            if (pLink.iosicon) $i.addClass('md-only');
+        }
+    }
+        
+    var $itemInner = $('<div/>', {
+        class: 'item-inner',
+    }).appendTo($itemCont);
+
+    $('<div/>', {
+        class: 'item-title',
+    }).append(pLink.title).appendTo($itemInner);
+
+    return $li;
+}

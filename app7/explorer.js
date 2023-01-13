@@ -50,7 +50,7 @@ DoorsAPI.foldersGetById(fld_id).then(
 
             if (routeTo.query.back == '1') {
                 $btn.css('margin-left', '0px');
-                
+
                 // Boton Back
                 var $backBtn = $('<a/>', {
                     href: '#',
