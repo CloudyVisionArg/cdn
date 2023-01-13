@@ -46,7 +46,7 @@ addDefaultOptions(pContainer)
 getTabbedViewsLayout(pTabs)
 getVirtualList(pListElement)
 renderMediaListItem(pItem)
-getListLink(pLink)
+getListLinkItem(pLink)
 */
 
 /*
@@ -2267,7 +2267,7 @@ function renderMediaListItem(pItem) {
 };
 
 /*
-Devuelve un li para el ListView que funciona como link
+Devuelve un li de tipo link para el ListView
 
 getListLink({
     title: 'Productos',
@@ -2279,7 +2279,7 @@ getListLink({
     },
 }).appendTo(ul);
 */
-function getListLink(pLink) {
+function getListLinkItem(pLink) {
     var $li = $('<li/>');
 
     var $itemCont = $('<a/>', {
