@@ -237,8 +237,9 @@ var app = {
                 console.log('bgFetch failed', error);
             };
 
+            //stopOnTerminate: false  // <-- true is default no existe mas esta opcion revisar doc    
             window.BackgroundFetch.configure( {
-                stopOnTerminate: false  // <-- true is default
+                minimumFetchInterval: 15
             },fetchFunctionIos, fetchFailureIos);
 
         } else if (device.platform == 'Android') {
