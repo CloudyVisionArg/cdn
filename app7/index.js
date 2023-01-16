@@ -237,9 +237,9 @@ var app = {
                 console.log('bgFetch failed', error);
             };
 
-            window.BackgroundFetch.configure(fetchFunctionIos, fetchFailureIos, {
+            window.BackgroundFetch.configure( {
                 stopOnTerminate: false  // <-- true is default
-            });
+            },fetchFunctionIos, fetchFailureIos);
 
         } else if (device.platform == 'Android') {
             var androidServiceReference = AndroidSingleton.getInstance();
