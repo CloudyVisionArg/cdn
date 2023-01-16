@@ -1784,7 +1784,7 @@ function addDefaultOptions(pContainer) {
 
         $('<div/>', {
             class: 'item-title',
-        }).append('F7 Icons Cheatsheet').appendTo($itemInner);
+        }).append('Framework7 Icons').appendTo($itemInner);
     
         // MD Icons
         $li = $('<li/>').appendTo(pContainer);
