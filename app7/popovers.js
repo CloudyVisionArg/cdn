@@ -11,7 +11,7 @@ fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
 })
 .then(json => {
     arrPopoversfijos = JSON.parse(json);
-    console.log(arrPopoversfijos);
+    console.log(json);
 })
 .catch(err => {
     console.log("ObtenerPopoversFijos -> Error " + err);
