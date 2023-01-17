@@ -1,5 +1,22 @@
 //se está llamando a generarCartelesVista antes de que esto esté resuelto
 var popoversFolder;
+const arrPopoversfijos = [];
+
+fetch('/Reading/api/file')
+.then(response => {
+    if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+    }
+    return response.json();
+})
+.then(json => {
+    arrPopoversfijos = JSON.parse(json);
+    console.log(arrPopoversfijos);
+})
+.catch(err => {
+    console.log("ObtenerPopoversFijos -> Error " + err);
+})
+
 DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     function (res) {
         popoversFolder = res;
@@ -109,7 +126,7 @@ function generarCartelesVista(pVista){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
-            const arrCartelesFijos = crearPopoversFijos().filter((item)=>{
+            const arrCartelesFijos = arrPopoversfijos().filter((item)=>{
                 return item["VIEW"] == pVista;
             });
             if(res.length > 0){
@@ -169,7 +186,7 @@ function generarCarteles(pScope){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
-            const arrCartelesFijos = crearPopoversFijos().filter((item)=>{
+            const arrCartelesFijos = arrPopoversfijos().filter((item)=>{
                 return (item["SCOPE"] == pScope || item["SCOPE"] == 'toolbar');
             });
             if(res.length > 0){
@@ -184,69 +201,13 @@ function generarCarteles(pScope){
     );
 }
 
-
-function crearPopoversFijos(){
-    const arrPopoversfijos = [
-        {        
-            CARTEL_ID: 100000001,
-            SCOPE: "explorer",
-            VIEW: null,
-            SELECTOR: ".subnavbar",
-            TITLE: " Vistas",
-            ICON_MD: "arrow_upward",
-            ICON_IOS: "arrow_up",
-            TEXT: "Presione aqu&iacute; para elegir la vista",
-            ORDEN: "1"
-        },  
-        {        
-            CARTEL_ID: 100000002,
-            SCOPE: "explorer",
-            VIEW: null,
-            SELECTOR: "#buttonSearch",
-            TITLE: " Buscar Contactos",
-            ICON_MD: "search",
-            ICON_IOS: "search",
-            TEXT: "Presione aqu&iacute; para buscar",
-            ORDEN: "2"
-        },  
-        {        
-            CARTEL_ID: 100000003,
-            SCOPE: "explorer",
-            VIEW: null,
-            SELECTOR: "#fabAdd",
-            TITLE: " Agregar",
-            ICON_MD: "add",
-            ICON_IOS: "plus",
-            TEXT: "Presione aquí para agregar o importar",
-            ORDEN: "3"
-        },  
-        {        
-            CARTEL_ID: 100000004,
-            SCOPE: "toolbar",
-            VIEW: null,
-            SELECTOR: "a[href='#view-notifications']",
-            TITLE: " Notificaciones",
-            ICON_MD: "notifications",
-            ICON_IOS: "bell",
-            TEXT: "Aqui podra consultar notificaciones acerca de los contactos asignados",
-            ORDEN: "4"
-        },  
-        {        
-            CARTEL_ID: 100000005,
-            SCOPE: "toolbar",
-            VIEW: null,
-            SELECTOR: "a[href='#view-opciones']",
-            TITLE: " Opciones",
-            ICON_MD: "settings",
-            ICON_IOS: "gear_alt_fill",
-            TEXT: "Aqui podra configurar sus opciones",
-            ORDEN: "5"
-        },  
-    ]
+/*
+function arrPopoversfijos(){
+    const arrPopoversfijos = 
     
     return arrPopoversfijos;
 }
-
+*/
 
 
 /* function iniciarTour() {
