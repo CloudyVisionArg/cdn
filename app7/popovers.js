@@ -126,7 +126,7 @@ function generarCartelesVista(pVista){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
-            const arrCartelesFijos = arrPopoversfijos().filter((item)=>{
+            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return item["VIEW"] == pVista;
             });
             if(res.length > 0){
@@ -186,7 +186,7 @@ function generarCarteles(pScope){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
-            const arrCartelesFijos = arrPopoversfijos().filter((item)=>{
+            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return (item["SCOPE"] == pScope || item["SCOPE"] == 'toolbar');
             });
             if(res.length > 0){
@@ -202,7 +202,7 @@ function generarCarteles(pScope){
 }
 
 /*
-function arrPopoversfijos(){
+function arrPopoversfijos{
     const arrPopoversfijos = 
     
     return arrPopoversfijos;
