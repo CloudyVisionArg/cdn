@@ -7,10 +7,12 @@ fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
     if (!response.ok) {
         throw new Error("HTTP error " + response.status);
     }
+    
     return response.json();
+
 })
 .then(json => {
-    arrPopoversfijos = JSON.parse(json);
+    arrPopoversfijos = json;
     console.log(json);
 })
 .catch(err => {
