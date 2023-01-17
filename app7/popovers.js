@@ -192,7 +192,7 @@ function generarCarteles(pScope){
                 return (item["SCOPE"] == pScope || item["SCOPE"] == 'toolbar');
             });
             if(res.length > 0){
-                renderPopovers([...res, ...arrCartelesFijos]);
+                renderPopovers([...arrCartelesFijos, ...res]);
             }else{
                 renderPopovers(arrCartelesFijos);
             }
