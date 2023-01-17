@@ -24,6 +24,8 @@ var $$ = Dom7;
 var app7;
 var db;
 
+window.crm = {};
+
 var app = {
     self: undefined,
 
