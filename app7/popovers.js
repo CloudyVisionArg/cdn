@@ -1,6 +1,6 @@
 //se está llamando a generarCartelesVista antes de que esto esté resuelto
 var popoversFolder;
-const arrPopoversfijos = [];
+var arrPopoversfijos;
 
 fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
 .then(response => {
