@@ -1,5 +1,23 @@
-//se está llamando a generarCartelesVista antes de que esto esté resuelto
+
 var popoversFolder;
+var arrPopoversfijos;
+
+fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
+.then(response => {
+    if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+    }    
+    return response.json();
+})
+.then(json => {
+    arrPopoversfijos = json;
+})
+.catch(err => {
+    console.log("ObtenerPopoversFijos -> Error " + err);
+})
+
+//se está llamando a generarCartelesVista antes de que esto esté resuelto
+// ya no hace falta llamarlo desde las codelibs, se llama desde los eventos de las paginas
 DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     function (res) {
         popoversFolder = res;
@@ -109,7 +127,7 @@ function generarCartelesVista(pVista){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
-            const arrCartelesFijos = crearPopoversFijos().filter((item)=>{
+            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return item["VIEW"] == pVista;
             });
             if(res.length > 0){
@@ -156,7 +174,6 @@ function obtenerScope(page){
 }
 
 function generarCarteles(pScope){
-    console.log("generar carteles por scope")
     const scopeformula =  pScope ? "scope LIKE '" + pScope + "' OR scope LIKE 'toolbar'" : "scope LIKE 'toolbar'";
 
     var read = window.localStorage.getItem("popoversLeidos");
@@ -169,11 +186,11 @@ function generarCarteles(pScope){
 
     DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
         function(res){            
-            const arrCartelesFijos = crearPopoversFijos().filter((item)=>{
+            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return (item["SCOPE"] == pScope || item["SCOPE"] == 'toolbar');
             });
             if(res.length > 0){
-                renderPopovers([...res, ...arrCartelesFijos]);
+                renderPopovers([...arrCartelesFijos, ...res]);
             }else{
                 renderPopovers(arrCartelesFijos);
             }
@@ -183,93 +200,3 @@ function generarCarteles(pScope){
         }
     );
 }
-
-
-function crearPopoversFijos(){
-    const arrPopoversfijos = [
-        {        
-            CARTEL_ID: 100000001,
-            SCOPE: "explorer",
-            VIEW: null,
-            SELECTOR: ".subnavbar",
-            TITLE: " Vistas",
-            ICON_MD: "arrow_upward",
-            ICON_IOS: "arrow_up",
-            TEXT: "Presione aqu&iacute; para elegir la vista",
-            ORDEN: "1"
-        },  
-        {        
-            CARTEL_ID: 100000002,
-            SCOPE: "explorer",
-            VIEW: null,
-            SELECTOR: "#buttonSearch",
-            TITLE: " Buscar Contactos",
-            ICON_MD: "search",
-            ICON_IOS: "search",
-            TEXT: "Presione aqu&iacute; para buscar",
-            ORDEN: "2"
-        },  
-        {        
-            CARTEL_ID: 100000003,
-            SCOPE: "explorer",
-            VIEW: null,
-            SELECTOR: "#fabAdd",
-            TITLE: " Agregar",
-            ICON_MD: "add",
-            ICON_IOS: "plus",
-            TEXT: "Presione aquí para agregar o importar",
-            ORDEN: "3"
-        },  
-        {        
-            CARTEL_ID: 100000004,
-            SCOPE: "toolbar",
-            VIEW: null,
-            SELECTOR: "a[href='#view-notifications']",
-            TITLE: " Notificaciones",
-            ICON_MD: "notifications",
-            ICON_IOS: "bell",
-            TEXT: "Aqui podra consultar notificaciones acerca de los contactos asignados",
-            ORDEN: "4"
-        },  
-        {        
-            CARTEL_ID: 100000005,
-            SCOPE: "toolbar",
-            VIEW: null,
-            SELECTOR: "a[href='#view-opciones']",
-            TITLE: " Opciones",
-            ICON_MD: "settings",
-            ICON_IOS: "gear_alt_fill",
-            TEXT: "Aqui podra configurar sus opciones",
-            ORDEN: "5"
-        },  
-    ]
-    
-    return arrPopoversfijos;
-}
-
-
-
-/* function iniciarTour() {
-    var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
-    DoorsAPI.folderSearch(popoversFolder.FldId, "doc_id,cartel_id,view,selector,text,orden", cartelFormula, "orden", 0, false, 0).then(
-        function (res) {
-            if (res.length > 0) {
-                const arrCarteles = res.map(crearCarteles)
-                for (let i = 0; i < arrCarteles.length - 1; i++) {
-                    arrCarteles[i].on('closed', function (popover) {
-                        app7.tab.show(arrCarteles[i + 1]["VIEW"]);
-                        arrCarteles[i + 1].open(arrCarteles[i + 1]["SELECTOR"]);
-                    });
-                }
-                //después cuando ya arme el array de lo que tengo que 
-                //mostrar lo dibujo en orden
-                app7.tab.show(arrCarteles[0]["VIEW"])
-                arrCarteles[0].open(arrCarteles[0]["SELECTOR"]);
-            }
-        },
-        function (err) {
-            console.log(err);
-        }
-    );
-} */
