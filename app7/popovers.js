@@ -2,7 +2,7 @@
 var popoversFolder;
 const arrPopoversfijos = [];
 
-fetch('/Reading/api/file')
+fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
 .then(response => {
     if (!response.ok) {
         throw new Error("HTTP error " + response.status);
