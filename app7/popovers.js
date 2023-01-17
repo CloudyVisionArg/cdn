@@ -1,4 +1,4 @@
-//se está llamando a generarCartelesVista antes de que esto esté resuelto
+
 var popoversFolder;
 var arrPopoversfijos;
 
@@ -6,19 +6,18 @@ fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
 .then(response => {
     if (!response.ok) {
         throw new Error("HTTP error " + response.status);
-    }
-    
+    }    
     return response.json();
-
 })
 .then(json => {
     arrPopoversfijos = json;
-    console.log(json);
 })
 .catch(err => {
     console.log("ObtenerPopoversFijos -> Error " + err);
 })
 
+//se está llamando a generarCartelesVista antes de que esto esté resuelto
+// ya no hace falta llamarlo desde las codelibs, se llama desde los eventos de las paginas
 DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     function (res) {
         popoversFolder = res;
@@ -175,7 +174,6 @@ function obtenerScope(page){
 }
 
 function generarCarteles(pScope){
-    console.log("generar carteles por scope")
     const scopeformula =  pScope ? "scope LIKE '" + pScope + "' OR scope LIKE 'toolbar'" : "scope LIKE 'toolbar'";
 
     var read = window.localStorage.getItem("popoversLeidos");
@@ -202,37 +200,3 @@ function generarCarteles(pScope){
         }
     );
 }
-
-/*
-function arrPopoversfijos{
-    const arrPopoversfijos = 
-    
-    return arrPopoversfijos;
-}
-*/
-
-
-/* function iniciarTour() {
-    var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
-    DoorsAPI.folderSearch(popoversFolder.FldId, "doc_id,cartel_id,view,selector,text,orden", cartelFormula, "orden", 0, false, 0).then(
-        function (res) {
-            if (res.length > 0) {
-                const arrCarteles = res.map(crearCarteles)
-                for (let i = 0; i < arrCarteles.length - 1; i++) {
-                    arrCarteles[i].on('closed', function (popover) {
-                        app7.tab.show(arrCarteles[i + 1]["VIEW"]);
-                        arrCarteles[i + 1].open(arrCarteles[i + 1]["SELECTOR"]);
-                    });
-                }
-                //después cuando ya arme el array de lo que tengo que 
-                //mostrar lo dibujo en orden
-                app7.tab.show(arrCarteles[0]["VIEW"])
-                arrCarteles[0].open(arrCarteles[0]["SELECTOR"]);
-            }
-        },
-        function (err) {
-            console.log(err);
-        }
-    );
-} */
