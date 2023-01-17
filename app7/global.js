@@ -646,7 +646,7 @@ function showLogin() {
                                         getDocField(doc, 'creator_nombre').Value = $get('#nombre').val();
                             
                                         DoorsAPI.documentSave(doc).then(function (doc) {
-                                            setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso.');
+                                            setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso, recuerde checkear el correo no deseado.');
                             
                                             DoorsAPI.logoff();
                                             Doors.RESTFULL.AuthToken = '';

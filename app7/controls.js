@@ -46,6 +46,7 @@ addDefaultOptions(pContainer)
 getTabbedViewsLayout(pTabs)
 getVirtualList(pListElement)
 renderMediaListItem(pItem)
+getListLinkItem(pLink)
 */
 
 /*
@@ -1379,8 +1380,8 @@ function getPage(params) {
 Para botones de la Navbar
 {
     text: miBoton,
-    iosicon: https://framework7.io/icons/,
-    mdicon: https://material.io/resources/icons,
+    iosicon: miIcono,
+    mdicon: miIcono, // Puede pasarse solo uno, en ese caso se usa el mismo en ambos temas
 }
 */
 function getLink(params) {
@@ -1783,7 +1784,27 @@ function addDefaultOptions(pContainer) {
 
         $('<div/>', {
             class: 'item-title',
-        }).append('F7 Icons Cheatsheet').appendTo($itemInner);
+        }).append('Framework7 Icons').appendTo($itemInner);
+    
+        // MD Icons
+        $li = $('<li/>').appendTo(pContainer);
+
+        $itemCont = $('<a/>', {
+            href: '#',
+            class: 'item-link item-content',
+        }).appendTo($li);
+
+        $itemCont.click(function () {
+            cordova.InAppBrowser.open('https://fonts.google.com/icons?selected=Material+Icons', '_system');
+        });
+
+        $itemInner = $('<div/>', {
+            class: 'item-inner',
+        }).appendTo($itemCont);
+
+        $('<div/>', {
+            class: 'item-title',
+        }).append('Material Icons').appendTo($itemInner);
     }
 }
 
@@ -1802,8 +1823,7 @@ getTabbedViewsLayout([
         viewid: 'view-opciones',
         label: 'Opciones',
         url: '/codelib/?code=opciones',
-        iosicon: 'gear_alt_fill',
-        mdicon: 'settings',
+        iosicon: 'gear_alt_fill', // Como no especifico mdicon se usa este en los 2
     }
 ]).appendTo($('#app'));
 */
@@ -2245,3 +2265,57 @@ function renderMediaListItem(pItem) {
     
     return $li;
 };
+
+/*
+Devuelve un li de tipo link para el ListView
+
+getListLink({
+    title: 'Productos',
+    iosicon: 'cart',
+    mdicon: 'shopping_cart', // Puede pasarse solo uno, en ese caso se usa el mismo en ambos temas
+    click: function () {
+        app7.preloader.show();
+        f7Page.view.router.navigate('/explorer/?fld_id=999&back=1');
+    },
+}).appendTo(ul);
+*/
+function getListLinkItem(pLink) {
+    var $li = $('<li/>');
+
+    var $itemCont = $('<a/>', {
+        href: '#',
+        class: 'item-link item-content',
+    }).appendTo($li);
+
+    $itemCont.click(pLink.click);
+
+    if (pLink.iosicon || pLink.mdicon) {
+        var $itemMedia = $('<div/>', {
+            class: 'item-media',
+        }).appendTo($itemCont);
+
+        if (pLink.iosicon) {
+            var $i = $('<i/>', {
+                class: 'f7-icons',
+            }).append(pLink.iosicon).appendTo($itemMedia);
+            if (pLink.mdicon) $i.addClass('ios-only');
+        }
+        
+        if (pLink.mdicon) {
+            var $i = $('<i/>', {
+                class: 'material-icons',
+            }).append(pLink.mdicon).appendTo($itemMedia);
+            if (pLink.iosicon) $i.addClass('md-only');
+        }
+    }
+        
+    var $itemInner = $('<div/>', {
+        class: 'item-inner',
+    }).appendTo($itemCont);
+
+    $('<div/>', {
+        class: 'item-title',
+    }).append(pLink.title).appendTo($itemInner);
+
+    return $li;
+}

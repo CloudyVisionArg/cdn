@@ -5,8 +5,6 @@ generic del APP7
 Documentacion:
 Cordova: https://cordova.apache.org/docs/en/latest/
 Framework7: https://framework7.io/docs/
-F7 icons: Boton F7 Icons Cheatsheet de las opciones (solo web)
-MD icons: https://fonts.google.com/icons?selected=Material+Icons
 */
 
 var fld_id, doc_id, doc, folder, cacheDir;

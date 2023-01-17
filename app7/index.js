@@ -147,7 +147,7 @@ var app = {
                                         }
                                     }
                                 } else {
-                                    resolve({ content: errPage('Codelib not found: ' + page) });
+                                    resolve({ content: errPage('Codelib not found: ' + code) });
                                 }
                             },
                             function (err) {
@@ -237,9 +237,10 @@ var app = {
                 console.log('bgFetch failed', error);
             };
 
-            window.BackgroundFetch.configure(fetchFunctionIos, fetchFailureIos, {
-                stopOnTerminate: false  // <-- true is default
-            });
+            //stopOnTerminate: false  // <-- true is default no existe mas esta opcion revisar doc    
+            window.BackgroundFetch.configure( {
+                minimumFetchInterval: 15
+            },fetchFunctionIos, fetchFailureIos);
 
         } else if (device.platform == 'Android') {
             var androidServiceReference = AndroidSingleton.getInstance();
