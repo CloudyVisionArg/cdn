@@ -179,7 +179,6 @@ var app = {
         function loadJS(url, routeTo, routeFrom, resolve, reject) {
             $.ajax({
                 url: url,
-                dataType: 'text',
             }).done(function (data, textStatus, jqXHR) {
                 if (device.platform == 'browser') {
                     eval(data);
