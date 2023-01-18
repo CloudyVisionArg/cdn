@@ -181,6 +181,9 @@ var app = {
                 url: url,
                 dataType: 'text',
                 crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                 }
             }).done(function (data, textStatus, jqXHR) {
                 if (device.platform == 'browser') {
                     eval(data);
