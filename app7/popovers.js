@@ -1,6 +1,6 @@
 
 var popoversFolder;
-var arrPopoversfijos;
+var arrPopoversfijos = [];
 
 fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
 .then(response => {
