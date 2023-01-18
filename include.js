@@ -314,14 +314,17 @@ function scriptSrc(scriptId, version) {
                 };
             };
 
-            if (v == 0) {
-                /*
-                todo: soportar el uso de branch, agregarlo asi a la peticion:
-                http://cloudycrm.net/c/gitcdn.asp?branch=master&path=/jslib.js
-                */
-                src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+            if (!isNaN(parseInt(v))) {
+                // Master
+                if (v == 0) {
+                    src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+                } else {
+                    src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
+                }
+
             } else {
-                src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
+                // Branch
+                src = 'http://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
             }
         }
 
