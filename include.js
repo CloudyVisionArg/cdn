@@ -28,6 +28,12 @@ U obtener el ultimo commit, sin caches, pidiendo la version 0
 		// emojis last commit loaded
 	});
 
+O el ultimo commit de un branch, pasando el nombre del mismo (case sensitive)
+
+	include('emojis', 'MyBranch', function () {
+		// emojis last commit from MyBranch loaded
+	});
+
 Puedo usarlo para mis propios script especificando el src:
 
 	include('myScript', 'http://path/to/my/script.js', function () {
@@ -40,7 +46,8 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 	scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
 	scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
 	scripts.push({ id: 'doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
-	scripts.push({ id: 'web-javascript', version: 0 });
+	scripts.push({ id: 'web-javascript', version: 0 }); // Ult commit
+	scripts.push({ id: 'web-javascript', version: 'MyBranch' }); // Ult commit del branch MyBranch
 	
 	include(scripts, function () {
 		// all scripts loaded
@@ -119,7 +126,7 @@ Argumentos:
 	- array -> Inclusion multiple [{ id, version o src, depends[id] }] (version se considera antes que src)
 1: 
 	- string -> SRC del script custom
-	- number -> Version (0 = lastCommit)
+	- number o string -> Tag si es numero (0 = lastCommit), Branch sino
 	- function -> Callback
 2:
 	- function -> Callback
@@ -188,7 +195,12 @@ function include() {
 
         } else {
             if (typeof arguments[1] == 'string') {
-                pSrc = arguments[1];
+                // Si empieza con http es el src, sino el branch
+                if (arguments[1].substring(0, 4).toLowerCase() == 'http') {
+                    pSrc = arguments[1];
+                } else {
+                    pVer = arguments[1]
+                }
             } else if (typeof arguments[1] == 'number') {
                 pVer = arguments[1]
             } else if (typeof arguments[1] == 'function') {
@@ -302,7 +314,7 @@ function scriptSrc(scriptId, version) {
                 try {
                     /*
                     Puedo especificar la version de los scripts en el localStorage, en un item asi:
-                        scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": 0 }]
+                        scripts = [{ "id": "doorsapi", "version": 0 }, { "id": "app7-global", "version": "MyBranch" }]
                     */
                     var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
                     if (Array.isArray(lsScripts)) {
