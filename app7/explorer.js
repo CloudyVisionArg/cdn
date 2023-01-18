@@ -350,7 +350,7 @@ function pageInit(e, page) {
         })
     }
 
-    pageEl.cloudy = {
+    pageEl.crm = {
         reloadView,
         toggleSelectionMode,
         refreshOnFocus,
