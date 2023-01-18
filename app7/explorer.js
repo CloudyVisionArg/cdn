@@ -31,7 +31,7 @@ DoorsAPI.foldersGetById(fld_id).then(
         if (folder.Type == 1) {
             $page = getPage({
                 id: 'explorer_' + getGuid(),
-                title: (folder.Description ? folder.Description : folder.Name),
+                title: 'jp' + (folder.Description ? folder.Description : folder.Name),
                 leftbutton: 'search',
                 rightbutton: 'new',
                 searchbar: 2,
