@@ -180,9 +180,7 @@ var app = {
             $.ajax({
                 url: url,
                 dataType: 'text',
-            }).done(function () {
-                debugger;
-                //success: function (data, textStatus, jqXHR) {
+            }).done(function (data, textStatus, jqXHR) {
                 if (device.platform == 'browser') {
                     eval(data);
                 } else {
@@ -193,10 +191,8 @@ var app = {
                         resolve({ content: errPage(err) });
                     }
                 }
-
-            }).fail(function () {
+            }).fail(function (jqXHR, textStatus, errorThrown) {
                 debugger;
-
             });
         }
 
