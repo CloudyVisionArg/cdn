@@ -181,6 +181,7 @@ var app = {
                 url: url,
                 dataType: 'jsonp',
             }).done(function (data, textStatus, jqXHR) {
+                debugger;
                 if (device.platform == 'browser') {
                     eval(data);
                 } else {
