@@ -180,18 +180,23 @@ var app = {
             $.ajax({
                 url: url,
                 dataType: 'text',
-                success: function (data, textStatus, jqXHR) {
-                    if (device.platform == 'browser') {
+            }).done(function () {
+                debugger;
+                //success: function (data, textStatus, jqXHR) {
+                if (device.platform == 'browser') {
+                    eval(data);
+                } else {
+                    try {
                         eval(data);
-                    } else {
-                        try {
-                            eval(data);
-                        } catch(err) {
-                            console.log(err);
-                            resolve({ content: errPage(err) });
-                        }
+                    } catch(err) {
+                        console.log(err);
+                        resolve({ content: errPage(err) });
                     }
-                },
+                }
+
+            }).fail(function () {
+                debugger;
+
             });
         }
 
