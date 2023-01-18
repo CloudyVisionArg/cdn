@@ -180,6 +180,7 @@ var app = {
             $.ajax({
                 url: url,
                 dataType: 'text',
+                crossDomain: true,
             }).done(function (data, textStatus, jqXHR) {
                 if (device.platform == 'browser') {
                     eval(data);
