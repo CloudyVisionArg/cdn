@@ -1404,7 +1404,7 @@ function f7AppEvents() {
 
         // Ejecuto el metodo refresh del explorer
         if (pageId && pageId.substring(0, 9) == 'explorer_') {
-            page.pageEl.cloudy.refreshOnFocus();
+            page.pageEl.crm.refreshOnFocus();
         };
     })
 }
