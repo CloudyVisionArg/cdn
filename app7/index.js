@@ -183,7 +183,7 @@ var app = {
             }).done(function (data, textStatus, jqXHR) {
                 debugger;
                 if (device.platform == 'browser') {
-                    eval(data);
+                    eval(data.code);
                 } else {
                     try {
                         eval(data);
