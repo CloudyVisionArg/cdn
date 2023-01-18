@@ -181,9 +181,8 @@ var app = {
                 url: url,
                 dataType: 'text',
             }).done(function (data, textStatus, jqXHR) {
-                debugger;
                 if (device.platform == 'browser') {
-                    eval(data.code);
+                    eval(code);
                 } else {
                     try {
                         eval(data);
