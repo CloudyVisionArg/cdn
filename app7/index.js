@@ -182,7 +182,7 @@ var app = {
                 dataType: 'text',
             }).done(function (data, textStatus, jqXHR) {
                 if (device.platform == 'browser') {
-                    eval(code);
+                    eval(data);
                 } else {
                     try {
                         eval(data);
