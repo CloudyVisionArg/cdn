@@ -336,7 +336,7 @@ function scriptSrc(scriptId, version) {
 
             } else {
                 // Branch
-                src = 'http://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
+                src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
             }
         }
 
