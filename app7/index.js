@@ -179,7 +179,7 @@ var app = {
         function loadJS(url, routeTo, routeFrom, resolve, reject) {
             $.ajax({
                 url: url,
-                dataType: 'jsonp',
+                dataType: 'text/plain',
             }).done(function (data, textStatus, jqXHR) {
                 debugger;
                 if (device.platform == 'browser') {
