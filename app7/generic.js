@@ -11,35 +11,35 @@ var fld_id, doc_id, doc, folder, cacheDir;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
-var pStuff = {}; // Deprecado, usar pageEl.cloudy
+var pStuff = {}; // Deprecado, usar pageEl.crm
 
 /*
-pageEl.cloudy sirve para guardar variables y funciones de UNA INSTANCIA de pagina.
+pageEl.crm sirve para guardar variables y funciones de UNA INSTANCIA de pagina.
 Al estar guardadas en el nodo de la pagina se pueden acceder desde otras paginas. Ej:
 
 En el BeforeRender:
 
-    pageEl.cloudy.myVar = 5;
-    pageEl.cloudy.myFunc = function () {
-        alert('myVar is ' + pageEl.cloudy.myVar.toString());
+    pageEl.crm.myVar = 5;
+    pageEl.crm.myFunc = function () {
+        alert('myVar is ' + pageEl.crm.myVar.toString());
     }
 
 Y luego en el app7_script de un textbox:
 
     $input.change(function () {
-        pageEl.cloudy.myVar = $(this).val()
-        pageEl.cloudy.myFunc();
+        pageEl.crm.myVar = $(this).val()
+        pageEl.crm.myFunc();
     });
 
 Y usar la misma function en el AfterRender (que se dispara al finalizar el abrir o guardar)
 
-    pageEl.cloudy.myFunc();
+    pageEl.crm.myFunc();
 
 Y tambien llamarla desde otra pagina de esta forma:
 
-    $('#view-myview .page[id*="generic_"]')[0].cloudy.myFunc()
+    $('#view-myview .page[id*="generic_"]')[0].crm.myFunc()
 
-pageEl.cloudy tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
+pageEl.crm tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
 */
 
 // Parametros del query string
@@ -997,7 +997,7 @@ function pageInit(e, page) {
         }
     }, 0);
 
-    pageEl.cloudy = {
+    pageEl.crm = {
         fillControls,
         saveDoc,
         fld_id,
@@ -1587,10 +1587,10 @@ function saveDoc() {
     DoorsAPI.documentSave(doc).then(
         function (doc2) {
             doc = doc2;
-            pageEl.cloudy.doc = doc;
+            pageEl.crm.doc = doc;
 
             doc_id = getDocField(doc, 'doc_id').Value;
-            pageEl.cloudy.doc_id = doc_id;
+            pageEl.crm.doc_id = doc_id;
 
             saveAtt().then(
                 function (res) {
