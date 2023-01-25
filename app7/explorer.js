@@ -1004,7 +1004,6 @@ function deleteClick() {
                             loop.next();
                         },
                         function (err) {
-                            debugger;
                             $block.append(errMsg(err) + '<br/>');
                             loop.next();
                         }
