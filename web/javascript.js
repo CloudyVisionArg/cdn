@@ -191,7 +191,7 @@ function addEmailButton(pControl) {
 }
 
 function wappNumber(pPhone) {
-	var ret = pPhone.replace(/\+| |\(|\)|-/g, '');
+	var ret = pPhone.replace(/[^0-9]/g, '');
 	if (ret.length == 10) ret = '549' + ret;
 	return ret;
 }
