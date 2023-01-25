@@ -145,7 +145,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                 }
             });
             // Fin Vistas
-            
+        viewDiv    
             $pageCont = $page.find('.page-content');
             
             // Evento del Pull To Refresh
@@ -251,7 +251,8 @@ function newDoc(e) {
         f7Page.view.router.navigate(prop);
     } else {
         f7Page.view.router.navigate('/generic/?fld_id=' + fld_id);
-    }
+    };
+    $viewDiv.addClass('refresh-on-focus');
 }
             
 function pageInit(e, page) {
@@ -1019,15 +1020,20 @@ function deleteClick() {
 }
 
 function refreshOnFocus() {
-    $get('li.refresh-on-focus').each(function (index, el) {
-        var $cont = $(el).closest('div.accordion-item-content');
-        if ($cont.length) {
-            $cont.empty();
-            loadViewSection($cont);
-            // todo: en este caso faltaria actualizar los totales
-        } else {
-            $viewDiv.empty();
-            loadViewSection($viewDiv);
-        }
-    });
+    if ($viewDiv.hasClass('refresh-on-focus')) {
+        $viewDiv.empty();
+        loadViewSection($viewDiv);
+    } else {
+        $get('li.refresh-on-focus').each(function (index, el) {
+            var $cont = $(el).closest('div.accordion-item-content');
+            if ($cont.length) {
+                $cont.empty();
+                loadViewSection($cont);
+                // todo: en este caso faltaria actualizar los totales
+            } else {
+                $viewDiv.empty();
+                loadViewSection($viewDiv);
+            }
+        });
+    }
 }
