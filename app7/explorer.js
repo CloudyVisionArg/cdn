@@ -145,7 +145,7 @@ DoorsAPI.foldersGetById(fld_id).then(
                 }
             });
             // Fin Vistas
-        viewDiv    
+
             $pageCont = $page.find('.page-content');
             
             // Evento del Pull To Refresh
