@@ -166,7 +166,7 @@ asyncLoop(10,
     }
 );
 */
-function asyncLoop(iterations, func, callback) {
+function asyncLoop(iterations, loopFunc, callback) {
 	var index = 0;
 	var done = false;
 	var loop = {
@@ -175,9 +175,9 @@ function asyncLoop(iterations, func, callback) {
             	return;
 	        }
 	
-	        if (index < iterations) {
+	        if (!iterations || index < iterations) {
 	            index++;
-	            func(loop);
+	            loopFunc(loop);
 	        } else {
 	            done = true;
 	            if (callback) callback();
