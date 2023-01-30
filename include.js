@@ -75,7 +75,7 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
-	scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 179 });
+	scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 0 });
 
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 179 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
