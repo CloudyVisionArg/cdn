@@ -227,6 +227,8 @@ var app = {
             );
         };
     
+        /*
+        // Background fetch
         if (device.platform == 'iOS') {
             // https://github.com/transistorsoft/cordova-plugin-background-fetch
 
@@ -275,6 +277,7 @@ var app = {
                 }
             }
         }
+        */
 
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
