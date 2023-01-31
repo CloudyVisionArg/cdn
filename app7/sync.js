@@ -89,7 +89,7 @@ function Sync() {
             return;
         }
 
-        dSession.checkToken(function () {
+        appSession.checkToken(function () {
             syncPriv(full, callback);
         }, function (err) {
             self.syncing(false);

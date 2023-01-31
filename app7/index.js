@@ -24,7 +24,7 @@ initScripts.push({ id: 'app7-index.css' });
 (async () => {
     await include(initScripts);
     doorsapi2 = await import(scriptSrc('doorsapi2'));
-    appSession = new DSession();
+    appSession = new AppSession();
     dSession = appSession; // Esta tiene q ser new doorsapi2.Session
     app.initialize();    
 })();
@@ -296,7 +296,7 @@ var app = {
             showLogin();
         } else {
             if (app7.online) {
-                dSession.checkToken(
+                appSession.checkToken(
                     execOnDeviceReady,
                     function (err) {
                         showLogin();
@@ -379,7 +379,7 @@ var app = {
         if (app7.online) {
             var ls = window.localStorage;
             if (ls.getItem('userName') && ls.getItem('instance') && ls.getItem('endPoint')) {
-                dSession.checkToken(
+                appSession.checkToken(
                     function () {
                         sync.sync(false);
                         if (window.refreshNotifications) window.refreshNotifications();

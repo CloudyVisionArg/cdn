@@ -1,4 +1,4 @@
-function DSession() {
+function AppSession() {
     this.freeVersion = {}
     this.freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';
     this.freeVersion.login = 'anonimo';
