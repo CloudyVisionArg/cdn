@@ -488,6 +488,7 @@ function showLogin() {
 
                                 try {
                                     sync.sync(true, function() {
+                                        debugger;
                                         location.href = 'index.html';
                                     })
                                 } catch(err) {
