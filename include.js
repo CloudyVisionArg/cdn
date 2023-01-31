@@ -78,17 +78,20 @@ function registeredScripts() {
 
 	scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 0 });
 
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 180 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 181 });
+	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 181 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 181, hasdep: true });
+	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 181 });
+	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 181 });
+	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 181 });    
+    
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 179 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 179 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 179 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 178, hasdep: true });
-	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 178 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
-	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 163 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 155 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 154 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
@@ -105,7 +108,6 @@ function registeredScripts() {
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
 	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
-	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 84 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
@@ -113,7 +115,6 @@ function registeredScripts() {
 	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
 	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
-	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 41 });
 
 	// Aliases (for backward compatibility)
 	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
