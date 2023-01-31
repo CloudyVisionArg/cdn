@@ -953,7 +953,7 @@ function pageInit(e, page) {
                 }
             ).then(() => {
                 const ev = new CustomEvent('fillComplete');
-                $el[0].dispatchEvent(catFound);
+                $el[0].dispatchEvent(ev);
             });
 
         } else {
