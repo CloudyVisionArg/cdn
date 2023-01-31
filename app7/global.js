@@ -708,7 +708,7 @@ function showLogin() {
                                 setMessage('message', '');
 
                                 if (!$get('#email').val()) {
-                                    setMessage('message', 'Ingrese su Usuario');
+                                    setMessage('instrucciones', 'Ingrese su Usuario');
                                     $get('#email').focus();
                                     return false;
                                 }
