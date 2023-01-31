@@ -951,7 +951,10 @@ function pageInit(e, page) {
                         }
                     })
                 }
-            );
+            ).then(() => {
+                const ev = new CustomEvent('fillComplete');
+                $el[0].dispatchEvent(catFound);
+            });
 
         } else {
             getControlFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
@@ -968,7 +971,10 @@ function pageInit(e, page) {
                             $el.attr('data-fill-formula'), $el.attr('data-fill-order')
                         ),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
-                    );
+                    ).then(() => {
+                        const ev = new CustomEvent('fillComplete');
+                        $el[0].dispatchEvent(ev);
+                    });
                 },
                 function (err) {
                     console.log(err);
