@@ -137,147 +137,150 @@ Argumentos:
 */
 
 function include() {
-	var src, pSrc, pVer, pCallback;
-	var scripts = registeredScripts();
+    return new Promise((resolve, reject) => {
+        var src, pSrc, pVer, pCallback;
+        var scripts = registeredScripts();
 
-    if (Array.isArray(arguments[0])) {
-        let arrScr = arguments[0];
-        pCallback = arguments[1];
+        if (Array.isArray(arguments[0])) {
+            let arrScr = arguments[0];
+            pCallback = arguments[1];
 
-        // Itera el array y carga todos los scripts
-        arrScr.forEach(function (el, ix) {
-            if (el.depends) {
-                // Tiene dependencias, hay que esperar que se carguen
-                setTimeout(function wait() {
-                    var faltan = false;
-                    el.depends.forEach(function (el2, ix2) {
-                        if (arrScr.find(el3 => el3.id == el2 && !el3.loaded)) {
-                            faltan = true;
-                        }
-                    });
-                    if (faltan) {
-                        setTimeout(wait, 100);
-                    } else {
-                        includeEl(el);
-                    }
-                }, 0)
-            } else {
-                includeEl(el);
-            }
-        });
-
-        function includeEl(pEl) {
-            if (typeof pEl.version == 'number') {
-                include(pEl.id, pEl.version, function () {
-                    pEl.loaded = true;
-                })
-            } else {
-                include(pEl.id, pEl.src, function () {
-                    pEl.loaded = true;
-                })
-            }
-        }
-
-        // Espera a que terminen de cargar todos y hace callback
-        setTimeout(function wait() {
-            if (arrScr.find(el => !el.loaded)) {
-                setTimeout(wait, 100)
-            } else {
-                if (pCallback) pCallback();
-            }
-        }, 0);
-
-    } else if (typeof arguments[0] == 'string') {
-        var pId = arguments[0].toLowerCase();
-
-        var script = scripts.find(el => el.id == pId);
-
-        if (script && script.aliasOf) {
-            // Es un alias
-            arguments[0] = script.aliasOf;
-            include.apply(null, arguments); 
-
-        } else {
-            if (typeof arguments[1] == 'string') {
-                // Si empieza con http es el src, sino el branch
-                if (arguments[1].substring(0, 4).toLowerCase() == 'http') {
-                    pSrc = arguments[1];
-                } else {
-                    pVer = arguments[1]
-                }
-            } else if (typeof arguments[1] == 'number') {
-                pVer = arguments[1]
-            } else if (typeof arguments[1] == 'function') {
-                pCallback = arguments[1];
-            }
-
-            if (typeof arguments[2] == 'function') {
-                pCallback = arguments[2];
-            }
-
-            var src = scriptSrc(pId, pVer);
-            if (!src) {
-                if (pSrc) {
-                    src = pSrc;
-                } else {
-                    throw pId + ' not registered and no src specified';
-                }
-            }
-
-            if (src) {
-                var scriptNode = document.getElementById('script_' + pId);
-                if (!scriptNode) {
-                    //console.log(pId + ' loading');
-                    var D = document;
-                    
-                    if (src.substring(src.length - 4).toLowerCase() == '.css') {
-                        scriptNode = D.createElement('link');
-                        scriptNode.rel = 'stylesheet';
-                        scriptNode.href = src;
-                    } else {
-                        scriptNode = D.createElement('script');
-                        scriptNode.type = 'text/javascript';
-                        scriptNode.async = true;
-                        scriptNode.src = src;
-                    }
-                    scriptNode.id = 'script_' + pId;
-                    if (script && script.hasdep) scriptNode._hasdep = true;
-                    
-                    scriptNode.loaded = function (callback) {
-                        var self = this;
-                        var waiting = 0;
-                        var interv = setInterval(function () {
-                            waiting += 10;
-                            if ((self._loaded && !self._hasdep) || waiting > 3000) {
-                                clearInterval(interv);
-                                if (waiting > 3000) console.log('include(' + pId + ') timeout');
-                                if (callback) callback(self);
-                                
-                                /* Cuando se esta depurando y hay un debugger en la carga de la pagina,
-                                el evento load no se dispara, en ese caso loaded llama igual al
-                                callback luego de 3 segundos */
+            // Itera el array y carga todos los scripts
+            arrScr.forEach(function (el, ix) {
+                if (el.depends) {
+                    // Tiene dependencias, hay que esperar que se carguen
+                    setTimeout(function wait() {
+                        var faltan = false;
+                        el.depends.forEach(function (el2, ix2) {
+                            if (arrScr.find(el3 => el3.id == el2 && !el3.loaded)) {
+                                faltan = true;
                             }
-                        }, 10)
-                    };
-                    
-                    scriptNode.addEventListener('load', function () {
-                        this._loaded = true;
-                        console.log(this.id.substring(7) + ' loaded' + ' - ' + src);
-                    });
-
-                    var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
-                    cont.appendChild(scriptNode);
-
-                    if (pCallback) scriptNode.loaded(pCallback);
-                    return scriptNode;
-                    
+                        });
+                        if (faltan) {
+                            setTimeout(wait, 100);
+                        } else {
+                            includeEl(el);
+                        }
+                    }, 0)
                 } else {
-                    if (pCallback) scriptNode.loaded(pCallback);
-                    return scriptNode;
+                    includeEl(el);
+                }
+            });
+
+            function includeEl(pEl) {
+                if (typeof pEl.version == 'number') {
+                    include(pEl.id, pEl.version, function () {
+                        pEl.loaded = true;
+                    })
+                } else {
+                    include(pEl.id, pEl.src, function () {
+                        pEl.loaded = true;
+                    })
+                }
+            }
+
+            // Espera a que terminen de cargar todos y hace callback
+            setTimeout(function wait() {
+                if (arrScr.find(el => !el.loaded)) {
+                    setTimeout(wait, 100)
+                } else {
+                    if (pCallback) pCallback();
+                    resolve(arrScr.length + ' items loaded');
+                }
+            }, 0);
+
+        } else if (typeof arguments[0] == 'string') {
+            var pId = arguments[0].toLowerCase();
+
+            var script = scripts.find(el => el.id == pId);
+
+            if (script && script.aliasOf) {
+                // Es un alias
+                arguments[0] = script.aliasOf;
+                include.apply(null, arguments); 
+
+            } else {
+                if (typeof arguments[1] == 'string') {
+                    // Si empieza con http es el src, sino el branch
+                    if (arguments[1].substring(0, 4).toLowerCase() == 'http') {
+                        pSrc = arguments[1];
+                    } else {
+                        pVer = arguments[1]
+                    }
+                } else if (typeof arguments[1] == 'number') {
+                    pVer = arguments[1]
+                } else if (typeof arguments[1] == 'function') {
+                    pCallback = arguments[1];
+                }
+
+                if (typeof arguments[2] == 'function') {
+                    pCallback = arguments[2];
+                }
+
+                var src = scriptSrc(pId, pVer);
+                if (!src) {
+                    if (pSrc) {
+                        src = pSrc;
+                    } else {
+                        throw pId + ' not registered and no src specified';
+                    }
+                }
+
+                if (src) {
+                    var scriptNode = document.getElementById('script_' + pId);
+                    if (!scriptNode) {
+                        //console.log(pId + ' loading');
+                        var D = document;
+                        
+                        if (src.substring(src.length - 4).toLowerCase() == '.css') {
+                            scriptNode = D.createElement('link');
+                            scriptNode.rel = 'stylesheet';
+                            scriptNode.href = src;
+                        } else {
+                            scriptNode = D.createElement('script');
+                            scriptNode.type = 'text/javascript';
+                            scriptNode.async = true;
+                            scriptNode.src = src;
+                        }
+                        scriptNode.id = 'script_' + pId;
+                        if (script && script.hasdep) scriptNode._hasdep = true;
+                        
+                        scriptNode.loaded = function (callback) {
+                            var self = this;
+                            var waiting = 0;
+                            var interv = setInterval(function () {
+                                waiting += 10;
+                                if ((self._loaded && !self._hasdep) || waiting > 3000) {
+                                    clearInterval(interv);
+                                    if (waiting > 3000) console.log('include(' + pId + ') timeout');
+                                    if (callback) callback(self);
+                                    
+                                    /* Cuando se esta depurando y hay un debugger en la carga de la pagina,
+                                    el evento load no se dispara, en ese caso loaded llama igual al
+                                    callback luego de 3 segundos */
+                                }
+                            }, 10)
+                        };
+                        
+                        scriptNode.addEventListener('load', function () {
+                            this._loaded = true;
+                            console.log(this.id.substring(7) + ' loaded' + ' - ' + src);
+                        });
+
+                        var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
+                        cont.appendChild(scriptNode);
+
+                        if (pCallback) scriptNode.loaded(pCallback);
+                        resolve(scriptNode);
+                        
+                    } else {
+                        if (pCallback) scriptNode.loaded(pCallback);
+                        resolve(scriptNode);
+                    }
                 }
             }
         }
-    }
+    });
 };
 
 // Backward compatibility

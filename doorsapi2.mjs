@@ -21,8 +21,8 @@ export class Session {
 
     /**
      * Cambia la contraseña del usuario logueado
-     * @param {string} oldPassword 
-     * @param {string} newPassword 
+     * @param {string} oldPassword
+     * @param {string} newPassword
      * @returns Promise <bool>
      */
     changePassword(oldPassword, newPassword) {
