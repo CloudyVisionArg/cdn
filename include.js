@@ -78,8 +78,8 @@ function registeredScripts() {
 
 	scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 0 });
 
+	scripts.push({ id: 'app7-appsession', path: '/app7/appsession.js', version: 182 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 181 });
-	scripts.push({ id: 'app7-dsession', path: '/app7/dsession.js', version: 181 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 181, hasdep: true });
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 181 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 181 });
@@ -117,6 +117,7 @@ function registeredScripts() {
 	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 
 	// Aliases (for backward compatibility)
+	scripts.push({ id: 'app7-dsession', aliasOf: 'app7-appsession' });
 	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
 	scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
 	scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
