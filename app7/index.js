@@ -1,5 +1,12 @@
 'use strict';
 
+// If we need to use custom DOM library, let's save it to $$ variable:
+var $$ = Dom7;
+var app7;
+var db;
+var appSession = new DSession();
+var dSession = appSession; // Esta tiene q ser doorsapi2.session
+
 var initScripts = [];
 
 initScripts.push({ id: 'doorsapi' });
@@ -14,19 +21,13 @@ initScripts.push({ id: 'lib-cryptojs-aes' });
 initScripts.push({ id: 'lib-filesaver' });
 initScripts.push({ id: 'app7-index.css' });
 
-await import(scriptSrc('doorsapi2'));
-
-include(initScripts, function () {
-    console.log('app.init');
-    app.initialize();
-});
-
-// If we need to use custom DOM library, let's save it to $$ variable:
-var $$ = Dom7;
-var app7;
-var db;
-var appSession = new DSession();
-var dSession = appSession; // Esta tiene q ser doorsapi2.session
+(async () => {
+    await include(initScripts);
+    doorsapi2 = await import(scriptSrc('doorsapi2'));
+    var appSession = new DSession();
+    var dSession = appSession; // Esta tiene q ser new doorsapi2.Session
+    app.initialize();    
+})();
 
 window.crm = {};
 
@@ -35,6 +36,7 @@ var app = {
 
     // Application Constructor
     initialize: function() {
+        console.log('app.init');
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
