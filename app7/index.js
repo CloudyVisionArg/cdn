@@ -5,7 +5,7 @@ var $$ = Dom7;
 var app7;
 var db;
 var appSession;
-var dSession;
+var doorsapi2, dSession;
 
 var initScripts = [];
 
