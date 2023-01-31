@@ -12,7 +12,7 @@ var initScripts = [];
 initScripts.push({ id: 'doorsapi' });
 initScripts.push({ id: 'app7-global' });
 initScripts.push({ id: 'app7-controls' });
-initScripts.push({ id: 'app7-dsession', depends: ['doorsapi'] });
+initScripts.push({ id: 'app7-appsession', depends: ['doorsapi'] });
 initScripts.push({ id: 'app7-sync', depends: ['jslib', 'app7-global', 'app7-doorsapi'] });
 initScripts.push({ id: 'lib-numeral' });
 initScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
