@@ -1,5 +1,3 @@
-var dSession = new DSession();
-
 function DSession() {
     this.freeVersion = {}
     this.freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';

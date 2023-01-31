@@ -25,6 +25,8 @@ include(initScripts, function () {
 var $$ = Dom7;
 var app7;
 var db;
+var appSession = new DSession();
+var dSession = appSession; // Esta tiene q ser doorsapi2.session
 
 window.crm = {};
 
