@@ -4,8 +4,8 @@
 var $$ = Dom7;
 var app7;
 var db;
-var appSession = new DSession();
-var dSession = appSession; // Esta tiene q ser doorsapi2.session
+var appSession;
+var dSession;
 
 var initScripts = [];
 
@@ -24,8 +24,8 @@ initScripts.push({ id: 'app7-index.css' });
 (async () => {
     await include(initScripts);
     doorsapi2 = await import(scriptSrc('doorsapi2'));
-    var appSession = new DSession();
-    var dSession = appSession; // Esta tiene q ser new doorsapi2.Session
+    appSession = new DSession();
+    dSession = appSession; // Esta tiene q ser new doorsapi2.Session
     app.initialize();    
 })();
 
