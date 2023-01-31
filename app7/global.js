@@ -708,7 +708,7 @@ function showLogin() {
                                 setMessage('message', '');
 
                                 if (!$get('#email').val()) {
-                                    setMessage('message', 'Ingrese su Email');
+                                    setMessage('message', 'Ingrese su Usuario');
                                     $get('#email').focus();
                                     return false;
                                 }
@@ -727,8 +727,8 @@ function showLogin() {
                                         getDocField(doc, 'email').Value = $get('#email').val();
                             
                                         DoorsAPI.documentSave(doc).then(function (doc) {
-                                            setMessage('instrucciones', 'Recibir&aacute; por email un c&oacute;digo de confirmaci&oacute;n. ' + 
-                                                'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el email puede enviar el c&oacute;digo nuevamente. ' +
+                                            setMessage('instrucciones', 'Recibir&aacute; un mensaje con un c&oacute;digo de confirmaci&oacute;n. ' + 
+                                                'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el mensaje puede enviar el c&oacute;digo nuevamente. ' +
                                                 'Si ha enviado su c&oacute;digo varias veces ingrese el &uacute;ltimo recibido.');
                                             
                                             disableInputs(false);
@@ -754,7 +754,7 @@ function showLogin() {
                                 setMessage('message', '');
 
                                 if (!$get('#email').val() || !$get('#code').val()) {
-                                    setMessage('message', 'Ingrese email y c&oacute;digo de confirmaci&oacute;n');
+                                    setMessage('message', 'Ingrese usuario y c&oacute;digo de confirmaci&oacute;n');
                                     return false;
                                 }
 
@@ -769,7 +769,7 @@ function showLogin() {
                                     DoorsAPI.folderSearch(fv.resetPassFolder, 'doc_id, codigo', 'confirmado is null and email = \'' + $('#email').val() + '\'', 'doc_id desc', 1).then(
                                         function (res) {
                                             if (!res.length) {
-                                                onError('No se encontraron solicitudes de desbloqueo pendientes para este email');
+                                                onError('No se encontraron solicitudes de desbloqueo pendientes para este usuario');
                                 
                                             } else {
                                                 if (res[0]['CODIGO'] != $('#code').val().toUpperCase()) {
@@ -782,7 +782,7 @@ function showLogin() {
 
                                                             DoorsAPI.documentSave(doc).then(
                                                                 function (doc) {
-                                                                    setMessage('instrucciones2', 'Recibir&aacute; por email su nueva contrase&ntilde;a. ' +
+                                                                    setMessage('instrucciones2', 'Recibir&aacute; un mensaje con su nueva contrase&ntilde;a.' +
                                                                         'Presione SALIR para regresar a la pantalla de Login.');
                                     
                                                                     DoorsAPI.logoff();
