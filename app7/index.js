@@ -1,5 +1,4 @@
 'use strict';
-debugger;
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
@@ -317,6 +316,9 @@ var app = {
                     badge: true,
                     sound: true,
                 },
+                browser : {
+                    pushServiceURL: 'http://push.api.phonegap.com/v1/push',
+                }
             };
             
             pushRegistration(pushSettings, function (push) {
