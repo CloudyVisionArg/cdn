@@ -669,7 +669,10 @@ function getTextarea(pId, pLabel, pValue) {
 /*
 Devuelve un Toggle (checkbox)
 
-$ctl = getToggle('myToggle', 'Etiqueta');
+$ctl = getToggle('myToggle', 'Etiqueta', {
+    iosicon: '',
+    mdicon: '',
+});
 $inp = $ctl.find('input');
 $inp.change(function (e) {
     alert(this.checked);
@@ -685,7 +688,7 @@ toggle.on('change', function (t) {
 })
 toggle.checked = true;
 */
-function getToggle(pId, pLabel) {
+function getToggle(pId, pLabel, options) {
     var $li, $itemCont, $itemInner, $itemAfter;
 
     $li = $('<li/>');
@@ -693,6 +696,26 @@ function getToggle(pId, pLabel) {
     $itemCont = $('<div/>', {
         class: 'item-content',
     }).appendTo($li);
+
+    if (options.iosicon || options.mdicon) {
+        var $itemMedia = $('<div/>', {
+            class: 'item-media',
+        }).appendTo($itemCont);
+
+        if (options.iosicon) {
+            var $i = $('<i/>', {
+                class: 'f7-icons',
+            }).append(options.iosicon).appendTo($itemMedia);
+            if (options.mdicon) $i.addClass('ios-only');
+        }
+        
+        if (options.mdicon) {
+            var $i = $('<i/>', {
+                class: 'material-icons',
+            }).append(options.mdicon).appendTo($itemMedia);
+            if (options.iosicon) $i.addClass('md-only');
+        }
+    };
 
     $itemInner = $('<div/>', {
         class: 'item-inner',
@@ -1691,7 +1714,10 @@ function addDefaultOptions(pContainer) {
     });
 
     // Modo oscuro
-    $ctl = getToggle('darktheme', 'Modo oscuro').appendTo(pContainer);
+    $ctl = getToggle('darktheme', 'Modo oscuro', {
+        iosicon: 'moon',
+        mdicon: 'dark_mode',
+    }).appendTo(pContainer);
     var toggle = app7.toggle.get($ctl.find('.toggle')[0]);
     toggle.on('change', function (t) {
         if (t.checked) {
@@ -2297,7 +2323,7 @@ function getListLinkItem(pLink) {
             }).append(pLink.mdicon).appendTo($itemMedia);
             if (pLink.iosicon) $i.addClass('md-only');
         }
-    }
+    };
         
     var $itemInner = $('<div/>', {
         class: 'item-inner',
