@@ -1806,7 +1806,7 @@ function addDefaultOptions(pContainer) {
     // Version de los scripts
     getListLinkItem({
         title: 'Version de los scripts',
-        mdicon: 'code',
+        mdicon: 'data_object',
         click: ev => {
             var view = app7.views.get($(ev.target).closest('.view')[0]);
             view.router.navigate('/cdn/?script=app7-scrversions');
