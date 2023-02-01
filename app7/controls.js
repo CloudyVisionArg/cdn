@@ -691,6 +691,9 @@ toggle.checked = true;
 function getToggle(pId, pLabel, options) {
     var $li, $itemCont, $itemInner, $itemAfter;
 
+    var opt = {};
+    Object.assign(opt, options);
+
     $li = $('<li/>');
 
     $itemCont = $('<div/>', {
@@ -702,18 +705,18 @@ function getToggle(pId, pLabel, options) {
             class: 'item-media',
         }).appendTo($itemCont);
 
-        if (options.iosicon) {
+        if (opt.iosicon) {
             var $i = $('<i/>', {
                 class: 'f7-icons',
-            }).append(options.iosicon).appendTo($itemMedia);
-            if (options.mdicon) $i.addClass('ios-only');
+            }).append(opt.iosicon).appendTo($itemMedia);
+            if (opt.mdicon) $i.addClass('ios-only');
         }
         
-        if (options.mdicon) {
+        if (opt.mdicon) {
             var $i = $('<i/>', {
                 class: 'material-icons',
-            }).append(options.mdicon).appendTo($itemMedia);
-            if (options.iosicon) $i.addClass('md-only');
+            }).append(opt.mdicon).appendTo($itemMedia);
+            if (opt.iosicon) $i.addClass('md-only');
         }
     };
 
