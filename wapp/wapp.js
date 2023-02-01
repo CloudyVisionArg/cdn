@@ -155,7 +155,7 @@ var wapp = {
 	checkSession: function (pCallback) {
 		if (typeof(cordova) == 'object') {
 			if (app7.online) {
-				appSession.checkToken(pCallback);
+				dSession.checkToken(pCallback);
 			}
 		} else {
 			if (pCallback) pCallback();

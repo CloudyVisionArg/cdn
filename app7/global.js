@@ -447,11 +447,11 @@ function showLogin() {
                             setInputVal($get('#endpoint'), endPoint);
                             setInputVal($get('#appname'), appName ? appName : 'default');
 
-                            popup.pStuff.corpToggle.checked = (instance && instance.toLowerCase() != appSession.freeVersion.instance.toLowerCase());
+                            popup.pStuff.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
                             setCorpVersion(popup.pStuff.corpToggle.checked);
                         
                             if (userName && instance && endPoint) {
-                                appSession.checkToken(function () {
+                                dSession.checkToken(function () {
                                     // token valido
                                     disableInputs(true);
                                     setIsLogged(true);
@@ -481,9 +481,9 @@ function showLogin() {
                             window.localStorage.setItem('endPoint', $get('#endpoint').val());
                             window.localStorage.setItem('appName', $get('#appname').val());
                             window.localStorage.setItem('userName', $get('#username').val());
-                            window.localStorage.setItem('userPassword', appSession.encryptPass($get('#password').val()));
+                            window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                             
-                            appSession.logon(function () {
+                            dSession.logon(function () {
                                 setMessage('Sincronizando datos... aguarde por favor', 'white');
 
                                 try {
@@ -511,7 +511,7 @@ function showLogin() {
                         function logoff() {
                             pushUnreg();
                             cleanDb(function () {
-                                appSession.logoff();
+                                dSession.logoff();
                                 app7.dialog.alert('Se ha cerrado la sesion y eliminado los datos locales',
                                     function () {
                                         location.href = 'index.html';
@@ -536,14 +536,14 @@ function showLogin() {
                         function setCorpVersion(set) {
                             if (set) {
                                 var $inst = $get('#instance');
-                                if ($inst.val() == appSession.freeVersion.instance) setInputVal($inst, '');
+                                if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
                                 var $endp = $get('#endpoint');
-                                if ($endp.val() == appSession.freeVersion.endpoint) setInputVal($endp, '');
+                                if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
                                 $get('.free-item').hide();
                                 $get('.corp-item').show();
                             } else {
-                                setInputVal($get('#instance'), appSession.freeVersion.instance);
-                                setInputVal($get('#endpoint'), appSession.freeVersion.endpoint);
+                                setInputVal($get('#instance'), dSession.freeVersion.instance);
+                                setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
                                 setInputVal($get('#appname'), 'default');
                                 $get('.free-item').show();
                                 $get('.corp-item').hide();
@@ -575,7 +575,7 @@ function showLogin() {
                         function chpassInit(e, page) {
                             $get('#chpass').click(function (e) {
                                 var $new = $get('#newpass');
-                                var pwdLen = appSession.freeVersion.minPasswordLen || 6;
+                                var pwdLen = dSession.freeVersion.minPasswordLen || 6;
                         
                                 if ($new.val().length < pwdLen) {
                                     app7.dialog.alert('La contrase&ntilde;a debe tener al menos ' + pwdLen + ' caracteres', function (dialog, e) {
@@ -598,7 +598,7 @@ function showLogin() {
                                 var instance = window.localStorage.getItem('instance');
                             
                                 DoorsAPI.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(function () {
-                                    window.localStorage.setItem('userPassword', appSession.encryptPass($new.val()));
+                                    window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
                                     app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
                                         page.router.back();
                                     });
@@ -632,7 +632,7 @@ function showLogin() {
 
                                 disableInputs(true);
 
-                                var fv = appSession.freeVersion;
+                                var fv = dSession.freeVersion;
                                 Doors.RESTFULL.ServerUrl = fv.endpoint;
 
                                 DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
@@ -715,7 +715,7 @@ function showLogin() {
 
                                 disableInputs(true);
                             
-                                var fv = appSession.freeVersion;
+                                var fv = dSession.freeVersion;
                                 Doors.RESTFULL.ServerUrl = fv.endpoint;
 
                                 DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
@@ -760,7 +760,7 @@ function showLogin() {
 
                                 disableInputs(true);
                             
-                                var fv = appSession.freeVersion;
+                                var fv = dSession.freeVersion;
                                 Doors.RESTFULL.ServerUrl = fv.endpoint;
 
                                 DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
@@ -975,7 +975,7 @@ function pushRegistration(pPushSetings, pCallback) {
             'DeviceModel': device.model,
             'DevicePlatform': device.platform,
             'DeviceVersion': device.version,
-            'Login': appSession.loggedUser()['Login'],
+            'Login': dSession.loggedUser()['Login'],
             'RegistrationId': data.registrationId,
             'RegistrationType': data.registrationType,
 
@@ -1453,7 +1453,7 @@ function getFolderElements(pFolder) {
                 var arrViews = [];
                 for (var i = 0; i < views.length; i++) {
                     var view = views[i];
-                    if (view['Type'] = 1 && (!view['Private'] || view['AccId'] == appSession.loggedUser()['AccId'])) {
+                    if (view['Type'] = 1 && (!view['Private'] || view['AccId'] == dSession.loggedUser()['AccId'])) {
                         arrViews.push({
                             VieId: view['VieId'],
                             Name: view['Name'],

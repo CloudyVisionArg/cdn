@@ -1474,8 +1474,8 @@ function addAtt(e) {
 }
 
 function renderNewAtt(pAtt, pCont) {
-    pAtt.AccId = appSession.loggedUser()['AccId'];
-    pAtt.AccName = appSession.loggedUser()['Name'];
+    pAtt.AccId = dSession.loggedUser()['AccId'];
+    pAtt.AccName = dSession.loggedUser()['Name'];
     var $li = getAttachment(pAtt);
     var $att = $li.find('a.item-link');
     $att.attr('data-att-url', pAtt.URL);

@@ -4,7 +4,6 @@
 var $$ = Dom7;
 var app7;
 var db;
-var appSession;
 var doorsapi2, dSession;
 
 var initScripts = [];
@@ -299,7 +298,7 @@ var app = {
             showLogin();
         } else {
             if (app7.online) {
-                appSession.checkToken(
+                dSession.checkToken(
                     execOnDeviceReady,
                     function (err) {
                         showLogin();
@@ -385,7 +384,7 @@ var app = {
         if (app7.online) {
             var ls = window.localStorage;
             if (ls.getItem('userName') && ls.getItem('instance') && ls.getItem('endPoint')) {
-                appSession.checkToken(
+                dSession.checkToken(
                     function () {
                         sync.sync(false);
                         if (window.refreshNotifications) window.refreshNotifications();
