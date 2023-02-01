@@ -1,4 +1,4 @@
-export class AppSession extends doorsapi2.Session {
+export class Session extends doorsapi2.Session {
     freeVersion = {};
     #tokenTimeout = 120;
 
