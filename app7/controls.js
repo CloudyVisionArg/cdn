@@ -1766,6 +1766,7 @@ function addDefaultOptions(pContainer) {
         iosicon: 'moon',
         mdicon: 'dark_mode',
     }).appendTo(pContainer);
+
     var toggle = app7.toggle.get($ctl.find('.toggle')[0]);
     toggle.on('change', function (t) {
         if (t.checked) {
@@ -1803,66 +1804,32 @@ function addDefaultOptions(pContainer) {
     }).appendTo(pContainer);
 
     // Version de los scripts
-    $li = $('<li/>').appendTo(pContainer);
+    getListLinkItem({
+        title: 'Version de los scripts',
+        mdicon: 'code',
+        click: () => {
+            var view = app7.views.get($(this).closest('.view')[0]);
+            view.router.navigate('/cdn/?script=app7-scrversions');
+        },
+    }).appendTo(pContainer);
 
-    $itemCont = $('<a/>', {
-        href: '#',
-        class: 'item-link item-content',
-    }).appendTo($li);
-
-    $itemCont.click(function () {
-        var view = app7.views.get($(this).closest('.view')[0]);
-        view.router.navigate('/cdn/?script=app7-scrversions');
-    });
-
-    $itemInner = $('<div/>', {
-        class: 'item-inner',
-    }).appendTo($itemCont);
-
-    $('<div/>', {
-        class: 'item-title',
-    }).append('Version de los scripts').appendTo($itemInner);
-
+    // Iconos
     if (device.platform == 'browser') {
         // F7 Icons
-        $li = $('<li/>').appendTo(pContainer);
+        getListLinkItem({
+            title: 'Framework7 Icons',
+            click: () => {
+                cordova.InAppBrowser.open('/lib/framework7/css/cheatsheet.htm', '_system');
+            },
+        }).appendTo(pContainer);
 
-        $itemCont = $('<a/>', {
-            href: '#',
-            class: 'item-link item-content',
-        }).appendTo($li);
-
-        $itemCont.click(function () {
-            cordova.InAppBrowser.open('/lib/framework7/css/cheatsheet.htm', '_system');
-        });
-
-        $itemInner = $('<div/>', {
-            class: 'item-inner',
-        }).appendTo($itemCont);
-
-        $('<div/>', {
-            class: 'item-title',
-        }).append('Framework7 Icons').appendTo($itemInner);
-    
         // MD Icons
-        $li = $('<li/>').appendTo(pContainer);
-
-        $itemCont = $('<a/>', {
-            href: '#',
-            class: 'item-link item-content',
-        }).appendTo($li);
-
-        $itemCont.click(function () {
-            cordova.InAppBrowser.open('https://fonts.google.com/icons?selected=Material+Icons', '_system');
-        });
-
-        $itemInner = $('<div/>', {
-            class: 'item-inner',
-        }).appendTo($itemCont);
-
-        $('<div/>', {
-            class: 'item-title',
-        }).append('Material Icons').appendTo($itemInner);
+        getListLinkItem({
+            title: 'Material Icons',
+            click: () => {
+                cordova.InAppBrowser.open('https://fonts.google.com/icons?selected=Material+Icons', '_system');
+            },
+        }).appendTo(pContainer);
     }
 }
 
