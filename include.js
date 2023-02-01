@@ -78,7 +78,7 @@ function registeredScripts() {
 
 	scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 0 });
 
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 186 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 187 });
 
 	scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 185 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 184, hasdep: true });
