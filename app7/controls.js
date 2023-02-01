@@ -1808,8 +1808,7 @@ function addDefaultOptions(pContainer) {
         title: 'Version de los scripts',
         mdicon: 'code',
         click: ev => {
-            debugger;
-            var view = app7.views.get($(this).closest('.view')[0]);
+            var view = app7.views.get($(ev.target).closest('.view')[0]);
             view.router.navigate('/cdn/?script=app7-scrversions');
         },
     }).appendTo(pContainer);
