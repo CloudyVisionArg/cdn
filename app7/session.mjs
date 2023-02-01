@@ -31,7 +31,6 @@ export class Session extends doorsapi2.Session {
         } else {
             me.authToken = authToken;
             Doors.RESTFULL.AuthToken = authToken;
-            debugger;
             me.isLogged.then(function (res) {
                 if (!res) {
                     me.logon(pSuccess, pFailure);
