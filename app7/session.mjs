@@ -129,6 +129,8 @@ export class Session extends doorsapi2.Session {
     }
 
     #getToken() {
+        var me = this;
+
         var tk = window.localStorage.getItem('authToken');
         if (!tk) {
             return null;
@@ -139,7 +141,7 @@ export class Session extends doorsapi2.Session {
             } else {
                 tkt = new Date(tkt);
                 var dif = (Math.abs((new Date).getTime() - tkt.getTime())) / (1000 * 60);
-                if (dif > tokenTimeout) {
+                if (dif > me.#tokenTimeout) {
                     return null
                 } else {
                     window.localStorage.setItem('authTokenTime', (new Date).toJSON());
