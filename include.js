@@ -287,7 +287,7 @@ function include() {
 
 // Backward compatibility
 function includeJs() {
-	include.apply(null, arguments);
+	return include.apply(null, arguments);
 }
 
 function scriptLoaded(scriptName, callback) {
