@@ -358,7 +358,6 @@ var app = {
 };
 
 function pushReg() {
-    debugger;
     if (device.platform != 'browser') {
         var pushSettings = {
             android: {
