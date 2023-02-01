@@ -1,32 +1,33 @@
-export class AppSession2 extends doorsapi2.Session {
+export class AppSession extends doorsapi2.Session {
+    freeVersion = {};
+    #tokenTimeout = 120;
 
-}
+    constructor() {
+        freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';
+        freeVersion.login = 'anonimo';
+        freeVersion.password = 'gTfy4#j0/x';
+        freeVersion.instance = 'FREEVERSION';
+        freeVersion.signinFolder = 5217;
+        freeVersion.resetPassFolder = 5269;
+        freeVersion.minPasswordLen = 6;
 
-function AppSession() {
-    this.freeVersion = {}
-    this.freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';
-    this.freeVersion.login = 'anonimo';
-    this.freeVersion.password = 'gTfy4#j0/x';
-    this.freeVersion.instance = 'FREEVERSION';
-    this.freeVersion.signinFolder = 5217;
-    this.freeVersion.resetPassFolder = 5269;
-    this.freeVersion.minPasswordLen = 6;
-    
-    var tokenTimeout = 120; //minutos
-    Doors.RESTFULL.ServerUrl = window.localStorage.getItem('endPoint');
-    
-    var self = this;
-    
-    this.instanceDescription = function() {
+        let ep = window.localStorage.getItem('endPoint');
+        super(ep);
+        Doors.RESTFULL.ServerUrl = ep;
+    }
+
+    instanceDescription() {
         return window.localStorage.getItem('instanceDesc');
     }
 
-    this.checkToken = function (pSuccess, pFailure) {
-        var authToken = getToken();
+    checkToken(pSuccess, pFailure) {
+        var me = this;
+        var authToken = me.#getToken();
 
         if (!authToken) {
             self.logon(pSuccess, pFailure);
         } else {
+            me.authToken = authToken;
             Doors.RESTFULL.AuthToken = authToken;
             DoorsAPI.islogged().then(function (res) {
                 if (!res) {
@@ -41,7 +42,9 @@ function AppSession() {
         }
     }
 
-    this.logon = function (pSuccess, pFailure) {
+    logon(pSuccess, pFailure) {
+        var me = this;
+
         var endPoint = window.localStorage.getItem('endPoint');
         if (!endPoint) {
             if (pFailure) pFailure('Falta el end point');
@@ -60,12 +63,14 @@ function AppSession() {
             return;
         };
 
+        me.serverUrl = endPoint;
         Doors.RESTFULL.ServerUrl = endPoint;
         var password = this.decryptPass(window.localStorage.getItem('userPassword'));
 
-        DoorsAPI.logon(userName, password, instance).then(function (token) {
+        debugger;
+        super.logon(userName, password, instance).then(function (token) {
             Doors.RESTFULL.AuthToken = token;
-            setToken(token);
+            me.#setToken(token);
             DoorsAPI.loggedUser().then(function (user) {
                 window.localStorage.setItem('loggedUser', JSON.stringify(user));
             });
@@ -83,8 +88,8 @@ function AppSession() {
         });
     }
 
-    this.logoff = function () {
-        DoorsAPI.logoff();
+    logoff() {
+        super.logoff();
         Doors.RESTFULL.AuthToken = '';
         Doors.RESTFULL.ServerUrl = '';
         window.localStorage.setItem('instance', '');
@@ -98,7 +103,7 @@ function AppSession() {
         window.localStorage.setItem('sync_table', ''); 
     }
 
-    this.loggedUser = function () {
+    loggedUser() {
         // Correccion del nombre de este item
         if (window.localStorage.getItem('loggedUser') == null) {
             if (window.localStorage.getItem('loggerUser') != null) {
@@ -109,7 +114,7 @@ function AppSession() {
         return JSON.parse(window.localStorage.getItem('loggedUser'));
     }
 
-    this.hasGroup = function (pGroup) {
+    hasGroup(pGroup) {
         var grp = this.loggedUser().ParentAccountsRecursive;
         if (typeof(pGroup) == 'number') {
             return grp.find(el => el['AccId'] == pGroup);
@@ -118,11 +123,11 @@ function AppSession() {
         }
     }
 
-    this.appsFolder = function () {
+    appsFolder() {
         return window.localStorage.getItem('appsFolder');
     }
 
-    function getToken() {
+    #getToken() {
         var tk = window.localStorage.getItem('authToken');
         if (!tk) {
             return null;
@@ -143,16 +148,16 @@ function AppSession() {
         }
     }
 
-    function setToken(pToken) {
+    #setToken(pToken) {
         window.localStorage.setItem('authToken', pToken);
         window.localStorage.setItem('authTokenTime', (new Date).toJSON());
     }
 
-    this.encryptPass = function (pPass) {
+    encryptPass(pPass) {
         return '__' + encrypt(pPass, '__');
     }
 
-    this.decryptPass = function (pPass) {
+    decryptPass (pPass) {
         if (!pPass) pPass = '';
         if (pPass.substr(0, 2) == '__') {
             return decrypt(pPass.substr(2), '__')
