@@ -700,7 +700,7 @@ function getToggle(pId, pLabel, options) {
         class: 'item-content',
     }).appendTo($li);
 
-    if (options.iosicon || options.mdicon) {
+    if (opt.iosicon || opt.mdicon) {
         var $itemMedia = $('<div/>', {
             class: 'item-media',
         }).appendTo($itemCont);
