@@ -187,7 +187,7 @@ function include() {
                     setTimeout(wait, 100)
                 } else {
                     if (pCallback) pCallback();
-                    resolve(arrScr.length + ' items loaded');
+                    resolve(arrScr.length); // Number of items loaded
                 }
             }, 0);
 
