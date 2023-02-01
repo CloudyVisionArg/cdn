@@ -65,6 +65,7 @@ export class Session extends doorsapi2.Session {
             return;
         };
 
+        debugger;
         me.serverUrl = endPoint;
         Doors.RESTFULL.ServerUrl = endPoint;
         var password = this.decryptPass(window.localStorage.getItem('userPassword'));
