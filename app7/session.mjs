@@ -3,13 +3,13 @@ export class Session extends doorsapi2.Session {
     #tokenTimeout = 120;
 
     constructor() {
-        freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';
-        freeVersion.login = 'anonimo';
-        freeVersion.password = 'gTfy4#j0/x';
-        freeVersion.instance = 'FREEVERSION';
-        freeVersion.signinFolder = 5217;
-        freeVersion.resetPassFolder = 5269;
-        freeVersion.minPasswordLen = 6;
+        this.freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';
+        this.freeVersion.login = 'anonimo';
+        this.freeVersion.password = 'gTfy4#j0/x';
+        this.freeVersion.instance = 'FREEVERSION';
+        this.freeVersion.signinFolder = 5217;
+        this.freeVersion.resetPassFolder = 5269;
+        this.freeVersion.minPasswordLen = 6;
 
         let ep = window.localStorage.getItem('endPoint');
         super(ep);
