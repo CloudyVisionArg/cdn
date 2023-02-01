@@ -207,7 +207,6 @@ export class Document {
     toJSON() {
         return this.#doc;
     }
-
 }
 
 class Field {
@@ -378,6 +377,10 @@ export class Folder {
 
     get session() {
         return this.#session;
+    }
+
+    toJSON() {
+        return this.#folder;
     }
 }
 
