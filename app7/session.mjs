@@ -14,7 +14,6 @@ export class Session extends doorsapi2.Session {
         this.freeVersion.signinFolder = 5217;
         this.freeVersion.resetPassFolder = 5269;
         this.freeVersion.minPasswordLen = 6;
-
     }
 
     instanceDescription() {
@@ -105,13 +104,6 @@ export class Session extends doorsapi2.Session {
     }
 
     loggedUser() {
-        // Correccion del nombre de este item
-        if (window.localStorage.getItem('loggedUser') == null) {
-            if (window.localStorage.getItem('loggerUser') != null) {
-                window.localStorage.setItem('loggedUser', window.localStorage.getItem('loggerUser'));
-                window.localStorage.removeItem('loggerUser');
-            }
-        }
         return JSON.parse(window.localStorage.getItem('loggedUser'));
     }
 

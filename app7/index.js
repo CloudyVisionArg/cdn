@@ -306,51 +306,7 @@ var app = {
         };
 
         function execOnDeviceReady() {
-            if (device.platform != 'browser') {
-                var pushSettings = {
-                    android: {
-                    },
-                    ios: {
-                        alert: true,
-                        badge: true,
-                        sound: true,
-                    },
-                    browser : {
-                        pushServiceURL: 'http://push.api.phonegap.com/v1/push',
-                    }
-                };
-                
-                pushRegistration(pushSettings, function (push) {
-                    if (push) {
-                        push.on('notification', function (data) {
-                            if (window.refreshNotifications) window.refreshNotifications();
-
-                            var notifEv = new CustomEvent('pushNotification', { detail: { data } });
-                            window.dispatchEvent(notifEv)
-
-                            var clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
-
-                            if (data.additionalData.foreground) {
-                                app7.notification.create({
-                                    title: 'CLOUDY CRM7',
-                                    subtitle: data.title,
-                                    text: data.message,
-                                    closeTimeout: 10000,
-                                    on: {
-                                        click: function (notif) {
-                                            notif.close();
-                                            window.dispatchEvent(clickEv);
-                                        }
-                                    }
-                                }).open();
-                                
-                            } else {
-                                window.dispatchEvent(clickEv);
-                            }
-                        });
-                    }	
-                });
-            }
+            pushReg();
 
             executeCode('onDeviceReady', 
                 function () {
@@ -400,3 +356,52 @@ var app = {
         };
     },
 };
+
+function pushReg() {
+    debugger;
+    if (device.platform != 'browser') {
+        var pushSettings = {
+            android: {
+            },
+            ios: {
+                alert: true,
+                badge: true,
+                sound: true,
+            },
+            browser : {
+                pushServiceURL: 'http://push.api.phonegap.com/v1/push',
+            }
+        };
+        
+        pushRegistration(pushSettings, function (push) {
+            if (push) {
+                push.on('notification', function (data) {
+                    if (window.refreshNotifications) window.refreshNotifications();
+
+                    var notifEv = new CustomEvent('pushNotification', { detail: { data } });
+                    window.dispatchEvent(notifEv)
+
+                    var clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
+
+                    if (data.additionalData.foreground) {
+                        app7.notification.create({
+                            title: 'CLOUDY CRM7',
+                            subtitle: data.title,
+                            text: data.message,
+                            closeTimeout: 10000,
+                            on: {
+                                click: function (notif) {
+                                    notif.close();
+                                    window.dispatchEvent(clickEv);
+                                }
+                            }
+                        }).open();
+                        
+                    } else {
+                        window.dispatchEvent(clickEv);
+                    }
+                });
+            }	
+        });
+    }
+}
