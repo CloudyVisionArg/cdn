@@ -1693,6 +1693,21 @@ function addDefaultOptions(pContainer) {
 
     // Theme
     $ctl = getSmartSelect('theme', 'Tema').appendTo(pContainer);
+
+    $itemCont = $ctl.find('.item-content');
+
+    $itemMedia = $('<div/>', {
+        class: 'item-media',
+    }).prependTo($itemCont);
+
+    var $i = $('<i/>', {
+        class: 'f7-icons ios-only',
+    }).append('logo_apple').appendTo($itemMedia);
+    
+    var $i = $('<i/>', {
+        class: 'material-icons md-only',
+    }).append('android').appendTo($itemMedia);
+
     $input = $ctl.find('select');
 
     $('<option/>', {
