@@ -73,7 +73,7 @@ export class Session {
         })
     };
 
-    isLogged() {
+    get isLogged() {
         var url = 'session/islogged';
         return this.#restClient.asyncCall(url, 'POST', {}, '');
     };
