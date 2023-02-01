@@ -26,13 +26,13 @@ export class Session extends doorsapi2.Session {
         var authToken = me.#getToken();
 
         if (!authToken) {
-            self.logon(pSuccess, pFailure);
+            me.logon(pSuccess, pFailure);
         } else {
             me.authToken = authToken;
             Doors.RESTFULL.AuthToken = authToken;
             DoorsAPI.islogged().then(function (res) {
                 if (!res) {
-                    self.logon(pSuccess, pFailure);
+                    me.logon(pSuccess, pFailure);
                 } else {
                     if (pSuccess) pSuccess();
                 }
@@ -68,7 +68,6 @@ export class Session extends doorsapi2.Session {
         Doors.RESTFULL.ServerUrl = endPoint;
         var password = this.decryptPass(window.localStorage.getItem('userPassword'));
 
-        debugger;
         super.logon(userName, password, instance).then(function (token) {
             Doors.RESTFULL.AuthToken = token;
             me.#setToken(token);
