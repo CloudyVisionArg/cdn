@@ -21,7 +21,7 @@ var propViewsFilter = 'App7_viewsFilter';
 var propInit = 'App7_explorerInit';
 var maxLen = 200;
 
-DoorsAPI.foldersGetById(fld_id).then(
+dSession.foldersGetById(fld_id).then(
     function (fld) {
         folder = fld;
         getFolderElements(folder);
