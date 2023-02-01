@@ -1683,7 +1683,11 @@ function addDefaultOptions(pContainer) {
     }).appendTo(pContainer);
 
     // Status bar
-    $ctl = getToggle('statusbar', 'Status bar').appendTo(pContainer);
+    $ctl = getToggle('statusbar', 'Status bar', {
+        iosicon: 'expand',
+        mdicon: 'fullscreen',
+    }).appendTo(pContainer);
+
     var toggle = app7.toggle.get($ctl.find('.toggle')[0]);
     toggle.on('change', function (t) {
         statusBar(t.checked);
