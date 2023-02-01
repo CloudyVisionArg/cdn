@@ -1807,7 +1807,7 @@ function addDefaultOptions(pContainer) {
     getListLinkItem({
         title: 'Version de los scripts',
         mdicon: 'code',
-        click: () => {
+        click: ev => {
             debugger;
             var view = app7.views.get($(this).closest('.view')[0]);
             view.router.navigate('/cdn/?script=app7-scrversions');
