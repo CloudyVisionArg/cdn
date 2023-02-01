@@ -290,6 +290,7 @@ var app = {
         f7AppEvents();
 
         // Muestra la pantalla de Login o ejecuta onDeviceReady
+        debugger;
         if (!window.localStorage.getItem('userName')) {
             showLogin();
         } else {
