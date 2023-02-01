@@ -761,7 +761,10 @@ function getCheckbox(pId, pLabel) {
 /*
 Devuelve un Stepper
 
-$ctl = getStepper('myStepper', 'Etiqueta');
+$ctl = getStepper('myStepper', 'Etiqueta', {
+    iosicon: '',
+    mdicon: '',
+});
 var stp = app7.stepper.get($ctl.find('.stepper')[0]);
 stp.min = 50;/
 
@@ -773,10 +776,33 @@ stp.on('change', function (s) {
     alert(s.getValue());
 })
 */
-function getStepper(pId, pLabel) {
+function getStepper(pId, pLabel, options) {
     var $li, $itemCont, $itemInner, $itemAfter;
 
+    var opt = {};
+    Object.assign(opt, options);
+
     $li = $('<li/>');
+
+    if (opt.iosicon || opt.mdicon) {
+        var $itemMedia = $('<div/>', {
+            class: 'item-media',
+        }).appendTo($itemCont);
+
+        if (opt.iosicon) {
+            var $i = $('<i/>', {
+                class: 'f7-icons',
+            }).append(opt.iosicon).appendTo($itemMedia);
+            if (opt.mdicon) $i.addClass('ios-only');
+        }
+        
+        if (opt.mdicon) {
+            var $i = $('<i/>', {
+                class: 'material-icons',
+            }).append(opt.mdicon).appendTo($itemMedia);
+            if (opt.iosicon) $i.addClass('md-only');
+        }
+    };
 
     $itemCont = $('<div/>', {
         class: 'item-content',
@@ -1752,7 +1778,12 @@ function addDefaultOptions(pContainer) {
     toggle.checked = $(document.body).hasClass('dark');
 
     // Explorer limit
-    $ctl = getStepper('explorerLimit', 'Cant de registros').appendTo(pContainer);
+    $ctl = getStepper('explorerLimit', 'Cant de registros', {
+        iosicon: 'list_number',
+        mdicon: 'format_list_numbered',
+
+    }).appendTo(pContainer);
+
     var stepper = app7.stepper.get($ctl.find('.stepper')[0]);
     stepper.min = 50;
     stepper.max = 200;
