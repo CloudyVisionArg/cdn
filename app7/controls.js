@@ -1646,25 +1646,15 @@ function getAttachment(pAttach, pReadonly) {
 
 // Agrega las opciones por defecto (pagina de opciones)
 function addDefaultOptions(pContainer) {
-    var $li, $itemCont, $itemInner, $ctl, $input;
+    var $li, $itemCont, $itemMedia, $itemInner, $ctl, $input;
 
     // Cuenta
-    $li = $('<li/>').appendTo(pContainer);
-
-    $itemCont = $('<a/>', {
-        href: '#',
-        class: 'item-link item-content',
-    }).appendTo($li);
-
-    $itemCont.click(showLogin);
-
-    $itemInner = $('<div/>', {
-        class: 'item-inner',
-    }).appendTo($itemCont);
-
-    $('<div/>', {
-        class: 'item-title',
-    }).append('Cuenta').appendTo($itemInner);
+    getListLinkItem({
+        title: 'Cuenta',
+        iosicon: 'person_circle',
+        mdicon: 'account_circle',
+        click: showLogin,
+    }).appendTo(pContainer);
 
     // Status bar
     $ctl = getToggle('statusbar', 'Status bar').appendTo(pContainer);
