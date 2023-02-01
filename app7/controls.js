@@ -784,6 +784,10 @@ function getStepper(pId, pLabel, options) {
 
     $li = $('<li/>');
 
+    $itemCont = $('<div/>', {
+        class: 'item-content',
+    }).appendTo($li);
+
     if (opt.iosicon || opt.mdicon) {
         var $itemMedia = $('<div/>', {
             class: 'item-media',
@@ -803,10 +807,6 @@ function getStepper(pId, pLabel, options) {
             if (opt.iosicon) $i.addClass('md-only');
         }
     };
-
-    $itemCont = $('<div/>', {
-        class: 'item-content',
-    }).appendTo($li);
 
     $itemInner = $('<div/>', {
         class: 'item-inner',
