@@ -1,5 +1,5 @@
 export class Session extends doorsapi2.Session {
-    freeVersion = {};
+    freeVersion;
     #tokenTimeout = 120;
 
     constructor() {
@@ -7,13 +7,15 @@ export class Session extends doorsapi2.Session {
         super(ep);
         Doors.RESTFULL.ServerUrl = ep;
 
-        this.freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';
-        this.freeVersion.login = 'anonimo';
-        this.freeVersion.password = 'gTfy4#j0/x';
-        this.freeVersion.instance = 'FREEVERSION';
-        this.freeVersion.signinFolder = 5217;
-        this.freeVersion.resetPassFolder = 5269;
-        this.freeVersion.minPasswordLen = 6;
+        this.freeVersion = {
+            endpoint: 'https://freeversion.cloudycrm.net/restful',
+            login: 'anonimo',
+            password: 'gTfy4#j0/x',
+            instance: 'FREEVERSION',
+            signinFolder: 5217,
+            resetPassFolder: 5269,
+            minPasswordLen: 6,
+        }
     }
 
     instanceDescription() {
