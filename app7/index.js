@@ -26,7 +26,8 @@ initScripts.push({ id: 'app7-index.css' });
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     //appSession = new AppSession();
     //dSession = appSession; // Esta tiene q ser new doorsapi2.Session
-    var h = await import(scriptSrc('app7-session'));
+    var sessionMod = await import(scriptSrc('app7-session'));
+    dSession = new sessionMod.Session();
     debugger;
     app.initialize();    
 })();
