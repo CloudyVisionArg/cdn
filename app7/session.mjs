@@ -31,7 +31,8 @@ export class Session extends doorsapi2.Session {
         } else {
             me.authToken = authToken;
             Doors.RESTFULL.AuthToken = authToken;
-            DoorsAPI.islogged().then(function (res) {
+            debugger;
+            me.isLogged.then(function (res) {
                 if (!res) {
                     me.logon(pSuccess, pFailure);
                 } else {
@@ -70,7 +71,6 @@ export class Session extends doorsapi2.Session {
         var password = this.decryptPass(window.localStorage.getItem('userPassword'));
 
         super.logon(userName, password, instance).then(function (token) {
-        //DoorsAPI.logon(userName, password, instance).then(function (token) {
             Doors.RESTFULL.AuthToken = token;
             me.#setToken(token);
             DoorsAPI.loggedUser().then(function (user) {
