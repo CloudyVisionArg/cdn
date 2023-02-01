@@ -1765,22 +1765,11 @@ function addDefaultOptions(pContainer) {
     })
 
     // Consola
-    $li = $('<li/>').appendTo(pContainer);
-
-    $itemCont = $('<a/>', {
-        href: '#',
-        class: 'item-link item-content',
-    }).appendTo($li);
-
-    $itemCont.click(showConsole);
-
-    $itemInner = $('<div/>', {
-        class: 'item-inner',
-    }).appendTo($itemCont);
-
-    $('<div/>', {
-        class: 'item-title',
-    }).append('Consola').appendTo($itemInner);
+    getListLinkItem({
+        title: 'Consola',
+        mdicon: 'bug_report',
+        click: showConsole,
+    }).appendTo(pContainer);
 
     // Version de los scripts
     $li = $('<li/>').appendTo(pContainer);
