@@ -1779,7 +1779,7 @@ function addDefaultOptions(pContainer) {
     toggle.checked = $(document.body).hasClass('dark');
 
     // Explorer limit
-    $ctl = getStepper('explorerLimit', 'Cant de registros', {
+    $ctl = getStepper('explorerLimit', 'Tope de registros', {
         iosicon: 'list_number',
         mdicon: 'format_list_numbered',
 
