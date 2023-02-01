@@ -21,6 +21,7 @@ var propViewsFilter = 'App7_viewsFilter';
 var propInit = 'App7_explorerInit';
 var maxLen = 200;
 
+debugger;
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
         folder = fld;
