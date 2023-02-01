@@ -119,7 +119,7 @@ export class Session {
 
     set serverUrl(value) {
         this.#serverUrl = value;
-        this.#restClient.ServerUrl = url;
+        this.#restClient.ServerUrl = value;
     }
 
 
