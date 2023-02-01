@@ -1,3 +1,7 @@
+export class AppSession2 extends doorsapi2.Session {
+
+}
+
 function AppSession() {
     this.freeVersion = {}
     this.freeVersion.endpoint = 'https://freeversion.cloudycrm.net/restful';

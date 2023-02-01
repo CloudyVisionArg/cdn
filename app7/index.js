@@ -12,7 +12,7 @@ var initScripts = [];
 initScripts.push({ id: 'doorsapi' });
 initScripts.push({ id: 'app7-global' });
 initScripts.push({ id: 'app7-controls' });
-initScripts.push({ id: 'app7-appsession', depends: ['doorsapi'] });
+//initScripts.push({ id: 'app7-appsession', depends: ['doorsapi'] });
 initScripts.push({ id: 'app7-sync', depends: ['jslib', 'app7-global', 'app7-doorsapi'] });
 initScripts.push({ id: 'lib-numeral' });
 initScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
@@ -24,8 +24,10 @@ initScripts.push({ id: 'app7-index.css' });
 (async () => {
     await include(initScripts);
     doorsapi2 = await import(scriptSrc('doorsapi2'));
-    appSession = new AppSession();
-    dSession = appSession; // Esta tiene q ser new doorsapi2.Session
+    //appSession = new AppSession();
+    //dSession = appSession; // Esta tiene q ser new doorsapi2.Session
+    var h = await import(scriptSrc('doorsapi2'));
+    debugger;
     app.initialize();    
 })();
 
