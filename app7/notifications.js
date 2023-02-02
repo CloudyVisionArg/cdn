@@ -158,7 +158,6 @@ $pageCont.on('ptr:refresh', function (e) {
 
 
 var $btn = $page.find('.navbar-inner .left .link')
-debugger;
 $btn.attr('id', 'buttonSearch');
 $btn.click(function (e) {
     searchBar.enable();
