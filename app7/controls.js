@@ -1418,9 +1418,9 @@ function getPage(params) {
         if (pButton == 'new')
             return getLink({ iosicon: 'plus', mdicon: 'add' });
         else if (pButton == 'save')
-            return getLink({ text: 'Guardar' });
+            return getLink({ mdicon: 'cloud' }); //cloud_done
         else if (pButton == 'exit')
-            return getLink({ text: 'Salir' });
+            return getLink({ iosicon: 'chevron_left', mdicon: 'arrow_back_ios' });
         else if (pButton == 'search')
             return getLink({ iosicon: 'search', mdicon: 'search' });
         else
