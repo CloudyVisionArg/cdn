@@ -24,7 +24,7 @@ export class Session extends doorsapi2.Session {
 
     checkToken(pSuccess, pFailure) {
         var me = this;
-        var authToken = me.#getToken();
+        var authToken = me.getToken();
 
         if (!authToken) {
             me.logon(pSuccess, pFailure);
@@ -71,7 +71,7 @@ export class Session extends doorsapi2.Session {
 
         super.logon(userName, password, instance).then(function (token) {
             Doors.RESTFULL.AuthToken = token;
-            me.#setToken(token);
+            me.setToken(token);
             DoorsAPI.loggedUser().then(function (user) {
                 window.localStorage.setItem('loggedUser', JSON.stringify(user));
             });
@@ -121,7 +121,7 @@ export class Session extends doorsapi2.Session {
         return window.localStorage.getItem('appsFolder');
     }
 
-    #getToken() {
+    getToken() {
         var me = this;
 
         var tk = window.localStorage.getItem('authToken');
@@ -144,7 +144,7 @@ export class Session extends doorsapi2.Session {
         }
     }
 
-    #setToken(pToken) {
+    setToken(pToken) {
         window.localStorage.setItem('authToken', pToken);
         window.localStorage.setItem('authTokenTime', (new Date).toJSON());
     }
