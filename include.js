@@ -76,16 +76,16 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
-	scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 190 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 191 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 191 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 191 });
+
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 190 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 190 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 190 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 190 });
-
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 189 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 189, hasdep: true });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 189 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 188 });
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 179 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
