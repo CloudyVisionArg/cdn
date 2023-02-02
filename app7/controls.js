@@ -1415,6 +1415,7 @@ function getPage(params) {
     
     // 'new', 'save', 'exit', 'search', {label, iosicon, mdicon}
     function getNavbarButton(pButton) {
+        debugger;
         if (pButton == 'new')
             return getLink({ iosicon: 'plus', mdicon: 'add' });
         else if (pButton == 'save')
