@@ -1018,7 +1018,7 @@ function $get(pSelector) {
 function fillControls() {
     if (!doc.IsNew) {
         var title = getDocField(doc, 'subject').Value;
-        if (!title) title = 'Doc Id ' + doc.DocId;
+        if (!title) title = 'Doc #' + doc.DocId;
         $navbar.find('.title').html(title);
 
         var $docLog = $get('[data-doclog]');
