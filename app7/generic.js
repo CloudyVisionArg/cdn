@@ -1600,42 +1600,40 @@ function saveDoc(exitOnSuccess) {
         }
     };
 
-    DoorsAPI.documentSave(doc).then(
-        function (doc2) {
-            doc = doc2;
+    DoorsAPI.documentSave(doc).then((doc2) => {
+        dSession.documentsGetFromId(doc2.DocId).then((doc3) => {
+            debugger;
+            doc = doc3.toJSON();
             pageEl.crm.doc = doc;
 
             doc_id = getDocField(doc, 'doc_id').Value;
             pageEl.crm.doc_id = doc_id;
 
-            saveAtt().then(
-                function (res) {
-                    // Evento AfterSave
-                    var ev = getEvent('AfterSave');
-                    if (ev) {
-                        try {
-                            eval(ev);
-                        } catch (err) {
-                            console.log('Error in AfterSave: ' + errMsg(err));
-                        }
-                    };
-
-                    saving = false;
-                    app7.preloader.hide();
-                    $navbar.find('.right .button').removeClass('disabled');
-                    toast('Cambios guardados');
-
-                    if (exitOnSuccess) {
-                        f7Page.view.router.back();
-                    } else {
-                        fillControls();
+            saveAtt().then((res) => {
+                // Evento AfterSave
+                var ev = getEvent('AfterSave');
+                if (ev) {
+                    try {
+                        eval(ev);
+                    } catch (err) {
+                        console.log('Error in AfterSave: ' + errMsg(err));
                     }
-                },
-                errMgr
-            );
-        },
-        errMgr
-    );
+                };
+
+                saving = false;
+                app7.preloader.hide();
+                $navbar.find('.right .button').removeClass('disabled');
+                toast('Cambios guardados');
+
+                if (exitOnSuccess) {
+                    f7Page.view.router.back();
+                } else {
+                    fillControls();
+                }
+                
+            }, errMgr);
+        }, errMgr);
+    }, errMgr);
 
     function errMgr(pErr) {
         saving = false;
