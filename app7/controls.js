@@ -1420,7 +1420,8 @@ function getPage(params) {
         else if (pButton == 'save')
             return getLink({ mdicon: '<span class="material-icons-outlined">cloud_upload</span>' }); //cloud_done
         else if (pButton == 'exit')
-            return getLink({ iosicon: 'chevron_left', mdicon: 'arrow_back_ios' });
+            //return getLink({ iosicon: 'chevron_left', mdicon: 'arrow_back_ios' });
+            return getLink({ mdicon: 'arrow_back_ios' });
         else if (pButton == 'search')
             return getLink({ iosicon: 'search', mdicon: 'search' });
         else
