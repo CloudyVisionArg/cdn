@@ -1049,11 +1049,11 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
                     style: 'height: 1px; width: 1px;',
                 })
                 $etc.appendTo($acEl.parent());
-                debuggerl;
+                debugger;
                 $etc.focus();
                 setTimeout(() => {
                     $acEl.focus();
-                    $etc.remove;
+                    $etc.remove();
                 }, 0);
             }
             
