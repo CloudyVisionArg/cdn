@@ -1614,8 +1614,12 @@ function saveDoc() {
                     app7.preloader.hide();
                     $navbar.find('.right .button').removeClass('disabled');
                     toast('Cambios guardados');
-                    f7Page.view.router.back();
-                    //fillControls();
+
+                    if (window.localStorage.getItem('exitOnSave') == 'on') {
+                        f7Page.view.router.back();
+                    } else {
+                        fillControls();
+                    }
                 },
                 errMgr
             );
