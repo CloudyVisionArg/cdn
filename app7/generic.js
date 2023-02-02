@@ -210,7 +210,7 @@ function renderPage() {
         href: '#',
         class: 'link icon-only',
     }).appendTo($nbRight);
-    $saveExitBtn.append('<i class="material-icons">cloud_done</i>');
+    $saveExitBtn.append('<i class="material-icons-outlined">cloud_done</i>');
 
     $saveExitBtn.click(function () {
         //grabar y dps
