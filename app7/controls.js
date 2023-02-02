@@ -126,7 +126,11 @@ function addPhoneButtons(pInput) {
     }).appendTo(pInput);
 
     var $i = $('<i/>', {
-        class: 'f7-icons',
+        class: 'f7-icons ios-only',
+    }).append('phone').appendTo($inputMedia);
+
+    var $i = $('<i/>', {
+        class: 'material-icons-outlined md-only',
     }).append('phone').appendTo($inputMedia);
 
     $i.click(function (e) {
@@ -135,8 +139,12 @@ function addPhoneButtons(pInput) {
     });
 
     $i = $('<i/>', {
-        class: 'f7-icons',
+        class: 'f7-icons ios-only',
     }).append('chat_bubble').appendTo($inputMedia);
+
+    $i = $('<i/>', {
+        class: 'material-icons-outlined md-only',
+    }).append('chat').appendTo($inputMedia);
 
     $i.click(function (e) {
         var val = $(this).closest('li').find('input').val();
@@ -167,8 +175,12 @@ function addEmailButton(pInput) {
     }).appendTo(pInput);
 
     var $i = $('<i/>', {
-        class: 'f7-icons',
+        class: 'f7-icons ios-only',
     }).append('envelope').appendTo($inputMedia);
+
+    var $i = $('<i/>', {
+        class: 'material-icons-outlined md-only',
+    }).append('email').appendTo($inputMedia);
 
     $i.click(function (e) {
         var val = $(this).closest('li').find('input').val();
