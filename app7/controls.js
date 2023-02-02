@@ -1445,7 +1445,7 @@ function getPage(params) {
         if (pButton == 'new')
             return getLink({ iosicon: 'plus', mdicon: 'add' });
         else if (pButton == 'save')
-            return getLink({ mdicon: '<span class="material-icons-outlined">cloud_upload</span>' });
+            return getLink({ mdicon: '<span class="material-icons-outlined">cloud</span>' });
         else if (pButton == 'exit')
             return getLink({ iosicon: 'chevron_left', mdicon: 'arrow_back' });
         else if (pButton == 'search')
