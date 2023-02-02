@@ -196,10 +196,8 @@ function renderPage() {
         }
         */
         if (!pageEl.crm.saved) {
-            $page.prev().find('.refresh-on-focus').each((index, b,c,d) => {
-                let $this = $(this);
-                debugger;
-                $(this).removeClass('refresh-on-focus');
+            $page.prev().find('.refresh-on-focus').each((ix, el) => {
+                $(el).removeClass('refresh-on-focus');
             })
         }
         f7Page.view.router.back();
