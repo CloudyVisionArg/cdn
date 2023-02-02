@@ -197,6 +197,7 @@ function renderPage() {
         */
         if (!pageEl.crm.saved) {
             $page.prev().find('.refresh-on-focus').each((index) => {
+                let $this = $(this);
                 debugger;
                 $(this).removeClass('refresh-on-focus');
             })
