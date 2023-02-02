@@ -196,7 +196,10 @@ function renderPage() {
         }
         */
         if (!pageEl.crm.saved) {
-            debugger;
+            $page.prev().find('.refresh-on-focus').each(() => {
+                debugger;
+                $(this).removeClass('refresh-on-focus');
+            })
         }
         f7Page.view.router.back();
     });
