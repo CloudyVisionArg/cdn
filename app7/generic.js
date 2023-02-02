@@ -12,7 +12,6 @@ var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
 var pStuff = {}; // Deprecado, usar pageEl.crm
-debugger;
 
 /*
 pageEl.crm sirve para guardar variables y funciones de UNA INSTANCIA de pagina.
@@ -191,11 +190,15 @@ function renderPage() {
 
     $page.find('.navbar-inner .left .link').on('click', function (e) {
         // todo: ver si se puede detectar si hubo cambios
-        //app7.dialog.confirm('Perdera los cambios relizados',
-        //    function (dialog) {
-                f7Page.view.router.back();
-        //    }
-        //);
+        /*
+        app7.dialog.confirm('Perdera los cambios relizados', (dialog) => {
+            f7Page.view.router.back();
+        }
+        */
+        if (!pageEl.crm.saved) {
+            debugger;
+        }
+        f7Page.view.router.back();
     });
 
     $page.find('.navbar-inner .right .link').on('click', function (e) {
@@ -1608,6 +1611,7 @@ function saveDoc(exitOnSuccess) {
 
             doc_id = getDocField(doc, 'doc_id').Value;
             pageEl.crm.doc_id = doc_id;
+            pageEl.crm.saved = true;
 
             saveAtt().then((res) => {
                 // Evento AfterSave
