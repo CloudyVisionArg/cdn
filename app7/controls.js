@@ -1043,7 +1043,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
 
         $li.find('.input-clear-button').click(function (e) {
             $acEl.val('');
-            setTimeout(() => { $acEl.focus() }, 200)
+            setTimeout(() => { $acEl.focus() }, 2000)
         });
         ac.on('change', function (value) { dropdownChanged(ac); });
         $acEl.on('change', function (e) { dropdownChanged(ac); })
