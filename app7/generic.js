@@ -188,7 +188,7 @@ function renderPage() {
         rightbutton: 'save',
     });
 
-    $page.find('.navbar-inner .left .button').on('click', function (e) {
+    $page.find('.navbar-inner .left .link').on('click', function (e) {
         // todo: ver si se puede detectar si hubo cambios
         //app7.dialog.confirm('Perdera los cambios relizados',
         //    function (dialog) {
@@ -197,7 +197,7 @@ function renderPage() {
         //);
     });
 
-    $page.find('.navbar-inner .right .button').on('click', function (e) {
+    $page.find('.navbar-inner .right .link').on('click', function (e) {
         saveDoc();
     });
 
