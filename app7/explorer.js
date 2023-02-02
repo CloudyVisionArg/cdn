@@ -1021,16 +1021,19 @@ function deleteClick() {
 
 function refreshOnFocus() {
     if ($viewDiv.hasClass('refresh-on-focus')) {
+        // Cuando haces nuevo
         $viewDiv.empty();
         loadViewSection($viewDiv);
     } else {
         $get('li.refresh-on-focus').each(function (index, el) {
             var $cont = $(el).closest('div.accordion-item-content');
             if ($cont.length) {
+                // Vista con grupos
                 $cont.empty();
                 loadViewSection($cont);
                 // todo: en este caso faltaria actualizar los totales
             } else {
+                // Vista plana
                 $viewDiv.empty();
                 loadViewSection($viewDiv);
             }

@@ -12,6 +12,7 @@ var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
 var pStuff = {}; // Deprecado, usar pageEl.crm
+debugger;
 
 /*
 pageEl.crm sirve para guardar variables y funciones de UNA INSTANCIA de pagina.
