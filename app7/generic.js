@@ -201,6 +201,22 @@ function renderPage() {
         saveDoc();
     });
 
+    //$btn.css('margin-left', '0px');
+
+    // Boton Guardar y salir
+    var $nbRight = $page.find('.navbar-inner .right');
+
+    var $saveExitBtn = $('<a/>', {
+        href: '#',
+        class: 'link icon-only',
+    }).appendTo($nbRight);
+    $saveExitBtn.append('<i class="material-icons">cloud_done</i>');
+
+    $saveExitBtn.click(function () {
+        //grabar y dps
+        f7Page.view.router.back();
+    });
+
     // Page Content
     var $pageCont = $page.find('.page-content');
 
