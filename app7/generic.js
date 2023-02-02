@@ -201,8 +201,6 @@ function renderPage() {
         saveDoc();
     });
 
-    //$btn.css('margin-left', '0px');
-
     // Boton Guardar y salir
     var $nbRight = $page.find('.navbar-inner .right');
 
@@ -214,8 +212,7 @@ function renderPage() {
     $saveExitBtn.append('<i class="material-icons-outlined">cloud_done</i>');
 
     $saveExitBtn.click(function () {
-        //grabar y dps
-        f7Page.view.router.back();
+        saveDoc(true);
     });
 
     // Page Content
@@ -1496,7 +1493,7 @@ function renderNewAtt(pAtt, pCont) {
     $li.prependTo(pCont.find('ul'));
 }
 
-function saveDoc() {
+function saveDoc(exitOnSuccess) {
     if (saving) return;
     saving = true;
     $navbar.find('.right .button').addClass('disabled');
@@ -1628,7 +1625,7 @@ function saveDoc() {
                     $navbar.find('.right .button').removeClass('disabled');
                     toast('Cambios guardados');
 
-                    if (window.localStorage.getItem('exitOnSave') == 'on') {
+                    if (exitOnSuccess) {
                         f7Page.view.router.back();
                     } else {
                         fillControls();
