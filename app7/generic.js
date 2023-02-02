@@ -184,11 +184,8 @@ function renderPage() {
     $page = getPage({
         id: 'generic_' + getGuid(),
         title: 'Cargando...',
-        leftbutton: {
-            text: 'Salir'
-        },
-        rightbutton: {
-            text: 'Guardar'
+        leftbutton: 'exit',
+        rightbutton: 'save',
         },
     });
 
