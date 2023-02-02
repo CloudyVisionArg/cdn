@@ -47,3 +47,7 @@
     background: rgba(var(--f7-theme-color-rgb), 0.6) !important;
     color: white !important;
 }
+
+.autocomplete-dropdown {
+    z-index: 700 !important;
+}
