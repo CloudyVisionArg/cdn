@@ -209,6 +209,7 @@ function renderPage() {
     var $saveExitBtn = $('<a/>', {
         href: '#',
         class: 'link icon-only',
+        style: 'margin-left: 0px;',
     }).appendTo($nbRight);
     $saveExitBtn.append('<i class="material-icons-outlined">cloud_done</i>');
 
