@@ -1614,7 +1614,8 @@ function saveDoc() {
                     app7.preloader.hide();
                     $navbar.find('.right .button').removeClass('disabled');
                     toast('Cambios guardados');
-                    fillControls();
+                    f7Page.view.router.back();
+                    //fillControls();
                 },
                 errMgr
             );
