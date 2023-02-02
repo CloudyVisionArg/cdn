@@ -186,7 +186,6 @@ function renderPage() {
         title: 'Cargando...',
         leftbutton: 'exit',
         rightbutton: 'save',
-        },
     });
 
     $page.find('.navbar-inner .left .button').on('click', function (e) {
