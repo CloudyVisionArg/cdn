@@ -56,7 +56,8 @@ dSession.foldersGetFromId(fld_id).then(
                     href: '#',
                     class: 'link icon-only',
                 }).prependTo($nbLeft);
-                $backBtn.append('<i class="f7-icons ios-only">chevron_left</i>');
+                $backBtn.append('<i class="f7-icons ios-only">chevron_left</i>' + 
+                    '<i class="material-icons md-only">arrow_back</i>');
 
                 $backBtn.click(function () {
                     f7Page.view.router.back();
