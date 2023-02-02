@@ -1043,6 +1043,21 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
 
         $li.find('.input-clear-button').click(function (e) {
             $acEl.val('');
+            if (app7.theme == 'md') {
+                let $etc = $('<input/>', {
+                    type: 'text',
+                    style: 'height: 1px; width: 1px;',
+                })
+                $etc.appendTo($acEl.parent());
+                debuggerl;
+                $etc.focus();
+                setTimeout(() => {
+                    $acEl.focus();
+                    $etc.remove;
+                }, 0);
+            }
+            
+
             //$acEl.focus()
         });
         ac.on('change', function (value) { dropdownChanged(ac); });
