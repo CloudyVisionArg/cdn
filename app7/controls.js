@@ -1046,7 +1046,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
             $acEl.focusout();
             setTimeout(() => {
                 $acEl.focus()
-            }, 0)
+            }, 150)
         });
         ac.on('change', function (value) { dropdownChanged(ac); });
         $acEl.on('change', function (e) { dropdownChanged(ac); })
