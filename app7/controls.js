@@ -1043,8 +1043,8 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
 
         $li.find('.input-clear-button').click(function (e) {
             $acEl.val('');
+            $acEl.focusout();
             setTimeout(() => {
-                $acEl.focusout();
                 $acEl.focus()
             }, 150)
         });
