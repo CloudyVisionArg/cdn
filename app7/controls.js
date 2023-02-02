@@ -140,7 +140,7 @@ function addPhoneButtons(pInput) {
 
     $i = $('<i/>', {
         class: 'f7-icons ios-only',
-    }).append('chat_bubble').appendTo($inputMedia);
+    }).append('maps_ugc').appendTo($inputMedia);
 
     $i = $('<i/>', {
         class: 'material-icons-outlined md-only',
