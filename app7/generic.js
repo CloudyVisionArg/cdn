@@ -209,7 +209,7 @@ function renderPage() {
         class: 'link icon-only',
         style: 'margin-left: 0px;',
     }).appendTo($nbRight);
-    $saveExitBtn.append('<i class="material-icons-outlined">cloud_done</i>');
+    $saveExitBtn.append('<i class="material-icons-outlined" style="font-size: 28px;">cloud_done</i>');
 
     $saveExitBtn.click(function () {
         saveDoc(true);
