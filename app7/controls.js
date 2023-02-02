@@ -1044,6 +1044,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
         $li.find('.input-clear-button').click(function (e) {
             $acEl.val('');
             if (app7.theme == 'md') {
+                // Fix: En android no vuelve a desplegar el listado hasta q no cambias el foco
                 let $etc = $('<input/>', {
                     type: 'text',
                     style: 'height: 1px; width: 1px;',
@@ -1055,9 +1056,6 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
                     $etc.remove();
                 }, 0);
             }
-            
-
-            //$acEl.focus()
         });
         ac.on('change', function (value) { dropdownChanged(ac); });
         $acEl.on('change', function (e) { dropdownChanged(ac); })
