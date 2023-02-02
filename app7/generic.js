@@ -207,7 +207,7 @@ function renderPage() {
     var $saveExitBtn = $('<a/>', {
         href: '#',
         class: 'link icon-only',
-        style: app7.theme == 'ios' ? 'margin-left: 10px;' : 'margin-right: 6px;',
+        style: app7.theme == 'ios' ? 'margin-left: 8px;' : 'margin-right: 6px;',
     }).appendTo($nbRight);
     $saveExitBtn.append('<i class="material-icons-outlined" style="font-size: 30px;">cloud_done</i>');
 
