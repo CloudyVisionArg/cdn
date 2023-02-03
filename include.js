@@ -76,7 +76,7 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 200 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 201 });
 
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 199 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 199 });
