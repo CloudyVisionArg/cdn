@@ -125,26 +125,32 @@ function addPhoneButtons(pInput) {
         style: 'min-width: 74px; align-self: flex-end;'
     }).appendTo(pInput);
 
-    var $i = $('<i/>', {
-        class: 'f7-icons ios-only',
-    }).append('phone').appendTo($inputMedia);
+    var $i;
 
-    var $i = $('<i/>', {
-        class: 'material-icons-outlined md-only',
-    }).append('phone').appendTo($inputMedia);
+    if (app7.theme == 'md') {
+        $i = $('<i/>', {
+            class: 'material-icons-outlined md-only',
+        }).append('phone').appendTo($inputMedia);    
+    } else {
+        $i = $('<i/>', {
+            class: 'f7-icons ios-only',
+        }).append('phone').appendTo($inputMedia);
+    }
 
     $i.click(function (e) {
         var val = $(this).closest('li').find('input').val();
         if (val) cordova.InAppBrowser.open('tel:' + val, '_system');
     });
 
-    $i = $('<i/>', {
-        class: 'f7-icons ios-only',
-    }).append('chat_bubble').appendTo($inputMedia);
-
-    $i = $('<i/>', {
-        class: 'material-icons-outlined md-only',
-    }).append('maps_ugc').appendTo($inputMedia);
+    if (app7.theme == 'md') {
+        $i = $('<i/>', {
+            class: 'material-icons-outlined md-only',
+        }).append('maps_ugc').appendTo($inputMedia);
+    } else {
+        $i = $('<i/>', {
+            class: 'f7-icons ios-only',
+        }).append('chat_bubble').appendTo($inputMedia);
+    }
 
     $i.click(function (e) {
         var val = $(this).closest('li').find('input').val();
