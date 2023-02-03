@@ -154,7 +154,6 @@ function addPhoneButtons(pInput) {
     }
 
     $i.click(function (e) {
-        debugger;
         var val = $(this).closest('li').find('input').val();
         if (val) cordova.InAppBrowser.open('whatsapp://send?phone=' + wappNumber(val), '_system');
     });
@@ -194,7 +193,6 @@ function addEmailButton(pInput) {
     }
 
     $i.click(function (e) {
-        debugger;
         var val = $(this).closest('li').find('input').val();
         if (val) cordova.InAppBrowser.open('mailto:' + encodeURI(val), '_system')
     });
