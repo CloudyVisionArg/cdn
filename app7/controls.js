@@ -129,30 +129,32 @@ function addPhoneButtons(pInput) {
 
     if (app7.theme == 'md') {
         $i = $('<i/>', {
-            class: 'material-icons-outlined md-only',
+            class: 'material-icons-outlined',
         }).append('phone').appendTo($inputMedia);    
     } else {
         $i = $('<i/>', {
-            class: 'f7-icons ios-only',
+            class: 'f7-icons',
         }).append('phone').appendTo($inputMedia);
     }
 
     $i.click(function (e) {
+        debugger;
         var val = $(this).closest('li').find('input').val();
         if (val) cordova.InAppBrowser.open('tel:' + val, '_system');
     });
 
     if (app7.theme == 'md') {
         $i = $('<i/>', {
-            class: 'material-icons-outlined md-only',
+            class: 'material-icons-outlined',
         }).append('maps_ugc').appendTo($inputMedia);
     } else {
         $i = $('<i/>', {
-            class: 'f7-icons ios-only',
+            class: 'f7-icons',
         }).append('chat_bubble').appendTo($inputMedia);
     }
 
     $i.click(function (e) {
+        debugger;
         var val = $(this).closest('li').find('input').val();
         if (val) cordova.InAppBrowser.open('whatsapp://send?phone=' + wappNumber(val), '_system');
     });
@@ -180,15 +182,19 @@ function addEmailButton(pInput) {
         style: 'min-width: 40px; align-self: flex-end;',
     }).appendTo(pInput);
 
-    var $i = $('<i/>', {
-        class: 'f7-icons ios-only',
-    }).append('envelope').appendTo($inputMedia);
-
-    var $i = $('<i/>', {
-        class: 'material-icons-outlined md-only',
-    }).append('email').appendTo($inputMedia);
+    var $i;
+    if (app7.theme == 'md') {
+        var $i = $('<i/>', {
+            class: 'material-icons-outlined',
+        }).append('email').appendTo($inputMedia);
+    } else {
+        var $i = $('<i/>', {
+            class: 'f7-icons',
+        }).append('envelope').appendTo($inputMedia);
+    }
 
     $i.click(function (e) {
+        debugger;
         var val = $(this).closest('li').find('input').val();
         if (val) cordova.InAppBrowser.open('mailto:' + encodeURI(val), '_system')
     });
