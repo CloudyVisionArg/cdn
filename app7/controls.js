@@ -138,7 +138,6 @@ function addPhoneButtons(pInput) {
     }
 
     $i.click(function (e) {
-        debugger;
         var val = $(this).closest('li').find('input').val();
         if (val) cordova.InAppBrowser.open('tel:' + encodeURI(val), '_system');
     });
