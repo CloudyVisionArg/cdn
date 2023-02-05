@@ -1608,9 +1608,8 @@ function saveDoc(exitOnSuccess) {
     };
 
     DoorsAPI.documentSave(doc).then((doc2) => {
-        debugger;
-        //dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
-            doc = doc2 //doc3.toJSON();
+        dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
+            doc = doc3.toJSON();
             pageEl.crm.doc = doc;
 
             doc_id = getDocField(doc, 'doc_id').Value;
