@@ -1640,7 +1640,7 @@ function saveDoc(exitOnSuccess) {
                 }
 
             }, errMgr);
-        //}, errMgr);
+        }, errMgr);
     }, errMgr);
 
     function errMgr(pErr) {
