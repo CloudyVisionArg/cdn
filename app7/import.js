@@ -24,11 +24,35 @@ var $list = $('<div/>', {
 
 var $ul = $('<ul/>').appendTo($list);
 
-getInputText('ee', 'Excel', {
+var $ctl = getInputText('ee', 'Excel', {
     iosicon: 'paperclip',
     mdicon: 'attach_file',
 }).appendTo($ul);
 
+var $clip = $ctl.find('.item-media');
+$clip.click(e => {
+    // Plugin chooser https://github.com/cyph/cordova-plugin-chooser
+    chooser.getFileMetadata().then(
+        function (res) {
+            if (res) {
+                getFile(res.uri).then(
+                    function (file) {
+                        att.URL = file.localURL;
+                        att.Name = res.name;
+                        att.Size = file.size;
+                        renderNewAtt(att, $attachs);
+                    },
+                    errMgr
+                )
+            }
+        },
+        errMgr
+    )
+
+
+});
+
+resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
 function pageInit(e, page) {
     f7Page = page;
@@ -41,23 +65,7 @@ function $get(pSelector) {
     return $(pSelector, f7Page.pageEl);
 }
 
-resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
-
-/* Con plugin chooser https://github.com/cyph/cordova-plugin-chooser
-chooser.getFileMetadata().then(
-    function (res) {
-        if (res) {
-            getFile(res.uri).then(
-                function (file) {
-                    att.URL = file.localURL;
-                    att.Name = res.name;
-                    att.Size = file.size;
-                    renderNewAtt(att, $attachs);
-                },
-                errMgr
-            )
-        }
-    },
-    errMgr
-)
-*/
+function errMgr(err) {
+    console.log(err);
+    toast(errMsg(err));
+};
