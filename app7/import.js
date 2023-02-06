@@ -36,6 +36,14 @@ var $inputFile = $('<input/>', {
     style: 'display: none',
 }).appendTo($ctl);
 
+$inputFile.change(async e => {
+    const file = e.target.files[0];
+    const data = await file.arrayBuffer();
+    /* data is an ArrayBuffer */
+    const workbook = XLSX.read(data);
+    debugger;
+});
+
 $clip.click(e => {
     $inputFile.click();
 });
