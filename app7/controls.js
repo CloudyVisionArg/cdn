@@ -68,8 +68,9 @@ var $ctl = getInputText('myInput', 'Etiqueta', {
 function getInputText(pId, pLabel, options) {
     var $itemCont, $itemInner, $inputWrap, value;
 
+    var opt = {};
+
     if (isObject(options)) {
-        var opt = {};
         Object.assign(opt, options);
         value = opt.value;
 
