@@ -5,7 +5,7 @@ Controles del APP7
 Inventario de metodos:
 
 getControlFolder(pFolder, pRootFolderId)
-getInputText(pId, pLabel, pValue)
+getInputText(pId, pLabel, options)
 setInputVal(pInput, pVal)
 inputReadonly(pInput, pReadonly)
 inputDisabled(pInput, pDisabled)
@@ -56,6 +56,15 @@ function getControlFolder(pFolder, pRootFolderId) {
     return getFolder(pFolder, pRootFolderId);
 }
 
+/*
+Devuelve un <input type="text">
+
+var $ctl = getInputText('myInput', 'Etiqueta', {
+    value: 'valor inicial',
+    iosicon: 'icon',
+    mdicon: 'icon',
+});
+*/
 function getInputText(pId, pLabel, options) {
     var $itemInput, $itemInner, $inputWrap, value;
 
@@ -73,6 +82,26 @@ function getInputText(pId, pLabel, options) {
         class: 'item-content item-input',
     });
     
+    if (opt.iosicon || opt.mdicon) {
+        var $itemMedia = $('<div/>', {
+            class: 'item-media',
+        }).appendTo($itemCont);
+
+        if (opt.iosicon) {
+            var $i = $('<i/>', {
+                class: 'f7-icons',
+            }).append(opt.iosicon).appendTo($itemMedia);
+            if (opt.mdicon) $i.addClass('ios-only');
+        }
+        
+        if (opt.mdicon) {
+            var $i = $('<i/>', {
+                class: 'material-icons',
+            }).append(opt.mdicon).appendTo($itemMedia);
+            if (opt.iosicon) $i.addClass('md-only');
+        }
+    };
+
     $itemInner = $('<div/>', {
         class: 'item-inner',
     }).appendTo($itemInput);

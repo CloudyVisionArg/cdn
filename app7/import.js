@@ -24,7 +24,10 @@ var $list = $('<div/>', {
 
 var $ul = $('<ul/>').appendTo($list);
 
-getInputFile('ee', 'Excel').appendTo($ul);
+getInputText('ee', 'Excel', {
+    iosicon: 'paperclip',
+    mdicon: 'attach_file',
+}).appendTo($ul);
 
 
 function pageInit(e, page) {
@@ -58,36 +61,3 @@ chooser.getFileMetadata().then(
     errMgr
 )
 */
-
-function getInputFile(pId, pLabel) {
-    var $itemInput, $itemInner, $inputWrap;
-
-    $itemInput = $('<li/>', {
-        class: 'item-content item-input',
-    });
-    
-    $itemInner = $('<div/>', {
-        class: 'item-inner',
-    }).appendTo($itemInput);
-
-    $('<div/>', {
-        class: 'item-title item-floating-label',
-    }).append(pLabel).appendTo($itemInner);
-    
-    $inputWrap = $('<div/>', {
-        class: 'item-input-wrap',
-    }).appendTo($itemInner);
-    
-    $('<input/>', {
-        type: 'file',
-        id: pId,
-        placeholder: pLabel,
-        autocomplete: 'off',
-    }).appendTo($inputWrap);
-
-    $('<span/>', {
-        class: 'input-clear-button',
-    }).appendTo($inputWrap);
-    
-    return $itemInput;
-}
