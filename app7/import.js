@@ -33,6 +33,7 @@ var $clip = $ctl.find('.item-media');
 
 var $inputFile = $('<input/>', {
     type: 'file',
+    style: 'display: none',
 }).appendTo($ctl);
 
 $clip.click(e => {
