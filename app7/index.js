@@ -20,7 +20,9 @@ initScripts.push({ id: 'lib-filesaver' });
 initScripts.push({ id: 'app7-index.css' });
 
 (async () => {
+    // https://docs.sheetjs.com/docs/
     include('xlsx', 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
+    
     await include(initScripts);
     
     doorsapi2 = await import(scriptSrc('doorsapi2'));
