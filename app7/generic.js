@@ -969,8 +969,8 @@ function pageInit(e, page) {
                     })
                 }
             ).then(() => {
-                const ev = new CustomEvent('fillComplete');
-                $el[0].dispatchEvent(ev);
+                //const ev = new CustomEvent('fillComplete');
+                //$el[0].dispatchEvent(ev);
             });
 
         } else {
@@ -989,8 +989,8 @@ function pageInit(e, page) {
                         ),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
                     ).then(() => {
-                        const ev = new CustomEvent('fillComplete');
-                        $el[0].dispatchEvent(ev);
+                        //const ev = new CustomEvent('fillComplete');
+                        //$el[0].dispatchEvent(ev);
                     });
                 },
                 function (err) {
