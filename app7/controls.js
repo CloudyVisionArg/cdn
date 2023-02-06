@@ -66,7 +66,7 @@ var $ctl = getInputText('myInput', 'Etiqueta', {
 });
 */
 function getInputText(pId, pLabel, options) {
-    var $itemInput, $itemInner, $inputWrap, value;
+    var $itemCont, $itemInner, $inputWrap, value;
 
     if (isObject(options)) {
         var opt = {};
@@ -78,7 +78,7 @@ function getInputText(pId, pLabel, options) {
         value = options;
     }
 
-    $itemInput = $('<li/>', {
+    $itemCont = $('<li/>', {
         class: 'item-content item-input',
     });
     
@@ -104,7 +104,7 @@ function getInputText(pId, pLabel, options) {
 
     $itemInner = $('<div/>', {
         class: 'item-inner',
-    }).appendTo($itemInput);
+    }).appendTo($itemCont);
 
     $('<div/>', {
         class: 'item-title item-floating-label',
@@ -126,7 +126,7 @@ function getInputText(pId, pLabel, options) {
         class: 'input-clear-button',
     }).appendTo($inputWrap);
     
-    return $itemInput;
+    return $itemCont;
 }
 
 function setInputVal(pInput, pVal) {
@@ -308,15 +308,15 @@ function inputDataList(pInput, pSource) {
 
 // Retorna un Automplete de Google Maps
 function getInputAddress(pId, pLabel, pValue) {
-    var $itemInput = getInputText(pId, pLabel, pValue);
+    var $itemCont = getInputText(pId, pLabel, pValue);
     
-    var $input = $itemInput.find('input');
+    var $input = $itemCont.find('input');
     $input.addClass('maps-autocomplete');
 
     var $inputMedia = $('<div/>', {
         class: 'item-media',
         style: 'min-width: 40px; align-self: flex-end;',
-    }).appendTo($itemInput);
+    }).appendTo($itemCont);
 
     var $i = $('<i/>', {
         class: 'f7-icons',
@@ -333,19 +333,19 @@ function getInputAddress(pId, pLabel, pValue) {
         });
     });
 
-    return $itemInput;
+    return $itemCont;
 }
 
 function getSelect(pId, pLabel) {
-    var $itemInput, $itemInner, $inputWrap;
+    var $itemCont, $itemInner, $inputWrap;
 
-    $itemInput = $('<li/>', {
+    $itemCont = $('<li/>', {
         class: 'item-content item-input',
     });
     
     $itemInner = $('<div/>', {
         class: 'item-inner',
-    }).appendTo($itemInput);
+    }).appendTo($itemCont);
 
     $('<div/>', {
         class: 'item-title item-floating-label',
@@ -360,7 +360,7 @@ function getSelect(pId, pLabel) {
         placeholder: pLabel,
     }).appendTo($inputWrap);
 
-    return $itemInput;
+    return $itemCont;
 }
 
 function getSmartSelect(pId, pLabel, pMultiple) {
@@ -614,15 +614,15 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
 function getDTPicker(pId, pLabel, pType, pValue) {
     // pType: date, time, datetime-local
 
-    var $itemInput, $itemInner, $inputWrap;
+    var $itemCont, $itemInner, $inputWrap;
 
-    $itemInput = $('<li/>', {
+    $itemCont = $('<li/>', {
         class: 'item-content item-input',
     });
     
     $itemInner = $('<div/>', {
         class: 'item-inner',
-    }).appendTo($itemInput);
+    }).appendTo($itemCont);
 
     $('<div/>', {
         class: 'item-title item-floating-label',
@@ -639,7 +639,7 @@ function getDTPicker(pId, pLabel, pType, pValue) {
 
     setDTPickerVal($input, pValue);
 
-    return $itemInput;
+    return $itemCont;
 }
 
 // Devuelve un Date con el value de un control DTPicker
@@ -697,15 +697,15 @@ function setDTPickerVal(pInput, pValue) {
 }
 
 function getTextarea(pId, pLabel, pValue) {
-    var $itemInput, $itemInner, $inputWrap;
+    var $itemCont, $itemInner, $inputWrap;
 
-    $itemInput = $('<li/>', {
+    $itemCont = $('<li/>', {
         class: 'item-content item-input',
     });
     
     $itemInner = $('<div/>', {
         class: 'item-inner',
-    }).appendTo($itemInput);
+    }).appendTo($itemCont);
 
     $('<div/>', {
         class: 'item-title item-floating-label',
@@ -726,7 +726,7 @@ function getTextarea(pId, pLabel, pValue) {
         class: 'input-clear-button',
     }).appendTo($inputWrap);
     
-    return $itemInput;
+    return $itemCont;
 }
 
 /*
@@ -1289,15 +1289,15 @@ Devuelve un boton. Ej:
     $ctl.find('button').click(function(e) { alert('clicked') });
 */
 function getButton(pTitle) {
-	var $itemInput, $itemInner, $inputWrap;
+	var $itemCont, $itemInner, $inputWrap;
 	
-	$itemInput = $('<li/>', {
+	$itemCont = $('<li/>', {
 		class: 'item-content item-input',
 	});
 	
 	$itemInner = $('<div/>', {
 		class: 'item-inner',
-	}).appendTo($itemInput);
+	}).appendTo($itemCont);
 	
 	$inputWrap = $('<div/>', {
 		class: 'item-input-wrap',
@@ -1307,7 +1307,7 @@ function getButton(pTitle) {
 		class: 'button',
 	}).append(pTitle).appendTo($inputWrap);
 	
-	return $itemInput;
+	return $itemCont;
 }
 
 // Devuelve una tabla con el DocLog del documento, mediante la funcion de Callback
