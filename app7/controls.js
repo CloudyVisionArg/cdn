@@ -485,7 +485,7 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
 
         function ending() {
             pSelect.removeAttr('data-filling');
-            resolve(true);
+            resolve(pSelect[0]);
 
             const ev = new CustomEvent('fillComplete');
             pSelect[0].dispatchEvent(ev);
