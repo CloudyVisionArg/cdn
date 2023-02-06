@@ -27,10 +27,10 @@ getDTPickerVal(pInput, pJSON)
 timeZone()
 setDTPickerVal(pInput, pValue)
 getTextarea(pId, pLabel, pValue)
-getToggle(pId, pLabel)
+getToggle(pId, pLabel, options)
 setToggleVal(pCtrl, pValue){
 getCheckbox(pId, pLabel)
-getStepper(pId, pLabel)
+getStepper(pId, pLabel, options)
 getPopup(pTitle)
 getAutocomplete(pId, pLabel, pSource, pMultiple)
 getButton(pTitle)
@@ -56,8 +56,18 @@ function getControlFolder(pFolder, pRootFolderId) {
     return getFolder(pFolder, pRootFolderId);
 }
 
-function getInputText(pId, pLabel, pValue) {
-    var $itemInput, $itemInner, $inputWrap;
+function getInputText(pId, pLabel, options) {
+    var $itemInput, $itemInner, $inputWrap, value;
+
+    if (isObject(options)) {
+        var opt = {};
+        Object.assign(opt, options);
+        value = opt.value;
+
+    } else {
+        // Backward compat
+        value = options;
+    }
 
     $itemInput = $('<li/>', {
         class: 'item-content item-input',
@@ -79,7 +89,7 @@ function getInputText(pId, pLabel, pValue) {
         type: 'text',
         id: pId,
         placeholder: pLabel,
-        value: pValue,
+        value: value,
         autocomplete: 'off',
     }).appendTo($inputWrap);
 

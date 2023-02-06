@@ -40,6 +40,24 @@ function $get(pSelector) {
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
+/* Con plugin chooser https://github.com/cyph/cordova-plugin-chooser
+chooser.getFileMetadata().then(
+    function (res) {
+        if (res) {
+            getFile(res.uri).then(
+                function (file) {
+                    att.URL = file.localURL;
+                    att.Name = res.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                },
+                errMgr
+            )
+        }
+    },
+    errMgr
+)
+*/
 
 function getInputFile(pId, pLabel) {
     var $itemInput, $itemInner, $inputWrap;

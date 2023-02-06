@@ -4,6 +4,7 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+isObject(value)
 accountsSearch(filter, order, forceOnline)
 getCache(pKey)
 setCache(pKey, pValue, pSeconds)
@@ -34,6 +35,13 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+/*
+Retorna true si value es un objeto {}
+*/
+function isObject(value) {
+    return Object.prototype.toString.call(value) === '[object Object]';
+}
 
 /*
 forceOnline se utiliza solo en el APP. Pasar true en caso que accounts
