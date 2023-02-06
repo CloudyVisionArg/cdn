@@ -41,7 +41,7 @@ function $get(pSelector) {
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
 
-function getInputFile(pId, pLabel, pValue) {
+function getInputFile(pId, pLabel) {
     var $itemInput, $itemInner, $inputWrap;
 
     $itemInput = $('<li/>', {
@@ -61,10 +61,9 @@ function getInputFile(pId, pLabel, pValue) {
     }).appendTo($itemInner);
     
     $('<input/>', {
-        type: 'text',
+        type: 'file',
         id: pId,
         placeholder: pLabel,
-        value: pValue,
         autocomplete: 'off',
     }).appendTo($inputWrap);
 
