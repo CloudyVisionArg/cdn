@@ -40,7 +40,8 @@ $inputFile.change(async e => {
     const file = e.target.files[0];
     const data = await file.arrayBuffer();
     /* data is an ArrayBuffer */
-    const workbook = XLSX.read(data);
+    const book = XLSX.read(data);
+    const sheet = wb.Sheets[wb.SheetNames[0]];
     debugger;
 });
 
