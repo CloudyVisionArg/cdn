@@ -646,7 +646,7 @@ function showLogin() {
                                         getDocField(doc, 'creator_nombre').Value = $get('#nombre').val();
                             
                                         DoorsAPI.documentSave(doc).then(function (doc) {
-                                            setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso, recuerde checkear el correo no deseado.');
+                                            setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso, recuerde checkear el correo no deseado.', 'white');
                             
                                             DoorsAPI.logoff();
                                             Doors.RESTFULL.AuthToken = '';
@@ -694,6 +694,11 @@ function showLogin() {
                             function setMessage(pMessage) {
                                 var $msg = $get('#message');
                                 $msg.html(pMessage);
+                                if (pColor) {
+                                    $msg.attr('style', 'color: ' + pColor + ' !important;');
+                                } else {
+                                    $msg.removeAttr('style');
+                                }
                                 if (pMessage) $msg.show();
                                 else $msg.hide();
                             }
