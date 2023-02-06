@@ -691,7 +691,7 @@ function showLogin() {
                                 inputDisabled($get('#empresa'), pDisable);
                             }
 
-                            function setMessage(pMessage) {
+                            function setMessage(pMessage, pColor) {
                                 var $msg = $get('#message');
                                 $msg.html(pMessage);
                                 if (pColor) {
