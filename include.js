@@ -1,4 +1,3 @@
-//TODO: PROMISES
 /*
 include permite cargar una biblioteca Javascript o CSS en forma dinamica.
 La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
