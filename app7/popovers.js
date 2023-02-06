@@ -2,7 +2,7 @@
 var popoversFolder;
 var arrPopoversfijos = [];
 
-fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json')
+fetch('https://cloudycrm.net/c/gitcdn.asp?path=/app7/popovers.json') // Dani, hay q cambiar esto, lo veamos
 .then(response => {
     if (!response.ok) {
         throw new Error("HTTP error " + response.status);
