@@ -1501,6 +1501,7 @@ function renderNewAtt(pAtt, pCont) {
 }
 
 function saveDoc(exitOnSuccess) {
+    debugger;
     if (saving) return;
     saving = true;
     $navbar.find('.right .button').addClass('disabled');
