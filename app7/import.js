@@ -30,26 +30,13 @@ var $ctl = getInputText('ee', 'Excel', {
 }).appendTo($ul);
 
 var $clip = $ctl.find('.item-media');
+
+var $inputFile = $('<input/>', {
+    type: 'file',
+}).appendTo($clip);
+
 $clip.click(e => {
-    // Plugin chooser https://github.com/cyph/cordova-plugin-chooser
-    chooser.getFileMetadata().then(
-        function (res) {
-            if (res) {
-                getFile(res.uri).then(
-                    function (file) {
-                        att.URL = file.localURL;
-                        att.Name = res.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    },
-                    errMgr
-                )
-            }
-        },
-        errMgr
-    )
-
-
+    $inputFile.click();
 });
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
