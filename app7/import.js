@@ -54,7 +54,11 @@ $inputFile.change(async e => {
     for (var i = 0; i < sheet._rangeCols(); i++) {
         headers.push(sheet._rangeCells(0, i).v);
 
-        getSelect('c' + i, headers[i]).appendTo($ul);
+        let $sel = getSelect('c' + i, headers[i]);
+        let $title = $sel.find('.item-title');
+        $title.removeClass('item-floating-label'),
+        $title.addClass('item-title');
+        $sel.appendTo($ul);
     }
 
 
