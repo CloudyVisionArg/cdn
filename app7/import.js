@@ -29,6 +29,8 @@ var $ctl = getInputText('ee', 'Excel', {
     mdicon: 'attach_file',
 }).appendTo($ul);
 
+var $fileName = $ctl.find('input');
+
 var $clip = $ctl.find('.item-media');
 
 var $inputFile = $('<input/>', {
@@ -38,7 +40,9 @@ var $inputFile = $('<input/>', {
 
 $inputFile.change(async e => {
     debugger;
+    
     const file = e.target.files[0];
+    $fileName.val(file.name);
     const data = await file.arrayBuffer();
     /* data is an ArrayBuffer */
     const book = XLSX.read(data);
