@@ -70,13 +70,12 @@ $inputFile.change(async e => {
 
     var form = await folder.form;
     var fields = [];
-    debugger;
     form.fieldsMap.forEach(f => {
         if (f.custom && !f.headerTable) {
-            fields.push(f.name)
+            fields.push(f.nam.toLowerCase());
         }
     });
-
+    fields.sort();
 
     var headers = [];
     for (var i = 0; i < sheet._rangeCols(); i++) {
