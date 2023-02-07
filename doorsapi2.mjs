@@ -121,9 +121,7 @@ export class Session {
         this.#serverUrl = value;
         this.#restClient.ServerBaseUrl = value;
     }
-
-
-}
+};
 
 class Directory {
     #session;
@@ -135,7 +133,7 @@ class Directory {
     get session() {
         return this.#session;
     }
-}
+};
 
 export class Document {
     #parent;
@@ -207,7 +205,7 @@ export class Document {
     toJSON() {
         return this.#doc;
     }
-}
+};
 
 class Field {
     #parent; // Document
@@ -296,7 +294,7 @@ IsNew
 Tags
 ValueChanged
 */    
-}
+};
 
 export class Folder {
     #folder;
@@ -400,7 +398,7 @@ export class Folder {
     toJSON() {
         return this.#folder;
     }
-}
+};
 
 class Form {
     #form;
@@ -415,7 +413,6 @@ class Form {
     fields(name) {
         var me = this;
         var field;
-        debugger;
         field = me.#form.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
         if (field) {
             return new Field(field, me);
@@ -429,21 +426,47 @@ class Form {
         if (me.#fieldsMap) {
             return me.#fieldsMap;
         } else {
-            var map = new Map();
+            var map = new CIMap();
             me.#form.Fields.forEach(it => {
-                debugger;
-                map.set();
+                map.set(it.Name, new Field(it, me.session));
             });
+            me.#fieldsMap = map;
+            return map;
         }
+    }
 
+    get session() {
+        return this.#session;
     }
 
     toJSON() {
         return this.#form;
     }
+};
 
 
-}
+class CIMap extends Map {    
+    set(key, value) {
+        if (typeof key === 'string') {
+            key = key.toLowerCase();
+        }
+        return super.set(key, value);
+    }
+
+    get(key) {
+        if (typeof key === 'string') {
+            key = key.toLowerCase();
+        }
+        return super.get(key);
+    }
+
+    has(key) {
+        if (typeof key === 'string') {
+            key = key.toLowerCase();
+        }
+        return super.has(key);
+    }
+};
 
 class RestClient {
     AuthToken = null;
@@ -535,4 +558,4 @@ class RestClient {
         }
         return stringParam;
     }
-}
+};
