@@ -405,6 +405,7 @@ export class Folder {
 class Form {
     #form;
     #session;
+    #fieldsMap;
 
     constructor(form, session) {
         this.#form = form;
@@ -415,13 +416,26 @@ class Form {
         var me = this;
         var field;
         debugger;
-        field = me.#form.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-        if (!field) field = me.#form.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+        field = me.#form.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
         if (field) {
             return new Field(field, me);
         } else {
             throw new Error('Field not found: ' + name);
         }
+    }
+
+    get fieldsMap() {
+        var me = this;
+        if (me.#fieldsMap) {
+            return me.#fieldsMap;
+        } else {
+            var map = new Map();
+            me.#form.Fields.forEach(it => {
+                debugger;
+                map.set();
+            });
+        }
+
     }
 
     toJSON() {
