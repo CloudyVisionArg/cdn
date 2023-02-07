@@ -73,7 +73,6 @@ $inputFile.change(async e => {
     $ul.empty();
 
     var form = await folder.form;
-    form.fieldsMap.forEach(it => {debugger;})
 
     var headers = [];
     for (var i = 0; i < sheet._rangeCols(); i++) {
@@ -85,7 +84,9 @@ $inputFile.change(async e => {
         $title.addClass('item-label');
 
         var $sel = $selCtl.find('select');
-        addOption($sel[0], 'Campo ' + i);
+        form.fieldsMap.forEach(f => {
+            addOption($sel[0], f.name);  
+        })
 
         $selCtl.appendTo($ul);
     }
