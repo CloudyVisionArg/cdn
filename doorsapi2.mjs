@@ -139,6 +139,7 @@ export class Document {
     #parent;
     #session;
     #doc;
+    #fieldsMap
 
     constructor(document, session, folder) {
         this.#doc = document;
@@ -158,8 +159,23 @@ export class Document {
         }
     }
 
-    fieldsMap() {
+    get fieldsMap() {
+        var me = this;
+        if (me.#fieldsMap) {
+            return me.#fieldsMap;
 
+        } else {
+            var map = new CIMap();
+            debugger; // revisar
+            me.#doc.HeadFields.forEach(it => {
+                map.set(it.Name, new Field(it, me.session));
+            });
+            me.#doc.CustomFields.forEach(it => {
+                map.set(it.Name, new Field(it, me.session));
+            });
+            me.#fieldsMap = map;
+            return map;
+        }
     }
 
     get folder() {
@@ -425,6 +441,7 @@ class Form {
         var me = this;
         if (me.#fieldsMap) {
             return me.#fieldsMap;
+
         } else {
             var map = new CIMap();
             me.#form.Fields.forEach(it => {
