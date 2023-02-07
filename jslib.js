@@ -41,12 +41,12 @@ function sheetFuncs (sheet) {
 
     sheet._rangeRows = function () {
         debugger;
-        return this._range.e.r - this.range.s.r;
+        return this._range.e.r - this._range.s.r;
     };
 
     sheet._rangeCols = function () {
         debugger;
-        return this._range.e.c - this.range.s.c;
+        return this._range.e.c - this._range.s.c;
     }
 
     sheet._rangeCells = function (r, c) {
