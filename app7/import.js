@@ -58,6 +58,7 @@ var $inputFile = $('<input/>', {
 }).appendTo($ctl);
 
 $inputFile.change(async e => {
+    // Lee el excel
     const file = e.target.files[0];
     $fileName.val(file.name);
     const data = await file.arrayBuffer();
@@ -66,8 +67,7 @@ $inputFile.change(async e => {
     const sheet = book.Sheets[book.SheetNames[0]];
     sheetFuncs(sheet);
 
-    $ul.empty();
-
+    // Lee los campos del folder
     var form = await folder.form;
     var fields = [];
     form.fieldsMap.forEach(f => {
@@ -77,11 +77,14 @@ $inputFile.change(async e => {
     });
     fields.sort();
 
+    $ul.empty();
     var headers = [];
+
+    // Carga el mapeo
     for (var i = 0; i < sheet._rangeCols(); i++) {
         headers.push(sheet._rangeCells(0, i).v);
 
-        let $selCtl = getSelect('c' + i, headers[i]);
+        let $selCtl = getSelect(undefined, headers[i]);
         $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
 
         var $sel = $selCtl.find('select');
