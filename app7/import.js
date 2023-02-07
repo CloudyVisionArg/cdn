@@ -43,7 +43,11 @@ $inputFile.change(async e => {
     const book = XLSX.read(data);
     const sheet = book.Sheets[book.SheetNames[0]];
     sheetFuncs(sheet);
-    
+
+    sheet._rangeRows();
+    sheet._rangeRows();
+    sheet._rangeCells(0, 0);
+
     debugger;
 
 
