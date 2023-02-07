@@ -411,6 +411,23 @@ class Form {
         this.#session = session;
     }
 
+    fields(name) {
+        var me = this;
+        var field;
+        debugger;
+        field = me.#form.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+        if (!field) field = me.#form.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+        if (field) {
+            return new Field(field, me);
+        } else {
+            throw new Error('Field not found: ' + name);
+        }
+    }
+
+    toJSON() {
+        return this.#form;
+    }
+
 
 }
 

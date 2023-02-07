@@ -2,11 +2,11 @@
 
 var fld_id = routeTo.query.fld_id;
 var folder;
+
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
         folder = fld;
-        debugger;
-        folder.form;
+        folder.form; // Para que vaya cargando
     },
     errMgr
 );
@@ -73,6 +73,9 @@ $inputFile.change(async e => {
     sheet._rangeCells(0, 0);
 
     $ul.empty();
+
+    var form = await folder.form;
+    debugger;
 
     var headers = [];
     for (var i = 0; i < sheet._rangeCols(); i++) {
