@@ -2,10 +2,11 @@
 
 var fld_id = routeTo.query.fld_id;
 var folder;
-debugger;
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
         folder = fld;
+        debugger;
+        folder.form;
     },
     errMgr
 );

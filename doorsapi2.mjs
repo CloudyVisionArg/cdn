@@ -320,6 +320,24 @@ export class Folder {
         })
     }
 
+    get form() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#folder.Form) {
+                var url = 'forms/' + me.#folder.FrmId;
+                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    frm => {
+                        me.#folder.Form = frm;
+                        resolve(new Form(frm, me.session));
+                    }
+                ),
+                reject
+            } else {
+                resolve(new Form(me.#folder.Form, me.session));
+            }
+        });
+    }
+
     get id() {
         return this.#folder.FldId;
     }
@@ -382,6 +400,18 @@ export class Folder {
     toJSON() {
         return this.#folder;
     }
+}
+
+class Form {
+    #form;
+    #session;
+
+    constructor(form, session) {
+        this.#form = form;
+        this.#session = session;
+    }
+
+
 }
 
 class RestClient {
