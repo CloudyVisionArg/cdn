@@ -87,7 +87,7 @@ $inputFile.change(async e => {
         $title.addClass('item-label');
 
         var $sel = $selCtl.find('select');
-        addOption(@self, '(no importar)', '[NULL]'); 
+        addOption($sel, '(no importar)', '[NULL]'); 
         fields.forEach(it => {
             addOption($sel[0], it); 
         })
