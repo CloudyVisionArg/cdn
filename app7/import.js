@@ -72,7 +72,7 @@ $inputFile.change(async e => {
     var fields = [];
     form.fieldsMap.forEach(f => {
         if (f.custom && !f.headerTable) {
-            fields.push(f.nam.toLowerCase());
+            fields.push(f.name.toLowerCase());
         }
     });
     fields.sort();
