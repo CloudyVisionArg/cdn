@@ -54,19 +54,32 @@ $inputFile.change(async e => {
     for (var i = 0; i < sheet._rangeCols(); i++) {
         headers.push(sheet._rangeCells(0, i).v);
 
-        let $sel = getSelect('c' + i, headers[i]);
-        let $title = $sel.find('.item-title');
+        let $selCtl = getSelect('c' + i, headers[i]);
+        let $title = $selCtl.find('.item-title');
         $title.removeClass('item-floating-label'),
-        $title.addClass('item-title');
-
+        $title.addClass('item-label');
+        
+        $sel.find('select');
         addOption($sel[0], 'Campo ' + i);
 
-        $sel.appendTo($ul);
+        $selCtl.appendTo($ul);
     }
 
 
     
     debugger;
+
+    <li class="item-content item-input">
+        <div class="item-inner">
+            <div class="item-title item-label">Gender</div>
+            <div class="item-input-wrap input-dropdown-wrap">
+                <select placeholder="Please choose...">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+        </div>
+    </li>
 
 });
 
