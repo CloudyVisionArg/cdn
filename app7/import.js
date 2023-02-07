@@ -1,5 +1,3 @@
-
-
 var fld_id = routeTo.query.fld_id;
 var folder;
 
@@ -17,7 +15,7 @@ var $page = getPage({
     id: 'import',
     title: 'Importar',
     leftbutton: 'exit',
-	//rightbutton: 'save',
+	rightbutton: 'save',
 });
 
 $page.find('.navbar-inner .left .link').on('click', function (e) {
