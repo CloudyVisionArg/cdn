@@ -40,22 +40,18 @@ function sheetFuncs (sheet) {
     sheet._range = XLSX.utils.decode_range(sheet['!ref']);
 
     sheet._rangeRows = function () {
-        debugger;
-        return this._range.e.r - this._range.s.r;
+        return this._range.e.r - this._range.s.r + 1;
     };
 
     sheet._rangeCols = function () {
-        debugger;
-        return this._range.e.c - this._range.s.c;
+        return this._range.e.c - this._range.s.c + 1;
     }
 
     sheet._rangeCells = function (r, c) {
-        debugger;
         return this[XLSX.utils.encode_cell({
-            r: row + this._range.s.r,
-            c: col + this._range.s.c,
+            r: r + this._range.s.r,
+            c: c + this._range.s.c,
         })];
-
     }
 };
 
