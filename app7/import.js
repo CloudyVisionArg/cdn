@@ -47,6 +47,9 @@ $itemTitle.remove();
 
 var $fileName = $ctl.find('input');
 $fileName.attr('readonly', true);
+$fileName.change(e => {
+    debugger;
+});
 
 var $clip = $ctl.find('.item-media');
 
@@ -86,24 +89,6 @@ $inputFile.change(async e => {
 
         $selCtl.appendTo($ul);
     }
-
-
-    
-    debugger;
-
-    /*
-    <li class="item-content item-input">
-        <div class="item-inner">
-            <div class="item-title item-label">Gender</div>
-            <div class="item-input-wrap input-dropdown-wrap">
-                <select placeholder="Please choose...">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-        </div>
-    </li>
-    */
 });
 
 $pageCont.append('<div class="block-title">Mapeo de campos</div>');
