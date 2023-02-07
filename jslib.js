@@ -4,6 +4,7 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+sheetFuncs (sheet)
 isObject(value)
 accountsSearch(filter, order, forceOnline)
 getCache(pKey)
@@ -36,6 +37,9 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+/*
+Funciones que facilitan el barrido de una hoja excel
+*/
 function sheetFuncs (sheet) {
     sheet._range = XLSX.utils.decode_range(sheet['!ref']);
 
@@ -47,6 +51,7 @@ function sheetFuncs (sheet) {
         return this._range.e.c - this._range.s.c + 1;
     }
 
+    //Devuelve un objeto cell https://docs.sheetjs.com/docs/csf/cell
     sheet._rangeCells = function (r, c) {
         return this[XLSX.utils.encode_cell({
             r: r + this._range.s.r,
@@ -54,7 +59,6 @@ function sheetFuncs (sheet) {
         })];
     }
 };
-
 
 /*
 Retorna true si value es un objeto {}

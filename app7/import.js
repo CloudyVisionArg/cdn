@@ -48,6 +48,10 @@ $inputFile.change(async e => {
     sheet._rangeRows();
     sheet._rangeCells(0, 0);
 
+    var headers = [];
+    for (var i = 0; i < sheet._rangeCols(); i++) {
+        headers.push(sheet._rangeCells(0, i).v);
+    }
     debugger;
 
 
