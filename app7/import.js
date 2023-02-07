@@ -72,7 +72,9 @@ $inputFile.change(async e => {
     var fields = [];
     debugger;
     form.fieldsMap.forEach(f => {
-
+        if (f.custom && !f.headerTable) {
+            fields.push(f.name)
+        }
     });
 
 
@@ -86,8 +88,8 @@ $inputFile.change(async e => {
         $title.addClass('item-label');
 
         var $sel = $selCtl.find('select');
-        form.fieldsMap.forEach(f => {
-            addOption($sel[0], f.name);  
+        fields.forEach(it => {
+            addOption($sel[0], it);  
         })
 
         $selCtl.appendTo($ul);
