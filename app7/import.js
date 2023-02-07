@@ -66,10 +66,6 @@ $inputFile.change(async e => {
     const sheet = book.Sheets[book.SheetNames[0]];
     sheetFuncs(sheet);
 
-    sheet._rangeRows();
-    sheet._rangeRows();
-    sheet._rangeCells(0, 0);
-
     $ul.empty();
 
     var form = await folder.form;
