@@ -59,7 +59,7 @@ $inputFile.change(async e => {
         $title.removeClass('item-floating-label'),
         $title.addClass('item-label');
 
-        $sel.find('select');
+        var $sel = $selCtl.find('select');
         addOption($sel[0], 'Campo ' + i);
 
         $selCtl.appendTo($ul);
