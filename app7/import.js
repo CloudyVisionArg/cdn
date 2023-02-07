@@ -22,20 +22,7 @@ var $list = $('<div/>', {
     style: 'margin-top: 0;',
 }).appendTo($pageCont);
 
-/*
-  <li class="item-content item-input">
-    <div class="item-media">
-      <i class="icon demo-list-icon"></i>
-    </div>
-    <div class="item-inner">
-      <div class="item-input-wrap">
-        <input type="text" placeholder="Your name" />
-        <span class="input-clear-button"></span>
-      </div>
-    </div>
-  </li>
-  */
- var $ul = $('<ul/>').appendTo($list);
+var $ul = $('<ul/>').appendTo($list);
 
 var $ctl = getInputText('filename', 'Seleccione el archivo a importar', {
     iosicon: 'paperclip',
@@ -48,7 +35,8 @@ $itemTitle.remove();
 var $fileName = $ctl.find('input');
 $fileName.attr('readonly', true);
 $fileName.change(e => {
-    debugger;
+    if (!e.target.value) $inputFile.val('');
+    $ul.empty();
 });
 
 var $clip = $ctl.find('.item-media');
