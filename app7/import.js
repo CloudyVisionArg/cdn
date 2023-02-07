@@ -69,6 +69,12 @@ $inputFile.change(async e => {
     $ul.empty();
 
     var form = await folder.form;
+    var fields = [];
+    debugger;
+    form.fieldsMap.forEach(f => {
+
+    });
+
 
     var headers = [];
     for (var i = 0; i < sheet._rangeCols(); i++) {

@@ -465,21 +465,21 @@ class Form {
 class CIMap extends Map {    
     set(key, value) {
         if (typeof key === 'string') {
-            key = key.toLowerCase();
+            key = key.toUpperCase();
         }
         return super.set(key, value);
     }
 
     get(key) {
         if (typeof key === 'string') {
-            key = key.toLowerCase();
+            key = key.toUpperCase();
         }
         return super.get(key);
     }
 
     has(key) {
         if (typeof key === 'string') {
-            key = key.toLowerCase();
+            key = key.toUpperCase();
         }
         return super.has(key);
     }
