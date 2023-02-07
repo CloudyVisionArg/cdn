@@ -41,19 +41,19 @@ function sheetFuncs (sheet) {
 
     sheet._rangeRows = function () {
         debugger;
-        return this.range.e.r - this.range.s.r;
+        return this._range.e.r - this.range.s.r;
     };
 
     sheet._rangeCols = function () {
         debugger;
-        return this.range.e.c - this.range.s.c;
+        return this._range.e.c - this.range.s.c;
     }
 
     sheet._rangeCells = function (r, c) {
         debugger;
         return this[XLSX.utils.encode_cell({
-            r: row - this._range.s.r,
-            c: col - this._range.s.c,
+            r: row + this._range.s.r,
+            c: col + this._range.s.c,
         })];
 
     }
