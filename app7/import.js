@@ -18,7 +18,7 @@ var $pageCont = $page.find('.page-content');
 
 
 var $list = $('<div/>', {
-    class: 'list no-hairlines-md',
+    class: 'list inline-labels no-hairlines-md',
     style: 'margin-top: 0;',
 }).appendTo($pageCont);
 
@@ -58,6 +58,9 @@ $inputFile.change(async e => {
         let $title = $sel.find('.item-title');
         $title.removeClass('item-floating-label'),
         $title.addClass('item-title');
+
+        addOption($sel[0], 'Campo ' + i);
+        
         $sel.appendTo($ul);
     }
 
