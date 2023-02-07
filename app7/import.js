@@ -29,7 +29,7 @@ $right.append(`
 <div style="margin-left: auto" class="menu-item menu-item-dropdown">
     <div class="menu-item-content icon-only">
         <div class="menu-item-content">
-            <i class="f7-icons">square_arrow_up</i>
+            <i class="f7-icons">plus</i>
         </div>
     </div>
     <div class="menu-dropdown menu-dropdown-right">
