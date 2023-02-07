@@ -58,7 +58,7 @@ $inputFile.change(async e => {
         let $title = $selCtl.find('.item-title');
         $title.removeClass('item-floating-label'),
         $title.addClass('item-label');
-        
+
         $sel.find('select');
         addOption($sel[0], 'Campo ' + i);
 
@@ -69,6 +69,7 @@ $inputFile.change(async e => {
     
     debugger;
 
+    /*
     <li class="item-content item-input">
         <div class="item-inner">
             <div class="item-title item-label">Gender</div>
@@ -80,7 +81,7 @@ $inputFile.change(async e => {
             </div>
         </div>
     </li>
-
+    */
 });
 
 $pageCont.append('<div class="block-title">Mapeo de campos</div>');
