@@ -61,8 +61,6 @@ $inputFile.change(async e => {
     
     debugger;
 
-    for 
-
 });
 
 $pageCont.append('<div class="block-title">Mapeo de campos</div>');
