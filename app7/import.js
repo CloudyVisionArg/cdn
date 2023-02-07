@@ -82,14 +82,12 @@ $inputFile.change(async e => {
         headers.push(sheet._rangeCells(0, i).v);
 
         let $selCtl = getSelect('c' + i, headers[i]);
-        let $title = $selCtl.find('.item-title');
-        $title.removeClass('item-floating-label'),
-        $title.addClass('item-label');
+        $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
 
         var $sel = $selCtl.find('select');
         addOption($sel[0], '(no importar)', '[NULL]'); 
         fields.forEach(it => {
-            addOption($sel[0], it); 
+            addOption($sel[0], it);
         })
         $sel.val(headers[i]);
         if ($sel[0].selectedIndex < 0) $sel[0].selectedIndex = 0;
