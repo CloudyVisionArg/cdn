@@ -73,6 +73,8 @@ $inputFile.change(async e => {
     $ul.empty();
 
     var form = await folder.form;
+    console.log(form.fields('nombre').name);
+    console.log(form.fieldsMap);
     debugger;
 
     var headers = [];
