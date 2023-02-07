@@ -23,6 +23,31 @@ $page.find('.navbar-inner .left .link').on('click', function (e) {
 });
 
 
+var $right = $page.find('.navbar-inner .right');
+$right.empty();
+$right.append(`
+<div style="margin-left: auto" class="menu-item menu-item-dropdown">
+    <div class="menu-item-content icon-only">
+        <div class="menu-item-content">
+            <i class="f7-icons">square_arrow_up</i>
+        </div>
+    </div>
+    <div class="menu-dropdown menu-dropdown-right">
+        <div class="menu-dropdown-content">
+            <a href="#" class="menu-dropdown-link menu-close">
+                <span>Share on Facebook</span>
+                <i class="f7-icons margin-left">logo_facebook</i>
+            </a>
+            <a href="#" class="menu-dropdown-link menu-close">
+                <span>Share on Twitter</span>
+                <i class="f7-icons margin-left">logo_twitter</i>
+            </a>
+        </div>
+    </div>
+</div>
+`);
+
+
 var $pageCont = $page.find('.page-content');
 
 
