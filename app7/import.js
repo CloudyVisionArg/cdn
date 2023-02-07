@@ -22,12 +22,28 @@ var $list = $('<div/>', {
     style: 'margin-top: 0;',
 }).appendTo($pageCont);
 
-var $ul = $('<ul/>').appendTo($list);
+/*
+  <li class="item-content item-input">
+    <div class="item-media">
+      <i class="icon demo-list-icon"></i>
+    </div>
+    <div class="item-inner">
+      <div class="item-input-wrap">
+        <input type="text" placeholder="Your name" />
+        <span class="input-clear-button"></span>
+      </div>
+    </div>
+  </li>
+  */
+ var $ul = $('<ul/>').appendTo($list);
 
-var $ctl = getInputText('ee', 'Excel', {
+var $ctl = getInputText('filename', 'Excel', {
     iosicon: 'paperclip',
     mdicon: 'attach_file',
 }).appendTo($ul);
+
+var $itemTitle = $ctl.find('.item-title');
+$itemTitle.remove();
 
 var $fileName = $ctl.find('input');
 
