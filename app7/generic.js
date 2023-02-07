@@ -968,10 +968,7 @@ function pageInit(e, page) {
                         }
                     })
                 }
-            ).then(() => {
-                const ev = new CustomEvent('fillComplete');
-                $el[0].dispatchEvent(ev);
-            });
+            );
 
         } else {
             getControlFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
@@ -988,10 +985,7 @@ function pageInit(e, page) {
                             $el.attr('data-fill-formula'), $el.attr('data-fill-order')
                         ),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
-                    ).then(() => {
-                        const ev = new CustomEvent('fillComplete');
-                        $el[0].dispatchEvent(ev);
-                    });
+                    );
                 },
                 function (err) {
                     console.log(err);
@@ -1501,6 +1495,7 @@ function renderNewAtt(pAtt, pCont) {
 }
 
 function saveDoc(exitOnSuccess) {
+    debugger;
     if (saving) return;
     saving = true;
     $navbar.find('.right .button').addClass('disabled');
@@ -1608,9 +1603,8 @@ function saveDoc(exitOnSuccess) {
     };
 
     DoorsAPI.documentSave(doc).then((doc2) => {
-        debugger;
-        //dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
-            doc = doc2 //doc3.toJSON();
+        dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
+            doc = doc3.toJSON();
             pageEl.crm.doc = doc;
 
             doc_id = getDocField(doc, 'doc_id').Value;
@@ -1640,7 +1634,7 @@ function saveDoc(exitOnSuccess) {
                 }
 
             }, errMgr);
-        //}, errMgr);
+        }, errMgr);
     }, errMgr);
 
     function errMgr(pErr) {

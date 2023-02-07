@@ -4,6 +4,8 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+sheetFuncs (sheet)
+isObject(value)
 accountsSearch(filter, order, forceOnline)
 getCache(pKey)
 setCache(pKey, pValue, pSeconds)
@@ -34,6 +36,36 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+/*
+Funciones que facilitan el barrido de una hoja excel
+*/
+function sheetFuncs (sheet) {
+    sheet._range = XLSX.utils.decode_range(sheet['!ref']);
+
+    sheet._rangeRows = function () {
+        return this._range.e.r - this._range.s.r + 1;
+    };
+
+    sheet._rangeCols = function () {
+        return this._range.e.c - this._range.s.c + 1;
+    }
+
+    //Devuelve un objeto cell https://docs.sheetjs.com/docs/csf/cell
+    sheet._rangeCells = function (r, c) {
+        return this[XLSX.utils.encode_cell({
+            r: r + this._range.s.r,
+            c: c + this._range.s.c,
+        })];
+    }
+};
+
+/*
+Retorna true si value es un objeto {}
+*/
+function isObject(value) {
+    return Object.prototype.toString.call(value) === '[object Object]';
+}
 
 /*
 forceOnline se utiliza solo en el APP. Pasar true en caso que accounts

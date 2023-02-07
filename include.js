@@ -1,4 +1,3 @@
-//TODO: PROMISES
 /*
 include permite cargar una biblioteca Javascript o CSS en forma dinamica.
 La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
@@ -76,16 +75,18 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 201 });
+    scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 0 });
 
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 199 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 202 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 202 });
+	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 202, hasdep: true });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 199 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
 	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 195 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 192 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 190 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 190 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 189, hasdep: true });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 189 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
@@ -101,7 +102,6 @@ function registeredScripts() {
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 146 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 146 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
-	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 102 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });

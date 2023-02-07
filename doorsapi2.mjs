@@ -121,9 +121,7 @@ export class Session {
         this.#serverUrl = value;
         this.#restClient.ServerBaseUrl = value;
     }
-
-
-}
+};
 
 class Directory {
     #session;
@@ -135,12 +133,13 @@ class Directory {
     get session() {
         return this.#session;
     }
-}
+};
 
 export class Document {
     #parent;
     #session;
     #doc;
+    #fieldsMap
 
     constructor(document, session, folder) {
         this.#doc = document;
@@ -160,8 +159,23 @@ export class Document {
         }
     }
 
-    fieldsMap() {
+    get fieldsMap() {
+        var me = this;
+        if (me.#fieldsMap) {
+            return me.#fieldsMap;
 
+        } else {
+            var map = new CIMap();
+            debugger; // revisar
+            me.#doc.HeadFields.forEach(it => {
+                map.set(it.Name, new Field(it, me.session));
+            });
+            me.#doc.CustomFields.forEach(it => {
+                map.set(it.Name, new Field(it, me.session));
+            });
+            me.#fieldsMap = map;
+            return map;
+        }
     }
 
     get folder() {
@@ -207,7 +221,7 @@ export class Document {
     toJSON() {
         return this.#doc;
     }
-}
+};
 
 class Field {
     #parent; // Document
@@ -296,7 +310,7 @@ IsNew
 Tags
 ValueChanged
 */    
-}
+};
 
 export class Folder {
     #folder;
@@ -318,6 +332,24 @@ export class Folder {
                 reject
             );
         })
+    }
+
+    get form() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#folder.Form) {
+                var url = 'forms/' + me.#folder.FrmId;
+                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    frm => {
+                        me.#folder.Form = frm;
+                        resolve(new Form(frm, me.session));
+                    }
+                ),
+                reject
+            } else {
+                resolve(new Form(me.#folder.Form, me.session));
+            }
+        });
     }
 
     get id() {
@@ -382,7 +414,76 @@ export class Folder {
     toJSON() {
         return this.#folder;
     }
-}
+};
+
+class Form {
+    #form;
+    #session;
+    #fieldsMap;
+
+    constructor(form, session) {
+        this.#form = form;
+        this.#session = session;
+    }
+
+    fields(name) {
+        var me = this;
+        var field;
+        field = me.#form.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+        if (field) {
+            return new Field(field, me);
+        } else {
+            throw new Error('Field not found: ' + name);
+        }
+    }
+
+    get fieldsMap() {
+        var me = this;
+        if (me.#fieldsMap) {
+            return me.#fieldsMap;
+
+        } else {
+            var map = new CIMap();
+            me.#form.Fields.forEach(it => {
+                map.set(it.Name, new Field(it, me.session));
+            });
+            me.#fieldsMap = map;
+            return map;
+        }
+    }
+
+    get session() {
+        return this.#session;
+    }
+
+    toJSON() {
+        return this.#form;
+    }
+};
+
+
+class CIMap extends Map {    
+    set(key, value) {
+        if (typeof key === 'string') {
+            key = key.toUpperCase();
+        }
+        return super.set(key, value);
+    }
+
+    get(key) {
+        if (typeof key === 'string') {
+            key = key.toUpperCase();
+        }
+        return super.get(key);
+    }
+
+    has(key) {
+        if (typeof key === 'string') {
+            key = key.toUpperCase();
+        }
+        return super.has(key);
+    }
+};
 
 class RestClient {
     AuthToken = null;
@@ -474,4 +575,4 @@ class RestClient {
         }
         return stringParam;
     }
-}
+};
