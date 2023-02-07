@@ -37,6 +37,7 @@ var $inputFile = $('<input/>', {
 }).appendTo($ctl);
 
 $inputFile.change(async e => {
+    debugger;
     const file = e.target.files[0];
     const data = await file.arrayBuffer();
     /* data is an ArrayBuffer */
