@@ -1,4 +1,12 @@
-//holaa
+
+
+var fld_id = routeTo.query.fld_id;
+dSession.foldersGetFromId(fld_id).then(
+    function (fld) {
+        debugger;
+    },
+    errMgr
+);
 
 var f7Page;
 
