@@ -18,7 +18,7 @@ var $pageCont = $page.find('.page-content');
 
 
 var $list = $('<div/>', {
-    class: 'list inline-labels no-hairlines-md',
+    class: 'list no-hairlines-md',
     style: 'margin-top: 0;',
 }).appendTo($pageCont);
 
@@ -60,7 +60,7 @@ $inputFile.change(async e => {
         $title.addClass('item-title');
 
         addOption($sel[0], 'Campo ' + i);
-        
+
         $sel.appendTo($ul);
     }
 
@@ -73,7 +73,7 @@ $inputFile.change(async e => {
 $pageCont.append('<div class="block-title">Mapeo de campos</div>');
 
 var $list = $('<div/>', {
-    class: 'list no-hairlines-md',
+    class: 'list inline-labels no-hairlines-md',
     style: 'margin-top: 0;',
 }).appendTo($pageCont);
 
