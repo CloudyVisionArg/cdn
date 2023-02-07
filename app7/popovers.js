@@ -26,23 +26,16 @@ DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
 
 app7.on('pageAfterIn', function (e) {
     if(e.el.closest('.tab-active')){
-        let scope = obtenerScope(e.el);
-        if(scope == 'custom'){
-            generarCartelesVista("#" + e.el.closest('.view').id)
-        }else{
-            generarCarteles(scope);
-        }        
+        let context = e.el.id.replace(/_*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, "");
+        generarCarteles(context);
     }
 })
 
+
 app7.on('pageTabShow', function (e) {
     if(e.className.includes("page-current")){
-        let scope = obtenerScope(e);
-        if(scope == 'custom'){
-            generarCartelesVista("#" + e.closest('.view').id)
-        }else{
-            generarCarteles(scope);
-        }        
+        let context = e.id.replace(/_*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i, "");
+        generarCarteles(context);                
     }
 })  
 
@@ -105,8 +98,8 @@ function crearCarteles(pCartel,index,array){
         }
     });
     
-    dynamicPopover["SCOPE"] = pCartel["SCOPE"]
-    dynamicPopover["VIEW"] = pCartel["VIEW"]
+    dynamicPopover["CONTEXT"] = pCartel["CONTEXT"]
+
     dynamicPopover["SELECTOR"] = pCartel["SELECTOR"]
 
     return dynamicPopover;
@@ -114,6 +107,59 @@ function crearCarteles(pCartel,index,array){
 }
 
 
+function renderPopovers(pArrPopovers){
+    var read = window.localStorage.getItem("popoversLeidos");
+    const arrRead = read ? read.split(",") : [];
+
+    const arrFiltrados = pArrPopovers.filter((item)=>{
+        return arrRead.findIndex((x)=>x==item["CARTEL_ID"]) < 0;
+    });
+
+    const arrCartelesVista = arrFiltrados.map(crearCarteles)
+
+    for (let i = 0; i < arrCartelesVista.length-1; i++) {                
+        arrCartelesVista[i].on('closed', function (popover) {
+            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
+        });
+    } 
+    if(arrCartelesVista.length > 0){
+        arrCartelesVista[0].open(arrCartelesVista[0]["SELECTOR"]);
+    }
+}
+
+
+function generarCarteles(pScope){
+    const contextformula =  pScope ? "context LIKE '" + pScope + "' OR context LIKE 'toolbar'" : "context LIKE 'toolbar'";
+
+    var read = window.localStorage.getItem("popoversLeidos");
+    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
+    let conector = ""
+    if(contextformula !== "" && cartelFormula !== ""){
+        conector = " and "
+    }
+    const finalFormula = contextformula + conector + cartelFormula
+
+    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
+        function(res){            
+            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
+                return (item["CONTEXT"] == pScope || item["CONTEXT"] == 'toolbar');
+            });
+            if(res.length > 0){
+                renderPopovers([...arrCartelesFijos, ...res]);
+            }else{
+                renderPopovers(arrCartelesFijos);
+            }
+        },
+        function(err){
+            console.log(err);
+        }
+    );
+}
+
+
+
+
+/*
 function generarCartelesVista(pVista){
     const vistaformula =  pVista ? "view LIKE '" + pVista + "'" : "";
 
@@ -141,62 +187,4 @@ function generarCartelesVista(pVista){
         }
     );
 }
-
-
-function renderPopovers(pArrPopovers){
-    var read = window.localStorage.getItem("popoversLeidos");
-    const arrRead = read ? read.split(",") : [];
-
-    const arrFiltrados = pArrPopovers.filter((item)=>{
-        return arrRead.findIndex((x)=>x==item["CARTEL_ID"]) < 0;
-    });
-
-    const arrCartelesVista = arrFiltrados.map(crearCarteles)
-
-    for (let i = 0; i < arrCartelesVista.length-1; i++) {                
-        arrCartelesVista[i].on('closed', function (popover) {
-            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["SELECTOR"]);
-        });
-    } 
-    if(arrCartelesVista.length > 0){
-        arrCartelesVista[0].open(arrCartelesVista[0]["SELECTOR"]);
-    }
-}
-
-function obtenerScope(page){
-    if(page.id.includes('explorer')){
-        return 'explorer';
-    }else if(page.id.includes('generic')){
-        return 'generic';
-    }else{
-        return 'custom';
-    }
-}
-
-function generarCarteles(pScope){
-    const scopeformula =  pScope ? "scope LIKE '" + pScope + "' OR scope LIKE 'toolbar'" : "scope LIKE 'toolbar'";
-
-    var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
-    let conector = ""
-    if(scopeformula !== "" && cartelFormula !== ""){
-        conector = " and "
-    }
-    const finalFormula = scopeformula + conector + cartelFormula
-
-    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
-        function(res){            
-            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
-                return (item["SCOPE"] == pScope || item["SCOPE"] == 'toolbar');
-            });
-            if(res.length > 0){
-                renderPopovers([...arrCartelesFijos, ...res]);
-            }else{
-                renderPopovers(arrCartelesFijos);
-            }
-        },
-        function(err){
-            console.log(err);
-        }
-    );
-}
+*/

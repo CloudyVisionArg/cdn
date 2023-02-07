@@ -1,8 +1,7 @@
 [
     {        
         "CARTEL_ID": 100000001,
-        "SCOPE": "explorer",
-        "VIEW": null,
+        "CONTEXT": "explorer",
         "SELECTOR": ".subnavbar",
         "TITLE": " Vistas",
         "ICON_MD": "arrow_upward",
@@ -12,8 +11,7 @@
     },  
     {        
         "CARTEL_ID": 100000002,
-        "SCOPE": "explorer",
-        "VIEW": null,
+        "CONTEXT": "explorer",
         "SELECTOR": "#buttonSearch",
         "TITLE": " Buscar Contactos",
         "ICON_MD": "search",
@@ -23,8 +21,7 @@
     },  
     {        
         "CARTEL_ID": 100000003,
-        "SCOPE": "explorer",
-        "VIEW": null,
+        "CONTEXT": "explorer",        
         "SELECTOR": "#fabAdd",
         "TITLE": " Agregar",
         "ICON_MD": "add",
@@ -34,8 +31,7 @@
     },  
     {        
         "CARTEL_ID": 100000004,
-        "SCOPE": "toolbar",
-        "VIEW": null,
+        "CONTEXT": "toolbar",
         "SELECTOR": "a[href='#view-notifications']",
         "TITLE": " Notificaciones",
         "ICON_MD": "notifications",
@@ -45,13 +41,62 @@
     },  
     {        
         "CARTEL_ID": 100000005,
-        "SCOPE": "toolbar",
-        "VIEW": null,
+        "CONTEXT": "toolbar",        
         "SELECTOR": "a[href='#view-opciones']",
         "TITLE": " Opciones",
         "ICON_MD": "settings",
         "ICON_IOS": "gear_alt_fill",
         "TEXT": "Aqui podra configurar sus opciones",
         "ORDEN": "5"
+    },  
+    {        
+        "CARTEL_ID": 100000006,
+        "CONTEXT": "toolbar",        
+        "SELECTOR": "a[href='#view-contactos']",
+        "TITLE": " Contactos",
+        "ICON_MD": "person",
+        "ICON_IOS": "person",
+        "TEXT": "Aqui podra administrar sus contactos",
+        "ORDEN": "6"
+    },  
+    {        
+        "CARTEL_ID": 100000007,
+        "CONTEXT": "ajustes",        
+        "SELECTOR": "[idpopover='equipo']",
+        "TITLE": " Equipo",
+        "ICON_MD": "groups",
+        "ICON_IOS": "person_3",
+        "TEXT": "Aqui podra administrar su Equipo",
+        "ORDEN": "7"
+    },  
+    {        
+        "CARTEL_ID": 100000008,
+        "CONTEXT": "ajustes",        
+        "SELECTOR": "[idpopover='productos']",
+        "TITLE": " Productos",
+        "ICON_MD": "shopping_cart",
+        "ICON_IOS": "cart",
+        "TEXT": "Aqui podra ver y crear Productos",
+        "ORDEN": "8"
+    },  
+    {        
+        "CARTEL_ID": 100000009,
+        "CONTEXT": "ajustes",        
+        "SELECTOR": "[idpopover='listas']",
+        "TITLE": " Listas",
+        "ICON_MD": "format_list_bulleted",
+        "ICON_IOS": "list_bullet",
+        "TEXT": "Aqui podra ver y crear Listas",
+        "ORDEN": "9"
+    },  
+    {        
+        "CARTEL_ID": 100000010,
+        "CONTEXT": "opciones",        
+        "SELECTOR": "[idpopover='cuenta']",
+        "TITLE": " Cuenta",
+        "ICON_MD": "person",
+        "ICON_IOS": "person",
+        "TEXT": "Aqui cerrar sesion y cambiar su contraseña",
+        "ORDEN": "10"
     }
 ]
