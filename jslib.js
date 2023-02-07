@@ -36,6 +36,27 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+function sheetFuncs (sheet) {
+    sheet._range = XLSX.utils.decode_range(sheet['!ref']);
+
+    sheet._rangeRows = function () {
+        return this.range.e.r - this.range.s.r;
+    };
+
+    sheet._rangeCols = function () {
+        return this.range.e.c - this.range.s.c;
+    }
+
+    sheet._rangeCells = function (row, col) {
+        return sheet[XLSX.utils.encode_cell({
+            r: row - this._range.s.r,
+            c: col - this._range.s.c,
+        })];
+
+    }
+};
+
+
 /*
 Retorna true si value es un objeto {}
 */

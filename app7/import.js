@@ -42,32 +42,14 @@ $inputFile.change(async e => {
     /* data is an ArrayBuffer */
     const book = XLSX.read(data);
     const sheet = book.Sheets[book.SheetNames[0]];
+    sheetFuncs(sheet);
+    
     debugger;
 
 
 
 });
 
-function sheet2arr (sheet) {
-    var result = [];
-    var row, rowNum, colNum;
-
-    var range = XLSX.utils.decode_range(sheet['!ref']);
-
-    for(rowNum = range.s.r; rowNum <= range.e.r; rowNum++){
-        row = [];
-        for(colNum = range.s.c; colNum <= range.e.c; colNum++){
-            var nextCell = sheet[
-                XLSX.utils.encode_cell({r: rowNum, c: colNum})
-            ];
-            if (typeof nextCell === 'undefined') {
-                row.push(void 0);
-            } else row.push(nextCell.w);
-        }
-        result.push(row);
-    }
-    return result;
-};
 
 
 
