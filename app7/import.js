@@ -37,7 +37,7 @@ var $list = $('<div/>', {
   */
  var $ul = $('<ul/>').appendTo($list);
 
-var $ctl = getInputText('filename', 'Excel', {
+var $ctl = getInputText('filename', 'Seleccione el archivo a importar', {
     iosicon: 'paperclip',
     mdicon: 'attach_file',
 }).appendTo($ul);
@@ -46,6 +46,7 @@ var $itemTitle = $ctl.find('.item-title');
 $itemTitle.remove();
 
 var $fileName = $ctl.find('input');
+$fileName.attr('readonly', true);
 
 var $clip = $ctl.find('.item-media');
 
