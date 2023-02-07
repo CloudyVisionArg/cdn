@@ -72,26 +72,6 @@ var $list = $('<div/>', {
 
 var $ul = $('<ul/>').appendTo($list);
 
-
-<ul><li class="item-content item-input item-input-with-value"><div class="item-media"><i class="f7-icons ios-only">paperclip</i></div><div class="item-inner"><div class="item-title item-floating-label">Excel</div><div class="item-input-wrap"><input type="text" id="ee" placeholder="Excel" autocomplete="off"><span class="input-clear-button"></span></div></div><input type="file" style="display: none" class="input-with-value"></li></ul></div>
-
-
-
-<div class="block-title">Full Layout / Inline Labels</div>
-<div class="list inline-labels no-hairlines-md">
-  <ul>
-    <li class="item-content item-input">
-      <div class="item-inner">
-        <div class="item-title item-label">Name</div>
-        <div class="item-input-wrap">
-          <input type="text" placeholder="Your name" />
-          <span class="input-clear-button"></span>
-        </div>
-      </div>
-    </li>
-
-
-
 $clip.click(e => {
     $inputFile.click();
 });
