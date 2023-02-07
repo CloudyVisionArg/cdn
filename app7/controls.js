@@ -2390,7 +2390,7 @@ function getListLinkItem(pLink) {
     var $itemCont = $('<a/>', {
         href: '#',
         class: 'item-link item-content',
-        idpopover:  idPopover.replaceAll(' ', '_'),
+        idpopover:  idPopover.replaceAll(' ', '_').toLowerCase(),
     }).appendTo($li);
 
     $itemCont.click(pLink.click);

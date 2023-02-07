@@ -62,7 +62,7 @@
     {        
         "CARTEL_ID": 100000007,
         "CONTEXT": "ajustes",        
-        "SELECTOR": "#ajustes > div.page-content > div > ul > li:nth-child(1)",
+        "SELECTOR": "[idpopover='equipo']",
         "TITLE": " Equipo",
         "ICON_MD": "groups",
         "ICON_IOS": "person_3",
@@ -72,7 +72,7 @@
     {        
         "CARTEL_ID": 100000008,
         "CONTEXT": "ajustes",        
-        "SELECTOR": "#ajustes > div.page-content > div > ul > li:nth-child(2)",
+        "SELECTOR": "[idpopover='productos']",
         "TITLE": " Productos",
         "ICON_MD": "shopping_cart",
         "ICON_IOS": "cart",
@@ -82,7 +82,7 @@
     {        
         "CARTEL_ID": 100000009,
         "CONTEXT": "ajustes",        
-        "SELECTOR": "#ajustes > div.page-content > div > ul > li:nth-child(3)",
+        "SELECTOR": "[idpopover='listas']",
         "TITLE": " Listas",
         "ICON_MD": "format_list_bulleted",
         "ICON_IOS": "list_bullet",
@@ -92,7 +92,7 @@
     {        
         "CARTEL_ID": 100000010,
         "CONTEXT": "opciones",        
-        "SELECTOR": "#opciones > div.page-content > div > ul > li:nth-child(1)",
+        "SELECTOR": "[idpopover='cuenta']",
         "TITLE": " Cuenta",
         "ICON_MD": "person",
         "ICON_IOS": "person",
