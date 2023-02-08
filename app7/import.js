@@ -80,13 +80,8 @@ var $block = $('<div/>', {
     class: 'block block-strong',
 }).appendTo($pageCont);
 
-/*
-var $row = $('<div/>', {
-    class: 'row',
-}).appendTo($block);
-*/
 var $btnImport = $('<button>', {
-    class: ' button button-fill disabled',
+    class: 'button button-fill disabled',
 }).append('Importar').appendTo($block);
 
 $btnImport.click(doImport);
@@ -102,13 +97,9 @@ var $block = $('<div/>', {
     class: 'block block-strong',
 }).appendTo($pageCont);
 
-var $row = $('<div/>', {
-    class: 'row',
-}).appendTo($block);
-
 var $btnCopy = $('<button>', {
-    class: 'col button button-fill disabled',
-}).append('Copiar log al portapapeles').appendTo($row);
+    class: 'button button-fill disabled',
+}).append('Copiar log al portapapeles').appendTo($block);
 
 $btnCopy.click(() => {
     navigator.clipboard.writeText($blocLog[0].innerText || $blocLog[0].textContent).then(
