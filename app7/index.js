@@ -232,9 +232,9 @@ var app = {
                 function (db) { console.log('invoked on creation'); }
             );
         } else {
-            db = window.sqlitePlugin.openDatabase({
+            db = window.sqlitePlugin.open({
                 name: 'DbName',
-                location: 'default',
+                readonly: false,
                 },
                 function(db) {
                     console.log('openDatabase OK');
@@ -243,6 +243,17 @@ var app = {
                     console.log('openDatabase Err: ' + JSON.stringify(err));        
                 }
             );
+            // db = window.sqlitePlugin.openDatabase({
+            //     name: 'DbName',
+            //     location: 'default',
+            //     },
+            //     function(db) {
+            //         console.log('openDatabase OK');
+            //     },
+            //     function(err) {
+            //         console.log('openDatabase Err: ' + JSON.stringify(err));        
+            //     }
+            // );
         };
     
         /*
