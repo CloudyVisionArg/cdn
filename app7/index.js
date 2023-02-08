@@ -1,5 +1,7 @@
 'use strict';
 
+import { Device as device } from '@capacitor/device';
+
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 var app7;
@@ -63,7 +65,7 @@ var app = {
         debugger;
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
-        if (!device) console.log('Plugin error: cordova-plugin-device');
+        if (!device) console.log('Plugin error: @capacitor/device');
         if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
         if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
         if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
