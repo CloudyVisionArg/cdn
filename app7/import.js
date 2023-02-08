@@ -157,13 +157,13 @@ async function doImport() {
                         $block.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
                     }
                 });
-                $block.append('Guardando el documento: ');
+                $block.append('Guardando el documento<br/>');
                 await doc.save();
-                $block.append('ok<br/>');
+                $block.append('OK!<br/>');
                 await doc.delete();
 
             } catch (err) {
-                $block.append('Error: ' + errMsg(err));
+                $block.append('ERROR: ' + errMsg(err) + '<br/>');
             }
 
         } else {
