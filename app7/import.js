@@ -106,7 +106,7 @@ var $btnCopy = $('<button>', {
 $btnCopy.click(() => {
     navigator.clipboard.writeText($blockLog[0].innerText || $blockLog[0].textContent).then(
         () => { toast('Listo!') },
-        (err) => { toast('Error: ' + errMsg(err)) }
+        (err) => { toast(errMsg(err)) }
     );
 });
 
@@ -120,6 +120,7 @@ async function loadXls(file) {
     $btnImport.addClass('disabled');
     $btnCopy.addClass('disabled');
     $blockLog.empty();
+    $ulMap.empty();
 
     try {
         setInputVal($fileName, file.name);
@@ -138,7 +139,6 @@ async function loadXls(file) {
         });
         fields.sort();
 
-        $ulMap.empty();
         var headers = [];
 
         // Carga el mapeo
@@ -162,7 +162,7 @@ async function loadXls(file) {
         $btnImport.removeClass('disabled');
 
     } catch (err) {
-        toast('Error: ' + errMsg(err));
+        toast(errMsg(err));
         console.error(err);
     }
 }
