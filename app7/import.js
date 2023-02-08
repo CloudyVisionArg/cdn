@@ -166,6 +166,7 @@ async function loadXls(file) {
 }
 
 async function doImport() {
+    $btnImport.addClass('disabled');
     var mapeo = [];
     $ulMap.find('select').each((ix, el) => {
         mapeo[ix] = getSelectVal($(el));
