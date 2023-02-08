@@ -173,6 +173,7 @@ async function doImport() {
         }
     }
     $block.append('<br/>Proceso terminado');
+    debugger;
 }
 
 // Usar solo despues del pageInit
