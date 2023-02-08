@@ -95,10 +95,11 @@ var $block = $('<div/>', {
 }).appendTo($pageCont);
 
 // Boton Copy
-var $row = $('<div/>', {
+var $row = $('<p/>', {
     class: 'row',
 }).appendTo($pageCont);
 
+var $btnCopy = $('')
 var $ctl = getButton('Copiar log al portapapeles').appendTo($row);
 var $btnCopy = $ctl.find('button');
 $btnCopy.addClass('button-fill disabled');
