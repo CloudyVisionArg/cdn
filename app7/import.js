@@ -140,13 +140,10 @@ function doImport() {
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
         let empty = true;
-        if (mapeo.find((el, ix) => {
-            debugger;
-            return el && sheet._rangeCells(i, ix).v;
-        })) {
-            debugger;
+        // Busca filas no vacias
+        if (mapeo.find((el, ix) => (el && sheet._rangeCells(i, ix).v))) {
+            console.log(i)
         };
-        
     }
 
 
