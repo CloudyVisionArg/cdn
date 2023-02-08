@@ -22,63 +22,7 @@ $page.find('.navbar-inner .left .link').on('click', function (e) {
     f7Page.view.router.back();
 });
 
-
-
-var root = document.querySelector(':root');
-var css = getComputedStyle(root);
-//value.getPropertyValue('--f7-menu-bg-color');
-root.style.setProperty('--f7-menu-bg-color', 'white');
-
-/*
-:root {
-    --f7-menu-text-color: #fff;
-    --f7-menu-font-size: 16px;
-    --f7-menu-font-weight: 500;
-    --f7-menu-line-height: 1.2;
-    --f7-menu-bg-color: rgba(0, 0, 0, 0.9);
-    --f7-menu-item-pressed-bg-color: rgba(20, 20, 20, 0.9);
-    --f7-menu-item-padding-horizontal: 12px;
-    --f7-menu-item-spacing: 6px;
-    --f7-menu-item-height: 40px;
-    --f7-menu-item-dropdown-icon-color: rgba(255, 255, 255, 0.4);
-    --f7-menu-item-border-radius: 8px;
-    //--f7-menu-dropdown-pressed-bg-color: var(--f7-theme-color);
-    --f7-menu-dropdown-item-height: 32px;
-    --f7-menu-dropdown-divider-color: rgba(255, 255, 255, 0.2);
-    --f7-menu-dropdown-padding-vertical: 6px;
-    //--f7-menu-dropdown-border-radius: var(--f7-menu-item-border-radius);
-}
-*/
-
-var $right = $page.find('.navbar-inner .right');
-$right.empty();
-$right.append(`
-<div style="margin-left: auto" class="menu-item menu-item-dropdown">
-    <div class="menu-item-content icon-only">
-        <div class="menu-item-content">
-            <i class="f7-icons">plus</i>
-        </div>
-    </div>
-    <div class="menu-dropdown menu-dropdown-right">
-        <div class="menu-dropdown-content">
-            <a href="#" class="menu-dropdown-link menu-close">
-                <span>Share on Facebook</span>
-                <i class="f7-icons margin-left">logo_facebook</i>
-            </a>
-            <a href="#" class="menu-dropdown-link menu-close">
-                <span>Share on Twitter</span>
-                <i class="f7-icons margin-left">logo_twitter</i>
-            </a>
-        </div>
-    </div>
-</div>
-`);
-
-
-
-
 var $pageCont = $page.find('.page-content');
-
 
 var $list = $('<div/>', {
     class: 'list no-hairlines-md',
@@ -92,8 +36,7 @@ var $ctl = getInputText('filename', 'Seleccione el archivo a importar', {
     mdicon: 'attach_file',
 }).appendTo($ul);
 
-var $itemTitle = $ctl.find('.item-title');
-$itemTitle.remove();
+$ctl.find('.item-title').remove();
 
 var $fileName = $ctl.find('input');
 $fileName.attr('readonly', true);
@@ -122,8 +65,9 @@ $inputFile.change(async e => {
     // Lee los campos del folder
     var form = await folder.form;
     var fields = [];
+    debugger;
     form.fieldsMap.forEach(f => {
-        if (f.custom && !f.headerTable) {
+        if (f.custom && !f.headerTable && f.updatable) {
             fields.push(f.name.toLowerCase());
         }
     });
