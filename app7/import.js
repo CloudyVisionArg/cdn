@@ -63,8 +63,8 @@ $clip.click(e => {
 });
 
 $inputFile.change(async e => {
-    debugger;
-    loadXls(e.target.files[0]);
+    if (e.target.files.length > 0)
+        loadXls(e.target.files[0]);
 });
 
 // Mapeo de campos
