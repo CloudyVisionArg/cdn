@@ -107,12 +107,8 @@ var $btnCopy = $ctl.find('button');
 $btnCopy.addClass('disabled');
 $btnCopy.click(() => {
     navigator.clipboard.writeText($block[0].innerText || $block[0].textContent).then(
-        () => {
-            toast('Listo!');
-        },
-        (err) => {
-            toast('Error: ' + errMsg(err));
-        }
+        () => { toast('Listo!') },
+        (err) => { toast('Error: ' + errMsg(err)) }
     );
 });
 
@@ -120,8 +116,6 @@ resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
 function pageInit(e, page) {
     f7Page = page;
-
-    //setInputVal($get('#scripts'), localStorage.getItem('scripts'));
 }
 
 async function loadXls(file) {
@@ -199,7 +193,7 @@ async function doImport() {
                 $block.append('Guardando el documento<br/>');
                 await doc.save();
                 $block.append('OK!<br/>');
-                await doc.delete();
+                //await doc.delete(); // sacar en prod!!
 
             } catch (err) {
                 $block.append('ERROR: ' + errMsg(err) + '<br/>');
