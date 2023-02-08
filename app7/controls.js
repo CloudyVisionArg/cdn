@@ -1383,7 +1383,7 @@ function getDocLog(pDocId, pCallback) {
 var $page = getPage({
 	id: 'contactos',
 	title: 'Contactos',
-	leftbutton: 'new' / 'save' / 'exit' / 'search' / {label, iosicon, mdicon}
+	leftbutton: 'new' / 'save' / 'exit' / 'search' / 'menu' / {label, iosicon, mdicon}
 	rightbutton: Igual que left
     searchbar: 1 fixed, 2 expandable
     subnavbar: true,
@@ -1502,6 +1502,8 @@ function getPage(params) {
             return getLink({ iosicon: 'chevron_left', mdicon: 'arrow_back' });
         else if (pButton == 'search')
             return getLink({ iosicon: 'search', mdicon: 'search' });
+        else if (pButton == 'menu')
+            return getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
         else
             return getLink(pButton);
     }

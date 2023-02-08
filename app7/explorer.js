@@ -2,7 +2,7 @@
 
 var folder, f7Page, pageEl;
 var $page, $navbar, $subnavbar, $title, $views, $pageCont, $viewDiv;
-var searchBar, docActions, actionsPopup;
+var searchBar, docActions, actionsPopup, fldActions;
 
 var fld_id = routeTo.query.fld_id;
 var forceOnline = routeTo.query.online;
@@ -33,7 +33,7 @@ dSession.foldersGetFromId(fld_id).then(
                 id: 'explorer_' + getGuid(),
                 title: (folder.Description ? folder.Description : folder.Name),
                 leftbutton: 'search',
-                rightbutton: 'new',
+                rightbutton: 'menu',
                 searchbar: 2,
                 subnavbar: true,
                 pulltorefresh: true,
@@ -99,10 +99,11 @@ dSession.foldersGetFromId(fld_id).then(
                 }
             });
             
-            // Boton Nuevo - navbar
+            // Boton Menu
             $btn = $page.find('.navbar-inner .right .link')
-            $btn.attr('id', 'buttonAdd');
+            $btn.attr('id', 'buttonMenu');
             $btn.on('click', newDoc);
+            */
 
             // Boton Nuevo - fab
             var $fab = $('<div/>', {
@@ -389,7 +390,7 @@ function toggleSelectionMode() {
         }
         $views.parent().removeClass('disabled');
         $navbar.find('#buttonSearch').show();
-        $navbar.find('#buttonAdd').show();
+        $navbar.find('#buttonMenu').show();
         $navbar.find('#buttonActions').hide();
         $navbar.find('#buttonCancel').hide();
 
@@ -409,7 +410,7 @@ function toggleSelectionMode() {
         }
         $views.parent().addClass('disabled');
         $navbar.find('#buttonSearch').hide();
-        $navbar.find('#buttonAdd').hide();
+        $navbar.find('#buttonMenu').hide();
         $navbar.find('#buttonActions').show();
         $navbar.find('#buttonCancel').show();
     }
