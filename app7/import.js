@@ -102,7 +102,7 @@ var $btnCopy = $('<button>', {
 }).append('Copiar log al portapapeles').appendTo($block);
 
 $btnCopy.click(() => {
-    navigator.clipboard.writeText($blocLog[0].innerText || $blocLog[0].textContent).then(
+    navigator.clipboard.writeText($blockLog[0].innerText || $blockLog[0].textContent).then(
         () => { toast('Listo!') },
         (err) => { toast('Error: ' + errMsg(err)) }
     );
@@ -174,7 +174,7 @@ async function doImport() {
     $blockLog.append('Importando ' + (sheet._rangeRows() - 1) + ' filas' + '<br/>');
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
-        $blocLog.append('<br/>Importando fila ' + (i + 1) + '<br/>');
+        $blockLog.append('<br/>Importando fila ' + (i + 1) + '<br/>');
 
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
@@ -183,23 +183,23 @@ async function doImport() {
                 mapeo.forEach((el, ix) => {
                     if (el) {
                         doc.fields(el).value = sheet._rangeCellsV(i, ix);
-                        $blocLog.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
+                        $blockLog.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
                     }
                 });
-                $blocLog.append('Guardando el documento<br/>');
+                $blockLog.append('Guardando el documento<br/>');
                 await doc.save();
-                $blocLog.append('OK!<br/>');
+                $blockLog.append('OK!<br/>');
                 //await doc.delete(); // sacar en prod!!
 
             } catch (err) {
-                $blocLog.append('ERROR: ' + errMsg(err) + '<br/>');
+                $blockLog.append('ERROR: ' + errMsg(err) + '<br/>');
             }
 
         } else {
-            $blocLog.append('Fila vacia<br/>');
+            $blockLog.append('Fila vacia<br/>');
         }
     }
-    $blocLog.append('<br/>Proceso terminado');
+    $blockLog.append('<br/>Proceso terminado');
     $btnCopy.removeClass('disabled')
 }
 
