@@ -1,7 +1,5 @@
 'use strict';
 
-import { Device as device } from '@capacitor/device';
-
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 var app7;
