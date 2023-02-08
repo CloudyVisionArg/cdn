@@ -21,6 +21,8 @@ var propViewsFilter = 'App7_viewsFilter';
 var propInit = 'App7_explorerInit';
 var maxLen = 200;
 
+actionsPopup = getActionsPopup();
+
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
         folder = fld.toJSON(); // TODO: cambiar el codigo para q use el objeto
@@ -69,7 +71,6 @@ dSession.foldersGetFromId(fld_id).then(
             $btn.attr('id', 'buttonActions');
             $btn.appendTo($page.find('.navbar-inner .left'));
             $btn.on('click', function (e) {
-                actionsPopup = getActionsPopup();
                 docActions.open();
             });
             $btn.css('margin-left', '0px');
