@@ -1,5 +1,5 @@
 var fld_id = routeTo.query.fld_id;
-var folder;
+var folder, sheet;
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
@@ -42,8 +42,11 @@ $ctl.find('.item-title').remove();
 var $fileName = $ctl.find('input');
 $fileName.attr('readonly', true);
 $fileName.change(e => {
-    if (!e.target.value) $inputFile.val('');
-    $ulMap.empty();
+    if (!e.target.value) {
+        $inputFile.val('');
+        $ulMap.empty();
+        sheet = undefined;
+    }
 });
 
 var $inputFile = $('<input/>', {
@@ -79,7 +82,8 @@ var $list = $('<div/>', {
 
 var $ul = $('<ul/>').appendTo($list);
 
-getButton('Importar').appendTo($ul);
+var $ctl = getButton('Importar').appendTo($ul);
+$ctl.find('button').click(doImport);
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
@@ -94,7 +98,7 @@ async function loadXls(file) {
     const data = await file.arrayBuffer();
     /* data is an ArrayBuffer */
     const book = XLSX.read(data);
-    const sheet = book.Sheets[book.SheetNames[0]];
+    sheet = book.Sheets[book.SheetNames[0]];
     sheetFuncs(sheet);
 
     // Lee los campos del folder
@@ -127,6 +131,16 @@ async function loadXls(file) {
 
         $selCtl.appendTo($ulMap);
     }
+}
+
+function doImport() {
+    var mapeo = [];
+    $ulMap.find('select').each((ix, el) => {
+        debugger;
+    });
+
+
+
 }
 
 // Usar solo despues del pageInit
