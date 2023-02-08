@@ -144,7 +144,6 @@ async function doImport() {
             let doc = await folder.documentsNew();
             mapeo.forEach((el, ix) => {
                 if (el) {
-                    if (!sheet._rangeCellsV(i, ix)) debugger;
                     doc.fields(el).value = sheet._rangeCellsV(i, ix);
                     console.log(el + '=' + sheet._rangeCellsV(i, ix));
                 }
