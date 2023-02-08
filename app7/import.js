@@ -132,21 +132,23 @@ async function loadXls(file) {
     }
 }
 
-function doImport() {
+async function doImport() {
     var mapeo = [];
     $ulMap.find('select').each((ix, el) => {
         mapeo[ix] = getSelectVal($(el));
     });
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
-        let empty = true;
-        // Busca filas no vacias
+        // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCells(i, ix).v))) {
-            console.log(i)
+            let doc = await dSession.documentsNew();
+            mapeo.filter(el => el).forEach((el, ix) => {
+                doc.fields(el).value = sheet._rangeCells(i, ix).v;
+                console.log(el + '=' + sheet._rangeCells(i, ix).v);
+            });
+            //await doc.save()
         };
     }
-
-
 }
 
 // Usar solo despues del pageInit
