@@ -301,6 +301,12 @@ function pageInit(e, page) {
                 onClick: newDoc,
             },
             {
+                text: 'Importar desde Excel',
+                onClick: () => {
+                    f7Page.view.router.navigate('/cdn/?script=app7-import&fld_id=' + fld_id);
+                },
+            },
+            {
                 text: 'Ayuda',
                 onClick: () => {
                     let url = 'https://docs.google.com/document/d/e/2PACX-1vTuWhEtDMWT9z6wCxrhyBUwxVzAUgZtTj_b8x4vuJFYQZQXg9sDJKkgf4V6Ew5fOn5my02XJMmSDWja/pub';
