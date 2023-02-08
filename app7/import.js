@@ -45,6 +45,8 @@ $fileName.change(e => {
         $inputFile.val('');
         $ulMap.empty();
         sheet = undefined;
+        $btnImport.addClass('disabled');
+        $btnCopy.addClass('disabled');
     }
 });
 
@@ -61,6 +63,7 @@ $clip.click(e => {
 
 $inputFile.change(async e => {
     loadXls(e.target.files[0]);
+    $btnImport.removeClass('disabled');
 });
 
 // Mapeo de campos
@@ -82,7 +85,9 @@ var $list = $('<div/>', {
 var $ul = $('<ul/>').appendTo($list);
 
 var $ctl = getButton('Importar').appendTo($ul);
-$ctl.find('button').click(doImport);
+var $btnImport = $ctl.find('button');
+$btnImport.addClass('disabled');
+$btnImport.click(doImport);
 
 // Block de log
 var $block = $('<div/>', {
@@ -99,7 +104,9 @@ var $list = $('<div/>', {
 var $ul = $('<ul/>').appendTo($list);
 
 var $ctl = getButton('Copiar al portapapeles').appendTo($ul);
-$ctl.find('button').click(() => {
+var $btnCopy = $ctl.find('button');
+$btnCopy.addClass('disabled');
+$btnCopy.click(() => {
     navigator.clipboard.writeText($block[0].innerText || $block[0].textContent);
 });
 
@@ -187,7 +194,7 @@ async function doImport() {
         }
     }
     $block.append('<br/>Proceso terminado');
-    debugger;
+    $btnCopy.removeClass('disabled')
 }
 
 // Usar solo despues del pageInit
