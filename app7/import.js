@@ -62,7 +62,7 @@ $clip.click(e => {
     $inputFile.click();
 });
 
-$inputFile.change(async e => {
+$inputFile.change(e => {
     if (e.target.files.length > 0)
         loadXls(e.target.files[0]);
 });
