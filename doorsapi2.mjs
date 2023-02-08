@@ -153,7 +153,7 @@ export class Document {
             debugger;
             var url = 'folders/' + me.#doc.FldId + '/documents/?tobin=' + 
                 encodeURIComponent(toRecycleBin == false ? false : true);
-            me.session.restClient.asyncCall(url, 'DELETE', me.id, 'docIds').then(
+            me.session.restClient.asyncCall(url, 'DELETE', [me.id], 'docIds').then(
                 res => {
                     me.#doc = res;
                     resolve(me);
@@ -236,7 +236,6 @@ export class Document {
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
-            debugger;
             var url = 'documents';
             me.session.restClient.asyncCall(url, 'PUT', me.#doc, 'document').then(
                 res => {
