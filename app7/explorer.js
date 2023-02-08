@@ -297,7 +297,7 @@ function pageInit(e, page) {
         // Acciones de carpeta
         var stdFldActions = [
             {
-                text: 'Nuevo',
+                text: 'Nuevo documento',
                 onClick: newDoc,
             },
             {
