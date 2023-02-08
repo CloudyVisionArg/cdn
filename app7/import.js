@@ -142,10 +142,11 @@ async function doImport() {
         mapeo[ix] = getSelectVal($(el));
     });
 
+    $block.empty();
     $block.append('Importando ' + (sheet._rangeRows() - 1) + ' filas' + '<br/>');
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
-        $block.append('Importando fila ' + (i + 1) + '<br/>');
+        $block.append('<br/>Importando fila ' + (i + 1) + '<br/>');
 
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
@@ -170,7 +171,7 @@ async function doImport() {
             $block.append('Fila vacia<br/>');
         }
     }
-    $block.append('Importacion terminada<br/>');
+    $block.append('Proceso terminado<br/>');
 }
 
 // Usar solo despues del pageInit
