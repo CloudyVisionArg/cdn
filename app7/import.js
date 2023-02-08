@@ -118,7 +118,6 @@ async function loadXls(file) {
     try {
         $fileName.val(file.name);
         const data = await file.arrayBuffer();
-        /* data is an ArrayBuffer */
         const book = XLSX.read(data);
         sheet = book.Sheets[book.SheetNames[0]];
         sheetFuncs(sheet);
@@ -138,7 +137,7 @@ async function loadXls(file) {
 
         // Carga el mapeo
         for (var i = 0; i < sheet._rangeCols(); i++) {
-            headers.push(sheet._rangeCellsV(0, i));
+            headers.push(String(sheet._rangeCellsV(0, i)));
 
             let $selCtl = getSelect(undefined, headers[i]);
             $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
