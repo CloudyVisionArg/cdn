@@ -123,7 +123,7 @@ async function loadXls(file) {
     $blockLog.empty();
 
     try {
-        $fileName.val(file.name);
+        setInputVal($fileName, file.name);
         const data = await file.arrayBuffer();
         const book = XLSX.read(data);
         sheet = book.Sheets[book.SheetNames[0]];
