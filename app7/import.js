@@ -84,10 +84,19 @@ var $ul = $('<ul/>').appendTo($list);
 var $ctl = getButton('Importar').appendTo($ul);
 $ctl.find('button').click(doImport);
 
+// Block de log
 var $block = $('<div/>', {
     class: 'block',
     style: 'overflow-wrap: anywhere;',
 }).appendTo($pageCont);
+
+// Boton Copy
+var $list = $('<div/>', {
+    class: 'list inline-labels no-hairlines-md',
+    style: 'margin-top: 0;',
+}).appendTo($pageCont);
+
+var $ul = $('<ul/>').appendTo($list);
 
 var $ctl = getButton('Copiar al portapapeles').appendTo($ul);
 $ctl.find('button').click(() => {
