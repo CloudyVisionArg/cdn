@@ -16,6 +16,7 @@ var selectionMode = false;
 
 var propEditPage = 'App7_editPage';
 var propViewItemRenderer = 'App7_viewItemRenderer';
+var propFldActions = 'App7_fldActions';
 var propDocActions = 'App7_docActions';
 var propViewsFilter = 'App7_viewsFilter';
 var propInit = 'App7_explorerInit';
@@ -100,10 +101,12 @@ dSession.foldersGetFromId(fld_id).then(
                 }
             });
             
-            // Boton Menu
+            // Boton Menu (fldActions)
             $btn = $page.find('.navbar-inner .right .link')
             $btn.attr('id', 'buttonMenu');
-            //$btn.on('click', newDoc);
+            $btn.on('click', function (e) {
+                fldActions.open();
+            });
 
             // Boton Nuevo - fab
             var $fab = $('<div/>', {
@@ -291,13 +294,11 @@ function pageInit(e, page) {
 
         setSelectVal($views, null, window.localStorage.getItem('folderView_' + fld_id), 0);
 
-        // Carga las acciones
-        var stdActions = [
+        // Acciones de carpeta
+        var stdFldActions = [
             {
-                text: 'Borrar',
-                onClick: function () {
-                    deleteClick();
-                }
+                text: 'Nuevo',
+                onClick: newDoc,
             },
             {
                 text: 'Cancelar',
@@ -306,26 +307,59 @@ function pageInit(e, page) {
             },
         ];
 
-        // Acciones custom
+        var prop = findProp(folder.Properties, propFldActions);
+        if (!prop) prop = findProp(folder.Form.Properties, propFldActions);
+        if (prop) {
+            evalCode(prop).then(
+                function (res) {
+                    if (Array.isArray(res)) {
+                        fldActions = app7.actions.create({ buttons: [res, stdFldActions] });
+                    } else {
+                        fldActions = app7.actions.create({ buttons: stdFldActions });
+                    }
+                },
+                function (err) {
+                    console.log(err)
+                    fldActions = app7.actions.create({ buttons: stdFldActions });
+                }
+            )
+
+        } else {
+            fldActions = app7.actions.create({ buttons: stdFldActions });
+        }
+
+        // Acciones de documento
+        var stdDocActions = [
+            {
+                text: 'Borrar',
+                onClick: deleteClick,
+            },
+            {
+                text: 'Cancelar',
+                color: 'red',
+                close: true,
+            },
+        ];
+
         var prop = findProp(folder.Properties, propDocActions);
         if (!prop) prop = findProp(folder.Form.Properties, propDocActions);
         if (prop) {
             evalCode(prop).then(
                 function (res) {
                     if (Array.isArray(res)) {
-                        docActions = app7.actions.create({ buttons: [res, stdActions] });
+                        docActions = app7.actions.create({ buttons: [res, stdDocActions] });
                     } else {
-                        docActions = app7.actions.create({ buttons: stdActions });
+                        docActions = app7.actions.create({ buttons: stdDocActions });
                     }
                 },
                 function (err) {
                     console.log(err)
-                    docActions = app7.actions.create({ buttons: stdActions });
+                    docActions = app7.actions.create({ buttons: stdDocActions });
                 }
             )
 
         } else {
-            docActions = app7.actions.create({ buttons: stdActions });
+            docActions = app7.actions.create({ buttons: stdDocActions });
         }
 
         // Evento Init
