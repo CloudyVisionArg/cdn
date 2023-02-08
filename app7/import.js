@@ -193,7 +193,7 @@ async function doImport() {
                 $blockLog.append('Guardando el documento<br/>');
                 await doc.save();
                 $blockLog.append('OK!<br/>');
-                await doc.delete(); // sacar en prod!!
+                //await doc.delete(); // sacar en prod!!
 
             } catch (err) {
                 $blockLog.append('ERROR: ' + errMsg(err) + '<br/>');
