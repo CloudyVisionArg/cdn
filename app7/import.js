@@ -141,7 +141,7 @@ async function doImport() {
     for (var i = 1; i < sheet._rangeRows(); i++) {
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCells(i, ix).v))) {
-            let doc = await dSession.documentsNew();
+            let doc = await folder.documentsNew();
             mapeo.filter(el => el).forEach((el, ix) => {
                 doc.fields(el).value = sheet._rangeCells(i, ix).v;
                 console.log(el + '=' + sheet._rangeCells(i, ix).v);
