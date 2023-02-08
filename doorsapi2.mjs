@@ -151,7 +151,7 @@ export class Document {
         var me = this;
         return new Promise((resolve, reject) => {
             debugger;
-            var url = 'folders/' + me.#doc.FldId + '/documents/?tobin=' + 
+            var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
                 encodeURIComponent(toRecycleBin == false ? false : true);
             me.session.restClient.asyncCall(url, 'DELETE', [me.id], 'docIds').then(
                 res => {
