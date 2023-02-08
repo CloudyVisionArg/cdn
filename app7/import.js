@@ -76,16 +76,18 @@ var $list = $('<div/>', {
 var $ulMap = $('<ul/>').appendTo($list);
 
 // Boton importar
-var $list = $('<div/>', {
-    class: 'list inline-labels no-hairlines-md',
-    style: 'margin-top: 0;',
+var $block = $('<div/>', {
+    class: 'block block-strong',
 }).appendTo($pageCont);
 
-var $ul = $('<ul/>').appendTo($list);
+var $row = $('<div/>', {
+    class: 'row',
+}).appendTo($block);
 
-var $ctl = getButton('Importar').appendTo($ul);
-var $btnImport = $ctl.find('button');
-$btnImport.addClass('button-fill disabled');
+var $btnImport = $('<button>', {
+    class: 'col button button-fill disabled',
+}).append('Importar').appendTo($row);
+
 $btnImport.click(doImport);
 
 // Block de log
@@ -96,7 +98,7 @@ var $blockLog = $('<div/>', {
 
 // Boton Copy
 var $block = $('<div/>', {
-    class: 'block',
+    class: 'block block-strong',
 }).appendTo($pageCont);
 
 var $row = $('<div/>', {
