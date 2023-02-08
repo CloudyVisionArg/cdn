@@ -138,6 +138,7 @@ function doImport() {
         mapeo[ix] = getSelectVal($(el));
     });
 
+    debugger;
     for (var i = 1; i < sheet._rangeRows(); i++) {
         let empty = true;
         if (mapeo.find((el, ix) => {
