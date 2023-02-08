@@ -227,22 +227,30 @@ var app = {
             'device.uuid: ' + device.uuid);
 
         if (device.platform == 'browser'){
-            db = window.openDatabase(
-                'DbName', '', 'Db Display Name', 5*1024*1024,
-                function (db) { console.log('invoked on creation'); }
+            db = window.sqlitePlugin.open({
+                name: 'DbName',
+                readonly: false,
+                }
+            ).then(
+                function (db) { console.log('invoked on creation'); }, 
+                function (err){ console.log('error invoked on creation'); }
             );
+            // db = window.openDatabase(
+            //     'DbName', '', 'Db Display Name', 5*1024*1024,
+            //     function (db) { console.log('invoked on creation'); }
+            // );
         } else {
             db = window.sqlitePlugin.open({
                 name: 'DbName',
                 readonly: false,
-                },
-                function(db) {
-                    console.log('openDatabase OK');
-                },
-                function(err) {
-                    console.log('openDatabase Err: ' + JSON.stringify(err));        
-                }
-            );
+                }).then(
+                    function(db) {
+                        console.log('openDatabase OK');
+                    },
+                    function(err) {
+                        console.log('openDatabase Err: ' + JSON.stringify(err));        
+                    }
+                );
             // db = window.sqlitePlugin.openDatabase({
             //     name: 'DbName',
             //     location: 'default',
@@ -255,58 +263,6 @@ var app = {
             //     }
             // );
         };
-    
-        /*
-        // Background fetch
-        if (device.platform == 'iOS') {
-            // https://github.com/transistorsoft/cordova-plugin-background-fetch
-
-            // Your background-fetch handler.
-            var fetchFunctionIos = function () {
-                console.log('bgFetch initiated');
-                executeCode('bgFetch');
-            }
-
-            var fetchFailureIos = function (error) {
-                console.log('bgFetch failed', error);
-            };
-
-            //stopOnTerminate: false  // <-- true is default no existe mas esta opcion revisar doc    
-            window.BackgroundFetch.configure( {
-                minimumFetchInterval: 15
-            },fetchFunctionIos, fetchFailureIos);
-
-        } else if (device.platform == 'Android') {
-            var androidServiceReference = AndroidSingleton.getInstance();
-            androidServiceReference.fetchSuccessFunction(fetchFunctionAndroid);
-            //androidServiceReference.fetchFailure(fetchFailure);
-
-            androidServiceReference.initialize();
-
-            function fetchFunctionAndroid(data) {
-                console.log('bgFetch initiated');
-                if (data.LatestResult != null) {
-                    console.log('bgFetch before exec');
-                    executeCode('bgFetch',
-                        function (){
-                            console.log('bgFetch exec success');
-                        },
-                        function (err){
-                            console.log('bgFetch exec failure');
-                        }
-                    );
-                }
-            }
-    
-            // todo: monky, esto no se usa?
-            //todo: todavia no pero tenemos que manejar el error al menos para saber, yo lo completo.
-            function fetchFailureAndroid(data) {
-                if (data.LatestResult != null) {
-                    console.log('bgFetch failure');
-                }
-            }
-        }
-        */
 
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
