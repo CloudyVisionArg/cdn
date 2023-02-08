@@ -45,12 +45,16 @@ $fileName.change(e => {
     $ul.empty();
 });
 
-var $clip = $ctl.find('.item-media');
-
 var $inputFile = $('<input/>', {
     type: 'file',
     style: 'display: none',
 }).appendTo($ctl);
+
+var $clip = $ctl.find('.item-media');
+
+$clip.click(e => {
+    $inputFile.click();
+});
 
 $inputFile.change(async e => {
     // Lee el excel
@@ -65,7 +69,6 @@ $inputFile.change(async e => {
     // Lee los campos del folder
     var form = await folder.form;
     var fields = [];
-    debugger;
     form.fieldsMap.forEach(f => {
         if (f.custom && !f.headerTable && f.updatable && !f.computed) {
             fields.push(f.name.toLowerCase());
@@ -73,7 +76,7 @@ $inputFile.change(async e => {
     });
     fields.sort();
 
-    $ul.empty();
+    $ulMap.empty();
     var headers = [];
 
     // Carga el mapeo
@@ -91,7 +94,7 @@ $inputFile.change(async e => {
         $sel.val(headers[i]);
         if ($sel[0].selectedIndex < 0) $sel[0].selectedIndex = 0;
 
-        $selCtl.appendTo($ul);
+        $selCtl.appendTo($ulMap);
     }
 });
 
@@ -102,11 +105,9 @@ var $list = $('<div/>', {
     style: 'margin-top: 0;',
 }).appendTo($pageCont);
 
-var $ul = $('<ul/>').appendTo($list);
+var $ulMap = $('<ul/>').appendTo($list);
 
-$clip.click(e => {
-    $inputFile.click();
-});
+getButton('Importar').appendTo($pageCont);
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 

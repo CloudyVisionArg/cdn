@@ -289,10 +289,10 @@ class Field {
     }
 
     set value(value) {
-        if (!this.updatable) throw new Error('Field not updatable: ' + this.name);
+        if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         this.#field.Value = value;
-        this.valueChanged;
+        this.valueChanged; // Actualiza valueChanged en el JSON
     }
 
     get valueChanged() {
@@ -303,13 +303,6 @@ class Field {
     get valueOld() {
         return this.#field.ValueOld;
     }
-
-/*
-todo: faltan
-IsNew
-Tags
-ValueChanged
-*/    
 };
 
 export class Folder {
