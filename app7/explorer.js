@@ -102,8 +102,7 @@ dSession.foldersGetFromId(fld_id).then(
             // Boton Menu
             $btn = $page.find('.navbar-inner .right .link')
             $btn.attr('id', 'buttonMenu');
-            $btn.on('click', newDoc);
-            */
+            //$btn.on('click', newDoc);
 
             // Boton Nuevo - fab
             var $fab = $('<div/>', {
