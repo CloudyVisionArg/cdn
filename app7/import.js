@@ -67,7 +67,7 @@ $inputFile.change(async e => {
     var fields = [];
     debugger;
     form.fieldsMap.forEach(f => {
-        if (f.custom && !f.headerTable && f.updatable) {
+        if (f.custom && !f.headerTable && f.updatable && !f.computed) {
             fields.push(f.name.toLowerCase());
         }
     });
