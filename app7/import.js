@@ -89,22 +89,26 @@ $btnImport.addClass('button-fill disabled');
 $btnImport.click(doImport);
 
 // Block de log
-var $block = $('<div/>', {
+var $blockLog = $('<div/>', {
     class: 'block',
     style: 'overflow-wrap: anywhere;',
 }).appendTo($pageCont);
 
 // Boton Copy
+var $block = $('<div/>', {
+    class: 'block',
+}).appendTo($pageCont);
+
 var $row = $('<div/>', {
     class: 'row',
-}).appendTo($pageCont);
+}).appendTo($block);
 
 var $btnCopy = $('<button>', {
     class: 'col button button-fill disabled',
 }).append('Copiar log al portapapeles').appendTo($row);
 
 $btnCopy.click(() => {
-    navigator.clipboard.writeText($block[0].innerText || $block[0].textContent).then(
+    navigator.clipboard.writeText($blocLog[0].innerText || $blocLog[0].textContent).then(
         () => { toast('Listo!') },
         (err) => { toast('Error: ' + errMsg(err)) }
     );
@@ -172,11 +176,11 @@ async function doImport() {
         mapeo[ix] = getSelectVal($(el));
     });
 
-    $block.empty();
-    $block.append('Importando ' + (sheet._rangeRows() - 1) + ' filas' + '<br/>');
+    $blockLog.empty();
+    $blockLog.append('Importando ' + (sheet._rangeRows() - 1) + ' filas' + '<br/>');
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
-        $block.append('<br/>Importando fila ' + (i + 1) + '<br/>');
+        $blocLog.append('<br/>Importando fila ' + (i + 1) + '<br/>');
 
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
@@ -185,23 +189,23 @@ async function doImport() {
                 mapeo.forEach((el, ix) => {
                     if (el) {
                         doc.fields(el).value = sheet._rangeCellsV(i, ix);
-                        $block.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
+                        $blocLog.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
                     }
                 });
-                $block.append('Guardando el documento<br/>');
+                $blocLog.append('Guardando el documento<br/>');
                 await doc.save();
-                $block.append('OK!<br/>');
+                $blocLog.append('OK!<br/>');
                 //await doc.delete(); // sacar en prod!!
 
             } catch (err) {
-                $block.append('ERROR: ' + errMsg(err) + '<br/>');
+                $blocLog.append('ERROR: ' + errMsg(err) + '<br/>');
             }
 
         } else {
-            $block.append('Fila vacia<br/>');
+            $blocLog.append('Fila vacia<br/>');
         }
     }
-    $block.append('<br/>Proceso terminado');
+    $blocLog.append('<br/>Proceso terminado');
     $btnCopy.removeClass('disabled')
 }
 
