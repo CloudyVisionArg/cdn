@@ -107,7 +107,14 @@ var $ctl = getButton('Copiar al portapapeles').appendTo($ul);
 var $btnCopy = $ctl.find('button');
 $btnCopy.addClass('disabled');
 $btnCopy.click(() => {
-    navigator.clipboard.writeText($block[0].innerText || $block[0].textContent);
+    navigator.clipboard.writeText($block[0].innerText || $block[0].textContent).then(
+        () => {
+            toast('Listo!');
+        },
+        (err) => {
+            toast('Error: ' + errMsg(err));
+        }
+    );
 });
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
