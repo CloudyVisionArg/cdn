@@ -139,7 +139,7 @@ export class Document {
     #parent;
     #session;
     #doc;
-    #fieldsMap
+    #fieldsMap;
 
     constructor(document, session, folder) {
         this.#doc = document;
@@ -166,7 +166,7 @@ export class Document {
 
         } else {
             var map = new CIMap();
-            debugger; // revisar
+            debugger; // sacar luego de revisar
             me.#doc.HeadFields.forEach(it => {
                 map.set(it.Name, new Field(it, me.session));
             });
