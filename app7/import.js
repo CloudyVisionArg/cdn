@@ -42,7 +42,7 @@ var $fileName = $ctl.find('input');
 $fileName.attr('readonly', true);
 $fileName.change(e => {
     if (!e.target.value) $inputFile.val('');
-    $ul.empty();
+    $ulMap.empty();
 });
 
 var $inputFile = $('<input/>', {
