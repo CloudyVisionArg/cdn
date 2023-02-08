@@ -63,7 +63,6 @@ $clip.click(e => {
 
 $inputFile.change(async e => {
     loadXls(e.target.files[0]);
-    $btnImport.removeClass('disabled');
 });
 
 // Mapeo de campos
@@ -126,47 +125,56 @@ function pageInit(e, page) {
 }
 
 async function loadXls(file) {
-    $fileName.val(file.name);
-    const data = await file.arrayBuffer();
-    /* data is an ArrayBuffer */
-    const book = XLSX.read(data);
-    sheet = book.Sheets[book.SheetNames[0]];
-    sheetFuncs(sheet);
+    try {
+        $fileName.val(file.name);
+        const data = await file.arrayBuffer();
+        /* data is an ArrayBuffer */
+        const book = XLSX.read(data);
+        sheet = book.Sheets[book.SheetNames[0]];
+        sheetFuncs(sheet);
 
-    // Lee los campos del folder
-    var form = await folder.form;
-    var fields = [];
-    form.fieldsMap.forEach(f => {
-        if (f.custom && !f.headerTable && f.updatable && !f.computed) {
-            fields.push(f.name.toLowerCase());
+        // Lee los campos del folder
+        var form = await folder.form;
+        var fields = [];
+        form.fieldsMap.forEach(f => {
+            if (f.custom && !f.headerTable && f.updatable && !f.computed) {
+                fields.push(f.name.toLowerCase());
+            }
+        });
+        fields.sort();
+
+        $ulMap.empty();
+        var headers = [];
+
+        // Carga el mapeo
+        for (var i = 0; i < sheet._rangeCols(); i++) {
+            headers.push(sheet._rangeCellsV(0, i));
+
+            let $selCtl = getSelect(undefined, headers[i]);
+            $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
+
+            var $sel = $selCtl.find('select');
+            addOption($sel[0], '(no importar)', '[NULL]'); 
+            fields.forEach(it => {
+                addOption($sel[0], it);
+            })
+            $sel.val(headers[i].toLowerCase());
+            if ($sel[0].selectedIndex < 0) $sel[0].selectedIndex = 0;
+
+            $selCtl.appendTo($ulMap);
         }
-    });
-    fields.sort();
 
-    $ulMap.empty();
-    var headers = [];
+        $btnImport.removeClass('disabled');
 
-    // Carga el mapeo
-    for (var i = 0; i < sheet._rangeCols(); i++) {
-        headers.push(sheet._rangeCellsV(0, i));
-
-        let $selCtl = getSelect(undefined, headers[i]);
-        $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
-
-        var $sel = $selCtl.find('select');
-        addOption($sel[0], '(no importar)', '[NULL]'); 
-        fields.forEach(it => {
-            addOption($sel[0], it);
-        })
-        $sel.val(headers[i].toLowerCase());
-        if ($sel[0].selectedIndex < 0) $sel[0].selectedIndex = 0;
-
-        $selCtl.appendTo($ulMap);
+    } catch (err) {
+        toast('Error: ' + errMsg(err));
+        console.error(err);
     }
 }
 
 async function doImport() {
     $btnImport.addClass('disabled');
+
     var mapeo = [];
     $ulMap.find('select').each((ix, el) => {
         mapeo[ix] = getSelectVal($(el));
