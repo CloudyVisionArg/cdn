@@ -86,6 +86,7 @@ $ctl.find('button').click(doImport);
 
 var $block = $('<div/>', {
     class: 'block',
+    style: 'overflow-wrap: anywhere;',
 }).appendTo($pageCont);
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
@@ -171,7 +172,7 @@ async function doImport() {
             $block.append('Fila vacia<br/>');
         }
     }
-    $block.append('Proceso terminado<br/>');
+    $block.append('<br/>Proceso terminado');
 }
 
 // Usar solo despues del pageInit
