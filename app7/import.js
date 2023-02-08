@@ -107,7 +107,7 @@ var $list = $('<div/>', {
 
 var $ulMap = $('<ul/>').appendTo($list);
 
-getButton('Importar').appendTo($pageCont);
+getButton('Importar').appendTo($ulMap);
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
