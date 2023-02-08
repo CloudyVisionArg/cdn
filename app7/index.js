@@ -60,6 +60,7 @@ var app = {
         numeral.defaultFormat('0,0.[00]');
 
         // Verificacion de plugins
+        debugger;
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
         if (!device) console.log('Plugin error: cordova-plugin-device');
