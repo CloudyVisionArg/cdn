@@ -24,6 +24,7 @@ $page.find('.navbar-inner .left .link').on('click', function (e) {
 
 var $pageCont = $page.find('.page-content');
 
+// Input file
 var $list = $('<div/>', {
     class: 'list no-hairlines-md',
     style: 'margin-top: 0;',
@@ -57,8 +58,38 @@ $clip.click(e => {
 });
 
 $inputFile.change(async e => {
-    // Lee el excel
-    const file = e.target.files[0];
+    loadXls(e.target.files[0]);
+});
+
+// Mapeo de campos
+$pageCont.append('<div class="block-title">Mapeo de campos</div>');
+
+var $list = $('<div/>', {
+    class: 'list inline-labels no-hairlines-md',
+    style: 'margin-top: 0;',
+}).appendTo($pageCont);
+
+var $ulMap = $('<ul/>').appendTo($list);
+
+// Boton importar
+var $list = $('<div/>', {
+    class: 'list inline-labels no-hairlines-md',
+    style: 'margin-top: 0;',
+}).appendTo($pageCont);
+
+var $ul = $('<ul/>').appendTo($list);
+
+getButton('Importar').appendTo($ul);
+
+resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
+
+function pageInit(e, page) {
+    f7Page = page;
+
+    //setInputVal($get('#scripts'), localStorage.getItem('scripts'));
+}
+
+async function loadXls(file) {
     $fileName.val(file.name);
     const data = await file.arrayBuffer();
     /* data is an ArrayBuffer */
@@ -96,33 +127,6 @@ $inputFile.change(async e => {
 
         $selCtl.appendTo($ulMap);
     }
-});
-
-$pageCont.append('<div class="block-title">Mapeo de campos</div>');
-
-var $list = $('<div/>', {
-    class: 'list inline-labels no-hairlines-md',
-    style: 'margin-top: 0;',
-}).appendTo($pageCont);
-
-var $ulMap = $('<ul/>').appendTo($list);
-
-
-var $list = $('<div/>', {
-    class: 'list inline-labels no-hairlines-md',
-    style: 'margin-top: 0;',
-}).appendTo($pageCont);
-
-var $ul = $('<ul/>').appendTo($list);
-
-getButton('Importar').appendTo($ul);
-
-resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
-
-function pageInit(e, page) {
-    f7Page = page;
-
-    //setInputVal($get('#scripts'), localStorage.getItem('scripts'));
 }
 
 // Usar solo despues del pageInit
