@@ -89,6 +89,11 @@ var $block = $('<div/>', {
     style: 'overflow-wrap: anywhere;',
 }).appendTo($pageCont);
 
+var $ctl = getButton('Copiar al portapapeles').appendTo($ul);
+$ctl.find('button').click(() => {
+    navigator.clipboard.writeText($block[0].innerText || $block[0].textContent);
+});
+
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
 function pageInit(e, page) {
