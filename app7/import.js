@@ -142,7 +142,7 @@ async function doImport() {
         mapeo[ix] = getSelectVal($(el));
     });
 
-    $block.append('Importando ' + sheet._rangeRows() - 1 + ' filas' + '<br/>');
+    $block.append('Importando ' + (sheet._rangeRows() - 1) + ' filas' + '<br/>');
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
         $block.append('Importando fila ' + (i + 1) + '<br/>');
@@ -160,7 +160,10 @@ async function doImport() {
             await doc.save();
             $block.append('ok<br/>');
             await doc.delete();
-        };
+            
+        } else {
+            $block.append('Fila vacia<br/>');
+        }
     }
     $block.append('Importacion terminada<br/>');
 }
