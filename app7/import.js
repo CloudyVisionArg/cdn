@@ -115,7 +115,7 @@ async function loadXls(file) {
 
     // Carga el mapeo
     for (var i = 0; i < sheet._rangeCols(); i++) {
-        headers.push(sheet._rangeCells(0, i).v);
+        headers.push(sheet._rangeCellsV(0, i));
 
         let $selCtl = getSelect(undefined, headers[i]);
         $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
@@ -140,13 +140,13 @@ async function doImport() {
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
         // Filas no vacias
-        if (mapeo.find((el, ix) => (el && sheet._rangeCells(i, ix).v))) {
+        if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
             let doc = await folder.documentsNew();
             mapeo.forEach((el, ix) => {
                 if (el) {
-                    if (!sheet._rangeCells(i, ix)) debugger;
-                    doc.fields(el).value = sheet._rangeCells(i, ix).v;
-                    console.log(el + '=' + sheet._rangeCells(i, ix).v);
+                    if (!sheet._rangeCellsV(i, ix)) debugger;
+                    doc.fields(el).value = sheet._rangeCellsV(i, ix);
+                    console.log(el + '=' + sheet._rangeCellsV(i, ix));
                 }
             });
             //await doc.save()
