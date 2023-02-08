@@ -85,7 +85,7 @@ var $ul = $('<ul/>').appendTo($list);
 
 var $ctl = getButton('Importar').appendTo($ul);
 var $btnImport = $ctl.find('button');
-$btnImport.addClass('disabled');
+$btnImport.addClass('button-fill disabled');
 $btnImport.click(doImport);
 
 // Block de log
@@ -102,9 +102,9 @@ var $list = $('<div/>', {
 
 var $ul = $('<ul/>').appendTo($list);
 
-var $ctl = getButton('Copiar al portapapeles').appendTo($ul);
+var $ctl = getButton('Copiar log al portapapeles').appendTo($ul);
 var $btnCopy = $ctl.find('button');
-$btnCopy.addClass('disabled');
+$btnCopy.addClass('button-fill disabled');
 $btnCopy.click(() => {
     navigator.clipboard.writeText($block[0].innerText || $block[0].textContent).then(
         () => { toast('Listo!') },
