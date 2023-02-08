@@ -47,6 +47,7 @@ $fileName.change(e => {
         sheet = undefined;
         $btnImport.addClass('disabled');
         $btnCopy.addClass('disabled');
+        $blockLog.empty();
     }
 });
 
@@ -115,6 +116,10 @@ function pageInit(e, page) {
 }
 
 async function loadXls(file) {
+    $btnImport.addClass('disabled');
+    $btnCopy.addClass('disabled');
+    $blockLog.empty();
+
     try {
         $fileName.val(file.name);
         const data = await file.arrayBuffer();
@@ -163,14 +168,13 @@ async function loadXls(file) {
 
 async function doImport() {
     $btnImport.addClass('disabled');
+    $blockLog.empty();
+    $blockLog.append('Importando ' + (sheet._rangeRows() - 1) + ' filas...' + '<br/>');
 
     var mapeo = [];
     $ulMap.find('select').each((ix, el) => {
         mapeo[ix] = getSelectVal($(el));
     });
-
-    $blockLog.empty();
-    $blockLog.append('Importando ' + (sheet._rangeRows() - 1) + ' filas' + '<br/>');
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
         $blockLog.append('<br/>Importando fila ' + (i + 1) + '<br/>');
@@ -188,7 +192,7 @@ async function doImport() {
                 $blockLog.append('Guardando el documento<br/>');
                 await doc.save();
                 $blockLog.append('OK!<br/>');
-                //await doc.delete(); // sacar en prod!!
+                await doc.delete(); // sacar en prod!!
 
             } catch (err) {
                 $blockLog.append('ERROR: ' + errMsg(err) + '<br/>');
