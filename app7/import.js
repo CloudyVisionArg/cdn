@@ -15,7 +15,6 @@ var $page = getPage({
     id: 'import',
     title: 'Importar',
     leftbutton: 'exit',
-	rightbutton: 'save',
 });
 
 $page.find('.navbar-inner .left .link').on('click', function (e) {
