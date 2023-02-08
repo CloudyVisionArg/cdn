@@ -84,6 +84,10 @@ var $ul = $('<ul/>').appendTo($list);
 var $ctl = getButton('Importar').appendTo($ul);
 $ctl.find('button').click(doImport);
 
+var $block = $('<div/>', {
+    class: 'block',
+}).appendTo($pageCont);
+
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
 function pageInit(e, page) {
@@ -138,20 +142,27 @@ async function doImport() {
         mapeo[ix] = getSelectVal($(el));
     });
 
+    $block.append('Importando ' + sheet._rangeRows() - 1 + ' filas' + '<br/>');
+
     for (var i = 1; i < sheet._rangeRows(); i++) {
+        $block.append('Importando fila ' + (i + 1) + '<br/>');
+
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
             let doc = await folder.documentsNew();
             mapeo.forEach((el, ix) => {
                 if (el) {
                     doc.fields(el).value = sheet._rangeCellsV(i, ix);
-                    console.log(el + '=' + sheet._rangeCellsV(i, ix));
+                    $block.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
                 }
             });
+            $block.append('Guardando el documento: ');
             await doc.save();
-            //await doc.delete();
+            $block.append('ok<br/>');
+            await doc.delete();
         };
     }
+    $block.append('Importacion terminada<br/>');
 }
 
 // Usar solo despues del pageInit
