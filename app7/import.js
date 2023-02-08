@@ -136,7 +136,7 @@ async function loadXls(file) {
 function doImport() {
     var mapeo = [];
     $ulMap.find('select').each((ix, el) => {
-        mape[ix] = getSelectVal($(el));
+        mapeo[ix] = getSelectVal($(el));
     });
     debugger;
 
