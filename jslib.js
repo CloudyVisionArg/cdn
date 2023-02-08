@@ -61,7 +61,7 @@ function sheetFuncs (sheet) {
 
     //Devuelve el .v de un cell, validando ya si es undefined https://github.com/SheetJS/sheetjs/issues/1600
     sheet._rangeCellsV = function (r, c) {
-        let cell = this.rangeCells(r, c);
+        let cell = this._rangeCells(r, c);
         if (cell == undefined) debugger;
         return cell ? cell.v : cell;
     }
