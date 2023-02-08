@@ -63,6 +63,7 @@ var app = {
         debugger;
         
         if (!Capacitor.Plugins.Device) console.log('Plugin error: @capacitor/device');
+        window.device = Capacitor.Plugins.Device;
         if (!Capacitor.Plugins.Camera) console.log('Plugin error: @capacitor/camera');
         //if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
         if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
