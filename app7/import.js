@@ -63,7 +63,6 @@ $clip.click(e => {
 });
 
 $inputFile.change(e => {
-    debugger;
     if (e.target.files.length > 0)
         loadXls(e.target.files[0]);
 });
