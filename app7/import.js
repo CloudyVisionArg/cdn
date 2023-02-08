@@ -123,9 +123,9 @@ async function loadXls(file) {
         var $sel = $selCtl.find('select');
         addOption($sel[0], '(no importar)', '[NULL]'); 
         fields.forEach(it => {
-            addOption($sel[0], it, it.toLowerCase());
+            addOption($sel[0], it);
         })
-        $sel.val(headers[i]);
+        $sel.val(headers[i].toLowerCase());
         if ($sel[0].selectedIndex < 0) $sel[0].selectedIndex = 0;
 
         $selCtl.appendTo($ulMap);
