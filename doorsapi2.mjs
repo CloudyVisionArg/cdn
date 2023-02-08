@@ -147,6 +147,32 @@ export class Document {
         if (folder) this.#parent = folder;
     }
 
+    delete(toRecycleBin) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            debugger;
+            var url = 'folders/' + me.#doc.FldId + '/documents/?tobin=' + 
+                encodeURIComponent(toRecycleBin == false ? false : true);
+            me.session.restClient.asyncCall(url, 'DELETE', me.id, 'docIds').then(
+                res => {
+                    me.#doc = res;
+                    resolve(me);
+                },
+                reject
+            )
+        });
+
+        /*
+        var sendRecycleBin = (sendRecycleBin === undefined ? true : sendRecycleBin);
+        var url = "folders/" + fldId + "/documents/?tobin=" + encodeURIComponent(sendRecycleBin);
+        return Doors.RESTFULL.asyncCall(url, "DELETE", [docId], "docIds");
+        */
+    }
+
+    get id() {
+
+    }
+
     fields(name) {
         var me = this;
         var field;
