@@ -301,6 +301,13 @@ function pageInit(e, page) {
                 onClick: newDoc,
             },
             {
+                text: 'Ayuda',
+                onClick: () => {
+                    let url = 'https://docs.google.com/document/d/e/2PACX-1vTuWhEtDMWT9z6wCxrhyBUwxVzAUgZtTj_b8x4vuJFYQZQXg9sDJKkgf4V6Ew5fOn5my02XJMmSDWja/pub';
+                    cordova.InAppBrowser.open(url, '_system', 'location=yes');
+                },
+            },
+            {
                 text: 'Cancelar',
                 color: 'red',
                 close: true,
