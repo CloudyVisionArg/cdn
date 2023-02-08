@@ -242,7 +242,7 @@ export class Document {
                 res => {
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
-                    me.restClient.asyncCall(url, 'GET', '', '').then(
+                    me.session.restClient.asyncCall(url, 'GET', '', '').then(
                         res => {
                             me.#doc = res;
                             resolve(me);

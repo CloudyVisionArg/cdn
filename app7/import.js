@@ -142,7 +142,6 @@ async function doImport() {
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
             let doc = await folder.documentsNew();
-            debugger;
             mapeo.forEach((el, ix) => {
                 if (el) {
                     doc.fields(el).value = sheet._rangeCellsV(i, ix);
