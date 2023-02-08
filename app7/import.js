@@ -149,18 +149,23 @@ async function doImport() {
 
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
-            let doc = await folder.documentsNew();
-            mapeo.forEach((el, ix) => {
-                if (el) {
-                    doc.fields(el).value = sheet._rangeCellsV(i, ix);
-                    $block.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
-                }
-            });
-            $block.append('Guardando el documento: ');
-            await doc.save();
-            $block.append('ok<br/>');
-            await doc.delete();
-            
+            try {
+                let doc = await folder.documentsNew();
+                mapeo.forEach((el, ix) => {
+                    if (el) {
+                        doc.fields(el).value = sheet._rangeCellsV(i, ix);
+                        $block.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
+                    }
+                });
+                $block.append('Guardando el documento: ');
+                await doc.save();
+                $block.append('ok<br/>');
+                await doc.delete();
+
+            } catch (err) {
+                $block.append('Error: ' + errMsg(err));
+            }
+
         } else {
             $block.append('Fila vacia<br/>');
         }
