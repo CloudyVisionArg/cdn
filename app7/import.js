@@ -107,7 +107,15 @@ var $list = $('<div/>', {
 
 var $ulMap = $('<ul/>').appendTo($list);
 
-getButton('Importar').appendTo($ulMap);
+
+var $list = $('<div/>', {
+    class: 'list inline-labels no-hairlines-md',
+    style: 'margin-top: 0;',
+}).appendTo($pageCont);
+
+var $ul = $('<ul/>').appendTo($list);
+
+getButton('Importar').appendTo($ul);
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
