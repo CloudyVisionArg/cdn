@@ -149,7 +149,7 @@ async function doImport() {
                 }
             });
             await doc.save();
-            await doc.delete();
+            //await doc.delete();
         };
     }
 }
