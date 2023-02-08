@@ -170,7 +170,7 @@ export class Document {
     }
 
     get id() {
-
+        return this.#doc.DocId;
     }
 
     fields(name) {
@@ -208,12 +208,15 @@ export class Document {
         return this.parent
     }
 
+    get folderId() {
+        return this.parentId
+    }
+
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#parent) {
-                let fldId = me.#doc.HeadFields.find(it => it.Name == 'FLD_ID').Value;
-                me.#session.foldersGetFromId(fldId).then(
+                me.#session.foldersGetFromId(me.parentId).then(
                     function (res) {
                         me.#parent = res;
                         resolve(res);
@@ -226,14 +229,26 @@ export class Document {
         });
     }
 
+    get parentId() {
+        return this.#doc.HeadFields.find(it => it.Name == 'FLD_ID').Value;
+    }
+
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
+            debugger;
             var url = 'documents';
             me.session.restClient.asyncCall(url, 'PUT', me.#doc, 'document').then(
                 res => {
-                    me.#doc = res;
-                    resolve(me);
+                    // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
+                    var url = 'documents/' + me.id;
+                    me.restClient.asyncCall(url, 'GET', '', '').then(
+                        res => {
+                            me.#doc = res;
+                            resolve(me);
+                        },
+                        reject
+                    )
                 },
                 reject
             )
