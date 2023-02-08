@@ -138,8 +138,16 @@ function doImport() {
     $ulMap.find('select').each((ix, el) => {
         mapeo[ix] = getSelectVal($(el));
     });
-    debugger;
 
+    for (var i = 1; i < sheet._rangeRows(); i++) {
+        let empty = true;
+        if (mapeo.find((el, ix) => {
+            return sheet._rangeCells(i, ix).v;
+        })) {
+            debugger;
+        };
+        
+    }
 
 
 }
