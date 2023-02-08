@@ -944,10 +944,11 @@ function getActionsPopup() {
         <div class="navbar-inner">
             <div class="title">actionsPopup</div>
             <div class="right">
-            <a id="close" class="link popup-close">
-                <i class="f7-icons ios-only">xmark</i>
-                <i class="material-icons md-only">close</i>
-            </a>
+                <a id="close" class="link popup-close">
+                    <i class="f7-icons ios-only">xmark</i>
+                    <i class="material-icons md-only">close</i>
+                </a>
+            </div>
         </div>
     </div>
     `);
