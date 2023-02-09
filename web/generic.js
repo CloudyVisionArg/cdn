@@ -135,7 +135,6 @@ async function getDoc() {
         doc = await folder.documentsNew();
     }
     docJ = doc.toJSON();
-    debugger;
     getControlsFolder();
 }
 
