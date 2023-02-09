@@ -18,6 +18,7 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 
 var doorsapi2, dSession;
 var urlParams, fld_id, folder, doc_id, doc;
+var folderJ, docJ;
 var controlsFolder, controls, controlsRights;
 var saving, cache, lsScripts;
 
@@ -92,6 +93,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     
     if (fld_id) {
         folder = await dSession.foldersGetFromId(fld_id);
+        folderJ = folder.toJSON();
         if (folder.type == 1) {
             getDoc();
         } else {
@@ -131,11 +133,12 @@ async function getDoc() {
     } else {
         doc = await folder.documentsNew();
     }
+    docJ = doc.toJSON();
     getControlsFolder();
 }
 
 function getControlsFolder() {
-	var cf = objPropCI(doc.Tags, 'controlsFolder');
+	var cf = objPropCI(docJ.Tags, 'controlsFolder');
 	
 	if (cf) {
 		DoorsAPI.foldersGetByPath(folder.RootFolderId, cf).then(
@@ -176,7 +179,7 @@ function loadControls() {
 }
 
 function getControlsRights(pControls) {
-	var cr = objPropCI(doc.Tags, 'controlsRights');
+	var cr = objPropCI(docJ.Tags, 'controlsRights');
 	if (cr) {
 		try {
 			controlsRights = $.parseXML(cr);
@@ -322,7 +325,7 @@ function renderPage() {
         $tab = $cont.find('#tabMain');
         $row = undefined;
 
-        doc.CustomFields.forEach(field => {
+        docJ.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
@@ -345,7 +348,7 @@ function renderPage() {
         $tab = $cont.find('#tabHeader');
         $row = undefined;
 
-        doc.CustomFields.forEach(field => {
+        docJ.CustomFields.forEach(field => {
             if (field.HeaderTable) {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
@@ -356,7 +359,7 @@ function renderPage() {
             }
         })
 
-        doc.HeadFields.forEach(field => {
+        docJ.HeadFields.forEach(field => {
             $row = getRow($row, $tab);
             $col = $('<div/>', {
                 class: 'col-12 col-md-6 form-group',
@@ -515,7 +518,7 @@ function renderPage() {
             if (wt == 3000) debugger; // Para poder ver q corno pasa
             setTimeout(waiting, 100);
         } else {
-            fillControls(doc);
+            fillControls(docJ);
             preloader.hide();
         }
     }, 0);
@@ -644,7 +647,7 @@ function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(doc, tf);
+            var textField = getDocField(docJ, tf);
             if (!textField) {
                 console.log('No se encontro el campo ' + tf.toUpperCase());
             }
@@ -652,7 +655,7 @@ function renderControls(pCont, pParent) {
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(doc, vf);
+            var valueField = getDocField(docJ, vf);
             if (!valueField) {
                 console.log('No se encontro el campo ' + vf.toUpperCase());
             }
@@ -1075,12 +1078,12 @@ function fillControls() {
 
     form = folder.Form.Description ? folder.Form.Description : folder.Form.Name;
 
-    if (!doc.IsNew) {
-        title = getDocField(doc, 'subject').Value;
+    if (!docJ.IsNew) {
+        title = getDocField(docJ, 'subject').Value;
         if (title) {
             title += ' - ' + form;
         } else {
-            title = form + ' #' + doc.DocId;
+            title = form + ' #' + docJ.DocId;
         };
 
         $('#deleteDoc').show();
@@ -1100,7 +1103,7 @@ function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            textField = getDocField(doc, tf);
+            textField = getDocField(docJ, tf);
             if (textField) {
                 text = textField.Value;
             } else {
@@ -1111,7 +1114,7 @@ function fillControls() {
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            valueField = getDocField(doc, vf);
+            valueField = getDocField(docJ, vf);
             if (valueField) {
                 value = valueField.Value;
             } else {
@@ -1122,7 +1125,7 @@ function fillControls() {
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            xmlField = getDocField(doc, xf);
+            xmlField = getDocField(docJ, xf);
             if (xmlField) {
                 xml = xmlField.Value;
             } else {
@@ -1269,7 +1272,7 @@ function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         let field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, getDocField(doc, field).Value);
+                            pCont.attr(pAttr, getDocField(docJ, field).Value);
                         }
                     }
                 });
@@ -1311,7 +1314,7 @@ function saveDoc(pExit) {
 
     $('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-textfield'));
+        var field = getDocField(docJ, $el.attr('data-textfield'));
 
         if (field && field.Updatable) {
             if (el.tagName == 'INPUT') {
@@ -1363,7 +1366,7 @@ function saveDoc(pExit) {
 
     $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-valuefield'));
+        var field = getDocField(docJ, $el.attr('data-valuefield'));
 
         if (field && field.Updatable) {
             if (el.tagName == 'SELECT') {
@@ -1390,7 +1393,7 @@ function saveDoc(pExit) {
 
     $('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-xmlfield'));
+        var field = getDocField(docJ, $el.attr('data-xmlfield'));
 
         if (field && field.Updatable) {
             if (el.tagName == 'INPUT') {
@@ -1412,10 +1415,11 @@ function saveDoc(pExit) {
         }
     };
 
-    DoorsAPI.documentSave(doc).then(
-        function (doc2) {
-            doc = doc2;
-            doc_id = getDocField(doc, 'doc_id').Value;
+    DoorsAPI.documentSave(docJ).then((doc2) => {
+        dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
+            doc = doc3;
+            docJ = doc3.toJSON();
+            doc_id = getDocField(docJ, 'doc_id').Value;
 
             saveAtt().then(
                 function (res) {
@@ -1437,12 +1441,9 @@ function saveDoc(pExit) {
                         toast('Cambios guardados');
                         fillControls();
                     }
-                },
-                errMgr
-            );
-        },
-        errMgr
-    );
+                }, errMgr);
+        }, errMgr);
+    }, errMgr);
 
     function errMgr(pErr) {
         saving = false;
