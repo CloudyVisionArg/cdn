@@ -127,26 +127,11 @@ function getToken() {
 
 async function getDoc() {
 	if (doc_id) {
-        doc = await folder.documents(42962);
-        debugger;
-        //doc = folder.documents(doc_id);
-		DoorsAPI.documentsGetById(doc_id).then(
-			function (res) {
-				doc = res;
-				getControlsFolder();
-			},
-			end
-		);
-
-	} else {
-		DoorsAPI.documentsNew(fld_id).then(
-			function (res) {
-				doc = res;
-				getControlsFolder();
-			},
-			end
-		);
-	}
+        doc = await folder.documents(doc_id);
+    } else {
+        doc = await folder.documentsNew();
+    }
+    getControlsFolder();
 }
 
 function getControlsFolder() {
