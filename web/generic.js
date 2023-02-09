@@ -571,7 +571,7 @@ function exitForm() {
 function getDefaultControl(pField) {
     var $ret, $input, label;
 
-    label = pField.description ? pField.description : pField.dame;
+    label = pField.description ? pField.description : pField.name;
 
     if (pField.type == 1) {
         if (pField.length > 0 && pField.length < 500) {
