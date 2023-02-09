@@ -148,7 +148,6 @@ class Application {
     }
 
     get rootFolder() {
-        debugger;
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#rootFolder) {
@@ -166,7 +165,6 @@ class Application {
     }
 
     get rootFolderId() {
-        debugger;
         return this.#parent.toJSON().RootFolderId;
     }
 
@@ -424,8 +422,6 @@ export class Folder {
                 reject(new Error('Expression returns more than one document'));
 
             } else {
-                debugger;
-
                 let url = 'documents/' + res[0]['DOC_ID'];
                 let jsn = await me.session.restClient.asyncCall(url, 'GET', '', '');
                 resolve(new Document(jsn, me.session, me));
