@@ -80,7 +80,6 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
         return;
     }
 
-    alert(await dSession.runSyncEventsOnClient);
     await (dSession.runSyncEventsOnClient = false);
 
     // todo: setar segun el LNG_ID

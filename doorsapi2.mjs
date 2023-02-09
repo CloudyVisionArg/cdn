@@ -368,6 +368,10 @@ export class Folder {
         })
     }
 
+    get folderType() {
+        return this.type;
+    }
+
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -450,7 +454,7 @@ export class Folder {
     }
 
     get type() {
-        debugger;
+        return this.#folder.Type;
     }
 };
 
