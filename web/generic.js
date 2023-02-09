@@ -1367,7 +1367,7 @@ function saveDoc(pExit) {
 
     $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc.fields($el.attr('data-valuefield'));
+        try { var field = doc.fields($el.attr('data-valuefield')) } catch(err) { debugger; };
 
         if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
