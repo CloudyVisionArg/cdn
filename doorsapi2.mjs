@@ -16,7 +16,7 @@ export class Session {
 
     set authToken(value) {
         this.#authToken = value;
-        this.#restClient.AuthToken = value;
+        this.restClient.AuthToken = value;
     }
 
     /**
@@ -34,7 +34,7 @@ export class Session {
             newPassword: newPassword,
             instanceName: instanceName
         };
-        return this.#restClient.asyncCall(url, 'POST', data, '');
+        return this.restClient.asyncCall(url, 'POST', data, '');
     };
 
     /**
@@ -75,14 +75,14 @@ export class Session {
 
     get isLogged() {
         var url = 'session/islogged';
-        return this.#restClient.asyncCall(url, 'POST', {}, '');
+        return this.restClient.asyncCall(url, 'POST', {}, '');
     };
 
     logoff() {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'session/logoff';
-            me.#restClient.asyncCall(url, 'POST', {}, '').then(
+            me.restClient.asyncCall(url, 'POST', {}, '').then(
                 res => { me.authToken = undefined },
                 reject
             )
@@ -99,7 +99,7 @@ export class Session {
             liteMode: liteMode ? true : false,
         };
         return new Promise((resolve, reject) => {
-            me.#restClient.asyncCall(url, 'POST', data, '').then(
+            me.restClient.asyncCall(url, 'POST', data, '').then(
                 token => {
                     me.authToken = token;
                     resolve(token);
@@ -119,7 +119,7 @@ export class Session {
 
     set serverUrl(value) {
         this.#serverUrl = value;
-        this.#restClient.ServerBaseUrl = value;
+        this.restClient.ServerBaseUrl = value;
     }
 };
 
@@ -202,7 +202,7 @@ export class Document {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#parent) {
-                me.#session.foldersGetFromId(me.parentId).then(
+                me.session.foldersGetFromId(me.parentId).then(
                     function (res) {
                         me.#parent = res;
                         resolve(res);
@@ -396,7 +396,7 @@ export class Folder {
             '&order=' + encodeURIComponent(opt.order) + '&maxDocs=' + encodeURIComponent(opt.maxDocs) + 
             '&recursive=' + encodeURIComponent(opt.recursive) + '&maxDescrLength=' + encodeURIComponent(opt.maxTextLen);
 
-        return this.#session.restClient.asyncCall(url, 'GET', params, '');
+        return this.session.restClient.asyncCall(url, 'GET', params, '');
     }
 
     /**
@@ -423,7 +423,7 @@ export class Folder {
             '&maxDocs=' + encodeURIComponent(opt.maxDocs) + '&recursive=' + encodeURIComponent(opt.recursive) + 
             '&groupsOrder=' + encodeURIComponent(opt.groupsOrder) + '&totalsOrder=' + encodeURIComponent(opt.totalsOrder);
 
-        return this.#session.restClient.asyncCall(url, 'GET', params, '');
+        return this.session.restClient.asyncCall(url, 'GET', params, '');
     }
 
     get session() {
