@@ -1,5 +1,5 @@
 var fld_id = routeTo.query.fld_id;
-var folder, sheet;
+var folder, sheet, refresh;
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
@@ -18,7 +18,7 @@ var $page = getPage({
 });
 
 $page.find('.navbar-inner .left .link').on('click', function (e) {
-    debugger;
+    if (refresh) f7Page.pageFrom.pageEl.crm.reloadView();
     f7Page.view.router.back();
 });
 
@@ -194,6 +194,7 @@ async function doImport() {
                 $blockLog.append('Guardando el documento<br/>');
                 await doc.save();
                 $blockLog.append('OK!<br/>');
+                refresh = true;
                 //await doc.delete(); // sacar en prod!!
 
             } catch (err) {
