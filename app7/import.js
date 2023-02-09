@@ -188,8 +188,7 @@ async function doImport() {
                 mapeo.forEach((el, ix) => {
                     if (el) {
                         let val = sheet._rangeCellsV(i, ix);
-                        if (val === undefined) debugger;
-                        val = val === undefined ? null : val;
+                        val = (val === undefined ? null : val);
                         doc.fields(el).value = val;
                         $blockLog.append(el + ' = ' + val + '<br/>');
                     }
