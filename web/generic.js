@@ -1159,7 +1159,7 @@ function fillControls() {
                     el._value(value);
         
                 } else {
-                    if (textField && textField.Type == 2) {
+                    if (textField && textField.type == 2) {
                         if (text) {
                             $el.val(formatDate(text));
                         } else {
@@ -1367,24 +1367,24 @@ function saveDoc(pExit) {
 
     $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        try { var field = doc.fields($el.attr('data-valuefield')) } catch(err) { debugger; };
+        try { var field = doc.fields($el.attr('data-valuefield')) } catch(err) { console.log(err) };
 
         if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
                 let aux = el._value();
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = el._value();
+                    field.value = el._value();
 
                 } else {
                     let type = $el.attr('type').toLowerCase();
                     if (type == 'hidden') {
-                        if (field.Type == 3) {
-                            field.Value = numeral($el.val()).value();
+                        if (field.type == 3) {
+                            field.value = numeral($el.val()).value();
                         } else {
-                            field.Value = $el.val();
+                            field.value = $el.val();
                         };
                     }
                 }
@@ -1416,10 +1416,8 @@ function saveDoc(pExit) {
         }
     };
 
-    debugger;
     doc.save().then(() => {
-        debugger; // chequear si se actualiza el json
-        //docJ = doc3.toJSON();
+        docJ = doc.toJSON();
         doc_id = doc.fields('doc_id').value;
 
         saveAtt().then(
