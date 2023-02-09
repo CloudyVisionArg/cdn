@@ -363,6 +363,7 @@ export class Folder {
                 res = await me.search({ fields: 'doc_id', formula: document });
             } else {
                 res = await me.search({ fields: 'doc_id', formula: 'doc_id = ' + document });
+                debugger;
             }
     
         });
