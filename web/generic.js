@@ -127,7 +127,7 @@ function getToken() {
 
 async function getDoc() {
 	if (doc_id) {
-        doc = await folder.documents('subject like \'chauu%\'');
+        doc = await folder.documents(42962);
         debugger;
         //doc = folder.documents(doc_id);
 		DoorsAPI.documentsGetById(doc_id).then(
