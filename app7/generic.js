@@ -197,9 +197,7 @@ function renderPage() {
         */
         if (!pageEl.crm.saved) {
             // Si nunca guarde evito el refresh del explorer
-            debugger;
             $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
-            //$page.prev().find('.refresh-on-focus').each((ix, el) => {
                 $(el).removeClass('refresh-on-focus');
             })
         }
