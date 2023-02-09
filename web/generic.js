@@ -139,7 +139,6 @@ async function getDoc() {
 }
 
 function getControlsFolder() {
-    debugger;
 	var cf = objPropCI(docJ.Tags, 'controlsFolder');
 	
 	if (cf) {
@@ -327,8 +326,8 @@ function renderPage() {
         $tab = $cont.find('#tabMain');
         $row = undefined;
 
-        docJ.CustomFields.forEach(field => {
-            if (!field.HeaderTable && field.Name != 'DOC_ID') {
+        doc.fieldsMap.forEach(field => {
+            if (!field.headerTable && field.name != 'DOC_ID') {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
@@ -350,8 +349,8 @@ function renderPage() {
         $tab = $cont.find('#tabHeader');
         $row = undefined;
 
-        docJ.CustomFields.forEach(field => {
-            if (field.HeaderTable) {
+        doc.fieldsMap.forEach(field => {
+            if (field.headerTable) {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
@@ -359,15 +358,6 @@ function renderPage() {
 
                 getDefaultControl(field).appendTo($col);
             }
-        })
-
-        docJ.HeadFields.forEach(field => {
-            $row = getRow($row, $tab);
-            $col = $('<div/>', {
-                class: 'col-12 col-md-6 form-group',
-            }).appendTo($row);
-
-            getDefaultControl(field).appendTo($col);
         })
 
         // tabHist
@@ -581,33 +571,33 @@ function exitForm() {
 function getDefaultControl(pField) {
     var $ret, $input, label;
 
-    label = pField.Description ? pField.Description : pField.Name;
+    label = pField.description ? pField.description : pField.dame;
 
-    if (pField.Type == 1) {
-        if (pField.Length > 0 && pField.Length < 500) {
-            $ret = newInputText(pField.Name, label);
+    if (pField.type == 1) {
+        if (pField.length > 0 && pField.length < 500) {
+            $ret = newInputText(pField.name, label);
             $ret.addClass('mt-3');
             $input = $ret.find('input');
         } else {
-            $ret = newTextarea(pField.Name, label);
+            $ret = newTextarea(pField.name, label);
             $ret.addClass('mt-3');
             $input = $ret.find('textarea');
         }
 
-    } else if (pField.Type == 2) {
-        $ret = newDTPicker(pField.Name, label, 'datetime-local');
+    } else if (pField.type == 2) {
+        $ret = newDTPicker(pField.name, label, 'datetime-local');
         $ret.addClass('mt-3');
         $input = $ret.find('input');
 
-    } else if (pField.Type == 3) {
-        $ret = newInputText(pField.Name, label);
+    } else if (pField.type == 3) {
+        $ret = newInputText(pField.name, label);
         $ret.addClass('mt-3');
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
-    if (!pField.Updatable) $input.attr({ 'readonly': 'readonly' });
-    $input.attr('data-textfield', pField.Name.toLowerCase())
+    if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
+    $input.attr('data-textfield', pField.name.toLowerCase())
 
     return $ret;
 }
