@@ -50,7 +50,6 @@ arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' 
 arrScriptsPos.push({ id: 'lib-filesaver' });
 
 (async () => {
-    debugger;
     await include(arrScriptsPre);
     preloader.show();
     await include(arrScripts);
@@ -117,7 +116,6 @@ function getToken() {
         } else {
             $.get('/c/tkn.asp', function (data) {
                 if (data.length < 100) {
-                    Doors.RESTFULL.AuthToken = data;
                     resolve(data);
                 } else {
                     resolve('');
@@ -127,8 +125,9 @@ function getToken() {
     });
 }
 
-function getDoc() {
+async function getDoc() {
 	if (doc_id) {
+        doc = folder.documents(doc_id);
 		DoorsAPI.documentsGetById(doc_id).then(
 			function (res) {
 				doc = res;

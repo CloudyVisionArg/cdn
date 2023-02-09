@@ -355,6 +355,20 @@ export class Folder {
         this.#session = session;
     }
 
+    documents(document) {
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            var res
+            if (isNaN(document)) {
+                res = await me.search({ fields: 'doc_id', formula: document });
+            } else {
+                res = await me.search({ fields: 'doc_id', formula: 'doc_id = ' + document });
+            }
+    
+        });
+
+    }
+
     documentsNew() {
         var me = this;
         return new Promise((resolve, reject) => {
