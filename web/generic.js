@@ -69,7 +69,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session(srvUrl, tkn);
 
-    include(arrScriptPos);
+    include(arrScriptsPos);
 
     // https://docs.sheetjs.com/docs/
     include('xlsx', 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
