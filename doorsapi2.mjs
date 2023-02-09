@@ -113,6 +113,16 @@ export class Session {
         return this.#restClient;
     }
 
+    get runSyncEventsOnClient() {
+        var url = 'session/syncevents/runOnClient';
+        return this.restClient.asyncCall(url, 'GET', {}, '');
+    }
+
+    set runSyncEventsOnClient(value) {
+        var url = 'session/syncevents/runOnClient/' + (value ? 'true' : 'false');
+        return this.restClient.asyncCall(url, 'POST', {}, '');
+    }
+
     get serverUrl() {
         return this.#serverUrl;
     }
@@ -131,8 +141,7 @@ class Directory {
     }
 
     accountsSearch(filter, order) {
-        debugger;
-        let url = '/accounts/search?filter=' + encURI(filter) + '&order=' + encURI(order);
+        let url = '/accounts/search?filter=' + encURIC(filter) + '&order=' + encURIC(order);
         return this.session.restClient.asyncCall(url, 'GET', '', '');
     }
 
@@ -156,7 +165,7 @@ export class Document {
     delete(toRecycleBin) {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
-            encodeURIComponent(toRecycleBin == false ? false : true);
+            encURIC(toRecycleBin == false ? false : true);
         return me.session.restClient.asyncCall(url, 'DELETE', [me.id], 'docIds');
         //todo: en q estado queda el objeto?
     }
@@ -398,9 +407,9 @@ export class Folder {
         Object.assign(opt, options);
 
         var url = 'folders/' + this.id + '/documents';
-        var params = 'fields=' + encodeURIComponent(opt.fields) + '&formula=' + encodeURIComponent(opt.formula) + 
-            '&order=' + encodeURIComponent(opt.order) + '&maxDocs=' + encodeURIComponent(opt.maxDocs) + 
-            '&recursive=' + encodeURIComponent(opt.recursive) + '&maxDescrLength=' + encodeURIComponent(opt.maxTextLen);
+        var params = 'fields=' + encURIC(opt.fields) + '&formula=' + encURIC(opt.formula) + 
+            '&order=' + encURIC(opt.order) + '&maxDocs=' + encURIC(opt.maxDocs) + 
+            '&recursive=' + encURIC(opt.recursive) + '&maxDescrLength=' + encURIC(opt.maxTextLen);
 
         return this.session.restClient.asyncCall(url, 'GET', params, '');
     }
@@ -424,10 +433,10 @@ export class Folder {
         Object.assign(opt, options);
 
         var url = 'folders/' + this.id + '/documents/grouped';
-        var params = 'groups=' + encodeURIComponent(opt.groups) + '&totals=' + encodeURIComponent(opt.totals) +
-            '&formula=' + encodeURIComponent(opt.formula) + '&order=' + encodeURIComponent(opt.order) + 
-            '&maxDocs=' + encodeURIComponent(opt.maxDocs) + '&recursive=' + encodeURIComponent(opt.recursive) + 
-            '&groupsOrder=' + encodeURIComponent(opt.groupsOrder) + '&totalsOrder=' + encodeURIComponent(opt.totalsOrder);
+        var params = 'groups=' + encURIC(opt.groups) + '&totals=' + encURIC(opt.totals) +
+            '&formula=' + encURIC(opt.formula) + '&order=' + encURIC(opt.order) + 
+            '&maxDocs=' + encURIC(opt.maxDocs) + '&recursive=' + encURIC(opt.recursive) + 
+            '&groupsOrder=' + encURIC(opt.groupsOrder) + '&totalsOrder=' + encURIC(opt.totalsOrder);
 
         return this.session.restClient.asyncCall(url, 'GET', params, '');
     }
@@ -602,6 +611,6 @@ class RestClient {
     }
 };
 
-function encURI(value) {
+function encURIC(value) {
     return (value == null || value == undefined) ? '' : encodeURIComponent(value);
 }

@@ -48,83 +48,84 @@ arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/f
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
 
-include(arrScriptsPre, function () {
+(async () => {
+    debugger;
+    await include(arrScriptsPre);
     preloader.show();
-    
-    include(arrScripts, function () {
-        Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
+    await include(arrScripts);
 
-        let tkn = getCookie('AuthToken');
-        if (tkn) {
-            Doors.RESTFULL.AuthToken = tkn;
-            resume();
-        } else {
-            $.get('/c/tkn.asp', function (data) {
-                if (data.length < 100) {
-                    Doors.RESTFULL.AuthToken = data;
-                    resume();
-                } else {
-                    end('La sesion no ha sido iniciada');
-                }
-            })
-        }
-
-        include(arrScriptsPos);
-    });
-
-    function resume() {
-        DoorsAPI.islogged().then(
-            function (res) {
-                if (res) {
-                    DoorsAPI.runSyncEventsOnClientSet(false).then(
-                        function () {
-                            resume2();
-                        },
-                        end
-                    )
-                } else {
-                    end('La sesion no ha sido iniciada');
-                }
-            },
-            end
-        );
-    };
-
-    function resume2() {
-        // todo: setar segun el LNG_ID
-        moment.locale('es');
-        numeral.locale('es'); // http://numeraljs.com/
-        numeral.defaultFormat('0,0.[00]');
-
-        urlParams = new URLSearchParams(window.location.search);
-        fld_id = urlParams.get('fld_id');
-        doc_id = urlParams.get('doc_id');
-        
-        if (fld_id) {
-            DoorsAPI.foldersGetById(fld_id).then(
-                function (res) {
-                    folder = res;
-                    if (folder.Type == 1) {
-                        DoorsAPI.formsGetById(folder.FrmId).then(
-                            function (frm) {
-                                folder.Form = frm;
-                                getDoc();
-                            },
-                            end
-                        );
-                    } else {
-                        end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
-                    }
-                },
-                end
-            )
-        }
+    let tkn = await getToken();
+    if (!tkn) {
+        end('La sesion no ha sido iniciada');
+        return;
     }
-});
+
+    let srvUrl = window.location.origin + '/restful';
+
+    Doors.RESTFULL.ServerUrl = srvUrl;
+    Doors.RESTFULL.AuthToken = tkn;
+
+    doorsapi2 = await import(scriptSrc('doorsapi2'));
+    dSession = new doorsapi2.Session(srvUrl, tkn);
+
+    include(arrScriptPos);
+
+    // https://docs.sheetjs.com/docs/
+    include('xlsx', 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
+
+    let isLogged = await dSession.isLogged;
+    if (!isLogged) {
+        end('La sesion no ha sido iniciada');
+        return;
+    }
+
+    alert(await dSession.runSyncEventsOnClient);
+    await (dSession.runSyncEventsOnClient = false);
+
+    // todo: setar segun el LNG_ID
+    moment.locale('es');
+    numeral.locale('es'); // http://numeraljs.com/
+    numeral.defaultFormat('0,0.[00]');
+
+    urlParams = new URLSearchParams(window.location.search);
+    fld_id = urlParams.get('fld_id');
+    doc_id = urlParams.get('doc_id');
+    
+    if (fld_id) {
+        folder = await dSession.foldersGetFromId(fldId);
+        if (folder.type == 1) {
+            getDoc();
+
+        } else {
+            end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
+        }
+    
+    } else {
+        end('Se requiere fld_id');
+    }
+})();
 
 function end(pErr) {
     logAndToast(errMsg(pErr), { delay: 10000 });
     preloader.hide();
+}
+
+function getToken() {
+    return new Promise((resolve, reject) => {
+        let tkn = getCookie('AuthToken');
+        if (tkn) {
+            resolve(tkn);
+        } else {
+            $.get('/c/tkn.asp', function (data) {
+                if (data.length < 100) {
+                    Doors.RESTFULL.AuthToken = data;
+                    resolve(data);
+                } else {
+                    resolve('');
+                }
+            })
+        }
+    });
 }
 
 function getDoc() {
