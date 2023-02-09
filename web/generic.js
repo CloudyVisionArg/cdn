@@ -1065,11 +1065,12 @@ function renderControls(pCont, pParent) {
     }
 }
 
-function fillControls() {
-    var title, form;
+async function fillControls() {
+    var title, form, formDesc;
 
+    form = await folder.form
+    formDesc = form.description ? form.description : form.name;
     debugger;
-    form = folder.form.description ? folder.form.description : folder.form.name;
 
     if (!doc.isNew) {
         title = doc.fields('subject').value;
