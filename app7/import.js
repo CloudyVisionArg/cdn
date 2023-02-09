@@ -18,6 +18,7 @@ var $page = getPage({
 });
 
 $page.find('.navbar-inner .left .link').on('click', function (e) {
+    debugger;
     f7Page.view.router.back();
 });
 
