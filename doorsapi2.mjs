@@ -363,11 +363,18 @@ export class Folder {
                 res = await me.search({ fields: 'doc_id', formula: document });
             } else {
                 res = await me.search({ fields: 'doc_id', formula: 'doc_id = ' + document });
-                debugger;
             }
-    
-        });
+            if (res.length == 0) {
+                reject(new Error('Document not found'));
+            } else if (res.length > 1) {
+                reject(new Error('Expression returns more than one document'));
 
+            } else {
+                debugger;
+                let doc = await me.session.documentsGetFromId(res[0]['DOC_ID']);
+                resolve(doc);
+            }
+        });
     }
 
     documentsNew() {
