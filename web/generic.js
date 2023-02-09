@@ -1070,19 +1070,18 @@ async function fillControls() {
 
     form = await folder.form
     formDesc = form.description ? form.description : form.name;
-    debugger;
 
     if (!doc.isNew) {
         title = doc.fields('subject').value;
         if (title) {
-            title += ' - ' + form;
+            title += ' - ' + formDesc;
         } else {
-            title = form + ' #' + doc.id;
+            title = formDesc + ' #' + doc.id;
         };
 
         $('#deleteDoc').show();
     } else {
-        title = 'Nuevo ' + form;
+        title = 'Nuevo ' + formDesc;
         $('#deleteDoc').hide();
     }    
 

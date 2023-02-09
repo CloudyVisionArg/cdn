@@ -233,7 +233,6 @@ export class Document {
 
         } else {
             var map = new CIMap();
-            debugger; // sacar luego de revisar
             me.#doc.HeadFields.forEach(it => {
                 map.set(it.Name, new Field(it, me.session));
             });
