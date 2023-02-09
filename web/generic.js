@@ -141,7 +141,7 @@ function getControlsFolder() {
 	var cf = objPropCI(docJ.Tags, 'controlsFolder');
 	
 	if (cf) {
-		DoorsAPI.foldersGetByPath(folder.RootFolderId, cf).then(
+		DoorsAPI.foldersGetByPath(folderJ.RootFolderId, cf).then(
 			function (res) {
 				controlsFolder = res;
 				loadControls();
@@ -487,7 +487,7 @@ function renderPage() {
             );
 
         } else {
-            getFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
+            getFolder($el.attr('data-fill-folder'), folderJ.RootFolderId).then(
                 function (res) {
                     var arrFields, textField, valueField, dataFields;
 
@@ -1076,7 +1076,7 @@ function renderControls(pCont, pParent) {
 function fillControls() {
     var title, form;
 
-    form = folder.Form.Description ? folder.Form.Description : folder.Form.Name;
+    form = folderJ.Form.Description ? folderJ.Form.Description : folderJ.Form.Name;
 
     if (!docJ.IsNew) {
         title = getDocField(docJ, 'subject').Value;
