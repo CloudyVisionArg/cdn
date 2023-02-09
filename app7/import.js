@@ -187,8 +187,11 @@ async function doImport() {
                 let doc = await folder.documentsNew();
                 mapeo.forEach((el, ix) => {
                     if (el) {
-                        doc.fields(el).value = sheet._rangeCellsV(i, ix);
-                        $blockLog.append(el + ' = ' + sheet._rangeCellsV(i, ix) + '<br/>');
+                        let val = sheet._rangeCellsV(i, ix);
+                        if (val === undefined) debugger;
+                        val = val === undefined ? null : val;
+                        doc.fields(el).value = val;
+                        $blockLog.append(el + ' = ' + val + '<br/>');
                     }
                 });
                 $blockLog.append('Guardando el documento<br/>');
