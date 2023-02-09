@@ -689,11 +689,11 @@ function renderControls(pCont, pParent) {
 
             if (ctl.attr('maxlength')) {
                 $input.attr('maxlength', ctl.attr('maxlength'));
-            } else if (textField && textField.Type == 1 && textField.Length > 0) {
-                $input.attr('maxlength', textField.Length);
+            } else if (textField && textField.type == 1 && textField.length > 0) {
+                $input.attr('maxlength', textField.length);
             }
 
-            if (textField && textField.Type == 3) {
+            if (textField && textField.type == 3) {
                 $input.attr('data-numeral', numeral.options.defaultFormat)
             }
 
@@ -1321,45 +1321,45 @@ function saveDoc(pExit) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text') {
-                    if ($el.attr('data-numeral') || field.Type == 3) {
-                        field.Value = numeral($el.val()).value();
-                    } else if (field.Type == 2) {
+                    if ($el.attr('data-numeral') || field.type == 3) {
+                        field.value = numeral($el.val()).value();
+                    } else if (field.type == 2) {
                         let mom = moment($el.val(), 'L LT');
                         if (mom.isValid()) {
-                            field.Value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
+                            field.value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
                         } else {
-                            field.Value = null;
+                            field.value = null;
                         }
                     } else {
-                        field.Value = $el.val();
+                        field.value = $el.val();
                     };
 
                 } else if (type == 'checkbox') {
-                    field.Value = el.checked ? '1' : '0';
+                    field.value = el.checked ? '1' : '0';
 
                 } else if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
 
             } else if (el.tagName == 'SELECT') {
                 let aux = el._text();
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'DIV') {
                 if ($el.hasClass('text-editor')) {
-                    field.Value = app7.textEditor.get($el).getValue();
+                    field.value = app7.textEditor.get($el).getValue();
                 }
 
             } else if (el.tagName == 'A') {
                 if ($el.attr('data-autocomplete')) {
-                    field.Value = $el.find('.item-after').html();
+                    field.value = $el.find('.item-after').html();
                 }
 
             } else if(el.tagName == 'TEXTAREA') {
                 if (el.ckeditor) {
                     field.value = el.ckeditor.getData();
                 } else {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
             }
         }
