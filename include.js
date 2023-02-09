@@ -202,8 +202,8 @@ function include() {
 
             } else {
                 if (typeof arguments[1] == 'string') {
-                    // Si empieza con http es el src, sino el branch
-                    if (arguments[1].substring(0, 4).toLowerCase() == 'http') {
+                    // Si empieza con http o tiene / es el src, sino el branch
+                    if (arguments[1].substring(0, 4).toLowerCase() == 'http' || arguments[1].indexOf('/') >= 0) {
                         pSrc = arguments[1];
                     } else {
                         pVer = arguments[1]
