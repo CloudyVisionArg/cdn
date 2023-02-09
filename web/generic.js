@@ -93,10 +93,9 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     doc_id = urlParams.get('doc_id');
     
     if (fld_id) {
-        folder = await dSession.foldersGetFromId(fldId);
+        folder = await dSession.foldersGetFromId(fld_id);
         if (folder.type == 1) {
             getDoc();
-
         } else {
             end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
         }
