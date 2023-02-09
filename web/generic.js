@@ -139,6 +139,7 @@ async function getDoc() {
 }
 
 function getControlsFolder() {
+    debugger;
 	var cf = objPropCI(docJ.Tags, 'controlsFolder');
 	
 	if (cf) {
@@ -519,7 +520,7 @@ function renderPage() {
             if (wt == 3000) debugger; // Para poder ver q corno pasa
             setTimeout(waiting, 100);
         } else {
-            fillControls(docJ);
+            fillControls();
             preloader.hide();
         }
     }, 0);
