@@ -370,7 +370,6 @@ export class Folder {
                 reject(new Error('Expression returns more than one document'));
 
             } else {
-                debugger;
                 let doc = await me.session.documentsGetFromId(res[0]['DOC_ID']);
                 resolve(doc);
             }
