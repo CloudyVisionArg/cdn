@@ -213,6 +213,10 @@ export class Document {
         return this.parentId
     }
 
+    get isNew() {
+        return this.#doc.IsNew;
+    }
+
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {

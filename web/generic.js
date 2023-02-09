@@ -648,7 +648,7 @@ function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(docJ, tf);
+            var textField = doc.fields(tf);
             if (!textField) {
                 console.log('No se encontro el campo ' + tf.toUpperCase());
             }
@@ -656,7 +656,7 @@ function renderControls(pCont, pParent) {
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(docJ, vf);
+            var valueField = doc.fields(vf);
             if (!valueField) {
                 console.log('No se encontro el campo ' + vf.toUpperCase());
             }
@@ -1079,12 +1079,12 @@ function fillControls() {
 
     form = folderJ.Form.Description ? folderJ.Form.Description : folderJ.Form.Name;
 
-    if (!docJ.IsNew) {
-        title = getDocField(docJ, 'subject').Value;
+    if (!doc.isNew) {
+        title = doc.fields('subject').value;
         if (title) {
             title += ' - ' + form;
         } else {
-            title = form + ' #' + docJ.DocId;
+            title = form + ' #' + doc.id;
         };
 
         $('#deleteDoc').show();
@@ -1104,9 +1104,9 @@ function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            textField = getDocField(docJ, tf);
+            textField = doc.fields(tf);
             if (textField) {
-                text = textField.Value;
+                text = textField.value;
             } else {
                 text = null;
                 console.log('No se encontro el campo ' + tf.toUpperCase());
@@ -1115,9 +1115,9 @@ function fillControls() {
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            valueField = getDocField(docJ, vf);
+            valueField = doc.fields(vf);
             if (valueField) {
-                value = valueField.Value;
+                value = valueField.value;
             } else {
                 value = null;
                 console.log('No se encontro el campo ' + vf.toUpperCase());
@@ -1126,9 +1126,9 @@ function fillControls() {
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            xmlField = getDocField(docJ, xf);
+            xmlField = doc.fields(xf);
             if (xmlField) {
-                xml = xmlField.Value;
+                xml = xmlField.value;
             } else {
                 xml = null;
                 console.log('No se encontro el campo ' + xf.toUpperCase());
@@ -1273,7 +1273,7 @@ function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         let field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, getDocField(docJ, field).Value);
+                            pCont.attr(pAttr, doc.fields(field).value);
                         }
                     }
                 });
@@ -1315,9 +1315,9 @@ function saveDoc(pExit) {
 
     $('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJ, $el.attr('data-textfield'));
+        var field = doc.fields($el.attr('data-textfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text') {
@@ -1367,9 +1367,9 @@ function saveDoc(pExit) {
 
     $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJ, $el.attr('data-valuefield'));
+        var field = doc.fields($el.attr('data-valuefield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
                 let aux = el._value();
                 field.Value = Array.isArray(aux) ? aux.join(';') : aux;
@@ -1394,13 +1394,13 @@ function saveDoc(pExit) {
 
     $('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJ, $el.attr('data-xmlfield'));
+        var field = doc.fields($el.attr('data-xmlfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 let type = $el.attr('type').toLowerCase();
                 if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
             }
         }
@@ -1416,34 +1416,34 @@ function saveDoc(pExit) {
         }
     };
 
-    DoorsAPI.documentSave(docJ).then((doc2) => {
-        dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
-            doc = doc3;
-            docJ = doc3.toJSON();
-            doc_id = getDocField(docJ, 'doc_id').Value;
+    debugger;
+    doc.save().then(() => {
+        debugger; // chequear si se actualiza el json
+        //docJ = doc3.toJSON();
+        doc_id = doc.fields('doc_id').value;
 
-            saveAtt().then(
-                function (res) {
-                    // Evento AfterSave
-                    let ev = getEvent('AfterSave');
-                    if (ev) {
-                        try {
-                            eval(ev);
-                        } catch (err) {
-                            console.log('Error in AfterSave: ' + errMsg(err));
-                        }
-                    };
-
-                    saving = false;
-                    preloader.hide();
-                    if (pExit) {
-                        exitForm();
-                    } else {
-                        toast('Cambios guardados');
-                        fillControls();
+        saveAtt().then(
+            function (res) {
+                // Evento AfterSave
+                let ev = getEvent('AfterSave');
+                if (ev) {
+                    try {
+                        eval(ev);
+                    } catch (err) {
+                        console.log('Error in AfterSave: ' + errMsg(err));
                     }
-                }, errMgr);
-        }, errMgr);
+                };
+
+                saving = false;
+                preloader.hide();
+                if (pExit) {
+                    exitForm();
+                } else {
+                    toast('Cambios guardados');
+                    fillControls();
+                }
+            }, errMgr
+        );
     }, errMgr);
 
     function errMgr(pErr) {
