@@ -130,6 +130,12 @@ class Directory {
         this.#session = session;
     }
 
+    accountsSearch(filter, order) {
+        let url = '/accounts/search?filter=' + encodeURIComponent(filter) + 
+            '&order=' + (order ? encodeURIComponent(order) : '');
+        return this.session.restClient.asyncCall(url, 'GET', '', '');
+    }
+
     get session() {
         return this.#session;
     }
