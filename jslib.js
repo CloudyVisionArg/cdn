@@ -122,7 +122,7 @@ function accountsSearch(filter, order, forceOnline) {
             }
 
             function onlineSearch() {
-                cache = DoorsAPI.accountsSearch(filter, order);
+                cache = dSession.directory.accountsSearch(filter, order);
                 setCache(key, cache, 60); // Cachea por 60 segundos
                 cache.then(resolve, reject);
             }

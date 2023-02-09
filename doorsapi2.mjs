@@ -131,6 +131,7 @@ class Directory {
     }
 
     accountsSearch(filter, order) {
+        debugger;
         let url = '/accounts/search?filter=' + encodeURIComponent(filter) + 
             '&order=' + (order ? encodeURIComponent(order) : '');
         return this.session.restClient.asyncCall(url, 'GET', '', '');
