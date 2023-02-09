@@ -132,8 +132,7 @@ class Directory {
 
     accountsSearch(filter, order) {
         debugger;
-        let url = '/accounts/search?filter=' + encodeURIComponent(filter) + 
-            '&order=' + (order ? encodeURIComponent(order) : '');
+        let url = '/accounts/search?filter=' + encURI(filter) + '&order=' + encURI(order);
         return this.session.restClient.asyncCall(url, 'GET', '', '');
     }
 
@@ -602,3 +601,7 @@ class RestClient {
         return stringParam;
     }
 };
+
+function encURI(value) {
+    return (value == null || value == undefined) ? '' : encodeURIComponent(value);
+}
