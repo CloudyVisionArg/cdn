@@ -427,7 +427,7 @@ export class Folder {
                 debugger;
 
                 let url = 'documents/' + res[0]['DOC_ID'];
-                let jsn = await me.restClient.asyncCall(url, 'GET', '', '');
+                let jsn = await me.session.restClient.asyncCall(url, 'GET', '', '');
                 resolve(new Document(jsn, me.session, me));
             }
         });
