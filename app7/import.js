@@ -184,6 +184,7 @@ async function doImport() {
         // Filas no vacias
         if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
             try {
+                $blockLog.append('Creando el documento<br/>');
                 let doc = await folder.documentsNew();
                 mapeo.forEach((el, ix) => {
                     if (el) {
