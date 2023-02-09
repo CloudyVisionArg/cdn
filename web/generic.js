@@ -1068,6 +1068,7 @@ function renderControls(pCont, pParent) {
 function fillControls() {
     var title, form;
 
+    debugger;
     form = folder.form.description ? folder.form.description : folder.form.name;
 
     if (!doc.isNew) {
