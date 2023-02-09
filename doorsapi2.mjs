@@ -133,6 +133,48 @@ export class Session {
     }
 };
 
+class Application {
+    #session;
+    #parent;
+    #rootFolder;
+
+    constructor(session, parent) {
+        this.#session = session;
+        this.#parent = parent
+    }
+
+    get parent() {
+        return this.#parent;
+    }
+
+    get rootFolder() {
+        debugger;
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#rootFolder) {
+                me.session.foldersGetFromId(me.rootFolderId).then(
+                    function (res) {
+                        me.#rootFolder = res;
+                        resolve(res);
+                    },
+                    reject
+                );
+            } else {
+                resolve(me.#rootFolder);
+            }
+        })
+    }
+
+    get rootFolderId() {
+        debugger;
+        return this.#parent.toJSON().RootFolderId;
+    }
+
+    get session() {
+        return this.#session;
+    }
+}
+
 class Directory {
     #session;
     
@@ -353,10 +395,18 @@ class Field {
 export class Folder {
     #folder;
     #session;
+    #app;
 
     constructor(folder, session) {
         this.#folder = folder;
         this.#session = session;
+    }
+
+    get app() {
+        if (!this.#app) {
+            this.#app = new Application(this.session, this);
+        }
+        return this.#app;
     }
 
     documents(document) {
@@ -374,8 +424,11 @@ export class Folder {
                 reject(new Error('Expression returns more than one document'));
 
             } else {
-                let doc = await me.session.documentsGetFromId(res[0]['DOC_ID']);
-                resolve(doc);
+                debugger;
+
+                let url = 'documents/' + res[0]['DOC_ID'];
+                let jsn = await me.restClient.asyncCall(url, 'GET', '', '');
+                resolve(new Document(jsn, me.session, me));
             }
         });
     }
@@ -493,6 +546,10 @@ class Form {
         this.#session = session;
     }
 
+    get description() {
+        return this.#form.Description;
+    }
+
     fields(name) {
         var me = this;
         var field;
@@ -517,6 +574,10 @@ class Form {
             me.#fieldsMap = map;
             return map;
         }
+    }
+
+    get name() {
+        return this.#form.Name;
     }
 
     get session() {
