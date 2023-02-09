@@ -16,7 +16,8 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 
 'use strict';
 
-var doorsapi2, urlParams, fld_id, folder, doc_id, doc;
+var doorsapi2, dSession;
+var urlParams, fld_id, folder, doc_id, doc;
 var controlsFolder, controls, controlsRights;
 var saving, cache, lsScripts;
 
