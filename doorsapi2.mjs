@@ -448,6 +448,10 @@ export class Folder {
     toJSON() {
         return this.#folder;
     }
+
+    get type() {
+        debugger;
+    }
 };
 
 class Form {
