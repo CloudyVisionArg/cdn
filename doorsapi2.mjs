@@ -115,7 +115,7 @@ export class Session {
 
     get runSyncEventsOnClient() {
         var url = 'session/syncevents/runOnClient';
-        return this.restClient.asyncCall(url, 'GET', {}, '');
+        return this.restClient.asyncCall(url, 'GET', '', '');
     }
 
     set runSyncEventsOnClient(value) {
