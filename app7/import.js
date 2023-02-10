@@ -131,8 +131,18 @@ async function loadXls(file) {
 
         // Lee los campos habilitados
         debugger;
-        f7page.pagePrev;
-        
+        try {
+            let sett = f7Page.pageFrom.pageEl.crm.import.fields;
+            if (sett) var fieldsSett = sett.split(',');
+            fieldsSett.forEach((el, ix) => {
+                fieldsSett[ix] = el.trim();
+            });
+
+        } catch(err) {
+            console.error(err);
+        };
+
+
         // Lee los campos del folder
         var form = await folder.form;
         var fields = [];
