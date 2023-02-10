@@ -1,5 +1,6 @@
-var fld_id = routeTo.query.fld_id;
 var folder, sheet, refresh;
+var f7Page;
+var fld_id = routeTo.query.fld_id;
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
@@ -8,8 +9,6 @@ dSession.foldersGetFromId(fld_id).then(
     },
     errMgr
 );
-
-var f7Page;
 
 var $page = getPage({
     id: 'import',
@@ -130,6 +129,10 @@ async function loadXls(file) {
         sheet = book.Sheets[book.SheetNames[0]];
         sheetFuncs(sheet);
 
+        // Lee los campos habilitados
+        debugger;
+        f7page.pagePrev;
+        
         // Lee los campos del folder
         var form = await folder.form;
         var fields = [];
