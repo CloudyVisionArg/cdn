@@ -8,6 +8,7 @@ Framework7: https://framework7.io/docs/
 */
 
 var fld_id, doc_id, doc, folder, cacheDir;
+var docJ, folderJ, controlsFolderJ;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -60,6 +61,7 @@ if (fld_id) {
     DoorsAPI.foldersGetById(fld_id).then(
         function (res) {
             folder = res;
+            folderJ = res;
             getDoc();
         },
         errMgr
@@ -71,6 +73,7 @@ function getDoc() {
         DoorsAPI.documentsGetById(doc_id).then(
             function (res) {
                 doc = res;
+                docJ = res;
                 getControlsFolder();
             },
             errMgr
@@ -80,6 +83,7 @@ function getDoc() {
         DoorsAPI.documentsNew(fld_id).then(
             function (res) {
                 doc = res;
+                docJ = res;
                 getControlsFolder();
             },
             errMgr
@@ -106,6 +110,7 @@ function getControlsFolder() {
         DoorsAPI.foldersGetByPath(folder.RootFolderId, cf).then(
             function (res) {
                 controlsFolder = res;
+                controlsFolderJ = res;
                 loadControls();
             },
             function (err) {
@@ -117,6 +122,7 @@ function getControlsFolder() {
         DoorsAPI.foldersGetByName(fld_id, 'controls').then(
             function (res) {
                 controlsFolder = res;
+                controlsFolderJ = res;
                 loadControls();
             },
             function (err) {
@@ -1601,9 +1607,10 @@ function saveDoc(exitOnSuccess) {
         }
     };
 
-    DoorsAPI.documentSave(doc).then((doc2) => {
+    DoorsAPI.documentSave(docJ).then((doc2) => {
         dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
             doc = doc3.toJSON();
+            docJ = doc3.toJSON();
             pageEl.crm.doc = doc;
 
             doc_id = getDocField(doc, 'doc_id').Value;
