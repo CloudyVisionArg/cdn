@@ -321,7 +321,6 @@ function pageInit(e, page) {
             },
         ];
 
-        debugger;
         var prop = findProp(folder.Properties, propImport);
         if (prop) {
             try { var importProp = JSON.parse(prop) } catch(err) { console.error(err) };
