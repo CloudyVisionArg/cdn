@@ -324,7 +324,7 @@ function pageInit(e, page) {
         debugger;
         var prop = findProp(folder.Properties, propImport);
         if (prop) {
-            var importProp = JSON.parse(prop);
+            try { var importProp = JSON.parse(prop) } catch(err) { console.error(err) };
             if (importProp && importProp.disabled) {
                 stdFldActions.splice(1, 1);
             }
