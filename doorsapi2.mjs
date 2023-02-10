@@ -193,11 +193,11 @@ class Directory {
 export class Document {
     #parent;
     #session;
-    #doc;
+    #json;
     #fieldsMap;
 
     constructor(document, session, folder) {
-        this.#doc = document;
+        this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
     }
@@ -211,14 +211,14 @@ export class Document {
     }
 
     get id() {
-        return this.#doc.DocId;
+        return this.#json.DocId;
     }
 
     fields(name) {
         var me = this;
         var field;
-        field = me.#doc.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-        if (!field) field = me.#doc.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+        field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+        if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
         if (field) {
             return new Field(field, me);
         } else {
@@ -233,10 +233,10 @@ export class Document {
 
         } else {
             var map = new CIMap();
-            me.#doc.HeadFields.forEach(it => {
+            me.#json.HeadFields.forEach(it => {
                 map.set(it.Name, new Field(it, me.session));
             });
-            me.#doc.CustomFields.forEach(it => {
+            me.#json.CustomFields.forEach(it => {
                 map.set(it.Name, new Field(it, me.session));
             });
             me.#fieldsMap = map;
@@ -253,7 +253,7 @@ export class Document {
     }
 
     get isNew() {
-        return this.#doc.IsNew;
+        return this.#json.IsNew;
     }
 
     get parent() {
@@ -274,20 +274,20 @@ export class Document {
     }
 
     get parentId() {
-        return this.#doc.HeadFields.find(it => it.Name == 'FLD_ID').Value;
+        return this.#json.HeadFields.find(it => it.Name == 'FLD_ID').Value;
     }
 
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'documents';
-            me.session.restClient.asyncCall(url, 'PUT', me.#doc, 'document').then(
+            me.session.restClient.asyncCall(url, 'PUT', me.#json, 'document').then(
                 res => {
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
                     me.session.restClient.asyncCall(url, 'GET', '', '').then(
                         res => {
-                            me.#doc = res;
+                            me.#json = res;
                             resolve(me);
                         },
                         reject
@@ -302,100 +302,108 @@ export class Document {
         return this.#session;
     }
 
+    get tags() {
+        return this.#json.Tags;
+    }
+
     toJSON() {
-        return this.#doc;
+        return this.#json;
     }
 };
 
 class Field {
-    #parent; // Document
-    #field;
+    #parent; // Document / Form
+    #json;
 
     constructor(field, document) {
-        this.#field = field;
+        this.#json = field;
         this.#parent = document;
     }
 
     get computed() {
-        return this.#field.Computed;
+        return this.#json.Computed;
     }
 
     get custom() {
-        return this.#field.Custom;
+        return this.#json.Custom;
     }
 
     get description() {
-        return this.#field.Description;
+        return this.#json.Description;
     }
 
     get descriptionRaw() {
-        return this.#field.DescriptionRaw;
+        return this.#json.DescriptionRaw;
     }
 
     get formId() {
-        return this.#field.Id;
+        return this.#json.Id;
     }
 
     get headerTable() {
-        return this.#field.HeaderTable;
+        return this.#json.HeaderTable;
     }
 
     get length() {
-        return this.#field.Length;
+        return this.#json.Length;
     }
 
     get name() {
-        return this.#field.Name;
+        return this.#json.Name;
     }
 
     get nullable() {
-        return this.#field.Nullable;
+        return this.#json.Nullable;
+    }
+
+    get parent() {
+        return this.#parent;
     }
 
     get precision() {
-        return this.#field.Precision;
+        return this.#json.Precision;
     }
 
     get scale() {
-        return this.#field.Scale;
+        return this.#json.Scale;
     }
 
     get type() {
-        return this.#field.Type;
+        return this.#json.Type;
     }
 
     get updatable() {
-        return this.#field.Updatable;
+        return this.#json.Updatable;
     }
 
     get value() {
-        return this.#field.Value;
+        return this.#json.Value;
     }
 
     set value(value) {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
-        this.#field.Value = value;
+        this.#json.Value = value;
         this.valueChanged; // Actualiza valueChanged en el JSON
     }
 
     get valueChanged() {
-        this.#field.ValueChanged = (this.#field.Value !== this.#field.ValueOld);
-        return this.#field.ValueChanged;
+        this.#json.ValueChanged = (this.#json.Value !== this.#json.ValueOld);
+        return this.#json.ValueChanged;
     }
 
     get valueOld() {
-        return this.#field.ValueOld;
+        return this.#json.ValueOld;
     }
 };
 
 export class Folder {
-    #folder;
+    #json;
     #session;
     #app;
 
     constructor(folder, session) {
-        this.#folder = folder;
+        this.#json = folder;
         this.#session = session;
     }
 
@@ -448,23 +456,23 @@ export class Folder {
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (!me.#folder.Form) {
-                var url = 'forms/' + me.#folder.FrmId;
+            if (!me.#json.Form) {
+                var url = 'forms/' + me.#json.FrmId;
                 me.session.restClient.asyncCall(url, 'GET', '', '').then(
                     frm => {
-                        me.#folder.Form = frm;
+                        me.#json.Form = frm;
                         resolve(new Form(frm, me.session));
                     }
                 ),
                 reject
             } else {
-                resolve(new Form(me.#folder.Form, me.session));
+                resolve(new Form(me.#json.Form, me.session));
             }
         });
     }
 
     get id() {
-        return this.#folder.FldId;
+        return this.#json.FldId;
     }
 
     /**
@@ -523,32 +531,32 @@ export class Folder {
     }
 
     toJSON() {
-        return this.#folder;
+        return this.#json;
     }
 
     get type() {
-        return this.#folder.Type;
+        return this.#json.Type;
     }
 };
 
 class Form {
-    #form;
+    #json;
     #session;
     #fieldsMap;
 
     constructor(form, session) {
-        this.#form = form;
+        this.#json = form;
         this.#session = session;
     }
 
     get description() {
-        return this.#form.Description;
+        return this.#json.Description;
     }
 
     fields(name) {
         var me = this;
         var field;
-        field = me.#form.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+        field = me.#json.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
         if (field) {
             return new Field(field, me);
         } else {
@@ -563,7 +571,7 @@ class Form {
 
         } else {
             var map = new CIMap();
-            me.#form.Fields.forEach(it => {
+            me.#json.Fields.forEach(it => {
                 map.set(it.Name, new Field(it, me.session));
             });
             me.#fieldsMap = map;
@@ -572,7 +580,7 @@ class Form {
     }
 
     get name() {
-        return this.#form.Name;
+        return this.#json.Name;
     }
 
     get session() {
@@ -580,7 +588,7 @@ class Form {
     }
 
     toJSON() {
-        return this.#form;
+        return this.#json;
     }
 };
 

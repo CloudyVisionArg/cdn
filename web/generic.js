@@ -95,7 +95,6 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
         folder = await dSession.foldersGetFromId(fld_id);
         folderJ = folder.toJSON();
         await folder.form; // Para q cargue el form
-        debugger;
         if (folder.type == 1) {
             getDoc();
         } else {
@@ -140,7 +139,7 @@ async function getDoc() {
 }
 
 function getControlsFolder() {
-	var cf = objPropCI(docJ.Tags, 'controlsFolder');
+	var cf = objPropCI(doc.tags, 'controlsFolder');
 	
 	if (cf) {
 		DoorsAPI.foldersGetByPath(folder.app.rootFolderId, cf).then(
@@ -181,7 +180,7 @@ function loadControls() {
 }
 
 function getControlsRights(pControls) {
-	var cr = objPropCI(docJ.Tags, 'controlsRights');
+	var cr = objPropCI(doc.tags, 'controlsRights');
 	if (cr) {
 		try {
 			controlsRights = $.parseXML(cr);
