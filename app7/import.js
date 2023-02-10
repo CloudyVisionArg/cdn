@@ -130,25 +130,28 @@ async function loadXls(file) {
         sheetFuncs(sheet);
 
         // Lee los campos habilitados
-        debugger;
         try {
             let sett = f7Page.pageFrom.pageEl.crm.import.fields;
-            if (sett) var fieldsSett = sett.split(',');
-            fieldsSett.forEach((el, ix) => {
-                fieldsSett[ix] = el.trim();
-            });
+            if (sett) {
+                var fieldsSett = sett.split(',');
+                fieldsSett.forEach((el, ix) => {
+                    fieldsSett[ix] = el.trim().toLowerCase();
+                });
+            }
 
         } catch(err) {
             console.error(err);
         };
-
 
         // Lee los campos del folder
         var form = await folder.form;
         var fields = [];
         form.fieldsMap.forEach(f => {
             if (f.custom && !f.headerTable && f.updatable && !f.computed) {
-                fields.push(f.name.toLowerCase());
+                let fName = f.name.toLowerCase();
+                if (!fieldsSett || fieldsSett.find(el => el == fName)) {
+                    fields.push(f.name.toLowerCase());
+                }
             }
         });
         fields.sort();
