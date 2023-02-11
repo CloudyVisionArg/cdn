@@ -14,8 +14,8 @@
         "CONTEXT": "explorer",
         "SELECTOR": ".navbar .right",
         "TITLE": "Acciones de carpeta",
-        "ICON_MD": "square_arrow_up",
-        "ICON_IOS": "menu",
+        "ICON_MD": "menu",
+        "ICON_IOS": "square_arrow_up",
         "TEXT": "Importar desde excel y otras opciones",
         "ORDEN": "4"
     },
