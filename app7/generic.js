@@ -47,9 +47,11 @@ pageEl.crm tendra precargadas algunas variables y funciones de la pagina como el
 fld_id = routeTo.query.fld_id;
 doc_id = routeTo.query.doc_id;
 
-debugger;
-doc = dSession.documentsGetFromId(doc_id);
-doc.fields;
+dSession.documentsGetFromId(doc_id).then(doc => {
+    debugger;
+    doc.fields;
+
+});
 
 app7.preloader.show();
 
