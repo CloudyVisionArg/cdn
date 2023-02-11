@@ -217,7 +217,7 @@ async function doImport() {
                 //await doc.delete(); // sacar en prod!!
 
             } catch (err) {
-                $blockLog.append('ERROR: ' + errMsg(err) + '<br/>');
+                $blockLog.append('<span style="color: red;">ERROR: ' + errMsg(err) + '</span><br/>');
             }
 
         } else {
