@@ -575,7 +575,12 @@ class Form {
         return this.#json.Description;
     }
 
+    get fields() {
+        debugger;
+    }
+
     fields(name) {
+        debugger;
         var me = this;
 
         if (name) {
