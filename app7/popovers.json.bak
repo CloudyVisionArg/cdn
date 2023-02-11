@@ -19,5 +19,16 @@
         "TEXT": "Presione aquí para agregar o importar",
         "ORDEN": "3"
     },
+    {        
+        "CARTEL_ID": 100000006,
+        "CONTEXT": "toolbar",        
+        "SELECTOR": "a[href='#view-contactos']",
+        "TITLE": "Contactos",
+        "ICON_MD": "person",
+        "ICON_IOS": "person",
+        "TEXT": "Aqui podra administrar sus contactos",
+        "ORDEN": "6"
+    },  
+
 
 ]

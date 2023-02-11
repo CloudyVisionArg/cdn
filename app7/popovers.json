@@ -26,19 +26,9 @@
         "TITLE": "Opciones",
         "ICON_MD": "settings",
         "ICON_IOS": "gear_alt_fill",
-        "TEXT": "Aqui podra configurar sus opciones",
+        "TEXT": "Cuenta, modo oscuro, y otras opciones",
         "ORDEN": "5"
     },
-    {        
-        "CARTEL_ID": 100000006,
-        "CONTEXT": "toolbar",        
-        "SELECTOR": "a[href='#view-contactos']",
-        "TITLE": "Contactos",
-        "ICON_MD": "person",
-        "ICON_IOS": "person",
-        "TEXT": "Aqui podra administrar sus contactos",
-        "ORDEN": "6"
-    },  
     {        
         "CARTEL_ID": 100000007,
         "CONTEXT": "ajustes",        
