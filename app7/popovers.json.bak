@@ -1,0 +1,23 @@
+[
+    {        
+        "CARTEL_ID": 100000002,
+        "CONTEXT": "explorer",
+        "SELECTOR": "#buttonSearch",
+        "TITLE": "Buscar Contactos",
+        "ICON_MD": "search",
+        "ICON_IOS": "search",
+        "TEXT": "Presione aqu&iacute; para buscar",
+        "ORDEN": "2"
+    },
+    {        
+        "CARTEL_ID": 100000003,
+        "CONTEXT": "explorer",        
+        "SELECTOR": "#fabAdd",
+        "TITLE": "Agregar",
+        "ICON_MD": "add",
+        "ICON_IOS": "plus",
+        "TEXT": "Presione aquí para agregar o importar",
+        "ORDEN": "3"
+    },
+
+]
