@@ -23,9 +23,9 @@
         "CARTEL_ID": 100000011,
         "CONTEXT": "toolbar",
         "SELECTOR": "a[href='#view-ajustes']",
-        "TITLE": "Notificaciones",
-        "ICON_MD": "notifications",
-        "ICON_IOS": "bell",
+        "TITLE": "Ajustes",
+        "ICON_MD": "tune",
+        "ICON_IOS": "dial",
         "TEXT": "Configurar equipo, productos y otras opciones",
         "ORDEN": "4"
     },
