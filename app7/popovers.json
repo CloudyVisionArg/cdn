@@ -2,7 +2,7 @@
     {        
         "CARTEL_ID": 100000001,
         "CONTEXT": "explorer",
-        "SELECTOR": ".subnavbar",
+        "SELECTOR": ".subnavbar .smart-select .item-after",
         "TITLE": "Vistas",
         "ICON_MD": "arrow_upward",
         "ICON_IOS": "arrow_up",
@@ -16,7 +16,7 @@
         "TITLE": "Acciones de carpeta",
         "ICON_MD": "menu",
         "ICON_IOS": "square_arrow_up",
-        "TEXT": "Importar desde excel y otras opciones",
+        "TEXT": "Importar desde excel, ayuda, y otras opciones",
         "ORDEN": "4"
     },
     {        
