@@ -202,6 +202,28 @@ export class Document {
         if (folder) this.#parent = folder;
     }
 
+    aclGrant(account, access) {
+        debugger; //probar
+        var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
+        return me.session.restClient.asyncCall(url, 'POST', {}, '');
+    }
+
+    aclRevoke(account, access) {
+        debugger; //probar
+        var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
+        return me.session.restClient.asyncCall(url, 'DELETE', {}, '');
+    }
+
+    aclRevokeAll(account) {
+        debugger; //probar
+        var url = 'documents/' + this.id + '/acl/revokeAll';
+        if (account) {
+            // Si viene account es un revokeAll para esa cuenta
+            url += '/' + account;
+        }
+        return me.session.restClient.asyncCall(url, 'DELETE', {}, '');
+    }
+
     delete(toRecycleBin) {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
