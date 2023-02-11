@@ -12,6 +12,16 @@
     {        
         "CARTEL_ID": 100000004,
         "CONTEXT": "toolbar",
+        "SELECTOR": "a[href='#view-ajustes']",
+        "TITLE": "Notificaciones",
+        "ICON_MD": "notifications",
+        "ICON_IOS": "bell",
+        "TEXT": "Configurar equipo, productos y otras opciones",
+        "ORDEN": "4"
+    },
+    {        
+        "CARTEL_ID": 100000004,
+        "CONTEXT": "toolbar",
         "SELECTOR": "a[href='#view-notifications']",
         "TITLE": "Notificaciones",
         "ICON_MD": "notifications",
