@@ -10,7 +10,7 @@
         "ORDEN": "1"
     },
     {        
-        "CARTEL_ID": 100000004,
+        "CARTEL_ID": 100000011,
         "CONTEXT": "toolbar",
         "SELECTOR": "a[href='#view-ajustes']",
         "TITLE": "Notificaciones",
