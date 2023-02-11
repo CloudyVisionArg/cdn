@@ -20,16 +20,6 @@
         "ORDEN": "4"
     },
     {        
-        "CARTEL_ID": 100000011,
-        "CONTEXT": "toolbar",
-        "SELECTOR": "a[href='#view-ajustes']",
-        "TITLE": "Ajustes",
-        "ICON_MD": "tune",
-        "ICON_IOS": "dial",
-        "TEXT": "Configurar equipo, productos y otras opciones",
-        "ORDEN": "4"
-    },
-    {        
         "CARTEL_ID": 100000004,
         "CONTEXT": "toolbar",
         "SELECTOR": "a[href='#view-notifications']",
@@ -50,43 +40,13 @@
         "ORDEN": "5"
     },
     {        
-        "CARTEL_ID": 100000007,
-        "CONTEXT": "ajustes",        
-        "SELECTOR": "[idpopover='equipo']",
-        "TITLE": "Equipo",
-        "ICON_MD": "groups",
-        "ICON_IOS": "person_3",
-        "TEXT": "Aqui podra administrar su Equipo",
-        "ORDEN": "7"
-    },  
-    {        
-        "CARTEL_ID": 100000008,
-        "CONTEXT": "ajustes",        
-        "SELECTOR": "[idpopover='productos']",
-        "TITLE": "Productos",
-        "ICON_MD": "shopping_cart",
-        "ICON_IOS": "cart",
-        "TEXT": "Aqui podra ver y crear Productos",
-        "ORDEN": "8"
-    },  
-    {        
-        "CARTEL_ID": 100000009,
-        "CONTEXT": "ajustes",        
-        "SELECTOR": "[idpopover='listas']",
-        "TITLE": "Listas",
-        "ICON_MD": "format_list_bulleted",
-        "ICON_IOS": "list_bullet",
-        "TEXT": "Aqui podra ver y crear Listas",
-        "ORDEN": "9"
-    },  
-    {        
         "CARTEL_ID": 100000010,
         "CONTEXT": "opciones",        
         "SELECTOR": "[idpopover='cuenta']",
         "TITLE": "Cuenta",
-        "ICON_MD": "person",
-        "ICON_IOS": "person",
-        "TEXT": "Aqui cerrar sesion y cambiar su contraseña",
+        "ICON_MD": "account_circle",
+        "ICON_IOS": "person_circle",
+        "TEXT": "Cambiar de usuario, cambiar su contrase&ntilde;, y otras opciones",
         "ORDEN": "10"
     }
 ]
