@@ -146,7 +146,7 @@ async function loadXls(file) {
         // Lee los campos del folder
         var form = await folder.form;
         var fields = [];
-        form.fieldsMap.forEach(f => {
+        form.fields().forEach(f => {
             if (f.custom && !f.headerTable && f.updatable && !f.computed) {
                 let fName = f.name.toLowerCase();
                 if (!fieldsSett || fieldsSett.find(el => el == fName)) {

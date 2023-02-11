@@ -576,7 +576,6 @@ class Form {
     }
 
     fields(name) {
-        debugger;
         var me = this;
 
         if (name) {
@@ -600,10 +599,6 @@ class Form {
             }
             return me.#fieldsMap;
         }
-    }
-
-    get fields() {
-        debugger;
     }
 
     get name() {
