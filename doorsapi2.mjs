@@ -236,10 +236,6 @@ export class Document {
         return this.#json.DocId;
     }
 
-    get fields() {
-        debugger
-    }
-
     fields(name) {
         debugger;
         var me = this;
@@ -251,6 +247,10 @@ export class Document {
         } else {
             throw new Error('Field not found: ' + name);
         }
+    }
+
+    get fields() {
+        debugger
     }
 
     get fieldsMap() {
