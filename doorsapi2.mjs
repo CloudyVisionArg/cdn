@@ -236,7 +236,12 @@ export class Document {
         return this.#json.DocId;
     }
 
+    get fields() {
+        debugger
+    }
+
     fields(name) {
+        debugger;
         var me = this;
         var field;
         field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
