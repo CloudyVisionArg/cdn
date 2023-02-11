@@ -203,19 +203,16 @@ export class Document {
     }
 
     aclGrant(account, access) {
-        debugger; //probar
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.asyncCall(url, 'POST', {}, '');
     }
 
     aclRevoke(account, access) {
-        debugger; //probar
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
         return this.session.restClient.asyncCall(url, 'DELETE', {}, '');
     }
 
     aclRevokeAll(account) {
-        debugger; //probar
         var url = 'documents/' + this.id + '/acl/revokeAll';
         if (account) {
             // Si viene account es un revokeAll para esa cuenta
