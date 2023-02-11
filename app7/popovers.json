@@ -10,6 +10,16 @@
         "ORDEN": "1"
     },
     {        
+        "CARTEL_ID": 100000012,
+        "CONTEXT": "explorer",
+        "SELECTOR": ".navbar .right",
+        "TITLE": "Acciones de carpeta",
+        "ICON_MD": "square_arrow_up",
+        "ICON_IOS": "menu",
+        "TEXT": "Importar desde excel y otras opciones",
+        "ORDEN": "4"
+    },
+    {        
         "CARTEL_ID": 100000011,
         "CONTEXT": "toolbar",
         "SELECTOR": "a[href='#view-ajustes']",
