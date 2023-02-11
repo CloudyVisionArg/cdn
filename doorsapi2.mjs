@@ -237,37 +237,32 @@ export class Document {
     }
 
     fields(name) {
-        debugger;
         var me = this;
-        var field;
-        field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-        if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-        if (field) {
-            return new Field(field, me);
+
+        if (name) {
+            // Devuelve un field
+            var field;
+            field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            if (field) {
+                return new Field(field, me);
+            } else {
+                throw new Error('Field not found: ' + name);
+            }
+
         } else {
-            throw new Error('Field not found: ' + name);
-        }
-    }
-
-    get fields() {
-        debugger
-    }
-
-    get fieldsMap() {
-        var me = this;
-        if (me.#fieldsMap) {
+            // Devuelve la coleccion
+            if (!me.#fieldsMap) {
+                var map = new CIMap();
+                me.#json.HeadFields.forEach(it => {
+                    map.set(it.Name, new Field(it, me.session));
+                });
+                me.#json.CustomFields.forEach(it => {
+                    map.set(it.Name, new Field(it, me.session));
+                });
+                me.#fieldsMap = map;
+            }
             return me.#fieldsMap;
-
-        } else {
-            var map = new CIMap();
-            me.#json.HeadFields.forEach(it => {
-                map.set(it.Name, new Field(it, me.session));
-            });
-            me.#json.CustomFields.forEach(it => {
-                map.set(it.Name, new Field(it, me.session));
-            });
-            me.#fieldsMap = map;
-            return map;
         }
     }
 
@@ -582,27 +577,27 @@ class Form {
 
     fields(name) {
         var me = this;
-        var field;
-        field = me.#json.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-        if (field) {
-            return new Field(field, me);
-        } else {
-            throw new Error('Field not found: ' + name);
-        }
-    }
 
-    get fieldsMap() {
-        var me = this;
-        if (me.#fieldsMap) {
+        if (name) {
+            // Devuelve un field
+            var field;
+            field = me.#json.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            if (field) {
+                return new Field(field, me);
+            } else {
+                throw new Error('Field not found: ' + name);
+            }
+
+        } else {
+            // Devuelve la coleccion
+            if (!me.#fieldsMap) {
+                var map = new CIMap();
+                me.#json.Fields.forEach(it => {
+                    map.set(it.Name, new Field(it, me.session));
+                });
+                me.#fieldsMap = map;
+            }
             return me.#fieldsMap;
-
-        } else {
-            var map = new CIMap();
-            me.#json.Fields.forEach(it => {
-                map.set(it.Name, new Field(it, me.session));
-            });
-            me.#fieldsMap = map;
-            return map;
         }
     }
 
