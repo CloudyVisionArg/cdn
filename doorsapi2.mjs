@@ -181,6 +181,7 @@ class Attachment {
     //File
     #parent; // Document
     #json;
+    #blob;
 
     constructor(attachment, document) {
         this.#json = attachment;
@@ -218,6 +219,26 @@ class Attachment {
         this.#json.External = value;
     }
 
+    get fileStream() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#blob) {
+                var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
+                //return Doors.RESTFULL.asyncCallXmlHttp(url, "GET", "");
+                me.session.restClient.asyncCall(url, 'GET', '').then(
+                    res => {
+                        me.#blob = res;
+                        resolve(res);
+                    },
+                    reject
+                )
+
+            } else {
+                resolve(me.#blob);
+            }
+        });
+    }
+
     get group() {
         return this.#json.group;
     }
@@ -253,6 +274,10 @@ class Attachment {
 
     get parent() {
         return this.#parent;
+    }
+
+    get session() {
+        return this.parent.session;
     }
 
     get size() {
@@ -318,7 +343,6 @@ export class Document {
         var me = this;
         return new Promise((resolve, reject) => {
             if (attachment) {
-                debugger;
                 me.attachments().then(
                     res => {
                         if (res.has(attachment)) {
