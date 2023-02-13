@@ -139,7 +139,6 @@ class Account {
 
 class Application {
     #parent;
-    #rootFolder;
 
     constructor(parent) {
         this.#parent = parent
@@ -148,7 +147,7 @@ class Application {
     folders(folderPath) {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + parentFolderId + '/children?folderpath=' + encURIC(folderPath);
+            var url = 'folders/' + me.rootFolderId + '/children?folderpath=' + encURIC(folderPath);
             me.session.restClient.asyncCall(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session));
