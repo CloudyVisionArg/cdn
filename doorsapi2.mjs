@@ -225,7 +225,7 @@ class Attachment {
             if (!me.#blob) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
                 //return Doors.RESTFULL.asyncCallXmlHttp(url, "GET", "");
-                me.session.restClient.asyncCall(url, 'GET', '').then(
+                me.session.restClient.asyncCallXmlHttp(url, 'GET', '').then(
                     res => {
                         me.#blob = res;
                         resolve(res);
@@ -893,6 +893,41 @@ class RestClient {
             });
         });
     }
+
+    asyncCallXmlHttp(callingMethod, httpMethod, data) {
+        var dataSend = null;
+        if (data) {
+            dataSend = data;
+        }
+        var completeUrl = this.ServerBaseUrl + "/" + callingMethod;
+
+        var prom = jQuery.Deferred();
+        var xhr = new XMLHttpRequest();
+        xhr.open(httpMethod, completeUrl, true);
+        xhr.setRequestHeader("AuthToken", this.AuthToken);
+        /*
+        if (Doors.RESTFULL.ApiKey != null) {
+            xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
+        }
+        else {
+            xhr.setRequestHeader("AuthToken", this.AuthToken);
+        }
+        */
+        (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
+        var _self = this;
+        xhr.onreadystatechange = function (event) {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    prom.resolve(this.response);
+                } else {
+                    prom.reject(this.statusText);
+                }
+            }
+        };
+        xhr.send(dataSend);
+        return prom.promise()
+    };
+
     constructJSONParameter(param, parameterName) {
         var clone = param; 
         var paramName = param.ParameterName;
