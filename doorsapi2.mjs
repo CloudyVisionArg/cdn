@@ -178,6 +178,90 @@ class Application {
 }
 
 class Attachment {
+    //File
+    #parent; // Document
+    #json;
+
+    constructor(attachment, document) {
+        this.#json = attachment;
+        this.#parent = document;
+    }
+
+    get created() {
+        return this.#json.Created;
+    }
+
+    get description() {
+        return this.#json.Description;
+    }
+
+    set description(value) {
+        if (!this.isNew) throw new Error('Read-only property');
+        this.#json.Description = value;
+    }
+
+    get extension() {
+        return this.#json.Extension;
+    }
+
+    set extension(value) {
+        if (!this.isNew) throw new Error('Read-only property');
+        this.#json.Extension = value;
+    }
+
+    get external() {
+        return this.#json.External;
+    }
+
+    set external(value) {
+        if (!this.isNew) throw new Error('Read-only property');
+        this.#json.External = value;
+    }
+
+    get group() {
+        return this.#json.group;
+    }
+
+    set group(value) {
+        if (!this.isNew) throw new Error('Read-only property');
+        this.#json.group = value;
+    }
+
+    get id() {
+        return this.#json.AttId;
+    }
+
+    get isNew() {
+        return this.#json.IsNew;
+    }
+
+    get name() {
+        return this.#json.Name;
+    }
+
+    get owner() {
+        //todo: retornar account
+    }
+
+    get ownerId() {
+        return this.#json.AccId
+    }
+
+    get ownerName() {
+        return this.#json.AccName
+    }
+
+    get parent() {
+        return this.#parent;
+    }
+
+    get size() {
+        return this.#json.Size;
+    }
+
+    get tags() {
+        return this.#json.Tags;
+    }
 
 }
 
@@ -232,72 +316,59 @@ export class Document {
 
     attachments(attachment) {
         var me = this;
+        return new Promise((resolve, reject) => {
 
-        if (attachment) {
-
-        } else {
-            // Devuelve la coleccion
-            if (!me.#attachmentsMap) {
-
-                var map = new CIMap();
-
-                var url = 'documents/' + me.id + '/attachments';
-                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            if (attachment) {
+                me.attachments().then(
                     res => {
-                        debugger;
-
-                    },
-                    err => {
-
-                    }
-                );
-
-    /*
-                DoorsAPI.attachments(doc_id).then(
-                    function (res) {
-                        // Filtra por el tag
-                        var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
-        
-                        if (atts.length > 0) {
-                            // Ordena descendente
-                            atts.sort(function (a, b) {
-                                return a.AttId >= b.AttId ? -1 : 1;
-                            });
-        
-                            // Arma un array de AccId
-                            var ids = atts.map(att => att.AccId);
-                            // Saca los repetidos
-                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                            // Levanta los accounts, completa el nombre y renderiza
-                            accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                                function (accs) {
-                                    atts.forEach(att => {
-                                        att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
-                                        getAttachment(att, readonly).appendTo($ul);
-                                    });
-                                }
-                            )
-        
+                        if (res.has(attachment)) {
+                            resolve(res.get(attachment));
                         } else {
-                            noAttachs();
+                            reject(new Error('Attachment not found: ' + attachment));
                         }
                     },
-        
-                    function (err) {
-                        logAndToast('attachments error: ' + errMsg(err));
-                    }
-                );
-        
+                    reject
+                )
+
             } else {
-                noAttachs();
+                // Devuelve la coleccion
+                if (!me.#attachmentsMap) {
+                    var url = 'documents/' + me.id + '/attachments';
+                    me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                        res => {
+                            debugger;
+
+                            if (res.length > 0) {
+                                // Ordena descendente
+                                res.sort(function (a, b) {
+                                    return a.AttId >= b.AttId ? -1 : 1;
+                                });
+                            }
+
+                            // Arma un array de AccId
+                            var ids = res.map(att => att.AccId);
+                            // Saca los repetidos
+                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                            // Levanta los accounts y completa el nombre
+                            me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                                accs => {
+                                    res.forEach(el => {
+                                        el.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
+                                        map.set(el.Name, new Attachment(el, me));
+                                    });
+                                    me.#attachmentsMap = map;
+                                    resolve(me.#attachmentsMap);
+        
+                                }, reject
+                            )
+                        }, reject
+                    );
+
+                } else {
+                    resolve(me.#attachmentsMap);
+                }
             }
-*/
-            
-                map.set(it.Name, new Field(it, me.session));
-                me.#attachmentsMap = map;
-            }
-            return me.#attachmentsMap;
-        }
+        });
     }
 
     delete(toRecycleBin) {
@@ -330,11 +401,11 @@ export class Document {
             // Devuelve la coleccion
             if (!me.#fieldsMap) {
                 var map = new CIMap();
-                me.#json.HeadFields.forEach(it => {
-                    map.set(it.Name, new Field(it, me.session));
+                me.#json.HeadFields.forEach(el => {
+                    map.set(el.Name, new Field(el, me.session));
                 });
-                me.#json.CustomFields.forEach(it => {
-                    map.set(it.Name, new Field(it, me.session));
+                me.#json.CustomFields.forEach(el => {
+                    map.set(el.Name, new Field(el, me.session));
                 });
                 me.#fieldsMap = map;
             }
@@ -668,8 +739,8 @@ class Form {
             // Devuelve la coleccion
             if (!me.#fieldsMap) {
                 var map = new CIMap();
-                me.#json.Fields.forEach(it => {
-                    map.set(it.Name, new Field(it, me.session));
+                me.#json.Fields.forEach(el => {
+                    map.set(el.Name, new Field(el, me.session));
                 });
                 me.#fieldsMap = map;
             }
