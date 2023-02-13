@@ -139,6 +139,7 @@ class Account {
 
 class Application {
     #parent;
+    #rootFolder;
 
     constructor(parent) {
         this.#parent = parent
