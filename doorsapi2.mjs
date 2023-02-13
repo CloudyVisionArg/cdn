@@ -352,6 +352,7 @@ export class Document {
                             // Levanta los accounts y completa el nombre
                             me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
                                 accs => {
+                                    var map = new CIMap();
                                     res.forEach(el => {
                                         el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                                         map.set(el.Name, new Attachment(el, me));
