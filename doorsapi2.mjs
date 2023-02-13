@@ -189,9 +189,8 @@ class Application {
 }
 
 class Attachment {
-    //File
     #parent; // Document
-    #json;
+    #json; // { AccId, AccName, AttId, Created, Description, DocId, Extension, External, File, Group, IsNew, Name, Size, Tags }
     #blob;
 
     constructor(attachment, document) {
@@ -328,6 +327,8 @@ export class Document {
         this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
+        this.#attachmentsMap = new CIMap();
+        this.#attachmentsMap._loaded = false;
     }
 
     aclGrant(account, access) {
@@ -366,7 +367,7 @@ export class Document {
 
             } else {
                 // Devuelve la coleccion
-                if (!me.#attachmentsMap) {
+                if (!me.#attachmentsMap._loaded) {
                     var url = 'documents/' + me.id + '/attachments';
                     me.session.restClient.asyncCall(url, 'GET', '', '').then(
                         res => {
@@ -383,13 +384,12 @@ export class Document {
                             // Levanta los accounts y completa el nombre
                             me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
                                 accs => {
-                                    var map = new CIMap();
                                     res.forEach(el => {
                                         //todo: aca se podria setear un objecto account en vez del name solo
                                         el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                        map.set(el.Name, new Attachment(el, me));
+                                        me.#attachmentsMap.set(el.Name, new Attachment(el, me));
                                     });
-                                    me.#attachmentsMap = map;
+                                    me.#attachmentsMap._loaded = true;
                                     resolve(me.#attachmentsMap);
         
                                 }, reject
@@ -402,6 +402,27 @@ export class Document {
                 }
             }
         });
+    }
+
+    attachmentsAdd() {
+
+        map.set(el.Name, new Attachment(el, me));
+
+        /*
+        var blobData = new Blob([this.result], { type: file.type });
+        var formData = new FormData();
+        // todo: como subimos el Tag?
+        formData.append('attachment', blobData, file.name);
+        DoorsAPI.attachmentsSave(doc_id, formData).then(
+            function (res) {
+                endCall(attName, 'OK');
+            },
+            function (err) {
+                endCall(attName, 'attachmentsSave error: ' + errMsg(err));
+            }
+        )
+        */
+
     }
 
     delete(toRecycleBin) {
