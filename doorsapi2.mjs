@@ -353,7 +353,7 @@ export class Document {
                             me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
                                 accs => {
                                     res.forEach(el => {
-                                        el.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
+                                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                                         map.set(el.Name, new Attachment(el, me));
                                     });
                                     me.#attachmentsMap = map;
