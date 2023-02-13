@@ -317,8 +317,8 @@ export class Document {
     attachments(attachment) {
         var me = this;
         return new Promise((resolve, reject) => {
-
             if (attachment) {
+                debugger;
                 me.attachments().then(
                     res => {
                         if (res.has(attachment)) {
@@ -336,15 +336,12 @@ export class Document {
                     var url = 'documents/' + me.id + '/attachments';
                     me.session.restClient.asyncCall(url, 'GET', '', '').then(
                         res => {
-                            debugger;
-
                             if (res.length > 0) {
                                 // Ordena descendente
                                 res.sort(function (a, b) {
                                     return a.AttId >= b.AttId ? -1 : 1;
                                 });
                             }
-
                             // Arma un array de AccId
                             var ids = res.map(att => att.AccId);
                             // Saca los repetidos
@@ -354,6 +351,7 @@ export class Document {
                                 accs => {
                                     var map = new CIMap();
                                     res.forEach(el => {
+                                        //todo: aca se podria setear un objecto account en vez del name solo
                                         el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                                         map.set(el.Name, new Attachment(el, me));
                                     });
