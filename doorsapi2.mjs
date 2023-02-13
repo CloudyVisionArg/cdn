@@ -65,7 +65,7 @@ export class Session {
         return new Promise((resolve, reject) => {
             var url = 'folders/' + fldId + '';
             me.restClient.asyncCall(url, 'GET', '', '').then(
-                function (res) {
+                res => {
                     resolve(new Folder(res, me));
                 },
                 reject
@@ -133,6 +133,10 @@ export class Session {
     }
 };
 
+class Account {
+
+}
+
 class Application {
     #session;
     #parent;
@@ -152,7 +156,7 @@ class Application {
         return new Promise((resolve, reject) => {
             if (!me.#rootFolder) {
                 me.session.foldersGetFromId(me.rootFolderId).then(
-                    function (res) {
+                    res => {
                         me.#rootFolder = res;
                         resolve(res);
                     },
@@ -171,6 +175,10 @@ class Application {
     get session() {
         return this.#session;
     }
+}
+
+class Attachment {
+
 }
 
 class Directory {
@@ -195,6 +203,7 @@ export class Document {
     #session;
     #json;
     #fieldsMap;
+    #attachmentsMap;
 
     constructor(document, session, folder) {
         this.#json = document;
@@ -221,6 +230,76 @@ export class Document {
         return this.session.restClient.asyncCall(url, 'DELETE', {}, '');
     }
 
+    attachments(attachment) {
+        var me = this;
+
+        if (attachment) {
+
+        } else {
+            // Devuelve la coleccion
+            if (!me.#attachmentsMap) {
+
+                var map = new CIMap();
+
+                var url = 'documents/' + me.id + '/attachments';
+                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    res => {
+                        debugger;
+
+                    },
+                    err => {
+
+                    }
+                );
+
+    /*
+                DoorsAPI.attachments(doc_id).then(
+                    function (res) {
+                        // Filtra por el tag
+                        var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
+        
+                        if (atts.length > 0) {
+                            // Ordena descendente
+                            atts.sort(function (a, b) {
+                                return a.AttId >= b.AttId ? -1 : 1;
+                            });
+        
+                            // Arma un array de AccId
+                            var ids = atts.map(att => att.AccId);
+                            // Saca los repetidos
+                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                            // Levanta los accounts, completa el nombre y renderiza
+                            accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                                function (accs) {
+                                    atts.forEach(att => {
+                                        att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
+                                        getAttachment(att, readonly).appendTo($ul);
+                                    });
+                                }
+                            )
+        
+                        } else {
+                            noAttachs();
+                        }
+                    },
+        
+                    function (err) {
+                        logAndToast('attachments error: ' + errMsg(err));
+                    }
+                );
+        
+            } else {
+                noAttachs();
+            }
+*/
+            
+                map.set(it.Name, new Field(it, me.session));
+                me.#attachmentsMap = map;
+            }
+            return me.#attachmentsMap;
+        }
+    }
+
     delete(toRecycleBin) {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
@@ -233,18 +312,18 @@ export class Document {
         return this.#json.DocId;
     }
 
-    fields(name) {
+    fields(field) {
         var me = this;
 
-        if (name) {
+        if (field) {
             // Devuelve un field
             var field;
-            field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-            if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
+            if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
             if (field) {
                 return new Field(field, me);
             } else {
-                throw new Error('Field not found: ' + name);
+                throw new Error('Field not found: ' + field);
             }
 
         } else {
@@ -280,7 +359,7 @@ export class Document {
         return new Promise((resolve, reject) => {
             if (!me.#parent) {
                 me.session.foldersGetFromId(me.parentId).then(
-                    function (res) {
+                    res => {
                         me.#parent = res;
                         resolve(res);
                     },
@@ -572,17 +651,17 @@ class Form {
         return this.#json.Description;
     }
 
-    fields(name) {
+    fields(field) {
         var me = this;
 
-        if (name) {
+        if (field) {
             // Devuelve un field
             var field;
-            field = me.#json.Fields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            field = me.#json.Fields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
             if (field) {
                 return new Field(field, me);
             } else {
-                throw new Error('Field not found: ' + name);
+                throw new Error('Field not found: ' + field);
             }
 
         } else {
@@ -611,6 +690,13 @@ class Form {
     }
 };
 
+class User {
+
+}
+
+class View {
+    
+}
 
 class CIMap extends Map {    
     set(key, value) {
