@@ -138,13 +138,24 @@ class Account {
 }
 
 class Application {
-    #session;
     #parent;
     #rootFolder;
 
-    constructor(session, parent) {
-        this.#session = session;
+    constructor(parent) {
         this.#parent = parent
+    }
+
+    folders(folderPath) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url = 'folders/' + parentFolderId + '/children?folderpath=' + encURIC(folderPath);
+            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                res => {
+                    resolve(new Folder(res, me.session));
+                },
+                reject
+            )
+        });
     }
 
     get parent() {
@@ -173,7 +184,7 @@ class Application {
     }
 
     get session() {
-        return this.#session;
+        return this.parent.session;
     }
 }
 
@@ -224,7 +235,6 @@ class Attachment {
         return new Promise((resolve, reject) => {
             if (!me.#blob) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
-                //return Doors.RESTFULL.asyncCallXmlHttp(url, "GET", "");
                 me.session.restClient.asyncCallXmlHttp(url, 'GET', '').then(
                     res => {
                         me.#blob = res;
@@ -601,7 +611,7 @@ export class Folder {
 
     get app() {
         if (!this.#app) {
-            this.#app = new Application(this.session, this);
+            this.#app = new Application(this);
         }
         return this.#app;
     }
@@ -894,6 +904,7 @@ class RestClient {
         });
     }
 
+    //todo: pasar a fetch
     asyncCallXmlHttp(callingMethod, httpMethod, data) {
         var dataSend = null;
         if (data) {
