@@ -527,6 +527,7 @@ export class Document {
                         var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
                         //var formData = new URLSearchParams();
                         // todo: como subimos el Tag?
+                        debugger;
                         let blob = await el.fileStream;
                         formData.append('attachment', blob, el.name);
                         var url = 'documents/' + me.id + '/attachments';
