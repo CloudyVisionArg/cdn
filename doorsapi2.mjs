@@ -323,7 +323,7 @@ class Directory {
 
     accounts(account) {
         var me = this;
-        return new Promise((resolve, reject) => {
+        //return new Promise((resolve, reject) => {
             var url;
             if (isNaN(parseInt(account))) {
                 url = 'accounts?accName=' + account;
@@ -331,7 +331,7 @@ class Directory {
                 url = 'accounts?accIds=' + account;
             }
             return me.session.restClient.asyncCall(url, 'GET', '', '');
-        });
+        //});
     }
 
     accountsSearch(filter, order) {
