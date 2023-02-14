@@ -524,7 +524,7 @@ export class Document {
                 var rm = [];
                 asyncLoop(me.#attachmentsMap.size, async loop => {
                     debugger;
-                    var key = Array.from(me.#attachmentsMap.keys())[2];                 // Returns 'item3'
+                    var key = Array.from(me.#attachmentsMap.keys())[loop.iterator()];                 // Returns 'item3'
                     var el = me.#attachmentsMap.get(key);      
 
                     if (el.isNew) {
@@ -542,6 +542,7 @@ export class Document {
                     } else if (el.remove) {
                         rm.push(el.id);
                     }
+                    loop.next();
 
                 }, () => {
                     if (rm.length > 0) {
