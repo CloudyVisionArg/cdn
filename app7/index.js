@@ -320,7 +320,51 @@ var app = {
     },
 };
 
+
 function pushReg() {
+    (Capacitor.Plugins.PushNotifications) 
+        ? pushRegCapacitor()
+        : pushRegCordova(); //Legacy
+}
+
+async function pushRegCapacitor(){
+    await addCapacitorListeners();
+    await registerNotifications();
+}
+
+async function addCapacitorListeners () {
+    await PushNotifications.addListener('registration', token => {
+        console.info('Registration token: ', token.value);
+    });
+
+    await PushNotifications.addListener('registrationError', err => {
+        console.error('Registration error: ', err.error);
+    });
+
+    await PushNotifications.addListener('pushNotificationReceived', notification => {
+        console.log('Push notification received: ', notification);
+    });
+
+    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+        console.log('Push notification action performed', notification.actionId, notification.inputValue);
+    });
+}
+
+async function registerNotifications() {
+    let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
+
+    if (permStatus.receive === 'prompt') {
+        permStatus = await Capacitor.Plugins.PushNotifications.requestPermissions();
+    }
+
+    if (permStatus.receive !== 'granted') {
+        throw new Error('User denied permissions!');
+    }
+
+    await Capacitor.Plugins.PushNotifications.register();
+}
+
+function pushRegCordova() {
     if (device.platform != 'browser') {
         var pushSettings = {
             android: {
