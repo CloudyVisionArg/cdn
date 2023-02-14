@@ -190,7 +190,7 @@ class Application {
 
 class Attachment {
     #parent; // Document
-    #json; // { AccId, AccName, AttId, Created, Description, DocId, Extension, External, File, Group, IsNew, Name, Size, Tags }
+    #json;
 
     constructor(attachment, document) {
         this.#json = attachment;
@@ -319,6 +319,18 @@ class Directory {
     
     constructor(session) {
         this.#session = session;
+    }
+
+    accounts(account) {
+        return new Promise((resolve, reject) => {
+            var url;
+            if (isNaN(parseInt(account))) {
+                url = 'accounts?accName=' + account;
+            } else {
+                url = 'accounts?accIds=' + account;
+            }
+            return Doors.RESTFULL.asyncCall(url, 'GET', '', '');
+        });
     }
 
     accountsSearch(filter, order) {
