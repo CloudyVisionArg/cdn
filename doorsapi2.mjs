@@ -418,7 +418,7 @@ export class Document {
     attachmentsAdd(name) {
         var att = new Attachment({
             Name: name,
-            isNew: true,
+            IsNew: true,
         }, this);
 
         this.#attachmentsMap.set(name, att);
