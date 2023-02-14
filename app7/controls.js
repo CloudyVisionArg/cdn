@@ -1797,15 +1797,15 @@ function addDefaultOptions(pContainer) {
     var $li, $itemCont, $itemMedia, $itemInner, $ctl, $input;
 
     // Cuenta
-    getListLinkItem({
+    var $li = getListLinkItem({
         title: 'Cuenta',
         iosicon: 'person_circle',
         mdicon: 'account_circle',
         click: showLogin,
     }).appendTo(pContainer);
 
-    debugger;
-    
+    $li.find('.item-title').attr('id', 'options-account');
+
     // Status bar
     $ctl = getToggle('statusbar', 'Status bar', {
         iosicon: 'expand',
