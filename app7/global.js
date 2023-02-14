@@ -990,6 +990,10 @@ function pushRegistration(pPushSetings, pCallback) {
             if (pCallback) pCallback(app.push);
         });
     });
+
+    app.push.on('error', (e) => {
+        console.log('push init error: ' + e.message);
+    });
 }
 
 function pushUnreg(pCallback) {
