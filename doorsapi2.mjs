@@ -569,7 +569,7 @@ export class Document {
                     var el = attMap.get(key);      
 
                     if (el.isNew) {
-                        var formData = new FormData(); // ver en node, URLSearchParams no anda
+                        var formData = new FormData(); // ver en node, URLSearchParams no anda, probar https://www.npmjs.com/package/form-data
                         // todo: como subimos el Tag?
                         var arrBuf = await el.fileStream;
                         formData.append('attachment', new Blob([arrBuf]), el.name);
