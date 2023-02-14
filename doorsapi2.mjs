@@ -536,7 +536,7 @@ export class Document {
                         var prom = me.session.restClient.asyncCallXmlHttp(url, 'POST', formData);
                         proms.push(prom);
 
-                    } else if (el.remove) {
+                    } else if (el.removed) {
                         rm.push(el.id);
                     }
                     loop.next();
