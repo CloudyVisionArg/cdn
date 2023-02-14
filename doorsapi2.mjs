@@ -191,7 +191,6 @@ class Application {
 class Attachment {
     #parent; // Document
     #json; // { AccId, AccName, AttId, Created, Description, DocId, Extension, External, File, Group, IsNew, Name, Size, Tags }
-    #blob;
 
     constructor(attachment, document) {
         this.#json = attachment;
@@ -232,20 +231,25 @@ class Attachment {
     get fileStream() {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (!me.#blob) {
+            if (!me.#json.File) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
                 me.session.restClient.asyncCallXmlHttp(url, 'GET', '').then(
                     res => {
-                        me.#blob = res;
+                        me.#json.File = res;
                         resolve(res);
                     },
                     reject
                 )
 
             } else {
-                resolve(me.#blob);
+                resolve(me.#json.File);
             }
         });
+    }
+
+    set fileStream(value) {
+        if (!this.isNew) throw new Error('Read-only property');
+        me.#json.File = value;
     }
 
     get group() {
@@ -285,6 +289,14 @@ class Attachment {
         return this.#parent;
     }
 
+    get remove() {
+        return this.#json.Remove;
+    }
+
+    set remove(value) {
+        this.#json.Remove = value;
+    }
+
     get session() {
         return this.parent.session;
     }
@@ -296,7 +308,6 @@ class Attachment {
     get tags() {
         return this.#json.Tags;
     }
-
 }
 
 class Directory {
@@ -404,31 +415,20 @@ export class Document {
         });
     }
 
-    attachmentsAdd() {
+    attachmentsAdd(name) {
+        var att = new Attachment({
+            Name: name,
+            isNew: true,
+        }, this);
 
-        map.set(el.Name, new Attachment(el, me));
-
-        /*
-        var blobData = new Blob([this.result], { type: file.type });
-        var formData = new FormData();
-        // todo: como subimos el Tag?
-        formData.append('attachment', blobData, file.name);
-        DoorsAPI.attachmentsSave(doc_id, formData).then(
-            function (res) {
-                endCall(attName, 'OK');
-            },
-            function (err) {
-                endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-            }
-        )
-        */
-
+        this.#attachmentsMap.set(name, att);
+        return att;
     }
 
-    delete(toRecycleBin) {
+    delete(purge) {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
-            encURIC(toRecycleBin == false ? false : true);
+            encURIC(purge == true ? false : true);
         return me.session.restClient.asyncCall(url, 'DELETE', [me.id], 'docIds');
         //todo: en q estado queda el objeto?
     }
@@ -511,14 +511,42 @@ export class Document {
                     me.session.restClient.asyncCall(url, 'GET', '', '').then(
                         res => {
                             me.#json = res;
-                            resolve(me);
+                            saveAttachs(resolve, reject);
                         },
                         reject
                     )
-                },
-                reject
-            )
-        });
+                }
+            );
+
+            function saveAttachs(resolve, reject) {
+                //todo: guardar los attachs
+                var proms = [];
+                me.#attachmentsMap.forEach(el => {
+                    let rm = [];
+                    if (el.isNew) {
+                        //var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
+                        var formData = new URLSearchParams();
+                        // todo: como subimos el Tag?
+                        formData.append('attachment', el.fileStream, el.name);
+                        var url = 'documents/' + me.id + '/attachments';
+                        proms.push(me.session.restClient.asyncCallXmlHttp(url, "POST", formData));
+
+                    } else if (el.remove) {
+                        rm.push(el.id);
+                    }
+                    var url = 'documents/' + me.id + '/attachments';
+                    proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
+                });
+
+                Promise.all(proms).then(
+                    res => { debugger; resolve(me) },
+                    err => {
+                        console.error(err);
+                        reject(new Error('saveAttachs error: ' + errMsg(err)));
+                    }
+                )
+            }
+        })
     }
 
     get session() {
