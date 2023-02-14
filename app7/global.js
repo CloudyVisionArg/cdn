@@ -965,6 +965,7 @@ function cleanDb(pCallback) {
 // Registra el dispositivo para notificaciones Push
 // https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md
 function pushRegistration(pPushSetings, pCallback) {
+    debugger;
     console.log('pushRegistration begin');
 
     app.push = PushNotification.init(pPushSetings);
