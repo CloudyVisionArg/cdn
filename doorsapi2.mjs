@@ -142,6 +142,10 @@ class Account {
         this.#session = session;
     }
 
+    get name() {
+        return this.#json.Name;
+    }
+
 
 }
 
