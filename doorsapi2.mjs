@@ -528,7 +528,7 @@ export class Document {
                         //var formData = new URLSearchParams();
                         // todo: como subimos el Tag?
                         debugger;
-                        let blob = new Blob(new Uint8Array(await el.fileStream), { type: 'application/octet-stream' });
+                        let blob = new Blob(new Uint16Array(await el.fileStream), { type: 'application/octet-stream' });
                         formData.append('attachment', blob, el.name);
                         var url = 'documents/' + me.id + '/attachments';
                         proms.push(me.session.restClient.asyncCallXmlHttp(url, 'POST', formData));
