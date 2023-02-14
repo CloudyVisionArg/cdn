@@ -522,7 +522,11 @@ export class Document {
                 //todo: guardar los attachs
                 var proms = [];
                 var rm = [];
-                me.#attachmentsMap.forEach(async el => {
+                asyncLoop(me.#attachmentsMap.size, async loop => {
+                    debugger;
+                    var key = Array.from(me.#attachmentsMap.keys())[2];                 // Returns 'item3'
+                    var el = me.#attachmentsMap.get(key);      
+
                     if (el.isNew) {
                         var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
                         //var formData = new URLSearchParams();
@@ -538,21 +542,56 @@ export class Document {
                     } else if (el.remove) {
                         rm.push(el.id);
                     }
-                });
 
-                if (rm.length > 0) {
-                    var url = 'documents/' + me.id + '/attachments';
-                    proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
-                }
-
-                Promise.all(proms).then(
-                    res => { debugger; resolve(me) },
-                    err => {
-                        debugger;
-                        console.error(err);
-                        reject(new Error('saveAttachs error: ' + errMsg(err)));
+                }, () => {
+                    if (rm.length > 0) {
+                        var url = 'documents/' + me.id + '/attachments';
+                        proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
                     }
-                )
+    
+                    Promise.all(proms).then(
+                        res => { debugger; resolve(me) },
+                        err => {
+                            debugger;
+                            console.error(err);
+                            reject(new Error('saveAttachs error: ' + errMsg(err)));
+                        }
+                    )
+    
+                })
+                
+
+            }
+
+            function asyncLoop(iterations, loopFunc, callback) {
+                var index = 0;
+                var done = false;
+                var loop = {
+                    next: function() {
+                        if (done) {
+                            return;
+                        }
+                
+                        if (!iterations || index < iterations) {
+                            index++;
+                            loopFunc(loop);
+                        } else {
+                            done = true;
+                            if (callback) callback();
+                        }
+                    },
+                
+                    iteration: function() {
+                        return index - 1;
+                    },
+                
+                    break: function() {
+                        done = true;
+                        if (callback) callback();
+                    }
+                };
+                loop.next();
+                return loop;
             }
         })
     }
