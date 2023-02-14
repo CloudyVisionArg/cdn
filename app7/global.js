@@ -975,7 +975,10 @@ async function pushRegistrationCapacitor(pCallback) {
 async function addListenersCapacitor (pCallback) {
     await Capacitor.Plugins.PushNotifications.addListener('registration', token => {
         console.info('Registration token: ', token.value);
-        debugger;
+        const data = { 
+            registrationId : token.value,
+            registrationType : "FCM" // Para APNS?
+        };
         app.pushData = data;
 
         console.log('push regId: ' + data.registrationId);
