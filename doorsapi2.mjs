@@ -134,6 +134,14 @@ export class Session {
 };
 
 class Account {
+    #json;
+    #session;
+
+    constructor(account, session) {
+        this.#json = account;
+        this.#session = session;
+    }
+
 
 }
 
@@ -323,16 +331,26 @@ class Directory {
 
     accounts(account) {
         var me = this;
-        //return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             var url;
-            //if (isNaN(parseInt(account))) {
+            if (isNaN(parseInt(account))) {
                 url = 'accounts?accName=' + encURIC(account);
-            //} else {
-                //url = 'accounts?accIds=' + account;
-            //}
-            debugger;
-            return me.session.restClient.asyncCall(url, 'GET', '', '');
-        //});
+            } else {
+                url = 'accounts?accIds=' + account;
+            }
+            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                res => {
+                    if (res.length == 0) {
+                        reject(new Error('Account not found'));
+                    } else if (reject.length > 1) {
+                        reject(new Error('Expression returns more than one account'));
+                    } else {
+                        resolve(new Account(res[0], me.session));
+                    }
+                },
+                reject
+            )
+        });
     }
 
     accountsSearch(filter, order) {
