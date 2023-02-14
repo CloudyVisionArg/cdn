@@ -969,7 +969,7 @@ async function pushRegistrationCapacitor(pCallback) {
     debugger;
     console.log('pushRegistration begin');
     await addListenersCapacitor(pCallback);
-    await registerNotificationsCapacitor();
+    app.push = await registerNotificationsCapacitor();
 }
 
 async function addListenersCapacitor (pCallback) {
@@ -1045,7 +1045,7 @@ async function registerNotificationsCapacitor() {
         throw new Error('User denied permissions!');
     }
 
-    await Capacitor.Plugins.PushNotifications.register();
+    return await Capacitor.Plugins.PushNotifications.register();
 }
 
 function pushUnregCapacitor(pCallback) {
