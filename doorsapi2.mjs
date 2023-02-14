@@ -521,8 +521,8 @@ export class Document {
             function saveAttachs(resolve, reject) {
                 //todo: guardar los attachs
                 var proms = [];
+                var rm = [];
                 me.#attachmentsMap.forEach(el => {
-                    let rm = [];
                     if (el.isNew) {
                         //var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
                         var formData = new URLSearchParams();
@@ -540,7 +540,7 @@ export class Document {
                     var url = 'documents/' + me.id + '/attachments';
                     proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
                 }
-                
+
                 Promise.all(proms).then(
                     res => { debugger; resolve(me) },
                     err => {
