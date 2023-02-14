@@ -961,7 +961,121 @@ function cleanDb(pCallback) {
         );
     });
 }
+/**
+    Capacitor
+ */
+// Registra el dispositivo para notificaciones Push
+async function pushRegistrationCapacitor(pCallback) {
+    debugger;
+    console.log('pushRegistration begin');
+    await addListenersCapacitor(pCallback);
+    await registerNotificationsCapacitor();
+}
 
+async function addListenersCapacitor (pCallback) {
+    await Capacitor.Plugins.PushNotifications.addListener('registration', token => {
+        console.info('Registration token: ', token.value);
+        app.pushData = data;
+
+        console.log('push regId: ' + data.registrationId);
+        console.log('push regType: ' + data.registrationType);
+        
+        DoorsAPI.pushRegistration({
+            'AppVersion': app7.version,
+            'DeviceModel': device.model,
+            'DevicePlatform': device.platform,
+            'DeviceVersion': device.version,
+            'Login': dSession.loggedUser()['Login'],
+            'RegistrationId': data.registrationId,
+            'RegistrationType': data.registrationType,
+
+        }).then(function (res) {
+            console.log('pushRegistration end');
+            if (pCallback) pCallback(app.push);
+        });
+    });
+
+    await Capacitor.Plugins.PushNotifications.addListener('registrationError', err => {
+        console.error('Registration error: ', err.error);
+    });
+
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', notification => {
+        console.log('Push notification received: ', notification);
+        let data = notification;
+        if (window.refreshNotifications) window.refreshNotifications();
+
+        var notifEv = new CustomEvent('pushNotification', { detail: { data } });
+        window.dispatchEvent(notifEv)
+
+        var clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
+
+        if (data.additionalData.foreground) {
+            app7.notification.create({
+                title: 'CLOUDY CRM7',
+                subtitle: data.title,
+                text: data.message,
+                closeTimeout: 10000,
+                on: {
+                    click: function (notif) {
+                        notif.close();
+                        window.dispatchEvent(clickEv);
+                    }
+                }
+            }).open();
+            
+        } else {
+            window.dispatchEvent(clickEv);
+        }
+    });
+
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+        console.log('Push notification action performed', notification.actionId, notification.inputValue);
+    });
+}
+
+async function registerNotificationsCapacitor() {
+    let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
+
+    if (permStatus.receive === 'prompt') {
+        permStatus = await Capacitor.Plugins.PushNotifications.requestPermissions();
+    }
+
+    if (permStatus.receive !== 'granted') {
+        throw new Error('User denied permissions!');
+    }
+
+    await Capacitor.Plugins.PushNotifications.register();
+}
+
+function pushUnregCapacitor(pCallback) {
+    //TODO
+    // if (app.pushData) {
+    //     app.push.unregister(
+    //         function () {
+    //             console.log('pushUnreg ok');
+    //             DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
+    //                 function (res) {
+    //                     if (pCallback) pCallback();
+    //                 },
+    //                 function (err) {
+    //                     console.log(err);
+    //                     if (pCallback) pCallback();
+    //                 }
+    //             );
+    //         },
+    //         function () {
+    //             console.log('pushUnreg error');
+    //             if (pCallback) pCallback();
+    //         }
+    //     );
+    // } else {
+    //     if (pCallback) pCallback();
+    // }
+}
+
+/**
+    Cordova
+ */
 // Registra el dispositivo para notificaciones Push
 // https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md
 function pushRegistration(pPushSetings, pCallback) {
