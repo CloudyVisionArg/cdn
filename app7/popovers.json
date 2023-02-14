@@ -42,7 +42,7 @@
     {        
         "CARTEL_ID": 100000010,
         "CONTEXT": "opciones",        
-        "SELECTOR": "[idpopover='cuenta']",
+        "SELECTOR": "#options-account",
         "TITLE": "Cuenta",
         "ICON_MD": "account_circle",
         "ICON_IOS": "person_circle",
