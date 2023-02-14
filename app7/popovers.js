@@ -2,6 +2,7 @@
 var popoversFolder;
 var arrPopoversfijos = [];
 
+debugger;
 fetch(scriptSrc('app7-popovers.json'))
 .then(response => {
     if (!response.ok) {
