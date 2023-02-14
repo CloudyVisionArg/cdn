@@ -269,7 +269,7 @@ var app = {
         };
 
         function execOnDeviceReady() {
-            pushReg();
+            //pushReg();
 
             executeCode('onDeviceReady', 
                 function () {
@@ -322,6 +322,7 @@ var app = {
 
 
 function pushReg() {
+    debugger;
     (Capacitor) //Si esta disponible Capacitor
         ? pushRegCapacitor()
         : pushRegCordova(); //Legacy
