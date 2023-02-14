@@ -289,12 +289,12 @@ class Attachment {
         return this.#parent;
     }
 
-    get remove() {
-        return this.#json.Remove;
+    get removed() {
+        return this.#json.Removed;
     }
 
-    set remove(value) {
-        this.#json.Remove = value;
+    remove() {
+        this.#json.Removed = true;
     }
 
     get session() {
