@@ -325,11 +325,11 @@ class Directory {
         var me = this;
         //return new Promise((resolve, reject) => {
             var url;
-            if (isNaN(parseInt(account))) {
-                url = 'accounts?accName=' + account;
-            } else {
+            //if (isNaN(parseInt(account))) {
+                //url = 'accounts?accName=' + account;
+            //} else {
                 url = 'accounts?accIds=' + account;
-            }
+            //}
             return me.session.restClient.asyncCall(url, 'GET', '', '');
         //});
     }
