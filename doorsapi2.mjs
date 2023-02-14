@@ -249,7 +249,7 @@ class Attachment {
 
     set fileStream(value) {
         if (!this.isNew) throw new Error('Read-only property');
-        me.#json.File = value;
+        this.#json.File = value;
     }
 
     get group() {
