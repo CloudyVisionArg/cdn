@@ -523,7 +523,7 @@ export class Document {
                 var proms = [];
                 var rm = [];
                 var attMap = me.#attachmentsMap;
-                
+
                 asyncLoop(attMap.size, async loop => {
                     var key = Array.from(attMap.keys())[loop.iteration()];
                     var el = attMap.get(key);      
@@ -548,7 +548,12 @@ export class Document {
                     }
     
                     Promise.all(proms).then(
-                        res => { resolve(me) },
+                        res => {
+                            attMap.forEach((el, key) => {
+                                if (el.removed) attMap.delete(key)
+                            });
+                            resolve(me)
+                        },
                         err => {
                             debugger;
                             console.error(err);
