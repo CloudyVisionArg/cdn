@@ -322,6 +322,7 @@ var app = {
 
 
 function pushReg() {
+    debugger;
     (Capacitor.Plugins.PushNotifications) 
         ? pushRegCapacitor()
         : pushRegCordova(); //Legacy
