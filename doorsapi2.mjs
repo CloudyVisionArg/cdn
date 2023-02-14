@@ -524,7 +524,7 @@ export class Document {
                 var rm = [];
                 asyncLoop(me.#attachmentsMap.size, async loop => {
                     debugger;
-                    var key = Array.from(me.#attachmentsMap.keys())[loop.iterator()];                 // Returns 'item3'
+                    var key = Array.from(me.#attachmentsMap.keys())[loop.iteration()];                 // Returns 'item3'
                     var el = me.#attachmentsMap.get(key);      
 
                     if (el.isNew) {
