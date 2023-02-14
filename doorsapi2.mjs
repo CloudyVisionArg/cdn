@@ -523,20 +523,17 @@ export class Document {
                 var proms = [];
                 var rm = [];
                 asyncLoop(me.#attachmentsMap.size, async loop => {
-                    debugger;
                     var key = Array.from(me.#attachmentsMap.keys())[loop.iteration()];                 // Returns 'item3'
                     var el = me.#attachmentsMap.get(key);      
 
                     if (el.isNew) {
-                        var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
-                        //var formData = new URLSearchParams();
+                        var formData = new FormData(); // ver en node, URLSearchParams no anda
                         // todo: como subimos el Tag?
-                        debugger;
-                        let arrBuf = await el.fileStream;
-                        let blob = new Blob([arrBuf], { type: 'application/octet-stream' });
+                        var arrBuf = await el.fileStream;
+                        var blob = new Blob([arrBuf]);
                         formData.append('attachment', blob, el.name);
-                        let url = 'documents/' + me.id + '/attachments';
-                        let prom = me.session.restClient.asyncCallXmlHttp(url, 'POST', formData);
+                        var url = 'documents/' + me.id + '/attachments';
+                        var prom = me.session.restClient.asyncCallXmlHttp(url, 'POST', formData);
                         proms.push(prom);
 
                     } else if (el.remove) {
@@ -551,17 +548,14 @@ export class Document {
                     }
     
                     Promise.all(proms).then(
-                        res => { debugger; resolve(me) },
+                        res => { resolve(me) },
                         err => {
                             debugger;
                             console.error(err);
                             reject(new Error('saveAttachs error: ' + errMsg(err)));
                         }
                     )
-    
                 })
-                
-
             }
 
             function asyncLoop(iterations, loopFunc, callback) {
