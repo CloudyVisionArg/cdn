@@ -531,8 +531,9 @@ export class Document {
                         let arrBuf = await el.fileStream;
                         let blob = new Blob([arrBuf], { type: 'application/octet-stream' });
                         formData.append('attachment', blob, el.name);
-                        var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.asyncCallXmlHttp(url, 'POST', formData));
+                        let url = 'documents/' + me.id + '/attachments';
+                        let prom = me.session.restClient.asyncCallXmlHttp(url, 'POST', formData);
+                        proms.push(prom);
 
                     } else if (el.remove) {
                         rm.push(el.id);
