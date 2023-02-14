@@ -322,6 +322,7 @@ class Directory {
     }
 
     accounts(account) {
+        var me = this;
         return new Promise((resolve, reject) => {
             var url;
             if (isNaN(parseInt(account))) {
@@ -329,7 +330,7 @@ class Directory {
             } else {
                 url = 'accounts?accIds=' + account;
             }
-            return Doors.RESTFULL.asyncCall(url, 'GET', '', '');
+            return me.session.restClient.asyncCall(url, 'GET', '', '');
         });
     }
 
