@@ -975,6 +975,7 @@ async function pushRegistrationCapacitor(pCallback) {
 async function addListenersCapacitor (pCallback) {
     await Capacitor.Plugins.PushNotifications.addListener('registration', token => {
         console.info('Registration token: ', token.value);
+        debugger;
         app.pushData = data;
 
         console.log('push regId: ' + data.registrationId);
@@ -1079,7 +1080,6 @@ function pushUnregCapacitor(pCallback) {
 // Registra el dispositivo para notificaciones Push
 // https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md
 function pushRegistration(pPushSetings, pCallback) {
-    debugger;
     console.log('pushRegistration begin');
 
     app.push = PushNotification.init(pPushSetings);
