@@ -524,8 +524,8 @@ export class Document {
                 var rm = [];
                 me.#attachmentsMap.forEach(async el => {
                     if (el.isNew) {
-                        //var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
-                        var formData = new URLSearchParams();
+                        var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
+                        //var formData = new URLSearchParams();
                         // todo: como subimos el Tag?
                         debugger;
                         let arrBuf = await el.fileStream;
