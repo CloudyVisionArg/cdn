@@ -344,7 +344,6 @@ class Directory {
             }
             me.session.restClient.asyncCall(url, 'GET', '', '').then(
                 res => {
-                    debugger;
                     if (res.length == 0) {
                         reject(new Error('Account not found'));
                     } else if (res.length > 1) {
