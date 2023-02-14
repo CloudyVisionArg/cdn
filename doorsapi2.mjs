@@ -269,6 +269,10 @@ class Attachment {
         return this.#json.IsNew;
     }
 
+    set isNew(value) {
+        this.#json.IsNew = value;
+    }
+
     get name() {
         return this.#json.Name;
     }
@@ -550,8 +554,13 @@ export class Document {
                     Promise.all(proms).then(
                         res => {
                             attMap.forEach((el, key) => {
-                                if (el.removed) attMap.delete(key)
+                                if (el.removed) {
+                                    attMap.delete(key)
+                                } else if (el.isNew) {
+                                    el.isNew = false;
+                                }
                             });
+
                             resolve(me)
                         },
                         err => {
