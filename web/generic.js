@@ -18,7 +18,7 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 
 var doorsapi2, dSession;
 var urlParams, fld_id, folder, doc_id, doc;
-var folderJ, docJ;
+var folderJson, docJson;
 var controlsFolder, controls, controlsRights;
 var saving, cache, lsScripts;
 
@@ -93,7 +93,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     
     if (fld_id) {
         folder = await dSession.foldersGetFromId(fld_id);
-        folderJ = folder.toJSON();
+        folderJson = folder.toJSON();
         await folder.form; // Para q cargue el form
         if (folder.type == 1) {
             getDoc();
@@ -134,7 +134,7 @@ async function getDoc() {
     } else {
         doc = await folder.documentsNew();
     }
-    docJ = doc.toJSON();
+    docJson = doc.toJSON();
     getControlsFolder();
 }
 
@@ -1409,7 +1409,7 @@ function saveDoc(pExit) {
     };
 
     doc.save().then(() => {
-        docJ = doc.toJSON();
+        docJson = doc.toJSON();
         doc_id = doc.fields('doc_id').value;
 
         saveAtt().then(
