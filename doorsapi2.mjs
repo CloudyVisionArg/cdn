@@ -524,11 +524,12 @@ export class Document {
                 var rm = [];
                 me.#attachmentsMap.forEach(async el => {
                     if (el.isNew) {
-                        var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
-                        //var formData = new URLSearchParams();
+                        //var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
+                        var formData = new URLSearchParams();
                         // todo: como subimos el Tag?
                         debugger;
-                        let blob = new Blob(new Uint16Array(await el.fileStream), { type: 'application/octet-stream' });
+                        let arrBuf = await el.fileStream;
+                        let blob = new Blob([arrBuf], { type: 'application/octet-stream' });
                         formData.append('attachment', blob, el.name);
                         var url = 'documents/' + me.id + '/attachments';
                         proms.push(me.session.restClient.asyncCallXmlHttp(url, 'POST', formData));
