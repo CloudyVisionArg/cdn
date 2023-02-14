@@ -522,12 +522,12 @@ export class Document {
                 //todo: guardar los attachs
                 var proms = [];
                 var rm = [];
-                me.#attachmentsMap.forEach(el => {
+                me.#attachmentsMap.forEach(async el => {
                     if (el.isNew) {
                         var formData = new FormData(); // cambiar por https://stackoverflow.com/questions/63576988/how-to-use-formdata-in-node-js-without-browser
                         //var formData = new URLSearchParams();
                         // todo: como subimos el Tag?
-                        formData.append('attachment', el.fileStream, el.name);
+                        formData.append('attachment', await el.fileStream, el.name);
                         var url = 'documents/' + me.id + '/attachments';
                         proms.push(me.session.restClient.asyncCallXmlHttp(url, 'POST', formData));
 
