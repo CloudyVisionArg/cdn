@@ -1804,6 +1804,8 @@ function addDefaultOptions(pContainer) {
         click: showLogin,
     }).appendTo(pContainer);
 
+    debugger;
+    
     // Status bar
     $ctl = getToggle('statusbar', 'Status bar', {
         iosicon: 'expand',
