@@ -60,21 +60,20 @@ var app = {
         numeral.defaultFormat('0,0.[00]');
 
         // Verificacion de plugins
-        debugger;
-        
         if (!Capacitor.Plugins.Device) console.log('Plugin error: @capacitor/device');
         window.device = Capacitor.Plugins.Device;
         if (!Capacitor.Plugins.Camera) console.log('Plugin error: @capacitor/camera');
-        //if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
-        if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
+        if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
+       // if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
+       // window.StatusBar = Capacitor.Plugins.StatusBar;
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
         if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
         if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
         
-        //if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
-        if (!Capacitor.Plugins.CapacitorSQLite) console.log('Plugin error: @capacitor/capacitorsqlite');
-        window.sqlitePlugin = Capacitor.Plugins.CapacitorSQLite;
+        if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
+        //if (!Capacitor.Plugins.CapacitorSQLite) console.log('Plugin error: @capacitor/capacitorsqlite');
+        //window.sqlitePlugin = Capacitor.Plugins.CapacitorSQLite;
         if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
         //if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
@@ -227,41 +226,22 @@ var app = {
             'device.uuid: ' + device.uuid);
 
         if (device.platform == 'browser'){
-            db = window.sqlitePlugin.open({
-                name: 'DbName',
-                readonly: false,
-                }
-            ).then(
-                function (db) { console.log('invoked on creation'); }, 
-                function (err){ console.log('error invoked on creation'); }
+            db = window.openDatabase(
+                'DbName', '', 'Db Display Name', 5*1024*1024,
+                function (db) { console.log('invoked on creation'); }
             );
-            // db = window.openDatabase(
-            //     'DbName', '', 'Db Display Name', 5*1024*1024,
-            //     function (db) { console.log('invoked on creation'); }
-            // );
         } else {
-            db = window.sqlitePlugin.open({
+            db = window.sqlitePlugin.openDatabase({
                 name: 'DbName',
-                readonly: false,
-                }).then(
-                    function(db) {
-                        console.log('openDatabase OK');
-                    },
-                    function(err) {
-                        console.log('openDatabase Err: ' + JSON.stringify(err));        
-                    }
-                );
-            // db = window.sqlitePlugin.openDatabase({
-            //     name: 'DbName',
-            //     location: 'default',
-            //     },
-            //     function(db) {
-            //         console.log('openDatabase OK');
-            //     },
-            //     function(err) {
-            //         console.log('openDatabase Err: ' + JSON.stringify(err));        
-            //     }
-            // );
+                location: 'default',
+                },
+                function(db) {
+                    console.log('openDatabase OK');
+                },
+                function(err) {
+                    console.log('openDatabase Err: ' + JSON.stringify(err));        
+                }
+            );
         };
 
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
