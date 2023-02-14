@@ -534,12 +534,13 @@ export class Document {
                     } else if (el.remove) {
                         rm.push(el.id);
                     }
-                    if (rm.length > 0) {
-                        var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
-                    }
                 });
 
+                if (rm.length > 0) {
+                    var url = 'documents/' + me.id + '/attachments';
+                    proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
+                }
+                
                 Promise.all(proms).then(
                     res => { debugger; resolve(me) },
                     err => {
