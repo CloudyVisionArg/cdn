@@ -1804,7 +1804,7 @@ function addDefaultOptions(pContainer) {
         click: showLogin,
     }).appendTo(pContainer);
 
-    $li.find('.item-title').attr('id', 'options-account');
+    $li.find('.item-media').attr('id', 'options-account');
 
     // Status bar
     $ctl = getToggle('statusbar', 'Status bar', {
