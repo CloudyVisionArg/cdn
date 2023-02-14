@@ -522,19 +522,19 @@ export class Document {
                 //todo: guardar los attachs
                 var proms = [];
                 var rm = [];
-                asyncLoop(me.#attachmentsMap.size, async loop => {
-                    var key = Array.from(me.#attachmentsMap.keys())[loop.iteration()];                 // Returns 'item3'
-                    var el = me.#attachmentsMap.get(key);      
+                var attMap = me.#attachmentsMap;
+                
+                asyncLoop(attMap.size, async loop => {
+                    var key = Array.from(attMap.keys())[loop.iteration()];
+                    var el = attMap.get(key);      
 
                     if (el.isNew) {
                         var formData = new FormData(); // ver en node, URLSearchParams no anda
                         // todo: como subimos el Tag?
                         var arrBuf = await el.fileStream;
-                        var blob = new Blob([arrBuf]);
-                        formData.append('attachment', blob, el.name);
+                        formData.append('attachment', new Blob([arrBuf]), el.name);
                         var url = 'documents/' + me.id + '/attachments';
-                        var prom = me.session.restClient.asyncCallXmlHttp(url, 'POST', formData);
-                        proms.push(prom);
+                        proms.push(me.session.restClient.asyncCallXmlHttp(url, 'POST', formData));
 
                     } else if (el.removed) {
                         rm.push(el.id);
