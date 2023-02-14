@@ -5,7 +5,7 @@
         "SELECTOR": ".subnavbar .smart-select .item-after",
         "TITLE": "Vistas",
         "ICON_MD": "format_list_bulleted",
-        "ICON_IOS": "list_bullet_indent",
+        "ICON_IOS": "list_bullet",
         "TEXT": "Las vistas le ofrecen distintas formas de explorar sus datos",
         "ORDEN": "1"
     },
