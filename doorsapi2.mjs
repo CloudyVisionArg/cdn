@@ -543,6 +543,7 @@ export class Document {
                 Promise.all(proms).then(
                     res => { debugger; resolve(me) },
                     err => {
+                        debugger;
                         console.error(err);
                         reject(new Error('saveAttachs error: ' + errMsg(err)));
                     }
