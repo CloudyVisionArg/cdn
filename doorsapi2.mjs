@@ -347,7 +347,7 @@ class Directory {
                     debugger;
                     if (res.length == 0) {
                         reject(new Error('Account not found'));
-                    } else if (reject.length > 1) {
+                    } else if (res.length > 1) {
                         reject(new Error('Expression returns more than one account'));
                     } else {
                         resolve(new Account(res[0], me.session));
