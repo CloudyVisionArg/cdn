@@ -322,8 +322,7 @@ var app = {
 
 
 function pushReg() {
-    debugger;
-    (Capacitor.Plugins.PushNotifications) 
+    (Capacitor) //Si esta disponible Capacitor
         ? pushRegCapacitor()
         : pushRegCordova(); //Legacy
 }
@@ -334,19 +333,19 @@ async function pushRegCapacitor(){
 }
 
 async function addCapacitorListeners () {
-    await PushNotifications.addListener('registration', token => {
+    await Capacitor.Plugins.PushNotifications.addListener('registration', token => {
         console.info('Registration token: ', token.value);
     });
 
-    await PushNotifications.addListener('registrationError', err => {
+    await Capacitor.Plugins.PushNotifications.addListener('registrationError', err => {
         console.error('Registration error: ', err.error);
     });
 
-    await PushNotifications.addListener('pushNotificationReceived', notification => {
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', notification => {
         console.log('Push notification received: ', notification);
     });
 
-    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', notification => {
         console.log('Push notification action performed', notification.actionId, notification.inputValue);
     });
 }
