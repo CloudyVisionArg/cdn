@@ -744,10 +744,12 @@ export class Folder {
     #json;
     #session;
     #app;
+    #parent;
 
-    constructor(folder, session) {
+    constructor(folder, session, parent) {
         this.#json = folder;
         this.#session = session;
+        if (parent) this.#parent = parent;
     }
 
     get app() {
@@ -799,7 +801,7 @@ export class Folder {
             var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
             me.session.restClient.asyncCall(url, 'GET', '', '').then(
                 res => {
-                    resolve(new Folder(res, me.session));
+                    resolve(new Folder(res, me.session, me));
                 },
                 reject
             )    
@@ -830,6 +832,28 @@ export class Folder {
 
     get id() {
         return this.#json.FldId;
+    }
+
+    get parent() {
+        debugger;
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (me.#parent) {
+                resolve(me.#parent);
+            } else {
+                if (me.#json.ParentFolder) {
+                    me.session.foldersGetFromId(me.#json.ParentFolder).then(
+                        res => {
+                            me.#parent = res;
+                            resolve(res);
+                        },
+                        reject
+                    )
+                } else {
+                    resolve(null);
+                }
+            }
+        });
     }
 
     /**
