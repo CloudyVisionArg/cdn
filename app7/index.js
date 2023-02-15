@@ -269,8 +269,7 @@ var app = {
         };
 
         function execOnDeviceReady() {
-            //pushReg();
-
+            pushReg();
             executeCode('onDeviceReady', 
                 function () {
                     sync.sync(false);
@@ -321,18 +320,14 @@ var app = {
 };
 
 function pushReg() {
-    
     (Capacitor) //Si esta disponible Capacitor
         ? pushRegCapacitor()
         : pushRegCordova(); //Legacy
 }
 
 async function pushRegCapacitor(){
-    pushRegistrationCapacitor(function () {
-    });
+    pushRegistrationCapacitor(function () {});
 }
-
-
 
 
 function pushRegCordova() {
@@ -381,8 +376,4 @@ function pushRegCordova() {
             }	
         });
     }
-}
-
-function pushRegistrationCompleted(){
-
 }
