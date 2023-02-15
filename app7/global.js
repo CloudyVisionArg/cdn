@@ -1004,8 +1004,7 @@ async function addListenersCapacitor (pCallback) {
     });
 
     await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', async (notification) => {
-        const data = notification;
-        debugger;
+        const data = notification.data;
         if (window.refreshNotifications) window.refreshNotifications();
         window.dispatchEvent(new CustomEvent('pushNotification', { detail: { data } }));
         
