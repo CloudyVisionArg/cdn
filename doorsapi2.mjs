@@ -983,18 +983,14 @@ class View {
 }
 
 class CIMap extends Map {    
-    set(key, value) {
-        if (typeof key === 'string') {
-            key = key.toUpperCase();
-        }
-        return super.set(key, value);
-    }
-
     get(key) {
+        var k;
         if (typeof key === 'string') {
-            key = key.toUpperCase();
+            k = key.toUpperCase();
+        } else if (typeof key == 'number') {
+            k = Array.from(attMap.keys())[key];
         }
-        return super.get(key);
+        return super.get(k);
     }
 
     has(key) {
@@ -1002,6 +998,17 @@ class CIMap extends Map {
             key = key.toUpperCase();
         }
         return super.has(key);
+    }
+
+    set(key, value) {
+        if (typeof key === 'string') {
+            key = key.toUpperCase();
+        }
+        return super.set(key, value);
+    }
+
+    get length() {
+        return super.size;
     }
 };
 
