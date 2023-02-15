@@ -969,7 +969,7 @@ async function pushRegistrationCapacitor(pCallback) {
     debugger;
     console.log('pushRegistration begin');
     await addListenersCapacitor(pCallback);
-    app.push = await registerNotificationsCapacitor();
+    await registerNotificationsCapacitor();
 }
 
 async function addListenersCapacitor (pCallback) {
@@ -995,7 +995,7 @@ async function addListenersCapacitor (pCallback) {
 
         }).then(function (res) {
             console.log('pushRegistration end');
-            if (pCallback) pCallback(app.push);
+            if (pCallback) pCallback();
         });
     });
 
@@ -1034,7 +1034,7 @@ async function addListenersCapacitor (pCallback) {
             }
         })
     });
-    
+
     await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', notification => {
         console.log('Push notification action performed', notification.actionId, notification.inputValue);
     });
@@ -1052,7 +1052,7 @@ async function registerNotificationsCapacitor() {
         throw new Error('User denied permissions!');
     }
 
-    return await Capacitor.Plugins.PushNotifications.register();
+    await Capacitor.Plugins.PushNotifications.register();
 }
 
 function pushUnregCapacitor(pCallback) {
