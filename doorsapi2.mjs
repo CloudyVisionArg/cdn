@@ -459,6 +459,8 @@ export class Document {
     }
 
     attachmentsAdd(name) {
+        if (!name) throw new Error('name is required');
+        
         var att = new Attachment({
             Name: name,
             IsNew: true,
