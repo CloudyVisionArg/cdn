@@ -477,18 +477,18 @@ export class Document {
         return this.#json.DocId;
     }
 
-    fields(field) {
+    fields(name) {
         var me = this;
 
-        if (field) {
+        if (name) {
             // Devuelve un field
             var field;
-            field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
-            if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
+            field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
             if (field) {
                 return new Field(field, me);
             } else {
-                throw new Error('Field not found: ' + field);
+                throw new Error('Field not found: ' + name);
             }
 
         } else {
