@@ -142,7 +142,7 @@ class Account {
         this.#session = session;
     }
 
-    get name() {
+    get name() {debugger;
         return this.#json.Name;
     }
 
@@ -795,7 +795,6 @@ export class Folder {
     }
 
     folders(name) {
-        debugger; //probar
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
@@ -835,7 +834,6 @@ export class Folder {
     }
 
     get parent() {
-        debugger;
         var me = this;
         return new Promise((resolve, reject) => {
             if (me.#parent) {
