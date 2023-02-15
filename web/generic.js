@@ -326,7 +326,7 @@ function renderPage() {
         $tab = $cont.find('#tabMain');
         $row = undefined;
 
-        doc.fieldsMap.forEach(field => {
+        doc.fields().forEach(field => {
             if (!field.headerTable && field.name != 'DOC_ID') {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
@@ -349,7 +349,7 @@ function renderPage() {
         $tab = $cont.find('#tabHeader');
         $row = undefined;
 
-        doc.fieldsMap.forEach(field => {
+        doc.fields().forEach(field => {
             if (field.headerTable) {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
