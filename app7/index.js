@@ -344,18 +344,18 @@ async function pushRegCapacitor(){
                 //App in foreground    
                 Capacitor.Plugins.App.getState().then((status)=>{
                     if(status.IsActive){
-                    app7.notification.create({
-                        title: 'CLOUDY CRM7',
-                        subtitle: data.title,
-                        text: data.message,
-                        closeTimeout: 10000,
-                        on: {
-                            click: function (notif) {
-                                notif.close();
-                                window.dispatchEvent(clickEv);
+                        app7.notification.create({
+                            title: 'CLOUDY CRM7',
+                            subtitle: data.title,
+                            text: data.message,
+                            closeTimeout: 10000,
+                            on: {
+                                click: function (notif) {
+                                    notif.close();
+                                    window.dispatchEvent(clickEv);
+                                }
                             }
-                        }
-                    }).open();
+                        }).open();
                     }
                     else{
                         window.dispatchEvent(clickEv);
