@@ -784,12 +784,26 @@ export class Folder {
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/documents/new';
             me.session.restClient.asyncCall(url, 'GET', '', '').then(
-                doc => {
-                    resolve(new Document(doc, me.session, me));
+                res => {
+                    resolve(new Document(res, me.session, me));
                 },
                 reject
             );
         })
+    }
+
+    folders(name) {
+        debugger; //probar
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
+            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                res => {
+                    resolve(new Folder(res, me.session));
+                },
+                reject
+            )    
+        });
     }
 
     get folderType() {
