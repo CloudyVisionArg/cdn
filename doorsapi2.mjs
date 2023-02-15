@@ -89,6 +89,7 @@ export class Session {
         })
     };
 
+    
     logon(login, password, instance, liteMode) {
         var me = this;
         var url = 'session/logon';
@@ -134,7 +135,7 @@ export class Session {
 };
 
 class Account {
-    #json;
+    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, ChildAccountRecursive, ChildAccounts, Description, Disabled, Email, FullName, GestarLogon, HasApiKey, IsAdmin, IsNew, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, System, Tags, Theme, TimeDiff, Type, WinLogon
     #session;
 
     constructor(account, session) {
@@ -142,11 +143,13 @@ class Account {
         this.#session = session;
     }
 
-    get name() {debugger;
-        return this.#json.Name;
+    get id() {
+        return this.#json.AccId;
     }
 
-
+    get name() {
+        return this.#json.Name;
+    }
 }
 
 class Application {

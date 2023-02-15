@@ -94,7 +94,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     if (fld_id) {
         folder = await dSession.foldersGetFromId(fld_id);
         folderJson = folder.toJSON();
-        await folder.form; // Para q cargue el form
+        folder.form; // Para q cargue el form
         if (folder.type == 1) {
             getDoc();
         } else {
