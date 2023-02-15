@@ -1003,37 +1003,35 @@ async function addListenersCapacitor (pCallback) {
         console.error('Registration error: ', err.error);
     });
 
-    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', notification => {
-        debugger;
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', async (notification) => {
         const data = notification;
+        debugger;
         if (window.refreshNotifications) window.refreshNotifications();
-
-        var notifEv = new CustomEvent('pushNotification', { detail: { data } });
-        window.dispatchEvent(notifEv)
-
-        var clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
-
+        window.dispatchEvent(new CustomEvent('pushNotification', { detail: { data } }));
+        
+        const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
+        debugger;
         //App in foreground    
-        Capacitor.Plugins.App.getState().then((status)=>{
-            if(status.IsActive){
-                app7.notification.create({
-                    title: 'CLOUDY CRM7',
-                    subtitle: data.title,
-                    text: data.message,
-                    closeTimeout: 10000,
-                    on: {
-                        click: function (notif) {
-                            notif.close();
-                            window.dispatchEvent(clickEv);
-                        }
+        const status = await Capacitor.Plugins.App.getState();
+        if(status.isActive){
+            app7.notification.create({
+                title: 'CLOUDY CRM7',
+                subtitle: data.title,
+                text: data.message,
+                closeTimeout: 10000,
+                on: {
+                    click: function (notif) {
+                        notif.close();
+                        window.dispatchEvent(clickEv);
                     }
-                }).open();
-            }
-            else{
-                window.dispatchEvent(clickEv);
-            }
-        })
+                }
+            }).open();
+        }
+        else{
+            window.dispatchEvent(clickEv);
+        }
     });
+    
 
     await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', notification => {
         console.log('Push notification action performed', notification.actionId, notification.inputValue);
