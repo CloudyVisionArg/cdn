@@ -320,9 +320,7 @@ var app = {
     },
 };
 
-
 function pushReg() {
-    debugger;
     (Capacitor) //Si esta disponible Capacitor
         ? pushRegCapacitor()
         : pushRegCordova(); //Legacy
@@ -331,7 +329,10 @@ function pushReg() {
 async function pushRegCapacitor(){
     pushRegistrationCapacitor(function (push) {
         if (push) {
-            push.on('notification', function (data) {
+            debugger;
+            push.addListener('pushNotificationReceived', notification => {
+                debugger;
+                const data = notification;
                 if (window.refreshNotifications) window.refreshNotifications();
 
                 var notifEv = new CustomEvent('pushNotification', { detail: { data } });
@@ -339,7 +340,9 @@ async function pushRegCapacitor(){
 
                 var clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
 
-                if (data.additionalData.foreground) {
+                //App in foreground    
+                Capacitor.Plugins.App.getState().then((status)=>{
+                    if(status.IsActive){
                     app7.notification.create({
                         title: 'CLOUDY CRM7',
                         subtitle: data.title,
@@ -352,10 +355,16 @@ async function pushRegCapacitor(){
                             }
                         }
                     }).open();
-                    
-                } else {
-                    window.dispatchEvent(clickEv);
-                }
+                    }
+                    else{
+                        window.dispatchEvent(clickEv);
+                    }
+                })
+            });
+            
+        
+            push.addListener('pushNotificationActionPerformed', notification => {
+                console.log('Push notification action performed', notification.actionId, notification.inputValue);
             });
         }	
     });
