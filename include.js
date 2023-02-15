@@ -273,7 +273,7 @@ function include() {
                         var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
                         cont.appendChild(scriptNode);
                     }
-                    
+
                     scriptNode.loaded(() => {
                         if (pCallback) pCallback(scriptNode);
                         resolve(scriptNode);
@@ -289,14 +289,14 @@ function includeJs() {
 	return include.apply(null, arguments);
 }
 
-function scriptLoaded(scriptName, callback) {
+function scriptLoaded(scriptId, callback) {
 	var scripts = registeredScripts();
-    var script = scripts.find(el => el.id.toLowerCase() == scriptName.toLowerCase());
+    var script = scripts.find(el => el.id.toLowerCase() == scriptId.toLowerCase());
     var id;
     if (script && script.aliasOf) {
         id = script.aliasOf.toLowerCase();
     } else {
-        id = scriptName.toLowerCase();
+        id = scriptId.toLowerCase();
     }
     var el = document.getElementById('script_' + id)
     if (el) {
