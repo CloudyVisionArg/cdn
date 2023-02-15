@@ -272,14 +272,12 @@ function include() {
 
                         var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
                         cont.appendChild(scriptNode);
-
-                        if (pCallback) scriptNode.loaded(pCallback);
-                        resolve(scriptNode);
-                        
-                    } else {
-                        if (pCallback) scriptNode.loaded(pCallback);
-                        resolve(scriptNode);
                     }
+                    
+                    scriptNode.loaded(() => {
+                        if (pCallback) pCallback(scriptNode);
+                        resolve(scriptNode);
+                    });
                 }
             }
         }
