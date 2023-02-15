@@ -988,7 +988,7 @@ class CIMap extends Map {
         if (typeof key === 'string') {
             k = key.toUpperCase();
         } else if (typeof key == 'number') {
-            k = Array.from(attMap.keys())[key];
+            k = Array.from(super.keys())[key];
         }
         return super.get(k);
     }
