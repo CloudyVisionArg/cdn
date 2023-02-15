@@ -1005,13 +1005,20 @@ async function addListenersCapacitor (pCallback) {
 
     await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', async (notification) => {
         const data = notification.data;
+        //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
+        //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
+        const status = await Capacitor.Plugins.App.getState();
+        data.additionalData = notification.data;
+        data.additionalData.foreground = status.isActive;
+        //data.additionalData.coldstart = 
+        //data.additionalData.dismissed = 
+
         if (window.refreshNotifications) window.refreshNotifications();
         window.dispatchEvent(new CustomEvent('pushNotification', { detail: { data } }));
         
         const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
         debugger;
         //App in foreground    
-        const status = await Capacitor.Plugins.App.getState();
         if(status.isActive){
             app7.notification.create({
                 title: 'CLOUDY CRM7',

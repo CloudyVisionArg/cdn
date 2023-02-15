@@ -321,12 +321,8 @@ var app = {
 
 function pushReg() {
     (Capacitor) //Si esta disponible Capacitor
-        ? pushRegCapacitor()
+        ? pushRegistrationCapacitor()
         : pushRegCordova(); //Legacy
-}
-
-async function pushRegCapacitor(){
-    pushRegistrationCapacitor(function () {});
 }
 
 
