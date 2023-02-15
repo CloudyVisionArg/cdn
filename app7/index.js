@@ -321,16 +321,17 @@ var app = {
 };
 
 function pushReg() {
+    
     (Capacitor) //Si esta disponible Capacitor
         ? pushRegCapacitor()
         : pushRegCordova(); //Legacy
 }
 
 async function pushRegCapacitor(){
-    pushRegistrationCapacitor(function (push) {
-        if (push) {
+    pushRegistrationCapacitor(function () {
+        
             debugger;
-            push.addListener('pushNotificationReceived', notification => {
+            Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', notification => {
                 debugger;
                 const data = notification;
                 if (window.refreshNotifications) window.refreshNotifications();
@@ -363,10 +364,9 @@ async function pushRegCapacitor(){
             });
             
         
-            push.addListener('pushNotificationActionPerformed', notification => {
+            Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', notification => {
                 console.log('Push notification action performed', notification.actionId, notification.inputValue);
             });
-        }	
     });
 }
 
