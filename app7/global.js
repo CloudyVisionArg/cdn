@@ -1002,7 +1002,44 @@ async function addListenersCapacitor (pCallback) {
     await Capacitor.Plugins.PushNotifications.addListener('registrationError', err => {
         console.error('Registration error: ', err.error);
     });
+
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', notification => {
+        debugger;
+        const data = notification;
+        if (window.refreshNotifications) window.refreshNotifications();
+
+        var notifEv = new CustomEvent('pushNotification', { detail: { data } });
+        window.dispatchEvent(notifEv)
+
+        var clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
+
+        //App in foreground    
+        Capacitor.Plugins.App.getState().then((status)=>{
+            if(status.IsActive){
+                app7.notification.create({
+                    title: 'CLOUDY CRM7',
+                    subtitle: data.title,
+                    text: data.message,
+                    closeTimeout: 10000,
+                    on: {
+                        click: function (notif) {
+                            notif.close();
+                            window.dispatchEvent(clickEv);
+                        }
+                    }
+                }).open();
+            }
+            else{
+                window.dispatchEvent(clickEv);
+            }
+        })
+    });
+    
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+        console.log('Push notification action performed', notification.actionId, notification.inputValue);
+    });
 }
+
 
 async function registerNotificationsCapacitor() {
     let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
