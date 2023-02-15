@@ -966,8 +966,7 @@ function cleanDb(pCallback) {
  */
 // Registra el dispositivo para notificaciones Push
 async function pushRegistrationCapacitor(pCallback) {
-    debugger;
-    console.log('pushRegistration begin');
+    console.log('pushRegistrationCapacitor begin');
     await addListenersCapacitor(pCallback);
     await registerNotificationsCapacitor();
 }
@@ -1004,21 +1003,19 @@ async function addListenersCapacitor (pCallback) {
     });
 
     await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', async (notification) => {
-        debugger;
         let data = JSON.parse(JSON.stringify(notification.data));
         //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
         //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
         const status = await Capacitor.Plugins.App.getState();
         data.additionalData = notification.data;
         data.additionalData.foreground = status.isActive;
-        //data.additionalData.coldstart = 
-        //data.additionalData.dismissed = 
+        //TODO: data.additionalData.coldstart = 
+        //TODO: data.additionalData.dismissed = 
 
         if (window.refreshNotifications) window.refreshNotifications();
         window.dispatchEvent(new CustomEvent('pushNotification', { detail: { data } }));
         
         const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
-        debugger;
         //App in foreground    
         if(status.isActive){
             app7.notification.create({
