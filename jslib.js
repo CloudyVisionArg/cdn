@@ -189,7 +189,7 @@ function fileSize(size) {
 /*
 Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
 que debo esperar antes de realizar la prox iteracion. Si en iterations
-Paso 0 o undefined, se repite el loop hasta loop.break()
+paso undefined, se repite el loop hasta loop.break()
 
 asyncLoop(10,
     function (loop) {
@@ -214,7 +214,7 @@ function asyncLoop(iterations, loopFunc, callback) {
             	return;
 	        }
 	
-	        if (!iterations || index < iterations) {
+	        if (iterations == undefined || index < iterations) {
 	            index++;
 	            loopFunc(loop);
 	        } else {

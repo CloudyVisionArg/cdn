@@ -620,7 +620,7 @@ export class Document {
                             return;
                         }
                 
-                        if (!iterations || index < iterations) {
+                        if (iterations == undefined || index < iterations) {
                             index++;
                             loopFunc(loop);
                         } else {

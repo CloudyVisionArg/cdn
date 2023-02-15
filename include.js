@@ -77,7 +77,6 @@ function registeredScripts() {
 
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 210 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 210 });
-
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 207 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 206 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 206 });
