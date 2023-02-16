@@ -89,7 +89,6 @@ export class Session {
         })
     };
 
-    
     logon(login, password, instance, liteMode) {
         var me = this;
         var url = 'session/logon';
@@ -135,7 +134,7 @@ export class Session {
 };
 
 class Account {
-    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, ChildAccountRecursive, ChildAccounts, Description, Disabled, Email, FullName, GestarLogon, HasApiKey, IsAdmin, IsNew, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, System, Tags, Theme, TimeDiff, Type, WinLogon
+    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, ChildAccountRecursive, ChildAccounts, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
     #session;
 
     constructor(account, session) {
@@ -143,12 +142,154 @@ class Account {
         this.#session = session;
     }
 
+    get accountType() {
+        return this.type;
+    }
+
+    cast2User() {
+        //todo:
+    }
+
+    childAccounts(account) {
+        /* todo devuelve una cuenta hija (no recursivo) account es id o name
+        If IsNull(lngId) Then ErrRaise 13
+        strFilter = "ACC_ID in (select ACC_ID_CHILD from SYS_ACC_REL where ACC_ID_PARENT = " & lngId & ")"
+        Set ChildAccounts = Session.ConstructAccount(Account, strFilter)
+        */
+    }
+
+    childAccountsAdd(account) {
+        /* todo
+        if isNew error
+        if not esgrupo err
+        account es id o name
+        */
+    }
+
+    childAccountsList() {
+        /* todo
+        "ACC_ID in (select ACC_ID_CHILD from SYS_ACC_REL where ACC_ID_PARENT = " & lngId & ")"
+        Set ChildAccountsList = Session.Directory.AccountsSearch(strFilter, "NAME")
+        */
+    }
+
+    childAccountsRecursive() {
+        //todo
+    }
+
+    childAccountsRemove(account) {
+        /* todo
+        if isNew error
+        if not esgrupo err
+        account es id o name
+        */
+    }
+
+    delete() {
+        /* todo
+        If IsNull(lngId) Then ErrRaise 13
+        If blnSystem Then ErrRaise 82
+        lngId = Null ' Para que no se pueda seguir usando el objeto
+        */
+    }
+
+    get description() {
+        return this.#json.Description;
+    }
+
+    set description(value) {
+        this.#json.Description = value;
+    }
+
+    get email() {
+        return this.#json.Email;
+    }
+
+    set email(value) {
+        this.#json.Email = value;
+    }
+
     get id() {
         return this.#json.AccId;
     }
 
+    get isAdmin() {
+        return this.#json.IsAdmin;
+    }
+
+    get isNew() {
+        return this.#json.IsNew;
+    }
+
     get name() {
         return this.#json.Name;
+    }
+
+    set name(value) {
+        this.#json.Name = value;
+    }
+
+    parentAccounts(account) {
+        /* todo
+        If IsNull(lngId) Then ErrRaise 13
+        strFilter = "ACC_ID in (select ACC_ID_PARENT from SYS_ACC_REL where ACC_ID_CHILD = " & lngId & ")"
+        Set ParentAccounts = Session.ConstructAccount(Account, strFilter)
+        */
+    }
+
+    parentAccountsAdd(account) {
+        /* todo
+        If IsNull(lngId) Then ErrRaise 13
+        If IsNew Then ErrRaise 78
+        */
+    }
+
+    parentAccountsList() {
+        /* todo
+        If IsNull(lngId) Then ErrRaise 13
+        strFilter = "ACC_ID in (select ACC_ID_PARENT from SYS_ACC_REL where ACC_ID_CHILD = " & lngId & ")"
+        Set ParentAccountsList = Session.Directory.AccountsSearch(strFilter, "NAME")
+        */
+    }
+
+    parentAccountsRecursive() {
+        /* todo
+        If IsNull(lngId) Then ErrRaise 13
+        
+        If oDomParentAccountsRecursive Is Nothing Then
+            Set oDomParentAccountsRecursive = RelativeAccountsRecursive(0)
+        End If
+        Set ParentAccountsRecursive = oDomParentAccountsRecursive
+        */
+    }
+
+    parentAccountsRemove(account) {
+        /* todo
+        If IsNull(lngId) Then ErrRaise 13
+        If IsNew Then ErrRaise 78
+        ParentAccountsRemove = AccountsRelations(Account, Me, 1)
+        */
+    }
+
+    save() {
+        /* todo
+        If IsNull(lngId) Then ErrRaise 13
+        If lngType = SpecialAccount Then ErrRaise 103
+        Set Args(0) = Me
+        Session.Db.DoTemplate 81, , Args
+        */
+    }
+
+    get session() {
+        return this.#session;
+    }
+
+    get system() {
+        return this.#json.System;
+    }
+
+    get type() {
+        return this.#json.Type;
     }
 }
 
@@ -460,7 +601,7 @@ export class Document {
 
     attachmentsAdd(name) {
         if (!name) throw new Error('name is required');
-        
+
         var att = new Attachment({
             Name: name,
             IsNew: true,
@@ -648,6 +789,10 @@ export class Document {
 
     get session() {
         return this.#session;
+    }
+
+    subject() {
+        return this.fields('subject').value;
     }
 
     get tags() {
