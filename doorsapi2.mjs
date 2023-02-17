@@ -1246,6 +1246,8 @@ class User extends Account {
                 res => {
                     //todo: tengo q pisar el json del account
                     me.#json = res;
+                    debugger;
+                    super(res, me.session);
                     resolve(me);
                 },
                 reject
