@@ -279,15 +279,10 @@ class Account {
         return this.#accountsGet('parentAccountsList', 'Parent', account);
     }
 
-    parentAccountsAdd(account) {
-        /* todo
-        If IsNull(lngId) Then ErrRaise 13
-        If IsNew Then ErrRaise 78
-        */
-        accId = accId + "";
-        var url = "accounts/" + encodeURIComponent(accId) + "/parentAccounts";
-        return Doors.RESTFULL.asyncCall(url, "PUT", arrParentAccounts, "arrayParentAccounts");
-    
+    parentAccountsAdd(accounts) {
+        var accs = Array.isArray(accounts) ? accounts : [accounts];
+        var url = 'accounts/' + this.id + '/parentAccounts';
+        return this.session.restClient.asyncCall(url, 'PUT', accs, 'arrayParentAccounts');    
     }
 
     parentAccountsList() {
@@ -299,15 +294,9 @@ class Account {
     }
 
     parentAccountsRemove(account) {
-        /* todo
-        If IsNull(lngId) Then ErrRaise 13
-        If IsNew Then ErrRaise 78
-        ParentAccountsRemove = AccountsRelations(Account, Me, 1)
-        */
-        accId = accId + "";
-        var url = "accounts/" + encodeURIComponent(accId) + "/parentAccounts";
-        return Doors.RESTFULL.asyncCall(url, "DELETE", arrParentAccounts, "arrayParentAccounts");
-    
+        var accs = Array.isArray(accounts) ? accounts : [accounts];
+        var url = 'accounts/' + this.id + '/parentAccounts';
+        return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayParentAccounts');    
     }
 
     save() {
