@@ -293,7 +293,7 @@ class Account {
         return this.#accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
     }
 
-    parentAccountsRemove(account) {
+    parentAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
         return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayParentAccounts');    
