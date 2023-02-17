@@ -1188,7 +1188,15 @@ class View {
 
 class CIMap extends Map {
     find(cbFunc) {
-        super.every((el, key, map) => {
+        var me = this;
+        for (let [key, value] of super) {
+            if (cbFunc(el, key, me)) {
+                return el;
+                break;
+            }
+        }
+
+        super.forEach((el, key, map) => {
             if (cbFunc(el, key, map)) {
                 return el;
             }
