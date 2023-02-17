@@ -172,7 +172,7 @@ class Account {
                     } else {
                         // Busca por id
                         var acc;
-                        if (parseInt(account) && (acc = res.find(el => el.id == account))) {
+                        if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
                             resolve(acc);
                         } else {
                             reject(new Error('Child account not found'));
