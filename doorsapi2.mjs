@@ -231,16 +231,15 @@ class Account {
         return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayChildAccountIds');    
     }
 
-    delete() {
+    delete(expropiateObjects) {
         /* todo
         If IsNull(lngId) Then ErrRaise 13
         If blnSystem Then ErrRaise 82
         lngId = Null ' Para que no se pueda seguir usando el objeto
         */
-        if (!expropiateObjects) expropiateObjects = false;
-        var url = "accounts/" + encodeURIComponent(accId) + "?expropiateObjects=" + expropiateObjects;
-        return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
-    
+        var expObj = expropiateObjects ? true : false;
+        var url = 'accounts/' + this.id + '?expropiateObjects=' + expObj;
+        return this.session.restClient.asyncCall(url, 'DELETE', '', '');
     }
 
     get description() {
@@ -315,6 +314,17 @@ class Account {
                 reject
             )
         })
+
+        /*
+        var url = "accounts/" + account.AccId;
+        var operation = "POST";
+        if (account.AccId === undefined || account.AccId == null) {
+            operation = "PUT";
+            url = "accounts";
+        }
+        return Doors.RESTFULL.asyncCall(url, operation, account, "account");
+        */
+    
     }
 
     get session() {
@@ -1228,6 +1238,18 @@ class User extends Account {
 
     set login(value) {
         this.#json.Login = value;
+    }
+
+    save() {
+        /*
+        var url = "users/" + user.AccId;
+        var operation = "POST";
+        if (user.AccId === undefined || user.AccId == null || user.IsNew) {
+            operation = "PUT";
+            url = "users";
+        }
+        return Doors.RESTFULL.asyncCall(url, operation, user, "user");
+        */
     }
 }
 
