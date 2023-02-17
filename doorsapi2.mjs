@@ -165,6 +165,7 @@ class Account {
         return new Promise((resolve, reject) => {
             me.childAccountsList().then(
                 res => {
+                    debugger;
                     if (res.has(account)) {
                         resolve(map.get(account));
 
