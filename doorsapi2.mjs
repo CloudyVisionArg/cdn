@@ -1193,6 +1193,10 @@ class Form {
 
 class User extends Account {
 
+    get login() {
+        debugger;
+        return super.#json.Login;
+    }
 }
 
 
