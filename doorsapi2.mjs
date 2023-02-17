@@ -1244,6 +1244,7 @@ class User extends Account {
             }
             me.session.restClient.asyncCall(url, oper, me.toJSON(), 'user').then(
                 res => {
+                    //todo: tengo q pisar el json del account
                     me.#json = res;
                     resolve(me);
                 },
