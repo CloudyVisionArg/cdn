@@ -304,7 +304,6 @@ class Account {
     }
 
     save() {
-        debugger;
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'accounts/' + me.id;
