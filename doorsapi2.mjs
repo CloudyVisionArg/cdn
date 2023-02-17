@@ -308,12 +308,17 @@ class Account {
         Set Args(0) = Me
         Session.Db.DoTemplate 81, , Args
         */
-        var me = this; 
-        var url = 'accounts/' + me.id;
-        me.session.restClient.asyncCall(url, 'POST', me.toJSON(), 'account').then(
-            res => {debugger}
-        )
-    
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url = 'accounts/' + me.id;
+            me.session.restClient.asyncCall(url, 'POST', me.toJSON(), 'account').then(
+                res => {
+                    me.#json = res;
+                    resolve(me);
+                },
+                reject
+            )
+        })
     }
 
     get session() {
