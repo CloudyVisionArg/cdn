@@ -1,52 +1,52 @@
 [
     {        
-        "cartel_id": 100000001,
+        "popover_id": 100000001,
         "context": "explorer",
         "selector": ".subnavbar .smart-select .item-after",
         "title": "Vistas",
         "icon_md": "format_list_bulleted",
         "icon_ios": "list_bullet",
         "text": "Las vistas le ofrecen distintas formas de explorar sus datos",
-        "orden": "1"
+        "order": "1"
     },
     {        
-        "cartel_id": 100000012,
+        "popover_id": 100000012,
         "context": "explorer",
         "selector": ".navbar .right",
         "title": "Acciones de carpeta",
         "icon_md": "menu",
         "icon_ios": "square_arrow_up",
         "text": "Importar desde excel, ayuda, y otras opciones",
-        "orden": "4"
+        "order": "4"
     },
     {        
-        "cartel_id": 100000004,
+        "popover_id": 100000004,
         "context": "toolbar",
         "selector": "a[href='#view-notifications']",
         "title": "Notificaciones",
         "icon_md": "notifications",
         "icon_ios": "bell",
         "text": "Aqui podr&aacute; revisar las notificaciones recibidas",
-        "orden": "4"
+        "order": "4"
     },
     {        
-        "cartel_id": 100000005,
+        "popover_id": 100000005,
         "context": "toolbar",        
         "selector": "a[href='#view-opciones']",
         "title": "Opciones",
         "icon_md": "settings",
         "icon_ios": "gear_alt_fill",
         "text": "Cuenta, modo oscuro, y otras opciones",
-        "orden": "5"
+        "order": "5"
     },
     {        
-        "cartel_id": 100000010,
+        "popover_id": 100000010,
         "context": "opciones",        
         "selector": "#options-account .item-media",
         "title": "Cuenta",
         "icon_md": "account_circle",
         "icon_ios": "person_circle",
         "text": "Cambiar de usuario, cambiar su contrase&ntilde;a, y otras opciones",
-        "orden": "10"
+        "order": "10"
     }
 ]

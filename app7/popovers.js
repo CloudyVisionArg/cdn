@@ -84,15 +84,15 @@ function crearCarteles(pCartel,index,array){
         content: text,
         on: {
             open: function (popover) {
-                console.log('Popover open ' + pCartel["cartel_id"]);
+                console.log('Popover open ' + pCartel["popover_id"]);
             },
             opened: function (popover) {
-                console.log('Popover opened ' + pCartel["cartel_id"]);
+                console.log('Popover opened ' + pCartel["popover_id"]);
             },
             close: function (popover) {
                 var read = window.localStorage.getItem("popoversLeidos");
                 if (read) read += ',';
-                read += pCartel["cartel_id"];
+                read += pCartel["popover_id"];
                 window.localStorage.setItem("popoversLeidos", read);
             },  
         }
@@ -112,7 +112,7 @@ function renderPopovers(pArrPopovers){
     const arrRead = read ? read.split(",") : [];
 
     const arrFiltrados = pArrPopovers.filter((item)=>{
-        return arrRead.findIndex((x)=>x==item["cartel_id"]) < 0;
+        return arrRead.findIndex((x)=>x==item["popover_id"]) < 0;
     });
 
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
@@ -132,14 +132,14 @@ function generarCarteles(pScope){
     const contextformula =  pScope ? "context LIKE '" + pScope + "' OR context LIKE 'toolbar'" : "context LIKE 'toolbar'";
 
     var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
+    const cartelFormula = read ? "popover_id not in (" + read + ")" : "";
     let conector = ""
     if(contextformula !== "" && cartelFormula !== ""){
         conector = " and "
     }
     const finalFormula = contextformula + conector + cartelFormula
 
-    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
+    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
         function(res){            
             const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return (item["context"] == pScope || item["context"] == 'toolbar');
@@ -164,14 +164,14 @@ function generarCartelesVista(pVista){
     const vistaformula =  pVista ? "view LIKE '" + pVista + "'" : "";
 
     var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "cartel_id not in (" + read + ")" : "";
+    const cartelFormula = read ? "popover_id not in (" + read + ")" : "";
     let conector = ""
     if(vistaformula !== "" && cartelFormula !== ""){
         conector = " and "
     }
     const finalFormula = vistaformula + conector + cartelFormula
 
-    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "orden", 0, false, 0).then(
+    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
         function(res){            
             const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return item["VIEW"] == pVista;

@@ -2412,6 +2412,10 @@ function getListLinkItem(pLink) {
 
     $itemCont.click(pLink.click);
 
+    if (pLink.id){
+        $itemCont.attr('id', pLink.id);
+    }
+
     if (pLink.iosicon || pLink.mdicon) {
         var $itemMedia = $('<div/>', {
             class: 'item-media',
