@@ -1188,7 +1188,7 @@ class View {
 
 class CIMap extends Map {
     find(cbFunc) {
-        super.forEach((el, key, map) => {
+        super.every((el, key, map) => {
             if (cbFunc(el, key, map)) {
                 return el;
             }
