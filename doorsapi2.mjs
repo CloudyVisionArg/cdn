@@ -208,8 +208,9 @@ class Account {
     }
 
     childAccountsAdd(accounts) {
+        var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'PUT', accounts, 'arrayChildAccountIds');
+        return this.session.restClient.asyncCall(url, 'PUT', accs, 'arrayChildAccountIds');
     }
 
     childAccountsList() {
@@ -221,8 +222,9 @@ class Account {
     }
 
     childAccountsRemove(accounts) {
+        var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'DELETE', accounts, 'arrayChildAccountIds');    
+        return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayChildAccountIds');    
     }
 
     delete() {
