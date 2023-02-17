@@ -1190,8 +1190,8 @@ class CIMap extends Map {
     find(cbFunc) {
         var me = this;
         for (let [key, value] of super.entries()) {
-            if (cbFunc(el, key, me)) {
-                return el;
+            if (cbFunc(value, key, me)) {
+                return value;
                 break;
             }
         }
