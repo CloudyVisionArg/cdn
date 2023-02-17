@@ -142,7 +142,7 @@ class Account {
         this.#session = session;
     }
 
-    #accounts(listFunction, relative, account) {
+    #accountsGet(listFunction, relative, account) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -203,7 +203,7 @@ class Account {
     }
 
     childAccounts(account) {
-        return this.#accounts('childAccountsList', 'Child', account);
+        return this.#accountsGet('childAccountsList', 'Child', account);
     }
 
     childAccountsAdd(account) {
@@ -275,7 +275,7 @@ class Account {
     }
 
     parentAccounts(account) {
-        return this.#accounts('parentAccountsList', 'Parent', account);
+        return this.#accountsGet('parentAccountsList', 'Parent', account);
     }
 
     parentAccountsAdd(account) {
