@@ -1189,19 +1189,19 @@ class View {
 class CIMap extends Map {
     find(cbFunc) {
         var me = this;
-        for (let [key, value] of super) {
+        for (let [key, value] of super.entries()) {
             if (cbFunc(el, key, me)) {
                 return el;
                 break;
             }
         }
+        return undefined;
 
         super.forEach((el, key, map) => {
             if (cbFunc(el, key, map)) {
                 return el;
             }
         });
-        return undefined;
     }
 
     get(key) {
