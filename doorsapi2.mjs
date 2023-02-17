@@ -133,6 +133,7 @@ export class Session {
     }
 };
 
+
 class Account {
     #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
     #session;
@@ -207,11 +208,8 @@ class Account {
     }
 
     childAccountsAdd(account) {
-        /* todo
-        if isNew error
-        if not esgrupo err
-        account es id o name
-        */
+        var url = 'accounts/' + me.id + '/childAccounts';
+        return me.session.restClient.asyncCall(url, 'PUT', arrayChildAccounts, 'arrayChildAccountIds');
     }
 
     childAccountsList() {
@@ -223,11 +221,8 @@ class Account {
     }
 
     childAccountsRemove(account) {
-        /* todo
-        if isNew error
-        if not esgrupo err
-        account es id o name
-        */
+        var url = 'accounts/' + me.id + '/childAccounts';
+        return me.session.restClient.asyncCall(url, 'DELETE', arrayChildAccounts, 'arrayChildAccountIds');    
     }
 
     delete() {
@@ -236,6 +231,10 @@ class Account {
         If blnSystem Then ErrRaise 82
         lngId = Null ' Para que no se pueda seguir usando el objeto
         */
+        if (!expropiateObjects) expropiateObjects = false;
+        var url = "accounts/" + encodeURIComponent(accId) + "?expropiateObjects=" + expropiateObjects;
+        return Doors.RESTFULL.asyncCall(url, "DELETE", "", "");
+    
     }
 
     get description() {
@@ -283,6 +282,10 @@ class Account {
         If IsNull(lngId) Then ErrRaise 13
         If IsNew Then ErrRaise 78
         */
+        accId = accId + "";
+        var url = "accounts/" + encodeURIComponent(accId) + "/parentAccounts";
+        return Doors.RESTFULL.asyncCall(url, "PUT", arrParentAccounts, "arrayParentAccounts");
+    
     }
 
     parentAccountsList() {
@@ -299,15 +302,13 @@ class Account {
         If IsNew Then ErrRaise 78
         ParentAccountsRemove = AccountsRelations(Account, Me, 1)
         */
+        accId = accId + "";
+        var url = "accounts/" + encodeURIComponent(accId) + "/parentAccounts";
+        return Doors.RESTFULL.asyncCall(url, "DELETE", arrParentAccounts, "arrayParentAccounts");
+    
     }
 
     save() {
-        /* todo
-        If IsNull(lngId) Then ErrRaise 13
-        If lngType = SpecialAccount Then ErrRaise 103
-        Set Args(0) = Me
-        Session.Db.DoTemplate 81, , Args
-        */
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'accounts/' + me.id;
@@ -337,6 +338,7 @@ class Account {
         return this.#json.Type;
     }
 }
+
 
 class Application {
     #parent;
@@ -388,6 +390,7 @@ class Application {
         return this.parent.session;
     }
 }
+
 
 class Attachment {
     #parent; // Document
@@ -515,6 +518,7 @@ class Attachment {
     }
 }
 
+
 class Directory {
     #session;
     
@@ -546,6 +550,22 @@ class Directory {
         });
     }
 
+    accountsNew() {
+        //todo
+        /*
+        var url;
+        if (accountType === AccountsTypeEnum.UserAccount.value) { //1
+            url = "users/new";
+        } else if (accountType === AccountsTypeEnum.GroupAccount.value) { //2
+            url = "groups/new";
+        } else {
+            return null;
+        }
+        return Doors.RESTFULL.asyncCall(url, "GET", "", "");
+        */
+    
+    }
+
     accountsSearch(filter, order) {
         let url = '/accounts/search?filter=' + encURIC(filter) + '&order=' + encURIC(order);
         return this.session.restClient.asyncCall(url, 'GET', '', '');
@@ -555,6 +575,7 @@ class Directory {
         return this.#session;
     }
 };
+
 
 export class Document {
     #parent;
@@ -849,6 +870,7 @@ export class Document {
     }
 };
 
+
 class Field {
     #parent; // Document / Form
     #json;
@@ -934,6 +956,7 @@ class Field {
         return this.#json.ValueOld;
     }
 };
+
 
 export class Folder {
     #json;
@@ -1113,6 +1136,7 @@ export class Folder {
     }
 };
 
+
 class Form {
     #json;
     #session;
@@ -1166,13 +1190,16 @@ class Form {
     }
 };
 
-class User {
+
+class User extends Account {
 
 }
+
 
 class View {
     
 }
+
 
 class CIMap extends Map {
     find(cbFunc) {
@@ -1213,6 +1240,7 @@ class CIMap extends Map {
         return super.set(key, value);
     }
 };
+
 
 class RestClient {
     AuthToken = null;
