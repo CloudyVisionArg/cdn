@@ -209,7 +209,7 @@ class Account {
 
     childAccountsAdd(account) {
         var url = 'accounts/' + this.id + '/childAccounts';
-        return me.session.restClient.asyncCall(url, 'PUT', arrayChildAccounts, 'arrayChildAccountIds');
+        return this.session.restClient.asyncCall(url, 'PUT', arrayChildAccounts, 'arrayChildAccountIds');
     }
 
     childAccountsList() {
@@ -222,7 +222,7 @@ class Account {
 
     childAccountsRemove(account) {
         var url = 'accounts/' + this.id + '/childAccounts';
-        return me.session.restClient.asyncCall(url, 'DELETE', arrayChildAccounts, 'arrayChildAccountIds');    
+        return this.session.restClient.asyncCall(url, 'DELETE', arrayChildAccounts, 'arrayChildAccountIds');    
     }
 
     delete() {
