@@ -232,11 +232,6 @@ class Account {
     }
 
     delete(expropiateObjects) {
-        /* todo
-        If IsNull(lngId) Then ErrRaise 13
-        If blnSystem Then ErrRaise 82
-        lngId = Null ' Para que no se pueda seguir usando el objeto
-        */
         var expObj = expropiateObjects ? true : false;
         var url = 'accounts/' + this.id + '?expropiateObjects=' + expObj;
         return this.session.restClient.asyncCall(url, 'DELETE', '', '');
@@ -305,8 +300,15 @@ class Account {
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'accounts/' + me.id;
-            me.session.restClient.asyncCall(url, 'POST', me.toJSON(), 'account').then(
+            var url, oper;
+            if (me.isNew || me.id == undefined) {
+                url = 'accounts';
+                oper = 'PUT';
+            } else {
+                url = 'accounts/' + me.id;
+                oper = 'POST';
+            }
+            me.session.restClient.asyncCall(url, oper, me.toJSON(), 'account').then(
                 res => {
                     me.#json = res;
                     resolve(me);
@@ -314,17 +316,6 @@ class Account {
                 reject
             )
         })
-
-        /*
-        var url = "accounts/" + account.AccId;
-        var operation = "POST";
-        if (account.AccId === undefined || account.AccId == null) {
-            operation = "PUT";
-            url = "accounts";
-        }
-        return Doors.RESTFULL.asyncCall(url, operation, account, "account");
-        */
-    
     }
 
     get session() {
