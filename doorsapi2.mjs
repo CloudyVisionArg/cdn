@@ -142,6 +142,29 @@ class Account {
         this.#session = session;
     }
 
+    #accounts(listFunction, relative, account) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            listFunction().then(
+                res => {
+                    if (res.has(account)) {
+                        resolve(res.get(account));
+
+                    } else {
+                        // Busca por id
+                        var acc;
+                        if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
+                            resolve(acc);
+                        } else {
+                            reject(new Error(relative + ' account not found'));
+                        }
+                    }
+                },
+                reject
+            )
+        });
+    }
+
     #accountsList(property, endPoint) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -180,26 +203,7 @@ class Account {
     }
 
     childAccounts(account) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.childAccountsList().then(
-                res => {
-                    if (res.has(account)) {
-                        resolve(res.get(account));
-
-                    } else {
-                        // Busca por id
-                        var acc;
-                        if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
-                            resolve(acc);
-                        } else {
-                            reject(new Error('Child account not found'));
-                        }
-                    }
-                },
-                reject
-            )
-        });
+        return this.#accounts(this.childAccountsList, 'Child', account);
     }
 
     childAccountsAdd(account) {
@@ -271,11 +275,7 @@ class Account {
     }
 
     parentAccounts(account) {
-        /* todo
-        If IsNull(lngId) Then ErrRaise 13
-        strFilter = "ACC_ID in (select ACC_ID_PARENT from SYS_ACC_REL where ACC_ID_CHILD = " & lngId & ")"
-        Set ParentAccounts = Session.ConstructAccount(Account, strFilter)
-        */
+        return this.#accounts(this.parentAccountsList, 'Parent', account);
     }
 
     parentAccountsAdd(account) {
