@@ -1192,10 +1192,17 @@ class Form {
 
 
 class User extends Account {
+    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
+    #session;
+
+    constructor(account, session) {
+        this.#json = account;
+        this.#session = session;
+    }
 
     get login() {
         debugger;
-        return super.#json.Login;
+        return this.#json.Login;
     }
 }
 
