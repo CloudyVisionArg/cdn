@@ -151,13 +151,6 @@ class Account {
     }
 
     childAccounts(account) {
-        return new Promise((resolve, reject) => {
-            var url = 'accounts/' + me.id + '/childAccounts';
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
-                res => {debugger}
-            )
-        });
-
         /* todo devuelve una cuenta hija (no recursivo) account es id o name
         If IsNull(lngId) Then ErrRaise 13
         strFilter = "ACC_ID in (select ACC_ID_CHILD from SYS_ACC_REL where ACC_ID_PARENT = " & lngId & ")"
@@ -174,6 +167,13 @@ class Account {
     }
 
     childAccountsList() {
+        return new Promise((resolve, reject) => {
+            var url = 'accounts/' + me.id + '/childAccounts';
+            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                res => {debugger}
+            )
+        });
+
         /* todo
         "ACC_ID in (select ACC_ID_CHILD from SYS_ACC_REL where ACC_ID_PARENT = " & lngId & ")"
         Set ChildAccountsList = Session.Directory.AccountsSearch(strFilter, "NAME")
