@@ -1232,15 +1232,25 @@ class User extends Account {
     }
 
     save() {
-        /*
-        var url = "users/" + user.AccId;
-        var operation = "POST";
-        if (user.AccId === undefined || user.AccId == null || user.IsNew) {
-            operation = "PUT";
-            url = "users";
-        }
-        return Doors.RESTFULL.asyncCall(url, operation, user, "user");
-        */
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url, oper;
+            if (me.isNew || me.id == undefined) {
+                url = 'users';
+                oper = 'PUT';
+            } else {
+                url = 'users/' + me.id;
+                oper = 'POST';
+            }
+            me.session.restClient.asyncCall(url, oper, me.toJSON(), 'user').then(
+                res => {
+                    debugger;
+                    me.#json = res;
+                    resolve(me);
+                },
+                reject
+            )
+        })
     }
 }
 
