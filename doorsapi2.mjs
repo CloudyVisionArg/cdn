@@ -165,18 +165,17 @@ class Account {
         return new Promise((resolve, reject) => {
             me.childAccountsList().then(
                 res => {
+                    debugger;
                     if (res.has(account)) {
                         resolve(res.get(account));
 
-                    } else {
+                    } else if (parseInt(account)) {
                         // Busca por id
                         var acc = res.find(el => el.id == account);
-                        if (acc) {
-                            resolve(acc);
-                        } else {
-                            reject(new Error('Child account not found'));
-                        }
+                        if (acc) resolve(acc);
                     }
+
+                    reject(new Error('Child account not found'));
                 },
                 reject
             )
