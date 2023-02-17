@@ -166,7 +166,7 @@ class Account {
             me.childAccountsList().then(
                 res => {
                     if (res.has(account)) {
-                        resolve(map.get(account));
+                        resolve(res.get(account));
 
                     } else {
                         // Busca por id
