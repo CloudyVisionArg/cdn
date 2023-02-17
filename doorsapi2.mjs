@@ -208,7 +208,7 @@ class Account {
     }
 
     childAccountsAdd(account) {
-        var url = 'accounts/' + me.id + '/childAccounts';
+        var url = 'accounts/' + this.id + '/childAccounts';
         return me.session.restClient.asyncCall(url, 'PUT', arrayChildAccounts, 'arrayChildAccountIds');
     }
 
@@ -221,7 +221,7 @@ class Account {
     }
 
     childAccountsRemove(account) {
-        var url = 'accounts/' + me.id + '/childAccounts';
+        var url = 'accounts/' + this.id + '/childAccounts';
         return me.session.restClient.asyncCall(url, 'DELETE', arrayChildAccounts, 'arrayChildAccountIds');    
     }
 
