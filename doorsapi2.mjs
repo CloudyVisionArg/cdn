@@ -134,7 +134,7 @@ export class Session {
 };
 
 class Account {
-    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, ChildAccountRecursive, ChildAccounts, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
+    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
     #session;
 
     constructor(account, session) {
@@ -193,15 +193,25 @@ class Account {
                 )
             }
         });
-
-        /* todo
-        "ACC_ID in (select ACC_ID_CHILD from SYS_ACC_REL where ACC_ID_PARENT = " & lngId & ")"
-        Set ChildAccountsList = Session.Directory.AccountsSearch(strFilter, "NAME")
-        */
     }
 
     childAccountsRecursive() {
-        //todo
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (me.#json.ChildAccountRecursive) {
+                resolve(me.#accountsMap(me.#json.ChildAccountRecursive));
+
+            } else {
+                var url = 'accounts/' + me.id + '/childAccountsRecursive';
+                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    res => {
+                        me.#json.ChildAccountRecursive = res;
+                        resolve(me.#accountsMap(me.#json.ChildAccountRecursive));
+                    },
+                    reject
+                )
+            }
+        });
     }
 
     childAccountsRemove(account) {
@@ -313,6 +323,10 @@ class Account {
 
     get system() {
         return this.#json.System;
+    }
+
+    toJSON() {
+        return this.#json;
     }
 
     get type() {
