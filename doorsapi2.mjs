@@ -1196,13 +1196,30 @@ class Form {
 
 
 class User extends Account {
-    #json; // AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
+    #json; // AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
     #session;
 
     constructor(account, session) {
         super(account, session);
         this.#json = account;
         this.#session = session;
+    }
+
+    get fullName() {
+        return this.#json.FullName;
+    }
+
+    set fullName(value) {
+        this.#json.FullName = value;
+    }
+
+    get gestarLogon() {
+        return this.#json.GestarLogon;
+    }
+
+    set gestarLogon(value) {
+        debugger;
+        this.#json.GestarLogon = value;
     }
 
     get login() {
