@@ -541,20 +541,29 @@ class Directory {
         });
     }
 
-    accountsNew() {
-        //todo
-        /*
-        var url;
-        if (accountType === AccountsTypeEnum.UserAccount.value) { //1
-            url = "users/new";
-        } else if (accountType === AccountsTypeEnum.GroupAccount.value) { //2
-            url = "groups/new";
-        } else {
-            return null;
-        }
-        return Doors.RESTFULL.asyncCall(url, "GET", "", "");
-        */
-    
+    accountsNew(type) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url;
+            if (type == 1) {
+                url = 'users/new';
+            } else if (type == 2) {
+                url = 'groups/new';
+            } else {
+                reject(new Error('Invalid account type'));
+            }
+
+            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                res => {
+                    if (type == 1) {
+                        resolve(new User(res, me.session));
+                    } else if (type == 2) {
+                        resolve(new Account(res, me.session));
+                    }
+                },
+                reject
+            )
+        })
     }
 
     accountsSearch(filter, order) {
