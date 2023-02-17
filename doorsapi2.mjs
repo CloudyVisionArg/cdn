@@ -1192,16 +1192,9 @@ class CIMap extends Map {
         for (let [key, value] of super.entries()) {
             if (cbFunc(value, key, me)) {
                 return value;
-                break;
             }
         }
         return undefined;
-
-        super.forEach((el, key, map) => {
-            if (cbFunc(el, key, map)) {
-                return el;
-            }
-        });
     }
 
     get(key) {
