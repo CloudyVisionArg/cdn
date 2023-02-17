@@ -142,6 +142,25 @@ class Account {
         this.#session = session;
     }
 
+    #accountsList(property, endPoint) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (me.#json[property]) {
+                resolve(me.#accountsMap(me.#json[property]));
+
+            } else {
+                var url = 'accounts/' + me.id + '/' + endPoint;
+                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    res => {
+                        me.#json[property] = res;
+                        resolve(me.#accountsMap(me.#json[property]));
+                    },
+                    reject
+                )
+            }
+        });
+    }
+
     #accountsMap(accounts) {
         var me = this;
         var map = new CIMap();
@@ -192,41 +211,11 @@ class Account {
     }
 
     childAccountsList() {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            if (me.#json.ChildAccounts) {
-                resolve(me.#accountsMap(me.#json.ChildAccounts));
-
-            } else {
-                var url = 'accounts/' + me.id + '/childAccounts';
-                me.session.restClient.asyncCall(url, 'GET', '', '').then(
-                    res => {
-                        me.#json.ChildAccounts = res;
-                        resolve(me.#accountsMap(me.#json.ChildAccounts));
-                    },
-                    reject
-                )
-            }
-        });
+        return this.#accountsList('ChildAccountsList', 'childAccounts');
     }
 
     childAccountsRecursive() {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            if (me.#json.ChildAccountRecursive) {
-                resolve(me.#accountsMap(me.#json.ChildAccountRecursive));
-
-            } else {
-                var url = 'accounts/' + me.id + '/childAccountsRecursive';
-                me.session.restClient.asyncCall(url, 'GET', '', '').then(
-                    res => {
-                        me.#json.ChildAccountRecursive = res;
-                        resolve(me.#accountsMap(me.#json.ChildAccountRecursive));
-                    },
-                    reject
-                )
-            }
-        });
+        return this.#accountsList('ChildAccountsListRecursive', 'childAccountsRecursive');
     }
 
     childAccountsRemove(account) {
@@ -297,22 +286,11 @@ class Account {
     }
 
     parentAccountsList() {
-        /* todo
-        If IsNull(lngId) Then ErrRaise 13
-        strFilter = "ACC_ID in (select ACC_ID_PARENT from SYS_ACC_REL where ACC_ID_CHILD = " & lngId & ")"
-        Set ParentAccountsList = Session.Directory.AccountsSearch(strFilter, "NAME")
-        */
+        return this.#accountsList('ParentAccountsList', 'parentAccounts');
     }
 
     parentAccountsRecursive() {
-        /* todo
-        If IsNull(lngId) Then ErrRaise 13
-        
-        If oDomParentAccountsRecursive Is Nothing Then
-            Set oDomParentAccountsRecursive = RelativeAccountsRecursive(0)
-        End If
-        Set ParentAccountsRecursive = oDomParentAccountsRecursive
-        */
+        return this.#accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
     }
 
     parentAccountsRemove(account) {
