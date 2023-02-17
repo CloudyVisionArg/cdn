@@ -207,9 +207,9 @@ class Account {
         return this.#accountsGet('childAccountsList', 'Child', account);
     }
 
-    childAccountsAdd(account) {
+    childAccountsAdd(accounts) {
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'PUT', arrayChildAccounts, 'arrayChildAccountIds');
+        return this.session.restClient.asyncCall(url, 'PUT', accounts, 'arrayChildAccountIds');
     }
 
     childAccountsList() {
@@ -220,9 +220,9 @@ class Account {
         return this.#accountsList('ChildAccountsListRecursive', 'childAccountsRecursive');
     }
 
-    childAccountsRemove(account) {
+    childAccountsRemove(accounts) {
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'DELETE', arrayChildAccounts, 'arrayChildAccountIds');    
+        return this.session.restClient.asyncCall(url, 'DELETE', accounts, 'arrayChildAccountIds');    
     }
 
     delete() {
