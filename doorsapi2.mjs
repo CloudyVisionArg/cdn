@@ -1196,6 +1196,7 @@ class User extends Account {
     #session;
 
     constructor(account, session) {
+        super(account, session);
         this.#json = account;
         this.#session = session;
     }
