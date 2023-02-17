@@ -171,7 +171,7 @@ class Account {
 
                     } else {
                         // Busca por id
-                        var acc = res.find(el => el.id = account);
+                        var acc = res.find(el => el.id == account);
                         if (acc) {
                             resolve(acc);
                         } else {
