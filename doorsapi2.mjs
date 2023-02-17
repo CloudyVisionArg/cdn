@@ -200,7 +200,11 @@ class Account {
     }
 
     cast2User() {
-        //todo:
+        if (this.type == 1) {
+            return new User(this.#json, this.#session);
+        } else {
+            throw new Error('User account required')
+        }
     }
 
     childAccounts(account) {
@@ -1192,7 +1196,7 @@ class Form {
 
 
 class User extends Account {
-    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
+    #json; // AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
     #session;
 
     constructor(account, session) {
@@ -1202,8 +1206,11 @@ class User extends Account {
     }
 
     get login() {
-        debugger;
         return this.#json.Login;
+    }
+
+    set login(value) {
+        this.#json.Login = value;
     }
 }
 
