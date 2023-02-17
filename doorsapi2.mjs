@@ -161,11 +161,26 @@ class Account {
     }
 
     childAccounts(account) {
-        /* todo devuelve una cuenta hija (no recursivo) account es id o name
-        If IsNull(lngId) Then ErrRaise 13
-        strFilter = "ACC_ID in (select ACC_ID_CHILD from SYS_ACC_REL where ACC_ID_PARENT = " & lngId & ")"
-        Set ChildAccounts = Session.ConstructAccount(Account, strFilter)
-        */
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.childAccountsList().then(
+                res => {
+                    if (res.has(account)) {
+                        resolve(map.get(account));
+
+                    } else {
+                        // Busca por id
+                        var acc = res.find(el => el.id = account);
+                        if (acc) {
+                            resolve(acc);
+                        } else {
+                            reject(new Error('Child account not found'));
+                        }
+                    }
+                },
+                reject
+            )
+        });
     }
 
     childAccountsAdd(account) {
@@ -1170,7 +1185,16 @@ class View {
     
 }
 
-class CIMap extends Map {    
+class CIMap extends Map {
+    find(cbFunc) {
+        super.forEach((el, key, map) => {
+            if (cbFunc(el, key, map)) {
+                return el;
+            }
+        });
+        return undefined;
+    }
+
     get(key) {
         var k;
         if (typeof key === 'string') {
