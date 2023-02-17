@@ -167,6 +167,7 @@ class Account {
     }
 
     childAccountsList() {
+        var me = this;
         return new Promise((resolve, reject) => {
             var url = 'accounts/' + me.id + '/childAccounts';
             me.session.restClient.asyncCall(url, 'GET', '', '').then(
