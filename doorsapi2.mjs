@@ -142,6 +142,16 @@ class Account {
         this.#session = session;
     }
 
+    #accountsMap(accounts) {
+        var me = this;
+        var map = new CIMap();
+        accounts.forEach(el => {
+            var acc = new Account(el, me.session);
+            map.set(acc.name, acc);
+        });
+        return map;
+    }
+
     get accountType() {
         return this.type;
     }
@@ -169,10 +179,19 @@ class Account {
     childAccountsList() {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'accounts/' + me.id + '/childAccounts';
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
-                res => {debugger}
-            )
+            if (me.#json.ChildAccounts) {
+                resolve(me.#accountsMap(me.#json.ChildAccounts));
+
+            } else {
+                var url = 'accounts/' + me.id + '/childAccounts';
+                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    res => {
+                        me.#json.ChildAccounts = res;
+                        resolve(me.#accountsMap(me.#json.ChildAccounts));
+                    },
+                    reject
+                )
+            }
         });
 
         /* todo
