@@ -301,15 +301,16 @@ class Account {
         var me = this;
         debugger;
         return new Promise((resolve, reject) => {
+            var type = me instanceof User ? 'user' : 'account';
             var url, oper;
             if (me.isNew || me.id == undefined) {
-                url = 'accounts';
+                url = type + 's';
                 oper = 'PUT';
             } else {
-                url = 'accounts/' + me.id;
+                url = type + 's/' + me.id;
                 oper = 'POST';
             }
-            me.session.restClient.asyncCall(url, oper, me.toJSON(), 'account').then(
+            me.session.restClient.asyncCall(url, oper, me.toJSON(), type).then(
                 res => {
                     me.#json = res;
                     resolve(me);
@@ -1198,38 +1199,38 @@ class Form {
 
 
 class User extends Account {
-    #json; // AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
-    #session;
+    // AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
 
+    /*
     constructor(account, session) {
         super(account, session);
         this.#json = account;
         this.#session = session;
     }
+    */
 
     get fullName() {
-        return this.#json.FullName;
+        return this.toJSON().FullName;
     }
 
     set fullName(value) {
-        this.#json.FullName = value;
+        this.toJSON().FullName = value;
     }
 
     get gestarLogon() {
-        return this.#json.GestarLogon;
+        return this.toJSON().GestarLogon;
     }
 
     set gestarLogon(value) {
-        debugger;
-        this.#json.GestarLogon = value;
+        this.toJSON().GestarLogon = value;
     }
 
     get login() {
-        return this.#json.Login;
+        return this.toJSON().Login;
     }
 
     set login(value) {
-        this.#json.Login = value;
+        this.toJSON().Login = value;
     }
 
     /*
