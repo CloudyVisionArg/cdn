@@ -135,7 +135,7 @@ export class Session {
 
 
 class Account {
-    #json; // AccId, AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, FullName, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Login, Name, ParentAccountList, ParentAccounts, ParentAccountsRecursive, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
+    #json;
     #session;
 
     constructor(account, session) {
@@ -143,7 +143,7 @@ class Account {
         this.#session = session;
     }
 
-    #accountsGet(listFunction, relative, account) {
+    #accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -157,7 +157,7 @@ class Account {
                         if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
                             resolve(acc);
                         } else {
-                            reject(new Error(relative + ' account not found'));
+                            reject(new Error('Account not found'));
                         }
                     }
                 },
@@ -208,7 +208,7 @@ class Account {
     }
 
     childAccounts(account) {
-        return this.#accountsGet('childAccountsList', 'Child', account);
+        return this.#accountsGet('childAccountsList', account);
     }
 
     childAccountsAdd(accounts) {
@@ -274,7 +274,7 @@ class Account {
     }
 
     parentAccounts(account) {
-        return this.#accountsGet('parentAccountsList', 'Parent', account);
+        return this.#accountsGet('parentAccountsList', account);
     }
 
     parentAccountsAdd(accounts) {
@@ -299,7 +299,6 @@ class Account {
 
     save() {
         var me = this;
-        debugger;
         return new Promise((resolve, reject) => {
             var type = me instanceof User ? 'user' : 'account';
             var url, oper;
@@ -326,6 +325,10 @@ class Account {
 
     get system() {
         return this.#json.System;
+    }
+
+    get tags() {
+        return this.#json.Tags;
     }
 
     toJSON() {
@@ -778,7 +781,6 @@ export class Document {
             );
 
             function saveAttachs(resolve, reject) {
-                //todo: guardar los attachs
                 var proms = [];
                 var rm = [];
                 var attMap = me.#attachmentsMap;
@@ -788,7 +790,7 @@ export class Document {
                     var el = attMap.get(key);      
 
                     if (el.isNew) {
-                        var formData = new FormData(); // ver en node, URLSearchParams no anda, probar https://www.npmjs.com/package/form-data
+                        var formData = new FormData(); //todo ver en node, URLSearchParams no anda, probar https://www.npmjs.com/package/form-data
                         // todo: como subimos el Tag?
                         var arrBuf = await el.fileStream;
                         formData.append('attachment', new Blob([arrBuf]), el.name);
@@ -825,37 +827,6 @@ export class Document {
                         }
                     )
                 })
-            }
-
-            function asyncLoop(iterations, loopFunc, callback) {
-                var index = 0;
-                var done = false;
-                var loop = {
-                    next: function() {
-                        if (done) {
-                            return;
-                        }
-                
-                        if (iterations == undefined || index < iterations) {
-                            index++;
-                            loopFunc(loop);
-                        } else {
-                            done = true;
-                            if (callback) callback();
-                        }
-                    },
-                
-                    iteration: function() {
-                        return index - 1;
-                    },
-                
-                    break: function() {
-                        done = true;
-                        if (callback) callback();
-                    }
-                };
-                loop.next();
-                return loop;
             }
         })
     }
@@ -987,22 +958,30 @@ export class Folder {
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            var res
+            var res, docId;
+
             if (isNaN(document)) {
                 res = await me.search({ fields: 'doc_id', formula: document });
-            } else {
-                res = await me.search({ fields: 'doc_id', formula: 'doc_id = ' + document });
-            }
-            if (res.length == 0) {
-                reject(new Error('Document not found'));
-            } else if (res.length > 1) {
-                reject(new Error('Expression returns more than one document'));
+
+                if (res.length == 0) {
+                    reject(new Error('Document not found'));
+                } else if (res.length > 1) {
+                    reject(new Error('Expression returns more than one document'));
+                } else {
+                    docId = res[0]['DOC_ID'];
+                }
 
             } else {
-                let url = 'documents/' + res[0]['DOC_ID'];
-                let jsn = await me.session.restClient.asyncCall(url, 'GET', '', '');
-                resolve(new Document(jsn, me.session, me));
+                docId = document;
             }
+
+            let url = 'documents/' + docId;
+            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                res => {
+                    resolve(new Document(res, me.session, me));
+                },
+                reject
+            )
         });
     }
 
@@ -1199,15 +1178,45 @@ class Form {
 
 
 class User extends Account {
-    // AdfsLogon, Business, CanNotChangePwd, ChangePwdNextLogon, Disabled, GestarLogon, HasApiKey, LDAPLogon, LDAPServer, LngId, Password, Phone, PictureProfile, PwdChanged, PwdNeverExpires, Tags, Theme, TimeDiff, WinLogon
-
-    /*
-    constructor(account, session) {
-        super(account, session);
-        this.#json = account;
-        this.#session = session;
+    get adfsLogon() {
+        return this.toJSON().AdfsLogon;
     }
-    */
+
+    set adfsLogon(value) {
+        this.toJSON().AdfsLogon = value;
+    }
+
+    get business() {
+        return this.toJSON().Business;
+    }
+
+    set business(value) {
+        this.toJSON().Business = value;
+    }
+
+    get canNotChangePwd() {
+        return this.toJSON().CanNotChangePwd;
+    }
+
+    set canNotChangePwd(value) {
+        this.toJSON().CanNotChangePwd = value;
+    }
+
+    get changePwdNextLogon() {
+        return this.toJSON().ChangePwdNextLogon;
+    }
+
+    set changePwdNextLogon(value) {
+        this.toJSON().ChangePwdNextLogon = value;
+    }
+
+    get disabled() {
+        return this.toJSON().Disabled;
+    }
+
+    set disabled(value) {
+        this.toJSON().Disabled = value;
+    }
 
     get fullName() {
         return this.toJSON().FullName;
@@ -1225,6 +1234,38 @@ class User extends Account {
         this.toJSON().GestarLogon = value;
     }
 
+    get hasApiKey() {
+        return this.toJSON().HasApiKey;
+    }
+
+    set hasApiKey(value) {
+        this.toJSON().HasApiKey = value;
+    }
+
+    get language() {
+        return this.toJSON().LngId;
+    }
+
+    set language(value) {timeDiff
+        this.toJSON().LngId = value;
+    }
+
+    get ldapLogon() {
+        return this.toJSON().LDAPLogon;
+    }
+
+    set ldapLogon(value) {timeDiff
+        this.toJSON().LDAPLogon = value;
+    }
+
+    get ldapServer() {
+        return this.toJSON().LDAPServer;
+    }
+
+    set ldapServer(value) {timeDiff
+        this.toJSON().LDAPServer = value;
+    }
+
     get login() {
         return this.toJSON().Login;
     }
@@ -1233,29 +1274,69 @@ class User extends Account {
         this.toJSON().Login = value;
     }
 
-    /*
-    save() {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            var url, oper;
-            if (me.isNew || me.id == undefined) {
-                url = 'users';
-                oper = 'PUT';
-            } else {
-                url = 'users/' + me.id;
-                oper = 'POST';
-            }
-            me.session.restClient.asyncCall(url, oper, me.toJSON(), 'user').then(
-                res => {
-                    //todo: tengo q pisar el json del account
-                    me.#json = res;
-                    resolve(me);
-                },
-                reject
-            )
-        })
+    get password() {
+        return this.toJSON().Password;
     }
-    */
+
+    set password(value) {
+        this.toJSON().Password = value;
+    }
+
+    get phone() {
+        return this.toJSON().Phone;
+    }
+
+    set phone(value) {
+        this.toJSON().Phone = value;
+    }
+
+    get pictureProfile() {
+        return this.toJSON().PictureProfile;
+    }
+
+    set pictureProfile(value) {
+        this.toJSON().PictureProfile = value;
+    }
+
+    get pwdChanged() {
+        return this.toJSON().PwdChanged;
+    }
+
+    set pwdChanged(value) {
+        this.toJSON().PwdChanged = value;
+    }
+
+    get pwdNeverExpires() {
+        return this.toJSON().PwdNeverExpires;
+    }
+
+    set pwdNeverExpires(value) {
+        this.toJSON().PwdNeverExpires = value;
+    }
+
+    get theme() {
+        return this.toJSON().Theme;
+    }
+
+    set theme(value) {
+        this.toJSON().Theme = value;
+    }
+
+    get timeDiff() {
+        return this.toJSON().TimeDiff;
+    }
+
+    set timeDiff(value) {
+        this.toJSON().TimeDiff = value;
+    }
+
+    get winLogon() {
+        return this.toJSON().WinLogon;
+    }
+
+    set winLogon(value) {
+        this.toJSON().WinLogon = value;
+    }
 }
 
 
@@ -1435,4 +1516,35 @@ class RestClient {
 
 function encURIC(value) {
     return (value == null || value == undefined) ? '' : encodeURIComponent(value);
+}
+
+function asyncLoop(iterations, loopFunc, callback) {
+    var index = 0;
+    var done = false;
+    var loop = {
+        next: function() {
+            if (done) {
+                return;
+            }
+    
+            if (iterations == undefined || index < iterations) {
+                index++;
+                loopFunc(loop);
+            } else {
+                done = true;
+                if (callback) callback();
+            }
+        },
+    
+        iteration: function() {
+            return index - 1;
+        },
+    
+        break: function() {
+            done = true;
+            if (callback) callback();
+        }
+    };
+    loop.next();
+    return loop;
 }
