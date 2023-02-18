@@ -299,6 +299,7 @@ class Account {
 
     save() {
         var me = this;
+        debugger;
         return new Promise((resolve, reject) => {
             var url, oper;
             if (me.isNew || me.id == undefined) {
@@ -1231,6 +1232,7 @@ class User extends Account {
         this.#json.Login = value;
     }
 
+    /*
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1252,6 +1254,7 @@ class User extends Account {
             )
         })
     }
+    */
 }
 
 
