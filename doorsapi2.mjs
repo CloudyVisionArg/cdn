@@ -810,6 +810,8 @@ export class Document {
     
                     Promise.all(proms).then(
                         res => {
+                            //todo: actualizar el json de los attachs
+
                             attMap.forEach((el, key) => {
                                 if (el.removed) {
                                     attMap.delete(key)
@@ -922,7 +924,7 @@ class Field {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         this.#json.Value = value;
-        this.valueChanged; // Actualiza valueChanged en el JSON
+        this.valueChanged; // Para actualizar valueChanged en el JSON
     }
 
     get valueChanged() {
@@ -1341,7 +1343,7 @@ class User extends Account {
 
 
 class View {
-    
+    //todo
 }
 
 
