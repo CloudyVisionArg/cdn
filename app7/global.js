@@ -1033,6 +1033,7 @@ async function addListenersCapacitor (pCallback) {
         }
         else{
             //window.dispatchEvent(clickEv);
+            console.log("llego en background: " + new Date());
             app7.notification.create({
                 title: 'CLOUDY CRM7',
                 subtitle: data.title,
@@ -1045,6 +1046,7 @@ async function addListenersCapacitor (pCallback) {
                     }
                 }
             }).open();
+            console.log("ponele q abrio en background: " + new Date());
         }
     });
     
