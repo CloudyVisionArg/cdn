@@ -1032,7 +1032,19 @@ async function addListenersCapacitor (pCallback) {
             }).open();
         }
         else{
-            window.dispatchEvent(clickEv);
+            //window.dispatchEvent(clickEv);
+            app7.notification.create({
+                title: 'CLOUDY CRM7',
+                subtitle: data.title,
+                text: data.message,
+                closeTimeout: 10000,
+                on: {
+                    click: function (notif) {
+                        notif.close();
+                        window.dispatchEvent(clickEv);
+                    }
+                }
+            }).open();
         }
     });
     
