@@ -1093,15 +1093,12 @@ export class Folder {
 
     async properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        //this.#userProperties = new Properties(this, true);
-        if (property == undefined) {
-            return this.#properties;
-        } else if (value == undefined) {
-            var prop = await this.#properties.get(property);
-            if (prop) return prop.value();
-        } else {
-            return this.#properties.set(property, value);
-        }
+        return Properties.classGet(this.#properties, property, value);
+    }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
     }
 
     /**
@@ -1271,6 +1268,17 @@ class Properties extends DoorsMap {
                 throw err;
             }
         )
+    }
+
+    static async classGet(propertyMap, property, value) {
+        if (property == undefined) {
+            return propertyMap;
+        } else if (value == undefined) {
+            var prop = await propertyMap.get(property);
+            if (prop) return prop.value();
+        } else {
+            return propertyMap.set(property, value);
+        }
     }
 
     get(key) {
