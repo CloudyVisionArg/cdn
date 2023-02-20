@@ -1522,7 +1522,9 @@ class Properties extends CIMap {
                     if (me.has(key)) {
                         var prop = super.get(key);
                         super.delete(key);
-                        return me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties');
+                        me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties').then(resolve, reject);
+                    } else {
+                        resolve(false);
                     }
                 },
                 reject
