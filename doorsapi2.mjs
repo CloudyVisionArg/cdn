@@ -1,11 +1,21 @@
 export class DoorsMap extends Map {
+    _parseKey(key) {
+        var k;
+        if (typeof key === 'string') {
+            k = key.toUpperCase();
+        } else if (typeof key == 'number') {
+            k = Array.from(super.keys())[key];
+        }
+        return k;
+    }
+
     // Alias de set
     add(key, value) {
         return this.set(key, value);
     }
 
     delete(key) {
-        return super.delete(this.parseKey(key));
+        return super.delete(this._parseKey(key));
     }
 
     // Alias de has
@@ -24,11 +34,11 @@ export class DoorsMap extends Map {
     }
 
     get(key) {
-        return super.get(this.parseKey(key));
+        return super.get(this._parseKey(key));
     }
 
     has(key) {
-        return super.has(this.parseKey(key));
+        return super.has(this._parseKey(key));
     }
 
     // Alias de get
@@ -41,23 +51,13 @@ export class DoorsMap extends Map {
         return super.size;
     }
 
-    parseKey(key) {
-        var k;
-        if (typeof key === 'string') {
-            k = key.toUpperCase();
-        } else if (typeof key == 'number') {
-            k = Array.from(super.keys())[key];
-        }
-        return k;
-    }
-
     // Alias de delete
     remove(key) {
         return this.delete(key);
     }
 
     set(key, value) {
-        return super.set(this.parseKey(key), value);
+        return super.set(this._parseKey(key), value);
     }
 };
 
@@ -210,7 +210,7 @@ class Account {
         this.#session = session;
     }
 
-    #accountsGet(listFunction, account) {
+    _accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -233,18 +233,18 @@ class Account {
         });
     }
 
-    #accountsList(property, endPoint) {
+    _accountsList(property, endPoint) {
         var me = this;
         return new Promise((resolve, reject) => {
             if (me.#json[property]) {
-                resolve(me.#accountsMap(me.#json[property]));
+                resolve(me._accountsMap(me.#json[property]));
 
             } else {
                 var url = 'accounts/' + me.id + '/' + endPoint;
                 me.session.restClient.asyncCall(url, 'GET', '', '').then(
                     res => {
                         me.#json[property] = res;
-                        resolve(me.#accountsMap(me.#json[property]));
+                        resolve(me._accountsMap(me.#json[property]));
                     },
                     reject
                 )
@@ -252,7 +252,7 @@ class Account {
         });
     }
 
-    #accountsMap(accounts) {
+    _accountsMap(accounts) {
         var me = this;
         var map = new DoorsMap();
         accounts.forEach(el => {
@@ -275,7 +275,7 @@ class Account {
     }
 
     childAccounts(account) {
-        return this.#accountsGet('childAccountsList', account);
+        return this._accountsGet('childAccountsList', account);
     }
 
     childAccountsAdd(accounts) {
@@ -285,11 +285,11 @@ class Account {
     }
 
     childAccountsList() {
-        return this.#accountsList('ChildAccountsList', 'childAccounts');
+        return this._accountsList('ChildAccountsList', 'childAccounts');
     }
 
     childAccountsRecursive() {
-        return this.#accountsList('ChildAccountsListRecursive', 'childAccountsRecursive');
+        return this._accountsList('ChildAccountsListRecursive', 'childAccountsRecursive');
     }
 
     childAccountsRemove(accounts) {
@@ -345,7 +345,7 @@ class Account {
     }
 
     parentAccounts(account) {
-        return this.#accountsGet('parentAccountsList', account);
+        return this._accountsGet('parentAccountsList', account);
     }
 
     parentAccountsAdd(accounts) {
@@ -355,11 +355,11 @@ class Account {
     }
 
     parentAccountsList() {
-        return this.#accountsList('ParentAccountsList', 'parentAccounts');
+        return this._accountsList('ParentAccountsList', 'parentAccounts');
     }
 
     parentAccountsRecursive() {
-        return this.#accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+        return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
     }
 
     parentAccountsRemove(accounts) {
