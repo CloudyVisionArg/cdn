@@ -104,10 +104,10 @@ if (device.platform != 'browser') {
 }
 
 function getControlsFolder() {
-    var cf = objPropCI(doc.Tags, 'controlsFolder');
+    var cf = objPropCI(docJson.Tags, 'controlsFolder');
 
     if (cf) {
-        DoorsAPI.foldersGetByPath(folder.RootFolderId, cf).then(
+        DoorsAPI.foldersGetByPath(folderJson.RootFolderId, cf).then(
             function (res) {
                 controlsFolder = res;
                 controlsFolderJson = res;
@@ -147,7 +147,7 @@ function loadControls() {
 }
 
 function getControlsRights(pControls) {
-    var cr = objPropCI(doc.Tags, 'controlsRights');
+    var cr = objPropCI(docJson.Tags, 'controlsRights');
     if (cr) {
         try {
             controlsRights = $.parseXML(cr);
@@ -285,7 +285,7 @@ function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        doc.CustomFields.forEach(field => {
+        docJson.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
             }
@@ -311,13 +311,13 @@ function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        doc.CustomFields.forEach(field => {
+        docJson.CustomFields.forEach(field => {
             if (field.HeaderTable) {
                 getDefaultControl(field).appendTo($ul);
             }
         })
 
-        doc.HeadFields.forEach(field => {
+        docJson.HeadFields.forEach(field => {
             getDefaultControl(field).appendTo($ul);
         })
 
@@ -447,7 +447,7 @@ function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(doc, tf);
+            var textField = getDocField(docJson, tf);
             if (!textField) {
                 console.log('No se encontro el campo ' + tf.toUpperCase());
             }
@@ -455,7 +455,7 @@ function renderControls(pCont, pParent) {
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(doc, vf);
+            var valueField = getDocField(docJson, vf);
             if (!valueField) {
                 console.log('No se encontro el campo ' + vf.toUpperCase());
             }
@@ -752,7 +752,7 @@ function renderControls(pCont, pParent) {
 
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
-                rootFolder: folder.RootFolderId,
+                rootFolder: folderJson.RootFolderId,
                 searchFields: ctl.attr('searchfields'),
                 extraFields: ctl.attr('returnfields'),
                 formula: ctl.attr('searchfilter'),
@@ -977,7 +977,7 @@ function pageInit(e, page) {
             );
 
         } else {
-            getControlFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
+            getControlFolder($el.attr('data-fill-folder'), folderJson.RootFolderId).then(
                 function (res) {
                     var arrFields, textField, valueField, dataFields;
 
@@ -1015,7 +1015,7 @@ function pageInit(e, page) {
         if ($page.find('[data-filling]').length > 0) {
             setTimeout(waiting, 100);
         } else {
-            fillControls(doc);
+            fillControls(docJson);
             app7.preloader.hide();
         }
     }, 0);
@@ -1025,8 +1025,10 @@ function pageInit(e, page) {
         saveDoc,
         fld_id,
         folder,
+        folderJson,
         doc_id,
         doc,
+        docJson,
         $navbar,
     };
 }
@@ -1037,9 +1039,9 @@ function $get(pSelector) {
 }
 
 function fillControls() {
-    if (!doc.IsNew) {
-        var title = getDocField(doc, 'subject').Value;
-        if (!title) title = 'Doc #' + doc.DocId;
+    if (!docJson.IsNew) {
+        var title = getDocField(docJson, 'subject').Value;
+        if (!title) title = 'Doc #' + docJson.DocId;
         $navbar.find('.title').html(title);
 
         var $docLog = $get('[data-doclog]');
@@ -1064,7 +1066,7 @@ function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(doc, tf);
+            var textField = getDocField(docJson, tf);
             if (textField) {
                 text = textField.Value;
             } else {
@@ -1075,7 +1077,7 @@ function fillControls() {
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(doc, vf);
+            var valueField = getDocField(docJson, vf);
             if (valueField) {
                 value = valueField.Value;
             } else {
@@ -1086,7 +1088,7 @@ function fillControls() {
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            var xmlField = getDocField(doc, xf);
+            var xmlField = getDocField(docJson, xf);
             if (xmlField) {
                 xml = xmlField.Value;
             } else {
@@ -1230,7 +1232,7 @@ function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         var field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, getDocField(doc, field).Value);
+                            pCont.attr(pAttr, getDocField(docJson, field).Value);
                         }
                     }
                 });
@@ -1508,7 +1510,7 @@ function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-textfield'));
+        var field = getDocField(docJson, $el.attr('data-textfield'));
 
         if (field && field.Updatable) {
             if (el.tagName == 'INPUT') {
@@ -1558,7 +1560,7 @@ function saveDoc(exitOnSuccess) {
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-valuefield'));
+        var field = getDocField(docJson, $el.attr('data-valuefield'));
 
         if (field && field.Updatable) {
             if (el.tagName == 'SELECT') {
@@ -1585,7 +1587,7 @@ function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-xmlfield'));
+        var field = getDocField(docJson, $el.attr('data-xmlfield'));
 
         if (field && field.Updatable) {
             if (el.tagName == 'INPUT') {
@@ -1611,9 +1613,9 @@ function saveDoc(exitOnSuccess) {
         dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
             doc = doc3.toJSON();
             docJson = doc3.toJSON();
-            pageEl.crm.doc = doc;
+            pageEl.crm.doc = docJson;
 
-            doc_id = getDocField(doc, 'doc_id').Value;
+            doc_id = getDocField(docJson, 'doc_id').Value;
             pageEl.crm.doc_id = doc_id;
             pageEl.crm.saved = true;
 
