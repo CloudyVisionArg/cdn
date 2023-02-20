@@ -1091,7 +1091,7 @@ export class Folder {
         });
     }
 
-    propert(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         //this.#userProperties = new Properties(this, true);
         if (property == undefined) {
@@ -1460,6 +1460,7 @@ class Properties extends CIMap {
     #loadProm;
 
     constructor(parent, user) {
+        super();
         this.#parent = parent;
         this.#user = user ? 'user' : '';
 
