@@ -1228,6 +1228,171 @@ class Form {
 };
 
 
+class Properties extends DoorsMap {
+    #parent;
+    #user;
+    #restUrl;
+    #loadProm;
+
+    constructor(parent, user) {
+        super();
+        var me = this;
+        this.#parent = parent;
+        this.#user = user ? true : false;
+
+        var restArgs = { objType: parent.objectType };
+
+        if (parent instanceof Field) {
+            restArgs.objId = parent.parent.id;
+            restArgs.objName = parent.name;
+        } else {
+            restArgs.objId = parent.id;
+            restArgs.objName = '';
+        }
+
+        if (parent instanceof View) {
+            restArgs.objParentId = parent.parent.id;
+        } else {
+            restArgs.objParentId = '';
+        }
+
+        this.#restUrl = (this.user ? 'user' : '') + 'properties?objectId=' + restArgs.objId + '&objectType=' + restArgs.objType +
+            '&objectParentId=' + restArgs.objParentId + '&objectName=' + encURIC(restArgs.objName);
+
+        this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
+        this.#loadProm.then(
+            res => {
+                res.forEach(el => {
+                    var prop = new Property(el, me);
+                    super.set(prop.name, prop);
+                })
+            },
+            err => {
+                throw err;
+            }
+        )
+    }
+
+    get(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.get(key)) },
+                reject
+            )
+        });
+    }
+
+    delete(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => {
+                    if (me.has(key)) {
+                        var prop = super.get(key);
+                        super.delete(key);
+                        me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties').then(resolve, reject);
+                    } else {
+                        resolve(false);
+                    }
+                },
+                reject
+            )
+        });
+    }
+
+    get parent() {
+        return this.#parent;
+    }
+
+    get restUrl() {
+        return this.#restUrl;
+    }
+
+    get session() {
+        return this.parent.session;
+    }
+
+    set(key, value) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => {
+                    var prop;
+                    if (super.has(key)) {
+                        prop = super.get(key);
+                    } else {
+                        var prop = new Property({ name: key }, me);
+                        super.set(key, prop);
+                    }
+                    prop.value(value).then(resolve, reject);
+                },
+                reject
+            )
+        });
+    }
+
+    get user() {
+        return this.#user;
+    }
+}
+
+
+class Property {
+    #parent;
+    #json;
+
+    constructor(property, parent) {
+        this.#json = property;
+        this.#parent = parent;
+    }
+
+    get created() {
+        return this.#json.Created;
+    }
+
+    get modified() {
+        return this.#json.Modified;
+    }
+
+    get name() {
+        return this.#json.Name;
+    }
+
+    get parent() {
+        return this.#parent;
+    }
+
+    get session() {
+        return this.parent.session;
+    }
+
+    toJSON() {
+        return this.#json;
+    }
+
+    get value() {
+        
+    }
+
+    value(value) {
+        if (value == undefined) {
+            return this.#json.Value;
+        } else {
+            var me = this;
+            return new Promise((resolve, reject) => {
+                if (this.value != value) {
+                    this.#json.Value = value;
+                    this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties').then(resolve, reject);
+                } else {
+                    resolve(true);
+                }
+            })
+        }
+    }
+}
+
+
 class User extends Account {
     get adfsLogon() {
         return this.toJSON().AdfsLogon;
@@ -1474,170 +1639,6 @@ class DoorsMap extends Map {
     }
 };
 
-
-class Properties extends DoorsMap {
-    #parent;
-    #user;
-    #restUrl;
-    #loadProm;
-
-    constructor(parent, user) {
-        super();
-        var me = this;
-        this.#parent = parent;
-        this.#user = user ? true : false;
-
-        var restArgs = { objType: parent.objectType };
-
-        if (parent instanceof Field) {
-            restArgs.objId = parent.parent.id;
-            restArgs.objName = parent.name;
-        } else {
-            restArgs.objId = parent.id;
-            restArgs.objName = '';
-        }
-
-        if (parent instanceof View) {
-            restArgs.objParentId = parent.parent.id;
-        } else {
-            restArgs.objParentId = '';
-        }
-
-        this.#restUrl = (this.user ? 'user' : '') + 'properties?objectId=' + restArgs.objId + '&objectType=' + restArgs.objType +
-            '&objectParentId=' + restArgs.objParentId + '&objectName=' + encURIC(restArgs.objName);
-
-        this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
-        this.#loadProm.then(
-            res => {
-                res.forEach(el => {
-                    var prop = new Property(el, me);
-                    super.set(prop.name, prop);
-                })
-            },
-            err => {
-                throw err;
-            }
-        )
-    }
-
-    get(key) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => { resolve(super.get(key)) },
-                reject
-            )
-        });
-    }
-
-    delete(key) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => {
-                    if (me.has(key)) {
-                        var prop = super.get(key);
-                        super.delete(key);
-                        me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties').then(resolve, reject);
-                    } else {
-                        resolve(false);
-                    }
-                },
-                reject
-            )
-        });
-    }
-
-    get parent() {
-        return this.#parent;
-    }
-
-    get restUrl() {
-        return this.#restUrl;
-    }
-
-    get session() {
-        return this.parent.session;
-    }
-
-    set(key, value) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => {
-                    var prop;
-                    if (super.has(key)) {
-                        prop = super.get(key);
-                    } else {
-                        var prop = new Property({ name: key }, me);
-                        super.set(key, prop);
-                    }
-                    prop.value(value).then(resolve, reject);
-                },
-                reject
-            )
-        });
-    }
-
-    get user() {
-        return this.#user;
-    }
-}
-
-
-class Property {
-    #parent;
-    #json;
-
-    constructor(property, parent) {
-        this.#json = property;
-        this.#parent = parent;
-    }
-
-    get created() {
-        return this.#json.Created;
-    }
-
-    get modified() {
-        return this.#json.Modified;
-    }
-
-    get name() {
-        return this.#json.Name;
-    }
-
-    get parent() {
-        return this.#parent;
-    }
-
-    get session() {
-        return this.parent.session;
-    }
-
-    toJSON() {
-        return this.#json;
-    }
-
-    get value() {
-        
-    }
-
-    value(value) {
-        if (value == undefined) {
-            return this.#json.Value;
-        } else {
-            var me = this;
-            return new Promise((resolve, reject) => {
-                if (this.value != value) {
-                    this.#json.Value = value;
-                    this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties').then(resolve, reject);
-                } else {
-                    resolve(true);
-                }
-            })
-        }
-    }
-}
 
 class RestClient {
     AuthToken = null;
