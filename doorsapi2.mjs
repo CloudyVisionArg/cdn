@@ -1,21 +1,11 @@
 export class DoorsMap extends Map {
-    #getKey(key) {
-        var k;
-        if (typeof key === 'string') {
-            k = key.toUpperCase();
-        } else if (typeof key == 'number') {
-            k = Array.from(super.keys())[key];
-        }
-        return k;
-    }
-
     // Alias de set
     add(key, value) {
         return this.set(key, value);
     }
 
     delete(key) {
-        return super.delete(this.#getKey(key));
+        return super.delete(this.parseKey(key));
     }
 
     // Alias de has
@@ -34,11 +24,11 @@ export class DoorsMap extends Map {
     }
 
     get(key) {
-        return super.get(this.#getKey(key));
+        return super.get(this.parseKey(key));
     }
 
     has(key) {
-        return super.has(this.#getKey(key));
+        return super.has(this.parseKey(key));
     }
 
     // Alias de get
@@ -51,13 +41,23 @@ export class DoorsMap extends Map {
         return super.size;
     }
 
+    parseKey(key) {
+        var k;
+        if (typeof key === 'string') {
+            k = key.toUpperCase();
+        } else if (typeof key == 'number') {
+            k = Array.from(super.keys())[key];
+        }
+        return k;
+    }
+
     // Alias de delete
     remove(key) {
         return this.delete(key);
     }
 
     set(key, value) {
-        return super.set(this.#getKey(key), value);
+        return super.set(this.parseKey(key), value);
     }
 };
 
