@@ -1572,7 +1572,7 @@ class Properties extends DoorsMap {
                         var prop = new Property({ name: key }, me);
                         super.set(key, prop);
                     }
-                    prop.value = value;
+                    (prop.value = value).then(resolve, reject);
                 },
                 reject
             )
