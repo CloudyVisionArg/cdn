@@ -1501,14 +1501,6 @@ class Properties extends CIMap {
                 throw err;
             }
         )
-
-        /* 
-
-        REMOVE
-        var url = "properties?objectId=" + objId + "&objectType=" + objType +
-        "&objectParentId=" + objParentId + "&objectName=" + encodeURIComponent(objName);
-        return Doors.RESTFULL.asyncCall(url, "DELETE", arrProperties, "arrProperties");
-        */
     }
 
     get(key) {
@@ -1516,6 +1508,23 @@ class Properties extends CIMap {
         return new Promise((resolve, reject) => {
             me.#loadProm.then(
                 () => { resolve(super.get(key)) },
+                reject
+            )
+        });
+    }
+
+    delete(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => {
+                    debugger;
+                    if (me.has(key)) {
+                        var prop = super.get(key);
+                        super.delete(key);
+                        return me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties');
+                    }
+                },
                 reject
             )
         });
