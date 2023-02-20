@@ -368,9 +368,9 @@ class Account {
         return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayParentAccounts');    
     }
 
-    async properties(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return Properties.classGet(this.#properties, property, value);
+        return this.#properties.getSet(property, value);
     }
 
     save() {
@@ -415,9 +415,9 @@ class Account {
         return this.#json.Type;
     }
 
-    async userProperties(property, value) {
+    userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
+        return this.#userProperties.getSet(property, value);
     }
 }
 
@@ -586,9 +586,9 @@ class Attachment {
         return this.#parent;
     }
 
-    async properties(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return Properties.classGet(this.#properties, property, value);
+        return this.#properties.getSet(property, value);
     }
 
     get removed() {
@@ -611,9 +611,9 @@ class Attachment {
         return this.#json.Tags;
     }
 
-    async userProperties(property, value) {
+    userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
+        return this.#userProperties.getSet(property, value);
     }
 }
 
@@ -867,9 +867,9 @@ export class Document {
         return this.#json.HeadFields.find(it => it.Name == 'FLD_ID').Value;
     }
 
-    async properties(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return Properties.classGet(this.#properties, property, value);
+        return this.#properties.getSet(property, value);
     }
 
     save() {
@@ -959,9 +959,9 @@ export class Document {
         return this.#json;
     }
 
-    async userProperties(property, value) {
+    userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
+        return this.#userProperties.getSet(property, value);
     }
 };
 
@@ -1027,9 +1027,9 @@ class Field {
     }
 
     // todo: solo para form, add o remove igual
-    async properties(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return Properties.classGet(this.#properties, property, value);
+        return this.#properties.getSet(property, value);
     }
 
     get scale() {
@@ -1048,9 +1048,9 @@ class Field {
         return this.#json.Updatable;
     }
 
-    async userProperties(property, value) {
+    userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
+        return this.#userProperties.getSet(property, value);
     }
 
     get value() {
@@ -1204,9 +1204,9 @@ export class Folder {
         });
     }
 
-    async properties(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return Properties.classGet(this.#properties, property, value);
+        return this.#properties.getSet(property, value);
     }
 
     /**
@@ -1272,9 +1272,9 @@ export class Folder {
         return this.#json.Type;
     }
 
-    async userProperties(property, value) {
+    userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
+        return this.#userProperties.getSet(property, value);
     }
 };
 
@@ -1330,9 +1330,9 @@ class Form {
         return Form.objectType;
     }
 
-    async properties(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return Properties.classGet(this.#properties, property, value);
+        return this.#properties.getSet(property, value);
     }
 
     get session() {
@@ -1343,9 +1343,9 @@ class Form {
         return this.#json;
     }
 
-    async userProperties(property, value) {
+    userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
+        return this.#userProperties.getSet(property, value);
     }
 };
 
@@ -1395,17 +1395,6 @@ class Properties extends DoorsMap {
         )
     }
 
-    static async classGet(propertyMap, property, value) {
-        if (property == undefined) {
-            return propertyMap;
-        } else if (value == undefined) {
-            var prop = await propertyMap.get(property);
-            if (prop) return prop.value();
-        } else {
-            return propertyMap.set(property, value);
-        }
-    }
-
     get(key) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1414,6 +1403,17 @@ class Properties extends DoorsMap {
                 reject
             )
         });
+    }
+
+    async getSet(property, value) {
+        if (property == undefined) {
+            return this;
+        } else if (value == undefined) {
+            var prop = await this.get(property);
+            if (prop) return prop.value();
+        } else {
+            return this.set(property, value);
+        }
     }
 
     delete(key) {
@@ -1707,14 +1707,14 @@ class View {
         return View.objectType;
     }
 
-    async properties(property, value) {
+    properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return Properties.classGet(this.#properties, property, value);
+        return this.#properties.getSet(property, value);
     }
 
-    async userProperties(property, value) {
+    userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
+        return this.#userProperties.getSet(property, value);
     }
 
     //todo
