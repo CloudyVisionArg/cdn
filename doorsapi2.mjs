@@ -1447,6 +1447,10 @@ class CIMap extends Map {
         return super.size;
     }
 
+    remove(key) {
+        return this.delete(key);
+    }
+
     set(key, value) {
         return super.set(this.#getKey(key), value);
     }
@@ -1461,6 +1465,7 @@ class Properties extends CIMap {
 
     constructor(parent, user) {
         super();
+        var me = this;
         this.#parent = parent;
         this.#user = user ? true : false;
 
@@ -1486,8 +1491,11 @@ class Properties extends CIMap {
         this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
             res => {
+                res.forEach(el => {
+                    var prop = new Property(el, me);
+                    super.set(prop.name, prop);
+                })
                 debugger;
-
             },
             err => {
                 throw err;
@@ -1525,11 +1533,47 @@ class Properties extends CIMap {
         return this.parent.session;
     }
 
+    set(key, value) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.get(key)) },
+                reject
+            )
+        });
+    }
+
     get user() {
         return this.#user;
     }
 }
 
+
+class Property {
+    #parent;
+    #json;
+
+    constructor(property, parent) {
+        this.#json = property;
+        this.#parent = parent;
+    }
+
+    get created() {
+        return this.#json.Created;
+    }
+
+    get modified() {
+        return this.#json.Modified;
+    }
+
+    get name() {
+        return this.#json.Name;
+    }
+
+    get value() {
+        return this.#json.Value;
+    }
+}
 
 class RestClient {
     AuthToken = null;
