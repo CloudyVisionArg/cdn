@@ -135,6 +135,7 @@ export class Session {
 
 
 class Account {
+    static objectType = 6;
     #json;
     #session;
 
@@ -273,6 +274,10 @@ class Account {
         this.#json.Name = value;
     }
 
+    get objectType() {
+        return Account.objectType;
+    }
+
     parentAccounts(account) {
         return this.#accountsGet('parentAccountsList', account);
     }
@@ -394,6 +399,7 @@ class Application {
 
 
 class Attachment {
+    static objectType = 7;
     #parent; // Document
     #json;
 
@@ -480,6 +486,10 @@ class Attachment {
 
     get name() {
         return this.#json.Name;
+    }
+
+    get objectType() {
+        return Attachment.objectType;
     }
 
     get owner() {
@@ -588,6 +598,7 @@ class Directory {
 
 
 export class Document {
+    static objectType = 2;
     #parent;
     #session;
     #json;
@@ -741,6 +752,10 @@ export class Document {
         return this.#json.IsNew;
     }
 
+    get objectType() {
+        return Document.objectType;
+    }
+
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -852,6 +867,7 @@ export class Document {
 
 
 class Field {
+    static objectType = 5;
     #parent; // Document / Form
     #json;
 
@@ -896,6 +912,10 @@ class Field {
         return this.#json.Nullable;
     }
 
+    get objectType() {
+        return Field.objectType;
+    }
+
     get parent() {
         return this.#parent;
     }
@@ -906,6 +926,10 @@ class Field {
 
     get scale() {
         return this.#json.Scale;
+    }
+
+    get session() {
+        return this.parent.session;
     }
 
     get type() {
@@ -939,10 +963,13 @@ class Field {
 
 
 export class Folder {
+    static objectType = 3;
     #json;
     #session;
     #app;
     #parent;
+    #properties;
+    #userProperties;
 
     constructor(folder, session, parent) {
         this.#json = folder;
@@ -968,7 +995,7 @@ export class Folder {
                 if (res.length == 0) {
                     reject(new Error('Document not found'));
                 } else if (res.length > 1) {
-                    reject(new Error('Expression returns more than one document'));
+                    reject(new Error('Vague expression'));
                 } else {
                     docId = res[0]['DOC_ID'];
                 }
@@ -1039,6 +1066,10 @@ export class Folder {
         return this.#json.FldId;
     }
 
+    get objectType() {
+        return Folder.objectType;
+    }
+
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1058,6 +1089,18 @@ export class Folder {
                 }
             }
         });
+    }
+
+    properties(property, value) {
+        if (!this.#properties) this.#properties = new Properties(this);
+        //this.#userProperties = new Properties(this, true);
+        if (property == undefined) {
+            return this.#properties;
+        } else if (value == undefined) {
+            return this.#properties.get(property);
+        } else {
+            return this.#properties.set(property, value);
+        }
     }
 
     /**
@@ -1126,6 +1169,7 @@ export class Folder {
 
 
 class Form {
+    static objectType = 1;
     #json;
     #session;
     #fieldsMap;
@@ -1167,6 +1211,10 @@ class Form {
 
     get name() {
         return this.#json.Name;
+    }
+
+    get objectType() {
+        return Form.objectType;
     }
 
     get session() {
@@ -1343,11 +1391,40 @@ class User extends Account {
 
 
 class View {
+    static objectType = 4;
+    #json;
+    #parent;
+    #session;
+
+    constructor(view, session, folder) {
+        this.#json = view;
+        this.#session = session;
+        if (folder) this.#parent = folder;
+    }
+
+    get objectType() {
+        return View.objectType;
+    }
+
     //todo
 }
 
 
 class CIMap extends Map {
+    #getKey(key) {
+        var k;
+        if (typeof key === 'string') {
+            k = key.toUpperCase();
+        } else if (typeof key == 'number') {
+            k = Array.from(super.keys())[key];
+        }
+        return k;
+    }
+
+    delete(key) {
+        return super.delete(this.#getKey(key));
+    }
+
     find(cbFunc) {
         var me = this;
         for (let [key, value] of super.entries()) {
@@ -1359,20 +1436,11 @@ class CIMap extends Map {
     }
 
     get(key) {
-        var k;
-        if (typeof key === 'string') {
-            k = key.toUpperCase();
-        } else if (typeof key == 'number') {
-            k = Array.from(super.keys())[key];
-        }
-        return super.get(k);
+        return super.get(this.#getKey(key));
     }
 
     has(key) {
-        if (typeof key === 'string') {
-            key = key.toUpperCase();
-        }
-        return super.has(key);
+        return super.has(this.#getKey(key));
     }
 
     get length() {
@@ -1380,12 +1448,82 @@ class CIMap extends Map {
     }
 
     set(key, value) {
-        if (typeof key === 'string') {
-            key = key.toUpperCase();
-        }
-        return super.set(key, value);
+        return super.set(this.#getKey(key), value);
     }
 };
+
+
+class Properties extends CIMap {
+    #parent;
+    #user;
+    #restUrl;
+    #loadProm;
+
+    constructor(parent, user) {
+        this.#parent = parent;
+        this.#user = user ? 'user' : '';
+
+        var restArgs = { objType: parent.objectType };
+
+        if (parent instanceof Field) {
+            restArgs.objId = parent.parent.id;
+            restArgs.objName = parent.name;
+        } else {
+            restArgs.objId = parent.id;
+            restArgs.objName = '';
+        }
+
+        if (parent instanceof View) {
+            restArgs.objParentId = parent.parent.id;
+        } else {
+            restArgs.objParentId = '';
+        }
+
+        this.#restUrl = user + 'properties?objectId=' + restArgs.objId + '&objectType=' + restArgs.objType +
+            '&objectParentId=' + restArgs.objParentId + '&objectName=' + encURIC(restArgs.objName);
+
+        this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
+        this.#loadProm.then(
+            res => {
+                debugger;
+
+            },
+            err => {
+                throw err;
+            }
+        )
+
+        /* 
+        SET
+        var url = "properties?objectId=" + objId + "&objectType=" + objType +
+        "&objectParentId=" + objParentId + "&objectName=" + encodeURIComponent(objName);
+        return Doors.RESTFULL.asyncCall(url, "PUT", arrProperties, "arrProperties");
+
+        REMOVE
+        var url = "properties?objectId=" + objId + "&objectType=" + objType +
+        "&objectParentId=" + objParentId + "&objectName=" + encodeURIComponent(objName);
+        return Doors.RESTFULL.asyncCall(url, "DELETE", arrProperties, "arrProperties");
+        */
+    }
+
+    get(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.get(key)) },
+                reject
+            )
+        });
+    }
+
+    get parent() {
+        return this.#parent;
+    }
+
+    get session() {
+        return this.parent.session;
+    }
+}
 
 
 class RestClient {
