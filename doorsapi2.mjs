@@ -1098,7 +1098,7 @@ export class Folder {
             return this.#properties;
         } else if (value == undefined) {
             var prop = await this.#properties.get(property);
-            if (prop) return prop.value;
+            if (prop) return prop.value();
         } else {
             return this.#properties.set(property, value);
         }
