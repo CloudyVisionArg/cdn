@@ -1,4 +1,4 @@
-class DoorsMap extends Map {
+export class DoorsMap extends Map {
     #getKey(key) {
         var k;
         if (typeof key === 'string') {
@@ -202,6 +202,8 @@ class Account {
     static objectType = 6;
     #json;
     #session;
+    #properties;
+    #userProperties;
 
     constructor(account, session) {
         this.#json = account;
@@ -366,6 +368,11 @@ class Account {
         return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayParentAccounts');    
     }
 
+    async properties(property, value) {
+        if (!this.#properties) this.#properties = new Properties(this);
+        return Properties.classGet(this.#properties, property, value);
+    }
+
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -406,6 +413,11 @@ class Account {
 
     get type() {
         return this.#json.Type;
+    }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
     }
 }
 
@@ -466,6 +478,8 @@ class Attachment {
     static objectType = 7;
     #parent; // Document
     #json;
+    #properties;
+    #userProperties;
 
     constructor(attachment, document) {
         this.#json = attachment;
@@ -572,6 +586,11 @@ class Attachment {
         return this.#parent;
     }
 
+    async properties(property, value) {
+        if (!this.#properties) this.#properties = new Properties(this);
+        return Properties.classGet(this.#properties, property, value);
+    }
+
     get removed() {
         return this.#json.Removed;
     }
@@ -590,6 +609,11 @@ class Attachment {
 
     get tags() {
         return this.#json.Tags;
+    }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
     }
 }
 
@@ -668,6 +692,8 @@ export class Document {
     #json;
     #fieldsMap;
     #attachmentsMap;
+    #properties;
+    #userProperties;
 
     constructor(document, session, folder) {
         this.#json = document;
@@ -841,6 +867,11 @@ export class Document {
         return this.#json.HeadFields.find(it => it.Name == 'FLD_ID').Value;
     }
 
+    async properties(property, value) {
+        if (!this.#properties) this.#properties = new Properties(this);
+        return Properties.classGet(this.#properties, property, value);
+    }
+
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -927,6 +958,11 @@ export class Document {
     toJSON() {
         return this.#json;
     }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
+    }
 };
 
 
@@ -934,6 +970,8 @@ class Field {
     static objectType = 5;
     #parent; // Document / Form
     #json;
+    #properties;
+    #userProperties;
 
     constructor(field, document) {
         this.#json = field;
@@ -988,6 +1026,12 @@ class Field {
         return this.#json.Precision;
     }
 
+    // todo: solo para form, add o remove igual
+    async properties(property, value) {
+        if (!this.#properties) this.#properties = new Properties(this);
+        return Properties.classGet(this.#properties, property, value);
+    }
+
     get scale() {
         return this.#json.Scale;
     }
@@ -1002,6 +1046,11 @@ class Field {
 
     get updatable() {
         return this.#json.Updatable;
+    }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
     }
 
     get value() {
@@ -1160,11 +1209,6 @@ export class Folder {
         return Properties.classGet(this.#properties, property, value);
     }
 
-    async userProperties(property, value) {
-        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return Properties.classGet(this.#userProperties, property, value);
-    }
-
     /**
      * 
      * @param {*} options: { fields, formula, order, maxDocs, recursive, maxValueLen, maxDescrLength }
@@ -1227,6 +1271,11 @@ export class Folder {
     get type() {
         return this.#json.Type;
     }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
+    }
 };
 
 
@@ -1235,6 +1284,8 @@ class Form {
     #json;
     #session;
     #fieldsMap;
+    #properties;
+    #userProperties;
 
     constructor(form, session) {
         this.#json = form;
@@ -1279,12 +1330,22 @@ class Form {
         return Form.objectType;
     }
 
+    async properties(property, value) {
+        if (!this.#properties) this.#properties = new Properties(this);
+        return Properties.classGet(this.#properties, property, value);
+    }
+
     get session() {
         return this.#session;
     }
 
     toJSON() {
         return this.#json;
+    }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
     }
 };
 
@@ -1633,6 +1694,8 @@ class View {
     #json;
     #parent;
     #session;
+    #properties;
+    #userProperties;
 
     constructor(view, session, folder) {
         this.#json = view;
@@ -1642,6 +1705,16 @@ class View {
 
     get objectType() {
         return View.objectType;
+    }
+
+    async properties(property, value) {
+        if (!this.#properties) this.#properties = new Properties(this);
+        return Properties.classGet(this.#properties, property, value);
+    }
+
+    async userProperties(property, value) {
+        if (!this.#userProperties) this.#userProperties = new Properties(this, true);
+        return Properties.classGet(this.#userProperties, property, value);
     }
 
     //todo
