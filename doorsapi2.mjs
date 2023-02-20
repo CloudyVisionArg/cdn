@@ -113,14 +113,14 @@ export class Session {
         return this.#restClient;
     }
 
-    get runSyncEventsOnClient() {
-        var url = 'session/syncevents/runOnClient';
-        return this.restClient.asyncCall(url, 'GET', '', '');
-    }
-
-    set runSyncEventsOnClient(value) {
-        var url = 'session/syncevents/runOnClient/' + (value ? 'true' : 'false');
-        return this.restClient.asyncCall(url, 'POST', {}, '');
+    runSyncEventsOnClient(value) {
+        if (value == undefined) {
+            var url = 'session/syncevents/runOnClient';
+            return this.restClient.asyncCall(url, 'GET', '', '');
+        } else {
+            var url = 'session/syncevents/runOnClient/' + (value ? 'true' : 'false');
+            return this.restClient.asyncCall(url, 'POST', {}, '');
+        }
     }
 
     get serverUrl() {
@@ -1572,7 +1572,7 @@ class Properties extends DoorsMap {
                         var prop = new Property({ name: key }, me);
                         super.set(key, prop);
                     }
-                    prop.value = value //).then(resolve, reject);
+                    prop.value(value).then(resolve, reject);
                 },
                 reject
             )
@@ -1619,20 +1619,23 @@ class Property {
     }
 
     get value() {
-        return this.#json.Value;
+        
     }
 
-    set value(value) {
-        var me = this;
-        debugger;
-        return new Promise((resolve, reject) => {
-            if (this.value != value) {
-                this.#json.Value = value;
-                this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties').then(resolve, reject);
-            } else {
-                resolve(true);
-            }
-        })
+    value(value) {
+        if (value == undefined) {
+            return this.#json.Value;
+        } else {
+            var me = this;
+            return new Promise((resolve, reject) => {
+                if (this.value != value) {
+                    this.#json.Value = value;
+                    this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties').then(resolve, reject);
+                } else {
+                    resolve(true);
+                }
+            })
+        }
     }
 }
 

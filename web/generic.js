@@ -80,7 +80,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
         return;
     }
 
-    await (dSession.runSyncEventsOnClient = false);
+    await dSession.runSyncEventsOnClient(false);
 
     // todo: setar segun el LNG_ID
     moment.locale('es');
