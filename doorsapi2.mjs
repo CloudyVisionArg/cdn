@@ -188,7 +188,7 @@ class Account {
 
     #accountsMap(accounts) {
         var me = this;
-        var map = new CIMap();
+        var map = new DoorsMap();
         accounts.forEach(el => {
             var acc = new Account(el, me.session);
             map.set(acc.name, acc);
@@ -609,7 +609,7 @@ export class Document {
         this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
-        this.#attachmentsMap = new CIMap();
+        this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
     }
 
@@ -727,7 +727,7 @@ export class Document {
         } else {
             // Devuelve la coleccion
             if (!me.#fieldsMap) {
-                var map = new CIMap();
+                var map = new DoorsMap();
                 me.#json.HeadFields.forEach(el => {
                     map.set(el.Name, new Field(el, me.session));
                 });
@@ -1200,7 +1200,7 @@ class Form {
         } else {
             // Devuelve la coleccion
             if (!me.#fieldsMap) {
-                var map = new CIMap();
+                var map = new DoorsMap();
                 me.#json.Fields.forEach(el => {
                     map.set(el.Name, new Field(el, me.session));
                 });
@@ -1411,7 +1411,7 @@ class View {
 }
 
 
-class CIMap extends Map {
+class DoorsMap extends Map {
     #getKey(key) {
         var k;
         if (typeof key === 'string') {
@@ -1422,8 +1422,18 @@ class CIMap extends Map {
         return k;
     }
 
+    // Alias de set
+    add(key, value) {
+        return this.set(key, value);
+    }
+
     delete(key) {
         return super.delete(this.#getKey(key));
+    }
+
+    // Alias de has
+    exists(key) {
+        return this.has(key);
     }
 
     find(cbFunc) {
@@ -1444,10 +1454,17 @@ class CIMap extends Map {
         return super.has(this.#getKey(key));
     }
 
+    // Alias de get
+    item(key) {
+        return this.get(key);
+    }
+
+    // Alias de size
     get length() {
         return super.size;
     }
 
+    // Alias de delete
     remove(key) {
         return this.delete(key);
     }
@@ -1458,7 +1475,7 @@ class CIMap extends Map {
 };
 
 
-class Properties extends CIMap {
+class Properties extends DoorsMap {
     #parent;
     #user;
     #restUrl;
@@ -1518,7 +1535,6 @@ class Properties extends CIMap {
         return new Promise((resolve, reject) => {
             me.#loadProm.then(
                 () => {
-                    debugger;
                     if (me.has(key)) {
                         var prop = super.get(key);
                         super.delete(key);
