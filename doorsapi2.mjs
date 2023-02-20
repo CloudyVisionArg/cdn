@@ -1623,12 +1623,17 @@ class Property {
     }
 
     set value(value) {
-        if (this.value != value) {
-            this.#json.Value = value;
-            return this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties');
-        }
+        var me = this;
+        debugger;
+        return new Promise((resolve, reject) => {
+            if (this.value != value) {
+                this.#json.Value = value;
+                this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties').then(resolve, reject);
+            } else {
+                resolve(true);
+            }
+        })
     }
-
 }
 
 class RestClient {
