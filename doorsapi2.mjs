@@ -1,3 +1,8 @@
+/*
+todo: reemplazar los _metodo con #metodo cdo safari implemente 
+metodos privados: https://caniuse.com/?search=private%20field
+*/
+
 export class DoorsMap extends Map {
     _parseKey(key) {
         var k;
