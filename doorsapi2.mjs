@@ -1495,7 +1495,6 @@ class Properties extends CIMap {
                     var prop = new Property(el, me);
                     super.set(prop.name, prop);
                 })
-                debugger;
             },
             err => {
                 throw err;
@@ -1503,10 +1502,6 @@ class Properties extends CIMap {
         )
 
         /* 
-        SET
-        var url = "properties?objectId=" + objId + "&objectType=" + objType +
-        "&objectParentId=" + objParentId + "&objectName=" + encodeURIComponent(objName);
-        return Doors.RESTFULL.asyncCall(url, "PUT", arrProperties, "arrProperties");
 
         REMOVE
         var url = "properties?objectId=" + objId + "&objectType=" + objType +
@@ -1529,6 +1524,10 @@ class Properties extends CIMap {
         return this.#parent;
     }
 
+    get restUrl() {
+        return this.#restUrl;
+    }
+
     get session() {
         return this.parent.session;
     }
@@ -1537,7 +1536,16 @@ class Properties extends CIMap {
         var me = this;
         return new Promise((resolve, reject) => {
             me.#loadProm.then(
-                () => { resolve(super.get(key)) },
+                () => {
+                    var prop;
+                    if (super.has(key)) {
+                        prop = super.get(key);
+                    } else {
+                        var prop = new Property({ name: key }, me);
+                        super.set(key, prop);
+                    }
+                    prop.value = value;
+                },
                 reject
             )
         });
@@ -1570,9 +1578,29 @@ class Property {
         return this.#json.Name;
     }
 
+    get parent() {
+        return this.#parent;
+    }
+
+    get session() {
+        return this.parent.session;
+    }
+
+    toJSON() {
+        return this.#json;
+    }
+
     get value() {
         return this.#json.Value;
     }
+
+    set value(value) {
+        if (this.value != value) {
+            this.#json.Value = value;
+            return this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties');
+        }
+    }
+
 }
 
 class RestClient {
