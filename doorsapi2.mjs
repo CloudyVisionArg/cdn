@@ -1091,13 +1091,14 @@ export class Folder {
         });
     }
 
-    properties(property, value) {
+    async properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         //this.#userProperties = new Properties(this, true);
         if (property == undefined) {
             return this.#properties;
         } else if (value == undefined) {
-            return this.#properties.get(property);
+            var prop = await this.#properties.get(property);
+            if (prop) return prop.value;
         } else {
             return this.#properties.set(property, value);
         }
