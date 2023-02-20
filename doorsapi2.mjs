@@ -1462,7 +1462,7 @@ class Properties extends CIMap {
     constructor(parent, user) {
         super();
         this.#parent = parent;
-        this.#user = user ? 'user' : '';
+        this.#user = user ? true : false;
 
         var restArgs = { objType: parent.objectType };
 
@@ -1480,7 +1480,7 @@ class Properties extends CIMap {
             restArgs.objParentId = '';
         }
 
-        this.#restUrl = user + 'properties?objectId=' + restArgs.objId + '&objectType=' + restArgs.objType +
+        this.#restUrl = (this.user ? 'user' : '') + 'properties?objectId=' + restArgs.objId + '&objectType=' + restArgs.objType +
             '&objectParentId=' + restArgs.objParentId + '&objectName=' + encURIC(restArgs.objName);
 
         this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
@@ -1523,6 +1523,10 @@ class Properties extends CIMap {
 
     get session() {
         return this.parent.session;
+    }
+
+    get user() {
+        return this.#user;
     }
 }
 
