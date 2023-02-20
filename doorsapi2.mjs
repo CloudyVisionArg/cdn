@@ -1,3 +1,67 @@
+class DoorsMap extends Map {
+    #getKey(key) {
+        var k;
+        if (typeof key === 'string') {
+            k = key.toUpperCase();
+        } else if (typeof key == 'number') {
+            k = Array.from(super.keys())[key];
+        }
+        return k;
+    }
+
+    // Alias de set
+    add(key, value) {
+        return this.set(key, value);
+    }
+
+    delete(key) {
+        return super.delete(this.#getKey(key));
+    }
+
+    // Alias de has
+    exists(key) {
+        return this.has(key);
+    }
+
+    find(cbFunc) {
+        var me = this;
+        for (let [key, value] of super.entries()) {
+            if (cbFunc(value, key, me)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    get(key) {
+        return super.get(this.#getKey(key));
+    }
+
+    has(key) {
+        return super.has(this.#getKey(key));
+    }
+
+    // Alias de get
+    item(key) {
+        return this.get(key);
+    }
+
+    // Alias de size
+    get length() {
+        return super.size;
+    }
+
+    // Alias de delete
+    remove(key) {
+        return this.delete(key);
+    }
+
+    set(key, value) {
+        return super.set(this.#getKey(key), value);
+    }
+};
+
+
 export class Session {
     #restClient;
     #directory;
@@ -1582,70 +1646,6 @@ class View {
 
     //todo
 }
-
-
-class DoorsMap extends Map {
-    #getKey(key) {
-        var k;
-        if (typeof key === 'string') {
-            k = key.toUpperCase();
-        } else if (typeof key == 'number') {
-            k = Array.from(super.keys())[key];
-        }
-        return k;
-    }
-
-    // Alias de set
-    add(key, value) {
-        return this.set(key, value);
-    }
-
-    delete(key) {
-        return super.delete(this.#getKey(key));
-    }
-
-    // Alias de has
-    exists(key) {
-        return this.has(key);
-    }
-
-    find(cbFunc) {
-        var me = this;
-        for (let [key, value] of super.entries()) {
-            if (cbFunc(value, key, me)) {
-                return value;
-            }
-        }
-        return undefined;
-    }
-
-    get(key) {
-        return super.get(this.#getKey(key));
-    }
-
-    has(key) {
-        return super.has(this.#getKey(key));
-    }
-
-    // Alias de get
-    item(key) {
-        return this.get(key);
-    }
-
-    // Alias de size
-    get length() {
-        return super.size;
-    }
-
-    // Alias de delete
-    remove(key) {
-        return this.delete(key);
-    }
-
-    set(key, value) {
-        return super.set(this.#getKey(key), value);
-    }
-};
 
 
 class RestClient {
