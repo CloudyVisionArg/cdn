@@ -892,7 +892,8 @@ export class Document {
                         },
                         reject
                     )
-                }
+                },
+                reject
             );
 
             function saveAttachs(resolve, reject) {
