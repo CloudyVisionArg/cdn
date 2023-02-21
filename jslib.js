@@ -510,8 +510,7 @@ function ISODate(pDate) {
         dt = new Date(pDate);
     }
     if(!isNaN(dt.getTime())) {
-        return dt.getFullYear() + '-' + leadingZeros(dt.getMonth() + 1, 2) + '-' +
-            leadingZeros(dt.getDate(), 2);
+        return dt.toISOString().substring(0, 10);
     } else {
         return null;
     }
