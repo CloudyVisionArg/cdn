@@ -323,7 +323,7 @@ var app = {
                     */
                     app7.toast.create({
                         text: 'Su cuenta registra saldos vencidos, por favor contactenos al 3537-609427. Evite interrupciones de servicio. Gracias.',
-                        closeTimeout: 10000,
+                        closeTimeout: 15000,
                         position: 'center',
                         closeButton: false,
                     }).open();
