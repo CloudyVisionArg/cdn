@@ -370,19 +370,16 @@ var app = {
 function sessionMsg() {
     dSession.tags.then(
         res => {
-            /*
             debugger;
             if (res.message) {
-                toast(res.message, 10000, 'center')
+                app7.toast.create({
+                    text: res.message,
+                    closeTimeout: 15000,
+                    position: 'center',
+                    closeButton: false,
+                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+                }).open();
             }
-            */
-            app7.toast.create({
-                text: 'Su cuenta registra saldos vencidos, por favor contactenos al 3537-609427. Evite interrupciones de servicio. Gracias.',
-                closeTimeout: 15000,
-                position: 'center',
-                closeButton: false,
-                icon: '<i class="f7-icons">exclamationmark_triangle</i>',
-            }).open();
         }
     )
 }
