@@ -211,6 +211,11 @@ export class Session {
         this.#serverUrl = value;
         this.restClient.ServerBaseUrl = value;
     }
+
+    get tags() {
+        var url = 'session/tags';
+        return restClient.asyncCall(url, 'GET', {}, '');
+    }
 };
 
 
