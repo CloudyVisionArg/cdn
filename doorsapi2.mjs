@@ -72,6 +72,7 @@ export class Session {
     #directory;
     #serverUrl;
     #authToken;
+    #tags;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(serverUrl, authToken);
@@ -213,8 +214,22 @@ export class Session {
     }
 
     get tags() {
-        var url = 'session/tags';
-        return this.restClient.asyncCall(url, 'GET', '', '');
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (me.#tags == undefined) {
+                var url = 'session/tags';
+                me.restClient.asyncCall(url, 'GET', '', '').then(
+                    res => {
+                        debugger;
+                        me.#tags = res;
+                        resolve(me.#tags);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#tags);
+            }
+        })
     }
 };
 
