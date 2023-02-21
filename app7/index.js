@@ -326,6 +326,7 @@ var app = {
                         closeTimeout: 15000,
                         position: 'center',
                         closeButton: false,
+                        icon: '<i class="f7-icons">exclamationmark_triangle</i>',
                     }).open();
                 }
             )
