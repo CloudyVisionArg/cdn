@@ -929,7 +929,7 @@ function pushRegistration(pPushSetings, pCallback) {
         console.log('push regId: ' + data.registrationId);
         console.log('push regType: ' + data.registrationType);
         
-        DoorsAPI.pushRegistration({
+        dSession.pushRegistration({
             'AppVersion': app7.version,
             'DeviceModel': device.model,
             'DevicePlatform': device.platform,
@@ -950,7 +950,7 @@ function pushUnreg(pCallback) {
         app.push.unregister(
             function () {
                 console.log('pushUnreg ok');
-                DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
+                dSession.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
                     function (res) {
                         if (pCallback) pCallback();
                     },
