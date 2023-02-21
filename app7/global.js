@@ -178,7 +178,7 @@ function closeConsole() {
 }
 
 // Muestra la Consola como popup
-function showConsole(allowClose) {
+async function showConsole(allowClose) {
     var popup;
     var $console = $('#popupConsole');
 
@@ -225,85 +225,86 @@ function showConsole(allowClose) {
             ]
         });
 
-        $.get(scriptSrc('app7-console'), function (data) {
-            popup = app7.popup.create({
-                content: data,
-                closeByBackdropClick: false,
-                on: {
-                    open: function (popup) {
-                        $get('#close').click(function () {
-                            popup.close();
-                        });
+        var data = await $.get(scriptSrc('app7-console');
+        popup = app7.popup.create({
+            content: data,
+            closeByBackdropClick: false,
+            on: {
+                open: onPopupOpen,
 
-                        if (!allowClose) {
-                            $get('#close').hide();
-                        } else {
-                            $get('#close').show();
+                close: function (popup) {
+                    clearInterval(this.intervalId);
+                },
+            }
+        });
+        popup.open();
+        return popup;
+
+        function onPopupOpen(popup) {
+            $get('#close').click(function () {
+                popup.close();
+            });
+
+            if (!allowClose) {
+                $get('#close').hide();
+            } else {
+                $get('#close').show();
+            }
+
+            this.intervalId = setInterval(function () {
+                if (popup.opened) {
+                    var log = window.localStorage.getItem('consoleLog');
+                    if ($get('#log').html() != log) {
+                        $get('#log').html(log);
+                    }
+                }
+            }, 250);
+
+            $get('#credentials').click(function (e) {
+                popup.close();
+                showLogin(true);
+            });
+
+            $get('#sync').click(function (e) {
+                syncActions.open();
+            });
+
+            $get('#support').click(function (e) {
+                cordova.plugins.email.open({
+                    to: 'soporte@cloudycrm.net',
+                    subject: 'Cloudy CRM - App issue',
+                    body: 'Por favor describanos su problema',
+                    attachments: [
+                        'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
+                        'base64:localStorage.txt//' + localStorageBase64(),
+                    ],
+                });
+    
+                function localStorageBase64() {
+                    var arr = new Array();
+                    for (var i = 0; i < localStorage.length; i++) {
+                        if (localStorage.key(i) != 'consoleLog') {
+                            arr.push(localStorage.key(i));
                         }
-
-                        this.intervalId = setInterval(function () {
-                            if (popup.opened) {
-                                var log = window.localStorage.getItem('consoleLog');
-                                if ($get('#log').html() != log) {
-                                    $get('#log').html(log);
-                                }
-                            }
-                        }, 250);
+                    }
+                    var arrOrd = arr.sort();
             
-                        $get('#credentials').click(function (e) {
-                            popup.close();
-                            showLogin(true);
-                        });
-
-                        $get('#sync').click(function (e) {
-                            syncActions.open();
-                        });
-
-                        $get('#support').click(function (e) {
-                            cordova.plugins.email.open({
-                                to: 'soporte@cloudycrm.net',
-                                subject: 'Cloudy CRM - App issue',
-                                body: 'Por favor describanos su problema',
-                                attachments: [
-                                    'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
-                                    'base64:localStorage.txt//' + localStorageBase64(),
-                                ],
-                            });
-                
-                            function localStorageBase64() {
-                                var arr = new Array();
-                                for (var i = 0; i < localStorage.length; i++) {
-                                    if (localStorage.key(i) != 'consoleLog') {
-                                        arr.push(localStorage.key(i));
-                                    }
-                                }
-                                var arrOrd = arr.sort();
-                        
-                                var ret = '';
-                                for (var i = 0; i < arrOrd.length; i++) {
-                                    ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
-                                }
-                                return window.btoa(ret);
-                            }
-                        });
-
-                        $get('#restart').click(function (e) {
-                            location.href = 'index.html';
-                        });
-
-                        function $get(pSelector) {
-                            return $(pSelector, popup.el);
-                        }
-                    },
-
-                    close: function (popup) {
-                        clearInterval(this.intervalId);
-                    },
+                    var ret = '';
+                    for (var i = 0; i < arrOrd.length; i++) {
+                        ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                    }
+                    return window.btoa(ret);
                 }
             });
-            popup.open();
-            return popup;
-        });
+
+            $get('#restart').click(function (e) {
+                location.href = 'index.html';
+            });
+
+            function $get(pSelector) {
+                return $(pSelector, popup.el);
+            }
+        };
     }
 }
 
@@ -698,7 +699,7 @@ async function showLogin() {
             setMessage('instrucciones2', '');
             setMessage('message', '');
 
-            $get('#sendcode').click(function (e) {
+            $get('#sendcode').click(async function (e) {
                 setMessage('message', '');
 
                 if (!$get('#email').val()) {
@@ -709,42 +710,29 @@ async function showLogin() {
 
                 disableInputs(true);
             
-                var fv = dSession.freeVersion;
-                Doors.RESTFULL.ServerUrl = fv.endpoint;
+                try {
+                    var fv = dSession.freeVersion;
+                    dSession.serverUrl = fv.endpoint;
+                    await dSession.logon(fv.login, fv.password, fv.instance);
 
-                DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
-                    Doors.RESTFULL.AuthToken = token;
-                    
-                    DoorsAPI.documentsNew(fv.resetPassFolder).then(function(doc) {
-                        var field;
-            
-                        getDocField(doc, 'email').Value = $get('#email').val();
-            
-                        DoorsAPI.documentSave(doc).then(function (doc) {
-                            setMessage('instrucciones', 'Recibir&aacute; un mensaje con un c&oacute;digo de confirmaci&oacute;n. ' + 
-                                'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el mensaje puede enviar el c&oacute;digo nuevamente. ' +
-                                'Si ha enviado su c&oacute;digo varias veces ingrese el &uacute;ltimo recibido.');
-                            
-                            disableInputs(false);
+                    var fld = await dSession.foldersGetFromId(fv.resetPassFolder);
+                    var doc = await fld.documentsNew();
+                    doc.fields('email').value = $get('#email').val();
+                    await doc.save();
 
-                            DoorsAPI.logoff();
-                            Doors.RESTFULL.AuthToken = '';
+                    setMessage('instrucciones', 'Recibir&aacute; un mensaje con un c&oacute;digo de confirmaci&oacute;n. ' + 
+                        'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el mensaje puede enviar el c&oacute;digo nuevamente. ' +
+                        'Si ha enviado su c&oacute;digo varias veces ingrese el &uacute;ltimo recibido.');
+                    disableInputs(false);
+                    dSession.logoff();
 
-                        }, function (err) {
-                            onError('documentSave error', err);
-                        });
-            
-            
-                    }, function(err) {
-                        onError('documentsNew error', err);
-                    });
-            
-                }, function (err) {
-                    onError('logon error', err);
-                });
+                } catch (err) {
+                    onError(err);
+                }
+
             });
 
-            $get('#confirmcode').click(function (e) {
+            $get('#confirmcode').click(async function (e) {
                 setMessage('message', '');
 
                 if (!$get('#email').val() || !$get('#code').val()) {
@@ -753,52 +741,39 @@ async function showLogin() {
                 }
 
                 disableInputs(true);
-            
-                var fv = dSession.freeVersion;
-                Doors.RESTFULL.ServerUrl = fv.endpoint;
 
-                DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
-                    Doors.RESTFULL.AuthToken = token;
+                try {
+                    var fv = dSession.freeVersion;
+                    dSession.serverUrl = fv.endpoint;
+                    await dSession.logon(fv.login, fv.password, fv.instance);
 
-                    DoorsAPI.folderSearch(fv.resetPassFolder, 'doc_id, codigo', 'confirmado is null and email = \'' + $('#email').val() + '\'', 'doc_id desc', 1).then(
-                        function (res) {
-                            if (!res.length) {
-                                onError('No se encontraron solicitudes de desbloqueo pendientes para este usuario');
-                
-                            } else {
-                                if (res[0]['CODIGO'] != $('#code').val().toUpperCase()) {
-                                    onError('C&oacute;digo incorrecto');
-                
-                                } else {
-                                    DoorsAPI.documentsGetById(res[0]['DOC_ID']).then(
-                                        function (doc) {
-                                            getDocField(doc, 'confirmado').Value = 1;
+                    var fld = await dSession.foldersGetFromId(fv.resetPassFolder);
+                    var res = await fld.search({
+                        fields: 'doc_id, codigo',
+                        formula: 'confirmado is null and email = \'' + $('#email').val() + '\'',
+                        order: 'doc_id desc',
+                        maxDocs: 1,
+                    });
 
-                                            DoorsAPI.documentSave(doc).then(
-                                                function (doc) {
-                                                    setMessage('instrucciones2', 'Recibir&aacute; un mensaje con su nueva contrase&ntilde;a.' +
-                                                        'Presione SALIR para regresar a la pantalla de Login.');
-                    
-                                                    DoorsAPI.logoff();
-                                                    Doors.RESTFULL.AuthToken = '';
-                                                },
-                                                function (err) {
-                                                    onError('documentSave error', err);
-                                                },
-                                            );
-                                        },
-                                        function(err) {
-                                            onError('documentsGetById error', err);
-                                        }
-                                    );
-                                }
-                            }
-                        },
-                        function (err) {
-                            onError('folderSearch error', err);
-                        },
-                    );
-                });
+                    if (!res.length) {
+                        onError('No se encontraron solicitudes de desbloqueo pendientes para este usuario');
+        
+                    } else if (res[0]['CODIGO'] != $('#code').val().toUpperCase()) {
+                            onError('C&oacute;digo incorrecto');
+        
+                    } else {
+                        var doc = await fld.documents(res[0]['DOC_ID']);
+                        doc.fields('confirmado').value = 1;
+                        await doc.save();
+
+                        setMessage('instrucciones2', 'Recibir&aacute; un mensaje con su nueva contrase&ntilde;a.' +
+                            'Presione SALIR para regresar a la pantalla de Login.');
+                        dSession.logoff();
+                    }
+
+                } catch (err) {
+                    onError(err);
+                }
             });
 
             $get('#cancel').click(function (e) {
@@ -809,14 +784,11 @@ async function showLogin() {
                 return $(pSelector, page.el);
             };
 
-            function onError(pMsg, pErr) {
+            function onError(pErr) {
                 console.log(pErr);
-                var msg = pMsg;
-                if (pErr) msg += '<br>' + errMsg(pErr);
-                setMessage('message', msg);
+                setMessage('message', errMsg(pErr));
                 disableInputs(false);
-                DoorsAPI.logoff();
-                Doors.RESTFULL.AuthToken = '';
+                dSession.logoff();
             }
 
             function disableInputs(pDisable) {
