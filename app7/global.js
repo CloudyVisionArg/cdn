@@ -637,7 +637,7 @@ async function showLogin() {
                                 var fv = dSession.freeVersion;
                                 dSession.serverUrl = fv.endpoint;
 
-                                await DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
+                                dSession.logon(fv.login, fv.password, fv.instance).then(function (token) {
                                     Doors.RESTFULL.AuthToken = token;
                                     
                                     DoorsAPI.documentsNew(fv.signinFolder).then(function(doc) {
