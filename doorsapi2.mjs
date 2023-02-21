@@ -220,7 +220,6 @@ export class Session {
                 var url = 'session/tags';
                 me.restClient.asyncCall(url, 'GET', '', '').then(
                     res => {
-                        debugger;
                         me.#tags = res;
                         resolve(me.#tags);
                     },
