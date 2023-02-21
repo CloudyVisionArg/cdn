@@ -308,7 +308,7 @@ function showConsole(allowClose) {
 }
 
 // Muestra la pantalla de Login como popup
-function showLogin() {
+async function showLogin() {
     var popup;
     var $login = $('div.login-screen');
     
@@ -325,6 +325,8 @@ function showLogin() {
         return popup;
     
     } else {
+        var data = await $.get(scriptSrc('app7-login'));
+        debugger;
         $.get(scriptSrc('app7-login'), function (data) {
             popup = app7.popup.create({
                 content: data,
@@ -633,9 +635,9 @@ function showLogin() {
                                 disableInputs(true);
 
                                 var fv = dSession.freeVersion;
-                                Doors.RESTFULL.ServerUrl = fv.endpoint;
+                                dSession.serverUrl = fv.endpoint;
 
-                                DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
+                                await DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
                                     Doors.RESTFULL.AuthToken = token;
                                     
                                     DoorsAPI.documentsNew(fv.signinFolder).then(function(doc) {
