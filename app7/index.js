@@ -313,6 +313,12 @@ var app = {
         function execOnDeviceReady() {
             pushReg();
 
+            dSession.tags.then(
+                res => {
+                    debugger;
+                }
+            )
+
             executeCode('onDeviceReady', 
                 function () {
                     sync.sync(false);
