@@ -94,14 +94,14 @@ export class Session {
      * @param {string} newPassword
      * @returns Promise <bool>
      */
-    changePassword(oldPassword, newPassword) {
+    changePassword(login, oldPassword, newPassword, instance) {
         var url = 'session/changepassword';
 
         var data = {
             login: login,
             oldPassword: oldPassword,
             newPassword: newPassword,
-            instanceName: instanceName
+            instanceName: instance,
         };
         return this.restClient.asyncCall(url, 'POST', data, '');
     };
