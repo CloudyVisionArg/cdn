@@ -214,7 +214,7 @@ export class Session {
 
     get tags() {
         var url = 'session/tags';
-        return this.restClient.asyncCall(url, 'GET', {}, '');
+        return this.restClient.asyncCall(url, 'GET', '', '');
     }
 };
 
