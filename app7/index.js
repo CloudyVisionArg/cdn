@@ -300,8 +300,12 @@ var app = {
         } else {
             if (app7.online) {
                 dSession.checkToken(
-                    execOnDeviceReady,
+                    () => {
+                        execOnDeviceReady();
+                        sessionMsg();
+                    },
                     function (err) {
+                        console.log(err);
                         showLogin();
                     }
                 );
@@ -312,24 +316,6 @@ var app = {
 
         function execOnDeviceReady() {
             pushReg();
-
-            dSession.tags.then(
-                res => {
-                    /*
-                    debugger;
-                    if (res.message) {
-                        toast(res.message, 10000, 'center')
-                    }
-                    */
-                    app7.toast.create({
-                        text: 'Su cuenta registra saldos vencidos, por favor contactenos al 3537-609427. Evite interrupciones de servicio. Gracias.',
-                        closeTimeout: 15000,
-                        position: 'center',
-                        closeButton: false,
-                        icon: '<i class="f7-icons">exclamationmark_triangle</i>',
-                    }).open();
-                }
-            )
 
             executeCode('onDeviceReady', 
                 function () {
@@ -366,6 +352,7 @@ var app = {
                         sync.sync(false);
                         if (window.refreshNotifications) window.refreshNotifications();
                         executeCode('onResume');
+                        sessionMsg();
                     },
                     function (err) {
                         console.log(err);
@@ -379,6 +366,26 @@ var app = {
         };
     },
 };
+
+function sessionMsg() {
+    dSession.tags.then(
+        res => {
+            /*
+            debugger;
+            if (res.message) {
+                toast(res.message, 10000, 'center')
+            }
+            */
+            app7.toast.create({
+                text: 'Su cuenta registra saldos vencidos, por favor contactenos al 3537-609427. Evite interrupciones de servicio. Gracias.',
+                closeTimeout: 20000,
+                position: 'center',
+                closeButton: false,
+                icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+            }).open();
+        }
+    )
+}
 
 function pushReg() {
     if (device.platform != 'browser') {
