@@ -225,7 +225,7 @@ async function showConsole(allowClose) {
             ]
         });
 
-        var data = await $.get(scriptSrc('app7-console');
+        var data = await $.get(scriptSrc('app7-console'));
         popup = app7.popup.create({
             content: data,
             closeByBackdropClick: false,
