@@ -146,11 +146,9 @@ Cache de uso gral
 setCache('myKey', myValue, 60); // Almacena por 60 segundos
 myVar = getCache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
 */
-var _cache;
-
 function getCache(pKey) {
-    if (Array.isArray(_cache)) {
-        let f = _cache.find(el => el.key == pKey);
+    if (Array.isArray(getCache._cache)) {
+        let f = getCache._cache.find(el => el.key == pKey);
         if (f) {
             if (!f.expires || f.expires > Date.now()) {
                 console.log('Cache hit: ' + pKey);
@@ -161,7 +159,7 @@ function getCache(pKey) {
 }
 
 function setCache(pKey, pValue, pSeconds) {
-    if (!Array.isArray(_cache)) _cache = [];
+    if (!Array.isArray(getCache._cache)) getCache._cache = [];
 
     var exp, sec = parseInt(pSeconds);
     if (!isNaN(sec)) {
@@ -169,12 +167,12 @@ function setCache(pKey, pValue, pSeconds) {
     } else {
         exp = Date.now() + 300000; // 5' por defecto
     }
-    let f = _cache.find(el => el.key == pKey);
+    let f = getCache._cache.find(el => el.key == pKey);
     if (f) {
         f.value = pValue;
         f.expires = exp;
     } else {
-        _cache.push({ key: pKey, value: pValue, expires: exp });
+        getCache._cache.push({ key: pKey, value: pValue, expires: exp });
     }
 }
 

@@ -439,6 +439,7 @@ class Account {
     }
 
     get tags() {
+        if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
@@ -643,6 +644,7 @@ class Attachment {
     }
 
     get tags() {
+        if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
@@ -674,7 +676,7 @@ class Directory {
                     if (res.length == 0) {
                         reject(new Error('Account not found'));
                     } else if (res.length > 1) {
-                        reject(new Error('Expression returns more than one account'));
+                        reject(new Error('Vague expression'));
                     } else {
                         resolve(new Account(res[0], me.session));
                     }
@@ -940,6 +942,8 @@ export class Document {
                         // todo: como subimos el Tag?
                         var arrBuf = await el.fileStream;
                         formData.append('attachment', new Blob([arrBuf]), el.name);
+                        formData.append('description', el.description);
+                        //formData.append('group', el.group);
                         var url = 'documents/' + me.id + '/attachments';
                         proms.push(me.session.restClient.asyncCallXmlHttp(url, 'POST', formData));
 
@@ -988,6 +992,7 @@ export class Document {
     }
 
     get tags() {
+        if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
@@ -1199,9 +1204,9 @@ export class Folder {
             if (!me.#json.Form) {
                 var url = 'forms/' + me.#json.FrmId;
                 me.session.restClient.asyncCall(url, 'GET', '', '').then(
-                    frm => {
-                        me.#json.Form = frm;
-                        resolve(new Form(frm, me.session));
+                    res => {
+                        me.#json.Form = res;
+                        resolve(new Form(res, me.session));
                     }
                 ),
                 reject
@@ -1300,6 +1305,11 @@ export class Folder {
         return this.#session;
     }
 
+    get tags() {
+        if (!this.#json.Tags) this.#json.Tags = {};
+        return this.#json.Tags;
+    }
+
     toJSON() {
         return this.#json;
     }
@@ -1375,6 +1385,11 @@ class Form {
         return this.#session;
     }
 
+    get tags() {
+        if (!this.#json.Tags) this.#json.Tags = {};
+        return this.#json.Tags;
+    }
+
     toJSON() {
         return this.#json;
     }
@@ -1414,8 +1429,9 @@ class Properties extends DoorsMap {
             restArgs.objParentId = '';
         }
 
-        this.#restUrl = (this.user ? 'user' : '') + 'properties?objectId=' + restArgs.objId + '&objectType=' + restArgs.objType +
-            '&objectParentId=' + restArgs.objParentId + '&objectName=' + encURIC(restArgs.objName);
+        this.#restUrl = (this.user ? 'user' : '') + 'properties?objectId=' + restArgs.objId + 
+            '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
+            '&objectName=' + encURIC(restArgs.objName);
 
         this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
@@ -1460,7 +1476,8 @@ class Properties extends DoorsMap {
                     if (me.has(key)) {
                         var prop = super.get(key);
                         super.delete(key);
-                        me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties').then(resolve, reject);
+                        me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties')
+                            .then(resolve, reject);
                     } else {
                         resolve(false);
                     }
@@ -1552,7 +1569,8 @@ class Property {
             return new Promise((resolve, reject) => {
                 if (this.value != value) {
                     this.#json.Value = value;
-                    this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties').then(resolve, reject);
+                    this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties')
+                        .then(resolve, reject);
                 } else {
                     resolve(true);
                 }
@@ -1746,6 +1764,11 @@ class View {
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.getSet(property, value);
+    }
+
+    get tags() {
+        if (!this.#json.Tags) this.#json.Tags = {};
+        return this.#json.Tags;
     }
 
     userProperties(property, value) {
