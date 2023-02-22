@@ -4,6 +4,7 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+numbersOnly(pText)
 sheetFuncs (sheet)
 isObject(value)
 accountsSearch(filter, order, forceOnline)
@@ -30,12 +31,22 @@ addOption(ctl, option, value)
 xmlDecodeDate(pDate)
 xmlEncodeDate(pDate)
 timeZone()
+cDate(pDate)
 ISODate(pDate)
 ISOTime(pDate, pSeconds)
 leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+/**
+ * Quita todos los caracteres que no sean numeros
+ * @param {*} pText 
+ * @returns 
+ */
+function numbersOnly(pText) {
+	return pText.replace(/\D/g, '');
+}
 
 /*
 Funciones que facilitan el barrido de una hoja excel
@@ -502,7 +513,12 @@ function timeZone() {
 	return ret;	
 }
 
-function ISODate(pDate) {
+/**
+ * Convierte a Date
+ * @param {*} pDate 
+ * @returns 
+ */
+function cDate(pDate) {
     var dt;
     if (Object.prototype.toString.call(pDate) === '[object Date]') {
         dt = pDate;
@@ -510,26 +526,48 @@ function ISODate(pDate) {
         dt = new Date(pDate);
     }
     if(!isNaN(dt.getTime())) {
-        return dt.toISOString().substring(0, 10);
+        return dt;
     } else {
         return null;
     }
 }
 
+/**
+ * Devuelve la fecha en formato YYYY-MM-DD
+ * @param {*} pDate 
+ * @returns 
+ */
+function ISODate(pDate) {
+    var dt = cDate(pDate);
+	if (dt) {
+        return dt.toISOString().substring(0, 10);
+	} else {
+        return null;
+	}
+}
+
+/**
+ * Devuelve la hora en formato HH:MM:SS
+ * @param {*} pDate 
+ * @param {*} pSeconds 
+ * @returns 
+ */
 function ISOTime(pDate, pSeconds) {
-    if (Object.prototype.toString.call(pDate) === '[object Date]') {
-        dt = pDate;
-    } else {
-        var dt = new Date(pDate);
-    }
-    if(!isNaN(dt.getTime())) {
+    var dt = cDate(pDate);
+	if (dt) {
         return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
             (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
-    } else {
+	} else {
         return null;
-    }
+	}
 }
 
+/**
+ * Completa con ceros a la izquierda
+ * @param {*} pString 
+ * @param {*} pLength 
+ * @returns 
+ */
 function leadingZeros(pString, pLength) {
     return ('0'.repeat(pLength) + pString).slice(-pLength);
 }
