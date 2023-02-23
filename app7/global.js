@@ -1009,6 +1009,9 @@ async function addListenersCapacitor (pCallback) {
         debugger;
         const status = await Capacitor.Plugins.App.getState();
         console.log("pushNotificationReceived:", notification);
+        /* Utilizo el formato legacy de mensajes para las app en cordova */
+        data.title = notification.title;
+        data.body = notification.body;
         data.additionalData = notification.data;
         data.additionalData.foreground = status.isActive;
         //TODO: data.additionalData.coldstart = 
@@ -1034,7 +1037,7 @@ async function addListenersCapacitor (pCallback) {
             }).open();
         }
         else{
-            //window.dispatchEvent(clickEv);
+            window.dispatchEvent(clickEv);
 
             console.log("llego en background: " + new Date());
             // app7.notification.create({
