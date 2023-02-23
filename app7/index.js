@@ -80,6 +80,7 @@ var app = {
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
         //if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
         if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
+        debugger;
         
         // Fin verificacion de plugins
 
