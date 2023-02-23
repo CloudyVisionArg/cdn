@@ -1006,7 +1006,9 @@ async function addListenersCapacitor (pCallback) {
         let data = JSON.parse(JSON.stringify(notification.data));
         //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
         //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
+        debugger;
         const status = await Capacitor.Plugins.App.getState();
+        console.log("pushNotificationReceived:", notification);
         data.additionalData = notification.data;
         data.additionalData.foreground = status.isActive;
         //TODO: data.additionalData.coldstart = 
@@ -1033,20 +1035,21 @@ async function addListenersCapacitor (pCallback) {
         }
         else{
             //window.dispatchEvent(clickEv);
+
             console.log("llego en background: " + new Date());
-            app7.notification.create({
-                title: 'CLOUDY CRM7',
-                subtitle: data.title,
-                text: data.message,
-                closeTimeout: 10000,
-                on: {
-                    click: function (notif) {
-                        notif.close();
-                        window.dispatchEvent(clickEv);
-                    }
-                }
-            }).open();
-            console.log("ponele q abrio en background: " + new Date());
+            // app7.notification.create({
+            //     title: 'CLOUDY CRM7',
+            //     subtitle: data.title,
+            //     text: data.message,
+            //     closeTimeout: 10000,
+            //     on: {
+            //         click: function (notif) {
+            //             notif.close();
+            //             window.dispatchEvent(clickEv);
+            //         }
+            //     }
+            // }).open();
+            // console.log("ponele q abrio en background: " + new Date());
         }
     });
     
