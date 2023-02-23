@@ -987,6 +987,10 @@ function pushRegistration(pPushSetings, pCallback) {
         }).then(function (res) {
             console.log('pushRegistration end');
             if (pCallback) pCallback(app.push);
+        },
+        function (err){
+            debugger;
+            console.log('pushRegistration error: ', err);
         });
     });
 }
