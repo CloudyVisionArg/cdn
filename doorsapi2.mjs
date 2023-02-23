@@ -181,13 +181,13 @@ export class Session {
 
     pushRegistration(settings) {
         var url = 'notifications/devices';
-        return restClient.asyncCall(url, 'POST', settings, 'notificationReceiver');
+        return this.restClient.asyncCall(url, 'POST', settings, 'notificationReceiver');
     }
 
     pushUnreg(regType, regId) {
         var url = 'notifications/devices';
         var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
-        return restClient.asyncCall(url, 'DELETE', params, '');
+        return this.restClient.asyncCall(url, 'DELETE', params, '');
     }
 
     get restClient() {
