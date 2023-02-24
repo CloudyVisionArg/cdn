@@ -77,7 +77,16 @@ function crearCarteles(pCartel,index,array){
     elTextCartel.innerHTML = pCartel["text"];
     divBlock.append(elTextCartel);
 
-    debugger;
+    function btnClosePopover(btn){
+        app7.popover.close(btn.closest(".popover"));
+    }
+    
+    const elButton = document.createElement("button");
+    elButton.classList.add("button"); 
+    elButton.setAttribute("type","button");
+    elButton.innerText = "Ok"
+    elButton.setAttribute("onclick","btnClosePopover(this)");
+    divBlock.append(elButton);
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
