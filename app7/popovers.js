@@ -80,7 +80,8 @@ function crearCarteles(pCartel,index,array){
     const elButton = document.createElement("button");
     elButton.classList.add("button"); 
     elButton.setAttribute("type","button");
-    elButton.onclick=(x)=>console.log(x);
+    elButton.innerText = "Ok"
+    elButton.onclick=function(){console.log(this)};
     divBlock.append(elButton);
 
 
