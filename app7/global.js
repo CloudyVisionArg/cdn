@@ -1066,13 +1066,19 @@ async function addListenersCapacitor (pCallback) {
             let data = JSON.parse(JSON.stringify(notification.data));
             //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
             //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
-            console.log("pushNotificationReceived:", notification);
+            console.log("pushNotificationActionPerformed actionId: tap");
             /* Utilizo el formato legacy de mensajes para las app en cordova */
             data.title = notification.title;
             data.body = notification.body;
             data.additionalData = notification.data;
             data.additionalData.foreground = true;
+
+            let a = getEventListeners(window);
+            if(!a.pushNotificationClick){
+                console.log("**** pushNotificationClick NOT defined")
+            }
             window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
+            
             console.log("******** dispara pushNotificationClick")
         }
     });
