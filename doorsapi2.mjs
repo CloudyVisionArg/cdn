@@ -213,6 +213,27 @@ export class Session {
         this.restClient.ServerBaseUrl = value;
     }
 
+    settings(setting, value) {
+        var url = 'settings';
+        var method, params, parName;
+
+        if (value == undefined) {
+            url += '/' + encURIC(setting);
+            method = 'GET';
+            params = {};
+            parName = ''
+        } else {
+            method = 'POST';
+            params = { setting: {
+                Setting: setting,
+                Value: value
+            } };
+            parName = 'setting';
+        }
+        
+        return this.restClient.asyncCall(url, method, params, parName);
+    }
+
     get tags() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -412,15 +433,15 @@ class Account {
         var me = this;
         return new Promise((resolve, reject) => {
             var type = me instanceof User ? 'user' : 'account';
-            var url, oper;
+            var url, method;
             if (me.isNew || me.id == undefined) {
                 url = type + 's';
-                oper = 'PUT';
+                method = 'PUT';
             } else {
                 url = type + 's/' + me.id;
-                oper = 'POST';
+                method = 'POST';
             }
-            me.session.restClient.asyncCall(url, oper, me.toJSON(), type).then(
+            me.session.restClient.asyncCall(url, method, me.toJSON(), type).then(
                 res => {
                     me.#json = res;
                     resolve(me);
