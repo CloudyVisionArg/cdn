@@ -1042,20 +1042,22 @@ async function addListenersCapacitor (pCallback) {
     });
     
 
-    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', notification => {
-        console.log('Push notification action performed', notification.actionId, notification.inputValue);
-        let data = JSON.parse(JSON.stringify(notification.data));
-        //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
-        //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
-        console.log("pushNotificationReceived:", notification);
-        /* Utilizo el formato legacy de mensajes para las app en cordova */
-        data.title = notification.title;
-        data.body = notification.body;
-        data.additionalData = notification.data;
-        data.additionalData.foreground = false;
-        //TODO: data.additionalData.coldstart = 
-        //TODO: data.additionalData.dismissed = 
-        window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', ev => {
+        console.log('Push notification action performed', ev.actionId, ev.inputValue);
+        if(ev.actionId == "tap"){
+            let data = JSON.parse(JSON.stringify(ev.notification.data));
+            //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
+            //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
+            console.log("pushNotificationReceived:", notification);
+            /* Utilizo el formato legacy de mensajes para las app en cordova */
+            data.title = notification.title;
+            data.body = notification.body;
+            data.additionalData = notification.data;
+            data.additionalData.foreground = false;
+            //TODO: data.additionalData.coldstart = 
+            //TODO: data.additionalData.dismissed = 
+            window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
+        }
     });
 }
 
