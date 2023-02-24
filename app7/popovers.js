@@ -152,7 +152,7 @@ function generarCarteles(pScope){
                     delete res[idx][key]
                 })
             }
-            debugger;
+            
             if(res.length > 0){
                 renderPopovers([...arrCartelesFijos, ...res]);
             }else{
