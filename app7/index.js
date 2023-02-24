@@ -319,12 +319,6 @@ var app = {
     },
 };
 
-function pushReg() {
-    (Capacitor) //Si esta disponible Capacitor
-        ? pushRegistrationCapacitor()
-        : pushRegCordova(); //Legacy
-}
-
 
 function pushRegCordova() {
     if (device.platform != 'browser') {

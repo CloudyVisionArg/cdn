@@ -961,6 +961,19 @@ function cleanDb(pCallback) {
         );
     });
 }
+
+function pushReg() {
+    (Capacitor) //Si esta disponible Capacitor
+    ? pushRegistrationCapacitor()
+    : pushRegCordova(); //Legacy
+}
+
+function pushUnreg(pCallback) {
+    (Capacitor) //Si esta disponible Capacitor
+    ? pushUnregCapacitor(pCallback)
+    : pushUnregCordova(pCallback);
+}
+
 /**
     Capacitor
  */
@@ -1055,8 +1068,6 @@ async function addListenersCapacitor (pCallback) {
             data.body = notification.body;
             data.additionalData = notification.data;
             data.additionalData.foreground = false;
-            //TODO: data.additionalData.coldstart = 
-            //TODO: data.additionalData.dismissed = 
             window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
         }
     });
@@ -1078,29 +1089,26 @@ async function registerNotificationsCapacitor() {
 }
 
 function pushUnregCapacitor(pCallback) {
-    //TODO
-    // if (app.pushData) {
-    //     app.push.unregister(
-    //         function () {
-    //             console.log('pushUnreg ok');
-    //             DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
-    //                 function (res) {
-    //                     if (pCallback) pCallback();
-    //                 },
-    //                 function (err) {
-    //                     console.log(err);
-    //                     if (pCallback) pCallback();
-    //                 }
-    //             );
-    //         },
-    //         function () {
-    //             console.log('pushUnreg error');
-    //             if (pCallback) pCallback();
-    //         }
-    //     );
-    // } else {
-    //     if (pCallback) pCallback();
-    // }
+    if (app.pushData) {
+        Capacitor.Plugins.PushNotifications.removeAllListeners().then(
+            (e)=>{
+                console.log("Notifications listeners removed");
+                DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
+                    function (res) {
+                        if (pCallback) pCallback();
+                    },
+                    function (err) {
+                        console.log(err);
+                        if (pCallback) pCallback();
+                    }
+                );
+            },
+            (err) => {
+                console.log('Error removing notifications listeners');
+                if (pCallback) pCallback();
+            }
+        );
+    }
 }
 
 /**
@@ -1139,7 +1147,7 @@ function pushRegistration(pPushSetings, pCallback) {
     });
 }
 
-function pushUnreg(pCallback) {
+function pushUnregCordova(pCallback){
     if (app.pushData) {
         app.push.unregister(
             function () {
