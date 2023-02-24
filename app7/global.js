@@ -1030,7 +1030,7 @@ async function addListenersCapacitor (pCallback) {
         //TODO: data.additionalData.dismissed = 
 
         if (window.refreshNotifications) window.refreshNotifications();
-        window.dispatchEvent(new CustomEvent('pushNotification', { detail: { data } }));
+        //window.dispatchEvent(new CustomEvent('pushNotification', { detail: { data } }));
         
         const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
         //App in foreground    
