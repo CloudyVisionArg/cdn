@@ -428,7 +428,7 @@ class Account {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties.getSet(property, value);
+        return this.#properties._getSet(property, value);
     }
 
     save() {
@@ -476,7 +476,7 @@ class Account {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties.getSet(property, value);
+        return this.#userProperties._getSet(property, value);
     }
 }
 
@@ -647,7 +647,7 @@ class Attachment {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties.getSet(property, value);
+        return this.#properties._getSet(property, value);
     }
 
     get removed() {
@@ -673,7 +673,7 @@ class Attachment {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties.getSet(property, value);
+        return this.#userProperties._getSet(property, value);
     }
 }
 
@@ -929,7 +929,7 @@ export class Document {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties.getSet(property, value);
+        return this.#properties._getSet(property, value);
     }
 
     save() {
@@ -1025,7 +1025,7 @@ export class Document {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties.getSet(property, value);
+        return this.#userProperties._getSet(property, value);
     }
 };
 
@@ -1093,7 +1093,7 @@ class Field {
     // todo: solo para form, add o remove igual
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties.getSet(property, value);
+        return this.#properties._getSet(property, value);
     }
 
     get scale() {
@@ -1114,7 +1114,7 @@ class Field {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties.getSet(property, value);
+        return this.#userProperties._getSet(property, value);
     }
 
     get value() {
@@ -1270,7 +1270,7 @@ export class Folder {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties.getSet(property, value);
+        return this.#properties._getSet(property, value);
     }
 
     /**
@@ -1343,7 +1343,7 @@ export class Folder {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties.getSet(property, value);
+        return this.#userProperties._getSet(property, value);
     }
 };
 
@@ -1401,7 +1401,7 @@ class Form {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties.getSet(property, value);
+        return this.#properties._getSet(property, value);
     }
 
     get session() {
@@ -1419,7 +1419,7 @@ class Form {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties.getSet(property, value);
+        return this.#userProperties._getSet(property, value);
     }
 };
 
@@ -1470,17 +1470,7 @@ class Properties extends DoorsMap {
         )
     }
 
-    get(key) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => { resolve(super.get(key)) },
-                reject
-            )
-        });
-    }
-
-    async getSet(property, value) {
+    async _getSet(property, value) {
         if (property == undefined) {
             return this;
         } else if (value == undefined) {
@@ -1489,6 +1479,16 @@ class Properties extends DoorsMap {
         } else {
             return this.set(property, value);
         }
+    }
+
+    get(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.get(key)) },
+                reject
+            )
+        });
     }
 
     delete(key) {
@@ -1786,7 +1786,7 @@ class View {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties.getSet(property, value);
+        return this.#properties._getSet(property, value);
     }
 
     get tags() {
@@ -1796,7 +1796,7 @@ class View {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties.getSet(property, value);
+        return this.#userProperties._getSet(property, value);
     }
 
     //todo
