@@ -228,6 +228,10 @@ export class Session {
                 Setting: setting,
                 Value: value
             } };
+            params = { 
+                Setting: setting,
+                Value: value
+            };
             parName = 'setting';
         }
 
