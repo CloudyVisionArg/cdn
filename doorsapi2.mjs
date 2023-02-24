@@ -220,7 +220,7 @@ export class Session {
         if (value == undefined) {
             url += '/' + encURIC(setting);
             method = 'GET';
-            params = {};
+            params = '';
             parName = ''
         } else {
             method = 'POST';
@@ -230,7 +230,7 @@ export class Session {
             } };
             parName = 'setting';
         }
-        
+
         return this.restClient.asyncCall(url, method, params, parName);
     }
 
