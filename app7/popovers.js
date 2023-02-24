@@ -20,8 +20,6 @@ fetch(scriptSrc('app7-popovers.json'))
     console.log("ObtenerPopoversFijos -> Error " + err);
 })
 
-//se está llamando a generarCartelesVista antes de que esto esté resuelto
-// ya no hace falta llamarlo desde las codelibs, se llama desde los eventos de las paginas
 DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     function (res) {
         popoversFolder = res;
@@ -45,7 +43,6 @@ app7.on('pageTabShow', function (e) {
 
 
 function crearCarteles(pCartel,index,array){
-    //pId,pView,pSelector,pTexto
 
     const div = document.createElement("div");
     div.classList.add("popover");
@@ -56,7 +53,6 @@ function crearCarteles(pCartel,index,array){
 
     const divBlock = document.createElement("div");
     divBlock.classList.add("block");
-    //divBlock.innerHTML = pCartel["TEXT"];
     divInner.append(divBlock);
 
     const elTitle = document.createElement("h3");
@@ -90,8 +86,6 @@ function crearCarteles(pCartel,index,array){
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
-        //targetEl: pCartel["VIEW"] + " " + pCartel["selector"],
-        // Events
         content: text,
         on: {
             open: function (popover) {
@@ -176,36 +170,3 @@ function generarCarteles(pScope){
         }
     );
 }
-
-
-
-
-/*
-function generarCartelesVista(pVista){
-    const vistaformula =  pVista ? "view LIKE '" + pVista + "'" : "";
-
-    var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "popover_id not in (" + read + ")" : "";
-    let conector = ""
-    if(vistaformula !== "" && cartelFormula !== ""){
-        conector = " and "
-    }
-    const finalFormula = vistaformula + conector + cartelFormula
-
-    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
-        function(res){            
-            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
-                return item["VIEW"] == pVista;
-            });
-            if(res.length > 0){
-                renderPopovers([...res, ...arrCartelesFijos]);
-            }else{
-                renderPopovers(arrCartelesFijos);
-            }
-        },
-        function(err){
-            console.log(err);
-        }
-    );
-}
-*/
