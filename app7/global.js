@@ -1060,7 +1060,7 @@ async function addListenersCapacitor (pCallback) {
         console.log('Push notification action performed', ev.actionId, ev.inputValue);
         console.log('ev.actionId: '+ ev.actionId);
         console.log('ev.inputValue: '+ ev.inputValue);
-        console.log('ev.notification: '+ ev.notification);
+        console.log('ev.notification: '+ JSON.stringify(ev.notification));
         if(ev.actionId == "tap"){
             const notification = ev.notification;
             let data = JSON.parse(JSON.stringify(notification.data));
@@ -1073,6 +1073,7 @@ async function addListenersCapacitor (pCallback) {
             data.additionalData = notification.data;
             data.additionalData.foreground = true;
             window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
+            console.log("******** dispara pushNotificationClick")
         }
     });
 }
