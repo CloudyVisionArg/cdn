@@ -1020,7 +1020,7 @@ async function addListenersCapacitor (pCallback) {
         //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
         //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
         const status = await Capacitor.Plugins.App.getState();
-        console.log("pushNotificationReceived:");
+        console.log("pushNotificationReceived -status: " + status);
         console.log(notification);
         /* Utilizo el formato legacy de mensajes para las app en cordova */
         data.title = notification.title;
