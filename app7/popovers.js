@@ -144,6 +144,14 @@ function generarCarteles(pScope){
             const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return (item["context"] == pScope || item["context"] == 'toolbar');
             });
+
+            for(let idx = 0; idx < res.length; idx++){
+                Object.keys(res[idx]).forEach((key)=>{
+                    console.log(key)
+                    res[idx][key.toLowerCase()] = res[idx][key];
+                    delete res[idx][key]
+                })
+            }
             debugger;
             if(res.length > 0){
                 renderPopovers([...arrCartelesFijos, ...res]);
