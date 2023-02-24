@@ -1057,8 +1057,9 @@ async function addListenersCapacitor (pCallback) {
 
     await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', ev => {
         console.log('Push notification action performed', ev.actionId, ev.inputValue);
-        console.log('ev.actionId: ', ev.actionId);
-        console.log('ev.inputValue: ', ev.inputValue);
+        console.log('ev.actionId: '+ ev.actionId);
+        console.log('ev.inputValue: '+ ev.inputValue);
+        console.log('ev.notification: '+ ev.notification);
         if(ev.actionId == "tap"){
             const notification = ev.notification;
             let data = JSON.parse(JSON.stringify(notification.data));
