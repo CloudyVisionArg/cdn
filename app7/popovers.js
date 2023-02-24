@@ -97,7 +97,8 @@ function crearCarteles(pCartel,index,array){
             },  
         }
     });
-    
+
+        
     dynamicPopover["context"] = pCartel["context"]
 
     dynamicPopover["selector"] = pCartel["selector"]
@@ -118,6 +119,7 @@ function renderPopovers(pArrPopovers){
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
     
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
+        console.log(arrCartelesVista[i].el);
         arrCartelesVista[i].on('closed', function (popover) {
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["selector"]);
         });
