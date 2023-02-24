@@ -521,6 +521,15 @@ function cDate(pDate) {
     if (Object.prototype.toString.call(pDate) === '[object Date]') {
         dt = pDate;
     } else {
+        debugger;
+        moment(pDate, 'L LT');
+        /*
+        if (mom.isValid()) {
+            dt = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
+        } else {
+            dt = null;
+        }
+        */
         dt = new Date(pDate);
     }
     if(!isNaN(dt.getTime())) {
