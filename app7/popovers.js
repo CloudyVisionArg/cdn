@@ -81,6 +81,8 @@ function crearCarteles(pCartel,index,array){
     elButton.classList.add("button"); 
     elButton.setAttribute("type","button");
     elButton.onclick=(x)=>console.log(x);
+    divBlock.append(elButton);
+
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
@@ -124,7 +126,7 @@ function renderPopovers(pArrPopovers){
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
     
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
-        console.log(arrCartelesVista[i].el);
+        
         arrCartelesVista[i].on('closed', function (popover) {
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["selector"]);
         });
