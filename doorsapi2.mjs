@@ -215,27 +215,23 @@ export class Session {
 
     settings(setting, value) {
         var url = 'settings';
-        var method, params, parName;
+        var method, param, paramName;
 
         if (value == undefined) {
             url += '/' + encURIC(setting);
             method = 'GET';
-            params = '';
+            param = '';
             parName = ''
         } else {
             method = 'POST';
-            params = { setting: {
-                Setting: setting,
-                Value: value
-            } };
-            params = { 
+            param = { 
                 Setting: setting,
                 Value: value
             };
-            parName = 'setting';
+            paramName = 'setting';
         }
 
-        return this.restClient.asyncCall(url, method, params, parName);
+        return this.restClient.asyncCall(url, method, param, paramName);
     }
 
     get tags() {
