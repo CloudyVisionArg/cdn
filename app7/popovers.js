@@ -151,7 +151,6 @@ function generarCarteles(pScope){
 
             for(let idx = 0; idx < res.length; idx++){
                 Object.keys(res[idx]).forEach((key)=>{
-                    console.log(key)
                     res[idx][key.toLowerCase()] = res[idx][key];
                     delete res[idx][key]
                 })
