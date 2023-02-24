@@ -221,7 +221,7 @@ export class Session {
             url += '/' + encURIC(setting);
             method = 'GET';
             param = '';
-            parName = ''
+            paramName = ''
         } else {
             method = 'POST';
             param = { 
