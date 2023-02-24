@@ -1072,11 +1072,6 @@ async function addListenersCapacitor (pCallback) {
             data.body = notification.body;
             data.additionalData = notification.data;
             data.additionalData.foreground = true;
-
-            let a = getEventListeners(window);
-            if(!a.pushNotificationClick){
-                console.log("**** pushNotificationClick NOT defined")
-            }
             window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
             
             console.log("******** dispara pushNotificationClick")
