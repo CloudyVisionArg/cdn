@@ -2,6 +2,10 @@
 var popoversFolder;
 var arrPopoversfijos = [];
 
+function btnClosePopover(btn){
+    app7.popover.close(btn.closest(".popover"));
+}
+
 fetch(scriptSrc('app7-popovers.json'))
 .then(response => {
     if (!response.ok) {
@@ -76,11 +80,7 @@ function crearCarteles(pCartel,index,array){
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
     divBlock.append(elTextCartel);
-
-    function btnClosePopover(btn){
-        app7.popover.close(btn.closest(".popover"));
-    }
-    
+       
     const elButton = document.createElement("button");
     elButton.classList.add("button"); 
     elButton.setAttribute("type","button");
