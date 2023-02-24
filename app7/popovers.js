@@ -80,7 +80,7 @@ function crearCarteles(pCartel,index,array){
     const elButton = document.createElement("button");
     elButton.classList.add("button"); 
     elButton.setAttribute("type","button");
-    elButton.onclick(x=>console.log(x));
+    elButton.onclick=(x)=>console.log(x);
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
