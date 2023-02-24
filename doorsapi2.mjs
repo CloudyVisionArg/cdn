@@ -87,6 +87,7 @@ export class Session {
     set authToken(value) {
         this.#authToken = value;
         this.restClient.AuthToken = value;
+        this.#tags == undefined
     }
 
     /**
@@ -211,6 +212,7 @@ export class Session {
     set serverUrl(value) {
         this.#serverUrl = value;
         this.restClient.ServerBaseUrl = value;
+        this.#tags == undefined
     }
 
     settings(setting, value) {
