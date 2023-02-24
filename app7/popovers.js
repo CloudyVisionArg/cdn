@@ -77,13 +77,7 @@ function crearCarteles(pCartel,index,array){
     elTextCartel.innerHTML = pCartel["text"];
     divBlock.append(elTextCartel);
 
-    const elButton = document.createElement("button");
-    elButton.classList.add("button"); 
-    elButton.setAttribute("type","button");
-    elButton.innerText = "Ok"
-    elButton.onclick=function(){console.log(this)};
-    divBlock.append(elButton);
-
+    debugger;
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
