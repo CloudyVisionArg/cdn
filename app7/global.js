@@ -1045,7 +1045,8 @@ async function addListenersCapacitor (pCallback) {
     await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', ev => {
         console.log('Push notification action performed', ev.actionId, ev.inputValue);
         if(ev.actionId == "tap"){
-            let data = JSON.parse(JSON.stringify(ev.notification.data));
+            const notification = ev.notification;
+            let data = JSON.parse(JSON.stringify(notification.data));
             //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
             //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
             console.log("pushNotificationReceived:", notification);
