@@ -1070,7 +1070,7 @@ async function addListenersCapacitor (pCallback) {
             data.title = notification.title;
             data.body = notification.body;
             data.additionalData = notification.data;
-            data.additionalData.foreground = false;
+            data.additionalData.foreground = true;
             window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
         }
     });
