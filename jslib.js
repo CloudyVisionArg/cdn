@@ -247,18 +247,18 @@ function asyncLoop(iterations, loopFunc, callback) {
 
 /*
 Devuelve un folder por ID o PATH
-Si es por PATH hay que pasar el RootFolderId
+Si es por PATH hay que pasar el CurrentFolderId
 Cachea por 60 segundos
 */
-function getFolder(pFolder, pRootFolderId) {
+function getFolder(pFolder, pCurrentFolderId) {
     return new Promise(function (resolve, reject) {
         var key = 'getFolder|' + pFolder + '|' + pRootFolderId;
         var cache = getCache(key);
         if (cache == undefined) {
             if (!isNaN(parseInt(pFolder))) {
-                cache = DoorsAPI.foldersGetById(pFolder);
+                cache = dSession.foldersGetFromId(pFolder);
             } else {
-                cache = DoorsAPI.foldersGetByPath(pRootFolderId, pFolder);
+                cache = dSession.foldersGetFromPath(pFolder, pCurrentFolderId);
             }
             setCache(key, cache, 60); // Cachea el folder por 60 segundos
         };
