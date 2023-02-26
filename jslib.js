@@ -252,7 +252,7 @@ Cachea por 60 segundos
 */
 function getFolder(pFolder, pCurrentFolderId) {
     return new Promise(function (resolve, reject) {
-        var key = 'getFolder|' + pFolder + '|' + pRootFolderId;
+        var key = 'getFolder|' + pFolder + '|' + pCurrentFolderId;
         var cache = getCache(key);
         if (cache == undefined) {
             if (!isNaN(parseInt(pFolder))) {
