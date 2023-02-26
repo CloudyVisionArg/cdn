@@ -258,7 +258,7 @@ function getFolder(pFolder, pCurrentFolderId) {
             if (!isNaN(parseInt(pFolder))) {
                 cache = dSession.foldersGetFromId(pFolder);
             } else {
-                cache = dSession.foldersGetFromPath(pFolder, pCurrentFolderId);
+                cache = dSession.foldersGetFromPath(pFolder, (pCurrentFolderId ? pCurrentFolderId : 1001));
             }
             setCache(key, cache, 60); // Cachea el folder por 60 segundos
         };
