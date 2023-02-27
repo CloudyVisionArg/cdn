@@ -1073,8 +1073,6 @@ async function addListenersCapacitor (pCallback) {
             data.additionalData = notification.data;
             data.additionalData.foreground = true;
             window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
-            
-            console.log("******** dispara pushNotificationClick")
         }
     });
 }
