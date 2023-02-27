@@ -1,4 +1,12 @@
+/*
+todo: reemplazar los _metodo con #metodo cdo safari implemente 
+metodos privados: https://caniuse.com/?search=private%20field
+
+swagger: http://tests.cloudycrm.net/apidocs
+*/
+
 // include
+
 var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
 var code = await res.text();
 var incjs = {};
@@ -8,9 +16,11 @@ eval(`
     ${code}
 `);
 
+
+// moment
+
 var _moment;
 
-debugger;
 if (typeof(moment) == 'undefined') {
     if (isNode()) {
         import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
@@ -27,16 +37,11 @@ if (typeof(moment) == 'undefined') {
     _moment = moment;
 }
 
+
 function isNode() {
     return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
 }
 
-/*
-todo: reemplazar los _metodo con #metodo cdo safari implemente 
-metodos privados: https://caniuse.com/?search=private%20field
-
-swagger: http://tests.cloudycrm.net/apidocs
-*/
 
 export class DoorsMap extends Map {
     _parseKey(key) {
