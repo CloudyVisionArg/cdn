@@ -75,11 +75,13 @@ export class Session {
     #serverUrl;
     #authToken;
     #tags;
+    #cache;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(serverUrl, authToken);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
+        this.#cache = [];
     }
     
     get authToken() {
@@ -90,6 +92,36 @@ export class Session {
         this.#authToken = value;
         this.restClient.AuthToken = value;
         this.#tags == undefined
+    }
+
+    /*
+    Cache de uso gral
+    dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
+    myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+    */
+    cache(key, value, seconds) {
+        let f = this.#cache.find(el => el.key == key);
+        if (value == undefined) { // get
+            if (f) {
+                if (!f.expires || f.expires > Date.now()) {
+                    console.log('Cache hit: ' + key);
+                    return f.value;
+                }
+            }
+        } else { // set
+            var exp, sec = parseInt(seconds);
+            if (!isNaN(sec)) {
+                exp = Date.now() + sec * 1000;
+            } else {
+                exp = Date.now() + 300000; // 5' por defecto
+            }
+            if (f) {
+                f.value = value;
+                f.expires = exp;
+            } else {
+                this.#cache.push({ key: pKey, value: pValue, expires: exp });
+            }
+        }
     }
 
     /**
@@ -138,12 +170,22 @@ export class Session {
         });
     }
 
+    /*
+    Llama a foldersGetFromId o foldersGetFromPath (segun los parametros)
+    Almacena en cache por 60 segs
+    */
     folder(folder, curFolder) {
-        if (!isNaN(parseInt(folder))) {
-            return this.foldersGetFromId(folder);
-        } else {
-            return this.foldersGetFromPath(folder, curFolder);
-        }
+        var key = 'folder|' + folder + '|' + curFolder;
+        var cache = this.cache(key);
+        if (cache == undefined) {
+            if (!isNaN(parseInt(folder))) {
+                cache = this.foldersGetFromId(folder);
+            } else {
+                cache = this.foldersGetFromPath(folder, (curFolder ? curFolder : 1001));
+            }
+            this.cache(key, cache, 60); // Cachea por 60 segundos
+        };
+        return cache;
     }
 
     foldersGetFromId(fldId) {
@@ -538,7 +580,7 @@ class Application {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#rootFolder) {
-                me.session.foldersGetFromId(me.rootFolderId).then(
+                me.session.folder(me.rootFolderId).then(
                     res => {
                         me.#rootFolder = res;
                         resolve(res);
@@ -938,7 +980,7 @@ export class Document {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#parent) {
-                me.session.foldersGetFromId(me.parentId).then(
+                me.session.folder(me.parentId).then(
                     res => {
                         me.#parent = res;
                         resolve(res);
@@ -1282,7 +1324,7 @@ export class Folder {
                 resolve(me.#parent);
             } else {
                 if (me.#json.ParentFolder) {
-                    me.session.foldersGetFromId(me.#json.ParentFolder).then(
+                    me.session.folder(me.#json.ParentFolder).then(
                         res => {
                             me.#parent = res;
                             resolve(res);
