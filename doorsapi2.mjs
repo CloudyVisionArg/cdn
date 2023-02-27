@@ -1,9 +1,3 @@
-if (window) {
-    // browser
-} else {
-    // node
-}
-
 /*
 todo: reemplazar los _metodo con #metodo cdo safari implemente 
 metodos privados: https://caniuse.com/?search=private%20field
@@ -1957,7 +1951,7 @@ class Utilities {
 
     // Manda un mail: https://nodemailer.com/message/
     async sendMail(message) {
-        if (!this.isNode) throw new Error('sendMail only works in sync events');
+        if (!this.isNode) throw new Error('sendMail only works on node (sync events)');
     
         var transport = this.cache('mailerTransport');
     
