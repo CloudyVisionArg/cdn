@@ -37,7 +37,9 @@ await (async () => {
         if (isNode()) {
             let res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             let numeral = res.default;
-            await import(incjs.scriptSrc('lib-numeral-locales'));
+            res = await fetch(incjs.scriptSrc('lib-numeral-locales'));
+            let code = await res.text();
+            eval(code);
             _numeral = numeral;
         } else {
             await incjs.include('lib-numeral');
