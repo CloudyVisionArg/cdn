@@ -157,6 +157,8 @@ export class Session {
         this.#authToken = authToken;
 
         _moment.locale('es'); // todo: setear a partir del lngId
+        _numeral.locale('es'); // http://numeraljs.com/
+        _numeral.defaultFormat('0,0.[00]');
     }
     
     get authToken() {
