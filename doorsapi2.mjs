@@ -596,7 +596,7 @@ class Attachment {
         return new Promise((resolve, reject) => {
             if (!me.#json.File) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
-                me.session.restClient.asyncCallXmlHttp(url, 'GET', '').then(
+                me.session.restClient.asyncCallBuff(url, 'GET', '').then(
                     res => {
                         me.#json.File = res;
                         resolve(res);
@@ -983,7 +983,7 @@ export class Document {
                         formData.append('description', el.description);
                         //formData.append('group', el.group);
                         var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.asyncCallXmlHttp(url, 'POST', formData));
+                        proms.push(me.session.restClient.asyncCallBuff(url, 'POST', formData));
 
                     } else if (el.removed) {
                         rm.push(el.id);
