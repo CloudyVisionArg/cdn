@@ -1155,7 +1155,7 @@ export class Document {
                 var rm = [];
                 var attMap = me.#attachmentsMap;
 
-                asyncLoop(attMap.size, async loop => {
+                me.session.utils.asyncLoop(attMap.size, async loop => {
                     var key = Array.from(attMap.keys())[loop.iteration()];
                     var el = attMap.get(key);      
 
@@ -1975,6 +1975,54 @@ class Utilities {
     }
 
     /*
+    Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
+    que debo esperar antes de realizar la prox iteracion. Si en iterations
+    paso undefined, se repite el loop hasta loop.break()
+
+    asyncLoop(10,
+        function (loop) {
+            console.log(loop.iteration());
+            setTimeout(function () {
+                loop.next();
+            }, 0);
+            
+            //loop.break(); // Para finalizar el loop
+        },
+        function() {
+            console.log('cycle ended')
+        }
+    );
+    */
+    asyncLoop(iterations, loopFunc, callback) {
+        var index = 0;
+        var done = false;
+        var loop = {
+            next: function() {
+                if (done) return;
+        
+                if (iterations == undefined || index < iterations) {
+                    index++;
+                    loopFunc(loop);
+                } else {
+                    done = true;
+                    if (callback) callback();
+                }
+            },
+        
+            iteration: function() {
+                return index - 1;
+            },
+        
+            break: function() {
+                done = true;
+                if (callback) callback();
+            }
+        };
+        loop.next();
+        return loop;
+    }
+
+    /*
     Cache de uso gral
     dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
     myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
@@ -2237,35 +2285,4 @@ class RestClient {
 
 function encURIC(value) {
     return (value == null || value == undefined) ? '' : encodeURIComponent(value);
-}
-
-function asyncLoop(iterations, loopFunc, callback) {
-    var index = 0;
-    var done = false;
-    var loop = {
-        next: function() {
-            if (done) {
-                return;
-            }
-    
-            if (iterations == undefined || index < iterations) {
-                index++;
-                loopFunc(loop);
-            } else {
-                done = true;
-                if (callback) callback();
-            }
-        },
-    
-        iteration: function() {
-            return index - 1;
-        },
-    
-        break: function() {
-            done = true;
-            if (callback) callback();
-        }
-    };
-    loop.next();
-    return loop;
 }
