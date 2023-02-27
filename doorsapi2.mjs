@@ -1979,7 +1979,7 @@ class Utilities {
      * @returns 
      */
     isoTime(pDate, pSeconds) {
-        var dt = cDate(pDate);
+        var dt = this.cDate(pDate);
         if (dt) {
             return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
                 (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
