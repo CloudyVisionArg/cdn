@@ -1940,12 +1940,16 @@ class RestClient {
 
             }).then(
                 response => {
-                    response.arrayBuffer().then(
-                        res => {
-                            resolve(res);
-                        },
-                        reject
-                    )
+                    if (response.ok) {
+                        response.arrayBuffer().then(
+                            res => {
+                                resolve(res);
+                            },
+                            reject
+                        )
+                        } else {
+                            reject(new Error(response.status + ' (' + response.statusText + ')'))
+                        }
                 },
                 reject
             )
