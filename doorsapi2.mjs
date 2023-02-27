@@ -34,7 +34,6 @@ await (async () => {
     // numeral
     if (typeof(numeral) == 'undefined') {
         if (isNode()) {
-            debugger;
             let res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
         } else {
