@@ -6,7 +6,7 @@ swagger: http://tests.cloudycrm.net/apidocs
 */
 
 var incjs = {};
-var _moment, _numeral;
+var _moment, _numeral, _nodemailer;
 
 await (async () => {
     // include
@@ -68,7 +68,15 @@ await (async () => {
         }
     });
 
-
+    // nodemailer
+    if (typeof(nodemailer) == 'undefined' && isNode()) {
+        let res = await import('https://cdn.jsdelivr.net/npm/nodemailer@6.9.1/+esm');
+        debugger;
+        _nodemailer = res.default;
+    } else {
+        _nodemailer = nodemailer;
+    }
+    
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
         String.prototype.reverse = function () {
@@ -2105,7 +2113,7 @@ class Utilities {
             if (options.host.indexOf('amazonaws') >= 0 && options.secure && options.port == '25') options.port = 465;
     
             // transport es reusable
-            transport = nodemailer.createTransport(options);
+            transport = _nodemailer.createTransport(options);
             this.cache('mailerTransport', transport);
         }
     
