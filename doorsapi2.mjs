@@ -26,15 +26,11 @@ var _moment;
 
 if (typeof(moment) == 'undefined') {
     if (isNode()) {
-        import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
-            res => {
-                _moment = res.default.default;
-            }
-        )
+        let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
+        _moment = res.default.default;
     } else {
-        incjs.include('lib-moment', () => {
-            _moment = moment;
-        });
+        await incjs.include('lib-moment');
+        _moment = moment;
     }
 } else {
     _moment = moment;
