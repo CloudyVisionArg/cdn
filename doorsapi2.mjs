@@ -1907,7 +1907,7 @@ class Utilities {
                 f.value = value;
                 f.expires = exp;
             } else {
-                this.#cache.push({ key: pKey, value: pValue, expires: exp });
+                this.#cache.push({ key: key, value: value, expires: exp });
             }
         }
     }
