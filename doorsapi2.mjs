@@ -68,17 +68,6 @@ await (async () => {
         }
     });
 
-    // nodemailer
-    if (typeof(nodemailer) == 'undefined') {
-        if (isNode()) {
-            debugger;
-            let res = await import('https://unpkg.com/nodemailer@6.7.2/lib/nodemailer.js');
-            _nodemailer = res.default;
-        }
-    } else {
-        _nodemailer = nodemailer;
-    }
-    
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
         String.prototype.reverse = function () {
@@ -2068,60 +2057,6 @@ class Utilities {
     */
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
-    }
-
-    // Manda un mail: https://nodemailer.com/message/
-    async sendMail(message) {
-        if (!this.isNode) throw new Error('sendMail only works on node (sync events)');
-    
-        var transport = this.cache('mailerTransport');
-    
-        if (!transport) {
-            let cdoConf = await this.session.settings('CDO_CONFIGURATION');
-            let options = {};
-            let arr = cdoConf.split(';');
-    
-            arr.forEach((el, ix) => {
-                let sett = el.split('=');
-                sett[0] = sett[0].toLowerCase().trim();
-                sett[1] = sett[1].trim();
-    
-                if (sett[0] == 'sendusing') {
-                    if (sett[1] != '2') throw new Error('sendusing must be 2 (cdoSendUsingPort)');
-    
-                } else if (sett[0] == 'smtpserver') {
-                    options.host = sett[1];
-    
-                } else if (sett[0] == 'smtpserverport') {
-                    options.port = sett[1];
-    
-                } else if (sett[0] == 'smtpusessl') {
-                    options.secure = (sett[1] == '1' ? true : false);
-    
-                } else if (sett[0] == 'smtpauthenticate') {
-                    if (sett[1] == '1' && !options.auth) options.auth = {};
-    
-                } else if (sett[0] == 'sendusername') {
-                    if (!options.auth) options.auth = {};
-                    options.auth.user = sett[1];
-    
-                } else if (sett[0] == 'sendpassword') {
-                    if (!options.auth) options.auth = {};
-                    options.auth.pass = sett[1];
-                }
-            })
-    
-            // Este hardcode es xq con 25 no funciona
-            if (options.host.indexOf('amazonaws') >= 0 && options.secure && options.port == '25') options.port = 465;
-    
-            // transport es reusable
-            transport = _nodemailer.createTransport(options);
-            this.cache('mailerTransport', transport);
-        }
-    
-        let info = await transport.sendMail(message);
-        console.log('Message sent: %s', info.messageId);
-        return info
     }
     
     get session() {
