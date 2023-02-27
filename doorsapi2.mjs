@@ -1923,7 +1923,6 @@ class RestClient {
         };
         */
 
-
         return new Promise((resolve, reject) => {
             // Opciones por defecto estan marcadas con un *
             fetch(completeUrl, {
@@ -1937,20 +1936,25 @@ class RestClient {
                 redirect: 'manual', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
                 body: dataSend // body data type must match "Content-Type" header
-            }).then((response) => {
-                debugger;
-                response.arrayBuffer().then(
-                    res => {
-                        resolve(res);
-                    },
-                    reject
-                )
+
+            }).then(
+                response => {
+                    debugger;
+                    response.arrayBuffer().then(
+                        res => {
+                            resolve(res);
+                        },
+                        reject
+                    )
+                },
+                reject
+            )
                 //TODO
                 /* var firstCharCode = body.charCodeAt(0);
                 if (firstCharCode === 65279) {
                     //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
                     body = body.substring(1);
-                }*/
+                }
 
                 response.text().then(function (textBody) {
                     let firstCharCode = textBody.charCodeAt(0);
@@ -1975,6 +1979,7 @@ class RestClient {
             }).catch((error) => {
                 reject(error);
             });
+            */
         });
 
 
