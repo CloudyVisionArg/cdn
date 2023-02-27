@@ -191,7 +191,7 @@ export class Session {
     set authToken(value) {
         this.#authToken = value;
         this.restClient.AuthToken = value;
-        this.#tags == undefined
+        this.#tags = undefined;
     }
 
     /**
@@ -1059,7 +1059,7 @@ export class Document {
         return this.#json.DocId;
     }
 
-    fields(name) {
+    fields(name, value) {
         var me = this;
 
         if (name) {
@@ -1068,7 +1068,9 @@ export class Document {
             field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
             if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
             if (field) {
-                return new Field(field, me);
+                var ret = new Field(field, me);
+                if (value != undefined) ret.value = value;
+                return ret;
             } else {
                 throw new Error('Field not found: ' + name);
             }
