@@ -1,20 +1,30 @@
-debugger;
-if (typeof(moment) == 'undefined') {
-    //var moment;
+// include
+var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
+var code = await res.text();
+var incjs = {};
+eval(`
+    incjs.include = include;
+    incjs.scriptSrc = scriptSrc;
+    ${code}
+`);
 
+var _moment;
+
+if (typeof(moment) == 'undefined') {
     if (isNode()) {
         import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
             res => {
-                moment = res.default.default;
-                moment.locale('es');
+                _moment = res.default.default;
+                _moment.locale('es');
             }
         )
-    
+    } else {
+        jslib.include('lib-moment', () => {
+            moment.locale('es');
+        });
+
     }
 
-}
-if (typeof(window) == 'undefined' && typeof(process) != 'undefined') {
-    // moment - https://momentjs.com/docs/
 }
 
 function isNode() {
@@ -1933,7 +1943,7 @@ class Utilities {
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
         } else {
-            dt = moment(date, 'L LTS').toDate();
+            dt = _moment(date, 'L LTS').toDate();
         }
         if(!isNaN(dt.getTime())) {
             return dt;
