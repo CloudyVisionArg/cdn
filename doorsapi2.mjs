@@ -39,7 +39,6 @@ await (async () => {
             _numeral = numeral;
         } else {
             await incjs.include('lib-numeral');
-            await incjs.include('lib-numeral-locales');
             _numeral = numeral;
         }
     } else {
@@ -181,8 +180,9 @@ export class Session {
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
 
-        _moment.locale('es'); // todo: setear a partir del lngId
-        _numeral.locale('es'); // http://numeraljs.com/
+        // todo: setear a partir del lngId
+        _moment.locale('es'); 
+        _numeral.locale('es');
         _numeral.defaultFormat('0,0.[00]');
     }
     
