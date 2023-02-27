@@ -503,7 +503,7 @@ function cDate(pDate) {
     if (Object.prototype.toString.call(pDate) === '[object Date]') {
         dt = pDate;
     } else {
-        dt = moment(pDate, 'L LT').toDate();
+        dt = moment(pDate, 'L LTS').toDate();
     }
     if(!isNaN(dt.getTime())) {
         return dt;

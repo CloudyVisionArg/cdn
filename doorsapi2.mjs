@@ -6,7 +6,7 @@ swagger: http://tests.cloudycrm.net/apidocs
 */
 
 var incjs = {};
-var _moment;
+var _moment, _numeral;
 
 await (async () => {
     // include
@@ -29,6 +29,21 @@ await (async () => {
         }
     } else {
         _moment = moment;
+    }
+
+    debugger;
+    // numeral
+    if (typeof(numeral) == 'undefined') {
+        if (isNode()) {
+            let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
+            _numeral = res.default.default;
+        } else {
+            await incjs.include('lib-numeral');
+            await incjs.include('lib-numeral-locales');
+            _numeral = numeral;
+        }
+    } else {
+        _numeral = numeral;
     }
 
     // string.reverse
@@ -818,7 +833,7 @@ class Database {
                 if (typeof value == 'number') {
                     return value.toString();
                 } else {
-                    var n = numeral(value).value();
+                    var n = _numeral(value).value();
                     if (n != null) {
                         return n.toString();
                     } else {
