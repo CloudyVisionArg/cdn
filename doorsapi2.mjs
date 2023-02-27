@@ -70,8 +70,8 @@ await (async () => {
 
     // nodemailer
     if (typeof(nodemailer) == 'undefined' && isNode()) {
-        let res = await import('https://cdn.jsdelivr.net/npm/nodemailer@6.9.1/+esm');
         debugger;
+        let res = await import('https://cdn.jsdelivr.net/npm/nodemailer@6.9.1/+esm');
         _nodemailer = res.default;
     } else {
         _nodemailer = nodemailer;
