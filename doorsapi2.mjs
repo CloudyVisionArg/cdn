@@ -107,7 +107,7 @@ export class Session {
             newPassword: newPassword,
             instanceName: instance,
         };
-        return this.restClient.asyncCall(url, 'POST', data, '');
+        return this.restClient.fetch(url, 'POST', data, '');
     };
 
     /**
@@ -124,7 +124,7 @@ export class Session {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'documents/' + docId;
-            me.restClient.asyncCall(url, 'GET', '', '').then(
+            me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Document(res, me));
                 },
@@ -137,7 +137,7 @@ export class Session {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + fldId + '';
-            me.restClient.asyncCall(url, 'GET', '', '').then(
+            me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
                 },
@@ -150,7 +150,7 @@ export class Session {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + (currFolderId ? currFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
-            me.restClient.asyncCall(url, 'GET', '', '').then(
+            me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
                 },
@@ -161,14 +161,14 @@ export class Session {
 
     get isLogged() {
         var url = 'session/islogged';
-        return this.restClient.asyncCall(url, 'POST', {}, '');
+        return this.restClient.fetch(url, 'POST', {}, '');
     };
 
     logoff() {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'session/logoff';
-            me.restClient.asyncCall(url, 'POST', {}, '').then(
+            me.restClient.fetch(url, 'POST', {}, '').then(
                 res => { me.authToken = undefined },
                 reject
             )
@@ -185,7 +185,7 @@ export class Session {
             liteMode: liteMode ? true : false,
         };
         return new Promise((resolve, reject) => {
-            me.restClient.asyncCall(url, 'POST', data, '').then(
+            me.restClient.fetch(url, 'POST', data, '').then(
                 token => {
                     me.authToken = token;
                     resolve(token);
@@ -197,13 +197,13 @@ export class Session {
 
     pushRegistration(settings) {
         var url = 'notifications/devices';
-        return this.restClient.asyncCall(url, 'POST', settings, 'notificationReceiver');
+        return this.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
     }
 
     pushUnreg(regType, regId) {
         var url = 'notifications/devices';
         var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
-        return this.restClient.asyncCall(url, 'DELETE', params, '');
+        return this.restClient.fetch(url, 'DELETE', params, '');
     }
 
     get restClient() {
@@ -213,10 +213,10 @@ export class Session {
     runSyncEventsOnClient(value) {
         if (value == undefined) {
             var url = 'session/syncevents/runOnClient';
-            return this.restClient.asyncCall(url, 'GET', '', '');
+            return this.restClient.fetch(url, 'GET', '', '');
         } else {
             var url = 'session/syncevents/runOnClient/' + (value ? 'true' : 'false');
-            return this.restClient.asyncCall(url, 'POST', {}, '');
+            return this.restClient.fetch(url, 'POST', {}, '');
         }
     }
 
@@ -248,7 +248,7 @@ export class Session {
             paramName = 'setting';
         }
 
-        return this.restClient.asyncCall(url, method, param, paramName);
+        return this.restClient.fetch(url, method, param, paramName);
     }
 
     get tags() {
@@ -256,7 +256,7 @@ export class Session {
         return new Promise((resolve, reject) => {
             if (me.#tags == undefined) {
                 var url = 'session/tags';
-                me.restClient.asyncCall(url, 'GET', '', '').then(
+                me.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#tags = res;
                         resolve(me.#tags);
@@ -314,7 +314,7 @@ class Account {
 
             } else {
                 var url = 'accounts/' + me.id + '/' + endPoint;
-                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json[property] = res;
                         resolve(me._accountsMap(me.#json[property]));
@@ -354,7 +354,7 @@ class Account {
     childAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'PUT', accs, 'arrayChildAccountIds');
+        return this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
     }
 
     childAccountsList() {
@@ -368,13 +368,13 @@ class Account {
     childAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayChildAccountIds');    
+        return this.session.restClient.fetch(url, 'DELETE', accs, 'arrayChildAccountIds');    
     }
 
     delete(expropiateObjects) {
         var expObj = expropiateObjects ? true : false;
         var url = 'accounts/' + this.id + '?expropiateObjects=' + expObj;
-        return this.session.restClient.asyncCall(url, 'DELETE', '', '');
+        return this.session.restClient.fetch(url, 'DELETE', '', '');
     }
 
     get description() {
@@ -424,7 +424,7 @@ class Account {
     parentAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
-        return this.session.restClient.asyncCall(url, 'PUT', accs, 'arrayParentAccounts');    
+        return this.session.restClient.fetch(url, 'PUT', accs, 'arrayParentAccounts');    
     }
 
     parentAccountsList() {
@@ -438,7 +438,7 @@ class Account {
     parentAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
-        return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayParentAccounts');    
+        return this.session.restClient.fetch(url, 'DELETE', accs, 'arrayParentAccounts');    
     }
 
     properties(property, value) {
@@ -458,7 +458,7 @@ class Account {
                 url = type + 's/' + me.id;
                 method = 'POST';
             }
-            me.session.restClient.asyncCall(url, method, me.toJSON(), type).then(
+            me.session.restClient.fetch(url, method, me.toJSON(), type).then(
                 res => {
                     me.#json = res;
                     resolve(me);
@@ -508,7 +508,7 @@ class Application {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.rootFolderId + '/children?folderpath=' + encURIC(folderPath);
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session));
                 },
@@ -596,7 +596,7 @@ class Attachment {
         return new Promise((resolve, reject) => {
             if (!me.#json.File) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
-                me.session.restClient.asyncCallBuff(url, 'GET', '').then(
+                me.session.restClient.fetchBuff(url, 'GET', '').then(
                     res => {
                         me.#json.File = res;
                         resolve(res);
@@ -709,7 +709,7 @@ class Directory {
             } else {
                 url = 'accounts?accIds=' + account;
             }
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     if (res.length == 0) {
                         reject(new Error('Account not found'));
@@ -736,7 +736,7 @@ class Directory {
                 reject(new Error('Invalid account type'));
             }
 
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     if (type == 1) {
                         resolve(new User(res, me.session));
@@ -751,7 +751,7 @@ class Directory {
 
     accountsSearch(filter, order) {
         let url = '/accounts/search?filter=' + encURIC(filter) + '&order=' + encURIC(order);
-        return this.session.restClient.asyncCall(url, 'GET', '', '');
+        return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     get session() {
@@ -780,12 +780,12 @@ export class Document {
 
     aclGrant(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
-        return this.session.restClient.asyncCall(url, 'POST', {}, '');
+        return this.session.restClient.fetch(url, 'POST', {}, '');
     }
 
     aclRevoke(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
-        return this.session.restClient.asyncCall(url, 'DELETE', {}, '');
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
     aclRevokeAll(account) {
@@ -794,7 +794,7 @@ export class Document {
             // Si viene account es un revokeAll para esa cuenta
             url += '/' + account;
         }
-        return this.session.restClient.asyncCall(url, 'DELETE', {}, '');
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
     attachments(attachment) {
@@ -816,7 +816,7 @@ export class Document {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap._loaded) {
                     var url = 'documents/' + me.id + '/attachments';
-                    me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             if (res.length > 0) {
                                 // Ordena descendente
@@ -867,7 +867,7 @@ export class Document {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
             encURIC(purge == true ? false : true);
-        return me.session.restClient.asyncCall(url, 'DELETE', [me.id], 'docIds');
+        return me.session.restClient.fetch(url, 'DELETE', [me.id], 'docIds');
         //todo: en q estado queda el objeto?
     }
 
@@ -951,11 +951,11 @@ export class Document {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'documents';
-            me.session.restClient.asyncCall(url, 'PUT', me.#json, 'document').then(
+            me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
-                    me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             me.#json = res;
                             saveAttachs(resolve, reject);
@@ -983,7 +983,7 @@ export class Document {
                         formData.append('description', el.description);
                         //formData.append('group', el.group);
                         var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.asyncCallBuff(url, 'POST', formData));
+                        proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
 
                     } else if (el.removed) {
                         rm.push(el.id);
@@ -993,7 +993,7 @@ export class Document {
                 }, () => {
                     if (rm.length > 0) {
                         var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
+                        proms.push(me.session.restClient.fetch(url, 'DELETE', rm, 'arrayAttId'));
                     }
     
                     Promise.all(proms).then(
@@ -1197,7 +1197,7 @@ export class Folder {
             }
 
             let url = 'documents/' + docId;
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Document(res, me.session, me));
                 },
@@ -1210,7 +1210,7 @@ export class Folder {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/documents/new';
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Document(res, me.session, me));
                 },
@@ -1223,7 +1223,7 @@ export class Folder {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session, me));
                 },
@@ -1241,7 +1241,7 @@ export class Folder {
         return new Promise((resolve, reject) => {
             if (!me.#json.Form) {
                 var url = 'forms/' + me.#json.FrmId;
-                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json.Form = res;
                         resolve(new Form(res, me.session));
@@ -1309,7 +1309,7 @@ export class Folder {
             '&order=' + encURIC(opt.order) + '&maxDocs=' + encURIC(opt.maxDocs) + 
             '&recursive=' + encURIC(opt.recursive) + '&maxDescrLength=' + encURIC(opt.maxTextLen);
 
-        return this.session.restClient.asyncCall(url, 'GET', params, '');
+        return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
     /**
@@ -1336,7 +1336,7 @@ export class Folder {
             '&maxDocs=' + encURIC(opt.maxDocs) + '&recursive=' + encURIC(opt.recursive) + 
             '&groupsOrder=' + encURIC(opt.groupsOrder) + '&totalsOrder=' + encURIC(opt.totalsOrder);
 
-        return this.session.restClient.asyncCall(url, 'GET', params, '');
+        return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
     get session() {
@@ -1471,7 +1471,7 @@ class Properties extends DoorsMap {
             '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
             '&objectName=' + encURIC(restArgs.objName);
 
-        this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
+        this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
             res => {
                 res.forEach(el => {
@@ -1514,7 +1514,7 @@ class Properties extends DoorsMap {
                     if (me.has(key)) {
                         var prop = super.get(key);
                         super.delete(key);
-                        me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties')
+                        me.session.restClient.fetch(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties')
                             .then(resolve, reject);
                     } else {
                         resolve(false);
@@ -1607,7 +1607,7 @@ class Property {
             return new Promise((resolve, reject) => {
                 if (this.value != value) {
                     this.#json.Value = value;
-                    this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties')
+                    this.session.restClient.fetch(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties')
                         .then(resolve, reject);
                 } else {
                     resolve(true);
@@ -1827,7 +1827,7 @@ class RestClient {
         this.ServerBaseUrl = serverUrl;
     }
 
-    asyncCall(url, method, parameters, parameterName) {
+    fetch(url, method, parameters, parameterName) {
         let data = null;
         //TODO Check if ends with /
         let completeUrl = this.ServerBaseUrl + "/" + url;
@@ -1898,7 +1898,7 @@ class RestClient {
     }
 
     //todo: pasar a fetch
-    asyncCallBuff(url, method, data) {
+    fetchBuff(url, method, data) {
         var dataSend = data ? data : null;
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
