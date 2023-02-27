@@ -75,13 +75,13 @@ export class Session {
     #serverUrl;
     #authToken;
     #tags;
-    #cache;
+    #db;
+    #utils;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(serverUrl, authToken);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
-        this.#cache = [];
     }
     
     get authToken() {
@@ -92,36 +92,6 @@ export class Session {
         this.#authToken = value;
         this.restClient.AuthToken = value;
         this.#tags == undefined
-    }
-
-    /*
-    Cache de uso gral
-    dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
-    myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
-    */
-    cache(key, value, seconds) {
-        let f = this.#cache.find(el => el.key == key);
-        if (value == undefined) { // get
-            if (f) {
-                if (!f.expires || f.expires > Date.now()) {
-                    console.log('Cache hit: ' + key);
-                    return f.value;
-                }
-            }
-        } else { // set
-            var exp, sec = parseInt(seconds);
-            if (!isNaN(sec)) {
-                exp = Date.now() + sec * 1000;
-            } else {
-                exp = Date.now() + 300000; // 5' por defecto
-            }
-            if (f) {
-                f.value = value;
-                f.expires = exp;
-            } else {
-                this.#cache.push({ key: pKey, value: pValue, expires: exp });
-            }
-        }
     }
 
     /**
@@ -142,9 +112,20 @@ export class Session {
         return this.restClient.fetch(url, 'POST', data, '');
     };
 
-    /**
-     * Devuelve el directory para acceder a informacion de usuarios
-     */
+    // Metodos de base de datos
+    get db() {
+        if (!this.#db) {
+            this.#db = new Database(this);
+        };
+        return this.#db;
+    }
+
+    // Alias de directory
+    get dir() {
+        return this.directory;
+    }
+
+    // Metodos de manejo del directorio
     get directory() {
         if (!this.#directory) {
             this.#directory = new Directory(this);
@@ -152,9 +133,9 @@ export class Session {
         return this.#directory;
     }
 
-    // Alias
-    doc() {
-        return this.documentsGetFromId(...arguments);
+    // Alias de documentsGetFromId
+    doc(docId) {
+        return this.documentsGetFromId(docId);
     }
 
     documentsGetFromId(docId) {
@@ -174,16 +155,16 @@ export class Session {
     Llama a foldersGetFromId o foldersGetFromPath (segun los parametros)
     Almacena en cache por 60 segs
     */
-    folder(folder, curFolder) {
-        var key = 'folder|' + folder + '|' + curFolder;
-        var cache = this.cache(key);
+    folder(folder, curFolderId) {
+        var key = 'folder|' + folder + '|' + curFolderId;
+        var cache = this.utils.cache(key);
         if (cache == undefined) {
             if (!isNaN(parseInt(folder))) {
                 cache = this.foldersGetFromId(folder);
             } else {
-                cache = this.foldersGetFromPath(folder, (curFolder ? curFolder : 1001));
+                cache = this.foldersGetFromPath(folder, (curFolderId ? curFolderId : 1001));
             }
-            this.cache(key, cache, 60); // Cachea por 60 segundos
+            this.utils.cache(key, cache, 60); // Cachea por 60 segundos
         };
         return cache;
     }
@@ -322,6 +303,14 @@ export class Session {
                 resolve(me.#tags);
             }
         })
+    }
+
+    // Metodos varios
+    get utils() {
+        if (!this.#utils) {
+            this.#utils = new Utilities(this);
+        };
+        return this.#utils;
     }
 };
 
@@ -560,16 +549,7 @@ class Application {
     }
 
     folders(folderPath) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            var url = 'folders/' + me.rootFolderId + '/children?folderpath=' + encURIC(folderPath);
-            me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Folder(res, me.session));
-                },
-                reject
-            )
-        });
+        return this.session.folder(folderPath, this.rootFolderId);
     }
 
     get parent() {
@@ -747,6 +727,55 @@ class Attachment {
     }
 }
 
+class Database {
+    #session;
+    
+    constructor(session) {
+        this.#session = session;
+    }
+
+    // Alias de sqlEncode
+    sqlEnc(value, type) {
+        return this.sqlEncode(value, type);
+    }
+
+    sqlEncode(value, type) {
+        if (value == null) {
+            return 'NULL';
+        } else {
+            if (type == 1) {
+                return '\'' + value.replaceAll('\'', '\'\'') + '\'';
+    
+            } else if (yype == 2) {
+                var ret = this.session.utils.isoDate(value);
+                if (ret == null) {
+                    return 'NULL';
+                } else {
+                    return '\'' + ret + ' ' + this.session.utils.isoTime(value, true) + '\''; 
+                }
+    
+            } else if (type == 3) {
+                if (typeof value == 'number') {
+                    return value.toString();
+                } else {
+                    var n = numeral(value).value();
+                    if (n != null) {
+                        return n.toString();
+                    } else {
+                        return 'NULL';
+                    }
+                };
+    
+            } else {
+                throw 'Unknown type: ' + type;
+            }
+        };
+    }
+    
+    get session() {
+        return this.#session;
+    }
+}
 
 class Directory {
     #session;
@@ -1832,6 +1861,146 @@ class User extends Account {
 
     set winLogon(value) {
         this.toJSON().WinLogon = value;
+    }
+}
+
+
+class Utilities {
+    #session;
+    #cache;
+    
+    constructor(session) {
+        this.#session = session;
+        this.#cache = [];
+    }
+
+    /*
+    Cache de uso gral
+    dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
+    myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+    */
+    cache(key, value, seconds) {
+        let f = this.#cache.find(el => el.key == key);
+        if (value == undefined) { // get
+            if (f) {
+                if (!f.expires || f.expires > Date.now()) {
+                    console.log('Cache hit: ' + key);
+                    return f.value;
+                }
+            }
+        } else { // set
+            var exp, sec = parseInt(seconds);
+            if (!isNaN(sec)) {
+                exp = Date.now() + sec * 1000;
+            } else {
+                exp = Date.now() + 300000; // 5' por defecto
+            }
+            if (f) {
+                f.value = value;
+                f.expires = exp;
+            } else {
+                this.#cache.push({ key: pKey, value: pValue, expires: exp });
+            }
+        }
+    }
+
+    // Convierte a Date
+    cDate(date) {
+        var dt;
+        if (Object.prototype.toString.call(date) === '[object Date]') {
+            dt = date;
+        } else {
+            dt = moment(date, 'L LTS').toDate();
+        }
+        if(!isNaN(dt.getTime())) {
+            return dt;
+        } else {
+            return null;
+        }
+    }
+
+    // Devuelve la fecha en formato YYYY-MM-DD
+    isoDate(date) {
+        var dt = this.cDate(date);
+        if (dt) {
+            return dt.toISOString().substring(0, 10);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Devuelve la hora en formato HH:MM:SS
+     * @param {*} pDate 
+     * @param {*} pSeconds 
+     * @returns 
+     */
+    isoTime(pDate, pSeconds) {
+        var dt = cDate(pDate);
+        if (dt) {
+            return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
+                (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
+        } else {
+            return null;
+        }
+    }
+
+    // Manda un mail
+    async sendMail(message) {
+        // https://nodemailer.com/message/
+    
+        var transport = this.cache('mailerTransport');
+    
+        if (!transport) {
+            let cdoConf = await this.session.settings('CDO_CONFIGURATION');
+            let options = {};
+            let arr = cdoConf.split(';');
+    
+            arr.forEach((el, ix) => {
+                let sett = el.split('=');
+                sett[0] = sett[0].toLowerCase().trim();
+                sett[1] = sett[1].trim();
+    
+                if (sett[0] == 'sendusing') {
+                    if (sett[1] != '2') throw new Error('sendusing must be 2 (cdoSendUsingPort)');
+    
+                } else if (sett[0] == 'smtpserver') {
+                    options.host = sett[1];
+    
+                } else if (sett[0] == 'smtpserverport') {
+                    options.port = sett[1];
+    
+                } else if (sett[0] == 'smtpusessl') {
+                    options.secure = (sett[1] == '1' ? true : false);
+    
+                } else if (sett[0] == 'smtpauthenticate') {
+                    if (sett[1] == '1' && !options.auth) options.auth = {};
+    
+                } else if (sett[0] == 'sendusername') {
+                    if (!options.auth) options.auth = {};
+                    options.auth.user = sett[1];
+    
+                } else if (sett[0] == 'sendpassword') {
+                    if (!options.auth) options.auth = {};
+                    options.auth.pass = sett[1];
+                }
+            })
+    
+            // Este hardcode es xq con 25 no funciona
+            if (options.host.indexOf('amazonaws') >= 0 && options.secure && options.port == '25') options.port = 465;
+    
+            // transport es reusable
+            transport = nodemailer.createTransport(options);
+            this.cache('mailerTransport', transport);
+        }
+    
+        let info = await transport.sendMail(message);
+        console.log('Message sent: %s', info.messageId);
+        return info
+    }
+    
+    get session() {
+        return this.#session;
     }
 }
 

@@ -219,9 +219,7 @@ function asyncLoop(iterations, loopFunc, callback) {
 	var done = false;
 	var loop = {
 	    next: function() {
-	        if (done) {
-            	return;
-	        }
+	        if (done) return;
 	
 	        if (iterations == undefined || index < iterations) {
 	            index++;
@@ -245,25 +243,9 @@ function asyncLoop(iterations, loopFunc, callback) {
 	return loop;
 }
 
-/*
-Devuelve un folder por ID o PATH
-Si es por PATH hay que pasar el CurrentFolderId
-Cachea por 60 segundos
-*/
+// Implementado en dSession.folder (usar ese) 
 function getFolder(pFolder, pCurrentFolderId) {
-    return new Promise(function (resolve, reject) {
-        var key = 'getFolder|' + pFolder + '|' + pCurrentFolderId;
-        var cache = getCache(key);
-        if (cache == undefined) {
-            if (!isNaN(parseInt(pFolder))) {
-                cache = dSession.foldersGetFromId(pFolder);
-            } else {
-                cache = dSession.foldersGetFromPath(pFolder, (pCurrentFolderId ? pCurrentFolderId : 1001));
-            }
-            setCache(key, cache, 60); // Cachea el folder por 60 segundos
-        };
-        cache.then(resolve, reject);
-    });
+    return dSession.folder(pFolder, pCurrentFolderId);
 }
 
 
