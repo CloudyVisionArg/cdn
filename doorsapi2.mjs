@@ -35,7 +35,7 @@ await (async () => {
     // numeral
     if (typeof(numeral) == 'undefined') {
         if (isNode()) {
-            let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
+            let res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default.default;
         } else {
             await incjs.include('lib-numeral');
