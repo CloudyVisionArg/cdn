@@ -1197,7 +1197,7 @@ export class Document {
                         err => {
                             debugger;
                             console.error(err);
-                            reject(new Error('saveAttachs error: ' + errMsg(err)));
+                            reject(err);
                         }
                     )
                 })
