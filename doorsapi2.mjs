@@ -149,7 +149,7 @@ export class Session {
     foldersGetFromPath(fldPath, currFolderId) {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + currFolderId + '/children?folderpath=' + encURIC(fldPath);
+            var url = 'folders/' + (currFolderId ? currFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
             me.restClient.asyncCall(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
@@ -1902,10 +1902,6 @@ class RestClient {
         var dataSend = data ? data : null;
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
-        var prom = jQuery.Deferred();
-        var xhr = new XMLHttpRequest();
-        xhr.open(httpMethod, completeUrl, true);
-        xhr.setRequestHeader("AuthToken", this.AuthToken);
         /*
         if (Doors.RESTFULL.ApiKey != null) {
             xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
@@ -1913,7 +1909,7 @@ class RestClient {
         else {
             xhr.setRequestHeader("AuthToken", this.AuthToken);
         }
-        */
+
         (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
         var _self = this;
         xhr.onreadystatechange = function (event) {
@@ -1925,7 +1921,7 @@ class RestClient {
                 }
             }
         };
-        xhr.send(dataSend);
+        */
 
 
         return new Promise((resolve, reject) => {
@@ -1940,7 +1936,7 @@ class RestClient {
                 },
                 redirect: 'manual', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: data != null ? data : null // body data type must match "Content-Type" header
+                body: dataSend // body data type must match "Content-Type" header
             }).then((response) => {
                 //TODO
                 /* var firstCharCode = body.charCodeAt(0);
