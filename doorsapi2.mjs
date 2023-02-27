@@ -5,11 +5,11 @@ metodos privados: https://caniuse.com/?search=private%20field
 swagger: http://tests.cloudycrm.net/apidocs
 */
 
-// include
-
 var incjs = {};
+var _moment;
 
 await (async () => {
+    // include
     var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
     var code = await res.text();
     eval(`
@@ -17,24 +17,20 @@ await (async () => {
         incjs.scriptSrc = scriptSrc;
         ${code}
     `);
-})();
 
-
-// moment
-
-var _moment;
-
-if (typeof(moment) == 'undefined') {
-    if (isNode()) {
-        let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
-        _moment = res.default.default;
+    // moment
+    if (typeof(moment) == 'undefined') {
+        if (isNode()) {
+            let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
+            _moment = res.default.default;
+        } else {
+            await incjs.include('lib-moment');
+            _moment = moment;
+        }
     } else {
-        await incjs.include('lib-moment');
         _moment = moment;
     }
-} else {
-    _moment = moment;
-}
+})();
 
 
 function isNode() {
@@ -1974,18 +1970,28 @@ class Utilities {
 
     /**
      * Devuelve la hora en formato HH:MM:SS
-     * @param {*} pDate 
-     * @param {*} pSeconds 
+     * @param {*} date 
+     * @param {*} seconds 
      * @returns 
      */
-    isoTime(pDate, pSeconds) {
-        var dt = this.cDate(pDate);
+    isoTime(date, seconds) {
+        var dt = this.cDate(date);
         if (dt) {
-            return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
-                (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
+            return this.lZeros(dt.getHours(), 2) + ':' + this.lZeros(dt.getMinutes(), 2) +
+                (seconds ? ':' + this.lZeros(dt.getSeconds(), 2) : '');
         } else {
             return null;
         }
+    }
+
+    /**
+     * Completa con ceros a la izquierda
+     * @param {*} string 
+     * @param {*} length 
+     * @returns 
+    */
+    lZeros(string, length) {
+        return ('0'.repeat(length) + string).slice(-length);
     }
 
     // Manda un mail: https://nodemailer.com/message/
