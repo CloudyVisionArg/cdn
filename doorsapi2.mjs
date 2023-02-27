@@ -1939,8 +1939,7 @@ class RestClient {
 
             }).then(
                 response => {
-                    debugger;
-                    response.blob().then(
+                    response.arrayBuffer().then(
                         res => {
                             resolve(res);
                         },
