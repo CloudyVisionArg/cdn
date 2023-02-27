@@ -246,16 +246,16 @@ function pageInitMembers(e, page) {
             title.appendTo(titleRow);
             
             //let textRow = $("<div />", {"class":"item-row"}).appendTo(contenedor);
-            let text = $("<div />", {"class":"item-text","text":item.Body});
+            let text = $("<div />", {"class":"item-subtitle","text":item.Body});
             text.appendTo(contenedor);
 
-            let iconRow = $("<div />", {"class":"item-row"}).appendTo(contenedor);
+            /*let iconRow = $("<div />", {"class":"item-row"}).appendTo(contenedor);
             let iconContainer = $("<div />", {"class":"item-cell","style":"text-align:end"});
             iconTrash_ios.appendTo(iconContainer);
             iconTrash_md.appendTo(iconContainer);
             iconSobre_ios.appendTo(iconContainer);
             iconSobre_md.appendTo(iconContainer);
-            iconContainer.appendTo(iconRow);
+            iconContainer.appendTo(iconRow);*/
             
             return ul.html();
         },
@@ -457,6 +457,7 @@ resolveRoute({ resolve: resolve, pageEl: $page, pageInit: function (e, page) {
 
 function resolveDeliverydDate(deliveryDate) {
     const diffDays = moment().diff(deliveryDate, 'days') + 1;
+    debugger;
     if (diffDays > 1) {
         return moment(deliveryDate).format("DD/MM/YYYY hh:mm");
     }
