@@ -1898,7 +1898,7 @@ class RestClient {
     }
 
     //todo: pasar a fetch
-    asyncCallXmlHttp(url, method, data) {
+    asyncCallBuff(url, method, data) {
         var dataSend = data ? data : null;
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
@@ -1939,6 +1939,12 @@ class RestClient {
                 body: dataSend // body data type must match "Content-Type" header
             }).then((response) => {
                 debugger;
+                response.arrayBuffer().then(
+                    res => {
+                        resolve(res);
+                    },
+                    reject
+                )
                 //TODO
                 /* var firstCharCode = body.charCodeAt(0);
                 if (firstCharCode === 65279) {
