@@ -1923,6 +1923,7 @@ class RestClient {
         };
         */
 
+        debugger;
         return new Promise((resolve, reject) => {
             // Opciones por defecto estan marcadas con un *
             fetch(completeUrl, {
