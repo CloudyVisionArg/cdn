@@ -9,7 +9,6 @@ swagger: http://tests.cloudycrm.net/apidocs
 
 var incjs = {};
 
-debugger;
 await (async () => {
     var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
     var code = await res.text();
@@ -24,7 +23,7 @@ await (async () => {
 // moment
 
 var _moment;
-debugger;
+
 if (typeof(moment) == 'undefined') {
     if (isNode()) {
         import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
