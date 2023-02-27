@@ -2068,6 +2068,26 @@ class Utilities {
         return isNode();
     }
 
+    // Devuelve el mensaje de un objeto err
+    errMsg(err) {
+        if (typeof(err) == 'string') {
+            return err;
+        } else if (typeof(err) == 'object') {
+            if (err instanceof Error) {
+                return err.constructor.name + ': ' + err.message;
+            } else if (err.constructor.name == 'SQLError') {
+                return 'SQLError {code: ' + err.code + ', message: \'' + err.message + '\'}';
+            } else if (err.ExceptionMessage) {
+                // error de Doors
+                return err.ExceptionMessage;            
+            } else if (err.xhr) {
+                return 'XHRError (readyState: ' + err.xhr.readyState 
+                    + ', status: ' + err.xhr.status + ' - ' + err.xhr.statusText + ')';
+            }
+        }
+        return JSON.stringify(err);
+    }
+
     // Devuelve la fecha en formato YYYY-MM-DD
     isoDate(date) {
         var dt = this.cDate(date);
@@ -2078,12 +2098,7 @@ class Utilities {
         }
     }
 
-    /**
-     * Devuelve la hora en formato HH:MM:SS
-     * @param {*} date 
-     * @param {*} seconds 
-     * @returns 
-     */
+    // Devuelve la hora en formato HH:MM:SS
     isoTime(date, seconds) {
         var dt = this.cDate(date);
         if (dt) {
@@ -2094,12 +2109,7 @@ class Utilities {
         }
     }
 
-    /**
-     * Completa con ceros a la izquierda
-     * @param {*} string 
-     * @param {*} length 
-     * @returns 
-    */
+    // Completa con ceros a la izquierda
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
     }
