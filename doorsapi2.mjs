@@ -1,7 +1,7 @@
 debugger;
 if (typeof(window) == 'undefined' && typeof(process) != 'undefined') {
     // moment - https://momentjs.com/docs/
-    moment = await import('./node_modules/moment/src/moment');
+    moment = await import('./node_modules/moment/src/moment.js');
     moment.locale('es');
 }
 
