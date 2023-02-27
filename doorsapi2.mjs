@@ -1,3 +1,9 @@
+if (window) {
+    // browser
+} else {
+    // node
+}
+
 /*
 todo: reemplazar los _metodo con #metodo cdo safari implemente 
 metodos privados: https://caniuse.com/?search=private%20field
@@ -1919,6 +1925,10 @@ class Utilities {
         }
     }
 
+    get isNode() {
+        return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
+    }
+
     // Devuelve la fecha en formato YYYY-MM-DD
     isoDate(date) {
         var dt = this.cDate(date);
@@ -1945,9 +1955,9 @@ class Utilities {
         }
     }
 
-    // Manda un mail
+    // Manda un mail: https://nodemailer.com/message/
     async sendMail(message) {
-        // https://nodemailer.com/message/
+        if (!this.isNode) throw new Error('sendMail only works in sync events');
     
         var transport = this.cache('mailerTransport');
     
