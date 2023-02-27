@@ -1,4 +1,5 @@
 debugger;
+var moment;
 if (typeof(moment) == 'undefined') {
 
     if (isNode()) {
