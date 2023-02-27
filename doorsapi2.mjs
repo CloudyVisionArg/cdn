@@ -26,17 +26,19 @@ var _moment;
 
 if (typeof(moment) == 'undefined') {
     if (isNode()) {
-        let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
-        _moment = res.default.default;
+        import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
+            res => {
+                _moment = res.default.default;
+            }
+        )
     } else {
-        await incjs.include('lib-moment');
-        _moment = moment;
+        incjs.include('lib-moment', () => {
+            _moment = moment;
+        });
     }
 } else {
     _moment = moment;
 }
-
-_moment.locale('es'); // todo: setear a partir del lngId
 
 
 function isNode() {
@@ -121,6 +123,8 @@ export class Session {
         this.#restClient = new RestClient(serverUrl, authToken);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
+
+        _moment.locale('es'); // todo: setear a partir del lngId
     }
     
     get authToken() {
