@@ -1,4 +1,4 @@
-/*
+/*moment
 todo: reemplazar los _metodo con #metodo cdo safari implemente 
 metodos privados: https://caniuse.com/?search=private%20field
 
@@ -120,6 +120,8 @@ export class Session {
         this.#restClient = new RestClient(serverUrl, authToken);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
+
+        _moment.locale('es'); // todo: setear a partir del lngId
     }
     
     get authToken() {
@@ -263,8 +265,6 @@ export class Session {
                 token => {
                     me.authToken = token;
                     resolve(token);
-
-                    _moment.locale('es'); // todo: setear a partir del lngId
                 },
                 reject
             );
