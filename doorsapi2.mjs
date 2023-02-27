@@ -746,7 +746,7 @@ class Database {
             if (type == 1) {
                 return '\'' + value.replaceAll('\'', '\'\'') + '\'';
     
-            } else if (yype == 2) {
+            } else if (type == 2) {
                 var ret = this.session.utils.isoDate(value);
                 if (ret == null) {
                     return 'NULL';
