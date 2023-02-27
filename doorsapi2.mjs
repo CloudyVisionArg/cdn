@@ -1940,7 +1940,7 @@ class RestClient {
             }).then(
                 response => {
                     debugger;
-                    response.arrayBuffer().then(
+                    response.blob().then(
                         res => {
                             resolve(res);
                         },
