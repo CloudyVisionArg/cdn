@@ -16,7 +16,9 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 
 'use strict';
 
+var doorsapi2, dSession;
 var urlParams, fld_id, folder, doc_id, doc;
+var folderJson, docJson;
 var controlsFolder, controls, controlsRights;
 var saving, cache, lsScripts;
 
@@ -48,111 +50,96 @@ arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/f
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
 
-include(arrScriptsPre, function () {
+(async () => {
+    await include(arrScriptsPre);
     preloader.show();
-    
-    include(arrScripts, function () {
-        Doors.RESTFULL.ServerUrl = window.location.origin + '/restful';
+    await include(arrScripts);
 
-        let tkn = getCookie('AuthToken');
-        if (tkn) {
-            Doors.RESTFULL.AuthToken = tkn;
-            resume();
-        } else {
-            $.get('/c/tkn.asp', function (data) {
-                if (data.length < 100) {
-                    Doors.RESTFULL.AuthToken = data;
-                    resume();
-                } else {
-                    end('La sesion no ha sido iniciada');
-                }
-            })
-        }
-
-        include(arrScriptsPos);
-    });
-
-    function resume() {
-        DoorsAPI.islogged().then(
-            function (res) {
-                if (res) {
-                    DoorsAPI.runSyncEventsOnClientSet(false).then(
-                        function () {
-                            resume2();
-                        },
-                        end
-                    )
-                } else {
-                    end('La sesion no ha sido iniciada');
-                }
-            },
-            end
-        );
-    };
-
-    function resume2() {
-        // todo: setar segun el LNG_ID
-        moment.locale('es');
-        numeral.locale('es'); // http://numeraljs.com/
-        numeral.defaultFormat('0,0.[00]');
-
-        urlParams = new URLSearchParams(window.location.search);
-        fld_id = urlParams.get('fld_id');
-        doc_id = urlParams.get('doc_id');
-        
-        if (fld_id) {
-            DoorsAPI.foldersGetById(fld_id).then(
-                function (res) {
-                    folder = res;
-                    if (folder.Type == 1) {
-                        DoorsAPI.formsGetById(folder.FrmId).then(
-                            function (frm) {
-                                folder.Form = frm;
-                                getDoc();
-                            },
-                            end
-                        );
-                    } else {
-                        end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
-                    }
-                },
-                end
-            )
-        }
+    let tkn = await getToken();
+    if (!tkn) {
+        end('La sesion no ha sido iniciada');
+        return;
     }
-});
+
+    let srvUrl = window.location.origin + '/restful';
+
+    Doors.RESTFULL.ServerUrl = srvUrl;
+    Doors.RESTFULL.AuthToken = tkn;
+
+    doorsapi2 = await import(scriptSrc('doorsapi2'));
+    dSession = new doorsapi2.Session(srvUrl, tkn);
+
+    include(arrScriptsPos);
+
+    let isLogged = await dSession.isLogged;
+    if (!isLogged) {
+        end('La sesion no ha sido iniciada');
+        return;
+    }
+
+    await dSession.runSyncEventsOnClient(false);
+
+    // todo: setar segun el LNG_ID
+    moment.locale('es');
+    numeral.locale('es'); // http://numeraljs.com/
+    numeral.defaultFormat('0,0.[00]');
+
+    urlParams = new URLSearchParams(window.location.search);
+    fld_id = urlParams.get('fld_id');
+    doc_id = urlParams.get('doc_id');
+    
+    if (fld_id) {
+        folder = await dSession.foldersGetFromId(fld_id);
+        folderJson = folder.toJSON();
+        folder.form; // Para q cargue el form
+        if (folder.type == 1) {
+            getDoc();
+        } else {
+            end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
+        }
+    
+    } else {
+        end('Se requiere fld_id');
+    }
+})();
 
 function end(pErr) {
     logAndToast(errMsg(pErr), { delay: 10000 });
     preloader.hide();
 }
 
-function getDoc() {
-	if (doc_id) {
-		DoorsAPI.documentsGetById(doc_id).then(
-			function (res) {
-				doc = res;
-				getControlsFolder();
-			},
-			end
-		);
+function getToken() {
+    return new Promise((resolve, reject) => {
+        let tkn = getCookie('AuthToken');
+        if (tkn) {
+            resolve(tkn);
+        } else {
+            $.get('/c/tkn.asp', function (data) {
+                if (data.length < 100) {
+                    resolve(data);
+                } else {
+                    resolve('');
+                }
+            })
+        }
+    });
+}
 
-	} else {
-		DoorsAPI.documentsNew(fld_id).then(
-			function (res) {
-				doc = res;
-				getControlsFolder();
-			},
-			end
-		);
-	}
+async function getDoc() {
+	if (doc_id) {
+        doc = await folder.documents(doc_id);
+    } else {
+        doc = await folder.documentsNew();
+    }
+    docJson = doc.toJSON();
+    getControlsFolder();
 }
 
 function getControlsFolder() {
-	var cf = objPropCI(doc.Tags, 'controlsFolder');
+	var cf = objPropCI(doc.tags, 'controlsFolder');
 	
 	if (cf) {
-		DoorsAPI.foldersGetByPath(folder.RootFolderId, cf).then(
+		DoorsAPI.foldersGetByPath(folder.app.rootFolderId, cf).then(
 			function (res) {
 				controlsFolder = res;
 				loadControls();
@@ -190,7 +177,7 @@ function loadControls() {
 }
 
 function getControlsRights(pControls) {
-	var cr = objPropCI(doc.Tags, 'controlsRights');
+	var cr = objPropCI(doc.tags, 'controlsRights');
 	if (cr) {
 		try {
 			controlsRights = $.parseXML(cr);
@@ -336,8 +323,8 @@ function renderPage() {
         $tab = $cont.find('#tabMain');
         $row = undefined;
 
-        doc.CustomFields.forEach(field => {
-            if (!field.HeaderTable && field.Name != 'DOC_ID') {
+        doc.fields().forEach(field => {
+            if (!field.headerTable && field.name != 'DOC_ID') {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
@@ -359,8 +346,8 @@ function renderPage() {
         $tab = $cont.find('#tabHeader');
         $row = undefined;
 
-        doc.CustomFields.forEach(field => {
-            if (field.HeaderTable) {
+        doc.fields().forEach(field => {
+            if (field.headerTable) {
                 $row = getRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
@@ -368,15 +355,6 @@ function renderPage() {
 
                 getDefaultControl(field).appendTo($col);
             }
-        })
-
-        doc.HeadFields.forEach(field => {
-            $row = getRow($row, $tab);
-            $col = $('<div/>', {
-                class: 'col-12 col-md-6 form-group',
-            }).appendTo($row);
-
-            getDefaultControl(field).appendTo($col);
         })
 
         // tabHist
@@ -498,7 +476,7 @@ function renderPage() {
             );
 
         } else {
-            getFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
+            getFolder($el.attr('data-fill-folder'), folder.app.rootFolderId).then(
                 function (res) {
                     var arrFields, textField, valueField, dataFields;
 
@@ -529,7 +507,7 @@ function renderPage() {
             if (wt == 3000) debugger; // Para poder ver q corno pasa
             setTimeout(waiting, 100);
         } else {
-            fillControls(doc);
+            fillControls();
             preloader.hide();
         }
     }, 0);
@@ -590,33 +568,33 @@ function exitForm() {
 function getDefaultControl(pField) {
     var $ret, $input, label;
 
-    label = pField.Description ? pField.Description : pField.Name;
+    label = pField.description ? pField.description : pField.name;
 
-    if (pField.Type == 1) {
-        if (pField.Length > 0 && pField.Length < 500) {
-            $ret = newInputText(pField.Name, label);
+    if (pField.type == 1) {
+        if (pField.length > 0 && pField.length < 500) {
+            $ret = newInputText(pField.name, label);
             $ret.addClass('mt-3');
             $input = $ret.find('input');
         } else {
-            $ret = newTextarea(pField.Name, label);
+            $ret = newTextarea(pField.name, label);
             $ret.addClass('mt-3');
             $input = $ret.find('textarea');
         }
 
-    } else if (pField.Type == 2) {
-        $ret = newDTPicker(pField.Name, label, 'datetime-local');
+    } else if (pField.type == 2) {
+        $ret = newDTPicker(pField.name, label, 'datetime-local');
         $ret.addClass('mt-3');
         $input = $ret.find('input');
 
-    } else if (pField.Type == 3) {
-        $ret = newInputText(pField.Name, label);
+    } else if (pField.type == 3) {
+        $ret = newInputText(pField.name, label);
         $ret.addClass('mt-3');
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
-    if (!pField.Updatable) $input.attr({ 'readonly': 'readonly' });
-    $input.attr('data-textfield', pField.Name.toLowerCase())
+    if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
+    $input.attr('data-textfield', pField.name.toLowerCase())
 
     return $ret;
 }
@@ -658,7 +636,7 @@ function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(doc, tf);
+            var textField = doc.fields(tf);
             if (!textField) {
                 console.log('No se encontro el campo ' + tf.toUpperCase());
             }
@@ -666,7 +644,7 @@ function renderControls(pCont, pParent) {
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(doc, vf);
+            var valueField = doc.fields(vf);
             if (!valueField) {
                 console.log('No se encontro el campo ' + vf.toUpperCase());
             }
@@ -699,11 +677,11 @@ function renderControls(pCont, pParent) {
 
             if (ctl.attr('maxlength')) {
                 $input.attr('maxlength', ctl.attr('maxlength'));
-            } else if (textField && textField.Type == 1 && textField.Length > 0) {
-                $input.attr('maxlength', textField.Length);
+            } else if (textField && textField.type == 1 && textField.length > 0) {
+                $input.attr('maxlength', textField.length);
             }
 
-            if (textField && textField.Type == 3) {
+            if (textField && textField.type == 3) {
                 $input.attr('data-numeral', numeral.options.defaultFormat)
             }
 
@@ -1084,22 +1062,23 @@ function renderControls(pCont, pParent) {
     }
 }
 
-function fillControls() {
-    var title, form;
+async function fillControls() {
+    var title, form, formDesc;
 
-    form = folder.Form.Description ? folder.Form.Description : folder.Form.Name;
+    form = await folder.form
+    formDesc = form.description ? form.description : form.name;
 
-    if (!doc.IsNew) {
-        title = getDocField(doc, 'subject').Value;
+    if (!doc.isNew) {
+        title = doc.fields('subject').value;
         if (title) {
-            title += ' - ' + form;
+            title += ' - ' + formDesc;
         } else {
-            title = form + ' #' + doc.DocId;
+            title = formDesc + ' #' + doc.id;
         };
 
         $('#deleteDoc').show();
     } else {
-        title = 'Nuevo ' + form;
+        title = 'Nuevo ' + formDesc;
         $('#deleteDoc').hide();
     }    
 
@@ -1114,9 +1093,9 @@ function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            textField = getDocField(doc, tf);
+            textField = doc.fields(tf);
             if (textField) {
-                text = textField.Value;
+                text = textField.value;
             } else {
                 text = null;
                 console.log('No se encontro el campo ' + tf.toUpperCase());
@@ -1125,9 +1104,9 @@ function fillControls() {
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            valueField = getDocField(doc, vf);
+            valueField = doc.fields(vf);
             if (valueField) {
-                value = valueField.Value;
+                value = valueField.value;
             } else {
                 value = null;
                 console.log('No se encontro el campo ' + vf.toUpperCase());
@@ -1136,9 +1115,9 @@ function fillControls() {
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            xmlField = getDocField(doc, xf);
+            xmlField = doc.fields(xf);
             if (xmlField) {
-                xml = xmlField.Value;
+                xml = xmlField.value;
             } else {
                 xml = null;
                 console.log('No se encontro el campo ' + xf.toUpperCase());
@@ -1169,7 +1148,7 @@ function fillControls() {
                     el._value(value);
         
                 } else {
-                    if (textField && textField.Type == 2) {
+                    if (textField && textField.type == 2) {
                         if (text) {
                             $el.val(formatDate(text));
                         } else {
@@ -1283,7 +1262,7 @@ function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         let field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, getDocField(doc, field).Value);
+                            pCont.attr(pAttr, doc.fields(field).value);
                         }
                     }
                 });
@@ -1325,51 +1304,51 @@ function saveDoc(pExit) {
 
     $('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-textfield'));
+        var field = doc.fields($el.attr('data-textfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text') {
-                    if ($el.attr('data-numeral') || field.Type == 3) {
-                        field.Value = numeral($el.val()).value();
-                    } else if (field.Type == 2) {
+                    if ($el.attr('data-numeral') || field.type == 3) {
+                        field.value = numeral($el.val()).value();
+                    } else if (field.type == 2) {
                         let mom = moment($el.val(), 'L LT');
                         if (mom.isValid()) {
-                            field.Value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
+                            field.value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
                         } else {
-                            field.Value = null;
+                            field.value = null;
                         }
                     } else {
-                        field.Value = $el.val();
+                        field.value = $el.val();
                     };
 
                 } else if (type == 'checkbox') {
-                    field.Value = el.checked ? '1' : '0';
+                    field.value = el.checked ? '1' : '0';
 
                 } else if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
 
             } else if (el.tagName == 'SELECT') {
                 let aux = el._text();
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'DIV') {
                 if ($el.hasClass('text-editor')) {
-                    field.Value = app7.textEditor.get($el).getValue();
+                    field.value = app7.textEditor.get($el).getValue();
                 }
 
             } else if (el.tagName == 'A') {
                 if ($el.attr('data-autocomplete')) {
-                    field.Value = $el.find('.item-after').html();
+                    field.value = $el.find('.item-after').html();
                 }
 
             } else if(el.tagName == 'TEXTAREA') {
                 if (el.ckeditor) {
                     field.value = el.ckeditor.getData();
                 } else {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
             }
         }
@@ -1377,24 +1356,24 @@ function saveDoc(pExit) {
 
     $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-valuefield'));
+        try { var field = doc.fields($el.attr('data-valuefield')) } catch(err) { console.log(err) };
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
                 let aux = el._value();
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = el._value();
+                    field.value = el._value();
 
                 } else {
                     let type = $el.attr('type').toLowerCase();
                     if (type == 'hidden') {
-                        if (field.Type == 3) {
-                            field.Value = numeral($el.val()).value();
+                        if (field.type == 3) {
+                            field.value = numeral($el.val()).value();
                         } else {
-                            field.Value = $el.val();
+                            field.value = $el.val();
                         };
                     }
                 }
@@ -1404,13 +1383,13 @@ function saveDoc(pExit) {
 
     $('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-xmlfield'));
+        var field = doc.fields($el.attr('data-xmlfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 let type = $el.attr('type').toLowerCase();
                 if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
             }
         }
@@ -1426,37 +1405,33 @@ function saveDoc(pExit) {
         }
     };
 
-    DoorsAPI.documentSave(doc).then(
-        function (doc2) {
-            doc = doc2;
-            doc_id = getDocField(doc, 'doc_id').Value;
+    doc.save().then(() => {
+        docJson = doc.toJSON();
+        doc_id = doc.fields('doc_id').value;
 
-            saveAtt().then(
-                function (res) {
-                    // Evento AfterSave
-                    let ev = getEvent('AfterSave');
-                    if (ev) {
-                        try {
-                            eval(ev);
-                        } catch (err) {
-                            console.log('Error in AfterSave: ' + errMsg(err));
-                        }
-                    };
-
-                    saving = false;
-                    preloader.hide();
-                    if (pExit) {
-                        exitForm();
-                    } else {
-                        toast('Cambios guardados');
-                        fillControls();
+        saveAtt().then(
+            function (res) {
+                // Evento AfterSave
+                let ev = getEvent('AfterSave');
+                if (ev) {
+                    try {
+                        eval(ev);
+                    } catch (err) {
+                        console.log('Error in AfterSave: ' + errMsg(err));
                     }
-                },
-                errMgr
-            );
-        },
-        errMgr
-    );
+                };
+
+                saving = false;
+                preloader.hide();
+                if (pExit) {
+                    exitForm();
+                } else {
+                    toast('Cambios guardados');
+                    fillControls();
+                }
+            }, errMgr
+        );
+    }, errMgr);
 
     function errMgr(pErr) {
         saving = false;

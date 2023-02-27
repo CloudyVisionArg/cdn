@@ -1,0 +1,77 @@
+[
+// estas son evidentes
+    {        
+        "CARTEL_ID": 100000002,
+        "CONTEXT": "explorer",
+        "SELECTOR": "#buttonSearch",
+        "TITLE": "Buscar Contactos",
+        "ICON_MD": "search",
+        "ICON_IOS": "search",
+        "TEXT": "Presione aqu&iacute; para buscar",
+        "ORDEN": "2"
+    },
+    {        
+        "CARTEL_ID": 100000003,
+        "CONTEXT": "explorer",        
+        "SELECTOR": "#fabAdd",
+        "TITLE": "Agregar",
+        "ICON_MD": "add",
+        "ICON_IOS": "plus",
+        "TEXT": "Presione aquí para agregar o importar",
+        "ORDEN": "3"
+    },
+    {        
+        "CARTEL_ID": 100000006,
+        "CONTEXT": "toolbar",        
+        "SELECTOR": "a[href='#view-contactos']",
+        "TITLE": "Contactos",
+        "ICON_MD": "person",
+        "ICON_IOS": "person",
+        "TEXT": "Aqui podra administrar sus contactos",
+        "ORDEN": "6"
+    },  
+
+// Estas debe ir en la custom Freemium
+    {        
+        "CARTEL_ID": 100000011,
+        "CONTEXT": "toolbar",
+        "SELECTOR": "a[href='#view-ajustes']",
+        "TITLE": "Ajustes",
+        "ICON_MD": "tune",
+        "ICON_IOS": "dial",
+        "TEXT": "Configurar equipo, productos y otras opciones",
+        "ORDEN": "4"
+    },
+    {        
+        "CARTEL_ID": 100000007,
+        "CONTEXT": "ajustes",        
+        "SELECTOR": "[idpopover='equipo']",
+        "TITLE": "Equipo",
+        "ICON_MD": "groups",
+        "ICON_IOS": "person_3",
+        "TEXT": "Gestionar su equipo de trabajo",
+        "ORDEN": "7"
+    },  
+    {        
+        "CARTEL_ID": 100000008,
+        "CONTEXT": "ajustes",        
+        "SELECTOR": "[idpopover='productos']",
+        "TITLE": "Productos",
+        "ICON_MD": "shopping_cart",
+        "ICON_IOS": "cart",
+        "TEXT": "Aqui podra ver y crear Productos",
+        "ORDEN": "8"
+    },  
+    {        
+        "CARTEL_ID": 100000009,
+        "CONTEXT": "ajustes",        
+        "SELECTOR": "[idpopover='listas']",
+        "TITLE": "Listas",
+        "ICON_MD": "format_list_bulleted",
+        "ICON_IOS": "list_bullet",
+        "TEXT": "Aqui podra ver y crear Listas",
+        "ORDEN": "9"
+    },  
+
+
+]

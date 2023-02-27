@@ -300,8 +300,12 @@ var app = {
         } else {
             if (app7.online) {
                 dSession.checkToken(
-                    execOnDeviceReady,
+                    () => {
+                        execOnDeviceReady();
+                        sessionMsg();
+                    },
                     function (err) {
+                        console.log(err);
                         showLogin();
                     }
                 );
@@ -348,6 +352,7 @@ var app = {
                         sync.sync(false);
                         if (window.refreshNotifications) window.refreshNotifications();
                         executeCode('onResume');
+                        sessionMsg();
                     },
                     function (err) {
                         console.log(err);
@@ -361,6 +366,22 @@ var app = {
         };
     },
 };
+
+function sessionMsg() {
+    dSession.tags.then(
+        res => {
+            if (res.message) {
+                app7.toast.create({
+                    text: res.message,
+                    closeTimeout: 15000,
+                    position: 'center',
+                    closeButton: false,
+                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+                }).open();
+            }
+        }
+    )
+}
 
 function pushReg() {
     if (device.platform != 'browser') {

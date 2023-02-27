@@ -178,7 +178,7 @@ function closeConsole() {
 }
 
 // Muestra la Consola como popup
-function showConsole(allowClose) {
+async function showConsole(allowClose) {
     var popup;
     var $console = $('#popupConsole');
 
@@ -225,90 +225,91 @@ function showConsole(allowClose) {
             ]
         });
 
-        $.get(scriptSrc('app7-console'), function (data) {
-            popup = app7.popup.create({
-                content: data,
-                closeByBackdropClick: false,
-                on: {
-                    open: function (popup) {
-                        $get('#close').click(function () {
-                            popup.close();
-                        });
+        var data = await $.get(scriptSrc('app7-console'));
+        popup = app7.popup.create({
+            content: data,
+            closeByBackdropClick: false,
+            on: {
+                open: onPopupOpen,
 
-                        if (!allowClose) {
-                            $get('#close').hide();
-                        } else {
-                            $get('#close').show();
+                close: function (popup) {
+                    clearInterval(this.intervalId);
+                },
+            }
+        });
+        popup.open();
+        return popup;
+
+        function onPopupOpen(popup) {
+            $get('#close').click(function () {
+                popup.close();
+            });
+
+            if (!allowClose) {
+                $get('#close').hide();
+            } else {
+                $get('#close').show();
+            }
+
+            this.intervalId = setInterval(function () {
+                if (popup.opened) {
+                    var log = window.localStorage.getItem('consoleLog');
+                    if ($get('#log').html() != log) {
+                        $get('#log').html(log);
+                    }
+                }
+            }, 250);
+
+            $get('#credentials').click(function (e) {
+                popup.close();
+                showLogin(true);
+            });
+
+            $get('#sync').click(function (e) {
+                syncActions.open();
+            });
+
+            $get('#support').click(function (e) {
+                cordova.plugins.email.open({
+                    to: 'soporte@cloudycrm.net',
+                    subject: 'Cloudy CRM - App issue',
+                    body: 'Por favor describanos su problema',
+                    attachments: [
+                        'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
+                        'base64:localStorage.txt//' + localStorageBase64(),
+                    ],
+                });
+    
+                function localStorageBase64() {
+                    var arr = new Array();
+                    for (var i = 0; i < localStorage.length; i++) {
+                        if (localStorage.key(i) != 'consoleLog') {
+                            arr.push(localStorage.key(i));
                         }
-
-                        this.intervalId = setInterval(function () {
-                            if (popup.opened) {
-                                var log = window.localStorage.getItem('consoleLog');
-                                if ($get('#log').html() != log) {
-                                    $get('#log').html(log);
-                                }
-                            }
-                        }, 250);
+                    }
+                    var arrOrd = arr.sort();
             
-                        $get('#credentials').click(function (e) {
-                            popup.close();
-                            showLogin(true);
-                        });
-
-                        $get('#sync').click(function (e) {
-                            syncActions.open();
-                        });
-
-                        $get('#support').click(function (e) {
-                            cordova.plugins.email.open({
-                                to: 'soporte@cloudycrm.net',
-                                subject: 'Cloudy CRM - App issue',
-                                body: 'Por favor describanos su problema',
-                                attachments: [
-                                    'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
-                                    'base64:localStorage.txt//' + localStorageBase64(),
-                                ],
-                            });
-                
-                            function localStorageBase64() {
-                                var arr = new Array();
-                                for (var i = 0; i < localStorage.length; i++) {
-                                    if (localStorage.key(i) != 'consoleLog') {
-                                        arr.push(localStorage.key(i));
-                                    }
-                                }
-                                var arrOrd = arr.sort();
-                        
-                                var ret = '';
-                                for (var i = 0; i < arrOrd.length; i++) {
-                                    ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
-                                }
-                                return window.btoa(ret);
-                            }
-                        });
-
-                        $get('#restart').click(function (e) {
-                            location.href = 'index.html';
-                        });
-
-                        function $get(pSelector) {
-                            return $(pSelector, popup.el);
-                        }
-                    },
-
-                    close: function (popup) {
-                        clearInterval(this.intervalId);
-                    },
+                    var ret = '';
+                    for (var i = 0; i < arrOrd.length; i++) {
+                        ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                    }
+                    return window.btoa(ret);
                 }
             });
-            popup.open();
-            return popup;
-        });
+
+            $get('#restart').click(function (e) {
+                location.href = 'index.html';
+            });
+
+            function $get(pSelector) {
+                return $(pSelector, popup.el);
+            }
+        };
     }
 }
 
 // Muestra la pantalla de Login como popup
-function showLogin() {
+async function showLogin() {
     var popup;
     var $login = $('div.login-screen');
     
@@ -325,538 +326,491 @@ function showLogin() {
         return popup;
     
     } else {
-        $.get(scriptSrc('app7-login'), function (data) {
-            popup = app7.popup.create({
-                content: data,
-                closeByBackdropClick: false,
-                on: {
-                    open: function (popup) {
-                        //if (!allowClose) $get('#cancel').closest('li').hide();
+        var data = await $.get(scriptSrc('app7-login'));
+        popup = app7.popup.create({
+            content: data,
+            closeByBackdropClick: false,
+            on: {
+                open: onPopupOpen,
+            }
+        });
+        popup.open();
+        return popup;
 
-                        var view = app7.views.create($get('.view')[0], {
-                            routes: [
-                                {
-                                    path: '/chpass/',
-                                    url: scriptSrc('app7-chpass'),
-                                    on: {
-                                        pageInit: chpassInit,
-                                    },
-                                },
-                                {
-                                    path: '/signin/',
-                                    url: scriptSrc('app7-signin'),
-                                    on: {
-                                        pageInit: signinInit,
-                                    },
-                                },
-                                {
-                                    path: '/resetpass/',
-                                    url: scriptSrc('app7-resetpass'),
-                                    on: {
-                                        pageInit: resetpassInit,
-                                    },
-                                },
-                            ],
-                        });
-                        
-                        popup.pStuff = {};
-                        popup.pStuff.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
-                        popup.pStuff.corpToggle.on('change', function () {
-                            setCorpVersion(this.checked);
-                        });
-
-                        $get('#showpwd').click(function () {
-                            var t = $('#password').attr('type');
-                            if (t == 'password') {
-                                $('#password').attr('type', 'text');
-                                $(this).html('eye_slash');
-                            } else if (t == 'text') {
-                                $('#password').attr('type', 'password');
-                                $(this).html('eye');
-                            }
-                            debugger;
-                        });
-
-                        $get('#instance').change(function () {
-                            if ($(this).val()) {
-                                $(this).val($(this).val().trim()); /* quita espacios en blanco */
-                                var newEp = 'https://' + $(this).val().toLowerCase() + '.cloudycrm.net/restful';
-                                var $ep = $get('#endpoint');
-                                if (!$ep.val() || !$ep.attr('manual')) {
-                                    setInputVal($ep, newEp);
-                                    $ep.removeAttr('manual');
-                                }
-                            }
-                        });
-
-                        $get('#endpoint').change(function () {
-                            $(this).attr('manual', '1');
-                        });
-
-                        $get('#logon').click(function (e) {
-                            logon();
-                        });
-
-                        $get('#logoff').click(function (e) {
-                            logoff();
-                        });
-
-                        $get('#chpass').click(function (e) {
-                            view.router.navigate('/chpass/');
-                        });
-
-                        $get('#signin').click(function (e) {
-                            view.router.navigate('/signin/');
-                        });
-
-                        $get('#resetpass').click(function (e) {
-                            view.router.navigate('/resetpass/');
-                        });
-
-                        $get('#console').click(function (e) {
-                            showConsole(true);
-                        });
-
-                        $get('#cancel').click(function (e) {
-                            popup.close();
-                            view.destroy();
-                        });
-
-                        fillControls();
-
-                        function $get(pSelector) {
-                            return $(pSelector, popup.el);
-                        }
-
-                        function fillControls() {
-                            $get('#message').hide()
-
-                            var userName = window.localStorage.getItem('userName');
-                            var instance = window.localStorage.getItem('instance');
-                            var endPoint = window.localStorage.getItem('endPoint');
-                            var appName = window.localStorage.getItem('appName');
-                    
-                            $get('#logon').closest('li').hide();
-                            $get('#logoff').closest('li').hide();
-                            $get('#chpass').closest('li').hide();
-                            $get('#signin').closest('li').hide();
-                            $get('#resetpass').closest('li').hide();
-
-                            setInputVal($get('#username'), userName);
-                            setInputVal($get('#instance'), instance);
-                            setInputVal($get('#endpoint'), endPoint);
-                            setInputVal($get('#appname'), appName ? appName : 'default');
-
-                            popup.pStuff.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
-                            setCorpVersion(popup.pStuff.corpToggle.checked);
-                        
-                            if (userName && instance && endPoint) {
-                                dSession.checkToken(function () {
-                                    // token valido
-                                    disableInputs(true);
-                                    setIsLogged(true);
-                                    
-                                }, function (err) {
-                                    setMessage(errMsg(err));
-                                    if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
-                                        $get('#chpass').closest('li').show();
-                                    }
-                                    disableInputs(false);
-                                    setIsLogged(false);
-                                })
-                            } else {
-                                disableInputs(false);
-                                setIsLogged(false);
-                            }
-                        }
-
-                        function logon() {
-                            disableInputs(true);
-                            $get('#logon').closest('li').addClass('disabled');
-                            $get('#signin').closest('li').addClass('disabled');
-                            $get('#chpass').closest('li').hide();
-                            $get('#resetpass').closest('li').addClass('disabled');
-
-                            window.localStorage.setItem('instance', $get('#instance').val());
-                            window.localStorage.setItem('endPoint', $get('#endpoint').val());
-                            window.localStorage.setItem('appName', $get('#appname').val());
-                            window.localStorage.setItem('userName', $get('#username').val());
-                            window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
-                            
-                            dSession.logon(function () {
-                                setMessage('Sincronizando datos... aguarde por favor', 'white');
-
-                                try {
-                                    sync.sync(true, function() {
-                                        location.href = 'index.html';
-                                    })
-                                } catch(err) {
-                                    setMessage(errMsg(err));
-                                    console.log(err);
-                                    fillControls();
-                                }
-                            }, function (err) {
-                                console.log(err);
-                                setMessage(errMsg(err));
-                                if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
-                                    $get('#chpass').closest('li').show();
-                                }
-                                disableInputs(false);
-                                $get('#logon').closest('li').removeClass('disabled');
-                                $get('#signin').closest('li').removeClass('disabled');
-                                $get('#resetpass').closest('li').removeClass('disabled');
-                            });
-                        }
-
-                        function logoff() {
-                            pushUnreg();
-                            cleanDb(function () {
-                                dSession.logoff();
-                                app7.dialog.alert('Se ha cerrado la sesion y eliminado los datos locales',
-                                    function () {
-                                        location.href = 'index.html';
-                                    }
-                                );
-                            });
-                        }
-
-                        function disableInputs(pDisable) {
-                            if (pDisable) {
-                                $get('#corpversion').parent().addClass('disabled');
-                            } else {
-                                $get('#corpversion').parent().removeClass('disabled');
-                            }
-                            inputDisabled($get('#instance'), pDisable);
-                            inputDisabled($get('#endpoint'), pDisable);
-                            inputDisabled($get('#appname'), pDisable);
-                            inputDisabled($get('#username'), pDisable);
-                            inputDisabled($get('#password'), pDisable);
-                        }
-
-                        function setCorpVersion(set) {
-                            if (set) {
-                                var $inst = $get('#instance');
-                                if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
-                                var $endp = $get('#endpoint');
-                                if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
-                                $get('.free-item').hide();
-                                $get('.corp-item').show();
-                            } else {
-                                setInputVal($get('#instance'), dSession.freeVersion.instance);
-                                setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
-                                setInputVal($get('#appname'), 'default');
-                                $get('.free-item').show();
-                                $get('.corp-item').hide();
-                            }
-                        };
-
-                        function setIsLogged(logged) {
-                            if (logged) {
-                                $get('.logged-item').show();
-                                $get('.not-logged-item').hide();
-                            } else {
-                                $get('.logged-item').hide();
-                                $get('.not-logged-item').show();
-                            }
-                        }
-
-                        function setMessage(pMessage, pColor) {
-                            var $msg = $get('#message');
-                            $msg.html(pMessage);
-                            if (pColor) {
-                                $msg.attr('style', 'color: ' + pColor + ' !important;');
-                            } else {
-                                $msg.removeAttr('style');
-                            }
-                            if (pMessage) $msg.show();
-                            else $msg.hide();
-                        }
-
-                        function chpassInit(e, page) {
-                            $get('#chpass').click(function (e) {
-                                var $new = $get('#newpass');
-                                var pwdLen = dSession.freeVersion.minPasswordLen || 6;
-                        
-                                if ($new.val().length < pwdLen) {
-                                    app7.dialog.alert('La contrase&ntilde;a debe tener al menos ' + pwdLen + ' caracteres', function (dialog, e) {
-                                        $new.focus();
-                                        app7.input.focus($new);
-                                    });
-                                    return false;
-                                }
-                                if ($new.val() != $get('#newpass2').val()) {
-                                    app7.dialog.alert('Las contrase&ntilde;as nuevas no coinciden', function (dialog, e) {
-                                        $new.focus();
-                                        app7.input.focus($new);
-                                    });
-                                    return false;
-                                }
-                            
-                                $get('#chpass').addClass('disabled');
-                            
-                                var userName = window.localStorage.getItem('userName');
-                                var instance = window.localStorage.getItem('instance');
-                            
-                                DoorsAPI.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(function () {
-                                    window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
-                                    app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
-                                        page.router.back();
-                                    });
-                            
-                                }, function (err) {
-                                    console.log(err);
-                                    app7.dialog.alert(errMsg(err));
-                                    $get('#chpass').removeClass('disabled');
-                                });
-                            });
-
-                            $get('#cancel').click(function (e) {
-                                page.router.back();
-                            });
-                        
-                            function $get(pSelector) {
-                                return $(pSelector, page.el);
-                            };
-
-                            function setMessage(pMessage) {
-                                var $msg = $get('#message');
-                                $msg.html(pMessage);
-                                if (pMessage) $msg.show();
-                                else $msg.hide();
-                            }
-                        }
-                        
-                        function signinInit(e, page) {
-                            $get('#signin').click(function (e) {
-                                $get('#signin').closest('li').addClass('disabled');
-
-                                disableInputs(true);
-
-                                var fv = dSession.freeVersion;
-                                Doors.RESTFULL.ServerUrl = fv.endpoint;
-
-                                DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
-                                    Doors.RESTFULL.AuthToken = token;
-                                    
-                                    DoorsAPI.documentsNew(fv.signinFolder).then(function(doc) {
-                                        var field;
-                            
-                                        getDocField(doc, 'empresa').Value = $get('#empresa').val();
-                                        getDocField(doc, 'creator_email').Value = $get('#email').val();
-                                        getDocField(doc, 'creator_nombre').Value = $get('#nombre').val();
-                            
-                                        DoorsAPI.documentSave(doc).then(function (doc) {
-                                            setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso, recuerde checkear el correo no deseado.', 'white');
-                            
-                                            DoorsAPI.logoff();
-                                            Doors.RESTFULL.AuthToken = '';
-                                        
-                                        }, function (err) {
-                                            onError('documentSave error', err);
-                                        });
-                            
-                            
-                                    }, function(err) {
-                                        onError('documentsNew error', err);
-                                    });
-                            
-                                }, function (err) {
-                                    onError('logon error', err);
-                                });
-                            
-                                function onError(pMsg, pErr) {
-                                    console.log(pErr);
-                                    var msg = pMsg;
-                                    if (pErr) msg += '<br>' + errMsg(pErr);
-                                    setMessage(msg);
-                                    disableInputs(false);
-                                    $get('#signin').closest('li').removeClass('disabled');
-                                    DoorsAPI.logoff();
-                                    Doors.RESTFULL.AuthToken = '';
-                                }
-
-                            });
-
-                            $get('#cancel').click(function (e) {
-                                page.router.back();
-                            });
-                        
-                            function $get(pSelector) {
-                                return $(pSelector, page.el);
-                            };
-
-                            function disableInputs(pDisable) {
-                                inputDisabled($get('#email'), pDisable);
-                                inputDisabled($get('#nombre'), pDisable);
-                                inputDisabled($get('#empresa'), pDisable);
-                            }
-
-                            function setMessage(pMessage, pColor) {
-                                var $msg = $get('#message');
-                                $msg.html(pMessage);
-                                if (pColor) {
-                                    $msg.attr('style', 'color: ' + pColor + ' !important;');
-                                } else {
-                                    $msg.removeAttr('style');
-                                }
-                                if (pMessage) $msg.show();
-                                else $msg.hide();
-                            }
-                        }
-
-                        function resetpassInit(e, page) {
-                            setMessage('instrucciones', '');
-                            setMessage('instrucciones2', '');
-                            setMessage('message', '');
-
-                            $get('#sendcode').click(function (e) {
-                                setMessage('message', '');
-
-                                if (!$get('#email').val()) {
-                                    setMessage('instrucciones', 'Ingrese su Usuario');
-                                    $get('#email').focus();
-                                    return false;
-                                }
-
-                                disableInputs(true);
-                            
-                                var fv = dSession.freeVersion;
-                                Doors.RESTFULL.ServerUrl = fv.endpoint;
-
-                                DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
-                                    Doors.RESTFULL.AuthToken = token;
-                                    
-                                    DoorsAPI.documentsNew(fv.resetPassFolder).then(function(doc) {
-                                        var field;
-                            
-                                        getDocField(doc, 'email').Value = $get('#email').val();
-                            
-                                        DoorsAPI.documentSave(doc).then(function (doc) {
-                                            setMessage('instrucciones', 'Recibir&aacute; un mensaje con un c&oacute;digo de confirmaci&oacute;n. ' + 
-                                                'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el mensaje puede enviar el c&oacute;digo nuevamente. ' +
-                                                'Si ha enviado su c&oacute;digo varias veces ingrese el &uacute;ltimo recibido.');
-                                            
-                                            disableInputs(false);
-
-                                            DoorsAPI.logoff();
-                                            Doors.RESTFULL.AuthToken = '';
-
-                                        }, function (err) {
-                                            onError('documentSave error', err);
-                                        });
-                            
-                            
-                                    }, function(err) {
-                                        onError('documentsNew error', err);
-                                    });
-                            
-                                }, function (err) {
-                                    onError('logon error', err);
-                                });
-                            });
-
-                            $get('#confirmcode').click(function (e) {
-                                setMessage('message', '');
-
-                                if (!$get('#email').val() || !$get('#code').val()) {
-                                    setMessage('message', 'Ingrese usuario y c&oacute;digo de confirmaci&oacute;n');
-                                    return false;
-                                }
-
-                                disableInputs(true);
-                            
-                                var fv = dSession.freeVersion;
-                                Doors.RESTFULL.ServerUrl = fv.endpoint;
-
-                                DoorsAPI.logon(fv.login, fv.password, fv.instance).then(function (token) {
-                                    Doors.RESTFULL.AuthToken = token;
-
-                                    DoorsAPI.folderSearch(fv.resetPassFolder, 'doc_id, codigo', 'confirmado is null and email = \'' + $('#email').val() + '\'', 'doc_id desc', 1).then(
-                                        function (res) {
-                                            if (!res.length) {
-                                                onError('No se encontraron solicitudes de desbloqueo pendientes para este usuario');
-                                
-                                            } else {
-                                                if (res[0]['CODIGO'] != $('#code').val().toUpperCase()) {
-                                                    onError('C&oacute;digo incorrecto');
-                                
-                                                } else {
-                                                    DoorsAPI.documentsGetById(res[0]['DOC_ID']).then(
-                                                        function (doc) {
-                                                            getDocField(doc, 'confirmado').Value = 1;
-
-                                                            DoorsAPI.documentSave(doc).then(
-                                                                function (doc) {
-                                                                    setMessage('instrucciones2', 'Recibir&aacute; un mensaje con su nueva contrase&ntilde;a.' +
-                                                                        'Presione SALIR para regresar a la pantalla de Login.');
-                                    
-                                                                    DoorsAPI.logoff();
-                                                                    Doors.RESTFULL.AuthToken = '';
-                                                                },
-                                                                function (err) {
-                                                                    onError('documentSave error', err);
-                                                                },
-                                                            );
-                                                        },
-                                                        function(err) {
-                                                            onError('documentsGetById error', err);
-                                                        }
-                                                    );
-                                                }
-                                            }
-                                        },
-                                        function (err) {
-                                            onError('folderSearch error', err);
-                                        },
-                                    );
-                                });
-                            });
-
-                            $get('#cancel').click(function (e) {
-                                page.router.back();
-                            });
-                        
-                            function $get(pSelector) {
-                                return $(pSelector, page.el);
-                            };
-
-                            function onError(pMsg, pErr) {
-                                console.log(pErr);
-                                var msg = pMsg;
-                                if (pErr) msg += '<br>' + errMsg(pErr);
-                                setMessage('message', msg);
-                                disableInputs(false);
-                                DoorsAPI.logoff();
-                                Doors.RESTFULL.AuthToken = '';
-                            }
-
-                            function disableInputs(pDisable) {
-                                inputDisabled($get('#email'), pDisable);
-                                inputDisabled($get('#code'), pDisable);
-                                if (pDisable) {
-                                    $get('#sendcode').closest('li').addClass('disabled');
-                                    $get('#confirmcode').closest('li').addClass('disabled').show();
-                                } else {
-                                    $get('#sendcode').closest('li').removeClass('disabled');
-                                    $get('#confirmcode').closest('li').removeClass('disabled').show();
-                                }
-                            }
-
-                            function setMessage(pId, pMessage) {
-                                var $msg = $get('#' + pId);
-                                $msg.html(pMessage);
-                                if (pMessage) $msg.parent().show();
-                                else $msg.parent().hide();
-                            }
-        
-                        }
-
+        function onPopupOpen(popup) {
+            var view = app7.views.create($get('.view')[0], {
+                routes: [
+                    {
+                        path: '/chpass/',
+                        url: scriptSrc('app7-chpass'),
+                        on: {
+                            pageInit: chpassInit,
+                        },
                     },
+                    {
+                        path: '/signin/',
+                        url: scriptSrc('app7-signin'),
+                        on: {
+                            pageInit: signinInit,
+                        },
+                    },
+                    {
+                        path: '/resetpass/',
+                        url: scriptSrc('app7-resetpass'),
+                        on: {
+                            pageInit: resetpassInit,
+                        },
+                    },
+                ],
+            });
+                
+            popup.pStuff = {};
+            popup.pStuff.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
+            popup.pStuff.corpToggle.on('change', function () {
+                setCorpVersion(this.checked);
+            });
+
+            $get('#showpwd').click(function () {
+                var t = $('#password').attr('type');
+                if (t == 'password') {
+                    $('#password').attr('type', 'text');
+                    $(this).html('eye_slash');
+                } else if (t == 'text') {
+                    $('#password').attr('type', 'password');
+                    $(this).html('eye');
+                }
+                debugger;
+            });
+
+            $get('#instance').change(function () {
+                if ($(this).val()) {
+                    $(this).val($(this).val().trim()); /* quita espacios en blanco */
+                    var newEp = 'https://' + $(this).val().toLowerCase() + '.cloudycrm.net/restful';
+                    var $ep = $get('#endpoint');
+                    if (!$ep.val() || !$ep.attr('manual')) {
+                        setInputVal($ep, newEp);
+                        $ep.removeAttr('manual');
+                    }
                 }
             });
-            popup.open();
-            return popup;
-        });
+
+            $get('#endpoint').change(function () {
+                $(this).attr('manual', '1');
+            });
+
+            $get('#logon').click(function (e) {
+                logon();
+            });
+
+            $get('#logoff').click(function (e) {
+                logoff();
+            });
+
+            $get('#chpass').click(function (e) {
+                view.router.navigate('/chpass/');
+            });
+
+            $get('#signin').click(function (e) {
+                view.router.navigate('/signin/');
+            });
+
+            $get('#resetpass').click(function (e) {
+                view.router.navigate('/resetpass/');
+            });
+
+            $get('#console').click(function (e) {
+                showConsole(true);
+            });
+
+            $get('#cancel').click(function (e) {
+                popup.close();
+                view.destroy();
+            });
+
+            fillControls();
+
+            function $get(pSelector) {
+                return $(pSelector, popup.el);
+            }
+
+            function fillControls() {
+                $get('#message').hide()
+
+                var userName = window.localStorage.getItem('userName');
+                var instance = window.localStorage.getItem('instance');
+                var endPoint = window.localStorage.getItem('endPoint');
+                var appName = window.localStorage.getItem('appName');
+        
+                $get('#logon').closest('li').hide();
+                $get('#logoff').closest('li').hide();
+                $get('#chpass').closest('li').hide();
+                $get('#signin').closest('li').hide();
+                $get('#resetpass').closest('li').hide();
+
+                setInputVal($get('#username'), userName);
+                setInputVal($get('#instance'), instance);
+                setInputVal($get('#endpoint'), endPoint);
+                setInputVal($get('#appname'), appName ? appName : 'default');
+
+                popup.pStuff.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
+                setCorpVersion(popup.pStuff.corpToggle.checked);
+            
+                if (userName && instance && endPoint) {
+                    dSession.checkToken(function () {
+                        // token valido
+                        disableInputs(true);
+                        setIsLogged(true);
+                        
+                    }, function (err) {
+                        setMessage(errMsg(err));
+                        if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
+                            $get('#chpass').closest('li').show();
+                        }
+                        disableInputs(false);
+                        setIsLogged(false);
+                    })
+                } else {
+                    disableInputs(false);
+                    setIsLogged(false);
+                }
+            }
+
+            function logon() {
+                disableInputs(true);
+                $get('#logon').closest('li').addClass('disabled');
+                $get('#signin').closest('li').addClass('disabled');
+                $get('#chpass').closest('li').hide();
+                $get('#resetpass').closest('li').addClass('disabled');
+
+                window.localStorage.setItem('instance', $get('#instance').val());
+                window.localStorage.setItem('endPoint', $get('#endpoint').val());
+                window.localStorage.setItem('appName', $get('#appname').val());
+                window.localStorage.setItem('userName', $get('#username').val());
+                window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
+                
+                dSession.appLogon(function () {
+                    setMessage('Sincronizando datos... aguarde por favor', 'white');
+
+                    try {
+                        sync.sync(true, function() {
+                            location.href = 'index.html';
+                        })
+                    } catch(err) {
+                        setMessage(errMsg(err));
+                        console.log(err);
+                        fillControls();
+                    }
+                }, function (err) {
+                    console.log(err);
+                    setMessage(errMsg(err));
+                    if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
+                        $get('#chpass').closest('li').show();
+                    }
+                    disableInputs(false);
+                    $get('#logon').closest('li').removeClass('disabled');
+                    $get('#signin').closest('li').removeClass('disabled');
+                    $get('#resetpass').closest('li').removeClass('disabled');
+                });
+            }
+
+            function logoff() {
+                pushUnreg();
+                cleanDb(function () {
+                    dSession.appLogoff();
+                    app7.dialog.alert('Se ha cerrado la sesion y eliminado los datos locales',
+                        function () {
+                            location.href = 'index.html';
+                        }
+                    );
+                });
+            }
+
+            function disableInputs(pDisable) {
+                if (pDisable) {
+                    $get('#corpversion').parent().addClass('disabled');
+                } else {
+                    $get('#corpversion').parent().removeClass('disabled');
+                }
+                inputDisabled($get('#instance'), pDisable);
+                inputDisabled($get('#endpoint'), pDisable);
+                inputDisabled($get('#appname'), pDisable);
+                inputDisabled($get('#username'), pDisable);
+                inputDisabled($get('#password'), pDisable);
+            }
+
+            function setCorpVersion(set) {
+                if (set) {
+                    var $inst = $get('#instance');
+                    if ($inst.val() == dSession.freeVersion.instance) setInputVal($inst, '');
+                    var $endp = $get('#endpoint');
+                    if ($endp.val() == dSession.freeVersion.endpoint) setInputVal($endp, '');
+                    $get('.free-item').hide();
+                    $get('.corp-item').show();
+                } else {
+                    setInputVal($get('#instance'), dSession.freeVersion.instance);
+                    setInputVal($get('#endpoint'), dSession.freeVersion.endpoint);
+                    setInputVal($get('#appname'), 'default');
+                    $get('.free-item').show();
+                    $get('.corp-item').hide();
+                }
+            };
+
+            function setIsLogged(logged) {
+                if (logged) {
+                    $get('.logged-item').show();
+                    $get('.not-logged-item').hide();
+                } else {
+                    $get('.logged-item').hide();
+                    $get('.not-logged-item').show();
+                }
+            }
+
+            function setMessage(pMessage, pColor) {
+                var $msg = $get('#message');
+                $msg.html(pMessage);
+                if (pColor) {
+                    $msg.attr('style', 'color: ' + pColor + ' !important;');
+                } else {
+                    $msg.removeAttr('style');
+                }
+                if (pMessage) $msg.show();
+                else $msg.hide();
+            }
+        }
+
+        function chpassInit(e, page) {
+            $get('#chpass').click(function (e) {
+                var $new = $get('#newpass');
+                var pwdLen = dSession.freeVersion.minPasswordLen || 6;
+        
+                if ($new.val().length < pwdLen) {
+                    app7.dialog.alert('La contrase&ntilde;a debe tener al menos ' + pwdLen + ' caracteres', function (dialog, e) {
+                        $new.focus();
+                        app7.input.focus($new);
+                    });
+                    return false;
+                }
+                if ($new.val() != $get('#newpass2').val()) {
+                    app7.dialog.alert('Las contrase&ntilde;as nuevas no coinciden', function (dialog, e) {
+                        $new.focus();
+                        app7.input.focus($new);
+                    });
+                    return false;
+                }
+            
+                $get('#chpass').addClass('disabled');
+            
+                var userName = window.localStorage.getItem('userName');
+                var instance = window.localStorage.getItem('instance');
+            
+                dSession.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(
+                    function () {
+                        window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
+                        app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
+                            page.router.back();
+                        });
+            
+                    }, function (err) {
+                        console.log(err);
+                        app7.dialog.alert(errMsg(err));
+                        $get('#chpass').removeClass('disabled');
+                    }
+                );
+            });
+
+            $get('#cancel').click(function (e) {
+                page.router.back();
+            });
+        
+            function $get(pSelector) {
+                return $(pSelector, page.el);
+            };
+
+            function setMessage(pMessage) {
+                var $msg = $get('#message');
+                $msg.html(pMessage);
+                if (pMessage) $msg.show();
+                else $msg.hide();
+            }
+        }
+
+        function signinInit(e, page) {
+            $get('#signin').click(async function (e) {
+                $get('#signin').closest('li').addClass('disabled');
+
+                disableInputs(true);
+
+                try {
+                    var fv = dSession.freeVersion;
+                    dSession.serverUrl = fv.endpoint;
+                    await dSession.logon(fv.login, fv.password, fv.instance);
+
+                    var fld = await dSession.foldersGetFromId(fv.signinFolder);
+                    var doc = await fld.documentsNew();
+                    doc.fields('empresa').value = $get('#empresa').val();
+                    doc.fields('creator_email').value = $get('#email').val();
+                    doc.fields('creator_nombre').value = $get('#nombre').val();
+                    await doc.save();
+                    setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso, recuerde checkear el correo no deseado.', 'white');
+                    await dSession.logoff();
+
+                } catch (err) {
+                    onError(err);
+                }
+
+                function onError(pErr) {
+                    setMessage(errMsg(pErr));
+                    disableInputs(false);
+                    $get('#signin').closest('li').removeClass('disabled');
+                    dSession.logoff();
+                }
+
+            });
+
+            $get('#cancel').click(function (e) {
+                page.router.back();
+            });
+        
+            function $get(pSelector) {
+                return $(pSelector, page.el);
+            };
+
+            function disableInputs(pDisable) {
+                inputDisabled($get('#email'), pDisable);
+                inputDisabled($get('#nombre'), pDisable);
+                inputDisabled($get('#empresa'), pDisable);
+            }
+
+            function setMessage(pMessage, pColor) {
+                var $msg = $get('#message');
+                $msg.html(pMessage);
+                if (pColor) {
+                    $msg.attr('style', 'color: ' + pColor + ' !important;');
+                } else {
+                    $msg.removeAttr('style');
+                }
+                if (pMessage) $msg.show();
+                else $msg.hide();
+            }
+        }
+
+        function resetpassInit(e, page) {
+            setMessage('instrucciones', '');
+            setMessage('instrucciones2', '');
+            setMessage('message', '');
+
+            $get('#sendcode').click(async function (e) {
+                setMessage('message', '');
+
+                if (!$get('#email').val()) {
+                    setMessage('instrucciones', 'Ingrese su Usuario');
+                    $get('#email').focus();
+                    return false;
+                }
+
+                disableInputs(true);
+            
+                try {
+                    var fv = dSession.freeVersion;
+                    dSession.serverUrl = fv.endpoint;
+                    await dSession.logon(fv.login, fv.password, fv.instance);
+
+                    var fld = await dSession.foldersGetFromId(fv.resetPassFolder);
+                    var doc = await fld.documentsNew();
+                    doc.fields('email').value = $get('#email').val();
+                    await doc.save();
+
+                    setMessage('instrucciones', 'Recibir&aacute; un mensaje con un c&oacute;digo de confirmaci&oacute;n. ' + 
+                        'Ingr&eacute;selo a continuaci&oacute;n. Si no ha recibido el mensaje puede enviar el c&oacute;digo nuevamente. ' +
+                        'Si ha enviado su c&oacute;digo varias veces ingrese el &uacute;ltimo recibido.');
+                    disableInputs(false);
+                    dSession.logoff();
+
+                } catch (err) {
+                    onError(err);
+                }
+
+            });
+
+            $get('#confirmcode').click(async function (e) {
+                setMessage('message', '');
+
+                if (!$get('#email').val() || !$get('#code').val()) {
+                    setMessage('message', 'Ingrese usuario y c&oacute;digo de confirmaci&oacute;n');
+                    return false;
+                }
+
+                disableInputs(true);
+
+                try {
+                    var fv = dSession.freeVersion;
+                    dSession.serverUrl = fv.endpoint;
+                    await dSession.logon(fv.login, fv.password, fv.instance);
+
+                    var fld = await dSession.foldersGetFromId(fv.resetPassFolder);
+                    var res = await fld.search({
+                        fields: 'doc_id, codigo',
+                        formula: 'confirmado is null and email = \'' + $('#email').val() + '\'',
+                        order: 'doc_id desc',
+                        maxDocs: 1,
+                    });
+
+                    if (!res.length) {
+                        onError('No se encontraron solicitudes de desbloqueo pendientes para este usuario');
+        
+                    } else if (res[0]['CODIGO'] != $('#code').val().toUpperCase()) {
+                            onError('C&oacute;digo incorrecto');
+        
+                    } else {
+                        var doc = await fld.documents(res[0]['DOC_ID']);
+                        doc.fields('confirmado').value = 1;
+                        await doc.save();
+
+                        setMessage('instrucciones2', 'Recibir&aacute; un mensaje con su nueva contrase&ntilde;a.' +
+                            'Presione SALIR para regresar a la pantalla de Login.');
+                        dSession.logoff();
+                    }
+
+                } catch (err) {
+                    onError(err);
+                }
+            });
+
+            $get('#cancel').click(function (e) {
+                page.router.back();
+            });
+        
+            function $get(pSelector) {
+                return $(pSelector, page.el);
+            };
+
+            function onError(pErr) {
+                console.log(pErr);
+                setMessage('message', errMsg(pErr));
+                disableInputs(false);
+                dSession.logoff();
+            }
+
+            function disableInputs(pDisable) {
+                inputDisabled($get('#email'), pDisable);
+                inputDisabled($get('#code'), pDisable);
+                if (pDisable) {
+                    $get('#sendcode').closest('li').addClass('disabled');
+                    $get('#confirmcode').closest('li').addClass('disabled').show();
+                } else {
+                    $get('#sendcode').closest('li').removeClass('disabled');
+                    $get('#confirmcode').closest('li').removeClass('disabled').show();
+                }
+            }
+
+            function setMessage(pId, pMessage) {
+                var $msg = $get('#' + pId);
+                $msg.html(pMessage);
+                if (pMessage) $msg.parent().show();
+                else $msg.parent().hide();
+            }
+
+        }
     }
 }
 
@@ -975,7 +929,7 @@ function pushRegistration(pPushSetings, pCallback) {
         console.log('push regId: ' + data.registrationId);
         console.log('push regType: ' + data.registrationType);
         
-        DoorsAPI.pushRegistration({
+        dSession.pushRegistration({
             'AppVersion': app7.version,
             'DeviceModel': device.model,
             'DevicePlatform': device.platform,
@@ -996,7 +950,7 @@ function pushUnreg(pCallback) {
         app.push.unregister(
             function () {
                 console.log('pushUnreg ok');
-                DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
+                dSession.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
                     function (res) {
                         if (pCallback) pCallback();
                     },

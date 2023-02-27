@@ -75,32 +75,33 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
-    scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 0 });
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 219 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 219 });
 
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 202 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 202 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 218 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 217, hasdep: true });
+    scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 217 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 216 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 213 });
+    scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 206 });
+    scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 206 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 206 });
+    scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 204 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 203 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 202, hasdep: true });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 199 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
 	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 195 });
-    scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 192 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 190 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 190 });
 	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 189 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 179 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
-    scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 154 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 149 });
     scripts.push({ id: 'app7-sade-index', path: '/app7/sade/index.js', version: 149 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 146 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 146 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
@@ -169,7 +170,7 @@ function include() {
             });
 
             function includeEl(pEl) {
-                if (typeof pEl.version == 'number') {
+                if (pEl.version || pEl.version == 0) {
                     include(pEl.id, pEl.version, function () {
                         pEl.loaded = true;
                     })
@@ -202,8 +203,9 @@ function include() {
 
             } else {
                 if (typeof arguments[1] == 'string') {
-                    // Si empieza con http es el src, sino el branch
-                    if (arguments[1].substring(0, 4).toLowerCase() == 'http') {
+                    // Si tiene ://, .js, .mjs o .css es el src, sino el branch
+                    if (arguments[1].indexOf('://') >= 0 || arguments[1].indexOf('.js') >= 0 || 
+                            arguments[1].indexOf('.mjs') >= 0 || arguments[1].indexOf('.css') >= 0) {
                         pSrc = arguments[1];
                     } else {
                         pVer = arguments[1]
@@ -270,14 +272,12 @@ function include() {
 
                         var cont = D.getElementsByTagName('head')[0] || D.body || D.documentElement;
                         cont.appendChild(scriptNode);
-
-                        if (pCallback) scriptNode.loaded(pCallback);
-                        resolve(scriptNode);
-                        
-                    } else {
-                        if (pCallback) scriptNode.loaded(pCallback);
-                        resolve(scriptNode);
                     }
+
+                    scriptNode.loaded(() => {
+                        if (pCallback) pCallback(scriptNode);
+                        resolve(scriptNode);
+                    });
                 }
             }
         }
@@ -289,14 +289,14 @@ function includeJs() {
 	return include.apply(null, arguments);
 }
 
-function scriptLoaded(scriptName, callback) {
+function scriptLoaded(scriptId, callback) {
 	var scripts = registeredScripts();
-    var script = scripts.find(el => el.id.toLowerCase() == scriptName.toLowerCase());
+    var script = scripts.find(el => el.id.toLowerCase() == scriptId.toLowerCase());
     var id;
     if (script && script.aliasOf) {
         id = script.aliasOf.toLowerCase();
     } else {
-        id = scriptName.toLowerCase();
+        id = scriptId.toLowerCase();
     }
     var el = document.getElementById('script_' + id)
     if (el) {

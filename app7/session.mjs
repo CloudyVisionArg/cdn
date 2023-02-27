@@ -27,13 +27,13 @@ export class Session extends doorsapi2.Session {
         var authToken = me.getToken();
 
         if (!authToken) {
-            me.logon(pSuccess, pFailure);
+            me.appLogon(pSuccess, pFailure);
         } else {
             me.authToken = authToken;
             Doors.RESTFULL.AuthToken = authToken;
             me.isLogged.then(function (res) {
                 if (!res) {
-                    me.logon(pSuccess, pFailure);
+                    me.appLogon(pSuccess, pFailure);
                 } else {
                     if (pSuccess) pSuccess();
                 }
@@ -44,7 +44,7 @@ export class Session extends doorsapi2.Session {
         }
     }
 
-    logon(pSuccess, pFailure) {
+    appLogon(pSuccess, pFailure) {
         var me = this;
 
         var endPoint = window.localStorage.getItem('endPoint');
@@ -89,7 +89,7 @@ export class Session extends doorsapi2.Session {
         });
     }
 
-    logoff() {
+    appLogoff() {
         super.logoff();
         Doors.RESTFULL.AuthToken = '';
         Doors.RESTFULL.ServerUrl = '';

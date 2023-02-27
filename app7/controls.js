@@ -11,9 +11,9 @@ inputReadonly(pInput, pReadonly)
 inputDisabled(pInput, pDisabled)
 addPhoneButtons(pInput)
 wappNumber(pPhone)
-getInputPhone(pId, pLabel, pValue)
+getInputPhone(pId, pLabel, options)
 addEmailButton(pInput)
-getInputEmail(pId, pLabel, pValue)
+getInputEmail(pId, pLabel, options)
 inputDataList(pInput, pSource)
 getInputAddress(pId, pLabel, pValue)
 getSelect(pId, pLabel)
@@ -131,39 +131,47 @@ function getInputText(pId, pLabel, options) {
 }
 
 function setInputVal(pInput, pVal) {
-    pInput.val(pVal);
-    app7.input.checkEmptyState(pInput[0]);
-    if (pInput.prop('tagName') == 'TEXTAREA' && pInput.hasClass('resizable')) {
-        app7.input.resizeTextarea(pInput[0]);
+    let $inp = $(pInput);
+
+    $inp.val(pVal);
+    app7.input.checkEmptyState($inp[0]);
+    if ($inp.prop('tagName') == 'TEXTAREA' && $inp.hasClass('resizable')) {
+        app7.input.resizeTextarea($inp[0]);
     }
 }
 
 function inputReadonly(pInput, pReadonly) {
+    let $inp = $(pInput);
+
     if (pReadonly) {
-        pInput.attr({ 'readonly': 'readonly' });
-        pInput.siblings('.input-clear-button').hide();
+        $inp.attr({ 'readonly': 'readonly' });
+        $inp.siblings('.input-clear-button').hide();
     } else {
-        pInput.removeAttr('readonly');
-        pInput.siblings('.input-clear-button').show();
+        $inp.removeAttr('readonly');
+        $inp.siblings('.input-clear-button').show();
     }
 }
 
 function inputDisabled(pInput, pDisabled) {
+    let $inp = $(pInput);
+
     if (pDisabled) {
-        pInput.closest('.item-input').addClass('disabled');
-        pInput.siblings('.input-clear-button').hide();
+        $inp.closest('.item-input').addClass('disabled');
+        $inp.siblings('.input-clear-button').hide();
     } else {
-        pInput.closest('.item-input').removeClass('disabled');
-        pInput.siblings('.input-clear-button').show();
+        $inp.closest('.item-input').removeClass('disabled');
+        $inp.siblings('.input-clear-button').show();
     }
 }
 
 // Agrega el boton llamar y enviar whatsapp a un Textbox
 function addPhoneButtons(pInput) {
+    let $inp = $(pInput);
+
     var $inputMedia = $('<div/>', {
         class: 'item-media',
         style: 'min-width: 74px; align-self: flex-end;'
-    }).appendTo(pInput);
+    }).appendTo($inp);
 
     var $i;
 
@@ -205,20 +213,22 @@ function wappNumber(pPhone) {
 	return encodeURI(num);
 }
 
-function getInputPhone(pId, pLabel, pValue) {
+function getInputPhone(pId, pLabel, options) {
     var $input;
 
-    var $input = getInputText(pId, pLabel, pValue);
+    var $input = getInputText(pId, pLabel, options);
     addPhoneButtons($input);
     return $input;
 }
 
 // Agrega el boton enviar email a un Textbox
 function addEmailButton(pInput) {
+    let $inp = $(pInput);
+
     var $inputMedia = $('<div/>', {
         class: 'item-media',
         style: 'min-width: 40px; align-self: flex-end;',
-    }).appendTo(pInput);
+    }).appendTo($inp);
 
     var $i;
     if (app7.theme == 'md') {
@@ -237,10 +247,10 @@ function addEmailButton(pInput) {
     });
 }
 
-function getInputEmail(pId, pLabel, pValue) {
+function getInputEmail(pId, pLabel, options) {
     var $input;
 
-    var $input = getInputText(pId, pLabel, pValue);
+    var $input = getInputText(pId, pLabel, options);
     addEmailButton($input);
     return $input;
 }
@@ -423,23 +433,25 @@ Llena un Select:
 - Los dataFields se ponen como atributos data-field-nombrecampo
 */
 function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, dataFields) {
+    let $sel = $(pSelect);
+
     return new Promise(function (resolve, reject) {
         var option;
 
-        pSelect.attr('data-filling', '1');
+        $sel.attr('data-filling', '1');
 
         if (!pWithoutNothing) {
             option = $('<option/>', { value: '[NULL]' });
-            option.appendTo(pSelect);
+            option.appendTo($sel);
 
-            if (pSelect.parent().hasClass('smart-select')) {
+            if ($sel.parent().hasClass('smart-select')) {
                 option.html('(ninguno)');
             } else {
                 // Para que no se superponga el (ninguno) con el placeholder
-                pSelect.focus(function (e) {
+                $sel.focus(function (e) {
                     this.options[0].innerText = '(ninguno)';
                 });
-                pSelect.blur(function (e) {
+                $sel.blur(function (e) {
                     if (this.selectedIndex == 0) {
                         this.options[0].innerText = '';
                     }
@@ -452,14 +464,14 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
             for (var i = 0; i < pSource.length; i++) {
                 option = $('<option/>', { 'value': pSource[i] });
                 option.html(pSource[i]);
-                option.appendTo(pSelect);
+                option.appendTo($sel);
             }
             ending();
             
         } else if (typeof pSource == 'string') {
             // SQL contra la base
             dbRead(pSource, [], function (rs) {
-                fillMe(pSelect, convertSqliteResultSet(rs));
+                fillMe($sel, convertSqliteResultSet(rs));
                 ending();
             });
         
@@ -467,7 +479,7 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
             // Promise, es un folderSearch
             pSource.then(
                 function (res) {
-                    fillMe(pSelect, res);
+                    fillMe($sel, res);
                     ending();
                 },
                 function (err) {
@@ -477,12 +489,12 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
             );
         };
 
-        function fillMe(pSelect, pRes) {
+        function fillMe($sel, pRes) {
             pRes.forEach(row => {
                 option = $('<option/>', { 'value': getValue(row) });
                 option.html(getText(row));
                 setData(row, option);
-                option.appendTo(pSelect);
+                option.appendTo($sel);
             })
         }
 
@@ -524,31 +536,33 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
         }
 
         function ending() {
-            pSelect.removeAttr('data-filling');
-            resolve(pSelect[0]);
+            $sel.removeAttr('data-filling');
+            resolve($sel[0]);
 
             const ev = new CustomEvent('fillComplete');
-            pSelect[0].dispatchEvent(ev);
+            $sel[0].dispatchEvent(ev);
         }
     });
 }
 
 function getSelectVal(pSelect) {
-    var val = pSelect.val();
+    let $sel = $(pSelect);
+    var val = $sel.val();
     return val && val != '[NULL]' ? val : null;
 }
 
 function getSelectText(pSelect) {
-    var val = pSelect.val();
+    let $sel = $(pSelect);
+    var val = $sel.val();
     if (val && val != '[NULL]') {
         if (Array.isArray(val)) {
             var arr = [];
-            pSelect.find('option:selected').each(function (ix, el) {
+            $sel.find('option:selected').each(function (ix, el) {
                 arr.push($(el).text());
             });
             return arr;
         } else {
-            return pSelect.find('option:selected').text();
+            return $sel.find('option:selected').text();
         };
     } else {
         return null;
@@ -563,13 +577,14 @@ pNotFoundAction:
     1: Lo agrega (opcion por defecto)
 */
 function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
-    pSelect.val(null);
+    let $sel = $(pSelect);
+    $sel.val(null);
 
-    if (pSelect.attr('multiple')) {
+    if ($sel.attr('multiple')) {
         if (pValue) {
-            pSelect.val(pValue);
+            $sel.val(pValue);
         } else if (pText) {
-            pSelect.find('option').filter(function() {
+            $sel.find('option').filter(function() {
                 return pText.indexOf($(this).text()) >= 0;
             }).prop('selected', true);
         }
@@ -578,36 +593,36 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
         var notFound = (pNotFoundAction === undefined) ? 1 : pNotFoundAction;
 
         if (pValue) {
-            pSelect.val(pValue);
+            $sel.val(pValue);
         } else {
-            pSelect.find('option').filter(function() {
+            $sel.find('option').filter(function() {
                 return $(this).text() == pText;
             }).prop('selected', true);
         };
 
-        if (pSelect[0].selectedIndex < 0) {
+        if ($sel[0].selectedIndex < 0) {
             if (notFound == 1 && (pValue || pText)) {
                 var option = $('<option/>', {
                     value: pValue,
                     selected: 'selected',
                 });
                 option.html(pText);
-                option.appendTo(pSelect);
+                option.appendTo($sel);
 
             } else if (notFound == 0) {
-                pSelect[0].selectedIndex = 0;
+                $sel[0].selectedIndex = 0;
             }
         }
     }
 
-    app7.input.checkEmptyState(pSelect[0]);
+    app7.input.checkEmptyState($sel[0]);
 
-    if (pSelect.parent().hasClass('smart-select')) {
-        var ss = app7.smartSelect.get(pSelect.parent()[0]);
-        if (pSelect[0].selectedIndex < 0) {
+    if ($sel.parent().hasClass('smart-select')) {
+        var ss = app7.smartSelect.get($sel.parent()[0]);
+        if ($sel[0].selectedIndex < 0) {
             ss.unsetValue();    
         } else {
-            ss.setValue(pSelect.val());
+            ss.setValue($sel.val());
         }
     }
 }
@@ -1782,12 +1797,14 @@ function addDefaultOptions(pContainer) {
     var $li, $itemCont, $itemMedia, $itemInner, $ctl, $input;
 
     // Cuenta
-    getListLinkItem({
+    var $li = getListLinkItem({
         title: 'Cuenta',
         iosicon: 'person_circle',
         mdicon: 'account_circle',
         click: showLogin,
     }).appendTo(pContainer);
+
+    $li.find('.item-link').attr('id', 'options-account');
 
     // Status bar
     $ctl = getToggle('statusbar', 'Status bar', {
@@ -2387,15 +2404,17 @@ getListLink({
 */
 function getListLinkItem(pLink) {
     var $li = $('<li/>');
-    var idPopover = pLink.title
 
     var $itemCont = $('<a/>', {
         href: '#',
         class: 'item-link item-content',
-        idpopover:  idPopover.replaceAll(' ', '_').toLowerCase(),
     }).appendTo($li);
 
     $itemCont.click(pLink.click);
+
+    if (pLink.id){
+        $itemCont.attr('id', pLink.id);
+    }
 
     if (pLink.iosicon || pLink.mdicon) {
         var $itemMedia = $('<div/>', {
