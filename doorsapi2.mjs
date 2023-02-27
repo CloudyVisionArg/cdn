@@ -121,7 +121,6 @@ export class Session {
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
 
-        debugger;
         _moment.locale('es'); // todo: setear a partir del lngId
     }
     
