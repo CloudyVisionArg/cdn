@@ -16,16 +16,15 @@ if (typeof(moment) == 'undefined') {
         import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
             res => {
                 _moment = res.default.default;
-                _moment.locale('es');
             }
         )
     } else {
-        jslib.include('lib-moment', () => {
-            moment.locale('es');
+        incjs.include('lib-moment', () => {
+            _moment = moment;
         });
-
     }
-
+} else {
+    _moment = moment;
 }
 
 function isNode() {
@@ -259,6 +258,8 @@ export class Session {
                 token => {
                     me.authToken = token;
                     resolve(token);
+
+                    _moment.locale('es'); // todo: setear a partir del lngId
                 },
                 reject
             );
