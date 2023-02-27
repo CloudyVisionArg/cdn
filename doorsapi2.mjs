@@ -1,6 +1,6 @@
 debugger;
 if (typeof(moment) == 'undefined') {
-    var moment;
+    //var moment;
 
     if (isNode()) {
         import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
