@@ -72,7 +72,7 @@ await (async () => {
     if (typeof(nodemailer) == 'undefined') {
         if (isNode()) {
             debugger;
-            let res = await import('https://cdn.jsdelivr.net/npm/nodemailer@6.9.1/+esm');
+            let res = await import('https://unpkg.com/nodemailer@6.7.2/lib/nodemailer.js');
             _nodemailer = res.default;
         }
     } else {
