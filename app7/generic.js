@@ -1373,6 +1373,7 @@ function downloadAtt(e) {
 }
 
 function openAtt(pURL) {
+    debugger;
     if (pURL.substring(0, 10) == 'cdvfile://') {
         window.resolveLocalFileSystemURL(pURL,
             function (fileEntry) {
