@@ -1899,7 +1899,6 @@ class RestClient {
 
     //todo: pasar a fetch
     fetchBuff(url, method, data) {
-        var dataSend = data ? data : null;
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
         /*
@@ -1909,34 +1908,17 @@ class RestClient {
         else {
             xhr.setRequestHeader("AuthToken", this.AuthToken);
         }
-
-        (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
-        var _self = this;
-        xhr.onreadystatechange = function (event) {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    prom.resolve(this.response);
-                } else {
-                    prom.reject(this.statusText);
-                }
-            }
-        };
         */
 
-        debugger;
         return new Promise((resolve, reject) => {
-            // Opciones por defecto estan marcadas con un *
+            // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
             fetch(completeUrl, {
-                method: method, // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'omit', // include, *same-origin, omit
+                method: method,
+                cache: 'no-cache',
                 headers: {
                     'AuthToken': this.AuthToken
                 },
-                redirect: 'manual', // manual, *follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: dataSend // body data type must match "Content-Type" header
+                body: data ? data : null,
 
             }).then(
                 response => {
@@ -1953,37 +1935,6 @@ class RestClient {
                 },
                 reject
             )
-                //TODO
-                /* var firstCharCode = body.charCodeAt(0);
-                if (firstCharCode === 65279) {
-                    //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
-                    body = body.substring(1);
-                }
-
-                response.text().then(function (textBody) {
-                    let firstCharCode = textBody.charCodeAt(0);
-                    if (firstCharCode === 65279) {
-                        //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
-                        textBody = textBody.substring(1);
-                    }
-                    let parsedJson = JSON.parse(textBody);
-                    if (response.ok) {
-                        if (parsedJson.InternalObject !== null) {
-                            resolve(parsedJson.InternalObject);
-                        }
-                    }
-                    else {
-
-                        if (response.statusCode !== 200 || parsedJson.ExceptionMessage !== null) {
-                            reject(parsedJson);
-                        }
-                    }
-                    resolve(parsedJson);
-                });
-            }).catch((error) => {
-                reject(error);
-            });
-            */
         });
 
 
