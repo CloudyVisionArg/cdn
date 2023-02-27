@@ -30,6 +30,31 @@ await (async () => {
     } else {
         _moment = moment;
     }
+
+    // string.reverse
+    if (typeof String.prototype.reverse !== 'function') {
+        String.prototype.reverse = function () {
+            return this.split('').reverse().join('');
+        };
+    }
+
+    // string.replaceAll
+    if (typeof String.prototype.replaceAll !== 'function') {
+        String.prototype.replaceAll = function (search, replacement) {
+            var me = this;
+            return me.replace(new RegExp(search, 'g'), replacement);
+        };
+    }
+
+    // string.repeat
+    if (typeof String.prototype.repeat !== 'function') {
+        String.prototype.repeat = function (count) {
+            var me = this;
+            var ret = '';
+            for (var i = 0; i < count; i++) ret += me;
+            return ret;
+        };
+    }
 })();
 
 
