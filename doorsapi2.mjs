@@ -1,3 +1,11 @@
+debugger;
+if (typeof(window) == 'undefined' && typeof(process) != 'undefined') {
+    // moment - https://momentjs.com/docs/
+    moment = await import('moment');
+    moment.locale('es');
+}
+
+
 /*
 todo: reemplazar los _metodo con #metodo cdo safari implemente 
 metodos privados: https://caniuse.com/?search=private%20field
