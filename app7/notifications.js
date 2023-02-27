@@ -457,9 +457,13 @@ resolveRoute({ resolve: resolve, pageEl: $page, pageInit: function (e, page) {
 
 function resolveDeliverydDate(deliveryDate) {
     const diffDays = moment().diff(deliveryDate, 'days') + 1;
-    debugger;
+    var filterDeliveryDate = "DD/MM/YYYY hh:mm";
+    if(moment().year() - moment(deliveryDate).year() > 0){
+        filterDeliveryDate = "DD/MM hh:mm";
+    }
+
     if (diffDays > 1) {
-        return moment(deliveryDate).format("DD/MM/YYYY hh:mm");
+        return moment(deliveryDate).format(filterDeliveryDate);
     }
     return moment(deliveryDate).fromNow();
 }
