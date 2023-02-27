@@ -1374,7 +1374,8 @@ function downloadAtt(e) {
 
 function openAtt(pURL) {
     debugger;
-    if (pURL.substring(0, 10) == 'cdvfile://') {
+    if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_cache__")) {
+        
         window.resolveLocalFileSystemURL(pURL,
             function (fileEntry) {
                 openFile(fileEntry.nativeURL);
