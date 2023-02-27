@@ -95,7 +95,7 @@ await (async () => {
 })();
 
 
-function isNode() {
+export function isNode() {
     return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
 }
 
@@ -587,7 +587,7 @@ class Account {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     save() {
@@ -635,7 +635,7 @@ class Account {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 }
 
@@ -797,7 +797,7 @@ class Attachment {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get removed() {
@@ -823,7 +823,7 @@ class Attachment {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 }
 
@@ -1130,7 +1130,7 @@ export class Document {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     save() {
@@ -1226,7 +1226,7 @@ export class Document {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 };
 
@@ -1294,7 +1294,7 @@ class Field {
     // todo: solo para form, add o remove igual
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get scale() {
@@ -1315,7 +1315,7 @@ class Field {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 
     get value() {
@@ -1471,7 +1471,7 @@ export class Folder {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     /**
@@ -1544,7 +1544,7 @@ export class Folder {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 };
 
@@ -1602,7 +1602,7 @@ class Form {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get session() {
@@ -1620,7 +1620,7 @@ class Form {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 };
 
@@ -1671,27 +1671,6 @@ class Properties extends DoorsMap {
         )
     }
 
-    async _getSet(property, value) {
-        if (property == undefined) {
-            return this;
-        } else if (value == undefined) {
-            var prop = await this.get(property);
-            if (prop) return prop.value();
-        } else {
-            return this.set(property, value);
-        }
-    }
-
-    get(key) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => { resolve(super.get(key)) },
-                reject
-            )
-        });
-    }
-
     delete(key) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1711,6 +1690,16 @@ class Properties extends DoorsMap {
         });
     }
 
+    get(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.get(key)) },
+                reject
+            )
+        });
+    }
+
     get parent() {
         return this.#parent;
     }
@@ -1724,22 +1713,28 @@ class Properties extends DoorsMap {
     }
 
     set(key, value) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => {
-                    var prop;
-                    if (super.has(key)) {
-                        prop = super.get(key);
-                    } else {
-                        var prop = new Property({ name: key }, me);
-                        super.set(key, prop);
-                    }
-                    prop.value(value).then(resolve, reject);
-                },
-                reject
-            )
-        });
+        if (value == undefined) {
+            // Sin value func como get
+            return this.get(key);
+
+        } else {
+            var me = this;
+            return new Promise((resolve, reject) => {
+                me.#loadProm.then(
+                    () => {
+                        var prop;
+                        if (super.has(key)) {
+                            prop = super.get(key);
+                        } else {
+                            var prop = new Property({ name: key }, me);
+                            super.set(key, prop);
+                        }
+                        prop.value(value).then(resolve, reject);
+                    },
+                    reject
+                )
+            });
+        }
     }
 
     get user() {
@@ -2135,7 +2130,7 @@ class View {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get tags() {
@@ -2145,7 +2140,7 @@ class View {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 }
 
