@@ -1,11 +1,23 @@
+debugger;
+if (typeof(moment) == 'undefined') {
+
+    if (isNode()) {
+        import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
+            res => {
+                moment = res.default.default;
+                moment.locale('es');
+            }
+        )
+    
+    }
+
+}
 if (typeof(window) == 'undefined' && typeof(process) != 'undefined') {
     // moment - https://momentjs.com/docs/
-    import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm').then(
-        res => {
-            const moment = res.default.default;
-            moment.locale('es');
-        }
-    )
+}
+
+function isNode() {
+    return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
 }
 
 /*
@@ -1930,7 +1942,7 @@ class Utilities {
     }
 
     get isNode() {
-        return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
+        return isNode();
     }
 
     // Devuelve la fecha en formato YYYY-MM-DD
