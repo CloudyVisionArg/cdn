@@ -120,6 +120,11 @@ export class Session {
         return this.#directory;
     }
 
+    // Alias
+    doc() {
+        return this.documentsGetFromId(...arguments);
+    }
+
     documentsGetFromId(docId) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -131,6 +136,14 @@ export class Session {
                 reject
             )
         });
+    }
+
+    folder(folder, curFolder) {
+        if (!isNaN(parseInt(folder))) {
+            return this.foldersGetFromId(folder);
+        } else {
+            return this.foldersGetFromPath(folder, curFolder);
+        }
     }
 
     foldersGetFromId(fldId) {
@@ -146,10 +159,10 @@ export class Session {
         })
     };
 
-    foldersGetFromPath(fldPath, currFolderId) {
+    foldersGetFromPath(fldPath, curFolderId) {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + (currFolderId ? currFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
+            var url = 'folders/' + (curFolderId ? curFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
             me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
@@ -976,7 +989,7 @@ export class Document {
                     var el = attMap.get(key);      
 
                     if (el.isNew) {
-                        var formData = new FormData(); //todo ver en node, URLSearchParams no anda, probar https://www.npmjs.com/package/form-data
+                        var formData = new FormData();
                         // todo: como subimos el Tag?
                         var arrBuf = await el.fileStream;
                         formData.append('attachment', new Blob([arrBuf]), el.name);
@@ -1813,8 +1826,6 @@ class View {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties._getSet(property, value);
     }
-
-    //todo
 }
 
 
@@ -1897,11 +1908,10 @@ class RestClient {
         });
     }
 
-    //todo: pasar a fetch
     fetchBuff(url, method, data) {
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
-        /*
+        /* todo: implementar ApiKey
         if (Doors.RESTFULL.ApiKey != null) {
             xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
         }
