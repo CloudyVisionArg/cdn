@@ -2145,7 +2145,7 @@ class Utilities {
         return this.#session;
     }
 
-    timeZone() {
+    get timeZone() {
         var ret = '';
         var dif = new Date().getTimezoneOffset();
         if (dif == 0) {
@@ -2175,8 +2175,7 @@ class Utilities {
             return value;
 
         } else if (type == 2) {
-            debugger;
-            return this.cDate(new Date(value.replace(' ', 'T') + timeZone()));
+            return this.cDate(new Date(value.replace(' ', 'T') + this.timeZone));
 
         } else if (type == 3) {
             val = parseFloat(value);
