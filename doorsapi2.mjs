@@ -29,6 +29,7 @@ await (async () => {
 
     if (typeof(moment) == 'undefined') {
         if (isNode()) {
+            // todo: si da problemas levantar como el crypto
             res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
             _moment = res.default.default;
         } else {
@@ -44,6 +45,7 @@ await (async () => {
 
     if (typeof(numeral) == 'undefined') {
         if (isNode()) {
+            // todo: si da problemas levantar como el crypto
             res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
         } else {
@@ -54,6 +56,12 @@ await (async () => {
         _numeral = numeral;
     }
 
+    debugger;
+    var res = await fetch(incjs.scriptSrc('lib-numeral-locales'));
+    var code = await res.text();
+    eval(code);
+
+    /*
     _numeral.register('locale', 'es', {
         delimiters: {
             thousands: '.',
@@ -77,6 +85,7 @@ await (async () => {
             symbol: '$'
         }
     });
+    */
 
 
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
