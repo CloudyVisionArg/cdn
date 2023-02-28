@@ -2176,7 +2176,7 @@ class Utilities {
 
         } else if (type == 2) {
             debugger;
-            return this.cDate(new Date(pDate.replace(' ', 'T') + timeZone()));
+            return this.cDate(new Date(value.replace(' ', 'T') + timeZone()));
 
         } else if (type == 3) {
             val = parseFloat(value);
