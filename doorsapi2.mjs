@@ -56,29 +56,31 @@ await (async () => {
         _numeral = numeral;
     }
 
-    _numeral.register('locale', 'es', {
-        delimiters: {
-            thousands: '.',
-            decimal: ','
-        },
-        abbreviations: {
-            thousand: 'k',
-            million: 'mm',
-            billion: 'b',
-            trillion: 't'
-        },
-        ordinal: function (number) {
-            var b = number % 10;
-            return (b === 1 || b === 3) ? 'er' :
-                (b === 2) ? 'do' :
-                (b === 7 || b === 0) ? 'mo' :
-                (b === 8) ? 'vo' :
-                (b === 9) ? 'no' : 'to';
-        },
-        currency: {
-            symbol: '$'
-        }
-    });
+    if (!_numeral.locales.es) {
+        _numeral.register('locale', 'es', {
+            delimiters: {
+                thousands: '.',
+                decimal: ','
+            },
+            abbreviations: {
+                thousand: 'k',
+                million: 'mm',
+                billion: 'b',
+                trillion: 't'
+            },
+            ordinal: function (number) {
+                var b = number % 10;
+                return (b === 1 || b === 3) ? 'er' :
+                    (b === 2) ? 'do' :
+                    (b === 7 || b === 0) ? 'mo' :
+                    (b === 8) ? 'vo' :
+                    (b === 9) ? 'no' : 'to';
+            },
+            currency: {
+                symbol: '$'
+            }
+        });
+    }
 
 
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
@@ -2135,6 +2137,10 @@ class Utilities {
         return num;
     }
 
+    get cryptoJS() {
+        return _CryptoJS;
+    }
+
     decrypt(pString, pPass) {
 	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
 	}
@@ -2193,6 +2199,18 @@ class Utilities {
         return ('0'.repeat(length) + string).slice(-length);
     }
     
+    get moment() {
+        return _moment;
+    }
+
+    newDoorsMap() {
+        return new DoorsMap();
+    }
+
+    get numeral() {
+        return _numeral;
+    }
+
     get session() {
         return this.#session;
     }
