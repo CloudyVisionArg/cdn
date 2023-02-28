@@ -2074,6 +2074,7 @@ class Utilities {
         } else {
             num = _numeral(number);
         }
+        return num;
     }
 
     get isNode() {
