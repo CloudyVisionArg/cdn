@@ -2067,6 +2067,11 @@ class Utilities {
         }
     }
 
+    // Alias de cNumber
+    cNum(number) {
+        return this.cNumber(number);
+    }
+
     cNumber(number) {
         var num;
         if (Object.prototype.toString.call(number) === '[object Number]') {
