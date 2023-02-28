@@ -86,9 +86,12 @@ await (async () => {
             var res = await fetch(incjs.scriptSrc('lib-cryptojs-aes'));
             var code = await res.text();
             eval(`
-                _CryptoJS = CryptoJS;
+                incjs.CryptoJS = CryptoJS;
                 ${code}
             `);
+            _CryptoJS = incjs.CryptoJS;
+            delete incjs.CryptoJS;
+
             debugger;
         
             //res = await import('https://cdn.jsdelivr.net/npm/crypto-js-aes@1.0.1/+esm');
