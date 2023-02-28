@@ -6,7 +6,10 @@ swagger: http://tests.cloudycrm.net/apidocs
 */
 
 var incjs = {};
-var _moment, _numeral, _nodemailer;
+var _moment, _numeral;
+
+export { _moment as moment };
+export { _numeral as numeral };
 
 await (async () => {
     // include
@@ -2062,6 +2065,16 @@ class Utilities {
         } else {
             return null;
         }
+    }
+
+    cLng(number) {
+        var num;
+        if (Object.prototype.toString.call(number) === '[object Number]') {
+            num = number;
+        } else {
+
+        }
+
     }
 
     get isNode() {
