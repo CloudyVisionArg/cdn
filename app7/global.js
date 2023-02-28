@@ -1432,7 +1432,6 @@ function _isCapacitor(){
 }
 
 function statusBar(pShow) {
-    debugger;
     let refStatusBarPLugin; 
     if(_isCapacitor()){
         refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
@@ -1451,9 +1450,6 @@ function statusBar(pShow) {
             //refStatusBarPLugin.backgroundColorByHexString('12A0D8');
             refStatusBarPLugin.backgroundColorByHexString('2BA0DA');
             refStatusBarPLugin.overlaysWebView(false)
-            // (_isCapacitor()) 
-            //     ? refStatusBarPLugin.overlaysWebView(false)
-            //     : refStatusBarPLugin.setOverlaysWebView(false);
         } else {
             refStatusBarPLugin.styleLightContent();
         }
