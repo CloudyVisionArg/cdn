@@ -2114,17 +2114,13 @@ class Utilities {
         return num;
     }
 
-    get isNode() {
-        return isNode();
-    }
+    decrypt(pString, pPass) {
+	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
+	}
 
     encrypt(pString, pPass) {
         return _CryptoJS.AES.encrypt(pString, pPass).toString();
     }
-
-    decrypt(pString, pPass) {
-	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
-	}
 
     // Devuelve el mensaje de un objeto err
     errMsg(err) {
@@ -2144,6 +2140,10 @@ class Utilities {
             }
         }
         return JSON.stringify(err);
+    }
+
+    get isNode() {
+        return isNode();
     }
 
     // Devuelve la fecha en formato YYYY-MM-DD
