@@ -29,7 +29,7 @@ await (async () => {
 
     if (typeof(moment) == 'undefined') {
         if (isNode()) {
-            let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
+            res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
             _moment = res.default.default;
         } else {
             await incjs.include('lib-moment');
@@ -44,7 +44,7 @@ await (async () => {
 
     if (typeof(numeral) == 'undefined') {
         if (isNode()) {
-            let res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
+            res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
         } else {
             await incjs.include('lib-numeral');
@@ -83,8 +83,16 @@ await (async () => {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (isNode()) {
-            let res = await import('https://cdn.jsdelivr.net/npm/crypto-js-aes@1.0.1/+esm');
-            _CryptoJS = res.default;
+            var res = await fetch(scriptSrc('lib-cryptojs-aes'));
+            var code = await res.text();
+            eval(`
+                _CryptoJS = CryptoJS;
+                ${code}
+            `);
+            debugger;
+        
+            //res = await import('https://cdn.jsdelivr.net/npm/crypto-js-aes@1.0.1/+esm');
+            //_CryptoJS = res.default;
         } else {
             await incjs.include('lib-cryptojs-aes');
             _CryptoJS = CryptoJS;
