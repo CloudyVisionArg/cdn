@@ -1428,7 +1428,7 @@ function getCodelib(pCode) {
 }
 
 function _isCapacitor(){
-    return (Capacitor);
+    return (Capacitor != undefined);
 }
 
 function statusBar(pShow) {
