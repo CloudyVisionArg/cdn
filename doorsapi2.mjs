@@ -85,7 +85,7 @@ await (async () => {
     if (typeof(CryptoJS) == 'undefined') {
         if (isNode()) {
             let res = await import('https://cdn.jsdelivr.net/npm/crypto-js-aes@1.0.1/+esm');
-            _CryptoJS = res.default.default;
+            _CryptoJS = res.default;
         } else {
             await incjs.include('lib-cryptojs-aes');
             _CryptoJS = CryptoJS;
