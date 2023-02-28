@@ -19,9 +19,9 @@ await (async () => {
     var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
     var code = await res.text();
     eval(`
+        ${code}
         incjs.include = include;
         incjs.scriptSrc = scriptSrc;
-        ${code}
     `);
 
 
@@ -88,8 +88,8 @@ await (async () => {
             var res = await fetch(incjs.scriptSrc('lib-cryptojs-aes'));
             var code = await res.text();
             eval(`
-                incjs.CryptoJS = CryptoJS;
                 ${code}
+                incjs.CryptoJS = CryptoJS;
             `);
             _CryptoJS = incjs.CryptoJS;
             delete incjs.CryptoJS;
