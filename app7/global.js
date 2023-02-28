@@ -1439,6 +1439,7 @@ function statusBar(pShow) {
         refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
         refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStatusBarStyleLight;
         refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
+        refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
     }else{
         refStatusBarPLugin = StatusBar; //Cordova
     }
