@@ -23,6 +23,9 @@ fetch(scriptSrc('app7-popovers.json'))
 DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     function (res) {
         popoversFolder = res;
+    },
+    err => {
+        popoversFolder = undefined;
     }
 );
 
@@ -146,27 +149,27 @@ function generarCarteles(pScope){
     }
     const finalFormula = contextformula + conector + cartelFormula
 
-    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
-        function(res){            
-            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
-                return (item["context"] == pScope || item["context"] == 'toolbar');
-            });
+    const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
+        return (item["context"] == pScope || item["context"] == 'toolbar');
+    });
 
-            for(let idx = 0; idx < res.length; idx++){
-                Object.keys(res[idx]).forEach((key)=>{
-                    res[idx][key.toLowerCase()] = res[idx][key];
-                    delete res[idx][key]
-                })
+    renderPopovers(arrCartelesFijos);
+
+    if (popoversFolder) {
+        DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
+            function(res){            
+                for(let idx = 0; idx < res.length; idx++){
+                    Object.keys(res[idx]).forEach((key)=>{
+                        res[idx][key.toLowerCase()] = res[idx][key];
+                        delete res[idx][key]
+                    })
+                }
+                
+                if(res.length > 0) renderPopovers(res);
+            },
+            function(err){
+                console.log(err);
             }
-            
-            if(res.length > 0){
-                renderPopovers([...arrCartelesFijos, ...res]);
-            }else{
-                renderPopovers(arrCartelesFijos);
-            }
-        },
-        function(err){
-            console.log(err);
-        }
-    );
+        );
+    }
 }
