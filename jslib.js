@@ -245,7 +245,7 @@ function asyncLoop(iterations, loopFunc, callback) {
 
 // Implementado en dSession.folder (usar ese) 
 async function getFolder(pFolder, pCurrentFolderId) {
-    return await(dSession.folder(pFolder, pCurrentFolderId)).toJSON();
+    return (await dSession.folder(pFolder, pCurrentFolderId)).toJSON();
 }
 
 
