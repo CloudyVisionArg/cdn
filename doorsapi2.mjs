@@ -2072,7 +2072,7 @@ class Utilities {
         if (Object.prototype.toString.call(number) === '[object Number]') {
             num = number;
         } else {
-            num = _numeral(number);
+            num = _numeral(number).value();
         }
         return num;
     }
