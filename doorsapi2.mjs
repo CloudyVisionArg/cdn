@@ -2113,7 +2113,7 @@ class Utilities {
             dt = date;
         } else {
             dt = _moment(date, 'L LTS').toDate();
-            if (isNaN(dt.getTime())) dt = new Date(pDate);
+            if (isNaN(dt.getTime())) dt = new Date(date);
         }
         if(!isNaN(dt.getTime())) {
             return dt;
