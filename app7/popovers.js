@@ -2,6 +2,10 @@
 var popoversFolder;
 var arrPopoversfijos = [];
 
+function btnClosePopover(btn){
+    app7.popover.close(btn.closest(".popover"));
+}
+
 fetch(scriptSrc('app7-popovers.json'))
 .then(response => {
     if (!response.ok) {
@@ -16,8 +20,6 @@ fetch(scriptSrc('app7-popovers.json'))
     console.log("ObtenerPopoversFijos -> Error " + err);
 })
 
-//se está llamando a generarCartelesVista antes de que esto esté resuelto
-// ya no hace falta llamarlo desde las codelibs, se llama desde los eventos de las paginas
 DoorsAPI.foldersGetByName(dSession.appsFolder(), 'popovers').then(
     function (res) {
         popoversFolder = res;
@@ -41,7 +43,6 @@ app7.on('pageTabShow', function (e) {
 
 
 function crearCarteles(pCartel,index,array){
-    //pId,pView,pSelector,pTexto
 
     const div = document.createElement("div");
     div.classList.add("popover");
@@ -52,7 +53,6 @@ function crearCarteles(pCartel,index,array){
 
     const divBlock = document.createElement("div");
     divBlock.classList.add("block");
-    //divBlock.innerHTML = pCartel["TEXT"];
     divInner.append(divBlock);
 
     const elTitle = document.createElement("h3");
@@ -76,11 +76,16 @@ function crearCarteles(pCartel,index,array){
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
     divBlock.append(elTextCartel);
+       
+    const elButton = document.createElement("button");
+    elButton.classList.add("button"); 
+    elButton.setAttribute("type","button");
+    elButton.innerText = "Ok"
+    elButton.setAttribute("onclick","btnClosePopover(this)");
+    divBlock.append(elButton);
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
-        //targetEl: pCartel["VIEW"] + " " + pCartel["selector"],
-        // Events
         content: text,
         on: {
             open: function (popover) {
@@ -97,7 +102,8 @@ function crearCarteles(pCartel,index,array){
             },  
         }
     });
-    
+
+        
     dynamicPopover["context"] = pCartel["context"]
 
     dynamicPopover["selector"] = pCartel["selector"]
@@ -116,8 +122,9 @@ function renderPopovers(pArrPopovers){
     });
 
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
-
+    
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
+        
         arrCartelesVista[i].on('closed', function (popover) {
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["selector"]);
         });
@@ -144,6 +151,14 @@ function generarCarteles(pScope){
             const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
                 return (item["context"] == pScope || item["context"] == 'toolbar');
             });
+
+            for(let idx = 0; idx < res.length; idx++){
+                Object.keys(res[idx]).forEach((key)=>{
+                    res[idx][key.toLowerCase()] = res[idx][key];
+                    delete res[idx][key]
+                })
+            }
+            
             if(res.length > 0){
                 renderPopovers([...arrCartelesFijos, ...res]);
             }else{
@@ -155,36 +170,3 @@ function generarCarteles(pScope){
         }
     );
 }
-
-
-
-
-/*
-function generarCartelesVista(pVista){
-    const vistaformula =  pVista ? "view LIKE '" + pVista + "'" : "";
-
-    var read = window.localStorage.getItem("popoversLeidos");
-    const cartelFormula = read ? "popover_id not in (" + read + ")" : "";
-    let conector = ""
-    if(vistaformula !== "" && cartelFormula !== ""){
-        conector = " and "
-    }
-    const finalFormula = vistaformula + conector + cartelFormula
-
-    DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
-        function(res){            
-            const arrCartelesFijos = arrPopoversfijos.filter((item)=>{
-                return item["VIEW"] == pVista;
-            });
-            if(res.length > 0){
-                renderPopovers([...res, ...arrCartelesFijos]);
-            }else{
-                renderPopovers(arrCartelesFijos);
-            }
-        },
-        function(err){
-            console.log(err);
-        }
-    );
-}
-*/
