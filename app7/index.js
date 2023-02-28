@@ -262,9 +262,9 @@ var app = {
             }
         };
 
-        function execOnDeviceReady() {
+        async function execOnDeviceReady() {
             pushReg();
-            includeJs('app7-popovers');
+            await includeJs('app7-popovers');
 
             executeCode('onDeviceReady', 
                 function () {
