@@ -6,13 +6,16 @@ swagger: http://tests.cloudycrm.net/apidocs
 */
 
 var incjs = {};
-var _moment, _numeral;
+var _moment, _numeral, _CryptoJS;
 
 export { _moment as moment };
 export { _numeral as numeral };
+export { _CryptoJS as CryptoJS };
 
 await (async () => {
+
     // include
+
     var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
     var code = await res.text();
     eval(`
@@ -21,7 +24,9 @@ await (async () => {
         ${code}
     `);
 
-    // moment
+
+    // moment - https://momentjs.com/docs/
+
     if (typeof(moment) == 'undefined') {
         if (isNode()) {
             let res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
@@ -34,7 +39,9 @@ await (async () => {
         _moment = moment;
     }
 
-    // numeral
+    
+    // numeral - http://numeraljs.com/
+
     if (typeof(numeral) == 'undefined') {
         if (isNode()) {
             let res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
@@ -70,6 +77,22 @@ await (async () => {
             symbol: '$'
         }
     });
+
+
+    // CryptoJS - https://code.google.com/archive/p/crypto-js/
+
+    debugger;
+    if (typeof(CryptoJS) == 'undefined') {
+        if (isNode()) {
+            let res = await import('https://cdn.jsdelivr.net/npm/crypto-js-aes@1.0.1/+esm');
+            _CryptoJS = res.default.default;
+        } else {
+            await incjs.include('lib-cryptojs-aes');
+            _CryptoJS = CryptoJS;
+        }
+    } else {
+        _CryptoJS = CryptoJS;
+    }
 
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
@@ -2094,6 +2117,14 @@ class Utilities {
     get isNode() {
         return isNode();
     }
+
+    encrypt(pString, pPass) {
+        return _CryptoJS.AES.encrypt(pString, pPass).toString();
+    }
+
+    decrypt(pString, pPass) {
+	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
+	}
 
     // Devuelve el mensaje de un objeto err
     errMsg(err) {
