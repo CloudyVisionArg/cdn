@@ -2199,7 +2199,7 @@ class Utilities {
 
         } else if (type == 2) {
             val = this.isoDate(value);
-            return val ? val + ' ' + this.isoTime(val, true) : '';
+            return val ? val + ' ' + this.isoTime(value, true) : '';
 
         } else if (type == 3) {
             val = this.cNum(value);
