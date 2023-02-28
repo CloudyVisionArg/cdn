@@ -56,12 +56,6 @@ await (async () => {
         _numeral = numeral;
     }
 
-    debugger;
-    var res = await fetch(incjs.scriptSrc('lib-numeral-locales'));
-    var code = await res.text();
-    eval(code);
-
-    /*
     _numeral.register('locale', 'es', {
         delimiters: {
             thousands: '.',
@@ -85,7 +79,6 @@ await (async () => {
             symbol: '$'
         }
     });
-    */
 
 
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
