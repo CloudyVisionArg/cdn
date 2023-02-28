@@ -65,9 +65,9 @@ var app = {
         //window.device = Capacitor.Plugins.Device;
         if (!device) console.log('Plugin error: cordova-plugin-device');
         if (!Capacitor.Plugins.Camera) console.log('Plugin error: @capacitor/camera');
-        if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
-       // if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
-       // window.StatusBar = Capacitor.Plugins.StatusBar;
+        //if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
+        if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
+        window.StatusBar = Capacitor.Plugins.StatusBar;
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
         if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
