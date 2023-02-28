@@ -83,7 +83,7 @@ await (async () => {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (isNode()) {
-            var res = await fetch(scriptSrc('lib-cryptojs-aes'));
+            var res = await fetch(incjs.scriptSrc('lib-cryptojs-aes'));
             var code = await res.text();
             eval(`
                 _CryptoJS = CryptoJS;
