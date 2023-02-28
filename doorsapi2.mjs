@@ -203,6 +203,7 @@ export class Session {
     #tags;
     #db;
     #utils;
+    #loggedUser;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(serverUrl, authToken);
