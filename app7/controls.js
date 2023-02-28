@@ -2393,6 +2393,7 @@ function renderMediaListItem(pItem) {
 Devuelve un li de tipo link para el ListView
 
 getListLink({
+    id: 'myLink',
     title: 'Productos',
     iosicon: 'cart',
     mdicon: 'shopping_cart', // Puede pasarse solo uno, en ese caso se usa el mismo en ambos temas
@@ -2406,15 +2407,12 @@ function getListLinkItem(pLink) {
     var $li = $('<li/>');
 
     var $itemCont = $('<a/>', {
+        id: pLink.id,
         href: '#',
         class: 'item-link item-content',
     }).appendTo($li);
 
     $itemCont.click(pLink.click);
-
-    if (pLink.id){
-        $itemCont.attr('id', pLink.id);
-    }
 
     if (pLink.iosicon || pLink.mdicon) {
         var $itemMedia = $('<div/>', {
