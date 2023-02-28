@@ -1427,16 +1427,30 @@ function getCodelib(pCode) {
     });
 }
 
+function _isCapacitor(){
+    return (Capacitor);
+}
+
 function statusBar(pShow) {
+    let refStatusBarPLugin = StatusBar; //Cordova
+    if(Capacitor){
+        refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
+        refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
+        refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStatusBarStyleLight;
+    }
     if (pShow) {
-        StatusBar.show();
+
+        refStatusBarPLugin.show();
         if (device.platform == 'iOS') {
-            StatusBar.styleDefault();
-            //StatusBar.backgroundColorByHexString('12A0D8');
-            StatusBar.backgroundColorByHexString('2BA0DA');
-            StatusBar.overlaysWebView(false);
+            refStatusBarPLugin.styleDefault();
+            //refStatusBarPLugin.backgroundColorByHexString('12A0D8');
+            refStatusBarPLugin.backgroundColorByHexString('2BA0DA');
+            refStatusBarPLugin.overlaysWebView(false)
+            // (_isCapacitor()) 
+            //     ? refStatusBarPLugin.overlaysWebView(false)
+            //     : refStatusBarPLugin.setOverlaysWebView(false);
         } else {
-            StatusBar.styleLightContent();
+            refStatusBarPLugin.styleLightContent();
         }
     } else {
         StatusBar.hide();
