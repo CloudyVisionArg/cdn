@@ -332,11 +332,15 @@ export class Session {
             if (!me.#loggedUser) {
                 var url = 'session/loggedUser';
                 me.restClient.fetch(url, 'GET', '', '').then(
-                    res => { me.#loggedUser = new User(res, me) },
+                    res => {
+                        me.#loggedUser = new User(res, me);
+                        resolve(me.#loggedUser);
+                    },
                     reject
                 )
+            } else {
+                resolve(me.#loggedUser);
             }
-            resolve(me.#loggedUser);
         });
     }
 
