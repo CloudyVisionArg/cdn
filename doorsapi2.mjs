@@ -1714,10 +1714,10 @@ class Properties extends DoorsMap {
     }
 
     set(key, value) {
-        if (value == undefined) {
-            // Sin value func como get
-            return this.get(key).value;
-
+        if (key == undefined) {
+            return this; // La coleccion
+        } else if (value == undefined) {
+            return this.get(key).value; // El value
         } else {
             var me = this;
             return new Promise((resolve, reject) => {
