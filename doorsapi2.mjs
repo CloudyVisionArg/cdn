@@ -1401,6 +1401,11 @@ export class Folder {
         return this.#app;
     }
 
+    // Alias de documents
+    doc(document) {
+        return this.documents(document);
+    }
+    
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -1483,6 +1488,11 @@ export class Folder {
         return this.#json.FldId;
     }
 
+    // Alias de documentsNew
+    newDoc() {
+        return this.documentsNew();
+    }
+
     get objectType() {
         return Folder.objectType;
     }
@@ -1513,11 +1523,7 @@ export class Folder {
         return this.#properties.set(property, value);
     }
 
-    /**
-     * 
-     * @param {*} options: { fields, formula, order, maxDocs, recursive, maxValueLen, maxDescrLength }
-     * @returns 
-     */
+    // options: { fields, formula, order, maxDocs, recursive, maxValueLen, maxDescrLength }
     search(options) {
         var opt = {
             fields: '',
@@ -1537,11 +1543,7 @@ export class Folder {
         return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
-    /**
-     * 
-     * @param {*} options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }
-     * @returns 
-     */
+    // options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }
     searchGroups(options) {
         var opt = {
             groups: undefined,
