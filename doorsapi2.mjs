@@ -90,6 +90,7 @@ await (async () => {
             eval(`
                 ${code}
                 incjs.CryptoJS = CryptoJS;
+                _CryptoJS = CryptoJS;
             `);
             _CryptoJS = incjs.CryptoJS;
             delete incjs.CryptoJS;
