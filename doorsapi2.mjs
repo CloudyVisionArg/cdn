@@ -225,12 +225,7 @@ export class Session {
         this.#tags = undefined;
     }
 
-    /**
-     * Cambia la contraseña del usuario logueado
-     * @param {string} oldPassword
-     * @param {string} newPassword
-     * @returns Promise <bool>
-     */
+    // Cambia la contraseña del usuario logueado
     changePassword(login, oldPassword, newPassword, instance) {
         var url = 'session/changepassword';
 
@@ -330,6 +325,20 @@ export class Session {
         var url = 'session/islogged';
         return this.restClient.fetch(url, 'POST', {}, '');
     };
+
+    get loggedUser() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#loggedUser) {
+                var url = 'session/loggedUser';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    res => { me.#loggedUser = new User(res, me) },
+                    reject
+                )
+            }
+            resolve(me.#loggedUser);
+        });
+    }
 
     logoff() {
         var me = this;
