@@ -81,7 +81,6 @@ await (async () => {
 
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
 
-    debugger;
     if (typeof(CryptoJS) == 'undefined') {
         if (isNode()) {
             let res = await import('https://cdn.jsdelivr.net/npm/crypto-js-aes@1.0.1/+esm');
