@@ -1433,11 +1433,13 @@ function _isCapacitor(){
 
 function statusBar(pShow) {
     debugger;
-    let refStatusBarPLugin = StatusBar; //Cordova
+    let refStatusBarPLugin; 
     if(_isCapacitor()){
         refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
         refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
         refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStatusBarStyleLight;
+    }else{
+        refStatusBarPLugin = StatusBar; //Cordova
     }
     if (pShow) {
 
