@@ -861,7 +861,7 @@ class Database {
                 if (typeof value == 'number') {
                     return value.toString();
                 } else {
-                    var n = _numeral(value).value();
+                    var n = this.session.utils.cNumber(value);
                     if (n != null) {
                         return n.toString();
                     } else {
@@ -2067,14 +2067,13 @@ class Utilities {
         }
     }
 
-    cLng(number) {
+    cNumber(number) {
         var num;
         if (Object.prototype.toString.call(number) === '[object Number]') {
             num = number;
         } else {
-
+            num = _numeral(number);
         }
-
     }
 
     get isNode() {
