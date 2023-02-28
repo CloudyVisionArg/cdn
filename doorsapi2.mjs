@@ -4,7 +4,6 @@ metodos privados: https://caniuse.com/?search=private%20field
 
 swagger: http://tests.cloudycrm.net/apidocs
 */
-debugger;
 
 var incjs = {};
 var _moment, _numeral, _nodemailer;
