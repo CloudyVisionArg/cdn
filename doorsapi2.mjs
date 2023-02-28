@@ -837,6 +837,10 @@ class Database {
         this.#session = session;
     }
 
+    nextVal(sequence) {
+        // todo
+    }
+
     // Alias de sqlEncode
     sqlEnc(value, type) {
         return this.sqlEncode(value, type);
@@ -877,6 +881,10 @@ class Database {
     
     get session() {
         return this.#session;
+    }
+
+    setVal(sequence, value) {
+        // todo
     }
 }
 
@@ -2072,6 +2080,7 @@ class Utilities {
         return this.cNumber(number);
     }
 
+    // Convierte a Number
     cNumber(number) {
         var num;
         if (Object.prototype.toString.call(number) === '[object Number]') {
@@ -2134,6 +2143,72 @@ class Utilities {
     
     get session() {
         return this.#session;
+    }
+
+    timeZone() {
+        var ret = '';
+        var dif = new Date().getTimezoneOffset();
+        if (dif == 0) {
+            return 'Z';
+        } else if (dif > 0) {
+            ret += '-';
+        } else {
+            ret += '+';
+        }
+        
+        dif = Math.abs(dif);
+        var h = parseInt(dif / 60);
+        ret += this.lZeros(h, 2) + ':' + this.lZeros(dif - (h * 60), 2);
+    
+        return ret;	
+    }
+
+    // Alias de xmlDecode
+    xmlDec(value, type) {
+        return this.xmlDecode(value, type);
+    }
+
+    xmlDecode(value, type) {
+        var val;
+
+        if (type == 1) {
+            return value;
+
+        } else if (type == 2) {
+            debugger;
+            return this.cDate(new Date(pDate.replace(' ', 'T') + timeZone()));
+
+        } else if (type == 3) {
+            val = parseFloat(value);
+            return isNaN(val) ? null : value;
+
+        } else {
+            throw 'Unknown type: ' + type;
+        }
+    }
+
+    // Alias de xmlEncode
+    xmlEnc(value, type) {
+        return this.xmlEncode(value, type);
+    }
+
+    xmlEncode(value, type) {
+        var val;
+
+        if (type == 1) {
+            return value ? value : '';
+
+        } else if (type == 2) {
+            val = this.isoDate(value);
+            return val ? val + ' ' + this.isoTime(val, true) : '';
+
+        } else if (type == 3) {
+            val = this.cNum(value);
+            return val ? val.toString() : '';
+
+        } else {
+            throw 'Unknown type: ' + type;
+        }
     }
 }
 
