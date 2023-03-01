@@ -1075,10 +1075,7 @@ async function addListenersCapacitor (pCallback) {
             window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
         }
     });
-}
 
-
-async function registerNotificationsCapacitor() {
     let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
 
     if (permStatus.receive === 'prompt') {
@@ -1090,6 +1087,11 @@ async function registerNotificationsCapacitor() {
     }
 
     await Capacitor.Plugins.PushNotifications.register();
+}
+
+
+async function registerNotificationsCapacitor() {
+
 }
 
 function pushUnregCapacitor(pCallback) {

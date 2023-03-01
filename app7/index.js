@@ -80,7 +80,8 @@ var app = {
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
         //if (!Capacitor.Plugins.CapacitorSQLite) console.log('Plugin error: @capacitor/capacitorsqlite');
         //window.sqlitePlugin = Capacitor.Plugins.CapacitorSQLite;
-        if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
+        //if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
+        if (typeof Capacitor.Plugins.PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
         //if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
         if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
