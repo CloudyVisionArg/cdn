@@ -1451,7 +1451,7 @@ function statusBar(pShow) {
             refStatusBarPLugin.styleDefault();
             //refStatusBarPLugin.backgroundColorByHexString('12A0D8');
             refStatusBarPLugin.backgroundColorByHexString('2BA0DA');
-            refStatusBarPLugin.overlaysWebView(false)
+            //refStatusBarPLugin.overlaysWebView(false)
         } else {
             refStatusBarPLugin.styleLightContent();
         }
