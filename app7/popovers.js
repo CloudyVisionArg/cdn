@@ -55,10 +55,7 @@ function crearCarteles(pCartel,index,array){
     divInner.style = "padding: 0px 1vmin"
     div.append(divInner);
 
-    //const divBlock = document.createElement("div");
-    //divBlock.classList.add("block");
-    //divInner.append(divBlock);
-
+    
     const elTitle = document.createElement("h3");
     elTitle.classList.add("popover-title");    
     //divBlock.append(elTitle);
@@ -78,10 +75,14 @@ function crearCarteles(pCartel,index,array){
     elTitleText.innerText = pCartel["title"]
     elTitle.append(elTitleText);
 
+    const divBlock = document.createElement("div");
+    divBlock.classList.add("block");
+    divInner.append(divBlock);
+
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
-    //divBlock.append(elTextCartel);
-    divInner.append(elTextCartel);
+    divBlock.append(elTextCartel);
+
 
     const elButton = document.createElement("button");
     elButton.classList.add("button"); 
