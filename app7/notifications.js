@@ -488,3 +488,102 @@ function injectCSS(css){
     document.head.appendChild(el);
     return el;
 };
+
+
+//Funciones traidas de explorer para utilizar seleccion en vez de botones individuales
+
+function getItemContent() {
+    var $cont;
+
+    if (selectionMode) {
+        $cont = $('<label/>', {
+            class: 'item-checkbox item-content',
+        });
+    
+        $('<input/>', {
+            type: 'checkbox',
+        }).appendTo($cont);
+    
+        $('<i/>', {
+            class: 'icon icon-checkbox',
+        }).appendTo($cont);
+    
+    } else {
+        $cont = $('<a/>', {
+            href: '#',
+            class: 'item-link item-content',
+        });
+    }
+
+    return $cont;
+}
+
+function toggleSelectionMode() {
+    var $itemContent;
+
+    if (selectionMode) {
+        // Desactivar
+        selectionMode = false;
+
+        $get('.media-list label.item-checkbox.item-content').replaceWith(function () {
+            var $itemContent = getItemContent();
+            $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
+            return $itemContent;
+        });
+
+        if (searchBar.enabled) {
+            $navbar.addClass('with-searchbar-expandable-enabled');
+            searchBar.$el.show();
+        }
+        $views.parent().removeClass('disabled');
+        $navbar.find('#buttonSearch').show();
+        $navbar.find('#buttonMenu').show();
+        $navbar.find('#buttonActions').hide();
+        $navbar.find('#buttonCancel').hide();
+
+    } else {
+        // Activar
+        selectionMode = true;
+
+        $get('.media-list a.item-link.item-content').replaceWith(function () {
+            $itemContent = getItemContent();
+            $itemContent.append($(this).contents());
+            return $itemContent;
+        });
+
+        if (searchBar.enabled) {
+            searchBar.$el.hide();
+            $navbar.removeClass('with-searchbar-expandable-enabled');
+        }
+        $views.parent().addClass('disabled');
+        $navbar.find('#buttonSearch').hide();
+        $navbar.find('#buttonMenu').hide();
+        $navbar.find('#buttonActions').show();
+        $navbar.find('#buttonCancel').show();
+    }
+
+    app7.navbar.size($navbar);
+}
+
+function taphold(e) {
+    var $list = $(this).closest('div.list');
+    if ($list.hasClass('media-list')) {
+        var $li = $(this).closest('li');
+        toggleSelectionMode();
+        $li.find('input:checkbox').prop('checked', true);
+    };
+};
+
+
+//attachear al div que está por debajo de pagecontent
+            
+ /*
+            // Evento taphold
+            if (device.platform == 'browser') {
+                // El taphold no anda en el browser
+                $viewDiv.on('contextmenu', 'a', taphold);
+            } else {
+                $viewDiv.on('taphold', 'a', taphold);
+            };
+*/
+            
