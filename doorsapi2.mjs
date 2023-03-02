@@ -552,7 +552,11 @@ class Account {
     }
 
     childAccounts(account) {
-        return this._accountsGet('childAccountsList', account);
+        if (account == undefined) {
+            return this._accountsList('ChildAccountsList', 'childAccounts');
+        } else {
+            return this._accountsGet('childAccounts', account);
+        }
     }
 
     childAccountsAdd(accounts) {
@@ -561,12 +565,12 @@ class Account {
         return this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
     }
 
-    childAccountsList() {
-        return this._accountsList('ChildAccountsList', 'childAccounts');
-    }
-
-    childAccountsRecursive() {
-        return this._accountsList('ChildAccountsListRecursive', 'childAccountsRecursive');
+    childAccountsRecursive(account) {
+        if (account == undefined) {
+            return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
+        } else {
+            return this._accountsGet('childAccountsRecursive', account);
+        }
     }
 
     childAccountsRemove(accounts) {
@@ -622,7 +626,11 @@ class Account {
     }
 
     parentAccounts(account) {
-        return this._accountsGet('parentAccountsList', account);
+        if (account == undefined) {
+            return this._accountsList('ParentAccountsList', 'parentAccounts');
+        } else {
+            return this._accountsGet('parentAccounts', account);
+        }
     }
 
     parentAccountsAdd(accounts) {
@@ -631,12 +639,12 @@ class Account {
         return this.session.restClient.fetch(url, 'PUT', accs, 'arrayParentAccounts');    
     }
 
-    parentAccountsList() {
-        return this._accountsList('ParentAccountsList', 'parentAccounts');
-    }
-
-    parentAccountsRecursive() {
-        return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+    parentAccountsRecursive(account) {
+        if (account == undefined) {
+            return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+        } else {
+            return this._accountsGet('parentAccountsRecursive', account);
+        }
     }
 
     parentAccountsRemove(accounts) {
