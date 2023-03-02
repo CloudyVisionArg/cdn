@@ -54,13 +54,14 @@ function crearCarteles(pCartel,index,array){
     divInner.classList.add("popover-inner");
     div.append(divInner);
 
-    const divBlock = document.createElement("div");
-    divBlock.classList.add("block");
-    divInner.append(divBlock);
+    //const divBlock = document.createElement("div");
+    //divBlock.classList.add("block");
+    //divInner.append(divBlock);
 
     const elTitle = document.createElement("h3");
     elTitle.classList.add("popover-title");    
-    divBlock.append(elTitle);
+    //divBlock.append(elTitle);
+    divInner.append(elTitle);
 
     const elIconMD = document.createElement("i");
     elIconMD.classList.add("material-icons", "md-only");    
@@ -78,15 +79,17 @@ function crearCarteles(pCartel,index,array){
 
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
-    divBlock.append(elTextCartel);
-       
+    //divBlock.append(elTextCartel);
+    divInner.append(elTextCartel);
+
     const elButton = document.createElement("button");
     elButton.classList.add("button"); 
     elButton.setAttribute("type","button");
     elButton.innerText = "Ok"
     elButton.setAttribute("onclick","btnClosePopover(this)");
-    divBlock.append(elButton);
-
+    //divBlock.append(elButton);
+    divInner.append(elButton);
+    
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
         content: text,
