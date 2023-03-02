@@ -52,7 +52,7 @@ function crearCarteles(pCartel,index,array){
 
     const divInner = document.createElement("div");
     divInner.classList.add("popover-inner");
-    divInner.style = "margin: 0px 1vmin"
+    divInner.style = "padding: 0px 1vmin"
     div.append(divInner);
 
     //const divBlock = document.createElement("div");
