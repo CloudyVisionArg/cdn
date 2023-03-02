@@ -52,6 +52,7 @@ function crearCarteles(pCartel,index,array){
 
     const divInner = document.createElement("div");
     divInner.classList.add("popover-inner");
+    divInner.style = "margin: 0px 5px"
     div.append(divInner);
 
     //const divBlock = document.createElement("div");
@@ -89,7 +90,7 @@ function crearCarteles(pCartel,index,array){
     elButton.setAttribute("onclick","btnClosePopover(this)");
     //divBlock.append(elButton);
     divInner.append(elButton);
-    
+
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
         content: text,
