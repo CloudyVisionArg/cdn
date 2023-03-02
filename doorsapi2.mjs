@@ -613,6 +613,17 @@ class Account {
         this.#json.Email = value;
     }
 
+    // account puede ser name o id
+    async hasChild(account, recursive) {
+        var acc = await this['childAccounts' + (recursive ? 'Recursive' : '')](account, true);
+        return acc ? true : false;
+    }
+
+    async hasParent(account, recursive) {
+        var acc = await this['parentAccounts' + (recursive ? 'Recursive' : '')](account, true);
+        return acc ? true : false;
+    }
+
     get id() {
         return this.#json.AccId;
     }
