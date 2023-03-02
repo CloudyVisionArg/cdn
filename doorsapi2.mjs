@@ -560,8 +560,7 @@ class Account {
     childAccounts(account) -> Devuelve una cuenta hija. Puedo pasar name o id. Da error si no esta.
     childAccounts(account, true) -> Igual que el anterior, pero si no esta devuelve undefined.
 
-    Los metodos childAccountsRecursive, parentAccounts y parentAccountsRecursive
-    trabajan igual
+    Los metodos childAccountsRecursive, parentAccounts y parentAccountsRecursive trabajan igual
     */
     childAccounts(account, has) {
         if (account == undefined) {
