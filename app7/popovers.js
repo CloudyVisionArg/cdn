@@ -132,6 +132,8 @@ function renderPopovers(pArrPopovers){
             arrCartelesVista[i+1].open(arrCartelesVista[i+1]["selector"]);
         });
     } 
+
+    debugger;
     if(arrCartelesVista.length > 0){
         arrCartelesVista[0].open(arrCartelesVista[0]["selector"]);
     }
@@ -153,7 +155,7 @@ function generarCarteles(pScope){
         return (item["context"] == pScope || item["context"] == 'toolbar');
     });
 
-    renderPopovers(arrCartelesFijos);
+    
 
     if (popoversFolder) {
         DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
@@ -165,11 +167,13 @@ function generarCarteles(pScope){
                     })
                 }
                 
-                if(res.length > 0) renderPopovers(res);
+                if(res.length > 0) renderPopovers([...arrCartelesFijos,...res]);
             },
             function(err){
                 console.log(err);
             }
         );
+    }else{
+        renderPopovers(arrCartelesFijos);
     }
 }
