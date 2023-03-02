@@ -6,11 +6,12 @@ swagger: http://tests.cloudycrm.net/apidocs
 */
 
 var incjs = {};
-var _moment, _numeral, _CryptoJS;
+var _moment, _numeral, _CryptoJS, _serializeError;
 
 export { _moment as moment };
 export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
+export { _serializeError as serializeError };
 
 await (async () => {
 
@@ -28,7 +29,7 @@ await (async () => {
     // moment - https://momentjs.com/docs/
 
     if (typeof(moment) == 'undefined') {
-        if (isNode()) {
+        if (inNode()) {
             // todo: si da problemas levantar como el crypto
             res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
             _moment = res.default.default;
@@ -44,7 +45,7 @@ await (async () => {
     // numeral - http://numeraljs.com/
 
     if (typeof(numeral) == 'undefined') {
-        if (isNode()) {
+        if (inNode()) {
             // todo: si da problemas levantar como el crypto
             res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
@@ -86,9 +87,9 @@ await (async () => {
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
 
     if (typeof(CryptoJS) == 'undefined') {
-        if (isNode()) {
-            var res = await fetch(incjs.scriptSrc('lib-cryptojs-aes'));
-            var code = await res.text();
+        if (inNode()) {
+            res = await fetch(incjs.scriptSrc('lib-cryptojs-aes'));
+            code = await res.text();
             eval(`
                 ${code}
                 _CryptoJS = CryptoJS;
@@ -100,6 +101,18 @@ await (async () => {
     } else {
         _CryptoJS = CryptoJS;
     }
+
+
+    // serialize-error - https://github.com/sindresorhus/serialize-error
+
+    debugger;
+    if (typeof(_serializeError) == 'undefined') {
+        res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+    }
+    if (!inNode() && window.serializeError == undefined) {
+        window.serializeError = _serializeError;
+    }
+
 
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
@@ -128,7 +141,7 @@ await (async () => {
 })();
 
 
-export function isNode() {
+export function inNode() {
     return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
 }
 
@@ -1221,7 +1234,7 @@ export class Document {
                         // todo: como subimos el Tag?
                         var arrBuf = await el.fileStream;
                         formData.append('attachment', new Blob([arrBuf]), el.name);
-                        formData.append('description', el.description);
+                        formData.append('description', el.description); // todo probar
                         //formData.append('group', el.group);
                         var url = 'documents/' + me.id + '/attachments';
                         proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
@@ -2170,8 +2183,8 @@ class Utilities {
         return JSON.stringify(err);
     }
 
-    get isNode() {
-        return isNode();
+    get inNode() {
+        return inNode();
     }
 
     // Devuelve la fecha en formato YYYY-MM-DD
