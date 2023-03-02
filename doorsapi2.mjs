@@ -105,7 +105,6 @@ await (async () => {
 
     // serialize-error - https://github.com/sindresorhus/serialize-error
 
-    debugger;
     if (typeof(_serializeError) == 'undefined') {
         res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
         _serializeError = res.default;
