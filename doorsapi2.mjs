@@ -487,7 +487,7 @@ class Account {
         this.#session = session;
     }
 
-    _accountsGet(listFunction, account) {
+    _accountsGet(listFunction, account, has) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -501,7 +501,11 @@ class Account {
                         if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
                             resolve(acc);
                         } else {
-                            reject(new Error('Account not found'));
+                            if (has) {
+                                resolve(undefined);
+                            } else {
+                                reject(new Error('Account not found'));
+                            }
                         }
                     }
                 },
@@ -551,11 +555,19 @@ class Account {
         }
     }
 
-    childAccounts(account) {
+    /*
+    childAccounts() -> Devuelve un map de cuentas hijas
+    childAccounts(account) -> Devuelve una cuenta hija. Puedo pasar name o id. Da error si no esta.
+    childAccounts(account, true) -> Igual que el anterior, pero si no esta devuelve undefined.
+
+    Los metodos childAccountsRecursive, parentAccounts y parentAccountsRecursive
+    trabajan igual
+    */
+    childAccounts(account, has) {
         if (account == undefined) {
             return this._accountsList('ChildAccountsList', 'childAccounts');
         } else {
-            return this._accountsGet('childAccounts', account);
+            return this._accountsGet('childAccounts', account, has);
         }
     }
 
@@ -565,11 +577,11 @@ class Account {
         return this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
     }
 
-    childAccountsRecursive(account) {
+    childAccountsRecursive(account, has) {
         if (account == undefined) {
             return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
         } else {
-            return this._accountsGet('childAccountsRecursive', account);
+            return this._accountsGet('childAccountsRecursive', account, has);
         }
     }
 
@@ -625,11 +637,11 @@ class Account {
         return Account.objectType;
     }
 
-    parentAccounts(account) {
+    parentAccounts(account, has) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsList', 'parentAccounts');
         } else {
-            return this._accountsGet('parentAccounts', account);
+            return this._accountsGet('parentAccounts', account, has);
         }
     }
 
@@ -639,11 +651,11 @@ class Account {
         return this.session.restClient.fetch(url, 'PUT', accs, 'arrayParentAccounts');    
     }
 
-    parentAccountsRecursive(account) {
+    parentAccountsRecursive(account, has) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
         } else {
-            return this._accountsGet('parentAccountsRecursive', account);
+            return this._accountsGet('parentAccountsRecursive', account, has);
         }
     }
 
