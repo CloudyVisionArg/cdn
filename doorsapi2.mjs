@@ -108,6 +108,7 @@ await (async () => {
     debugger;
     if (typeof(_serializeError) == 'undefined') {
         res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+        _serializeError = res.default;
     }
     if (!inNode() && window.serializeError == undefined) {
         window.serializeError = _serializeError;
@@ -2159,6 +2160,10 @@ class Utilities {
 	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
 	}
 
+    deserializeError(err) {
+        return _serializeError.deserializeError(err);
+    }
+
     encrypt(pString, pPass) {
         return _CryptoJS.AES.encrypt(pString, pPass).toString();
     }
@@ -2223,6 +2228,10 @@ class Utilities {
 
     get numeral() {
         return _numeral;
+    }
+
+    serializeError(err) {
+        return _serializeError.serializeError(err);
     }
 
     get session() {
