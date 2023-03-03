@@ -144,7 +144,7 @@ function renderPopovers(pArrPopovers){
 
         arrCartelesVista[i].on('click', function () {
             console.log("popoverclosedonclick");
-            arrCartelesVista[i].close();
+            app7.popover.close(".popover");
         })
 
         //encadenar la apertura automatica de los popovers
