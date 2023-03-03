@@ -84,18 +84,22 @@ function crearCarteles(pCartel,index,array){
     divBlock.append(elTextCartel);
 
 
-    const elButton = document.createElement("button");
-    elButton.classList.add("button"); 
-    elButton.setAttribute("type","button");
-    elButton.innerText = "Ok"
-    elButton.setAttribute("onclick","btnClosePopover(this)");
+    //const elButton = document.createElement("button");
+    //elButton.classList.add("button"); 
+    //elButton.setAttribute("type","button");
+    //elButton.innerText = "Ok"
+    //elButton.setAttribute("onclick","btnClosePopover(this)");
     //divBlock.append(elButton);
-    divInner.append(elButton);
+    //divInner.append(elButton);
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
         content: text,
         on: {
+            click: function (this) {
+                console.log("popoverclosedonclick");
+                btnClosePopover(this);
+            },
             open: function () {
                 console.log('Popover open ' + pCartel["popover_id"]);
             },
