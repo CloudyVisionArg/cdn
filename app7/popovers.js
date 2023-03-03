@@ -84,6 +84,7 @@ function crearCarteles(pCartel,index,array){
     elTitle.append(elIconIOS);
 
     const elTitleText = document.createElement("span");
+    elTitleText.style = "padding-left: 1rem"
     elTitleText.innerText = pCartel["title"]
     elTitle.append(elTitleText);
 
