@@ -92,8 +92,8 @@ function crearCarteles(pCartel,index,array){
     
     const closeBtnIconMD = document.createElement("i");
     closeBtnIconMD.classList.add("material-icons", "md-only");    
-    elIcocloseBtnIconMDnMD.innerText = "close"
-    elTelButtonitle.append(closeBtnIconMD);
+    closeBtnIconMD.innerText = "close"
+    elButton.append(closeBtnIconMD);
 
     const closeBtnIconIOS = document.createElement("i");
     closeBtnIconIOS.classList.add("f7-icons", "ios-only");    
