@@ -1509,13 +1509,24 @@ export class Folder {
         if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
             var url = 'folders/' + this.id + '/documents/?tobin=' + 
                 encURIC(purge == true ? false : true);
-            return this.session.restClient.fetch(url, 'DELETE', 
-                Array.isArray(documents) ? documents : [documents], 'docIds');
+            return this.pr(this.session.restClient.fetch(url, 'DELETE', 
+                Array.isArray(documents) ? documents : [documents], 'docIds'));
 
         } else {
             var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
-            return this.session.restClient.fetch(url, 'DELETE', {}, '');
+            return this.pr(this.session.restClient.fetch(url, 'DELETE', {}, ''));
         }
+    }
+
+    pr(prom) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            prom.then(
+                resolve,
+                err => { reject(me.session.utils.errParser(err)) } 
+            )
+    
+        })
     }
 
     documentsNew() {
@@ -2480,13 +2491,13 @@ class RestClient {
                     else {
 
                         if (response.statusCode !== 200 || parsedJson.ExceptionMessage !== null) {
-                            reject(me.session.utils.errParser(parsedJson));
+                            reject(parsedJson);
                         }
                     }
                     resolve(parsedJson);
                 });
             }).catch((error) => {
-                reject(me.session.utils.errParser(error));
+                reject(error);
             });
         });
     }
@@ -2526,9 +2537,7 @@ class RestClient {
                             reject(new Error(response.status + ' (' + response.statusText + ')'))
                         }
                 },
-                err => {
-                    reject(me.session.utils.errParser(err));
-                }
+                reject
             )
         });
 
