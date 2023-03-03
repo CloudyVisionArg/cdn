@@ -1506,26 +1506,23 @@ export class Folder {
     }
 
     documentsDelete(documents, purge) {
-        if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
-            var url = 'folders/' + this.id + '/documents/?tobin=' + 
-                encURIC(purge == true ? false : true);
-            return this.pr(this.session.restClient.fetch(url, 'DELETE', 
-                Array.isArray(documents) ? documents : [documents], 'docIds'));
-
-        } else {
-            var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
-            return this.pr(this.session.restClient.fetch(url, 'DELETE', {}, ''));
-        }
-    }
-
-    pr(prom) {
         var me = this;
         return new Promise((resolve, reject) => {
+            var prom;
+            if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
+                var url = 'folders/' + this.id + '/documents/?tobin=' + 
+                    encURIC(purge == true ? false : true);
+                prom = this.session.restClient.fetch(url, 'DELETE', 
+                    Array.isArray(documents) ? documents : [documents], 'docIds');
+    
+            } else {
+                var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
+                prom = this.session.restClient.fetch(url, 'DELETE', {}, '');
+            }
             prom.then(
                 resolve,
-                err => { reject(me.session.utils.errParser(err)) } 
+                err => { reject(me.session.utils.errParser(err)) }
             )
-    
         })
     }
 
