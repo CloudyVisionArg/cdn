@@ -84,13 +84,26 @@ function crearCarteles(pCartel,index,array){
     divBlock.append(elTextCartel);
 
 
-    //const elButton = document.createElement("button");
-    //elButton.classList.add("button"); 
-    //elButton.setAttribute("type","button");
+    const elButton = document.createElement("button");
+    elButton.classList.add("button"); 
+    elButton.setAttribute("type","button");
     //elButton.innerText = "Ok"
-    //elButton.setAttribute("onclick","btnClosePopover(this)");
+    elButton.setAttribute("onclick","btnClosePopover(this)");
+    
+    const closeBtnIconMD = document.createElement("i");
+    closeBtnIconMD.classList.add("material-icons", "md-only");    
+    elIcocloseBtnIconMDnMD.innerText = "close"
+    elTelButtonitle.append(closeBtnIconMD);
+
+    const closeBtnIconIOS = document.createElement("i");
+    closeBtnIconIOS.classList.add("f7-icons", "ios-only");    
+    closeBtnIconIOS.innerText = "xmark"
+    elButton.append(closeBtnIconIOS);
+    
     //divBlock.append(elButton);
     //divInner.append(elButton);
+
+
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
@@ -141,11 +154,6 @@ function renderPopovers(pArrPopovers){
                 arrCartelesVista[i].emit("closedWithoutDisplay");
             }
         });
-
-        arrCartelesVista[i].on('click', function () {
-            console.log("popoverclosedonclick");
-            app7.popover.close(".popover");
-        })
 
         //encadenar la apertura automatica de los popovers
         //en el cierre del popover anterior
