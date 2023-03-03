@@ -88,12 +88,13 @@ function crearCarteles(pCartel,index,array){
     elTitle.append(elTitleText);
 
     const divBlock = document.createElement("div");
-    divBlock.style = "padding: 0px 1vmin; margin: 1vmin"
+    divBlock.style = "padding: 0px 1vmin; margin: 1vmin 1vmin 1rem"
     divBlock.classList.add("block");
     divInner.append(divBlock);
 
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
+    elTextCartel.style = "font-size: medium"
     divBlock.append(elTextCartel);
 
     const text = div.outerHTML;
