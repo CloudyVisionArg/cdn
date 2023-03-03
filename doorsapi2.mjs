@@ -221,7 +221,7 @@ export class Session {
     #loggedUser;
     
     constructor(serverUrl, authToken) {
-        this.#restClient = new RestClient(serverUrl, authToken);
+        this.#restClient = new RestClient(serverUrl, authToken, this);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
 
@@ -2222,12 +2222,7 @@ class Utilities {
 
     // Recibe un err, lo convierte a Error, loguea y dispara
     errMgr(err) {
-        var e;
-        if (err instanceof Error) {
-            e = err;
-        } else {
-            e = new Error(this.errMsg(err));
-        }
+        var e = this.errParser(err);
         console.error(e);
         throw e;
     }
@@ -2250,6 +2245,16 @@ class Utilities {
             }
         }
         return JSON.stringify(err);
+    }
+
+    errParser(err) {
+        var e;
+        if (err instanceof Error) {
+            e = err;
+        } else {
+            e = new Error(this.errMsg(err));
+        }
+        return e;
     }
 
     get inNode() {
@@ -2407,13 +2412,16 @@ class View {
 class RestClient {
     AuthToken = null;
     ServerBaseUrl = null;
+    #session;
 
-    constructor(serverUrl, authToken) {
+    constructor(serverUrl, authToken, session) {
         this.AuthToken = authToken;
         this.ServerBaseUrl = serverUrl;
+        this.$session = session;
     }
 
     fetch(url, method, parameters, parameterName) {
+        var me = this;
         let data = null;
         //TODO Check if ends with /
         let completeUrl = this.ServerBaseUrl + "/" + url;
@@ -2478,7 +2486,8 @@ class RestClient {
                     resolve(parsedJson);
                 });
             }).catch((error) => {
-                reject(error);
+                debugger;
+                reject(me.session.utils.errParser(error));
             });
         });
     }
@@ -2524,6 +2533,10 @@ class RestClient {
 
 
     };
+
+    get session() {
+        return this.#session;
+    }
 
     constructJSONParameter(param, parameterName) {
         var clone = param; 
