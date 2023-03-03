@@ -2417,7 +2417,7 @@ class RestClient {
     constructor(serverUrl, authToken, session) {
         this.AuthToken = authToken;
         this.ServerBaseUrl = serverUrl;
-        this.$session = session;
+        this.#session = session;
     }
 
     fetch(url, method, parameters, parameterName) {
