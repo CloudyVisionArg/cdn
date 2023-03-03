@@ -95,11 +95,7 @@ function crearCarteles(pCartel,index,array){
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
         content: text,
-        on: {
-            click: function (this) {
-                console.log("popoverclosedonclick");
-                btnClosePopover(this);
-            },
+        on: {       
             open: function () {
                 console.log('Popover open ' + pCartel["popover_id"]);
             },
@@ -145,6 +141,11 @@ function renderPopovers(pArrPopovers){
                 arrCartelesVista[i].emit("closedWithoutDisplay");
             }
         });
+
+        arrCartelesVista[i].on('click', function (this) {
+            console.log("popoverclosedonclick");
+            btnClosePopover(this);
+        })
 
         //encadenar la apertura automatica de los popovers
         //en el cierre del popover anterior
