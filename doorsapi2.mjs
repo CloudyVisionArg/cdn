@@ -2220,6 +2220,18 @@ class Utilities {
         return _CryptoJS.AES.encrypt(pString, pPass).toString();
     }
 
+    // Recibe un err, lo convierte a Error, loguea y dispara
+    errMgr(err) {
+        var e;
+        if (err instanceof Error) {
+            e = err;
+        } else {
+            e = new Error(this.errMsg(err));
+        }
+        console.error(e);
+        throw e;
+    }
+   
     // Devuelve el mensaje de un objeto err
     errMsg(err) {
         if (typeof(err) == 'string') {
