@@ -2480,7 +2480,7 @@ class RestClient {
                     else {
 
                         if (response.statusCode !== 200 || parsedJson.ExceptionMessage !== null) {
-                            reject(parsedJson);
+                            reject(me.session.utils.errParser(parsedJson));
                         }
                     }
                     resolve(parsedJson);
@@ -2527,7 +2527,9 @@ class RestClient {
                             reject(new Error(response.status + ' (' + response.statusText + ')'))
                         }
                 },
-                reject
+                err => {
+                    reject(me.session.utils.errParser(err));
+                }
             )
         });
 
