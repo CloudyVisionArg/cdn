@@ -142,9 +142,9 @@ function renderPopovers(pArrPopovers){
             }
         });
 
-        arrCartelesVista[i].on('click', function (this) {
+        arrCartelesVista[i].on('click', function () {
             console.log("popoverclosedonclick");
-            btnClosePopover(this);
+            arrCartelesVista[i].close();
         })
 
         //encadenar la apertura automatica de los popovers
