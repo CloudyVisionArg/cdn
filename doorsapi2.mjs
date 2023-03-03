@@ -2486,7 +2486,6 @@ class RestClient {
                     resolve(parsedJson);
                 });
             }).catch((error) => {
-                debugger;
                 reject(me.session.utils.errParser(error));
             });
         });
