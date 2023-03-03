@@ -88,6 +88,7 @@ function crearCarteles(pCartel,index,array){
     elTitle.append(elTitleText);
 
     const divBlock = document.createElement("div");
+    divBlock.style = "padding: 0px 1vmin; margin: 1vmin"
     divBlock.classList.add("block");
     divInner.append(divBlock);
 
