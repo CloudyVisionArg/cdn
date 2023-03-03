@@ -131,9 +131,8 @@ function renderPopovers(pArrPopovers){
 
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
     
-    debugger;
-
-    for (let i = 0; i < arrCartelesVista.length-1; i++) {                
+   
+    for (let i = 0; i < arrCartelesVista.length; i++) {                
 
         arrCartelesVista[i].on('beforeOpen', function () {
             if($(arrCartelesVista[i]["selector"]).length > 0){
@@ -142,15 +141,19 @@ function renderPopovers(pArrPopovers){
                 arrCartelesVista[i].emit("closedWithoutDisplay");
             }
         });
-        
-        arrCartelesVista[i].on('closed', function () {
-            arrCartelesVista[i+1].emit("beforeOpen");
-        });
 
-        arrCartelesVista[i].on('closedWithoutDisplay', function () {
-            console.log("close without display: " + arrCartelesVista[i]["selector"])
-            arrCartelesVista[i+1].emit("beforeOpen");            
-        });
+        //encadenar la apertura automatica de los popovers
+        //en el cierre del popover anterior
+        if(i < arrCartelesVista.length-1){  //el ultimo elemento no
+            arrCartelesVista[i].on('closed', function () {
+                arrCartelesVista[i+1].emit("beforeOpen");
+            });
+
+            arrCartelesVista[i].on('closedWithoutDisplay', function () {
+                console.log("close without display: " + arrCartelesVista[i]["selector"])
+                arrCartelesVista[i+1].emit("beforeOpen");            
+            });
+        }
     } 
 
     if(arrCartelesVista.length > 0){
