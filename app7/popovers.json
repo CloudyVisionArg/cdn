@@ -48,5 +48,15 @@
         "icon_ios": "person_circle",
         "text": "Cambiar de usuario, cambiar su contrase&ntilde;a, y otras opciones",
         "order": "10"
+    },
+    {        
+        "popover_id": 100000101,
+        "context": "explorer",
+        "selector": ".clasequenoexiste",
+        "title": "ESTE POPOVER NO DEBE APARECER",
+        "icon_md": "format_list_bulleted",
+        "icon_ios": "list_bullet",
+        "text": "ESTE POPOVER NO DEBE APARECER",
+        "order": "100"
     }
 ]
