@@ -95,7 +95,7 @@ function crearCarteles(pCartel,index,array){
 
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
-    elTextCartel.style = "font-size: medium"
+    elTextCartel.style = "font-size: large"
     divBlock.append(elTextCartel);
 
     const text = div.outerHTML;
