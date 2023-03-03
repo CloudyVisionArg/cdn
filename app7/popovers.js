@@ -185,6 +185,7 @@ function generarCarteles(pScope){
                 }
                 
                 if(res.length > 0){
+                    console.log([...arrCartelesFijos,...res])
                     renderPopovers([...arrCartelesFijos,...res]);
                     console.log("trajo carteles desde carpeta")
                 }else{
