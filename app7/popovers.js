@@ -54,21 +54,15 @@ function crearCarteles(pCartel,index,array){
     divInner.classList.add("popover-inner");
     divInner.style = "padding: 0px 1vmin"
     div.append(divInner);
-
-    const elButton = document.createElement("button");
-    elButton.classList.add("float-right"); 
-    elButton.setAttribute("type","button");
-    //elButton.innerText = "Ok"
-    
     
     const closeBtnIconMD = document.createElement("i");
-    closeBtnIconMD.classList.add("material-icons", "md-only");    
+    closeBtnIconMD.classList.add("material-icons", "md-only","float-right");    
     closeBtnIconMD.innerText = "close"
     closeBtnIconMD.setAttribute("onclick","btnClosePopover(this)");
     divInner.append(closeBtnIconMD);
 
     const closeBtnIconIOS = document.createElement("i");
-    closeBtnIconIOS.classList.add("f7-icons", "ios-only");    
+    closeBtnIconIOS.classList.add("f7-icons", "ios-only","float-right");    
     closeBtnIconIOS.innerText = "xmark"
     closeBtnIconIOS.setAttribute("onclick","btnClosePopover(this)");
     divInner.append(closeBtnIconIOS);
