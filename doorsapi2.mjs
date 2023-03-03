@@ -2247,16 +2247,6 @@ class Utilities {
         return JSON.stringify(err);
     }
 
-    errParser(err) {
-        var e;
-        if (err instanceof Error) {
-            e = err;
-        } else {
-            e = new Error(this.errMsg(err));
-        }
-        return e;
-    }
-
     get inNode() {
         return inNode();
     }
@@ -2293,6 +2283,16 @@ class Utilities {
 
     newDoorsMap() {
         return new DoorsMap();
+    }
+
+    newErr(err) {
+        var e;
+        if (err instanceof Error) {
+            e = err;
+        } else {
+            e = new Error(this.errMsg(err));
+        }
+        return e;
     }
 
     get numeral() {
@@ -2480,13 +2480,13 @@ class RestClient {
                     else {
 
                         if (response.statusCode !== 200 || parsedJson.ExceptionMessage !== null) {
-                            reject(me.session.utils.errParse(parsedJson));
+                            reject(me.session.utils.newErr(parsedJson));
                         }
                     }
                     resolve(parsedJson);
                 });
             }).catch((error) => {
-                reject(me.session.utils.errParse(error));
+                reject(me.session.utils.newErr(error));
             });
         });
     }
@@ -2527,7 +2527,7 @@ class RestClient {
                         }
                 },
                 err => {
-                    reject(me.session.utils.errParse(err));
+                    reject(me.session.utils.newErr(err));
                 }
             )
         });
