@@ -96,13 +96,13 @@ function crearCarteles(pCartel,index,array){
     const dynamicPopover = app7.popover.create({
         content: text,
         on: {
-            open: function (popover) {
+            open: function () {
                 console.log('Popover open ' + pCartel["popover_id"]);
             },
-            opened: function (popover) {
+            opened: function () {
                 console.log('Popover opened ' + pCartel["popover_id"]);
             },
-            close: function (popover) {
+            close: function () {
                 var read = window.localStorage.getItem("popoversLeidos");
                 if (read) read += ',';
                 read += pCartel["popover_id"];
@@ -132,15 +132,26 @@ function renderPopovers(pArrPopovers){
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
     
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
+
+        arrCartelesVista[i].on('beforeOpen', function () {
+            if($(arrCartelesVista[i]["selector"]).length > 0){
+                arrCartelesVista[i].open(arrCartelesVista[i]["selector"]);
+            }else{
+                arrCartelesVista[i].emit("closedWithoutDisplay");
+            }
+        });
         
-        arrCartelesVista[i].on('closed', function (popover) {
-            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["selector"]);
+        arrCartelesVista[i].on('closed', function () {
+            arrCartelesVista[i+1].emit("beforeOpen");
+        });
+
+        arrCartelesVista[i].on('closedWithoutDisplay', function () {
+            arrCartelesVista[i+1].emit("beforeOpen");            
         });
     } 
 
-    debugger;
     if(arrCartelesVista.length > 0){
-        arrCartelesVista[0].open(arrCartelesVista[0]["selector"]);
+        arrCartelesVista[0].emit("beforeOpen");            
     }
 }
 
