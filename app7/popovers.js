@@ -101,7 +101,7 @@ function crearCarteles(pCartel,index,array){
     elButton.append(closeBtnIconIOS);
     
     //divBlock.append(elButton);
-    //divInner.append(elButton);
+    divInner.append(elButton);
 
 
 
