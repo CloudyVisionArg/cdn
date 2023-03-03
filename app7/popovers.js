@@ -131,6 +131,8 @@ function renderPopovers(pArrPopovers){
 
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
     
+    debugger;
+
     for (let i = 0; i < arrCartelesVista.length-1; i++) {                
 
         arrCartelesVista[i].on('beforeOpen', function () {
@@ -146,6 +148,7 @@ function renderPopovers(pArrPopovers){
         });
 
         arrCartelesVista[i].on('closedWithoutDisplay', function () {
+            console.log("close without display: " + arrCartelesVista[i]["selector"])
             arrCartelesVista[i+1].emit("beforeOpen");            
         });
     } 
@@ -184,8 +187,7 @@ function generarCarteles(pScope){
                     })
                 }
                 
-                if(res.length > 0){
-                    debugger;
+                if(res.length > 0){                    
                     renderPopovers([...arrCartelesFijos,...res]);
                     console.log("trajo carteles desde carpeta")
                 }else{
