@@ -311,6 +311,11 @@ export class Session {
         return cache;
     }
 
+    // Alias de folder
+    folders(folder, curFolderId) {
+        return this.folder(folder, curFolderId);
+    }
+
     foldersGetFromId(fldId) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1460,6 +1465,11 @@ export class Folder {
         return this.#app;
     }
 
+    // Alias de documentsDelete
+    delete(documents, purge) {
+        return this.documentsDelete(documents, purge);
+    }
+
     // Alias de documents
     doc(document) {
         return this.documents(document);
@@ -1493,6 +1503,19 @@ export class Folder {
                 reject
             )
         });
+    }
+
+    documentsDelete(documents, purge) {
+        if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
+            var url = 'folders/' + this.id + '/documents/?tobin=' + 
+                encURIC(purge == true ? false : true);
+            return this.session.restClient.fetch(url, 'DELETE', 
+                Array.isArray(documents) ? documents : [documents], 'docIds');
+
+        } else {
+            var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
+            return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        }
     }
 
     documentsNew() {
