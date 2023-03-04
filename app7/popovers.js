@@ -52,15 +52,26 @@ function crearCarteles(pCartel,index,array){
 
     const divInner = document.createElement("div");
     divInner.classList.add("popover-inner");
+    divInner.style = "padding: 0px 1vmin"
     div.append(divInner);
+    
+    const closeBtnIconMD = document.createElement("i");
+    closeBtnIconMD.classList.add("material-icons", "md-only","float-right");    
+    closeBtnIconMD.innerText = "close"
+    closeBtnIconMD.setAttribute("onclick","btnClosePopover(this)");
+    divInner.append(closeBtnIconMD);
 
-    const divBlock = document.createElement("div");
-    divBlock.classList.add("block");
-    divInner.append(divBlock);
+    const closeBtnIconIOS = document.createElement("i");
+    closeBtnIconIOS.classList.add("f7-icons", "ios-only","float-right");    
+    closeBtnIconIOS.innerText = "xmark"
+    closeBtnIconIOS.setAttribute("onclick","btnClosePopover(this)");
+    divInner.append(closeBtnIconIOS);
 
+    
     const elTitle = document.createElement("h3");
     elTitle.classList.add("popover-title");    
-    divBlock.append(elTitle);
+    //divBlock.append(elTitle);
+    divInner.append(elTitle);
 
     const elIconMD = document.createElement("i");
     elIconMD.classList.add("material-icons", "md-only");    
@@ -73,31 +84,31 @@ function crearCarteles(pCartel,index,array){
     elTitle.append(elIconIOS);
 
     const elTitleText = document.createElement("span");
+    elTitleText.style = "padding-left: 1rem"
     elTitleText.innerText = pCartel["title"]
     elTitle.append(elTitleText);
 
+    const divBlock = document.createElement("div");
+    divBlock.style = "padding: 0px 1vmin; margin: 1vmin 1vmin 1rem"
+    divBlock.classList.add("block");
+    divInner.append(divBlock);
+
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
+    elTextCartel.style = "font-size: large"
     divBlock.append(elTextCartel);
-       
-    const elButton = document.createElement("button");
-    elButton.classList.add("button"); 
-    elButton.setAttribute("type","button");
-    elButton.innerText = "Ok"
-    elButton.setAttribute("onclick","btnClosePopover(this)");
-    divBlock.append(elButton);
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
         content: text,
-        on: {
-            open: function (popover) {
+        on: {       
+            open: function () {
                 console.log('Popover open ' + pCartel["popover_id"]);
             },
-            opened: function (popover) {
+            opened: function () {
                 console.log('Popover opened ' + pCartel["popover_id"]);
             },
-            close: function (popover) {
+            close: function () {
                 var read = window.localStorage.getItem("popoversLeidos");
                 if (read) read += ',';
                 read += pCartel["popover_id"];
@@ -126,14 +137,33 @@ function renderPopovers(pArrPopovers){
 
     const arrCartelesVista = arrFiltrados.map(crearCarteles)
     
-    for (let i = 0; i < arrCartelesVista.length-1; i++) {                
-        
-        arrCartelesVista[i].on('closed', function (popover) {
-            arrCartelesVista[i+1].open(arrCartelesVista[i+1]["selector"]);
+   
+    for (let i = 0; i < arrCartelesVista.length; i++) {                
+
+        arrCartelesVista[i].on('beforeOpen', function () {
+            if($(arrCartelesVista[i]["selector"]).length > 0){
+                arrCartelesVista[i].open(arrCartelesVista[i]["selector"]);
+            }else{
+                arrCartelesVista[i].emit("closedWithoutDisplay");
+            }
         });
+
+        //encadenar la apertura automatica de los popovers
+        //en el cierre del popover anterior
+        if(i < arrCartelesVista.length-1){  //el ultimo elemento no
+            arrCartelesVista[i].on('closed', function () {
+                arrCartelesVista[i+1].emit("beforeOpen");
+            });
+
+            arrCartelesVista[i].on('closedWithoutDisplay', function () {
+                console.log("close without display: " + arrCartelesVista[i]["selector"])
+                arrCartelesVista[i+1].emit("beforeOpen");            
+            });
+        }
     } 
+
     if(arrCartelesVista.length > 0){
-        arrCartelesVista[0].open(arrCartelesVista[0]["selector"]);
+        arrCartelesVista[0].emit("beforeOpen");            
     }
 }
 
@@ -153,9 +183,10 @@ function generarCarteles(pScope){
         return (item["context"] == pScope || item["context"] == 'toolbar');
     });
 
-    renderPopovers(arrCartelesFijos);
+    
 
     if (popoversFolder) {
+        console.log("existe popoversFolder")
         DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
             function(res){            
                 for(let idx = 0; idx < res.length; idx++){
@@ -165,11 +196,20 @@ function generarCarteles(pScope){
                     })
                 }
                 
-                if(res.length > 0) renderPopovers(res);
+                if(res.length > 0){                    
+                    renderPopovers([...arrCartelesFijos,...res]);
+                    console.log("trajo carteles desde carpeta")
+                }else{
+                    renderPopovers(arrCartelesFijos);
+                    console.log("no trajo carteles desde carpeta")
+                }
             },
             function(err){
                 console.log(err);
             }
         );
+    }else{
+        console.log("no existe popoversFolder")
+        renderPopovers(arrCartelesFijos);
     }
 }
