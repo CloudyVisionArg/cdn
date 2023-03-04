@@ -1605,7 +1605,7 @@ export class Folder {
         return this.#properties.set(property, value);
     }
 
-    // options: { fields, formula, order, maxDocs, recursive, maxValueLen, maxDescrLength }
+    // options: { fields, formula, order, maxDocs, recursive, maxTextLength }
     search(options) {
         var opt = {
             fields: '',
@@ -2222,7 +2222,7 @@ class Utilities {
 
     // Recibe un err, lo convierte a Error, loguea y dispara
     errMgr(err) {
-        var e = this.errParser(err);
+        var e = this.newErr(err);
         console.error(e);
         throw e;
     }
