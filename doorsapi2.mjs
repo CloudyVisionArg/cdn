@@ -15,8 +15,7 @@ export { _serializeError as serializeError };
 
 await (async () => {
     if (inNode()) {
-        var importCache = import ('./../import-cache.mjs');
-
+        var importCache = await import ('./../import-cache.mjs');
     }
 
     // include
