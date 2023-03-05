@@ -32,9 +32,7 @@ await (async () => {
 
     if (typeof(moment) == 'undefined') {
         if (inNode()) {
-            // todo: si da problemas levantar como el crypto
             res = await importCache.webImport('https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment-with-locales.min.js/+esm');
-            debugger;
             _moment = res.default;
         } else {
             await incjs.include('lib-moment');
