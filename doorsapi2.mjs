@@ -90,7 +90,8 @@ await (async () => {
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
             // todo: usar cdnImport con localPath
-            res = await fetch(incjs.scriptSrc('lib-cryptojs-aes'));
+            res = await importCache.cdnImport({ id: 'lib-cryptojs-aes', localPath: true });
+            debugger;
             code = await res.text();
             eval(`
                 ${code}
