@@ -14,6 +14,10 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError };
 
 await (async () => {
+    if (inNode()) {
+        var importCache = import ('./import-cache.mjs');
+
+    }
 
     // include
 
