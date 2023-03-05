@@ -93,8 +93,6 @@ await (async () => {
             // todo: usar cdnImport con localPath
             res = await importCache.cdnImport({ id: 'lib-cryptojs-aes', localPath: true });
             code = await fs.readFileSync('./service/' + res, { encoding: 'utf8' });
-            //code = await res.text();
-            debugger;
             eval(`
                 ${code}
                 _CryptoJS = CryptoJS;
