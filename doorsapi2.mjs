@@ -31,7 +31,7 @@ await (async () => {
     if (typeof(moment) == 'undefined') {
         if (inNode()) {
             // todo: si da problemas levantar como el crypto
-            res = await import('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
+            res = await webImport('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
             _moment = res.default.default;
         } else {
             await incjs.include('lib-moment');
@@ -47,7 +47,7 @@ await (async () => {
     if (typeof(numeral) == 'undefined') {
         if (inNode()) {
             // todo: si da problemas levantar como el crypto
-            res = await import('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
+            res = await webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
         } else {
             await incjs.include('lib-numeral');
@@ -88,6 +88,7 @@ await (async () => {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
+            // todo: usar cdnImport con localPath
             res = await fetch(incjs.scriptSrc('lib-cryptojs-aes'));
             code = await res.text();
             eval(`
@@ -106,7 +107,7 @@ await (async () => {
     // serialize-error - https://github.com/sindresorhus/serialize-error
 
     if (typeof(_serializeError) == 'undefined') {
-        res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+        res = await webImport('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
         _serializeError = res.default;
     }
     if (!inNode() && window.serializeError == undefined) {
