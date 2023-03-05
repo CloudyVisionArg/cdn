@@ -11,12 +11,11 @@ var _moment, _numeral, _CryptoJS, _serializeError;
 export { _moment as moment };
 export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
-export { _serializeError as serializeError };
 
 await (async () => {
-    //if (inNode()) {
+    if (inNode()) {
         var importCache = await import ('./../import-cache.mjs');
-    //}
+    }
 
     // include
 
@@ -107,12 +106,9 @@ await (async () => {
 
     // serialize-error - https://github.com/sindresorhus/serialize-error
 
-    if (typeof(_serializeError) == 'undefined') {
+    if (inNode() && typeof(_serializeError) == 'undefined') {
         res = await importCache.webImport('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
         _serializeError = res.default;
-    }
-    if (!inNode() && window.serializeError == undefined) {
-        window.serializeError = _serializeError;
     }
 
 
