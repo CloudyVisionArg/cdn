@@ -27,13 +27,13 @@ await (async () => {
         incjs.include = include;
         incjs.scriptSrc = scriptSrc;
     `);
-debugger;
 
     // moment - https://momentjs.com/docs/
 
     if (typeof(moment) == 'undefined') {
         if (inNode()) {
             // todo: si da problemas levantar como el crypto
+            debugger;
             res = await importCache.webImport('https://cdn.jsdelivr.net/npm/moment-with-locales-es6@1.0.1/+esm');
             _moment = res.default.default;
         } else {
