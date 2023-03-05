@@ -11,6 +11,7 @@ var _moment, _numeral, _CryptoJS, _serializeError;
 export { _moment as moment };
 export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
+export { _serializeError as serializeError }
 
 await (async () => {
     if (inNode()) {
@@ -106,11 +107,16 @@ await (async () => {
 
     // serialize-error - https://github.com/sindresorhus/serialize-error
 
-    if (inNode() && typeof(_serializeError) == 'undefined') {
-        res = await importCache.webImport('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
-        _serializeError = res.default;
+    if (typeof(_serializeError) == 'undefined') {
+        if (inNode()) {
+            res = await importCache.webImport('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+            _serializeError = res.default;
+        } else {
+            res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+            _serializeError = res.default;
+            window.serializeError = _serializeError;
+        }
     }
-
 
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
