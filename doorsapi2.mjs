@@ -34,7 +34,7 @@ await (async () => {
         if (inNode()) {
             // todo: si da problemas levantar como el crypto
 
-            res = await import('../lib/moment.mjs');
+            res = await import('../../lib/moment.mjs');
             debugger;
             _moment = res.default.default;
         } else {
