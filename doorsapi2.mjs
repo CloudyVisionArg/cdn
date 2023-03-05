@@ -1194,10 +1194,6 @@ export class Document {
         }
     }
 
-    fld(name, value) {
-        return this.fields(name, value);
-    }
-
     get folder() {
         return this.parent
     }
