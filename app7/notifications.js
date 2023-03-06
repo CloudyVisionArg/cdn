@@ -418,6 +418,7 @@ function clickOnEnvelope(ev) {
 }
 
 function clickOnAnchor(ev) {
+    debugger;
     let ExtraData = JSON.parse($(ev.target).closest("a").attr("extradata"))
     let doc_id = ExtraData.doc_id;
     let fld_id = ExtraData.fld_id;
