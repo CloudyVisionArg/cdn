@@ -1731,6 +1731,10 @@ export class Folder {
         });
     }
 
+    get formId() {
+        return this.#json.FrmId;
+    }
+
     get id() {
         return this.#json.FldId;
     }
