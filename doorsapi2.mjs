@@ -19,7 +19,6 @@ await (async () => {
         var fs = await import('fs');
 
     } else {
-        debugger;
         if (window.scriptSrc == undefined) {
             // include
             var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
