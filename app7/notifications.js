@@ -199,6 +199,15 @@ var $divActions = $("<div/>").appendTo($pageCont);
 var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
+// Evento taphold
+if (device.platform == 'browser') {
+    // El taphold no anda en el browser
+    $listMembers.on('contextmenu', 'a', taphold);
+} else {
+    $listMembers.on('taphold', 'a', taphold);
+};
+
+
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "I"){
         if(ev.target.classList.contains("btnRead")){
