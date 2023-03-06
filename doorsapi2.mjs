@@ -1419,7 +1419,7 @@ export class Document {
         return this.#session;
     }
 
-    subject() {
+    get subject() {
         return this.fields('subject').value;
     }
 
