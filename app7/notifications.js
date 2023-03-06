@@ -578,6 +578,7 @@ function toggleSelectionMode() {
 }
 
 function taphold(e) {
+    console.log("TAPHOLD");
     var $list = $(this).closest('div.list');
     if ($list.hasClass('media-list')) {
         var $li = $(this).closest('li');
