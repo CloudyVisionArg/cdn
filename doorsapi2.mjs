@@ -962,19 +962,25 @@ class Database {
         `);
     
         var txt = await res.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(txt, 'application/xml');
-        const err = xml.querySelector('parsererror');
-        if (err) throw new Error('Error parsing xml');
-    
-        var ret = [];
-        var rows = xml.querySelectorAll('data row');
-        for (var row of rows) {
-            var r = {};
-            for (var att of row.attributes) {
-                r[att.name] = att.value;
-            };
-            ret.push(r);
+
+        if (inNode()) {
+            // todo: https://geshan.com.np/blog/2022/11/nodejs-xml-parser/
+        
+        } else {
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(txt, 'application/xml');
+            const err = xml.querySelector('parsererror');
+            if (err) throw new Error('Error parsing xml');
+        
+            var ret = [];
+            var rows = xml.querySelectorAll('data row');
+            for (var row of rows) {
+                var r = {};
+                for (var att of row.attributes) {
+                    r[att.name] = att.value;
+                };
+                ret.push(r);
+            }
         }
         return ret;
     }
