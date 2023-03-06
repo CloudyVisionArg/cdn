@@ -17,17 +17,19 @@ await (async () => {
     if (inNode()) {
         var importCache = await import ('./../import-cache.mjs');
         var fs = await import('fs');
+    } else {
+        debugger;
+        if (window.scriptSrc == undefined) {
+            // include
+            var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
+            var code = await res.text();
+            eval(`
+                ${code}
+                window.include = include;
+                window.scriptSrc = scriptSrc;
+            `);
+        }
     }
-
-    // include
-
-    var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
-    var code = await res.text();
-    eval(`
-        ${code}
-        incjs.include = include;
-        incjs.scriptSrc = scriptSrc;
-    `);
 
     // moment - https://momentjs.com/docs/
 
