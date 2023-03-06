@@ -1686,6 +1686,7 @@ function saveAtt() {
 
                     getFile($this.attr('data-att-url')).then(
                         function (file) {
+                            debugger;
                             var reader = new FileReader();
                             reader.onloadend = function (e) {
                                 var blobData = new Blob([this.result], { type: file.type });
