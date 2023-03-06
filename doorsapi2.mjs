@@ -2346,8 +2346,9 @@ class Utilities {
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
         } else {
-            dt = _moment(date, 'L LTS').toDate();
-            if (isNaN(dt.getTime())) dt = new Date(date);
+            dt = _moment(date, 'L LTS').toDate(); // moment con locale
+            if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin locale
+            if (isNaN(dt.getTime())) dt = new Date(date); // native
         }
         if(!isNaN(dt.getTime())) {
             return dt;
