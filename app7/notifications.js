@@ -202,9 +202,9 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 // Evento taphold
 if (device.platform == 'browser') {
     // El taphold no anda en el browser
-    $listMembers.on('contextmenu', 'a', taphold);
+    $ulMembers.on('contextmenu', 'a', taphold);
 } else {
-    $listMembers.on('taphold', 'a', taphold);
+    $ulMembers.on('taphold', 'a', taphold);
 };
 
 
@@ -418,7 +418,6 @@ function clickOnEnvelope(ev) {
 }
 
 function clickOnAnchor(ev) {
-    debugger;
     if(ev.target.closest("a")){
         if(ev.target.closest("a").hasAttribute("extradata")){
             let ExtraData = JSON.parse(ev.target.closest("a").getAttribute("extradata"))
