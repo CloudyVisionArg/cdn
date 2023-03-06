@@ -1192,6 +1192,7 @@ export class Document {
 
     get created() {
         // todo
+        debugger;
     }
 
     currentAccess(access, explicit) {
