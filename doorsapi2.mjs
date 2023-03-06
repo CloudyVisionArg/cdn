@@ -2486,7 +2486,7 @@ class Utilities {
         return uuid;
     }
 
-    get inNode() {
+    inNode() {
         return inNode();
     }
 
