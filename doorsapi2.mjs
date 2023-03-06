@@ -31,7 +31,7 @@ await (async () => {
         }
     }
 
-    
+
     // moment - https://momentjs.com/docs/
 
     if (typeof(moment) == 'undefined') {
@@ -51,7 +51,7 @@ await (async () => {
 
     if (typeof(numeral) == 'undefined') {
         if (inNode()) {
-            // todo: si da problemas levantar como el crypto
+            // si da problemas levantar como el crypto
             res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
         } else {
@@ -93,7 +93,6 @@ await (async () => {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
-            // todo: usar cdnImport con localPath
             res = await importCache.cdnImport({ id: 'lib-cryptojs-aes', localPath: true });
             code = await fs.readFileSync('./service/' + res, { encoding: 'utf8' });
             eval(`
@@ -792,6 +791,7 @@ class Attachment {
     #json;
     #properties;
     #userProperties;
+    #owner;
 
     constructor(attachment, document) {
         this.#json = attachment;
@@ -883,7 +883,20 @@ class Attachment {
     }
 
     get owner() {
-        //todo: retornar account
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#owner) {
+                me.session.directory.accounts(me.ownerId).then(
+                    res => {
+                        me.#owner = res.cast2User();
+                        resolve(me.#owner);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#owner);
+            }
+        });
     }
 
     get ownerId() {
@@ -1073,9 +1086,25 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
+    acl() {
+        //todo
+    }
+
     aclGrant(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.fetch(url, 'POST', {}, '');
+    }
+
+    aclInherited() {
+        //todo
+    }
+
+    get aclInherits() {
+        //todo
+    }
+
+    aclOwn() {
+        //todo
     }
 
     aclRevoke(account, access) {
@@ -1127,7 +1156,6 @@ export class Document {
                             me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
                                 accs => {
                                     res.forEach(el => {
-                                        //todo: aca se podria setear un objecto account en vez del name solo
                                         el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                                         me.#attachmentsMap.set(el.Name, new Attachment(el, me));
                                     });
@@ -1158,16 +1186,24 @@ export class Document {
         return att;
     }
 
+    copy(folder) {
+        // todo
+    }
+
+    get created() {
+        // todo
+    }
+
+    currentAccess(access, explicit) {
+        // todo
+    }
+
     delete(purge) {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
             encURIC(purge == true ? false : true);
         return me.session.restClient.fetch(url, 'DELETE', [me.id], 'docIds');
         //todo: en q estado queda el objeto?
-    }
-
-    get id() {
-        return this.#json.DocId;
     }
 
     fields(name, value) {
@@ -1210,12 +1246,73 @@ export class Document {
         return this.parentId
     }
 
+    get folderId() {
+        return this.parentId
+    }
+
+    get form() {
+        // todo
+    }
+
+    get formId() {
+        // todo
+    }
+
+    get icon() {
+        // todo
+    }
+
+    get iconRaw() {
+        // todo
+    }
+
+    get id() {
+        return this.#json.DocId;
+    }
+
     get isNew() {
         return this.#json.IsNew;
     }
 
+    log() {
+        // todo
+    }
+
     get objectType() {
         return Document.objectType;
+    }
+
+    get modified() {
+        // todo
+    }
+
+    move(folder) {
+        // todo
+    }
+
+    get owner() {
+        /* todo
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#owner) {
+                me.session.directory.accounts(me.ownerId).then(
+                    res => {
+                        me.#owner = res.cast2User();
+                        resolve(me.#owner);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#owner);
+            }
+        });
+        */
+    }
+
+    get ownerId() {
+        /* todo
+        return this.#json.AccId
+        */
     }
 
     get parent() {
@@ -1274,11 +1371,11 @@ export class Document {
 
                     if (el.isNew) {
                         var formData = new FormData();
-                        // todo: como subimos el Tag?
+                        // todo: probar
                         var arrBuf = await el.fileStream;
                         formData.append('attachment', new Blob([arrBuf]), el.name);
-                        formData.append('description', el.description); // todo probar
-                        //formData.append('group', el.group);
+                        formData.append('description', el.description);
+                        formData.append('group', el.group);
                         var url = 'documents/' + me.id + '/attachments';
                         proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
 
@@ -1464,6 +1561,47 @@ export class Folder {
         this.#json = folder;
         this.#session = session;
         if (parent) this.#parent = parent;
+    }
+
+    acl() {
+        //todo
+    }
+
+    aclGrant(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
+        return this.session.restClient.fetch(url, 'POST', {}, '');
+        */
+    }
+
+    aclInherited() {
+        //todo
+    }
+
+    get aclInherits() {
+        //todo
+    }
+
+    aclOwn() {
+        //todo
+    }
+
+    aclRevoke(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
+    aclRevokeAll(account) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/revokeAll';
+        if (account) {
+            // Si viene account es un revokeAll para esa cuenta
+            url += '/' + account;
+        }
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
     }
 
     get app() {
@@ -1691,6 +1829,35 @@ class Form {
     constructor(form, session) {
         this.#json = form;
         this.#session = session;
+    }
+
+    acl() {
+        //todo
+    }
+
+    aclGrant(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
+        return this.session.restClient.fetch(url, 'POST', {}, '');
+        */
+    }
+
+    aclRevoke(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
+    aclRevokeAll(account) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/revokeAll';
+        if (account) {
+            // Si viene account es un revokeAll para esa cuenta
+            url += '/' + account;
+        }
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
     }
 
     get description() {
@@ -2212,6 +2379,7 @@ class Utilities {
         return num;
     }
 
+    // https://code.google.com/archive/p/crypto-js/
     get cryptoJS() {
         return _CryptoJS;
     }
@@ -2255,6 +2423,19 @@ class Utilities {
         return JSON.stringify(err);
     }
 
+    getGuid() {
+        var uuid = '', i, random;
+        for (i = 0; i < 32; i++) {
+            random = Math.random() * 16 | 0;
+    
+            if (i == 8 || i == 12 || i == 16 || i == 20) {
+                uuid += '-'
+            }
+            uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+        }
+        return uuid;
+    }
+
     get inNode() {
         return inNode();
     }
@@ -2284,7 +2465,8 @@ class Utilities {
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
     }
-    
+
+    // https://momentjs.com/docs/
     get moment() {
         return _moment;
     }
@@ -2303,10 +2485,12 @@ class Utilities {
         return e;
     }
 
+    // http://numeraljs.com/
     get numeral() {
         return _numeral;
     }
 
+    // https://github.com/sindresorhus/serialize-error
     serializeError(err) {
         return _serializeError.serializeError(err);
     }
@@ -2394,6 +2578,47 @@ class View {
         this.#json = view;
         this.#session = session;
         if (folder) this.#parent = folder;
+    }
+
+    acl() {
+        //todo
+    }
+
+    aclGrant(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
+        return this.session.restClient.fetch(url, 'POST', {}, '');
+        */
+    }
+
+    aclInherited() {
+        //todo
+    }
+
+    get aclInherits() {
+        //todo
+    }
+
+    aclOwn() {
+        //todo
+    }
+
+    aclRevoke(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
+    aclRevokeAll(account) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/revokeAll';
+        if (account) {
+            // Si viene account es un revokeAll para esa cuenta
+            url += '/' + account;
+        }
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
     }
 
     get objectType() {
