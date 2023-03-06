@@ -1077,6 +1077,7 @@ export class Document {
     #attachmentsMap;
     #properties;
     #userProperties;
+    #owner;
 
     constructor(document, session, folder) {
         this.#json = document;
@@ -1191,8 +1192,7 @@ export class Document {
     }
 
     get created() {
-        // todo
-        debugger;
+        return this.fields('created').value;
     }
 
     currentAccess(access, explicit) {
@@ -1256,15 +1256,11 @@ export class Document {
     }
 
     get formId() {
-        // todo
+        return this.fields('frm_id').value;
     }
 
     get icon() {
-        // todo
-    }
-
-    get iconRaw() {
-        // todo
+        return this.fields('icon').value;
     }
 
     get id() {
@@ -1284,7 +1280,7 @@ export class Document {
     }
 
     get modified() {
-        // todo
+        return this.fields('modified').value;
     }
 
     move(folder) {
@@ -1292,7 +1288,6 @@ export class Document {
     }
 
     get owner() {
-        /* todo
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#owner) {
@@ -1307,13 +1302,10 @@ export class Document {
                 resolve(me.#owner);
             }
         });
-        */
     }
 
     get ownerId() {
-        /* todo
-        return this.#json.AccId
-        */
+        return this.fields('acc_id').value;
     }
 
     get parent() {
