@@ -419,20 +419,23 @@ function clickOnEnvelope(ev) {
 
 function clickOnAnchor(ev) {
     debugger;
-    let ExtraData = JSON.parse($(ev.target).closest("a").attr("extradata"))
-    let doc_id = ExtraData.doc_id;
-    let fld_id = ExtraData.fld_id;
-    if($(ev.target).closest("a").hasClass("msgunread")){
-        $(ev.target).closest("a").removeClass("msgunread");
-        $(ev.target).closest("a").addClass("msgread");
-        setNotificationUnReadCounter($(".msgunread").length);
+    if(ev.target.closest("a")){
+        if(ev.target.closest("a").hasAttribute("extradata")){
+            let ExtraData = JSON.parse(ev.target.closest("a").getAttribute("extradata"))
+            let doc_id = ExtraData.doc_id;
+            let fld_id = ExtraData.fld_id;
+            if($(ev.target).closest("a").hasClass("msgunread")){
+                $(ev.target).closest("a").removeClass("msgunread");
+                $(ev.target).closest("a").addClass("msgread");
+                setNotificationUnReadCounter($(".msgunread").length);
+            }
+            DoorsAPI.notificationsRead($(ev.target).closest("a").attr("id"));
+            searchNotifications()
+            if(doc_id !== undefined && fld_id !== undefined){
+                f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id); 
+            }
+        }
     }
-    DoorsAPI.notificationsRead($(ev.target).closest("a").attr("id"));
-    searchNotifications()
-    if(doc_id !== undefined && fld_id !== undefined){
-        f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id); 
-    }
-    
 };        
 
 function setNotificationUnReadCounter(unReadCount){
