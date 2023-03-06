@@ -954,6 +954,31 @@ class Database {
         // todo
     }
 
+    async openRecordset(sql) {
+        var res = await this.session.utils.execApi(`
+            Set rcs = dSession.Db.OpenRecordset("${ sql.replaceAll('"', '""') }")
+            rcs.Save Response, 1
+            Response.End
+        `);
+    
+        var txt = await res.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(txt, 'application/xml');
+        const err = xml.querySelector('parsererror');
+        if (err) throw new Error('Error parsing xml');
+    
+        var ret = [];
+        var rows = xml.querySelectorAll('data row');
+        for (var row of rows) {
+            var r = {};
+            for (var att of row.attributes) {
+                r[att.name] = att.value;
+            };
+            ret.push(r);
+        }
+        return ret;
+    }
+
     // Alias de sqlEncode
     sqlEnc(value, type) {
         return this.sqlEncode(value, type);
@@ -2416,6 +2441,32 @@ class Utilities {
             }
         }
         return JSON.stringify(err);
+    }
+
+    async execVbs(code) {
+        var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
+            '&code=' + encodeURIComponent(code);
+    
+        var res = await fetch(this.session.serverUrl.replace('restful', 'c/execapi.asp'), {
+            method: 'POST',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+            body: data,
+        })
+    
+        if (!res.ok) {
+            var js = await res.json();
+            var err = new Error();
+            err.name = js.source;
+            err.message = js.description + ' at line ' + js.line + '\n' + js.code;
+            err.lineNumber = js.line;
+            throw err;
+    
+        } else {
+            return res;
+        }
     }
 
     getGuid() {
