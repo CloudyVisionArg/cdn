@@ -31,6 +31,7 @@ await (async () => {
         }
     }
 
+    
     // moment - https://momentjs.com/docs/
 
     if (typeof(moment) == 'undefined') {
@@ -45,7 +46,7 @@ await (async () => {
         _moment = moment;
     }
 
-    
+
     // numeral - http://numeraljs.com/
 
     if (typeof(numeral) == 'undefined') {
