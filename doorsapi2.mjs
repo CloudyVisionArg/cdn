@@ -94,7 +94,7 @@ await (async () => {
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
             res = await importCache.cdnImport({ id: 'lib-cryptojs-aes', localPath: true });
-            code = await fs.readFileSync('./service/' + res, { encoding: 'utf8' });
+            code = fs.readFileSync('./service/' + res, { encoding: 'utf8' });
             eval(`
                 ${code}
                 _CryptoJS = CryptoJS;
@@ -1520,6 +1520,7 @@ class Field {
     }
 
     get value() {
+        //todo convertir a fecha
         return this.#json.Value;
     }
 
@@ -2348,7 +2349,7 @@ class Utilities {
         } else {
             dt = _moment(date, 'L LTS').toDate(); // moment con locale
             if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin locale
-            if (isNaN(dt.getTime())) dt = new Date(date); // native
+            if (isNaN(dt.getTime())) dt = new Date(date); // nativo
         }
         if(!isNaN(dt.getTime())) {
             return dt;
