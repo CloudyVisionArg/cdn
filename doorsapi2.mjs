@@ -17,6 +17,7 @@ await (async () => {
     if (inNode()) {
         var importCache = await import ('./../import-cache.mjs');
         var fs = await import('fs');
+
     } else {
         debugger;
         if (window.scriptSrc == undefined) {
@@ -38,7 +39,7 @@ await (async () => {
             res = await importCache.webImport('https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment-with-locales.min.js/+esm');
             _moment = res.default;
         } else {
-            await incjs.include('lib-moment');
+            await include('lib-moment');
             _moment = moment;
         }
     } else {
@@ -54,7 +55,7 @@ await (async () => {
             res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
         } else {
-            await incjs.include('lib-numeral');
+            await include('lib-numeral');
             _numeral = numeral;
         }
     } else {
@@ -100,7 +101,7 @@ await (async () => {
                 _CryptoJS = CryptoJS;
             `);
         } else {
-            await incjs.include('lib-cryptojs-aes');
+            await include('lib-cryptojs-aes');
             _CryptoJS = CryptoJS;
         }
     } else {
