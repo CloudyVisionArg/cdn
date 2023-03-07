@@ -107,7 +107,6 @@ async function loadUtils() {
 
     if (typeof(_serializeError) == 'undefined') {
         if (inNode()) {
-            debugger;
             res = await import('serialize-error');
             _serializeError = res;
         } else {
