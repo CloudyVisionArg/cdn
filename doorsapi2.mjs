@@ -33,7 +33,7 @@ async function loadUtils() {
         var importCache = await import ('../import-cache.mjs');
 
     } else {
-        if (window.scriptSrc == undefined) {
+        if (window.include == undefined) {
             // include
             var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
             var code = await res.text();
