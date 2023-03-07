@@ -989,7 +989,6 @@ class Database {
         });
         var json = parser.parse(txt);
 
-        debugger;
         var ret = [];
         json.xml.data.row.forEach((el, ix) => {
             var r = {};
