@@ -73,6 +73,7 @@ async function loadUtils() {
             await import('numeral/locales/es.js');
         } else {
             await include('lib-numeral');
+            await include('lib-numeral-locales');
             _numeral = numeral;
         }
     } else {
