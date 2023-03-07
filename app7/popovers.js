@@ -6,6 +6,30 @@ function btnClosePopover(btn){
     app7.popover.close(btn.closest(".popover"));
 }
 
+injectCSS(`
+    .popover-inner{
+        padding: 0px 4vmin;
+    }
+
+    .popover-custom-body{
+        padding: 0px;
+        margin: 4vmin 0.4vmin;
+    }
+
+    .popover-custom-body-text{
+        font-size: 1.17em;
+    }
+
+    .popover-custom-title-text{
+        padding-left: 0.3em;
+    }
+
+    .popover-custom-button{
+        margin-left: 60%;
+    }
+
+`);
+
 fetch(scriptSrc('app7-popovers.json'))
 .then(response => {
     if (!response.ok) {
@@ -52,10 +76,10 @@ function crearCarteles(pCartel,index,array){
 
     const divInner = document.createElement("div");
     divInner.classList.add("popover-inner");
-    divInner.style = "padding: 0px 1vmin"
+    //divInner.style = "padding: 0px 1vmin"
     div.append(divInner);
     
-    const closeBtnIconMD = document.createElement("i");
+    /*const closeBtnIconMD = document.createElement("i");
     closeBtnIconMD.classList.add("material-icons", "md-only","float-right");    
     closeBtnIconMD.innerText = "close"
     closeBtnIconMD.setAttribute("onclick","btnClosePopover(this)");
@@ -65,7 +89,7 @@ function crearCarteles(pCartel,index,array){
     closeBtnIconIOS.classList.add("f7-icons", "ios-only","float-right");    
     closeBtnIconIOS.innerText = "xmark"
     closeBtnIconIOS.setAttribute("onclick","btnClosePopover(this)");
-    divInner.append(closeBtnIconIOS);
+    divInner.append(closeBtnIconIOS);*/
 
     
     const elTitle = document.createElement("h3");
@@ -84,19 +108,26 @@ function crearCarteles(pCartel,index,array){
     elTitle.append(elIconIOS);
 
     const elTitleText = document.createElement("span");
-    elTitleText.style = "padding-left: 1rem"
+    elTitleText.classList.add("popover-custom-title-text")
     elTitleText.innerText = pCartel["title"]
     elTitle.append(elTitleText);
 
     const divBlock = document.createElement("div");
-    divBlock.style = "padding: 0px 1vmin; margin: 1vmin 1vmin 1rem"
-    divBlock.classList.add("block");
+    divBlock.classList.add("block","popover-custom-body");
     divInner.append(divBlock);
 
     const elTextCartel = document.createElement("p");      
     elTextCartel.innerHTML = pCartel["text"];
-    elTextCartel.style = "font-size: large"
+    elTextCartel.classList.add("popover-custom-body-text");
     divBlock.append(elTextCartel);
+
+    const elButtonOk = document.createElement("button");
+    elButtonOk.setAttribute("type","button");
+    elButtonOk.classList.add("popover-custom-button");
+    elButtonOk.setAttribute("onclick","btnClosePopover(this)");
+    elButtonOk.innerText = "Ok"
+    divInner.append(elButtonOk);
+
 
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
@@ -213,3 +244,11 @@ function generarCarteles(pScope){
         renderPopovers(arrCartelesFijos);
     }
 }
+
+function injectCSS(css){
+    let el = document.createElement('style');
+    el.type = 'text/css';
+    el.innerHTML = css;
+    document.head.appendChild(el);
+    return el;
+};
