@@ -991,13 +991,11 @@ class Database {
 
         debugger;
         var ret = [];
-        for (var row of json.xml.data.row) {
+        json.xml.data.row.forEach((el, ix) => {
             var r = {};
-            for (var att of row.attributes) {
-                r[att.name] = att.value;
-            };
+            Object.assign(r, el);
             ret.push(r);
-        }
+        })
         
         return ret;
     }
