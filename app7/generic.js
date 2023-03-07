@@ -1702,7 +1702,8 @@ function saveAtt() {
                                     }
                                 )
                             };
-                            reader.readAsArrayBuffer(file);
+                            //reader.readAsArrayBuffer(file);
+                            reader.readAsText(file);
     
                         },
                         function (err) {
