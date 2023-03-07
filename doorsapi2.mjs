@@ -14,7 +14,7 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
-var utilsProm = loadUtils();
+var utilsPromise = loadUtils(); // esperar asi 
 debugger;
 
 async function loadUtils() {
@@ -50,6 +50,8 @@ async function loadUtils() {
         _moment = moment;
     }
 
+    _moment.locale('es'); // todo: setear a partir del lngId
+    
 
     // numeral - http://numeraljs.com/
 
@@ -91,6 +93,10 @@ async function loadUtils() {
             }
         });
     }
+
+    // todo: setear a partir del lngId
+    _numeral.locale('es');
+    _numeral.defaultFormat('0,0.[00]');
 
 
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
@@ -251,11 +257,6 @@ export class Session {
         this.#restClient = new RestClient(serverUrl, authToken, this);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
-
-        // todo: setear a partir del lngId
-        _moment.locale('es'); 
-        _numeral.locale('es');
-        _numeral.defaultFormat('0,0.[00]');
     }
     
     get authToken() {
