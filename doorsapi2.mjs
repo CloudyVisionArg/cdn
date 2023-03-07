@@ -71,6 +71,7 @@ async function loadUtils() {
             // si da problemas levantar como el crypto
             debugger;
             res = await import('numeral');
+            await import('numeral/locales/es');
 
             //res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
