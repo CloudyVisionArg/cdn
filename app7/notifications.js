@@ -551,7 +551,7 @@ function toggleSelectionMode() {
             $navbar.addClass('with-searchbar-expandable-enabled');
             searchBar.$el.show();
         }
-        $views.parent().removeClass('disabled');
+        //$views.parent().removeClass('disabled');
         $navbar.find('#buttonSearch').show();
         $navbar.find('#buttonMenu').show();
         $navbar.find('#buttonActions').hide();
@@ -571,7 +571,7 @@ function toggleSelectionMode() {
             searchBar.$el.hide();
             $navbar.removeClass('with-searchbar-expandable-enabled');
         }
-        $views.parent().addClass('disabled');
+        //$views.parent().addClass('disabled');
         $navbar.find('#buttonSearch').hide();
         $navbar.find('#buttonMenu').hide();
         $navbar.find('#buttonActions').show();
