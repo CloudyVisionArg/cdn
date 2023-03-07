@@ -1144,6 +1144,9 @@ export class Document {
     #userProperties;
     #owner;
 
+    // todo: como pasamos los attachs en memoria?
+    // https://gist.github.com/jonathanlurie/04fa6343e64f750d03072ac92584b5df
+
     constructor(document, session, folder) {
         this.#json = document;
         this.#session = session;
@@ -1491,7 +1494,7 @@ export class Document {
         if (!log) log = '';
         
         var dt = new Date();
-        var dts = dt.getDate() + '/' + (dt.getMonth() + 1) + ' ' + this.session.utils.isoTime(dt, true);
+        var dts = dt.getSeconds() + '.' + dt.getMilliseconds();
         log = dts + ' - ' + this.session.utils.errMsg(msg) + '\n' + log.substring(0, 1024*64);
         this.tags.log = log;
     }
