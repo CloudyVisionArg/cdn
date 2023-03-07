@@ -73,7 +73,7 @@ async function loadUtils() {
             res = await import('numeral');
 
             //res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
-            _numeral = res.default.default;
+            _numeral = res.default;
         } else {
             await include('lib-numeral');
             _numeral = numeral;
