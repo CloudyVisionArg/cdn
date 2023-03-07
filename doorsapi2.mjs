@@ -978,11 +978,11 @@ class Database {
         var txt = await res.text();
 
         debugger;
-        
+
         if (inNode()) {
             // todo: https://geshan.com.np/blog/2022/11/nodejs-xml-parser/
 
-            var parser = new XMLParser();
+            var parser = new _fastXmlParser.XMLParser();
             var json = parser.parse(txt);
             debugger;
         
