@@ -69,7 +69,10 @@ async function loadUtils() {
     if (typeof(numeral) == 'undefined') {
         if (inNode()) {
             // si da problemas levantar como el crypto
-            res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
+            debugger;
+            res = await import('numeral-es6');
+
+            //res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
         } else {
             await include('lib-numeral');
