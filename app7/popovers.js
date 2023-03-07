@@ -25,9 +25,13 @@ injectCSS(`
     }
 
     .popover-custom-button{
-        margin-left: 60%;
+        margin-left: 70%;
+        width: 30%;
     }
 
+    .popover-custom-button-container{
+        margin-bottom: 4vmin;        
+    }
 `);
 
 fetch(scriptSrc('app7-popovers.json'))
@@ -125,7 +129,7 @@ function crearCarteles(pCartel,index,array){
     elButtonOk_container.classList.add("popover-custom-button-container")
     const elButtonOk = document.createElement("button");
     elButtonOk.setAttribute("type","button");
-    elButtonOk.classList.add("popover-custom-button","button","button-small");
+    elButtonOk.classList.add("popover-custom-button","button");
     elButtonOk.setAttribute("onclick","btnClosePopover(this)");
     elButtonOk.innerText = "Ok"
     elButtonOk_container.append(elButtonOk);
