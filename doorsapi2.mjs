@@ -6,7 +6,7 @@ swagger: http://tests.cloudycrm.net/apidocs
 */
 
 var incjs = {};
-var _moment, _numeral, _CryptoJS, _serializeError;
+var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser;
 
 export { _moment as moment };
 export { _numeral as numeral };
@@ -118,6 +118,21 @@ await (async () => {
             res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
             _serializeError = res.default;
             window.serializeError = _serializeError;
+        }
+    }
+
+
+    // fast-xml-parser - https://github.com/NaturalIntelligence/fast-xml-parser
+
+    debugger;
+    if (typeof(_fastXmlParser) == 'undefined') {
+        if (inNode()) {
+            var res = await importCache.webImport('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
+            _fastXmlParser = res.default;
+        } else {
+            var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
+            _fastXmlParser = res.default;
+            window.fastXmlParser = _fastXmlParser;
         }
     }
 
