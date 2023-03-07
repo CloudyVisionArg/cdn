@@ -1616,7 +1616,7 @@ class Field {
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         debugger;
         if (this.type == 2) {
-            var dt = this.session.utils.cDate(dt);
+            var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
         } else {
             this.#json.Value = value;
