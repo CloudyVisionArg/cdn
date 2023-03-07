@@ -31,7 +31,7 @@ arrScriptsPre.push({ id: 'web-javascript', depends: ['jquery', 'bootstrap'] });
 
 // Includes que tienen que estar antes de dibujar la pag
 var arrScripts = [];
-arrScripts.push({ id: 'doorsapi', depends: ['jquery'] });
+//arrScripts.push({ id: 'doorsapi', depends: ['jquery'] });
 arrScripts.push({ id: 'web-controls' });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
