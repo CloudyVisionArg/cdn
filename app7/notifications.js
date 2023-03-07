@@ -201,9 +201,11 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 // Evento taphold
 if (device.platform == 'browser') {
+    console.log("BROSER TAPHOLD CONTEXTMENU")
     // El taphold no anda en el browser
     $listMembers.on('contextmenu', 'a', taphold);
 } else {
+    console.log("NOT BROSER TAPHOLD TAPHOLD")
     $listMembers.on('taphold', 'a', taphold);
 };
 
