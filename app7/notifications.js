@@ -202,9 +202,9 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 // Evento taphold
 if (device.platform == 'browser') {
     // El taphold no anda en el browser
-    $ulMembers.on('contextmenu', 'a', taphold);
+    $listMembers.on('contextmenu', 'a', taphold);
 } else {
-    $ulMembers.on('taphold', 'a', taphold);
+    $listMembers.on('taphold', 'a', taphold);
 };
 
 
