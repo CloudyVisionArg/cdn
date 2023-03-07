@@ -162,7 +162,7 @@ async function loadUtils() {
     }
 };
 
-await loadUtils();
+loadUtils();
 
 
 export function inNode() {
