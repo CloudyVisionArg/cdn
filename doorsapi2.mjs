@@ -413,7 +413,10 @@ export class Session {
         })
     };
 
-    logon(login, password, instance, liteMode) {
+    async logon(login, password, instance, liteMode) {
+        debugger;
+        await utilsPromise;
+
         var me = this;
         var url = 'session/logon';
         var data = {
