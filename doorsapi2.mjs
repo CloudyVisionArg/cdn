@@ -1616,6 +1616,10 @@ class Field {
         return this.#json.ValueChanged;
     }
 
+    get valueEmpty() {
+        return (this.value == null || this.value == undefined || this.value == '');
+    }
+
     get valueOld() {
         return this.#json.ValueOld;
     }
