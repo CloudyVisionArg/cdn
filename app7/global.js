@@ -1439,7 +1439,7 @@ function statusBar(pShow) {
     if(_isCapacitor()){
         refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
         refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
-        refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
+        //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
         refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
         refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
     }else{
