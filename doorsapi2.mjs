@@ -107,7 +107,7 @@ async function loadUtils() {
 
     if (typeof(_serializeError) == 'undefined') {
         if (inNode()) {
-            res = await importCache.webImport('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+            res = await import('serialize-error');
             _serializeError = res.default;
         } else {
             res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
