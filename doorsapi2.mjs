@@ -1614,7 +1614,7 @@ class Field {
     set value(value) {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
-        debugger;
+        
         if (this.type == 2) {
             var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
