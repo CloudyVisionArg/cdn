@@ -109,7 +109,7 @@ async function loadUtils() {
         if (inNode()) {
             debugger;
             res = await import('serialize-error');
-            _serializeError = res.default;
+            _serializeError = res;
         } else {
             res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
             _serializeError = res.default;
