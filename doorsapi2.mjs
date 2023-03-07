@@ -1495,7 +1495,7 @@ export class Document {
         
         var dt = new Date();
         var dts = dt.getSeconds() + '.' + dt.getMilliseconds();
-        log = dts + ' - ' + this.session.utils.errMsg(msg) + '\n' + log.substring(0, 1024*64);
+        log = log.substring(0, 1024*64) + '\n' + dts + ' - ' + this.session.utils.errMsg(msg);
         this.tags.log = log;
     }
 
