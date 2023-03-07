@@ -977,38 +977,28 @@ class Database {
     
         var txt = await res.text();
 
+        // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+        var parser = new _fastXmlParser.XMLParser({
+            ignoreAttributes: false,
+            ignoreDeclaration: true,
+            removeNSPrefix: true,
+            trimValues: true,
+            parseAttributeValue: true,
+            attributeNamePrefix : '',
+            attributesGroupName : 'attributes',
+        });
+        var json = parser.parse(txt);
+
         debugger;
-
-        if (inNode()) {
-            // todo: https://geshan.com.np/blog/2022/11/nodejs-xml-parser/
-
-            var parser = new _fastXmlParser.XMLParser({
-                ignoreAttributes: false,
-                ignoreDeclaration: true,
-                removeNSPrefix: true,
-                trimValues: true,
-                parseAttributeValue: true,
-                attributeNamePrefix : "@_"
-            });
-            var json = parser.parse(txt);
-            debugger;
-        
-        } else {
-            const parser = new DOMParser();
-            const xml = parser.parseFromString(txt, 'application/xml');
-            const err = xml.querySelector('parsererror');
-            if (err) throw new Error('Error parsing xml');
-        
-            var ret = [];
-            var rows = xml.querySelectorAll('data row');
-            for (var row of rows) {
-                var r = {};
-                for (var att of row.attributes) {
-                    r[att.name] = att.value;
-                };
-                ret.push(r);
-            }
+        var ret = [];
+        for (var row of json.xml.data.row) {
+            var r = {};
+            for (var att of row.attributes) {
+                r[att.name] = att.value;
+            };
+            ret.push(r);
         }
+        
         return ret;
     }
 
