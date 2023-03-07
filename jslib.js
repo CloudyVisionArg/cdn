@@ -505,8 +505,8 @@ function cDate(pDate) {
     if (Object.prototype.toString.call(pDate) === '[object Date]') {
         dt = pDate;
     } else {
-        dt = _moment(pDate, 'L LTS').toDate(); // moment con locale
-        if (isNaN(dt.getTime())) dt = _moment(pDate).toDate(); // moment sin locale
+        dt = moment(pDate, 'L LTS').toDate(); // moment con locale
+        if (isNaN(dt.getTime())) dt = moment(pDate).toDate(); // moment sin locale
         if (isNaN(dt.getTime())) dt = new Date(pDate); // nativo
     }
     if(!isNaN(dt.getTime())) {
