@@ -2439,6 +2439,8 @@ class Utilities {
     // Convierte a Date
     cDate(date) {
         var dt;
+        if (date == null || date == undefined) return null;
+        
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
         } else {

@@ -500,11 +500,14 @@ function timeZone() {
  */
 function cDate(pDate) {
     var dt;
+    if (pDate == null || pDate == undefined) return null;
+    
     if (Object.prototype.toString.call(pDate) === '[object Date]') {
         dt = pDate;
     } else {
-        dt = moment(pDate, 'L LTS').toDate();
-        if (isNaN(dt.getTime())) dt = new Date(pDate);
+        dt = _moment(pDate, 'L LTS').toDate(); // moment con locale
+        if (isNaN(dt.getTime())) dt = _moment(pDate).toDate(); // moment sin locale
+        if (isNaN(dt.getTime())) dt = new Date(pDate); // nativo
     }
     if(!isNaN(dt.getTime())) {
         return dt;
