@@ -1606,6 +1606,7 @@ class Field {
     get value() {
         //todo convertir al tipo del field
         var v = this.#json.Value;
+        debugger;
         if (this.type == 2) {
             var tv = this.session.utils.cDate(v);
             return tv ? tv : null;
