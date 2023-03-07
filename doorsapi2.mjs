@@ -68,45 +68,15 @@ async function loadUtils() {
 
     if (typeof(numeral) == 'undefined') {
         if (inNode()) {
-            // si da problemas levantar como el crypto
-            debugger;
             res = await import('numeral');
-            await import('numeral/locales/es.js');
-
-            //res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
             _numeral = res.default;
+            await import('numeral/locales/es.js');
         } else {
             await include('lib-numeral');
             _numeral = numeral;
         }
     } else {
         _numeral = numeral;
-    }
-
-    if (!_numeral.locales.es) {
-        _numeral.register('locale', 'es', {
-            delimiters: {
-                thousands: '.',
-                decimal: ','
-            },
-            abbreviations: {
-                thousand: 'k',
-                million: 'mm',
-                billion: 'b',
-                trillion: 't'
-            },
-            ordinal: function (number) {
-                var b = number % 10;
-                return (b === 1 || b === 3) ? 'er' :
-                    (b === 2) ? 'do' :
-                    (b === 7 || b === 0) ? 'mo' :
-                    (b === 8) ? 'vo' :
-                    (b === 9) ? 'no' : 'to';
-            },
-            currency: {
-                symbol: '$'
-            }
-        });
     }
 
     // todo: setear a partir del lngId
