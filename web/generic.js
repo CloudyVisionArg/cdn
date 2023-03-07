@@ -55,7 +55,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     preloader.show();
     //await include(arrScripts);
 
-    let tkn = await getToken();
+    //let tkn = await getToken();
     if (!tkn) {
         end('La sesion no ha sido iniciada');
         return;
