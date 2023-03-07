@@ -80,8 +80,7 @@ async function loadUtils() {
     }
 
     // todo: setear a partir del lngId
-    debugger;
-    _numeral.locale('es');
+    _numeral.locale('es'); // es / en
     _numeral.defaultFormat('0,0.[00]');
 
 
