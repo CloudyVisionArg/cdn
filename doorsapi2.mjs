@@ -14,7 +14,10 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
-(async () => {
+var utilsProm = loadUtils();
+debugger;
+
+async function loadUtils() {
     if (inNode()) {
         var importCache = await import ('./../import-cache.mjs');
         var fs = await import('fs');
@@ -160,7 +163,9 @@ export { _fastXmlParser as fastXmlParser }
             return ret;
         };
     }
-})();
+
+    return true;
+};
 
 
 export function inNode() {
