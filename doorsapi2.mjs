@@ -1607,7 +1607,7 @@ class Field {
 
     get value() {
         if (this.type == 2) {
-            return this.session.utils.cDate(v);
+            return this.session.utils.cDate(this.#json.Value);
         } else {
             return this.#json.Value;
         }
