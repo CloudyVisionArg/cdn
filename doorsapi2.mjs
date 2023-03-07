@@ -29,10 +29,10 @@ await utilsPromise;
 */
 
 async function loadUtils() {
-    if (inNode()) {
-        var importCache = await import ('../import-cache.mjs');
 
-    } else {
+    // include
+    
+    if (!inNode()) {
         if (window.include == undefined) {
             // include
             var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
