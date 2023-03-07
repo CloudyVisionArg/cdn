@@ -1607,9 +1607,6 @@ function getFile(pFileURL) {
         if (device.platform == 'Android' && pFileURL.substring(0, 10) == 'content://') {
             window.FilePath.resolveNativePath(pFileURL, resLocalFile, errMgr);
         }    
-        else if (device.platform == 'Android' && pFileURL.includes("__cdvfile_")) {
-            resLocalFile(pFileURL);
-        } 
         else {
             resLocalFile(pFileURL);
         }
