@@ -1381,7 +1381,7 @@ function downloadAtt(e) {
 }
 
 function openAtt(pURL) {
-    if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_cache__")) {
+    if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
         window.resolveLocalFileSystemURL(pURL,
             function (fileEntry) {
                 openFile(fileEntry.nativeURL);
@@ -1685,6 +1685,7 @@ function saveAtt() {
 
                     getFile($this.attr('data-att-url')).then(
                         function (file) {
+                            debugger;
                             var reader = new FileReader();
                             reader.onloadend = function (e) {
                                 var blobData = new Blob([this.result], { type: file.type });
@@ -1701,6 +1702,7 @@ function saveAtt() {
                                 )
                             };
                             reader.readAsArrayBuffer(file);
+                            //reader.readAsText(file);
     
                         },
                         function (err) {

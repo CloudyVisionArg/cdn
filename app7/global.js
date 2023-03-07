@@ -1606,7 +1606,8 @@ function getFile(pFileURL) {
     return new Promise(function (resolve, reject) {
         if (device.platform == 'Android' && pFileURL.substring(0, 10) == 'content://') {
             window.FilePath.resolveNativePath(pFileURL, resLocalFile, errMgr);
-        } else {
+        }    
+        else {
             resLocalFile(pFileURL);
         }
 
@@ -1693,7 +1694,6 @@ function audioRecorder(pCallback) {
             // success callback
             function() {
                 if (save) {
-                    debugger;
                     window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
                         function (fileSystem) {
                             fileSystem.root.getFile(src, { create: false, exclusive: false	},
