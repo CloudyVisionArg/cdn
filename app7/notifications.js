@@ -200,7 +200,7 @@ var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-c
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 // Evento taphold
-if (device.platform == 'browser') {
+/*if (device.platform == 'browser') {
     console.log("BROSER TAPHOLD CONTEXTMENU")
     // El taphold no anda en el browser
     $listMembers.on('contextmenu', 'a', taphold);
@@ -209,6 +209,8 @@ if (device.platform == 'browser') {
     $listMembers.on('taphold', 'a', taphold);
 };
 
+$listMembers.on('contextmenu', 'a', taphold);*/
+$listMembers.on('taphold', 'a', taphold);
 
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "I"){
