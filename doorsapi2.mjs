@@ -88,16 +88,7 @@ async function loadUtils() {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
-            /*
-            res = await importCache.cdnImport({ id: 'lib-cryptojs-aes', localPath: true });
-            code = fs.readFileSync('./service/' + res, { encoding: 'utf8' });
-            eval(`
-                ${code}
-                _CryptoJS = CryptoJS;
-            `);
-            */
             res = await import('crypto-js/aes.js');
-            debugger;
             _CryptoJS = res.default;
         } else {
             await include('lib-cryptojs-aes');
