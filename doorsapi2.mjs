@@ -1,5 +1,5 @@
 /*
-todo: Safari soporta metodos privados en la v15.
+todo: Safari soporta metodos privados recien en la v15.
 Cdo esta sea estandar reemplazar los _metodo con #metodo
 https://caniuse.com/?search=private%20methods
 */
@@ -19,7 +19,7 @@ var utilsPromise = loadUtils();
 /*
 todo: Safari soporta await at module top level recien en la v15
 https://caniuse.com/?search=top%20level%20await
-Cuando esta sea estandar reemplazar por:
+Cuando esta sea estandar reemplazar la linea anterior por:
 
 await loadUtils();
 
