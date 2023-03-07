@@ -121,6 +121,7 @@ async function loadUtils() {
 
     if (typeof(_fastXmlParser) == 'undefined') {
         if (inNode()) {
+            debugger;
             var res = await import('fast-xml-parser');
             _fastXmlParser = res.default;
         } else {
