@@ -63,8 +63,8 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 
     let srvUrl = window.location.origin + '/restful';
 
-    Doors.RESTFULL.ServerUrl = srvUrl;
-    Doors.RESTFULL.AuthToken = tkn;
+   //Doors.RESTFULL.ServerUrl = srvUrl;
+    //Doors.RESTFULL.AuthToken = tkn;
 
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session(srvUrl, tkn);
