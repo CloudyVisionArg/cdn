@@ -965,10 +965,13 @@ class Database {
         this.#session = session;
     }
 
+    async execute(sql) {
+        // todo
+    }
+
     async nextVal(sequence) {
         var res = await this.session.utils.execVbs(`
             Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
-            Response.End
         `);
 
         return parseInt(await res.text());
@@ -980,7 +983,6 @@ class Database {
             Set rcs = dSession.Db.OpenRecordset("${ sql.replaceAll('"', '""') }")
             rcs.Save Response, 1
             rcs.Close
-            Response.End
         `);
 
         var txt = await res.text();
