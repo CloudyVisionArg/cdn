@@ -965,8 +965,12 @@ class Database {
         this.#session = session;
     }
 
-    nextVal(sequence) {
-        // todo
+    async nextVal(sequence) {
+        var res = await this.session.utils.execVbs(`
+            Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
+            Response.End
+        `);
+        debugger;
     }
 
     // OJO: Las columnas en null no bajan en el xml
