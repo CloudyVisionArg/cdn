@@ -96,7 +96,7 @@ async function loadUtils() {
                 _CryptoJS = CryptoJS;
             `);
             */
-            res = import('crypto-js/aes');
+            res = await import('crypto-js/aes');
             debugger;
             _CryptoJS = res.default;
         } else {
