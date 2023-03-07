@@ -51,9 +51,7 @@ async function loadUtils() {
 
     if (typeof(moment) == 'undefined') {
         if (inNode()) {
-            debugger;
             res = await import('moment');
-            //res = await importCache.webImport('https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment-with-locales.min.js/+esm');
             _moment = res.default;
         } else {
             await include('lib-moment');
