@@ -970,9 +970,8 @@ class Database {
             Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
             Response.End
         `);
-        
-        var txt = await res.text();
-        debugger;
+
+        return parseInt(await res.text());
     }
 
     // OJO: Las columnas en null no bajan en el xml
