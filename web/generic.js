@@ -32,7 +32,6 @@ arrScriptsPre.push({ id: 'web-javascript', depends: ['jquery', 'bootstrap'] });
 // Includes que tienen que estar antes de dibujar la pag
 var arrScripts = [];
 arrScripts.push({ id: 'doorsapi', depends: ['jquery'] });
-/*
 arrScripts.push({ id: 'web-controls' });
 arrScripts.push({ id: 'lib-numeral' });
 arrScripts.push({ id: 'lib-numeral-locales', depends: ['lib-numeral'] });
@@ -43,7 +42,6 @@ arrScripts.push({ id: 'bootstrap-select', depends: ['jquery', 'bootstrap', 'boot
 arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
 // todo: esto deberia ser segun el lng_id
 arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
-*/
 
 // Includes que no es necesario esperar
 var arrScriptsPos = [];
@@ -55,7 +53,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 (async () => {
     await include(arrScriptsPre);
     preloader.show();
-    await include(arrScripts);
+    //await include(arrScripts);
 
     let tkn = await getToken();
     if (!tkn) {
