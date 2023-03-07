@@ -14,7 +14,7 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
-//await loadUtils();
+debugger;
 
 async function loadUtils() {
     if (inNode()) {
