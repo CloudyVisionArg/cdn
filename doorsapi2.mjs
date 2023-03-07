@@ -31,7 +31,7 @@ await utilsPromise;
 async function loadUtils() {
 
     // include
-    
+
     if (!inNode()) {
         if (window.include == undefined) {
             // include
@@ -65,6 +65,7 @@ async function loadUtils() {
 
     // numeral - http://numeraljs.com/
 
+    debugger;
     if (typeof(numeral) == 'undefined') {
         if (inNode()) {
             res = await import('numeral');
