@@ -987,7 +987,8 @@ class Database {
                 ignoreDeclaration: true,
                 removeNSPrefix: true,
                 trimValues: true,
-                //attributeNamePrefix : "@_"
+                parseAttributeValue: true,
+                attributeNamePrefix : "@_"
             });
             var json = parser.parse(txt);
             debugger;
