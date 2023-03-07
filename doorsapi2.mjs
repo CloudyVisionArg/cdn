@@ -1,9 +1,10 @@
-/*moment
-todo: reemplazar los _metodo con #metodo cdo safari implemente 
-metodos privados: https://caniuse.com/?search=private%20field
-
-swagger: http://tests.cloudycrm.net/apidocs
+/*
+todo: Safari soporta metodos privados en la v15.
+Cdo esta sea estandar reemplazar los _metodo con #metodo
+https://caniuse.com/?search=private%20methods
 */
+
+//swagger: http://tests.cloudycrm.net/apidocs
 
 var incjs = {};
 var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser;
@@ -16,8 +17,9 @@ export { _fastXmlParser as fastXmlParser }
 
 var utilsPromise = loadUtils();
 /*
-todo: safari no soporta await at module top level: https://caniuse.com/?search=top%20level%20await
-Cuando el 15 sea estandar reemplazar por:
+todo: Safari soporta await at module top level recien en la v15
+https://caniuse.com/?search=top%20level%20await
+Cuando esta sea estandar reemplazar por:
 
 await loadUtils();
 
