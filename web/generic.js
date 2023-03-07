@@ -53,18 +53,18 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 (async () => {
     await include(arrScriptsPre);
     preloader.show();
-    //await include(arrScripts);
+    await include(arrScripts);
 
-    /*let tkn = await getToken();
+    let tkn = await getToken();
     if (!tkn) {
         end('La sesion no ha sido iniciada');
         return;
-    }*/
+    }
 
     let srvUrl = window.location.origin + '/restful';
 
-   //Doors.RESTFULL.ServerUrl = srvUrl;
-    //Doors.RESTFULL.AuthToken = tkn;
+    Doors.RESTFULL.ServerUrl = srvUrl;
+    Doors.RESTFULL.AuthToken = tkn;
 
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session(srvUrl, tkn);
