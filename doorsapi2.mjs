@@ -991,11 +991,21 @@ class Database {
 
         debugger;
         var ret = [];
-        json.xml.data.row.forEach((el, ix) => {
-            var r = {};
-            Object.assign(r, el.attributes);
-            ret.push(r);
-        })
+        var rows = json.xml.data.row;
+        if (rows) {
+            var r;
+            if (Array.isArray(rows)) {
+                rows.forEach((el, ix) => {
+                    r = {};
+                    Object.assign(r, el.attributes);
+                    ret.push(r);
+                });
+            } else {
+                r = {};
+                Object.assign(r, rows.attributes);
+                ret.push(r);
+            }
+        }
         
         return ret;
     }
