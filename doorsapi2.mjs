@@ -1492,7 +1492,7 @@ export class Document {
         
         var dt = new Date();
         var dts = dt.getDate() + '/' + (dt.getMonth() + 1) + ' ' + this.session.utils.isoTime(dt, true);
-        log = logDate(new Date()) + ' - ' + (isErr ? 'ERR: ' : '') + this.session.utils.errMsg(msg) + '\n' + log.substring(0, 1024*64);
+        log = dts + ' - ' + this.session.utils.errMsg(msg) + '\n' + log.substring(0, 1024*64);
         doc.tags.log = log;
     }
 
