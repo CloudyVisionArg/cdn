@@ -1533,6 +1533,12 @@ class Field {
         return this.#json.HeaderTable;
     }
 
+    get label() {
+        ret = this.description;
+        if (!ret) ret = this.name.substring(0, 1).toUpperCase() + this.name.substring(1).toLowerCase();
+        return ret;
+    }
+
     get length() {
         return this.#json.Length;
     }
