@@ -14,7 +14,7 @@ export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
-
+debugger;
 var utilsPromise = loadUtils();
 /*
 todo: Safari soporta await at module top level recien en la v15
