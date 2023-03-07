@@ -2484,7 +2484,7 @@ class Utilities {
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
             '&code=' + encodeURIComponent(code);
     
-        var res = await fetch(this.session.serverUrl.replace('restful', 'c/execapi.asp'), {
+        var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
             method: 'POST',
             cache: 'no-cache',
             headers: {
