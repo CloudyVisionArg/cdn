@@ -993,7 +993,7 @@ class Database {
         var ret = [];
         json.xml.data.row.forEach((el, ix) => {
             var r = {};
-            Object.assign(r, el);
+            Object.assign(r, el.attributes);
             ret.push(r);
         })
         
