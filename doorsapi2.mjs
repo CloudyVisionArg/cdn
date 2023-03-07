@@ -1486,6 +1486,22 @@ export class Document {
         return this.#json.Tags;
     }
 
+    tagLog(msg) {
+        var log = this.tags.log;
+        if (!log) log = '';
+        
+        var dt = new Date();
+        var dts = dt.getDate() + '/' + (dt.getMonth() + 1) + ' ' + this.session.utils.isoTime(dt, true);
+        log = logDate(new Date()) + ' - ' + (isErr ? 'ERR: ' : '') + this.session.utils.errMsg(msg) + '\n' + log.substring(0, 1024*64);
+            doc.tags.log = log;
+        };
+    }
+
+	function logDateTime(pDate) {
+		return dt.getDate() + '/' + (dt.getMonth() + 1) + ' ' + dSession.utils.isoTime(dt, true);
+	}	
+
+
     toJSON() {
         return this.#json;
     }
