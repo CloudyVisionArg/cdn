@@ -127,7 +127,7 @@ await (async () => {
     debugger;
     if (typeof(_fastXmlParser) == 'undefined') {
         if (inNode()) {
-            var res = await importCache.webImport('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
+            var res = await import('fast-xml-parser');
             _fastXmlParser = res.default;
         } else {
             var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
