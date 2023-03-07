@@ -1494,7 +1494,7 @@ export class Document {
         if (!log) log = '';
         
         var dt = new Date();
-        var dts = dt.getSeconds() + '.' + dt.getMilliseconds();
+        var dts = this.session.utils.lZeros(dt.getSeconds(), 2) + '.' + dt.getMilliseconds();
         log = log.substring(0, 1024*64) + (log ? '\n' : '') + dts + ' - ' + this.session.utils.errMsg(msg);
         this.tags.log = log;
     }
