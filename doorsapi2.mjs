@@ -970,6 +970,8 @@ class Database {
             Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
             Response.End
         `);
+        
+        var txt = await res.text();
         debugger;
     }
 
@@ -981,7 +983,7 @@ class Database {
             rcs.Close
             Response.End
         `);
-    
+
         var txt = await res.text();
 
         // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
