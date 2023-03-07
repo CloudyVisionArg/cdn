@@ -65,12 +65,11 @@ async function loadUtils() {
 
     // numeral - http://numeraljs.com/
 
-    debugger;
     if (typeof(numeral) == 'undefined') {
         if (inNode()) {
             res = await import('numeral');
-            _numeral = res.default;
             await import('numeral/locales/es.js');
+            _numeral = res.default;
         } else {
             await include('lib-numeral');
             await include('lib-numeral-locales');
