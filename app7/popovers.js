@@ -123,7 +123,7 @@ function crearCarteles(pCartel,index,array){
 
     const elButtonOk = document.createElement("button");
     elButtonOk.setAttribute("type","button");
-    elButtonOk.classList.add("popover-custom-button");
+    elButtonOk.classList.add("popover-custom-button","btn","btn-sm");
     elButtonOk.setAttribute("onclick","btnClosePopover(this)");
     elButtonOk.innerText = "Ok"
     divInner.append(elButtonOk);
