@@ -104,8 +104,12 @@ export class Session extends doorsapi2.Session {
         window.localStorage.setItem('sync_table', ''); 
     }
 
-    loggedUser() {
-        return JSON.parse(window.localStorage.getItem('loggedUser'));
+    loggedUser(spr) {
+        if (spr) {
+            return super.loggedUser;
+        } else {
+            return JSON.parse(window.localStorage.getItem('loggedUser'));
+        }
     }
 
     hasGroup(pGroup) {

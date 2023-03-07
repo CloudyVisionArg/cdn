@@ -1,9 +1,194 @@
 /*
-todo: reemplazar los _metodo con #metodo cdo safari implemente 
-metodos privados: https://caniuse.com/?search=private%20field
-
-swagger: http://tests.cloudycrm.net/apidocs
+todo: Safari soporta metodos privados en la v15.
+Cdo esta sea estandar reemplazar los _metodo con #metodo
+https://caniuse.com/?search=private%20methods
 */
+
+//swagger: http://tests.cloudycrm.net/apidocs
+
+var incjs = {};
+var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser;
+
+export { _moment as moment };
+export { _numeral as numeral };
+export { _CryptoJS as CryptoJS };
+export { _serializeError as serializeError }
+export { _fastXmlParser as fastXmlParser }
+
+var utilsPromise = loadUtils();
+/*
+todo: Safari soporta await at module top level recien en la v15
+https://caniuse.com/?search=top%20level%20await
+Cuando esta sea estandar reemplazar por:
+
+await loadUtils();
+
+Mientras tanto, si en algun metodo da error xq no esta el modulo esperar la promise asi:
+
+await utilsPromise;
+*/
+
+async function loadUtils() {
+    if (inNode()) {
+        var importCache = await import ('./../import-cache.mjs');
+        var fs = await import('fs');
+
+    } else {
+        if (window.scriptSrc == undefined) {
+            // include
+            var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
+            var code = await res.text();
+            eval(`
+                ${code}
+                window.include = include;
+                window.scriptSrc = scriptSrc;
+            `);
+        }
+    }
+
+
+    // moment - https://momentjs.com/docs/
+
+    if (typeof(moment) == 'undefined') {
+        if (inNode()) {
+            res = await importCache.webImport('https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment-with-locales.min.js/+esm');
+            _moment = res.default;
+        } else {
+            await include('lib-moment');
+            _moment = moment;
+        }
+    } else {
+        _moment = moment;
+    }
+
+    _moment.locale('es'); // todo: setear a partir del lngId
+    
+
+    // numeral - http://numeraljs.com/
+
+    if (typeof(numeral) == 'undefined') {
+        if (inNode()) {
+            // si da problemas levantar como el crypto
+            res = await importCache.webImport('https://cdn.jsdelivr.net/npm/numeral@2.0.6/+esm');
+            _numeral = res.default;
+        } else {
+            await include('lib-numeral');
+            _numeral = numeral;
+        }
+    } else {
+        _numeral = numeral;
+    }
+
+    if (!_numeral.locales.es) {
+        _numeral.register('locale', 'es', {
+            delimiters: {
+                thousands: '.',
+                decimal: ','
+            },
+            abbreviations: {
+                thousand: 'k',
+                million: 'mm',
+                billion: 'b',
+                trillion: 't'
+            },
+            ordinal: function (number) {
+                var b = number % 10;
+                return (b === 1 || b === 3) ? 'er' :
+                    (b === 2) ? 'do' :
+                    (b === 7 || b === 0) ? 'mo' :
+                    (b === 8) ? 'vo' :
+                    (b === 9) ? 'no' : 'to';
+            },
+            currency: {
+                symbol: '$'
+            }
+        });
+    }
+
+    // todo: setear a partir del lngId
+    _numeral.locale('es');
+    _numeral.defaultFormat('0,0.[00]');
+
+
+    // CryptoJS - https://code.google.com/archive/p/crypto-js/
+
+    if (typeof(CryptoJS) == 'undefined') {
+        if (inNode()) {
+            res = await importCache.cdnImport({ id: 'lib-cryptojs-aes', localPath: true });
+            code = fs.readFileSync('./service/' + res, { encoding: 'utf8' });
+            eval(`
+                ${code}
+                _CryptoJS = CryptoJS;
+            `);
+        } else {
+            await include('lib-cryptojs-aes');
+            _CryptoJS = CryptoJS;
+        }
+    } else {
+        _CryptoJS = CryptoJS;
+    }
+
+
+    // serialize-error - https://github.com/sindresorhus/serialize-error
+
+    if (typeof(_serializeError) == 'undefined') {
+        if (inNode()) {
+            res = await importCache.webImport('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+            _serializeError = res.default;
+        } else {
+            res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+            _serializeError = res.default;
+            window.serializeError = _serializeError;
+        }
+    }
+
+
+    // fast-xml-parser - https://github.com/NaturalIntelligence/fast-xml-parser
+
+    if (typeof(_fastXmlParser) == 'undefined') {
+        if (inNode()) {
+            var res = await import('fast-xml-parser');
+            _fastXmlParser = res.default;
+        } else {
+            var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
+            _fastXmlParser = res.default;
+            window.fastXmlParser = _fastXmlParser;
+        }
+    }
+
+    // string.reverse
+    if (typeof String.prototype.reverse !== 'function') {
+        String.prototype.reverse = function () {
+            return this.split('').reverse().join('');
+        };
+    }
+
+    // string.replaceAll
+    if (typeof String.prototype.replaceAll !== 'function') {
+        String.prototype.replaceAll = function (search, replacement) {
+            var me = this;
+            return me.replace(new RegExp(search, 'g'), replacement);
+        };
+    }
+
+    // string.repeat
+    if (typeof String.prototype.repeat !== 'function') {
+        String.prototype.repeat = function (count) {
+            var me = this;
+            var ret = '';
+            for (var i = 0; i < count; i++) ret += me;
+            return ret;
+        };
+    }
+
+    return true;
+};
+
+
+export function inNode() {
+    return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
+}
+
 
 export class DoorsMap extends Map {
     _parseKey(key) {
@@ -75,9 +260,12 @@ export class Session {
     #serverUrl;
     #authToken;
     #tags;
+    #db;
+    #utils;
+    #loggedUser;
     
     constructor(serverUrl, authToken) {
-        this.#restClient = new RestClient(serverUrl, authToken);
+        this.#restClient = new RestClient(serverUrl, authToken, this);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
     }
@@ -89,15 +277,10 @@ export class Session {
     set authToken(value) {
         this.#authToken = value;
         this.restClient.AuthToken = value;
-        this.#tags == undefined
+        this.#tags = undefined;
     }
 
-    /**
-     * Cambia la contraseña del usuario logueado
-     * @param {string} oldPassword
-     * @param {string} newPassword
-     * @returns Promise <bool>
-     */
+    // Cambia la contraseña del usuario logueado
     changePassword(login, oldPassword, newPassword, instance) {
         var url = 'session/changepassword';
 
@@ -107,12 +290,23 @@ export class Session {
             newPassword: newPassword,
             instanceName: instance,
         };
-        return this.restClient.asyncCall(url, 'POST', data, '');
+        return this.restClient.fetch(url, 'POST', data, '');
     };
 
-    /**
-     * Devuelve el directory para acceder a informacion de usuarios
-     */
+    // Metodos de base de datos
+    get db() {
+        if (!this.#db) {
+            this.#db = new Database(this);
+        };
+        return this.#db;
+    }
+
+    // Alias de directory
+    get dir() {
+        return this.directory;
+    }
+
+    // Metodos de manejo del directorio
     get directory() {
         if (!this.#directory) {
             this.#directory = new Directory(this);
@@ -120,11 +314,16 @@ export class Session {
         return this.#directory;
     }
 
+    // Alias de documentsGetFromId
+    doc(docId) {
+        return this.documentsGetFromId(docId);
+    }
+
     documentsGetFromId(docId) {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'documents/' + docId;
-            me.restClient.asyncCall(url, 'GET', '', '').then(
+            me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Document(res, me));
                 },
@@ -133,11 +332,34 @@ export class Session {
         });
     }
 
+    /*
+    Llama a foldersGetFromId o foldersGetFromPath (segun los parametros)
+    Almacena en cache por 60 segs
+    */
+    folder(folder, curFolderId) {
+        var key = 'folder|' + folder + '|' + curFolderId;
+        var cache = this.utils.cache(key);
+        if (cache == undefined) {
+            if (!isNaN(parseInt(folder))) {
+                cache = this.foldersGetFromId(folder);
+            } else {
+                cache = this.foldersGetFromPath(folder, (curFolderId ? curFolderId : 1001));
+            }
+            this.utils.cache(key, cache, 60); // Cachea por 60 segundos
+        };
+        return cache;
+    }
+
+    // Alias de folder
+    folders(folder, curFolderId) {
+        return this.folder(folder, curFolderId);
+    }
+
     foldersGetFromId(fldId) {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + fldId + '';
-            me.restClient.asyncCall(url, 'GET', '', '').then(
+            me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
                 },
@@ -146,11 +368,11 @@ export class Session {
         })
     };
 
-    foldersGetFromPath(fldPath, currFolderId) {
+    foldersGetFromPath(fldPath, curFolderId) {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + (currFolderId ? currFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
-            me.restClient.asyncCall(url, 'GET', '', '').then(
+            var url = 'folders/' + (curFolderId ? curFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
+            me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
                 },
@@ -161,14 +383,32 @@ export class Session {
 
     get isLogged() {
         var url = 'session/islogged';
-        return this.restClient.asyncCall(url, 'POST', {}, '');
+        return this.restClient.fetch(url, 'POST', {}, '');
     };
+
+    get loggedUser() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#loggedUser) {
+                var url = 'session/loggedUser';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        me.#loggedUser = new User(res, me);
+                        resolve(me.#loggedUser);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#loggedUser);
+            }
+        });
+    }
 
     logoff() {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'session/logoff';
-            me.restClient.asyncCall(url, 'POST', {}, '').then(
+            me.restClient.fetch(url, 'POST', {}, '').then(
                 res => { me.authToken = undefined },
                 reject
             )
@@ -185,7 +425,7 @@ export class Session {
             liteMode: liteMode ? true : false,
         };
         return new Promise((resolve, reject) => {
-            me.restClient.asyncCall(url, 'POST', data, '').then(
+            me.restClient.fetch(url, 'POST', data, '').then(
                 token => {
                     me.authToken = token;
                     resolve(token);
@@ -197,13 +437,13 @@ export class Session {
 
     pushRegistration(settings) {
         var url = 'notifications/devices';
-        return this.restClient.asyncCall(url, 'POST', settings, 'notificationReceiver');
+        return this.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
     }
 
     pushUnreg(regType, regId) {
         var url = 'notifications/devices';
         var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
-        return this.restClient.asyncCall(url, 'DELETE', params, '');
+        return this.restClient.fetch(url, 'DELETE', params, '');
     }
 
     get restClient() {
@@ -213,10 +453,10 @@ export class Session {
     runSyncEventsOnClient(value) {
         if (value == undefined) {
             var url = 'session/syncevents/runOnClient';
-            return this.restClient.asyncCall(url, 'GET', '', '');
+            return this.restClient.fetch(url, 'GET', '', '');
         } else {
             var url = 'session/syncevents/runOnClient/' + (value ? 'true' : 'false');
-            return this.restClient.asyncCall(url, 'POST', {}, '');
+            return this.restClient.fetch(url, 'POST', {}, '');
         }
     }
 
@@ -248,7 +488,7 @@ export class Session {
             paramName = 'setting';
         }
 
-        return this.restClient.asyncCall(url, method, param, paramName);
+        return this.restClient.fetch(url, method, param, paramName);
     }
 
     get tags() {
@@ -256,7 +496,7 @@ export class Session {
         return new Promise((resolve, reject) => {
             if (me.#tags == undefined) {
                 var url = 'session/tags';
-                me.restClient.asyncCall(url, 'GET', '', '').then(
+                me.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#tags = res;
                         resolve(me.#tags);
@@ -267,6 +507,14 @@ export class Session {
                 resolve(me.#tags);
             }
         })
+    }
+
+    // Metodos varios
+    get utils() {
+        if (!this.#utils) {
+            this.#utils = new Utilities(this);
+        };
+        return this.#utils;
     }
 };
 
@@ -283,7 +531,7 @@ class Account {
         this.#session = session;
     }
 
-    _accountsGet(listFunction, account) {
+    _accountsGet(listFunction, account, has) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -297,7 +545,11 @@ class Account {
                         if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
                             resolve(acc);
                         } else {
-                            reject(new Error('Account not found'));
+                            if (has) {
+                                resolve(undefined);
+                            } else {
+                                reject(new Error('Account not found'));
+                            }
                         }
                     }
                 },
@@ -314,7 +566,7 @@ class Account {
 
             } else {
                 var url = 'accounts/' + me.id + '/' + endPoint;
-                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json[property] = res;
                         resolve(me._accountsMap(me.#json[property]));
@@ -347,34 +599,45 @@ class Account {
         }
     }
 
-    childAccounts(account) {
-        return this._accountsGet('childAccountsList', account);
+    /*
+    childAccounts() -> Devuelve un map de cuentas hijas
+    childAccounts(account) -> Devuelve una cuenta hija. Puedo pasar name o id. Da error si no esta.
+    childAccounts(account, true) -> Igual que el anterior, pero si no esta devuelve undefined.
+
+    Los metodos childAccountsRecursive, parentAccounts y parentAccountsRecursive trabajan igual
+    */
+    childAccounts(account, has) {
+        if (account == undefined) {
+            return this._accountsList('ChildAccountsList', 'childAccounts');
+        } else {
+            return this._accountsGet('childAccounts', account, has);
+        }
     }
 
     childAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'PUT', accs, 'arrayChildAccountIds');
+        return this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
     }
 
-    childAccountsList() {
-        return this._accountsList('ChildAccountsList', 'childAccounts');
-    }
-
-    childAccountsRecursive() {
-        return this._accountsList('ChildAccountsListRecursive', 'childAccountsRecursive');
+    childAccountsRecursive(account, has) {
+        if (account == undefined) {
+            return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
+        } else {
+            return this._accountsGet('childAccountsRecursive', account, has);
+        }
     }
 
     childAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayChildAccountIds');    
+        return this.session.restClient.fetch(url, 'DELETE', accs, 'arrayChildAccountIds');    
     }
 
     delete(expropiateObjects) {
         var expObj = expropiateObjects ? true : false;
         var url = 'accounts/' + this.id + '?expropiateObjects=' + expObj;
-        return this.session.restClient.asyncCall(url, 'DELETE', '', '');
+        return this.session.restClient.fetch(url, 'DELETE', '', '');
     }
 
     get description() {
@@ -391,6 +654,17 @@ class Account {
 
     set email(value) {
         this.#json.Email = value;
+    }
+
+    // account puede ser name o id
+    async hasChild(account, recursive) {
+        var acc = await this['childAccounts' + (recursive ? 'Recursive' : '')](account, true);
+        return acc ? true : false;
+    }
+
+    async hasParent(account, recursive) {
+        var acc = await this['parentAccounts' + (recursive ? 'Recursive' : '')](account, true);
+        return acc ? true : false;
     }
 
     get id() {
@@ -417,33 +691,37 @@ class Account {
         return Account.objectType;
     }
 
-    parentAccounts(account) {
-        return this._accountsGet('parentAccountsList', account);
+    parentAccounts(account, has) {
+        if (account == undefined) {
+            return this._accountsList('ParentAccountsList', 'parentAccounts');
+        } else {
+            return this._accountsGet('parentAccounts', account, has);
+        }
     }
 
     parentAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
-        return this.session.restClient.asyncCall(url, 'PUT', accs, 'arrayParentAccounts');    
+        return this.session.restClient.fetch(url, 'PUT', accs, 'arrayParentAccounts');    
     }
 
-    parentAccountsList() {
-        return this._accountsList('ParentAccountsList', 'parentAccounts');
-    }
-
-    parentAccountsRecursive() {
-        return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+    parentAccountsRecursive(account, has) {
+        if (account == undefined) {
+            return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+        } else {
+            return this._accountsGet('parentAccountsRecursive', account, has);
+        }
     }
 
     parentAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
-        return this.session.restClient.asyncCall(url, 'DELETE', accs, 'arrayParentAccounts');    
+        return this.session.restClient.fetch(url, 'DELETE', accs, 'arrayParentAccounts');    
     }
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     save() {
@@ -458,7 +736,7 @@ class Account {
                 url = type + 's/' + me.id;
                 method = 'POST';
             }
-            me.session.restClient.asyncCall(url, method, me.toJSON(), type).then(
+            me.session.restClient.fetch(url, method, me.toJSON(), type).then(
                 res => {
                     me.#json = res;
                     resolve(me);
@@ -491,7 +769,7 @@ class Account {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 }
 
@@ -505,16 +783,7 @@ class Application {
     }
 
     folders(folderPath) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            var url = 'folders/' + me.rootFolderId + '/children?folderpath=' + encURIC(folderPath);
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Folder(res, me.session));
-                },
-                reject
-            )
-        });
+        return this.session.folder(folderPath, this.rootFolderId);
     }
 
     get parent() {
@@ -525,7 +794,7 @@ class Application {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#rootFolder) {
-                me.session.foldersGetFromId(me.rootFolderId).then(
+                me.session.folder(me.rootFolderId).then(
                     res => {
                         me.#rootFolder = res;
                         resolve(res);
@@ -554,6 +823,7 @@ class Attachment {
     #json;
     #properties;
     #userProperties;
+    #owner;
 
     constructor(attachment, document) {
         this.#json = attachment;
@@ -596,7 +866,7 @@ class Attachment {
         return new Promise((resolve, reject) => {
             if (!me.#json.File) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
-                me.session.restClient.asyncCallBuff(url, 'GET', '').then(
+                me.session.restClient.fetchBuff(url, 'GET', '').then(
                     res => {
                         me.#json.File = res;
                         resolve(res);
@@ -645,7 +915,20 @@ class Attachment {
     }
 
     get owner() {
-        //todo: retornar account
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#owner) {
+                me.session.directory.accounts(me.ownerId).then(
+                    res => {
+                        me.#owner = res.cast2User();
+                        resolve(me.#owner);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#owner);
+            }
+        });
     }
 
     get ownerId() {
@@ -662,7 +945,7 @@ class Attachment {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get removed() {
@@ -688,10 +971,117 @@ class Attachment {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 }
 
+class Database {
+    #session;
+    
+    constructor(session) {
+        this.#session = session;
+    }
+
+    async execute(sql) {
+        // todo
+    }
+
+    async nextVal(sequence) {
+        var res = await this.session.utils.execVbs(`
+            Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
+        `);
+
+        return parseInt(await res.text());
+    }
+
+    // OJO: Las columnas en null no bajan en el xml
+    async openRecordset(sql) {
+        var res = await this.session.utils.execVbs(`
+            Set rcs = dSession.Db.OpenRecordset("${ sql.replaceAll('"', '""') }")
+            rcs.Save Response, 1
+            rcs.Close
+        `);
+
+        var txt = await res.text();
+
+        // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+        var parser = new _fastXmlParser.XMLParser({
+            ignoreAttributes: false,
+            ignoreDeclaration: true,
+            removeNSPrefix: true,
+            trimValues: true,
+            parseAttributeValue: true,
+            attributeNamePrefix : '',
+            attributesGroupName : 'attributes',
+        });
+        var json = parser.parse(txt);
+
+        var ret = [];
+        var rows = json.xml.data.row;
+        if (rows) {
+            var r;
+            if (Array.isArray(rows)) {
+                rows.forEach((el, ix) => {
+                    r = {};
+                    Object.assign(r, el.attributes);
+                    ret.push(r);
+                });
+            } else {
+                r = {};
+                Object.assign(r, rows.attributes);
+                ret.push(r);
+            }
+        }
+        
+        return ret;
+    }
+
+    // Alias de sqlEncode
+    sqlEnc(value, type) {
+        return this.sqlEncode(value, type);
+    }
+
+    sqlEncode(value, type) {
+        if (value == null) {
+            return 'NULL';
+        } else {
+            if (type == 1) {
+                return '\'' + value.replaceAll('\'', '\'\'') + '\'';
+    
+            } else if (type == 2) {
+                var ret = this.session.utils.isoDate(value);
+                if (ret == null) {
+                    return 'NULL';
+                } else {
+                    return '\'' + ret + ' ' + this.session.utils.isoTime(value, true) + '\''; 
+                }
+    
+            } else if (type == 3) {
+                if (typeof value == 'number') {
+                    return value.toString();
+                } else {
+                    var n = this.session.utils.cNumber(value);
+                    if (n != null) {
+                        return n.toString();
+                    } else {
+                        return 'NULL';
+                    }
+                };
+    
+            } else {
+                throw 'Unknown type: ' + type;
+            }
+        };
+    }
+    
+    get session() {
+        return this.#session;
+    }
+
+    setVal(sequence, value) {
+        // todo
+    }
+}
 
 class Directory {
     #session;
@@ -709,7 +1099,7 @@ class Directory {
             } else {
                 url = 'accounts?accIds=' + account;
             }
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     if (res.length == 0) {
                         reject(new Error('Account not found'));
@@ -736,7 +1126,7 @@ class Directory {
                 reject(new Error('Invalid account type'));
             }
 
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     if (type == 1) {
                         resolve(new User(res, me.session));
@@ -751,7 +1141,7 @@ class Directory {
 
     accountsSearch(filter, order) {
         let url = '/accounts/search?filter=' + encURIC(filter) + '&order=' + encURIC(order);
-        return this.session.restClient.asyncCall(url, 'GET', '', '');
+        return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     get session() {
@@ -769,6 +1159,10 @@ export class Document {
     #attachmentsMap;
     #properties;
     #userProperties;
+    #owner;
+
+    // todo: como pasamos los attachs en memoria?
+    // https://gist.github.com/jonathanlurie/04fa6343e64f750d03072ac92584b5df
 
     constructor(document, session, folder) {
         this.#json = document;
@@ -778,14 +1172,30 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
+    acl() {
+        //todo
+    }
+
     aclGrant(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
-        return this.session.restClient.asyncCall(url, 'POST', {}, '');
+        return this.session.restClient.fetch(url, 'POST', {}, '');
+    }
+
+    aclInherited() {
+        //todo
+    }
+
+    get aclInherits() {
+        //todo
+    }
+
+    aclOwn() {
+        //todo
     }
 
     aclRevoke(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
-        return this.session.restClient.asyncCall(url, 'DELETE', {}, '');
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
     aclRevokeAll(account) {
@@ -794,7 +1204,7 @@ export class Document {
             // Si viene account es un revokeAll para esa cuenta
             url += '/' + account;
         }
-        return this.session.restClient.asyncCall(url, 'DELETE', {}, '');
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
     attachments(attachment) {
@@ -816,7 +1226,7 @@ export class Document {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap._loaded) {
                     var url = 'documents/' + me.id + '/attachments';
-                    me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             if (res.length > 0) {
                                 // Ordena descendente
@@ -832,7 +1242,6 @@ export class Document {
                             me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
                                 accs => {
                                     res.forEach(el => {
-                                        //todo: aca se podria setear un objecto account en vez del name solo
                                         el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                                         me.#attachmentsMap.set(el.Name, new Attachment(el, me));
                                     });
@@ -863,19 +1272,27 @@ export class Document {
         return att;
     }
 
+    copy(folder) {
+        // todo
+    }
+
+    get created() {
+        return this.fields('created').value;
+    }
+
+    currentAccess(access, explicit) {
+        // todo
+    }
+
     delete(purge) {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
             encURIC(purge == true ? false : true);
-        return me.session.restClient.asyncCall(url, 'DELETE', [me.id], 'docIds');
+        return me.session.restClient.fetch(url, 'DELETE', [me.id], 'docIds');
         //todo: en q estado queda el objeto?
     }
 
-    get id() {
-        return this.#json.DocId;
-    }
-
-    fields(name) {
+    fields(name, value) {
         var me = this;
 
         if (name) {
@@ -884,7 +1301,9 @@ export class Document {
             field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
             if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
             if (field) {
-                return new Field(field, me);
+                var ret = new Field(field, me);
+                if (value != undefined) ret.value = value;
+                return ret;
             } else {
                 throw new Error('Field not found: ' + name);
             }
@@ -913,19 +1332,72 @@ export class Document {
         return this.parentId
     }
 
+    get folderId() {
+        return this.parentId
+    }
+
+    get form() {
+        // todo
+    }
+
+    get formId() {
+        return this.fields('frm_id').value;
+    }
+
+    get icon() {
+        return this.fields('icon').value;
+    }
+
+    get id() {
+        return this.#json.DocId;
+    }
+
     get isNew() {
         return this.#json.IsNew;
+    }
+
+    log() {
+        // todo
     }
 
     get objectType() {
         return Document.objectType;
     }
 
+    get modified() {
+        return this.fields('modified').value;
+    }
+
+    move(folder) {
+        // todo
+    }
+
+    get owner() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#owner) {
+                me.session.directory.accounts(me.ownerId).then(
+                    res => {
+                        me.#owner = res.cast2User();
+                        resolve(me.#owner);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#owner);
+            }
+        });
+    }
+
+    get ownerId() {
+        return this.fields('acc_id').value;
+    }
+
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#parent) {
-                me.session.foldersGetFromId(me.parentId).then(
+                me.session.folder(me.parentId).then(
                     res => {
                         me.#parent = res;
                         resolve(res);
@@ -944,18 +1416,18 @@ export class Document {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'documents';
-            me.session.restClient.asyncCall(url, 'PUT', me.#json, 'document').then(
+            me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
-                    me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             me.#json = res;
                             saveAttachs(resolve, reject);
@@ -971,19 +1443,19 @@ export class Document {
                 var rm = [];
                 var attMap = me.#attachmentsMap;
 
-                asyncLoop(attMap.size, async loop => {
+                me.session.utils.asyncLoop(attMap.size, async loop => {
                     var key = Array.from(attMap.keys())[loop.iteration()];
                     var el = attMap.get(key);      
 
                     if (el.isNew) {
-                        var formData = new FormData(); //todo ver en node, URLSearchParams no anda, probar https://www.npmjs.com/package/form-data
-                        // todo: como subimos el Tag?
+                        var formData = new FormData();
+                        // todo: probar
                         var arrBuf = await el.fileStream;
                         formData.append('attachment', new Blob([arrBuf]), el.name);
                         formData.append('description', el.description);
-                        //formData.append('group', el.group);
+                        formData.append('group', el.group);
                         var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.asyncCallBuff(url, 'POST', formData));
+                        proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
 
                     } else if (el.removed) {
                         rm.push(el.id);
@@ -993,7 +1465,7 @@ export class Document {
                 }, () => {
                     if (rm.length > 0) {
                         var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.asyncCall(url, 'DELETE', rm, 'arrayAttId'));
+                        proms.push(me.session.restClient.fetch(url, 'DELETE', rm, 'arrayAttId'));
                     }
     
                     Promise.all(proms).then(
@@ -1013,7 +1485,7 @@ export class Document {
                         err => {
                             debugger;
                             console.error(err);
-                            reject(new Error('saveAttachs error: ' + errMsg(err)));
+                            reject(err);
                         }
                     )
                 })
@@ -1025,7 +1497,7 @@ export class Document {
         return this.#session;
     }
 
-    subject() {
+    get subject() {
         return this.fields('subject').value;
     }
 
@@ -1034,13 +1506,23 @@ export class Document {
         return this.#json.Tags;
     }
 
+    tagLog(msg) {
+        var log = this.tags.log;
+        if (!log) log = '';
+        
+        var dt = new Date();
+        var dts = this.session.utils.lZeros(dt.getSeconds(), 2) + '.' + dt.getMilliseconds();
+        log = log.substring(0, 1024*64) + (log ? '\n' : '') + dts + ' - ' + this.session.utils.errMsg(msg);
+        this.tags.log = log;
+    }
+
     toJSON() {
         return this.#json;
     }
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 };
 
@@ -1081,6 +1563,12 @@ class Field {
         return this.#json.HeaderTable;
     }
 
+    get label() {
+        ret = this.description;
+        if (!ret) ret = this.name.substring(0, 1).toUpperCase() + this.name.substring(1).toLowerCase();
+        return ret;
+    }
+
     get length() {
         return this.#json.Length;
     }
@@ -1108,7 +1596,7 @@ class Field {
     // todo: solo para form, add o remove igual
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get scale() {
@@ -1129,17 +1617,27 @@ class Field {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 
     get value() {
-        return this.#json.Value;
+        if (this.type == 2) {
+            return this.session.utils.cDate(this.#json.Value);
+        } else {
+            return this.#json.Value;
+        }
     }
 
     set value(value) {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
-        this.#json.Value = value;
+        
+        if (this.type == 2) {
+            var dt = this.session.utils.cDate(value);
+            this.#json.Value = dt ? dt.toJSON() : null;
+        } else {
+            this.#json.Value = value;
+        }
         this.valueChanged; // Para actualizar valueChanged en el JSON
     }
 
@@ -1169,6 +1667,47 @@ export class Folder {
         if (parent) this.#parent = parent;
     }
 
+    acl() {
+        //todo
+    }
+
+    aclGrant(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
+        return this.session.restClient.fetch(url, 'POST', {}, '');
+        */
+    }
+
+    aclInherited() {
+        //todo
+    }
+
+    get aclInherits() {
+        //todo
+    }
+
+    aclOwn() {
+        //todo
+    }
+
+    aclRevoke(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
+    aclRevokeAll(account) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/revokeAll';
+        if (account) {
+            // Si viene account es un revokeAll para esa cuenta
+            url += '/' + account;
+        }
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
     get app() {
         if (!this.#app) {
             this.#app = new Application(this);
@@ -1176,6 +1715,16 @@ export class Folder {
         return this.#app;
     }
 
+    // Alias de documentsDelete
+    delete(documents, purge) {
+        return this.documentsDelete(documents, purge);
+    }
+
+    // Alias de documents
+    doc(document) {
+        return this.documents(document);
+    }
+    
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -1197,7 +1746,7 @@ export class Folder {
             }
 
             let url = 'documents/' + docId;
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Document(res, me.session, me));
                 },
@@ -1206,11 +1755,24 @@ export class Folder {
         });
     }
 
+    documentsDelete(documents, purge) {
+        if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
+            var url = 'folders/' + this.id + '/documents/?tobin=' + 
+                encURIC(purge == true ? false : true);
+            return this.session.restClient.fetch(url, 'DELETE', 
+                Array.isArray(documents) ? documents : [documents], 'docIds');
+
+        } else {
+            var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
+            return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        }
+    }
+
     documentsNew() {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/documents/new';
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Document(res, me.session, me));
                 },
@@ -1223,7 +1785,7 @@ export class Folder {
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
-            me.session.restClient.asyncCall(url, 'GET', '', '').then(
+            me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session, me));
                 },
@@ -1241,7 +1803,7 @@ export class Folder {
         return new Promise((resolve, reject) => {
             if (!me.#json.Form) {
                 var url = 'forms/' + me.#json.FrmId;
-                me.session.restClient.asyncCall(url, 'GET', '', '').then(
+                me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json.Form = res;
                         resolve(new Form(res, me.session));
@@ -1254,8 +1816,17 @@ export class Folder {
         });
     }
 
+    get formId() {
+        return this.#json.FrmId;
+    }
+
     get id() {
         return this.#json.FldId;
+    }
+
+    // Alias de documentsNew
+    newDoc() {
+        return this.documentsNew();
     }
 
     get objectType() {
@@ -1269,7 +1840,7 @@ export class Folder {
                 resolve(me.#parent);
             } else {
                 if (me.#json.ParentFolder) {
-                    me.session.foldersGetFromId(me.#json.ParentFolder).then(
+                    me.session.folder(me.#json.ParentFolder).then(
                         res => {
                             me.#parent = res;
                             resolve(res);
@@ -1285,14 +1856,10 @@ export class Folder {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
-    /**
-     * 
-     * @param {*} options: { fields, formula, order, maxDocs, recursive, maxValueLen, maxDescrLength }
-     * @returns 
-     */
+    // options: { fields, formula, order, maxDocs, recursive, maxTextLength }
     search(options) {
         var opt = {
             fields: '',
@@ -1309,14 +1876,10 @@ export class Folder {
             '&order=' + encURIC(opt.order) + '&maxDocs=' + encURIC(opt.maxDocs) + 
             '&recursive=' + encURIC(opt.recursive) + '&maxDescrLength=' + encURIC(opt.maxTextLen);
 
-        return this.session.restClient.asyncCall(url, 'GET', params, '');
+        return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
-    /**
-     * 
-     * @param {*} options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }
-     * @returns 
-     */
+    // options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }
     searchGroups(options) {
         var opt = {
             groups: undefined,
@@ -1336,7 +1899,7 @@ export class Folder {
             '&maxDocs=' + encURIC(opt.maxDocs) + '&recursive=' + encURIC(opt.recursive) + 
             '&groupsOrder=' + encURIC(opt.groupsOrder) + '&totalsOrder=' + encURIC(opt.totalsOrder);
 
-        return this.session.restClient.asyncCall(url, 'GET', params, '');
+        return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
     get session() {
@@ -1358,7 +1921,7 @@ export class Folder {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 };
 
@@ -1374,6 +1937,35 @@ class Form {
     constructor(form, session) {
         this.#json = form;
         this.#session = session;
+    }
+
+    acl() {
+        //todo
+    }
+
+    aclGrant(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
+        return this.session.restClient.fetch(url, 'POST', {}, '');
+        */
+    }
+
+    aclRevoke(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
+    aclRevokeAll(account) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/revokeAll';
+        if (account) {
+            // Si viene account es un revokeAll para esa cuenta
+            url += '/' + account;
+        }
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
     }
 
     get description() {
@@ -1416,7 +2008,7 @@ class Form {
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get session() {
@@ -1434,7 +2026,7 @@ class Form {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
 };
 
@@ -1471,7 +2063,7 @@ class Properties extends DoorsMap {
             '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
             '&objectName=' + encURIC(restArgs.objName);
 
-        this.#loadProm = this.session.restClient.asyncCall(this.#restUrl, 'GET', '', '');
+        this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
             res => {
                 res.forEach(el => {
@@ -1485,27 +2077,6 @@ class Properties extends DoorsMap {
         )
     }
 
-    async _getSet(property, value) {
-        if (property == undefined) {
-            return this;
-        } else if (value == undefined) {
-            var prop = await this.get(property);
-            if (prop) return prop.value();
-        } else {
-            return this.set(property, value);
-        }
-    }
-
-    get(key) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => { resolve(super.get(key)) },
-                reject
-            )
-        });
-    }
-
     delete(key) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1514,12 +2085,22 @@ class Properties extends DoorsMap {
                     if (me.has(key)) {
                         var prop = super.get(key);
                         super.delete(key);
-                        me.session.restClient.asyncCall(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties')
+                        me.session.restClient.fetch(me.restUrl, 'DELETE', [prop.toJSON()], 'arrProperties')
                             .then(resolve, reject);
                     } else {
                         resolve(false);
                     }
                 },
+                reject
+            )
+        });
+    }
+
+    get(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.get(key)) },
                 reject
             )
         });
@@ -1538,22 +2119,28 @@ class Properties extends DoorsMap {
     }
 
     set(key, value) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            me.#loadProm.then(
-                () => {
-                    var prop;
-                    if (super.has(key)) {
-                        prop = super.get(key);
-                    } else {
-                        var prop = new Property({ name: key }, me);
-                        super.set(key, prop);
-                    }
-                    prop.value(value).then(resolve, reject);
-                },
-                reject
-            )
-        });
+        if (key == undefined) {
+            return this; // La coleccion
+        } else if (value == undefined) {
+            return this.get(key).value; // El value
+        } else {
+            var me = this;
+            return new Promise((resolve, reject) => {
+                me.#loadProm.then(
+                    () => {
+                        var prop;
+                        if (super.has(key)) {
+                            prop = super.get(key);
+                        } else {
+                            var prop = new Property({ name: key }, me);
+                            super.set(key, prop);
+                        }
+                        prop.value(value).then(resolve, reject);
+                    },
+                    reject
+                )
+            });
+        }
     }
 
     get user() {
@@ -1607,7 +2194,7 @@ class Property {
             return new Promise((resolve, reject) => {
                 if (this.value != value) {
                     this.#json.Value = value;
-                    this.session.restClient.asyncCall(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties')
+                    this.session.restClient.fetch(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties')
                         .then(resolve, reject);
                 } else {
                     resolve(true);
@@ -1781,6 +2368,346 @@ class User extends Account {
 }
 
 
+class Utilities {
+    #session;
+    #cache;
+    
+    constructor(session) {
+        this.#session = session;
+        this.#cache = [];
+    }
+
+    /*
+    Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
+    que debo esperar antes de realizar la prox iteracion. Si en iterations
+    paso undefined, se repite el loop hasta loop.break()
+
+    asyncLoop(10,
+        function (loop) {
+            console.log(loop.iteration());
+            setTimeout(function () {
+                loop.next();
+            }, 0);
+            
+            //loop.break(); // Para finalizar el loop
+        },
+        function() {
+            console.log('cycle ended')
+        }
+    );
+    */
+    asyncLoop(iterations, loopFunc, callback) {
+        var index = 0;
+        var done = false;
+        var loop = {
+            next: function() {
+                if (done) return;
+        
+                if (iterations == undefined || index < iterations) {
+                    index++;
+                    loopFunc(loop);
+                } else {
+                    done = true;
+                    if (callback) callback();
+                }
+            },
+        
+            iteration: function() {
+                return index - 1;
+            },
+        
+            break: function() {
+                done = true;
+                if (callback) callback();
+            }
+        };
+        loop.next();
+        return loop;
+    }
+
+    /*
+    Cache de uso gral
+    dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
+    myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+    */
+    cache(key, value, seconds) {
+        let f = this.#cache.find(el => el.key == key);
+        if (value == undefined) { // get
+            if (f) {
+                if (!f.expires || f.expires > Date.now()) {
+                    console.log('Cache hit: ' + key);
+                    return f.value;
+                }
+            }
+        } else { // set
+            var exp, sec = parseInt(seconds);
+            if (!isNaN(sec)) {
+                exp = Date.now() + sec * 1000;
+            } else {
+                exp = Date.now() + 300000; // 5' por defecto
+            }
+            if (f) {
+                f.value = value;
+                f.expires = exp;
+            } else {
+                this.#cache.push({ key: key, value: value, expires: exp });
+            }
+        }
+    }
+
+    // Convierte a Date
+    cDate(date) {
+        var dt;
+        if (date == null || date == undefined) return null;
+
+        if (Object.prototype.toString.call(date) === '[object Date]') {
+            dt = date;
+        } else {
+            dt = _moment(date, 'L LTS').toDate(); // moment con locale
+            if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin locale
+            if (isNaN(dt.getTime())) dt = new Date(date); // nativo
+        }
+        if(!isNaN(dt.getTime())) {
+            return dt;
+        } else {
+            return null;
+        }
+    }
+
+    // Alias de cNumber
+    cNum(number) {
+        return this.cNumber(number);
+    }
+
+    // Convierte a Number
+    cNumber(number) {
+        var num;
+        if (Object.prototype.toString.call(number) === '[object Number]') {
+            num = number;
+        } else {
+            num = _numeral(number).value();
+        }
+        return num;
+    }
+
+    // https://code.google.com/archive/p/crypto-js/
+    get cryptoJS() {
+        return _CryptoJS;
+    }
+
+    decrypt(pString, pPass) {
+	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
+	}
+
+    deserializeError(err) {
+        return _serializeError.deserializeError(err);
+    }
+
+    encrypt(pString, pPass) {
+        return _CryptoJS.AES.encrypt(pString, pPass).toString();
+    }
+
+    // Recibe un err, lo convierte a Error, loguea y dispara
+    errMgr(err) {
+        var e = this.newErr(err);
+        console.error(e);
+        throw e;
+    }
+   
+    // Devuelve el mensaje de un objeto err
+    errMsg(err) {
+        if (typeof(err) == 'string') {
+            return err;
+        } else if (typeof(err) == 'object') {
+            if (err instanceof Error) {
+                return err.constructor.name + ': ' + err.message;
+            } else if (err.constructor.name == 'SQLError') {
+                return 'SQLError {code: ' + err.code + ', message: \'' + err.message + '\'}';
+            } else if (err.ExceptionMessage) {
+                // error de Doors
+                return err.ExceptionMessage;            
+            } else if (err.xhr) {
+                return 'XHRError (readyState: ' + err.xhr.readyState 
+                    + ', status: ' + err.xhr.status + ' - ' + err.xhr.statusText + ')';
+            }
+        }
+        return JSON.stringify(err);
+    }
+
+    async execVbs(code) {
+        var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
+            '&code=' + encodeURIComponent(code);
+    
+        var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
+            method: 'POST',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+            body: data,
+        })
+    
+        if (!res.ok) {
+            var js = await res.json();
+            var err = new Error();
+            err.name = js.source;
+            err.message = js.description + ' at line ' + js.line + '\n' + js.code;
+            err.lineNumber = js.line;
+            throw err;
+    
+        } else {
+            return res;
+        }
+    }
+
+    getGuid() {
+        var uuid = '', i, random;
+        for (i = 0; i < 32; i++) {
+            random = Math.random() * 16 | 0;
+    
+            if (i == 8 || i == 12 || i == 16 || i == 20) {
+                uuid += '-';
+            }
+            uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+        }
+        return uuid;
+    }
+
+    inNode() {
+        return inNode();
+    }
+
+    // Devuelve la fecha en formato YYYY-MM-DD
+    isoDate(date) {
+        var dt = this.cDate(date);
+        if (dt) {
+            return dt.toISOString().substring(0, 10);
+        } else {
+            return null;
+        }
+    }
+
+    // Devuelve la hora en formato HH:MM:SS
+    isoTime(date, seconds) {
+        var dt = this.cDate(date);
+        if (dt) {
+            return this.lZeros(dt.getHours(), 2) + ':' + this.lZeros(dt.getMinutes(), 2) +
+                (seconds ? ':' + this.lZeros(dt.getSeconds(), 2) : '');
+        } else {
+            return null;
+        }
+    }
+
+    // Completa con ceros a la izquierda
+    lZeros(string, length) {
+        return ('0'.repeat(length) + string).slice(-length);
+    }
+
+    // https://momentjs.com/docs/
+    get moment() {
+        return _moment;
+    }
+
+    newDoorsMap() {
+        return new DoorsMap();
+    }
+
+    newErr(err) {
+        var e;
+        if (err instanceof Error) {
+            e = err;
+        } else {
+            e = new Error(this.errMsg(err));
+        }
+        return e;
+    }
+
+    // http://numeraljs.com/
+    get numeral() {
+        return _numeral;
+    }
+
+    // https://github.com/sindresorhus/serialize-error
+    serializeError(err) {
+        return _serializeError.serializeError(err);
+    }
+
+    get session() {
+        return this.#session;
+    }
+
+    get timeZone() {
+        var ret = '';
+        var dif = new Date().getTimezoneOffset();
+        if (dif == 0) {
+            return 'Z';
+        } else if (dif > 0) {
+            ret += '-';
+        } else {
+            ret += '+';
+        }
+        
+        dif = Math.abs(dif);
+        var h = parseInt(dif / 60);
+        ret += this.lZeros(h, 2) + ':' + this.lZeros(dif - (h * 60), 2);
+    
+        return ret;	
+    }
+
+    // Alias de xmlDecode
+    xmlDec(value, type) {
+        return this.xmlDecode(value, type);
+    }
+
+    xmlDecode(value, type) {
+        var val;
+
+        if (type == 1) {
+            return value;
+
+        } else if (type == 2) {
+            return this.cDate(new Date(value.replace(' ', 'T') + this.timeZone));
+
+        } else if (type == 3) {
+            val = parseFloat(value);
+            return isNaN(val) ? null : value;
+
+        } else {
+            throw 'Unknown type: ' + type;
+        }
+    }
+
+    // Alias de xmlEncode
+    xmlEnc(value, type) {
+        return this.xmlEncode(value, type);
+    }
+
+    xmlEncode(value, type) {
+        var val;
+
+        if (type == 1) {
+            return value ? value : '';
+
+        } else if (type == 2) {
+            val = this.isoDate(value);
+            return val ? val + ' ' + this.isoTime(value, true) : '';
+
+        } else if (type == 3) {
+            val = this.cNum(value);
+            return val ? val.toString() : '';
+
+        } else {
+            throw 'Unknown type: ' + type;
+        }
+    }
+
+    // options: https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+    xmlParser(options) {
+        return new _fastXmlParser.XMLParser(options);
+    }
+}
+
+
 class View {
     static objectType = 4;
     #json;
@@ -1795,13 +2722,54 @@ class View {
         if (folder) this.#parent = folder;
     }
 
+    acl() {
+        //todo
+    }
+
+    aclGrant(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
+        return this.session.restClient.fetch(url, 'POST', {}, '');
+        */
+    }
+
+    aclInherited() {
+        //todo
+    }
+
+    get aclInherits() {
+        //todo
+    }
+
+    aclOwn() {
+        //todo
+    }
+
+    aclRevoke(account, access) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
+    aclRevokeAll(account) {
+        /* todo
+        var url = 'documents/' + this.id + '/acl/revokeAll';
+        if (account) {
+            // Si viene account es un revokeAll para esa cuenta
+            url += '/' + account;
+        }
+        return this.session.restClient.fetch(url, 'DELETE', {}, '');
+        */
+    }
+
     get objectType() {
         return View.objectType;
     }
 
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
-        return this.#properties._getSet(property, value);
+        return this.#properties.set(property, value);
     }
 
     get tags() {
@@ -1811,23 +2779,24 @@ class View {
 
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
-        return this.#userProperties._getSet(property, value);
+        return this.#userProperties.set(property, value);
     }
-
-    //todo
 }
 
 
 class RestClient {
     AuthToken = null;
     ServerBaseUrl = null;
+    #session;
 
-    constructor(serverUrl, authToken) {
+    constructor(serverUrl, authToken, session) {
         this.AuthToken = authToken;
         this.ServerBaseUrl = serverUrl;
+        this.#session = session;
     }
 
-    asyncCall(url, method, parameters, parameterName) {
+    fetch(url, method, parameters, parameterName) {
+        var me = this;
         let data = null;
         //TODO Check if ends with /
         let completeUrl = this.ServerBaseUrl + "/" + url;
@@ -1886,104 +2855,64 @@ class RestClient {
                     else {
 
                         if (response.statusCode !== 200 || parsedJson.ExceptionMessage !== null) {
-                            reject(parsedJson);
+                            reject(me.session.utils.newErr(parsedJson));
                         }
                     }
                     resolve(parsedJson);
                 });
             }).catch((error) => {
-                reject(error);
+                reject(me.session.utils.newErr(error));
             });
         });
     }
 
-    //todo: pasar a fetch
-    asyncCallBuff(url, method, data) {
-        var dataSend = data ? data : null;
+    fetchBuff(url, method, data) {
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
-        /*
+        /* todo: implementar ApiKey
         if (Doors.RESTFULL.ApiKey != null) {
             xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
         }
         else {
             xhr.setRequestHeader("AuthToken", this.AuthToken);
         }
-
-        (httpMethod == "GET") ? xhr.responseType = "arraybuffer" : null;
-        var _self = this;
-        xhr.onreadystatechange = function (event) {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    prom.resolve(this.response);
-                } else {
-                    prom.reject(this.statusText);
-                }
-            }
-        };
         */
 
         return new Promise((resolve, reject) => {
-            // Opciones por defecto estan marcadas con un *
+            // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
             fetch(completeUrl, {
-                method: method, // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'omit', // include, *same-origin, omit
+                method: method,
+                cache: 'no-cache',
                 headers: {
                     'AuthToken': this.AuthToken
                 },
-                redirect: 'manual', // manual, *follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: dataSend // body data type must match "Content-Type" header
+                body: data ? data : null,
 
             }).then(
                 response => {
-                    debugger;
-                    response.arrayBuffer().then(
-                        res => {
-                            resolve(res);
-                        },
-                        reject
-                    )
-                },
-                reject
-            )
-                //TODO
-                /* var firstCharCode = body.charCodeAt(0);
-                if (firstCharCode === 65279) {
-                    //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
-                    body = body.substring(1);
-                }
-
-                response.text().then(function (textBody) {
-                    let firstCharCode = textBody.charCodeAt(0);
-                    if (firstCharCode === 65279) {
-                        //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
-                        textBody = textBody.substring(1);
-                    }
-                    let parsedJson = JSON.parse(textBody);
                     if (response.ok) {
-                        if (parsedJson.InternalObject !== null) {
-                            resolve(parsedJson.InternalObject);
+                        response.arrayBuffer().then(
+                            res => {
+                                resolve(res);
+                            },
+                            reject
+                        )
+                        } else {
+                            reject(new Error(response.status + ' (' + response.statusText + ')'))
                         }
-                    }
-                    else {
-
-                        if (response.statusCode !== 200 || parsedJson.ExceptionMessage !== null) {
-                            reject(parsedJson);
-                        }
-                    }
-                    resolve(parsedJson);
-                });
-            }).catch((error) => {
-                reject(error);
-            });
-            */
+                },
+                err => {
+                    reject(me.session.utils.newErr(err));
+                }
+            )
         });
 
 
     };
+
+    get session() {
+        return this.#session;
+    }
 
     constructJSONParameter(param, parameterName) {
         var clone = param; 
@@ -2001,35 +2930,4 @@ class RestClient {
 
 function encURIC(value) {
     return (value == null || value == undefined) ? '' : encodeURIComponent(value);
-}
-
-function asyncLoop(iterations, loopFunc, callback) {
-    var index = 0;
-    var done = false;
-    var loop = {
-        next: function() {
-            if (done) {
-                return;
-            }
-    
-            if (iterations == undefined || index < iterations) {
-                index++;
-                loopFunc(loop);
-            } else {
-                done = true;
-                if (callback) callback();
-            }
-        },
-    
-        iteration: function() {
-            return index - 1;
-        },
-    
-        break: function() {
-            done = true;
-            if (callback) callback();
-        }
-    };
-    loop.next();
-    return loop;
 }

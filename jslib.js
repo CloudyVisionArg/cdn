@@ -219,9 +219,7 @@ function asyncLoop(iterations, loopFunc, callback) {
 	var done = false;
 	var loop = {
 	    next: function() {
-	        if (done) {
-            	return;
-	        }
+	        if (done) return;
 	
 	        if (iterations == undefined || index < iterations) {
 	            index++;
@@ -245,25 +243,9 @@ function asyncLoop(iterations, loopFunc, callback) {
 	return loop;
 }
 
-/*
-Devuelve un folder por ID o PATH
-Si es por PATH hay que pasar el CurrentFolderId
-Cachea por 60 segundos
-*/
-function getFolder(pFolder, pCurrentFolderId) {
-    return new Promise(function (resolve, reject) {
-        var key = 'getFolder|' + pFolder + '|' + pCurrentFolderId;
-        var cache = getCache(key);
-        if (cache == undefined) {
-            if (!isNaN(parseInt(pFolder))) {
-                cache = dSession.foldersGetFromId(pFolder);
-            } else {
-                cache = dSession.foldersGetFromPath(pFolder, (pCurrentFolderId ? pCurrentFolderId : 1001));
-            }
-            setCache(key, cache, 60); // Cachea el folder por 60 segundos
-        };
-        cache.then(resolve, reject);
-    });
+// Implementado en dSession.folder (usar ese) 
+async function getFolder(pFolder, pCurrentFolderId) {
+    return (await dSession.folder(pFolder, pCurrentFolderId)).toJSON();
 }
 
 
@@ -518,10 +500,14 @@ function timeZone() {
  */
 function cDate(pDate) {
     var dt;
+    if (pDate == null || pDate == undefined) return null;
+    
     if (Object.prototype.toString.call(pDate) === '[object Date]') {
         dt = pDate;
     } else {
-        dt = moment(pDate, 'L LT').toDate();
+        dt = moment(pDate, 'L LTS').toDate(); // moment con locale
+        if (isNaN(dt.getTime())) dt = moment(pDate).toDate(); // moment sin locale
+        if (isNaN(dt.getTime())) dt = new Date(pDate); // nativo
     }
     if(!isNaN(dt.getTime())) {
         return dt;
