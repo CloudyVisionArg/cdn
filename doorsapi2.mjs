@@ -12,6 +12,7 @@ export { _moment as moment };
 export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
+export { _fastXmlParser as fastXmlParser }
 
 await (async () => {
     if (inNode()) {
@@ -2644,6 +2645,11 @@ class Utilities {
         } else {
             throw 'Unknown type: ' + type;
         }
+    }
+
+    // options: https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+    xmlParser(options) {
+        return new _fastXmlParser.XMLParser(options);
     }
 }
 
