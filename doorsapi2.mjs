@@ -982,7 +982,13 @@ class Database {
         if (inNode()) {
             // todo: https://geshan.com.np/blog/2022/11/nodejs-xml-parser/
 
-            var parser = new _fastXmlParser.XMLParser();
+            var parser = new _fastXmlParser.XMLParser({
+                ignoreAttributes: false,
+                ignoreDeclaration: true,
+                removeNSPrefix: true,
+                trimValues: true,
+                //attributeNamePrefix : "@_"
+            });
             var json = parser.parse(txt);
             debugger;
         
