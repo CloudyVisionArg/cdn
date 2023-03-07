@@ -1439,7 +1439,7 @@ function statusBar(pShow) {
     if(_isCapacitor()){
         refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
         refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
-        refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStatusBarStyleLight;
+        refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
         refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
         refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
     }else{
@@ -1454,7 +1454,7 @@ function statusBar(pShow) {
             //refStatusBarPLugin.backgroundColorByHexString('2BA0DA');
             //refStatusBarPLugin.overlaysWebView(false)
         } else {
-            refStatusBarPLugin.styleLightContent();
+            //refStatusBarPLugin.styleLightContent();
         }
     } else {
         StatusBar.hide();
