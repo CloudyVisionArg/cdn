@@ -972,6 +972,7 @@ class Database {
         var res = await this.session.utils.execVbs(`
             Set rcs = dSession.Db.OpenRecordset("${ sql.replaceAll('"', '""') }")
             rcs.Save Response, 1
+            rcs.Close
             Response.End
         `);
     
