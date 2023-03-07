@@ -1694,7 +1694,6 @@ function audioRecorder(pCallback) {
             // success callback
             function() {
                 if (save) {
-                    debugger;
                     window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
                         function (fileSystem) {
                             fileSystem.root.getFile(src, { create: false, exclusive: false	},
