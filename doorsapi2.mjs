@@ -1604,21 +1604,23 @@ class Field {
     }
 
     get value() {
-        //todo convertir al tipo del field
-        var v = this.#json.Value;
-        debugger;
         if (this.type == 2) {
-            var tv = this.session.utils.cDate(v);
-            return tv ? tv : null;
+            return this.session.utils.cDate(v);
         } else {
-            return v;
+            return this.#json.Value;
         }
     }
 
     set value(value) {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
-        this.#json.Value = value;
+        debugger;
+        if (this.type == 2) {
+            var dt = this.session.utils.cDate(dt);
+            this.#json.Value = dt ? dt.toJSON() : null;
+        } else {
+            this.#json.Value = value;
+        }
         this.valueChanged; // Para actualizar valueChanged en el JSON
     }
 
@@ -2440,7 +2442,7 @@ class Utilities {
     cDate(date) {
         var dt;
         if (date == null || date == undefined) return null;
-        
+
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
         } else {
