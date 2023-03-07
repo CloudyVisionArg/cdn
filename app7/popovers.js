@@ -121,12 +121,15 @@ function crearCarteles(pCartel,index,array){
     elTextCartel.classList.add("popover-custom-body-text");
     divBlock.append(elTextCartel);
 
+    const elButtonOk_container = document.createElement("div");
+    elButtonOk_container.classList.add("popover-custom-button-container")
     const elButtonOk = document.createElement("button");
     elButtonOk.setAttribute("type","button");
     elButtonOk.classList.add("popover-custom-button","button","button-small");
     elButtonOk.setAttribute("onclick","btnClosePopover(this)");
     elButtonOk.innerText = "Ok"
-    divInner.append(elButtonOk);
+    elButtonOk_container.append(elButtonOk);
+    divInner.append(elButtonOk_container);
 
 
     const text = div.outerHTML;
