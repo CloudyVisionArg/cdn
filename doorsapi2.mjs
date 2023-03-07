@@ -30,7 +30,7 @@ await utilsPromise;
 
 async function loadUtils() {
     if (inNode()) {
-        var importCache = await import ('.../import-cache.mjs');
+        var importCache = await import ('../import-cache.mjs');
         var fs = await import('fs');
 
     } else {
