@@ -124,7 +124,6 @@ await (async () => {
 
     // fast-xml-parser - https://github.com/NaturalIntelligence/fast-xml-parser
 
-    debugger;
     if (typeof(_fastXmlParser) == 'undefined') {
         if (inNode()) {
             var res = await import('fast-xml-parser');
@@ -980,6 +979,10 @@ class Database {
 
         if (inNode()) {
             // todo: https://geshan.com.np/blog/2022/11/nodejs-xml-parser/
+
+            var parser = new XMLParser();
+            var json = parser.parse(txt);
+            debugger;
         
         } else {
             const parser = new DOMParser();
