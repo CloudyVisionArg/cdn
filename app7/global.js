@@ -873,9 +873,11 @@ function errPage(err) {
 
 // Borra los datos locales
 function cleanDb(pCallback) {
+    var arrExc = ['consoleLog', 'scripts', 'popoversLeidos'];
     for (var key in localStorage) {
         if (localStorage.hasOwnProperty(key)) {
-            if (key != 'consoleLog' && key != 'scripts') localStorage.removeItem(key);
+            debugger;
+            if (arrExc.indexOf(key) < 0) localStorage.removeItem(key);
         }
     }
 

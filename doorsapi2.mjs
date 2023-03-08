@@ -233,6 +233,7 @@ export class Session {
     #db;
     #utils;
     #loggedUser;
+    #push;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(serverUrl, authToken, this);
@@ -405,15 +406,22 @@ export class Session {
         });
     };
 
-    pushRegistration(settings) {
-        var url = 'notifications/devices';
-        return this.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
+    // Metodos para manejo de notificaciones push
+    get push() {
+        if (!this.#push) {
+            this.#push = new Push(this);
+        };
+        return this.#push;
     }
 
+    // Backward compat
+    pushRegistration(settings) {
+        return this.push.register(settings);
+    }
+
+    // Backward compat
     pushUnreg(regType, regId) {
-        var url = 'notifications/devices';
-        var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
-        return this.restClient.fetch(url, 'DELETE', params, '');
+        return this.push.unreg(regType, regId);
     }
 
     get restClient() {
@@ -2175,6 +2183,40 @@ class Property {
                 }
             })
         }
+    }
+}
+
+
+class Push {
+    #session;
+    
+    constructor(session) {
+        this.#session = session;
+    }
+
+    send() {
+        var url = '/notification';
+
+    }
+
+    register(settings) {
+        var url = 'notifications/devices';
+        return this.session.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
+    }
+
+    // Alias de unregister
+    unreg(regType, regId) {
+        return this.unregister(regType, regId);
+    }
+
+    unregister(regType, regId) {
+        var url = 'notifications/devices';
+        var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
+        return this.session.restClient.fetch(url, 'DELETE', params, '');
+    }
+
+    get session() {
+        return this.#session;
     }
 }
 
