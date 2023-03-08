@@ -2217,7 +2217,8 @@ class Push {
         if (msg.data) {
             if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
             notW.JsonExtraParameters = JSON.stringify(msg.data, (key, value) => {
-                if (key == '') return value;
+                if (typeof(value) == 'number') return value.toString();
+                return value;
                 debugger;
             });
         }
@@ -2620,6 +2621,11 @@ class Utilities {
 
     inNode() {
         return inNode();
+    }
+
+    // Retorna true si value es un objeto puro {}
+    isObject(value) {
+        return Object.prototype.toString.call(value) === '[object Object]';
     }
 
     // Devuelve la fecha en formato YYYY-MM-DD
