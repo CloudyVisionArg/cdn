@@ -1505,12 +1505,9 @@ function addAtt(e) {
                 (res)=>{
                     const files = res.files;
                     debugger;
-                    Filesystem.writeFile({
-                            path: files[0].name,
-                            data: files[0].data,
-                            directory: Directory.Cache,
-                            encoding: Encoding.UTF8,
-                        }).then((succ)=>{
+                    Capacitor.Plugins.Filesystem.readFilePath({
+                            path: files[0].path,
+                        }).then((contents)=>{
                             debugger;
                         },(err)=>{
                             debugger;
