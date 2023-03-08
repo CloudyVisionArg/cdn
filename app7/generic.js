@@ -1504,6 +1504,16 @@ function addAtt(e) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (res)=>{
                     const files = res.files;
+                    debugger;
+                    const writeSecretFile = async () => {
+                        await Filesystem.writeFile({
+                          path: files[0].name,
+                          data: files[0].data,
+                          directory: Directory.Cache,
+                          encoding: Encoding.UTF8,
+                        });
+                      };
+
                     if(files.length == 1){
                         Capacitor.Plugins.Filesystem.stat({
                             path: files[0].name,
