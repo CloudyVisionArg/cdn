@@ -1509,7 +1509,7 @@ function addAtt(e) {
                         }).then((contents) => {
                             Capacitor.Plugins.Filesystem.writeFile({
                                 path : files[0].name,
-                                data : contents
+                                data : contents.data
                             }).then(
                                 (succ)=>{
                                     debugger;
