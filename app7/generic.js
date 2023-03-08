@@ -1416,7 +1416,6 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
-    debugger;
     if (action == 'camera') {
         if (_isCapacitor()) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
@@ -1759,6 +1758,25 @@ function getEvent(pEvent) {
         var ev = controls.find(el => el['NAME'] && el['NAME'].toUpperCase() == pEvent.toUpperCase());
         if (ev) return ev['APP7_SCRIPT'];
     }
+}
+
+//Donde va esto
+//Plugin Camera
+const CameraResultType = {
+    Uri: 'uri',
+    Base64: 'base64',
+    DataUrl: 'dataUrl'
+}
+
+const CameraSource = {
+    Prompt: 'PROMPT', //Prompts the user to select either the photo album or take a photo.
+    Camera: 'CAMERA', //Take a new photo using the camera.
+    Photos: 'PHOTOS' //Pick an existing photo from the gallery or photo album.
+}
+
+const CameraDirection = {
+    Rear: 'REAR',
+    Front: 'FRONT'
 }
 
 /*
