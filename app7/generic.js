@@ -1416,9 +1416,8 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
-
+    debugger;
     if (action == 'camera') {
-        debugger;
         if (_isCapacitor()) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(

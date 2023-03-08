@@ -53,6 +53,14 @@ audioRecorder(pCallback)
 	});
 })();
 
+// Enums jslib como dependencia
+(function () {
+	include('enums', function () {
+		var n = document.getElementById('script_app7-global');
+		n._hasdep = false;
+	});
+})();
+
 /*
 Utilizar esta funcion para resolver la Promise de una ruta
 Soporta las versiones 5 y 6 de F7
