@@ -1506,7 +1506,7 @@ function addAtt(e) {
                     const files = res.files;
                     if(files.length == 1){
                         Capacitor.Plugins.Filesystem.stat({
-                            path: file.name,
+                            path: files[0].name,
                             directory: Directory.Cache,
                         }).then((res)=>{
                             debugger;
