@@ -2231,10 +2231,9 @@ class Push {
             //notW.LoginName = 'jorge@cloudy.ar'; // todo: en q casos se usa?
             notWs.push(n);
         }
-        debugger;
 
         var url = '/notification';
-        return this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
+        return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationsW');
     }
 
     register(settings) {
