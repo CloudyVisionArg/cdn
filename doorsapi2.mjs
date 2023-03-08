@@ -514,6 +514,7 @@ class Account {
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
                 res => {
+                    debugger;
                     if (res.has(account)) {
                         resolve(res.get(account));
 
