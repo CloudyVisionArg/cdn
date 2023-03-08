@@ -2234,7 +2234,7 @@ class Push {
 
         debugger;
         var url = '/notification';
-        return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationsW');
+        return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationW');
     }
 
     register(settings) {
