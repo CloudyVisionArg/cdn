@@ -1505,25 +1505,28 @@ function addAtt(e) {
                 (res)=>{
                     const files = res.files;
                     debugger;
-                    const writeSecretFile = async () => {
-                        await Filesystem.writeFile({
-                          path: files[0].name,
-                          data: files[0].data,
-                          directory: Directory.Cache,
-                          encoding: Encoding.UTF8,
-                        });
-                      };
-
-                    if(files.length == 1){
-                        Capacitor.Plugins.Filesystem.stat({
+                    Filesystem.writeFile({
                             path: files[0].name,
+                            data: files[0].data,
                             directory: Directory.Cache,
-                        }).then((res)=>{
+                            encoding: Encoding.UTF8,
+                        }).then((succ)=>{
                             debugger;
                         },(err)=>{
                             debugger;
                         });
-                        console.log(result);
+                      //};
+
+                    // if(files.length == 1){
+                    //     Capacitor.Plugins.Filesystem.stat({
+                    //         path: files[0].name,
+                    //         directory: Directory.Cache,
+                    //     }).then((res)=>{
+                    //         debugger;
+                    //     },(err)=>{
+                    //         debugger;
+                    //     });
+                    //     console.log(result);
                         // const fileUrl = files[0].path;
                         // getFile(fileUrl).then(
                         //     function (file) {
@@ -1534,7 +1537,7 @@ function addAtt(e) {
                         //     },
                         //     errMgr
                         // )
-                    }
+                   // }
                 },errMgr);
         }else{
             chooser.getFileMetadata().then(
