@@ -2902,7 +2902,6 @@ class RestClient {
 
         return new Promise((resolve, reject) => {
             // Opciones por defecto estan marcadas con un *
-            debugger;
             fetch(completeUrl, {
                 method: method, // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
