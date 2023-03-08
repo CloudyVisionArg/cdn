@@ -1503,15 +1503,19 @@ function addAtt(e) {
         if(_isCapacitor()){
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (res)=>{
-                    getFile(res.uri).then(
-                        function (file) {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    )
+                    const files = res.files;
+                    if(files.length == 1){
+                        const fileUrl = files[0].path;
+                        getFile(fileUrl).then(
+                            function (file) {
+                                att.URL = file.localURL;
+                                att.Name = file.name;
+                                att.Size = file.size;
+                                renderNewAtt(att, $attachs);
+                            },
+                            errMgr
+                        )
+                    }
                 },errMgr);
         }else{
             chooser.getFileMetadata().then(
