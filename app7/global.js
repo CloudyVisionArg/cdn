@@ -1826,6 +1826,22 @@ function cameraOptions(pSource) {
 	};
 };
 
+function cameraOptionsCapacitor(pSource){
+    return {
+		quality: 50,
+		saveToGallery: true,    
+		sourceType: pSource,
+		//encodingType: Camera.EncodingType.JPEG,
+		//mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+}
+
 function getFile(pFileURL) {
     return new Promise(function (resolve, reject) {
         if (device.platform == 'Android' && pFileURL.substring(0, 10) == 'content://') {

@@ -1418,21 +1418,40 @@ function addAtt(e) {
     var att = {};
 
     if (action == 'camera') {
-        navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    function (file) {
-                        att.URL = file.localURL;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    },
-                    errMgr
-                )
-            },
-            errMgr,
-            cameraOptions(Camera.PictureSourceType.CAMERA)
-        )
+        debugger;
+        if (_isCapacitor()) {
+            const opts = cameraOptionsCapacitor(CameraSource.Camera);
+            Capacitor.Plugins.Camera.getPhoto(opts).then(
+                (res)=>{
+                    getFile(fileURL).then(
+                        function (file) {
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    );
+                }, errMgr
+            );
+        }
+        else {
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        function (file) {
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    )
+                },
+                errMgr,
+                cameraOptions(Camera.PictureSourceType.CAMERA)
+            )
+        }
 
     } else if (action == 'photo') {
         navigator.camera.getPicture(
