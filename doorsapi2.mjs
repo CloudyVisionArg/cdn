@@ -514,7 +514,6 @@ class Account {
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
                 res => {
-                    debugger;
                     if (res.has(account)) {
                         resolve(res.get(account));
 
@@ -2195,9 +2194,9 @@ class Push {
         this.#session = session;
     }
 
-    send() {
+    send(msg) {
         var url = '/notification';
-
+        return this.session.restClient.fetch(url, 'PUT', msg, 'notificationW');
     }
 
     register(settings) {
