@@ -2232,6 +2232,7 @@ class Push {
             notWs.push(n);
         }
 
+        debugger;
         var url = '/notification';
         return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationsW');
     }
