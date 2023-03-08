@@ -1505,7 +1505,7 @@ function addAtt(e) {
                 (res)=>{
                     const files = res.files;
                     debugger;
-                    Capacitor.Plugins.Filesystem.readFilePath({
+                    Capacitor.Plugins.Filesystem.readFile({
                             path: files[0].path,
                         }).then((contents)=>{
                             debugger;
