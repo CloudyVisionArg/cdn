@@ -71,7 +71,8 @@ var app = {
         
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
-        if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+        //if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+        if(Capacitor.Plugins.FileOpener) console.log('Plugin error: @capacitor-community/file-opener');
         if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
         
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');

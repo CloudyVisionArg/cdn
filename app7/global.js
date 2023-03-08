@@ -987,7 +987,6 @@ async function pushRegistrationCapacitor(pCallback) {
 
 async function addListenersCapacitor (pCallback) {
     await Capacitor.Plugins.PushNotifications.addListener('registration', token => {
-        debugger;
         console.info('Registration token: ', token.value);
         const data = { 
             registrationId : token.value,

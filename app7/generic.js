@@ -1387,15 +1387,26 @@ function openAtt(pURL) {
     }
 
     function openFile(pFile) {
-        // Abre el archivo con fileOpener2
-        cordova.plugins.fileOpener2.open(pFile, undefined, {
-            success: function () {
-                console.log('File opened');
-            },
-            error: function (err) {
-                logAndToast('fileOpener2 error: ' + err.message);
-            },
-        });
+        if(_isCapacitor()){
+            Capacitor.Plugins.FileOpener.open({filePath : pFile}).then(
+                ()=> {
+                    console.log('File opened');
+                },
+                (err)=> {
+                    logAndToast('Capacitor.Plugins.FileOpener error: ' + err.message);
+                }, 
+            );
+        }else{
+            // Abre el archivo con fileOpener2
+            cordova.plugins.fileOpener2.open(pFile, undefined, {
+                success: function () {
+                    console.log('File opened');
+                },
+                error: function (err) {
+                    logAndToast('fileOpener2 error: ' + err.message);
+                },
+            });
+        }
     }
 }
 
