@@ -4,7 +4,7 @@ La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repe
 
 Ej:
 
-	include('emojis');
+	await include('emojis');
 	
 	include('emojis', function () {
 		// emojis loaded
@@ -18,27 +18,19 @@ Puedo verificar si la biblioteca se termino de cargar con el metodo scriptLoaded
 
 Puedo especificar la version (tag del commit)
 
-	include('emojis', 15, function () {
-		// emojis v15 loaded
-	});
+	await include('emojis', 15);
 
 U obtener el ultimo commit, sin caches, pidiendo la version 0
 
-	include('emojis', 0, function () {
-		// emojis last commit loaded
-	});
+	await include('emojis', 0);
 
 O el ultimo commit de un branch, pasando el nombre del mismo (case sensitive)
 
-	include('emojis', 'MyBranch', function () {
-		// emojis last commit from MyBranch loaded
-	});
+	await include('emojis', 'MyBranch');
 
 Puedo usarlo para mis propios script especificando el src:
 
-	include('myScript', 'http://path/to/my/script.js', function () {
-		// myScript loaded
-	});
+	await include('myScript', 'http://path/to/my/script.js');
 
 Tambien puedo armar un array de includes y cargarlos todos juntos:
 
@@ -49,9 +41,8 @@ Tambien puedo armar un array de includes y cargarlos todos juntos:
 	scripts.push({ id: 'web-javascript', version: 0 }); // Ult commit
 	scripts.push({ id: 'web-javascript', version: 'MyBranch' }); // Ult commit del branch MyBranch
 	
-	include(scripts, function () {
-		// all scripts loaded
-	});
+	await include(scripts);
+    // all scripts loaded
 
 Si el src termina en '.css' se creara un <link>, sino un <script>
 */
