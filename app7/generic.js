@@ -1418,6 +1418,7 @@ function addAtt(e) {
     var att = {};
     if (action == 'camera') {
         if (_isCapacitor()) {
+            debugger;
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (res)=>{
@@ -1766,18 +1767,18 @@ const CameraResultType = {
     Uri: 'uri',
     Base64: 'base64',
     DataUrl: 'dataUrl'
-}
+};
 
 const CameraSource = {
     Prompt: 'PROMPT', //Prompts the user to select either the photo album or take a photo.
     Camera: 'CAMERA', //Take a new photo using the camera.
     Photos: 'PHOTOS' //Pick an existing photo from the gallery or photo album.
-}
+};
 
 const CameraDirection = {
     Rear: 'REAR',
     Front: 'FRONT'
-}
+};
 
 /*
 Function getTimeInterval(pCtlNode, pProps)
