@@ -1505,16 +1505,25 @@ function addAtt(e) {
                 (res)=>{
                     const files = res.files;
                     if(files.length == 1){
-                        const fileUrl = files[0].path;
-                        getFile(fileUrl).then(
-                            function (file) {
-                                att.URL = file.localURL;
-                                att.Name = file.name;
-                                att.Size = file.size;
-                                renderNewAtt(att, $attachs);
-                            },
-                            errMgr
-                        )
+                        Capacitor.Plugins.Filesystem.stat({
+                            path: file.name,
+                            directory: Directory.Cache,
+                        }).then((res)=>{
+                            debugger;
+                        },(err)=>{
+                            debugger;
+                        });
+                        console.log(result);
+                        // const fileUrl = files[0].path;
+                        // getFile(fileUrl).then(
+                        //     function (file) {
+                        //         att.URL = file.localURL;
+                        //         att.Name = file.name;
+                        //         att.Size = file.size;
+                        //         renderNewAtt(att, $attachs);
+                        //     },
+                        //     errMgr
+                        // )
                     }
                 },errMgr);
         }else{
