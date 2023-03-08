@@ -1499,9 +1499,10 @@ function addAtt(e) {
             );
         }
     } else if (action == 'doc') {
-        chooser.getFileMetadata().then(
-            function (res) {
-                if (res) {
+        debugger;
+        if(_isCapacitor()){
+            Capacitor.Plugins.FilePicker.pickFiles().then(
+                (res)=>{
                     getFile(res.uri).then(
                         function (file) {
                             att.URL = file.localURL;
@@ -1511,10 +1512,25 @@ function addAtt(e) {
                         },
                         errMgr
                     )
-                }
-            },
-            errMgr
-        )
+                },errMgr);
+        }else{
+            chooser.getFileMetadata().then(
+                function (res) {
+                    if (res) {
+                        getFile(res.uri).then(
+                            function (file) {
+                                att.URL = file.localURL;
+                                att.Name = res.name;
+                                att.Size = file.size;
+                                renderNewAtt(att, $attachs);
+                            },
+                            errMgr
+                        )
+                    }
+                },
+                errMgr
+            );
+        }
         
     } else if (action == 'audio') {
         audioRecorder(function (file) {
