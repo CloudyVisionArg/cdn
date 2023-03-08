@@ -1506,7 +1506,7 @@ function addAtt(e) {
                     getFile(res.uri).then(
                         function (file) {
                             att.URL = file.localURL;
-                            att.Name = res.name;
+                            att.Name = file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
                         },
