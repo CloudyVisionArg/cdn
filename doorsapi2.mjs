@@ -2912,8 +2912,7 @@ class RestClient {
                         }
                     }
                     else {
-
-                        if (response.statusCode !== 200 || parsedJson.ExceptionMessage !== null) {
+                        if (response.status !== 200 || parsedJson.ExceptionMessage) {
                             reject(me.session.utils.newErr(parsedJson));
                         }
                     }
