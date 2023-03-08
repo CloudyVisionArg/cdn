@@ -1427,9 +1427,9 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
+    debugger;
     if (action == 'camera') {
         if (_isCapacitor()) {
-            debugger;
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (res)=>{
@@ -1464,22 +1464,40 @@ function addAtt(e) {
         }
 
     } else if (action == 'photo') {
-        navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    function (file) {
-                        att.URL = file.localURL;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    },
-                    errMgr
-                )
-            },
-            errMgr,
-            cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-        );
-        
+        if (_isCapacitor()) {
+            //NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
+            // quizas estaria bueno 
+            const opts = cameraOptionsCapacitor(CameraSource.Photos);
+            Capacitor.Plugins.Camera.getPhoto(opts).then(
+                (res)=>{
+                    getFile(res.path).then(
+                        function (file) {
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    );
+                }, errMgr
+            );
+        }else{
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        function (file) {
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    )
+                },
+                errMgr,
+                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            );
+        }
     } else if (action == 'doc') {
         chooser.getFileMetadata().then(
             function (res) {
