@@ -2217,8 +2217,9 @@ class Push {
         if (msg.data) {
             if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
             notW.JsonExtraParameters = JSON.stringify(msg.data, (key, value) => {
-                if (key == '' || typeof(value) == 'date') return value;
+                if (key == '') return value;
                 if (typeof(value) == 'number' || typeof(value) == 'boolean') return value.toString();
+                if (Object.prototype.toString.call(date) === '[object Date]') return value;
             });
         }
 
