@@ -2240,18 +2240,21 @@ class Push {
     }
     */
 
-    send(msg) {
-        var notW = {};
-        notW.AccId = msg.to;
-        notW.Title = msg.title;
-        notW.Body = msg.body;
-        if (msg.data) {
-            if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
-            notW.JsonExtraParameters = this.stringifyData(msg.data);
+    async send(msg) {
+        msg.to = Array.isArray(msg.to) ? msg.to : [msg.to];
+        for (var el of msg.to) {
+            var notW = {};
+            notW.AccId = el;
+            notW.Title = msg.title;
+            notW.Body = msg.body;
+            if (msg.data) {
+                if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
+                notW.JsonExtraParameters = this.stringifyData(msg.data);
+            }
+    
+            var url = '/notification';
+            await this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
         }
-
-        var url = '/notification';
-        return this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
     }
 
     get session() {
