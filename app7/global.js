@@ -876,7 +876,6 @@ function cleanDb(pCallback) {
     var arrExc = ['consoleLog', 'scripts', 'popoversLeidos'];
     for (var key in localStorage) {
         if (localStorage.hasOwnProperty(key)) {
-            debugger;
             if (arrExc.indexOf(key) < 0) localStorage.removeItem(key);
         }
     }
