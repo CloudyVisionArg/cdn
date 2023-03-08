@@ -2232,9 +2232,8 @@ class Push {
             notWs.push(n);
         }
 
-        debugger;
         var url = '/notification';
-        return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationW');
+        return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationsW');
     }
 
     register(settings) {
@@ -2879,6 +2878,7 @@ class RestClient {
 
         return new Promise((resolve, reject) => {
             // Opciones por defecto estan marcadas con un *
+            debugger;
             fetch(completeUrl, {
                 method: method, // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
