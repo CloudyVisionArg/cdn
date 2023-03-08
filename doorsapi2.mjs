@@ -2217,7 +2217,7 @@ class Push {
         if (msg.data) {
             if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
             notW.JsonExtraParameters = JSON.stringify(msg.data, (key, value) => {
-                debugger;
+                if (key == '') return value; 
             });
         }
 
