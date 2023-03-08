@@ -2194,7 +2194,71 @@ class Push {
         this.#session = session;
     }
 
-    jsonData(data) {
+    register(settings) {
+        var url = 'notifications/devices';
+        return this.session.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
+    }
+
+    /*
+    Envia una notificacion push
+    msg = {
+        to: accId (pueden ser grupos), puede ser un array
+        title: titulo,
+        body: cuerpo,
+        data: { todos los datos que quiera agregar, ej:
+            doc_id: 555,
+            fld_id: 111,
+            (el guid se genera solo)
+        }
+    }
+    */
+    // todo dejar esta cdo se cierre el issue 251
+    /*
+    send(msg) {
+        msg.to = Array.isArray(msg.to) ? msg.to : [msg.to];
+
+        var nots = [];
+
+        var notW = {};
+        notW.Title = msg.title;
+        notW.Body = msg.body;
+        if (msg.data) {
+            if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
+            notW.JsonExtraParameters = this.stringifyData(msg.data);
+        }
+
+        for (var el of msg.to) {
+            var n = {};
+            Object.assign(n, notW);
+            n.AccId = el;
+            //notW.LoginName = 'jorge@cloudy.ar'; // todo: en q casos se usa?
+            nots.push(n);
+        }
+
+        var url = '/notification';
+        return this.session.restClient.fetch(url, 'PUT', nots, 'notificationsW');
+    }
+    */
+
+    send(msg) {
+        var notW = {};
+        notW.AccId = msg.to;
+        notW.Title = msg.title;
+        notW.Body = msg.body;
+        if (msg.data) {
+            if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
+            notW.JsonExtraParameters = this.stringifyData(msg.data);
+        }
+
+        var url = '/notification';
+        return this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
+    }
+
+    get session() {
+        return this.#session;
+    }
+    
+    stringifyData(data) {
         if (typeof(data) == 'string') {
             return data;
         } else {
@@ -2205,53 +2269,6 @@ class Push {
         }
     }
 
-    register(settings) {
-        var url = 'notifications/devices';
-        return this.session.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
-    }
-
-    /*
-    Envia una notificacion push
-    msg = {
-        to: accId (pueden ser grupos)
-        title: titulo,
-        body: cuerpo,
-        data: { todos los datos que quiera agregar, ej:
-            doc_id: 555,
-            fld_id: 111,
-            (el guid se genera solo)
-        }
-    }
-    */
-    send(msg) {
-        msg.to = Array.isArray(msg.to) ? msg.to : [msg.to];
-
-        var notWs = [];
-
-        var notW = {};
-        notW.Title = msg.title;
-        notW.Body = msg.body;
-        if (msg.data) {
-            if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
-            notW.JsonExtraParameters = this.jsonData(msg.data);
-        }
-
-        for (var el of msg.to) {
-            var n = {};
-            Object.assign(n, notW);
-            n.AccId = el;
-            //notW.LoginName = 'jorge@cloudy.ar'; // todo: en q casos se usa?
-            notWs.push(n);
-        }
-
-        var url = '/notification';
-        return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationsW');
-    }
-
-    get session() {
-        return this.#session;
-    }
-    
     // Alias de unregister
     unreg(regType, regId) {
         return this.unregister(regType, regId);
