@@ -2194,6 +2194,22 @@ class Push {
         this.#session = session;
     }
 
+    jsonData(data) {
+        if (typeof(data) == 'string') {
+            return data;
+        } else {
+            return JSON.stringify(data, (key, value) => {
+                if (key == '' || typeof(value) == 'string') return value;
+                if (typeof(value) == 'number' || typeof(value) == 'boolean') return value.toString();
+            });
+        }
+    }
+
+    register(settings) {
+        var url = 'notifications/devices';
+        return this.session.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
+    }
+
     /*
     Envia una notificacion push
     msg = {
@@ -2217,11 +2233,7 @@ class Push {
         notW.Body = msg.body;
         if (msg.data) {
             if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
-
-            notW.JsonExtraParameters = JSON.stringify(msg.data, (key, value) => {
-                if (key == '' || typeof(value) == 'string') return value;
-                if (typeof(value) == 'number' || typeof(value) == 'boolean') return value.toString();
-            });
+            notW.JsonExtraParameters = this.jsonData(msg.data);
         }
 
         for (var el of msg.to) {
@@ -2236,11 +2248,10 @@ class Push {
         return this.session.restClient.fetch(url, 'PUT', notWs, 'notificationsW');
     }
 
-    register(settings) {
-        var url = 'notifications/devices';
-        return this.session.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
+    get session() {
+        return this.#session;
     }
-
+    
     // Alias de unregister
     unreg(regType, regId) {
         return this.unregister(regType, regId);
@@ -2250,10 +2261,6 @@ class Push {
         var url = 'notifications/devices';
         var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
         return this.session.restClient.fetch(url, 'DELETE', params, '');
-    }
-
-    get session() {
-        return this.#session;
     }
 }
 
