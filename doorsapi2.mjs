@@ -2213,8 +2213,6 @@ class Push {
         var notWs = [];
 
         var notW = {};
-        //notW.LoginName = 'jorge@cloudy.ar';
-        //notW.AccId = msg.to;
         notW.Title = msg.title;
         notW.Body = msg.body;
         if (msg.data) {
@@ -2227,8 +2225,13 @@ class Push {
         }
 
         for (var el of msg.to) {
-            debugger;
+            var n = {};
+            Object.assign(n, notW);
+            n.AccId = el;
+            //notW.LoginName = 'jorge@cloudy.ar'; // todo: en q casos se usa?
+            notWs.push(n);
         }
+        debugger;
 
         var url = '/notification';
         return this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
