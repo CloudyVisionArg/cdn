@@ -2211,7 +2211,6 @@ class Push {
         var notW = {};
 
         //notW.LoginName = 'jorge@cloudy.ar';
-        debugger
         notW.AccId = msg.to;
         notW.Title = msg.title;
         notW.Body = msg.body;
@@ -2219,6 +2218,8 @@ class Push {
             if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
             notW.JsonExtraParameters = JSON.stringify(msg.data);
         }
+
+        debugger;
 
         var url = '/notification';
         return this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
