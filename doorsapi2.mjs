@@ -2197,10 +2197,10 @@ class Push {
     /*
     Envia una notificacion push
     msg = {
-        to: login o id,
+        to: accId (pueden ser grupos)
         title: titulo,
         body: cuerpo,
-        data: { todos los datos que quiera adjuntar, ej:
+        data: { todos los datos que quiera agregar, ej:
             doc_id: 555,
             fld_id: 111,
             (el guid se genera solo)
@@ -2208,21 +2208,27 @@ class Push {
     }
     */
     send(msg) {
-        var notW = {};
+        msg.to = Array.isArray(msg.to) ? msg.to : [msg.to];
 
+        var notWs = [];
+
+        var notW = {};
         //notW.LoginName = 'jorge@cloudy.ar';
-        notW.AccId = msg.to;
+        //notW.AccId = msg.to;
         notW.Title = msg.title;
         notW.Body = msg.body;
         if (msg.data) {
             if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
+
             notW.JsonExtraParameters = JSON.stringify(msg.data, (key, value) => {
                 if (key == '' || typeof(value) == 'string') return value;
                 if (typeof(value) == 'number' || typeof(value) == 'boolean') return value.toString();
             });
         }
 
-        debugger;
+        for (var el of msg.to) {
+            debugger;
+        }
 
         var url = '/notification';
         return this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
