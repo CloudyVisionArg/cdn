@@ -1504,11 +1504,19 @@ function addAtt(e) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (res)=>{
                     const files = res.files;
-                    debugger;
                     Capacitor.Plugins.Filesystem.readFile({
                             path: files[0].path,
-                        }).then((contents)=>{
-                            debugger;
+                        }).then((contents) => {
+                            Capacitor.Plugins.writeFile({
+                                path : files[0].name,
+                                data : contents
+                            }).then(
+                                (succ)=>{
+                                    debugger;
+                                },(err)=>{
+                                    debugger;
+                                }
+                            );
                         },(err)=>{
                             debugger;
                         });
