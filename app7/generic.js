@@ -1507,7 +1507,7 @@ function addAtt(e) {
                     Capacitor.Plugins.Filesystem.readFile({
                             path: files[0].path,
                         }).then((contents) => {
-                            Capacitor.Plugins.writeFile({
+                            Capacitor.Plugins.Filesystem.writeFile({
                                 path : files[0].name,
                                 data : contents
                             }).then(
