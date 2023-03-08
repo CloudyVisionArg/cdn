@@ -2219,7 +2219,7 @@ class Push {
             notW.JsonExtraParameters = JSON.stringify(msg.data, (key, value) => {
                 if (key == '') return value;
                 if (typeof(value) == 'number' || typeof(value) == 'boolean') return value.toString();
-                if (Object.prototype.toString.call(date) === '[object Date]') return value;
+                if (Object.prototype.toString.call(value) === '[object Date]') return value;
             });
         }
 
