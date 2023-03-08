@@ -1831,7 +1831,7 @@ function cameraOptionsCapacitor(pSource){
     return {
 		quality: 50,
 		saveToGallery: true,    
-		sourceType: pSource,
+		source: pSource,
 		//encodingType: Camera.EncodingType.JPEG,
 		//mediaType: Camera.MediaType.ALLMEDIA,
 		//allowEdit: (device.platform == 'iOS'),
