@@ -974,8 +974,11 @@ class Database {
 
     // OJO: Las columnas en null no bajan en el xml
     async openRecordset(sql) {
+        sql = sql.replaceAll('"', '""');
+        sql = sql.replaceAll('\n', '');
+
         var res = await this.session.utils.execVbs(`
-            Set rcs = dSession.Db.OpenRecordset("${ sql.replaceAll('"', '""') }")
+            Set rcs = dSession.Db.OpenRecordset("${sql}")
             rcs.Save Response, 1
             rcs.Close
         `);
