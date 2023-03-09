@@ -1499,60 +1499,32 @@ function addAtt(e) {
             );
         }
     } else if (action == 'doc') {
-        debugger;
         if(_isCapacitor()){
+            //Obtengo el archivo seleccionado, lo copio al cache del app y desde ahi dejo asociado.
+            //Esto deberia tener un momento en el cual se borra del cache estos files despues de subirlos.
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (res)=>{
                     const files = res.files;
+                    //lee el archivo
                     Capacitor.Plugins.Filesystem.readFile({
                             path: files[0].path,
                         }).then((contents) => {
+                            //Escribe en cache
                             Capacitor.Plugins.Filesystem.writeFile({
                                 path : files[0].name,
                                 data : contents.data,
                                 directory: Directory.Cache,
                             }).then(
-                                (succ)=>{
-                                    debugger;
-                                    getFile(succ.uri).then(
-                                            function (file) {
-                                                att.URL = file.localURL;
-                                                att.Name = file.name;
-                                                att.Size = file.size;
-                                                renderNewAtt(att, $attachs);
-                                            },
-                                            errMgr
-                                    );
-                                },(err)=>{
-                                    debugger;
-                                }
-                            );
-                        },(err)=>{
-                            debugger;
-                        });
-                      //};
-
-                    // if(files.length == 1){
-                    //     Capacitor.Plugins.Filesystem.stat({
-                    //         path: files[0].name,
-                    //         directory: Directory.Cache,
-                    //     }).then((res)=>{
-                    //         debugger;
-                    //     },(err)=>{
-                    //         debugger;
-                    //     });
-                    //     console.log(result);
-                        // const fileUrl = files[0].path;
-                        // getFile(fileUrl).then(
-                        //     function (file) {
-                        //         att.URL = file.localURL;
-                        //         att.Name = file.name;
-                        //         att.Size = file.size;
-                        //         renderNewAtt(att, $attachs);
-                        //     },
-                        //     errMgr
-                        // )
-                   // }
+                                (res)=>{
+                                    getFile(res.uri).then(
+                                        function (file) {
+                                            att.URL = file.localURL;
+                                            att.Name = file.name;
+                                            att.Size = file.size;
+                                            renderNewAtt(att, $attachs);
+                                        },errMgr);
+                                },errMgr);
+                        },errMgr);
                 },errMgr);
         }else{
             chooser.getFileMetadata().then(
