@@ -1514,6 +1514,15 @@ function addAtt(e) {
                             }).then(
                                 (succ)=>{
                                     debugger;
+                                    getFile(succ.uri).then(
+                                            function (file) {
+                                                att.URL = file.localURL;
+                                                att.Name = file.name;
+                                                att.Size = file.size;
+                                                renderNewAtt(att, $attachs);
+                                            },
+                                            errMgr
+                                    );
                                 },(err)=>{
                                     debugger;
                                 }
