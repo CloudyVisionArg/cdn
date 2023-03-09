@@ -2631,7 +2631,7 @@ class Utilities {
         })
     
         if (!res.ok) {
-            var js = await res.json();
+            var txt = await res.text();
             var err = new Error();
             err.name = js.source;
             err.message = js.description + ' at line ' + js.line + '\n' + js.code;
