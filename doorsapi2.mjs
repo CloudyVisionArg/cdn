@@ -2634,15 +2634,15 @@ class Utilities {
             var txt = await res.text();
             var err;
             debugger;
-            
+
             try {
                 var js = JSON.parse(txt + 'eee');
                 err = new Error();
                 err.name = js.source;
                 err.message = js.description + ' at line ' + js.line + '\n' + js.code;
                 err.lineNumber = js.line;
-            } catch (err) {
-                console.error(err);
+            } catch (e) {
+                console.error(e);
                 err = new Error(txt);
             }
             throw err;
