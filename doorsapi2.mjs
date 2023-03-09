@@ -2632,11 +2632,17 @@ class Utilities {
     
         if (!res.ok) {
             var txt = await res.text();
-            var js = JSON.parse(txt);
-            var err = new Error();
-            err.name = js.source;
-            err.message = js.description + ' at line ' + js.line + '\n' + js.code;
-            err.lineNumber = js.line;
+            var err;
+            try {
+                var js = JSON.parse(txt + 'eee');
+                err = new Error();
+                err.name = js.source;
+                err.message = js.description + ' at line ' + js.line + '\n' + js.code;
+                err.lineNumber = js.line;
+            } catch (err) {
+                console.error(err);
+                err = new Error(txt);
+            }
             throw err;
     
         } else {
