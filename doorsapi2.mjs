@@ -1075,6 +1075,7 @@ class Directory {
         var me = this;
         return new Promise((resolve, reject) => {
             var url;
+            debugger;
             if (isNaN(parseInt(account))) {
                 url = 'accounts?accName=' + encURIC(account);
             } else {
@@ -1520,6 +1521,9 @@ export class Document {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
     }
+
+    views() {
+    }
 };
 
 
@@ -1660,6 +1664,7 @@ export class Folder {
     #parent;
     #properties;
     #userProperties;
+    #form;
 
     constructor(folder, session, parent) {
         this.#json = folder;
@@ -1802,7 +1807,7 @@ export class Folder {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#json.Form) {
-                var url = 'forms/' + me.#json.FrmId;
+                var url = 'forms/' + me.formId;
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json.Form = res;
