@@ -1201,7 +1201,7 @@ export class Document {
     attachments(attachment) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (attachment) {
+            if (attachment != undefined) {
                 me.attachments().then(
                     res => {
                         if (res.has(attachment)) {
@@ -1790,6 +1790,7 @@ export class Folder {
     }
 
     folders(name) {
+        //todo: si no viene name devolve la lista
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
@@ -1937,7 +1938,7 @@ export class Folder {
     views(view) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (view) {
+            if (view != undefined) {
                 me.views().then(
                     res => {
                         if (res.has(view)) {
