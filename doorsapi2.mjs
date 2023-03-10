@@ -1323,10 +1323,6 @@ export class Document {
         return this.parentId
     }
 
-    get folderId() {
-        return this.parentId
-    }
-
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1416,7 +1412,7 @@ export class Document {
     }
 
     get parentId() {
-        return this.#json.HeadFields.find(it => it.Name == 'FLD_ID').Value;
+        return this.fields('fld_id').value;
     }
 
     properties(property, value) {
@@ -1992,45 +1988,6 @@ export class Folder {
 
             }
         })
-
-        /* todo
-            } else {
-                // Devuelve la coleccion
-                if (!me.#attachmentsMap._loaded) {
-                    var url = 'documents/' + me.id + '/attachments';
-                    me.session.restClient.fetch(url, 'GET', '', '').then(
-                        res => {
-                            if (res.length > 0) {
-                                // Ordena descendente
-                                res.sort(function (a, b) {
-                                    return a.AttId >= b.AttId ? -1 : 1;
-                                });
-                            }
-                            // Arma un array de AccId
-                            var ids = res.map(att => att.AccId);
-                            // Saca los repetidos
-                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                            // Levanta los accounts y completa el nombre
-                            me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                                accs => {
-                                    res.forEach(el => {
-                                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                        me.#attachmentsMap.set(el.Name, new Attachment(el, me));
-                                    });
-                                    me.#attachmentsMap._loaded = true;
-                                    resolve(me.#attachmentsMap);
-        
-                                }, reject
-                            )
-                        }, reject
-                    );
-
-                } else {
-                    resolve(me.#attachmentsMap);
-                }
-            }
-        });
-        */
     }
 
     viewsAdd(name) {
@@ -2283,11 +2240,11 @@ class Property {
     }
 
     get created() {
-        return this.#json.Created;
+        return this.session.utils.cDate(this.#json.Created);
     }
 
     get modified() {
-        return this.#json.Modified;
+        return this.session.utils.cDate(this.#json.Modified);
     }
 
     get name() {
@@ -2949,16 +2906,37 @@ class View {
     #session;
     #properties;
     #userProperties;
+    #hasFilter;
+    #owner;
+    #loaded;
 
     //var url = 'folders/' + me.id + '/views/' + 4795;
-    //{"DescriptionRaw":"","Parent":null,"Inherits":true,"FldIdOld":0, "Definition":{},"AclInfo":null,"AclInherits":false,"StyleScriptDefinition":{},"IsNew":false,"Tags":null}
-    //{"HasFilter":false}
+    //no estan {"DescriptionRaw":"","Inherits":true,"FldIdOld":0, "AclInfo":null,"AclInherits":false,"IsNew":false,"Tags":null}
 
 
     constructor(view, session, folder) {
         this.#json = view;
+        this.#hasFilter = view.HasFilter;
         this.#session = session;
         if (folder) this.#parent = folder;
+        this.#loaded = false;
+    }
+
+    async _asyncGet(property) {
+        await this._load();
+        return this.#json[property];
+    }
+
+    async _load() {
+        if (!this.#loaded) {
+            var url = 'folders/' + me.parentId + '/views/' + me.id;
+            var res = await this.session.restClient.fetch(url, 'GET', '', '');
+            // Para no pisar las que puedan haber cambiado
+            Object.assign(res, this.#json);
+            this.#json = res;
+            this.#loaded = true;
+        }
+        return this.#json;
     }
 
     acl() {
@@ -3001,9 +2979,115 @@ class View {
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
         */
     }
+    
+    get created() {
+        return this.session.utils.cDate(this.#json.Created);
+    }
+
+    get comments() {
+        return this.#json.Comments;
+    }
+
+    set comments(value) {
+        this.#json.Comments = value;
+    }
+
+    get definition() {
+        return this._asyncGet('Definition');
+    }
+
+    set definition(value) {
+        this.#json.Definition = value;
+    }
+
+    get description() {
+        return this.#json.Description;
+    }
+
+    set description(value) {
+        this.#json.Description = value;
+    }
+
+    get folder() {
+        return this.parent
+    }
+
+    get folderId() {
+        return this.parentId
+    }
+
+    get hasFilter() {
+        return this.#hasFilter;
+    }
+
+    get id() {
+        return this.#json.VieId;
+    }
+
+    get modified() {
+        return this.session.utils.cDate(this.#json.Modified);
+    }
+
+    get name() {
+        return this.#json.Name;
+    }
+
+    set name(value) {
+        this.#json.Name = value;
+    }
 
     get objectType() {
         return View.objectType;
+    }
+
+    get owner() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#owner) {
+                me.session.directory.accounts(me.ownerId).then(
+                    res => {
+                        me.#owner = res.cast2User();
+                        resolve(me.#owner);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#owner);
+            }
+        });
+    }
+
+    get ownerId() {
+        return this.#json.AccId;
+    }
+
+    get parent() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#parent) {
+                me.session.folder(me.parentId).then(
+                    res => {
+                        me.#parent = res;
+                        resolve(res);
+                    },
+                    reject
+                );
+            } else {
+                resolve(me.#parent);
+            }
+        });
+    }
+
+    get parentId() {
+        return this.#json.FldId;
+    }
+
+    get private() {
+        return this.#json.Private;
+    }
+
+    set private(value) {
+        this.#json.Private = value;
     }
 
     properties(property, value) {
@@ -3011,9 +3095,25 @@ class View {
         return this.#properties.set(property, value);
     }
 
+    get styleScript() {
+        return this._asyncGet('StyleScriptDefinition');
+    }
+
+    set styleScript(value) {
+        this.#json.StyleScriptDefinition = value;
+    }
+
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
+    }
+
+    get type() {
+        return this.#json.Type;
+    }
+
+    set type(value) {
+        this.#json.Type = value;
     }
 
     userProperties(property, value) {
