@@ -1790,7 +1790,7 @@ export class Folder {
     }
 
     folders(name) {
-        //todo: si no viene name devolve la lista
+        //todo: si no viene name devolver la lista
         var me = this;
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);

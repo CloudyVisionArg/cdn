@@ -8,8 +8,8 @@ Framework7: https://framework7.io/docs/
 */
 
 var fld_id, doc_id, doc, folder, cacheDir;
-var docJson, folderJson, controlsFolderJson;
-var doc2, folder2, controlsFolder2; // todo: Eliminar cdo se pueda usar doc y folder
+var docJson, folderJson;
+var doc2, folder2; // todo: Eliminar cdo se pueda usar doc y folder
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -92,19 +92,15 @@ if (device.platform != 'browser') {
 })();
 
 async function loadControls() {
-    debugger;
     var cf = objPropCI(doc2.tags, 'controlsFolder');
 
     try {
         if (cf) {
-            controlsFolder2 = await folder2.app.folders(cf);
+            controlsFolder = await folder2.app.folders(cf);
         } else {
-            controlsFolder2 = await folder2.folders('controls');
+            controlsFolder = await folder2.folders('controls');
         }
-        controlsFolder = controlsFolder2.toJSON();
-        controlsFolderJson = controlsFolder2.toJSON();
-
-        controls = await controlsFolder2.search({ order: 'parent, order, column', maxTextLen: 0 });
+        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
         renderPage();    
 
@@ -114,7 +110,7 @@ async function loadControls() {
 }
 
 function getControlsRights(pControls) {
-    var cr = objPropCI(docJson.Tags, 'controlsRights');
+    var cr = objPropCI(doc2.tags, 'controlsRights');
     if (cr) {
         try {
             controlsRights = $.parseXML(cr);
@@ -252,6 +248,7 @@ function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
+        // todo seguir aca
         docJson.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
