@@ -3112,7 +3112,7 @@ class View {
         var res = await this.session.restClient.fetch(url, 'POST', this.#json, 'view');
         var id = res.VieId;
         url = 'folders/' + this.parentId + '/views/' + id;
-        res = await this.session.restClient.fetch((url, 'GET', '', '');
+        res = await this.session.restClient.fetch(url, 'GET', '', '');
         debugger;
     }
 
