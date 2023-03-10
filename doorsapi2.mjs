@@ -592,10 +592,14 @@ class Account {
         }
     }
 
-    childAccountsAdd(accounts) {
+    async childAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
+        var res = this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
+        debugger;
+        this.#json.ChildAccountsList = undefined;
+        return res;
+        // todo: en todos los add y remove hay q actualizar las colecciones
     }
 
     childAccountsRecursive(account, has) {
@@ -1522,7 +1526,73 @@ export class Document {
     }
 
     views() {
+        /* todo
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (attachment) {
+                me.attachments().then(
+                    res => {
+                        if (res.has(attachment)) {
+                            resolve(res.get(attachment));
+                        } else {
+                            reject(new Error('Attachment not found: ' + attachment));
+                        }
+                    },
+                    reject
+                )
+
+            } else {
+                // Devuelve la coleccion
+                if (!me.#attachmentsMap._loaded) {
+                    var url = 'documents/' + me.id + '/attachments';
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
+                        res => {
+                            if (res.length > 0) {
+                                // Ordena descendente
+                                res.sort(function (a, b) {
+                                    return a.AttId >= b.AttId ? -1 : 1;
+                                });
+                            }
+                            // Arma un array de AccId
+                            var ids = res.map(att => att.AccId);
+                            // Saca los repetidos
+                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                            // Levanta los accounts y completa el nombre
+                            me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                                accs => {
+                                    res.forEach(el => {
+                                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                                        me.#attachmentsMap.set(el.Name, new Attachment(el, me));
+                                    });
+                                    me.#attachmentsMap._loaded = true;
+                                    resolve(me.#attachmentsMap);
+        
+                                }, reject
+                            )
+                        }, reject
+                    );
+
+                } else {
+                    resolve(me.#attachmentsMap);
+                }
+            }
+        });
+        */
     }
+    viewsAdd(name) {
+        /* todo
+        if (!name) throw new Error('name is required');
+
+        var att = new Attachment({
+            Name: name,
+            IsNew: true,
+        }, this);
+
+        this.#attachmentsMap.set(name, att);
+        return att;
+        */
+    }
+
 };
 
 
