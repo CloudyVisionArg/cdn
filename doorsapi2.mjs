@@ -1141,6 +1141,7 @@ export class Document {
     #properties;
     #userProperties;
     #owner;
+    #form;
 
     // todo: como pasamos los attachs en memoria?
     // https://gist.github.com/jonathanlurie/04fa6343e64f750d03072ac92584b5df
@@ -1318,7 +1319,20 @@ export class Document {
     }
 
     get form() {
-        // todo
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#form) {
+                me.session.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        me.#form = new Form(res, me.session);
+                        resolve(me.#form);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#form);
+            }
+        });
     }
 
     get formId() {
