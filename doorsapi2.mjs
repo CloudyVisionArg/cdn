@@ -3111,9 +3111,12 @@ class View {
         var url = 'folders/' + this.parentId + '/views';
         var res = await this.session.restClient.fetch(url, 'POST', this.#json, 'view');
         var id = res.VieId;
+        // Actualiza el json
         url = 'folders/' + this.parentId + '/views/' + id;
         res = await this.session.restClient.fetch(url, 'GET', '', '');
-        debugger;
+        this.#json = res;
+        this.#hasFilter = res.HasFilter;
+        this.#loaded = res.Definition ? true : false;
     }
 
     get session() {
