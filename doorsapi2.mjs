@@ -1836,7 +1836,11 @@ export class Folder {
     }
 
     get name() {
-        debugger;
+        return this.#json.Name;
+    }
+
+    set name(value) {
+        this.#json.Name = value;
     }
 
     // Alias de documentsNew
