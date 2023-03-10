@@ -9,7 +9,7 @@ Framework7: https://framework7.io/docs/
 
 var fld_id, doc_id, doc, folder, cacheDir;
 var docJson, folderJson, controlsFolderJson;
-var doc2, folder2; // todo: Eliminar cdo se pueda usar doc y folder
+var doc2, folder2, controlsFolder2; // todo: Eliminar cdo se pueda usar doc y folder
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -91,35 +91,23 @@ if (device.platform != 'browser') {
     }
 })();
 
-
-function getControlsFolder() {
+async function getControlsFolder() {
     debugger;
-    var cf = objPropCI(docJson.Tags, 'controlsFolder');
+    var cf = objPropCI(doc2.tags, 'controlsFolder');
 
-    if (cf) {
-        DoorsAPI.foldersGetByPath(folderJson.RootFolderId, cf).then(
-            function (res) {
-                controlsFolder = res;
-                controlsFolderJson = res;
-                loadControls();
-            },
-            function (err) {
-                renderPage(); // Dibuja igual, sin controles
-            }
-        );
+    try {
+        if (cf) {
+            controlsFolder2 = await folder2.app.folders(cf);
+        } else {
+            controlsFolder2 = await folder2.folders('controls');
+        }
+        controlsFolder = controlsFolder2.toJSON();
+        controlsFolderJson = controlsFolder2.toJSON();
+        loadControls()
 
-    } else {
-        DoorsAPI.foldersGetByName(fld_id, 'controls').then(
-            function (res) {
-                controlsFolder = res;
-                controlsFolderJson = res;
-                loadControls();
-            },
-            function (err) {
-                renderPage(); // Dibuja igual, sin controles
-            }
-        );
-    };
+    } catch(err) {
+        renderPage(); // Dibuja igual, sin controles
+    }
 }
 
 function loadControls() {
