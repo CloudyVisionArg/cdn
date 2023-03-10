@@ -1955,7 +1955,9 @@ export class Folder {
             } else {
                 if (!me.#viewsMap) {
                     var map = new DoorsMap();
-                    var url = 'folders/' + me.id + '/views';
+                    var url = 'folders/' + me.id + '/views/' + 4795;
+                    //var url = 'folders/' + me.id + '/views';
+                    //{"VieId":4795,"FldId":5103,"Name":"Agenda","Description":"","Private":false,"AccId":0,"Comments":null,"Created":"2017-06-14T19:22:50.74Z","Modified":"2022-09-29T19:06:26.01Z","Type":1,"HasFilter":false}
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             debugger;
