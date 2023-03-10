@@ -1950,7 +1950,6 @@ export class Folder {
                 )
             } else {
                 if (!me.#viewsMap) {
-                    var map = new DoorsMap();
                     var url = 'folders/' + me.id + '/views';
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
@@ -1972,10 +1971,10 @@ export class Folder {
                                 };
                             });
 
+                            me.#viewsMap = new DoorsMap();
                             for (var el of res) {
-                                map.set(el.Name, new View(el, me.session, me));
+                                me.#viewsMap.set(el.Name, new View(el, me.session, me));
                             }
-                            me.#viewsMap = map;
                             resolve(me.#viewsMap);
                         },
                         reject
