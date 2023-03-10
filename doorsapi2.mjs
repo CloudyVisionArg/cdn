@@ -1865,6 +1865,10 @@ export class Folder {
         });
     }
 
+    get parentId() {
+        return this.#json.ParentFolder;
+    }
+
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
@@ -1990,7 +1994,7 @@ export class Folder {
     }
 
     async viewsAdd(name) {
-        var url = 'folders/' + this.parentId + '/views/new';
+        var url = 'folders/' + this.id + '/views/new';
         var res = await this.session.restClient.fetch(url, 'GET', '', '');
         debugger;
     
