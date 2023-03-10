@@ -1954,8 +1954,6 @@ export class Folder {
                     var url = 'folders/' + me.id + '/views';
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
-                            debugger;
-
                             // Ordena
                             res.sort(function (a, b) {
                                 // Privadas al ult
@@ -1975,8 +1973,9 @@ export class Folder {
                             });
 
                             for (var el of res) {
-                                me.#viewsMap.set(el.Name, new View(el, me.session, me));
+                                map.set(el.Name, new View(el, me.session, me));
                             }
+                            me.#viewsMap = map;
                             resolve(me.#viewsMap);
                         },
                         reject
