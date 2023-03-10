@@ -1529,75 +1529,6 @@ export class Document {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
     }
-
-    views() {
-        /* todo
-        var me = this;
-        return new Promise((resolve, reject) => {
-            if (attachment) {
-                me.attachments().then(
-                    res => {
-                        if (res.has(attachment)) {
-                            resolve(res.get(attachment));
-                        } else {
-                            reject(new Error('Attachment not found: ' + attachment));
-                        }
-                    },
-                    reject
-                )
-
-            } else {
-                // Devuelve la coleccion
-                if (!me.#attachmentsMap._loaded) {
-                    var url = 'documents/' + me.id + '/attachments';
-                    me.session.restClient.fetch(url, 'GET', '', '').then(
-                        res => {
-                            if (res.length > 0) {
-                                // Ordena descendente
-                                res.sort(function (a, b) {
-                                    return a.AttId >= b.AttId ? -1 : 1;
-                                });
-                            }
-                            // Arma un array de AccId
-                            var ids = res.map(att => att.AccId);
-                            // Saca los repetidos
-                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                            // Levanta los accounts y completa el nombre
-                            me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                                accs => {
-                                    res.forEach(el => {
-                                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                        me.#attachmentsMap.set(el.Name, new Attachment(el, me));
-                                    });
-                                    me.#attachmentsMap._loaded = true;
-                                    resolve(me.#attachmentsMap);
-        
-                                }, reject
-                            )
-                        }, reject
-                    );
-
-                } else {
-                    resolve(me.#attachmentsMap);
-                }
-            }
-        });
-        */
-    }
-    viewsAdd(name) {
-        /* todo
-        if (!name) throw new Error('name is required');
-
-        var att = new Attachment({
-            Name: name,
-            IsNew: true,
-        }, this);
-
-        this.#attachmentsMap.set(name, att);
-        return att;
-        */
-    }
-
 };
 
 
@@ -1739,6 +1670,7 @@ export class Folder {
     #properties;
     #userProperties;
     #form;
+    #viewsMap;
 
     constructor(folder, session, parent) {
         this.#json = folder;
@@ -1809,7 +1741,7 @@ export class Folder {
         return new Promise(async (resolve, reject) => {
             var res, docId;
 
-            if (isNaN(document)) {
+            if (isNaN(parseInt(document))) {
                 res = await me.search({ fields: 'doc_id', formula: document });
 
                 if (res.length == 0) {
@@ -1842,6 +1774,7 @@ export class Folder {
                 Array.isArray(documents) ? documents : [documents], 'docIds');
 
         } else {
+            // todo: tobin??
             var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
             return this.session.restClient.fetch(url, 'DELETE', {}, '');
         }
@@ -1873,6 +1806,7 @@ export class Folder {
         });
     }
 
+    // Alias de type
     get folderType() {
         return this.type;
     }
@@ -1880,17 +1814,18 @@ export class Folder {
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (!me.#json.Form) {
+            if (!me.#form) {
                 var url = 'forms/' + me.formId;
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json.Form = res;
-                        resolve(new Form(res, me.session));
+                        me.#form = new Form(res, me.session);
+                        resolve(me.#form);
                     }
                 ),
                 reject
             } else {
-                resolve(new Form(me.#json.Form, me.session));
+                resolve(me.#form);
             }
         });
     }
@@ -2002,6 +1937,94 @@ export class Folder {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
     }
+
+    views(view) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (view) {
+                me.views().then(
+                    res => {
+                        if (res.has(view)) {
+                            resolve(res.get(view));
+                        } else {
+                            reject(new Error('View not found: ' + view));
+                        }
+                    },
+                    reject
+                )
+            } else {
+                if (!me.#viewsMap) {
+                    var map = new DoorsMap();
+                    var url = 'folders/' + me.id + '/views';
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
+                        res => {
+                            debugger;
+
+                        },
+                        reject
+                    )
+
+                } else {
+                    resolve(me.#viewsMap);
+                }
+
+            }
+        })
+
+        /* todo
+            } else {
+                // Devuelve la coleccion
+                if (!me.#attachmentsMap._loaded) {
+                    var url = 'documents/' + me.id + '/attachments';
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
+                        res => {
+                            if (res.length > 0) {
+                                // Ordena descendente
+                                res.sort(function (a, b) {
+                                    return a.AttId >= b.AttId ? -1 : 1;
+                                });
+                            }
+                            // Arma un array de AccId
+                            var ids = res.map(att => att.AccId);
+                            // Saca los repetidos
+                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                            // Levanta los accounts y completa el nombre
+                            me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                                accs => {
+                                    res.forEach(el => {
+                                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                                        me.#attachmentsMap.set(el.Name, new Attachment(el, me));
+                                    });
+                                    me.#attachmentsMap._loaded = true;
+                                    resolve(me.#attachmentsMap);
+        
+                                }, reject
+                            )
+                        }, reject
+                    );
+
+                } else {
+                    resolve(me.#attachmentsMap);
+                }
+            }
+        });
+        */
+    }
+
+    viewsAdd(name) {
+        /* todo
+        if (!name) throw new Error('name is required');
+
+        var att = new Attachment({
+            Name: name,
+            IsNew: true,
+        }, this);
+
+        this.#attachmentsMap.set(name, att);
+        return att;
+        */
+    }
+
 };
 
 
