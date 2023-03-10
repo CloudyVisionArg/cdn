@@ -598,7 +598,6 @@ class Account {
         var res = await this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
         this.#json.ChildAccountsList = undefined;
         return res;
-        // todo: en todos los add y remove hay q actualizar las colecciones
     }
 
     childAccountsRecursive(account, has) {
@@ -613,7 +612,6 @@ class Account {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
         var res = await this.session.restClient.fetch(url, 'DELETE', accs, 'arrayChildAccountIds');
-        debugger;
         this.#json.ChildAccountsList = undefined;
         return res;
     }
@@ -683,10 +681,12 @@ class Account {
         }
     }
 
-    parentAccountsAdd(accounts) {
+    async parentAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
-        return this.session.restClient.fetch(url, 'PUT', accs, 'arrayParentAccounts');    
+        var res = await this.session.restClient.fetch(url, 'PUT', accs, 'arrayParentAccounts');    
+        this.#json.ParentAccountsList = undefined;
+        return res;
     }
 
     parentAccountsRecursive(account, has) {
@@ -697,10 +697,12 @@ class Account {
         }
     }
 
-    parentAccountsRemove(accounts) {
+    async parentAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
-        return this.session.restClient.fetch(url, 'DELETE', accs, 'arrayParentAccounts');    
+        var res = await this.session.restClient.fetch(url, 'DELETE', accs, 'arrayParentAccounts');    
+        this.#json.ParentAccountsList = undefined;
+        return res;
     }
 
     properties(property, value) {
