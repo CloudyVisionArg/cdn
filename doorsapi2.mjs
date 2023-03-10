@@ -1077,7 +1077,7 @@ class Directory {
             var url;
             debugger;
             if (isNaN(parseInt(account))) {
-                url = 'accounts?accName=' + encURIC(dSession.db.sqlEncode(account));
+                url = 'accounts?accName=' + encURIC(me.session.db.sqlEnc(account, 1));
             } else {
                 url = 'accounts?accIds=' + account;
             }
