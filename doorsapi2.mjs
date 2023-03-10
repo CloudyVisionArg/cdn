@@ -2927,7 +2927,6 @@ class View {
         this.#hasFilter = view.HasFilter;
         this.#session = session;
         if (folder) this.#parent = folder;
-        debugger;
         this.#loaded = view.Definition ? true : false;
     }
 
