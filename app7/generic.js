@@ -58,44 +58,6 @@ function errMgr(pErr) {
     });
 }
 
-if (fld_id) {
-    dSession.folder(fld_id).then(
-        function (res) {
-            folder2 = res;
-            folder = folder2.toJSON();
-            folderJson = folder2.toJSON();
-            getDoc();
-        },
-        errMgr
-    )
-}
-
-function getDoc() {
-    if (doc_id) {
-        folder2.documents(doc_id).then(
-        //DoorsAPI.documentsGetById(doc_id).then(
-            function (res) {
-                debugger;
-                doc2 = res;
-                doc = doc2.toJSON();
-                docJson = doc2.toJSON();
-                getControlsFolder();
-            },
-            errMgr
-        );
-
-    } else {
-        DoorsAPI.documentsNew(fld_id).then(
-            function (res) {
-                doc = res;
-                docJson = res;
-                getControlsFolder();
-            },
-            errMgr
-        );
-    }
-}
-
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
     window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
@@ -108,7 +70,29 @@ if (device.platform != 'browser') {
     );
 }
 
+try {
+    doc2 = await dSession.folder(fld_id);
+    folder = folder2.toJSON();
+    folderJson = folder2.toJSON();
+
+    if (doc_id) {
+        doc2 = await folder2.documents(doc_id);
+    } else {
+        doc2 = await folder2.documentsNew();
+    }
+
+    doc = doc2.toJSON();
+    docJson = doc2.toJSON();
+
+    getControlsFolder();
+    
+} catch (err) {
+    errMgr(err)
+}
+
+
 function getControlsFolder() {
+    debugger;
     var cf = objPropCI(docJson.Tags, 'controlsFolder');
 
     if (cf) {
