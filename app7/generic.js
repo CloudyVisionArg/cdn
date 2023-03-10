@@ -72,7 +72,6 @@ if (device.platform != 'browser') {
 
 (async () => {
     try {
-        debugger;
         folder2 = await dSession.folder(fld_id);
         folder = folder2.toJSON();
         folderJson = folder2.toJSON();
