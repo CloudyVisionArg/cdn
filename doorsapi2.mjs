@@ -1835,6 +1835,10 @@ export class Folder {
         return this.#json.FldId;
     }
 
+    get name() {
+        debugger;
+    }
+
     // Alias de documentsNew
     newDoc() {
         return this.documentsNew();
