@@ -1322,6 +1322,7 @@ export class Document {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#form) {
+                var url = 'forms/' + me.formId;
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#form = new Form(res, me.session);
