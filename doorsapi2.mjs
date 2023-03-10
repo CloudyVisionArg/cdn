@@ -1075,7 +1075,6 @@ class Directory {
         var me = this;
         return new Promise((resolve, reject) => {
             var url;
-            debugger;
             if (isNaN(parseInt(account))) {
                 url = 'accounts?accName=' + encURIC(me.session.db.sqlEnc(account, 1));
             } else {
