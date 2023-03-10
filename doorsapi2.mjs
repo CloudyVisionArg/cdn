@@ -595,7 +595,7 @@ class Account {
     async childAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        var res = this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
+        var res = await this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
         debugger;
         this.#json.ChildAccountsList = undefined;
         return res;
