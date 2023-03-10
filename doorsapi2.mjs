@@ -3094,6 +3094,10 @@ class View {
         return this.#properties.set(property, value);
     }
 
+    get session() {
+        return this.#session;
+    }
+
     get styleScript() {
         return this._asyncGet('StyleScriptDefinition');
     }
