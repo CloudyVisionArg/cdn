@@ -104,7 +104,7 @@ async function loadControls() {
         controlsFolder = controlsFolder2.toJSON();
         controlsFolderJson = controlsFolder2.toJSON();
 
-        controls = await controlsFolder2.search({ order: 'parent, order, column' });
+        controls = await controlsFolder2.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
         renderPage();    
 
