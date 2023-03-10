@@ -84,14 +84,14 @@ if (device.platform != 'browser') {
         doc = doc2.toJSON();
         docJson = doc2.toJSON();
 
-        getControlsFolder();
+        loadControls();
 
     } catch (err) {
         errMgr(err)
     }
 })();
 
-async function getControlsFolder() {
+async function loadControls() {
     debugger;
     var cf = objPropCI(doc2.tags, 'controlsFolder');
 
@@ -103,25 +103,14 @@ async function getControlsFolder() {
         }
         controlsFolder = controlsFolder2.toJSON();
         controlsFolderJson = controlsFolder2.toJSON();
-        loadControls()
+
+        controls = await controlsFolder2.search({ order: 'parent, order, column' });
+        getControlsRights(controls);
+        renderPage();    
 
     } catch(err) {
         renderPage(); // Dibuja igual, sin controles
     }
-}
-
-function loadControls() {
-    folderSearch(controlsFolder['FldId'], '', '', 'parent, order, column').then(
-        function (res) {
-            controls = res;
-            getControlsRights(controls);
-            renderPage();
-        },
-        function (err) {
-            console.log(pErr);
-            renderPage(); // Dibuja igual, sin controles
-        }
-    )
 }
 
 function getControlsRights(pControls) {
