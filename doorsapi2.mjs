@@ -2928,7 +2928,7 @@ class View {
 
     async _load() {
         if (!this.#loaded) {
-            var url = 'folders/' + me.parentId + '/views/' + me.id;
+            var url = 'folders/' + this.parentId + '/views/' + this.id;
             var res = await this.session.restClient.fetch(url, 'GET', '', '');
             // Para no pisar las que puedan haber cambiado
             Object.assign(res, this.#json);
