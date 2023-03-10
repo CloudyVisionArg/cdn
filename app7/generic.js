@@ -60,9 +60,7 @@ function errMgr(pErr) {
 
 if (fld_id) {
     dSession.folder(fld_id).then(
-    //DoorsAPI.foldersGetById(fld_id).then(
         function (res) {
-            debugger;
             folder2 = res;
             folder = folder2.toJSON();
             folderJson = folder2.toJSON();
@@ -74,10 +72,13 @@ if (fld_id) {
 
 function getDoc() {
     if (doc_id) {
-        DoorsAPI.documentsGetById(doc_id).then(
+        folder2.documents(doc_id).then(
+        //DoorsAPI.documentsGetById(doc_id).then(
             function (res) {
-                doc = res;
-                docJson = res;
+                debugger;
+                doc2 = res;
+                doc = doc2.toJSON();
+                docJson = doc2.toJSON();
                 getControlsFolder();
             },
             errMgr
