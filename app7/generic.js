@@ -70,25 +70,27 @@ if (device.platform != 'browser') {
     );
 }
 
-try {
-    doc2 = await dSession.folder(fld_id);
-    folder = folder2.toJSON();
-    folderJson = folder2.toJSON();
+(async () => {
+    try {
+        doc2 = await dSession.folder(fld_id);
+        folder = folder2.toJSON();
+        folderJson = folder2.toJSON();
 
-    if (doc_id) {
-        doc2 = await folder2.documents(doc_id);
-    } else {
-        doc2 = await folder2.documentsNew();
+        if (doc_id) {
+            doc2 = await folder2.documents(doc_id);
+        } else {
+            doc2 = await folder2.documentsNew();
+        }
+
+        doc = doc2.toJSON();
+        docJson = doc2.toJSON();
+
+        getControlsFolder();
+
+    } catch (err) {
+        errMgr(err)
     }
-
-    doc = doc2.toJSON();
-    docJson = doc2.toJSON();
-
-    getControlsFolder();
-    
-} catch (err) {
-    errMgr(err)
-}
+})();
 
 
 function getControlsFolder() {
