@@ -596,7 +596,6 @@ class Account {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
         var res = await this.session.restClient.fetch(url, 'PUT', accs, 'arrayChildAccountIds');
-        debugger;
         this.#json.ChildAccountsList = undefined;
         return res;
         // todo: en todos los add y remove hay q actualizar las colecciones
@@ -610,10 +609,13 @@ class Account {
         }
     }
 
-    childAccountsRemove(accounts) {
+    async childAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
-        return this.session.restClient.fetch(url, 'DELETE', accs, 'arrayChildAccountIds');    
+        var res = await this.session.restClient.fetch(url, 'DELETE', accs, 'arrayChildAccountIds');
+        debugger;
+        this.#json.ChildAccountsList = undefined;
+        return res;
     }
 
     delete(expropiateObjects) {
