@@ -1989,7 +1989,11 @@ export class Folder {
         })
     }
 
-    viewsAdd(name) {
+    async viewsAdd(name) {
+        var url = 'folders/' + this.parentId + '/views/new';
+        var res = await this.session.restClient.fetch(url, 'GET', '', '');
+        debugger;
+    
         /* todo
         if (!name) throw new Error('name is required');
 
@@ -2910,7 +2914,7 @@ class View {
     #loaded;
 
     //var url = 'folders/' + me.id + '/views/' + 4795;
-    //no estan {"DescriptionRaw":"","Inherits":true,"FldIdOld":0, "AclInfo":null,"AclInherits":false,"IsNew":false,"Tags":null}
+    //no estan {"Inherits":true,"FldIdOld":0, "AclInfo":null,"AclInherits":false,"IsNew":false}
 
 
     constructor(view, session, folder) {
@@ -2933,6 +2937,7 @@ class View {
             // Para no pisar las que puedan haber cambiado
             Object.assign(res, this.#json);
             this.#json = res;
+            if (!this.#json.Tags) this.#json.Tags = {};
             this.#loaded = true;
         }
         return this.#json;
@@ -3005,6 +3010,14 @@ class View {
 
     set description(value) {
         this.#json.Description = value;
+    }
+
+    get descriptionRaw() {
+        return this._asyncGet('DescriptionRaw');
+    }
+
+    set descriptionRaw(value) {
+        this.#json.DescriptionRaw = value;
     }
 
     get folder() {
@@ -3107,8 +3120,7 @@ class View {
     }
 
     get tags() {
-        if (!this.#json.Tags) this.#json.Tags = {};
-        return this.#json.Tags;
+        return this._asyncGet('Tags');
     }
 
     get type() {
