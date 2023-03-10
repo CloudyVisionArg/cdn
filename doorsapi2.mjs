@@ -1998,20 +1998,7 @@ export class Folder {
         var res = await this.session.restClient.fetch(url, 'GET', '', '');
         this.#viewsMap = undefined;
         return new View(res, this.session, this);
-    
-        /* todo
-        if (!name) throw new Error('name is required');
-
-        var att = new Attachment({
-            Name: name,
-            IsNew: true,
-        }, this);
-
-        this.#attachmentsMap.set(name, att);
-        return att;
-        */
     }
-
 };
 
 
@@ -3110,6 +3097,11 @@ class View {
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
+    }
+
+    async save() {
+        var url = 'folders/' + this.parentId + '/views';
+        return await this.session.restClient.fetch(url, 'POST', this.#json, 'view');
     }
 
     get session() {
