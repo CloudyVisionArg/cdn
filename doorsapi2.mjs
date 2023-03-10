@@ -1993,10 +1993,11 @@ export class Folder {
         })
     }
 
-    async viewsAdd(name) {
+    async viewsAdd() {
         var url = 'folders/' + this.id + '/views/new';
         var res = await this.session.restClient.fetch(url, 'GET', '', '');
-        debugger;
+        this.#viewsMap = undefined;
+        return new View(res, this.session, this);
     
         /* todo
         if (!name) throw new Error('name is required');
@@ -2926,7 +2927,8 @@ class View {
         this.#hasFilter = view.HasFilter;
         this.#session = session;
         if (folder) this.#parent = folder;
-        this.#loaded = false;
+        debugger;
+        this.#loaded = view.Definition ? true : false;
     }
 
     async _asyncGet(property) {
