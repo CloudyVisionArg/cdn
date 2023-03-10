@@ -3109,7 +3109,8 @@ class View {
 
     async save() {
         var url = 'folders/' + this.parentId + '/views';
-        return await this.session.restClient.fetch(url, 'POST', this.#json, 'view');
+        var res = await this.session.restClient.fetch(url, 'POST', this.#json, 'view');
+        debugger;
     }
 
     get session() {
