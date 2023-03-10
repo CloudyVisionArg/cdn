@@ -9,6 +9,7 @@ Framework7: https://framework7.io/docs/
 
 var fld_id, doc_id, doc, folder, cacheDir;
 var docJson, folderJson, controlsFolderJson;
+var doc2, folder2; // todo: Eliminar cdo se pueda usar doc y folder
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -58,10 +59,13 @@ function errMgr(pErr) {
 }
 
 if (fld_id) {
-    DoorsAPI.foldersGetById(fld_id).then(
+    dSession.folder(fld_id).then(
+    //DoorsAPI.foldersGetById(fld_id).then(
         function (res) {
-            folder = res;
-            folderJson = res;
+            debugger;
+            folder2 = res;
+            folder = folder2.toJSON();
+            folderJson = folder2.toJSON();
             getDoc();
         },
         errMgr
