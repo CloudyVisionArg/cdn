@@ -1955,13 +1955,33 @@ export class Folder {
             } else {
                 if (!me.#viewsMap) {
                     var map = new DoorsMap();
-                    var url = 'folders/' + me.id + '/views/' + 4795;
-                    //var url = 'folders/' + me.id + '/views';
-                    //{"VieId":4795,"FldId":5103,"Name":"Agenda","Description":"","Private":false,"AccId":0,"Comments":null,"Created":"2017-06-14T19:22:50.74Z","Modified":"2022-09-29T19:06:26.01Z","Type":1,"HasFilter":false}
+                    var url = 'folders/' + me.id + '/views';
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             debugger;
 
+                            // Ordena
+                            res.sort(function (a, b) {
+                                // Privadas al ult
+                                if (!a['Private'] && b['Private']) {
+                                    return -1;
+                                } else if (a['Private'] && !b['Private']) {
+                                    return 1;
+                                } else {
+                                    var aTitle = a['Description'] ? a['Description'] : a['Name'];
+                                    var bTitle = b['Description'] ? b['Description'] : b['Name'];
+                                    if (aTitle.toLowerCase() < bTitle.toLowerCase()) {
+                                        return -1;
+                                    } else {
+                                        return 1;
+                                    };
+                                };
+                            });
+
+                            for (var el of res) {
+                                me.#viewsMap.set(el.Name, new View(el, me.session, me));
+                            }
+                            resolve(me.#viewsMap);
                         },
                         reject
                     )
@@ -2929,6 +2949,11 @@ class View {
     #session;
     #properties;
     #userProperties;
+
+    //var url = 'folders/' + me.id + '/views/' + 4795;
+    //{"DescriptionRaw":"","Parent":null,"Inherits":true,"FldIdOld":0, "Definition":{},"AclInfo":null,"AclInherits":false,"StyleScriptDefinition":{},"IsNew":false,"Tags":null}
+    //{"HasFilter":false}
+
 
     constructor(view, session, folder) {
         this.#json = view;
