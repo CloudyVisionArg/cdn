@@ -305,7 +305,7 @@ async function renderPage() {
         var ev = getEvent('BeforeRender');
         if (ev) {
             try {
-                eval(ev);
+                await evalCode(ev);
             } catch (err) {
                 console.log('Error in BeforeRender: ' + errMsg(err));
             }
@@ -369,6 +369,12 @@ async function renderPage() {
                 }
             }
         }
+    }
+
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
     }
 
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
@@ -842,10 +848,7 @@ async function renderControls(pCont, pParent) {
         }
 
         try {
-            if (ctl['APP7_SCRIPT']) {
-                var ec = evalCode.bind({});
-                await ec([ctl['APP7_SCRIPT']]);
-            }
+            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
         } catch (err) {
             console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
         }
@@ -866,14 +869,13 @@ async function renderControls(pCont, pParent) {
         */
 
         if ($this) $this.appendTo(pCont);
-
     }
-}
-async function evalCode(code) {
-    debugger;
-    var pipe = {};
-    eval(`pipe.fn = async () => {\n\n${code}\n};`);
-    await pipe.fn();
+
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getDefaultControl(pField) {
@@ -986,11 +988,11 @@ function pageInit(e, page) {
     }
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
-    setTimeout(function waiting() {
+    setTimeout(async function waiting() {
         if ($page.find('[data-filling]').length > 0) {
             setTimeout(waiting, 100);
         } else {
-            fillControls(docJson);
+            await fillControls(docJson);
             app7.preloader.hide();
         }
     }, 0);
@@ -1013,7 +1015,7 @@ function $get(pSelector) {
     return $(pSelector, f7Page.pageEl);
 }
 
-function fillControls() {
+async function fillControls() {
     if (!docJson.IsNew) {
         var title = getDocField(docJson, 'subject').Value;
         if (!title) title = 'Doc #' + docJson.DocId;
@@ -1223,11 +1225,17 @@ function fillControls() {
     var ev = getEvent('AfterRender');
     if (ev) {
         try {
-            eval(ev);
+            await evalCode(ev);
         } catch (err) {
             console.log('Error in AfterRender: ' + errMsg(err));
         }
     };
+
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function fillAttachments(pEl) {
@@ -1477,7 +1485,7 @@ function renderNewAtt(pAtt, pCont) {
     $li.prependTo(pCont.find('ul'));
 }
 
-function saveDoc(exitOnSuccess) {
+async function saveDoc(exitOnSuccess) {
     if (saving) return;
     saving = true;
     $navbar.find('.right .button').addClass('disabled');
@@ -1578,7 +1586,7 @@ function saveDoc(exitOnSuccess) {
     var ev = getEvent('BeforeSave');
     if (ev) {
         try {
-            eval(ev);
+            await evalCode(ev);
         } catch (err) {
             console.log('Error in BeforeSave: ' + errMsg(err));
         }
@@ -1594,12 +1602,12 @@ function saveDoc(exitOnSuccess) {
             pageEl.crm.doc_id = doc_id;
             pageEl.crm.saved = true;
 
-            saveAtt().then((res) => {
+            saveAtt().then(async (res) => {
                 // Evento AfterSave
                 var ev = getEvent('AfterSave');
                 if (ev) {
                     try {
-                        eval(ev);
+                        await evalCode(ev);
                     } catch (err) {
                         console.log('Error in AfterSave: ' + errMsg(err));
                     }
@@ -1613,12 +1621,18 @@ function saveDoc(exitOnSuccess) {
                 if (exitOnSuccess) {
                     f7Page.view.router.back();
                 } else {
-                    fillControls();
+                    await fillControls();
                 }
 
             }, errMgr);
         }, errMgr);
     }, errMgr);
+
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 
     function errMgr(pErr) {
         saving = false;
