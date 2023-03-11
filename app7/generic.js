@@ -866,7 +866,7 @@ async function renderControls(pCont, pParent) {
         if ($this) $this.appendTo(pCont);
 
         async function evalCode(code) {
-            var c = `(async () => { ${code} return;})();`;
+            var c = `(async () => { ${code} })();`;
             eval(c);
         }
         
