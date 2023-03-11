@@ -229,7 +229,7 @@ dSession.foldersGetFromId(fld_id).then(
             $title.css('cursor', 'pointer');
             $title.click(function () {
                 var fld = prompt('Ingrese el fldId'); // todo: mostrar popup con el treeview para elegir la carpeta
-                if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld);
+                if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld + '&fixed=0&back=1');
             });
         }
 
