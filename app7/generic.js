@@ -865,7 +865,7 @@ async function renderControls(pCont, pParent) {
 
         async function evalCode(code) {
             var pipe = {};
-            var c = `pipe.fn = async () => {\n${code}\n};`;
+            var c = `pipe.fn = async () => {\n\n${code}\n};`;
             eval(c);
             await pipe.fn();
         }
