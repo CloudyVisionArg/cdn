@@ -1030,8 +1030,6 @@ async function fillControls() {
 
     app7.navbar.size($navbar); // Para que se ajuste bien el titulo
 
-    debugger;
-    
     $get('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
         var tf, textField, text;
         var vf, valueField, value;
@@ -1040,9 +1038,9 @@ async function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(docJson, tf);
-            if (textField) {
-                text = textField.Value;
+            if (doc2.fields().has(tf)) {
+                textField = doc2.fields(tf);
+                text = textField.value;
             } else {
                 text = null;
                 console.log('No se encontro el campo ' + tf.toUpperCase());
@@ -1051,9 +1049,9 @@ async function fillControls() {
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(docJson, vf);
-            if (valueField) {
-                value = valueField.Value;
+            if (doc2.fields().has(vf)) {
+                valueField = doc2.fields(vf);
+                value = valueField.value;
             } else {
                 value = null;
                 console.log('No se encontro el campo ' + vf.toUpperCase());
@@ -1062,8 +1060,8 @@ async function fillControls() {
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            var xmlField = getDocField(docJson, xf);
-            if (xmlField) {
+            if (doc2.fields().has(xf)) {
+                xmlField = doc2.fields(xf);
                 xml = xmlField.Value;
             } else {
                 xml = null;
@@ -1088,7 +1086,7 @@ async function fillControls() {
                         el._value(value);
         
                     } else {
-                        if (textField && textField.Type == 2) {
+                        if (textField && textField.type == 2) {
                             if (text) {
                                 setInputVal($el, formatDate(text));
                             } else {
