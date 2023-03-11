@@ -1,3 +1,4 @@
+//todo: agregar soporte await a todos los eval
 /*
 app7-generic
 generic del APP7
@@ -841,7 +842,7 @@ async function renderControls(pCont, pParent) {
         }
 
         try {
-            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
+            if (ctl['APP7_SCRIPT']) await evalCode.apply(null, ctl['APP7_SCRIPT']);
         } catch (err) {
             console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
         }
@@ -863,13 +864,12 @@ async function renderControls(pCont, pParent) {
 
         if ($this) $this.appendTo(pCont);
 
-        async function evalCode(code) {
-            var pipe = {};
-            var c = `pipe.fn = async () => {\n\n${code}\n};`;
-            eval(c);
-            await pipe.fn();
-        }
     }
+}
+async function evalCode(code) {
+    var pipe = {};
+    eval(`pipe.fn = async () => {\n\n${code}\n};`);
+    await pipe.fn();
 }
 
 function getDefaultControl(pField) {
