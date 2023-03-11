@@ -866,8 +866,10 @@ async function renderControls(pCont, pParent) {
         if ($this) $this.appendTo(pCont);
 
         async function evalCode(code) {
-            var c = `(async () => { ${code} })();`;
+            var fn;
+            var c = `fn = async function () { ${code} });`;
             eval(c);
+            await fn();
             debugger;
         }
         
