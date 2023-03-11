@@ -841,7 +841,6 @@ async function renderControls(pCont, pParent) {
         }
 
         try {
-            // todo agregar async
             if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
         } catch (err) {
             console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
