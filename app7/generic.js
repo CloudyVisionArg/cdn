@@ -872,8 +872,6 @@ async function renderControls(pCont, pParent) {
     }
 }
 
-
-
 function getDefaultControl(pField) {
     var $ret, $input, label;
 
