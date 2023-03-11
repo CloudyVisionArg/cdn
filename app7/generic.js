@@ -376,6 +376,7 @@ async function renderPage() {
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
+// todo: falta migrar
 async function renderControls(pCont, pParent) {
     var ctl, type, $this, domAttr, label, $input, aux, f7ctl;
     var tf, textField, vf, valueField;
