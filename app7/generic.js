@@ -1030,6 +1030,8 @@ async function fillControls() {
 
     app7.navbar.size($navbar); // Para que se ajuste bien el titulo
 
+    debugger;
+    
     $get('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
         var tf, textField, text;
         var vf, valueField, value;
