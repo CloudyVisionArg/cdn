@@ -306,6 +306,7 @@ async function renderPage() {
         if (ev) {
             try {
                 await evalCode(ev);
+                debugger;
             } catch (err) {
                 console.log('Error in BeforeRender: ' + errMsg(err));
             }
@@ -1226,6 +1227,7 @@ async function fillControls() {
     if (ev) {
         try {
             await evalCode(ev);
+            debugger;
         } catch (err) {
             console.log('Error in AfterRender: ' + errMsg(err));
         }
@@ -1587,6 +1589,7 @@ async function saveDoc(exitOnSuccess) {
     if (ev) {
         try {
             await evalCode(ev);
+            debugger;
         } catch (err) {
             console.log('Error in BeforeSave: ' + errMsg(err));
         }
@@ -1608,6 +1611,7 @@ async function saveDoc(exitOnSuccess) {
                 if (ev) {
                     try {
                         await evalCode(ev);
+                        debugger;
                     } catch (err) {
                         console.log('Error in AfterSave: ' + errMsg(err));
                     }
