@@ -842,7 +842,7 @@ async function renderControls(pCont, pParent) {
         }
 
         try {
-            if (ctl['APP7_SCRIPT']) await evalCode.apply(null, ctl['APP7_SCRIPT']);
+            if (ctl['APP7_SCRIPT']) await evalCode.apply(null, [ctl['APP7_SCRIPT']]);
         } catch (err) {
             console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
         }
