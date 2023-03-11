@@ -306,7 +306,6 @@ async function renderPage() {
         if (ev) {
             try {
                 await evalCode(ev);
-                debugger;
             } catch (err) {
                 console.log('Error in BeforeRender: ' + errMsg(err));
             }
@@ -372,6 +371,7 @@ async function renderPage() {
         }
     }
 
+    // evalCode con context de renderPage
     async function evalCode(code) {
         var pipe = {};
         eval(`pipe.fn = async () => {\n\n${code}\n};`);
@@ -872,6 +872,7 @@ async function renderControls(pCont, pParent) {
         if ($this) $this.appendTo(pCont);
     }
 
+    // evalCode con context de renderControls
     async function evalCode(code) {
         var pipe = {};
         eval(`pipe.fn = async () => {\n\n${code}\n};`);
@@ -1227,12 +1228,12 @@ async function fillControls() {
     if (ev) {
         try {
             await evalCode(ev);
-            debugger;
         } catch (err) {
             console.log('Error in AfterRender: ' + errMsg(err));
         }
     };
 
+    // evalCode con context de fillControls
     async function evalCode(code) {
         var pipe = {};
         eval(`pipe.fn = async () => {\n\n${code}\n};`);
@@ -1589,7 +1590,6 @@ async function saveDoc(exitOnSuccess) {
     if (ev) {
         try {
             await evalCode(ev);
-            debugger;
         } catch (err) {
             console.log('Error in BeforeSave: ' + errMsg(err));
         }
@@ -1611,7 +1611,6 @@ async function saveDoc(exitOnSuccess) {
                 if (ev) {
                     try {
                         await evalCode(ev);
-                        debugger;
                     } catch (err) {
                         console.log('Error in AfterSave: ' + errMsg(err));
                     }
@@ -1632,6 +1631,7 @@ async function saveDoc(exitOnSuccess) {
         }, errMgr);
     }, errMgr);
 
+    // evalCode con context de saveDoc
     async function evalCode(code) {
         var pipe = {};
         eval(`pipe.fn = async () => {\n\n${code}\n};`);
