@@ -843,7 +843,7 @@ async function renderControls(pCont, pParent) {
 
         try {
             if (ctl['APP7_SCRIPT']) {
-                var ec = new evalCode();
+                var ec = evalCode.bind();
                 await ec([ctl['APP7_SCRIPT']]);
             }
         } catch (err) {
