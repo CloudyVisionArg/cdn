@@ -146,7 +146,7 @@ function getControlsRights(pControls) {
     })
 }
 
-function renderPage() {
+async function renderPage() {
     var $tabbar, $tabbarInner, $tabs;
 
     // page
@@ -313,7 +313,7 @@ function renderPage() {
         // Membrete
 
         $ul = $('<ul/>')
-        renderControls($ul, '[NULL]');
+        await renderControls($ul, '[NULL]');
 
         if ($ul.html()) {
             $('<div/>', {
@@ -358,7 +358,7 @@ function renderPage() {
                 }).appendTo($tabs);
 
                 $ul = $('<ul/>')
-                renderControls($ul, tab['NAME']);
+                await renderControls($ul, tab['NAME']);
 
                 if ($ul.html()) {
                     $('<div/>', {
@@ -624,7 +624,7 @@ async function renderControls(pCont, pParent) {
             $this = getCollapsible(ctl['NAME'], ctl['DESCRIPTION']);
 
             var $ul = $('<ul/>')
-            renderControls($ul, ctl['NAME']);
+            await renderControls($ul, ctl['NAME']);
 
             if ($ul.html()) {
                 $('<div/>', {
