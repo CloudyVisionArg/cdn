@@ -251,11 +251,18 @@ async function renderPage() {
 
         // todo seguir aca
         debugger;
+        for (var field of doc2.fields()) {
+            if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
+                getDefaultControl(field).appendTo($ul);
+            }
+        }
+        /*
         docJson.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
             }
         });
+        */
 
         $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
         $ctl.find('.list').on('click', 'a', downloadAtt);
