@@ -1011,9 +1011,9 @@ function $get(pSelector) {
 }
 
 async function fillControls() {
-    if (!docJson.IsNew) {
-        var title = getDocField(docJson, 'subject').Value;
-        if (!title) title = 'Doc #' + docJson.DocId;
+    if (!doc2.isNew) {
+        var title = doc2.fields('subject').value;
+        if (!title) title = 'Doc #' + doc2.id;
         $navbar.find('.title').html(title);
 
         var $docLog = $get('[data-doclog]');
