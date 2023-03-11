@@ -253,7 +253,7 @@ async function renderPage() {
         debugger;
         for (let [key, field] of doc2.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
-                getDefaultControl(field).appendTo($ul);
+                getDefaultControl(field.toJSON()).appendTo($ul);
             }
         }
         /*
