@@ -185,6 +185,7 @@ export class DoorsMap extends Map {
         return this.has(key);
     }
 
+    // map.find((value, key) => { if ... return true })
     find(cbFunc) {
         var me = this;
         for (let [key, value] of super.entries()) {
@@ -1609,6 +1610,10 @@ class Field {
         return this.parent.session;
     }
 
+    toJSON() {
+        return this.#json;
+    }
+    
     get type() {
         return this.#json.Type;
     }
