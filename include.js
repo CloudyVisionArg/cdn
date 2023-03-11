@@ -66,8 +66,8 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 234 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 233 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 233 });
 
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 227 });
