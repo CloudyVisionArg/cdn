@@ -1087,6 +1087,7 @@ class Directory {
                 //url = 'accounts?accName=' + encURIC(account);
                 url = 'accounts/name/' + encURIC(account);
             } else {
+                // todo: cambiar por /accounts/{accId}
                 url = 'accounts?accIds=' + account;
             }
             me.session.restClient.fetch(url, 'GET', '', '').then(

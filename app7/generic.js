@@ -373,7 +373,7 @@ function renderPage() {
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
-function renderControls(pCont, pParent) {
+async function renderControls(pCont, pParent) {
     var ctl, type, $this, domAttr, label, $input, aux, f7ctl;
     var tf, textField, vf, valueField;
 
@@ -841,7 +841,8 @@ function renderControls(pCont, pParent) {
         }
 
         try {
-            if (ctl['APP7_SCRIPT']) eval(ctl['APP7_SCRIPT']);
+            // todo agregar async
+            if (ctl['APP7_SCRIPT']) evalCode(ctl['APP7_SCRIPT']);
         } catch (err) {
             console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
         }
@@ -861,9 +862,16 @@ function renderControls(pCont, pParent) {
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
 
+        debugger;
         if ($this) $this.appendTo(pCont);
     }
 }
+
+async function evalCode(code) {
+    var c = `(async () => { ${code} })();`;
+    eval(c);
+}
+
 
 function getDefaultControl(pField) {
     var $ret, $input, label;
