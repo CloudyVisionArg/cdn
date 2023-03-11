@@ -250,6 +250,7 @@ async function renderPage() {
         $ul = $('<ul/>').appendTo($div);
 
         // todo seguir aca
+        debugger;
         docJson.CustomFields.forEach(field => {
             if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
