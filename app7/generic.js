@@ -869,7 +869,6 @@ async function renderControls(pCont, pParent) {
             eval(c);
             await fn();
         }
-        
     }
 }
 
