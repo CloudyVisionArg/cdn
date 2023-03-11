@@ -249,20 +249,11 @@ async function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        // todo seguir aca
-        debugger;
         for (let [key, field] of doc2.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
-                getDefaultControl(field.toJSON()).appendTo($ul);
-            }
-        }
-        /*
-        docJson.CustomFields.forEach(field => {
-            if (!field.HeaderTable && field.Name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
             }
-        });
-        */
+        }
 
         $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
         $ctl.find('.list').on('click', 'a', downloadAtt);
@@ -284,15 +275,11 @@ async function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        docJson.CustomFields.forEach(field => {
-            if (field.HeaderTable) {
+        for (let [key, field] of doc2.fields()) {
+            if (!field.custom && field.headerTable) {
                 getDefaultControl(field).appendTo($ul);
             }
-        })
-
-        docJson.HeadFields.forEach(field => {
-            getDefaultControl(field).appendTo($ul);
-        })
+        }
 
         // tabHist
 
@@ -889,31 +876,29 @@ async function renderControls(pCont, pParent) {
 }
 
 function getDefaultControl(pField) {
-    var $ret, $input, label;
+    var $ret, $input;
 
-    label = pField.Description ? pField.Description : pField.Name;
-
-    if (pField.Type == 1) {
-        if (pField.Length > 0 && pField.Length < 500) {
-            $ret = getInputText(pField.Name, label);
+    if (pField.type == 1) {
+        if (pField.length > 0 && pField.length < 500) {
+            $ret = getInputText(pField.name, pField.label);
             $input = $ret.find('input');
         } else {
-            $ret = getTextarea(pField.Name, label);
+            $ret = getTextarea(pField.name, pField.label);
             $input = $ret.find('textarea');
         }
 
-    } else if (pField.Type == 2) {
-        $ret = getDTPicker(pField.Name, label, 'datetime-local');
+    } else if (pField.type == 2) {
+        $ret = getDTPicker(pField.name, pField.label, 'datetime-local');
         $input = $ret.find('input');
 
-    } else if (pField.Type == 3) {
-        $ret = getInputText(pField.Name, label);
+    } else if (pField.type == 3) {
+        $ret = getInputText(pField.name, pField.label);
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
-    if (!pField.Updatable) inputReadonly($input, true);
-    if ($input) $input.attr('data-textfield', pField.Name.toLowerCase())
+    if (!pField.updatable) inputReadonly($input, true);
+    if ($input) $input.attr('data-textfield', pField.name.toLowerCase())
 
     return $ret;
 }
