@@ -868,7 +868,7 @@ async function renderControls(pCont, pParent) {
 }
 
 async function evalCode(code) {
-    var c = `(async () => { ${code} })();`;
+    var c = `(async () => { ${code} return;})();`;
     eval(code);
 }
 
