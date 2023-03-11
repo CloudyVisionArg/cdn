@@ -864,6 +864,7 @@ async function renderControls(pCont, pParent) {
         if ($this) $this.appendTo(pCont);
 
         async function evalCode(code) {
+            debugger;
             var pipe = {};
             var c = `pipe.fn = async () => {\n${code}\n};`;
             eval(c);
