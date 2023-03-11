@@ -862,7 +862,6 @@ async function renderControls(pCont, pParent) {
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
 
-        debugger;
         if ($this) $this.appendTo(pCont);
 
         async function evalCode(code) {
@@ -870,7 +869,6 @@ async function renderControls(pCont, pParent) {
             var c = `fn = async () => { ${code} };`;
             eval(c);
             await fn();
-            debugger;
         }
         
     }
