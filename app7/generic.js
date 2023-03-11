@@ -864,13 +864,14 @@ async function renderControls(pCont, pParent) {
 
         debugger;
         if ($this) $this.appendTo(pCont);
+
+        async function evalCode(code) {
+            var c = `await (async () => { ${code} return;})();`;
+            eval(c);
+        }        
     }
 }
 
-async function evalCode(code) {
-    var c = `(async () => { ${code} return;})();`;
-    eval(c);
-}
 
 
 function getDefaultControl(pField) {
