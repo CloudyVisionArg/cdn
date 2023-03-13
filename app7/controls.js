@@ -1742,6 +1742,8 @@ Devuelve el markup de un attachment para agregar
 al ul del control anterior
 */
 function getAttachment(pAttach, pReadonly) {
+    debugger;
+    
     var $li = $('<li/>', {
         class: 'swipeout',
     });

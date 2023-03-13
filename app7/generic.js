@@ -1222,6 +1222,20 @@ function fillAttachments(pEl) {
     var tag = pEl.attr('data-attachments').toLowerCase();
 
     if (doc_id) {
+        doc2.attachments().then(
+            res => {
+                for (let [key, att] of res) {
+                    if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
+                        getAttachment(att, readonly).appendTo($ul);
+                    }
+                }
+            },
+            err => {
+                logAndToast('attachments error: ' + errMsg(err));
+            }
+        );
+
+        /*
         DoorsAPI.attachments(doc_id).then(
             function (res) {
                 // Filtra por el tag
@@ -1256,6 +1270,7 @@ function fillAttachments(pEl) {
                 logAndToast('attachments error: ' + errMsg(err));
             }
         );
+        */
 
     } else {
         noAttachs();
