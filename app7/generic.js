@@ -1222,7 +1222,7 @@ async function fillAttachments(pEl) {
 
     if (doc_id) {
         var atts = await doc2.attachments();
-        for (let [key, att] of res) {
+        for (let [key, att] of atts) {
             //if (tag == 'all' || (att.group && att.group.toLowerCase() == tag)) { // todo: tiene q quedar esta cdo este group
             if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
                 getAttachment(att, readonly).appendTo($ul);
