@@ -1647,6 +1647,8 @@ class Field {
         if (this.type == 2) {
             var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
+        } else if (this.type == 3) {
+            this.#json.Value = this.session.utils.cNum(value);
         } else {
             this.#json.Value = value;
         }

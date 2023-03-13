@@ -721,7 +721,7 @@ async function renderControls(pCont, pParent) {
 
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
-                rootFolder: folderJson.RootFolderId,
+                rootFolder: folder2.rootFolderId,
                 searchFields: ctl.attr('searchfields'),
                 extraFields: ctl.attr('returnfields'),
                 formula: ctl.attr('searchfilter'),
@@ -989,7 +989,7 @@ function pageInit(e, page) {
         if ($page.find('[data-filling]').length > 0) {
             setTimeout(waiting, 100);
         } else {
-            await fillControls(docJson);
+            await fillControls();
             app7.preloader.hide();
         }
     }, 0);
@@ -1206,7 +1206,7 @@ async function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         var field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, getDocField(docJson, field).Value);
+                            pCont.attr(pAttr, doc2.fields(field).value);
                         }
                     }
                 });
@@ -1236,6 +1236,7 @@ async function fillControls() {
     }
 }
 
+// todo doc2 folder2 seguir de aca
 function fillAttachments(pEl) {
     var $ul = pEl.find('ul');
     $ul.empty();
@@ -1491,75 +1492,64 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJson, $el.attr('data-textfield'));
+        var field = doc2.fields($el.attr('data-textfield'));
 
-        if (field && field.Updatable) {
+        if (field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text') {
-                    if ($el.attr('data-numeral') || field.Type == 3) {
-                        field.Value = numeral($el.val()).value();
-                    } else if (field.Type == 2) {
-                        var mom = moment($el.val(), 'L LT');
-                        if (mom.isValid()) {
-                            field.Value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
-                        } else {
-                            field.Value = null;
-                        }
+                    if ($el.attr('data-numeral')) {
+                        field.value = numeral($el.val()).value();
                     } else {
-                        field.Value = $el.val();
+                        field.value = $el.val();
                     };
 
                 } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                    field.Value = getDTPickerVal($el);
+                    field.value = getDTPickerVal($el);
 
                 } else if (type == 'checkbox') {
-                    field.Value = el.checked ? '1' : '0';
+                    field.value = el.checked ? '1' : '0';
 
                 } else if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
 
             } else if (el.tagName == 'SELECT') {
                 var aux = getSelectText($el);
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'DIV') {
                 if ($el.hasClass('text-editor')) {
-                    field.Value = app7.textEditor.get($el[0]).getValue();
+                    field.value = app7.textEditor.get($el[0]).getValue();
                 }
 
             } else if (el.tagName == 'A') {
                 if ($el.attr('data-autocomplete')) {
-                    field.Value = $el.find('.item-after').html();
+                    field.value = $el.find('.item-after').html();
                 }
             } else if(el.tagName == 'TEXTAREA') {
-                field.Value = $el.val();
+                field.value = $el.val();
             }
         }
     });
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJson, $el.attr('data-valuefield'));
+        var field = doc2.fields($el.attr('data-valuefield'));
 
-        if (field && field.Updatable) {
+        if (field.updatable) {
             if (el.tagName == 'SELECT') {
                 var aux = getSelectVal($el);
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = el._value();
+                    field.value = el._value();
 
                 } else {
                     var type = $el.attr('type').toLowerCase();
                     if (type == 'hidden') {
-                        if (field.Type == 3) {
-                            field.Value = numeral($el.val()).value();
-                        } else {
-                            field.Value = $el.val();
-                        };
+                        field.value = $el.val();
                     }
                 }
             }
@@ -1568,13 +1558,13 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJson, $el.attr('data-xmlfield'));
+        var field = doc2.fields($el.attr('data-xmlfield'));
 
-        if (field && field.Updatable) {
+        if (field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
             }
         }
