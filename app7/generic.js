@@ -1535,9 +1535,9 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-valuefield'));
+        var field = doc2.fields().has($el.attr('data-valuefield')) ? doc2.fields($el.attr('data-valuefield')) : undefined;
 
-        if (field.updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
                 var aux = getSelectVal($el);
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
@@ -1558,9 +1558,9 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-xmlfield'));
+        var field = doc2.fields().has($el.attr('data-xmlfield')) ? doc2.fields($el.attr('data-xmlfield')) : undefined;
 
-        if (field.updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'hidden') {
