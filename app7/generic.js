@@ -951,8 +951,7 @@ function pageInit(e, page) {
             );
 
         } else {
-            debugger;
-            dSession.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
+            folder.app.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
                 function (fld) {
                     var arrFields, textField, valueField, dataFields;
 

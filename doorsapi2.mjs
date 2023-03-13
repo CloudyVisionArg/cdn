@@ -769,6 +769,11 @@ class Application {
         this.#parent = parent
     }
 
+    // Alias de folders
+    folder(folderPath) {
+        return this.folders(folderPath);
+    }
+
     folders(folderPath) {
         return this.session.folder(folderPath, this.rootFolderId);
     }
