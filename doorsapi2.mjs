@@ -510,7 +510,7 @@ class Account {
         this.#session = session;
     }
 
-    _accountsGet(listFunction, account, has) {
+    _accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -524,11 +524,8 @@ class Account {
                         if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
                             resolve(acc);
                         } else {
-                            if (has) {
-                                resolve(undefined);
-                            } else {
-                                reject(new Error('Account not found'));
-                            }
+                            console.log('Account not found: ' + account);
+                            resolve(undefined);
                         }
                     }
                 },
@@ -585,11 +582,11 @@ class Account {
 
     Los metodos childAccountsRecursive, parentAccounts y parentAccountsRecursive trabajan igual
     */
-    childAccounts(account, has) {
+    childAccounts(account) {
         if (account == undefined) {
             return this._accountsList('ChildAccountsList', 'childAccounts');
         } else {
-            return this._accountsGet('childAccounts', account, has);
+            return this._accountsGet('childAccounts', account);
         }
     }
 
@@ -601,11 +598,11 @@ class Account {
         return res;
     }
 
-    childAccountsRecursive(account, has) {
+    childAccountsRecursive(account) {
         if (account == undefined) {
             return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
         } else {
-            return this._accountsGet('childAccountsRecursive', account, has);
+            return this._accountsGet('childAccountsRecursive', account);
         }
     }
 
@@ -674,11 +671,11 @@ class Account {
         return Account.objectType;
     }
 
-    parentAccounts(account, has) {
+    parentAccounts(account) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsList', 'parentAccounts');
         } else {
-            return this._accountsGet('parentAccounts', account, has);
+            return this._accountsGet('parentAccounts', account);
         }
     }
 
@@ -690,11 +687,11 @@ class Account {
         return res;
     }
 
-    parentAccountsRecursive(account, has) {
+    parentAccountsRecursive(account) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
         } else {
-            return this._accountsGet('parentAccountsRecursive', account, has);
+            return this._accountsGet('parentAccountsRecursive', account);
         }
     }
 
@@ -1303,7 +1300,8 @@ export class Document {
                 if (value != undefined) ret.value = value;
                 return ret;
             } else {
-                throw new Error('Field not found: ' + name);
+                console.log('Field not found: ' + name);
+                return undefined;
             }
 
         } else {

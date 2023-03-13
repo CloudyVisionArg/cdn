@@ -414,20 +414,12 @@ async function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            if (doc2.fields().has(tf)) {
-                textField = doc2.fields(tf);
-            } else {
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            textField = doc2.fields(tf);
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            if (doc2.fields().has(vf)) {
-                valueField = doc2.fields(vf);
-            } else {
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            valueField = doc2.fields(vf);
         };
 
 
@@ -1040,35 +1032,20 @@ async function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            if (doc2.fields().has(tf)) {
-                textField = doc2.fields(tf);
-                text = textField.value;
-            } else {
-                text = null;
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            textField = doc2.fields(tf);
+            text = textField ? textField.value : null;
         };
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            if (doc2.fields().has(vf)) {
-                valueField = doc2.fields(vf);
-                value = valueField.value;
-            } else {
-                value = null;
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
+            valueField = doc2.fields(vf);
+            value = valueField ? valueField.value : null;
         };
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            if (doc2.fields().has(xf)) {
-                xmlField = doc2.fields(xf);
-                xml = xmlField.Value;
-            } else {
-                xml = null;
-                console.log('No se encontro el campo ' + xf.toUpperCase());
-            }
+            xmlField = doc2.fields(xf);
+            xml = xmlField ? xmlField.value : null;
         };
 
         if (el.tagName == 'INPUT') {
@@ -1492,7 +1469,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields().has($el.attr('data-textfield')) ? doc2.fields($el.attr('data-textfield')) : undefined;
+        var field = doc2.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
@@ -1535,7 +1512,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields().has($el.attr('data-valuefield')) ? doc2.fields($el.attr('data-valuefield')) : undefined;
+        var field = doc2.fields($el.attr('data-valuefield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
@@ -1558,7 +1535,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields().has($el.attr('data-xmlfield')) ? doc2.fields($el.attr('data-xmlfield')) : undefined;
+        var field = doc2.fields($el.attr('data-xmlfield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
