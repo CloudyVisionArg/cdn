@@ -1888,6 +1888,10 @@ export class Folder {
         return this.#properties.set(property, value);
     }
 
+    get rootFolderId() {
+        return this.#json.RootFolderId;
+    }
+
     // options: { fields, formula, order, maxDocs, recursive, maxTextLength }
     search(options) {
         var opt = {
