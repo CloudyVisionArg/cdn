@@ -1232,23 +1232,26 @@ export class Document {
                                 res.sort(function (a, b) {
                                     return a.AttId >= b.AttId ? -1 : 1;
                                 });
+                                // Arma un array de AccId
+                                var ids = res.map(att => att.AccId);
+                                // Saca los repetidos
+                                ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                                // Levanta los accounts y completa el nombre
+                                me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                                    accs => {
+                                        res.forEach(el => {
+                                            el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                                            me.#attachmentsMap.set(el.Name, new Attachment(el, me));
+                                        });
+                                        me.#attachmentsMap._loaded = true;
+                                        resolve(me.#attachmentsMap);
+            
+                                    }, reject
+                                )
+                            } else {
+                                me.#attachmentsMap._loaded = true;
+                                resolve(me.#attachmentsMap);
                             }
-                            // Arma un array de AccId
-                            var ids = res.map(att => att.AccId);
-                            // Saca los repetidos
-                            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                            // Levanta los accounts y completa el nombre
-                            me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                                accs => {
-                                    res.forEach(el => {
-                                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                        me.#attachmentsMap.set(el.Name, new Attachment(el, me));
-                                    });
-                                    me.#attachmentsMap._loaded = true;
-                                    resolve(me.#attachmentsMap);
-        
-                                }, reject
-                            )
                         }, reject
                     );
 
