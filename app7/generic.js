@@ -376,7 +376,6 @@ async function renderPage() {
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
-// todo: falta migrar
 async function renderControls(pCont, pParent) {
     var ctl, type, $this, domAttr, label, $input, aux, f7ctl;
     var tf, textField, vf, valueField;
@@ -952,6 +951,7 @@ function pageInit(e, page) {
             );
 
         } else {
+            debugger;
             getControlFolder($el.attr('data-fill-folder'), folderJson.RootFolderId).then(
                 function (res) {
                     var arrFields, textField, valueField, dataFields;
