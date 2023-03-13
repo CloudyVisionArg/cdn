@@ -1239,7 +1239,7 @@ export class Document {
                                 // Levanta los accounts y completa el nombre
                                 me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
                                     accs => {
-                                        res.forEach(el => {
+                                        accs.forEach(el => {
                                             el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                                             me.#attachmentsMap.set(el.Name, new Attachment(el, me));
                                         });
