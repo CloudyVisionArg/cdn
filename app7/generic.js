@@ -952,7 +952,7 @@ function pageInit(e, page) {
 
         } else {
             debugger;
-            getControlFolder($el.attr('data-fill-folder'), folderJson.RootFolderId).then(
+            dSession.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
                 function (res) {
                     var arrFields, textField, valueField, dataFields;
 
