@@ -1742,8 +1742,8 @@ Devuelve el markup de un attachment para agregar
 al ul del control anterior
 */
 function getAttachment(pAttach, pReadonly) {
-    debugger;
-    
+    if (pAttach instanceof doorsapi2.Attachment) pAttach = pAttach.toJSON():
+
     var $li = $('<li/>', {
         class: 'swipeout',
     });

@@ -498,7 +498,7 @@ export class Session {
 };
 
 
-class Account {
+export class Account {
     static objectType = 6;
     #json;
     #session;
@@ -758,7 +758,7 @@ class Account {
 }
 
 
-class Application {
+export class Application {
     #parent;
     #rootFolder;
 
@@ -806,7 +806,7 @@ class Application {
 }
 
 
-class Attachment {
+export class Attachment {
     static objectType = 7;
     #parent; // Document
     #json;
@@ -958,13 +958,17 @@ class Attachment {
         return this.#json.Tags;
     }
 
+    toJSON() {
+        return this.#json;
+    }
+
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
     }
 }
 
-class Database {
+export class Database {
     #session;
     
     constructor(session) {
@@ -1075,7 +1079,7 @@ class Database {
     }
 }
 
-class Directory {
+export class Directory {
     #session;
     
     constructor(session) {
@@ -1533,7 +1537,7 @@ export class Document {
 };
 
 
-class Field {
+export class Field {
     static objectType = 5;
     #parent; // Document / Form
     #json;
@@ -2025,7 +2029,7 @@ export class Folder {
 };
 
 
-class Form {
+export class Form {
     static objectType = 1;
     #json;
     #session;
@@ -2130,7 +2134,7 @@ class Form {
 };
 
 
-class Properties extends DoorsMap {
+export class Properties extends DoorsMap {
     #parent;
     #user;
     #restUrl;
@@ -2248,7 +2252,7 @@ class Properties extends DoorsMap {
 }
 
 
-class Property {
+export class Property {
     #parent;
     #json;
 
@@ -2304,7 +2308,7 @@ class Property {
 }
 
 
-class Push {
+export class Push {
     #session;
     
     constructor(session) {
@@ -2402,7 +2406,7 @@ class Push {
 }
 
 
-class User extends Account {
+export class User extends Account {
     get adfsLogon() {
         return this.toJSON().AdfsLogon;
     }
@@ -2565,7 +2569,7 @@ class User extends Account {
 }
 
 
-class Utilities {
+export class Utilities {
     #session;
     #cache;
     
@@ -2917,7 +2921,7 @@ class Utilities {
 }
 
 
-class View {
+export class View {
     static objectType = 4;
     #json;
     #parent;
