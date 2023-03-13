@@ -951,7 +951,7 @@ function pageInit(e, page) {
             );
 
         } else {
-            folder.app.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
+            folder2.app.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
                 function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
