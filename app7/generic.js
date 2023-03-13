@@ -415,17 +415,19 @@ async function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(docJson, tf);
-            if (!textField) {
+            if (doc2.fields().has(tf)) {
+                textField = doc2.fields(tf);
+            } else {
                 console.log('No se encontro el campo ' + tf.toUpperCase());
             }
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(docJson, vf);
-            if (!valueField) {
-                console.log('No se encontro el campo ' + vf.toUpperCase());
+            if (doc2.fields().has(vf)) {
+                valueField = doc2.fields(vf);
+            } else {
+                console.log('No se encontro el campo ' + tf.toUpperCase());
             }
         };
 
@@ -450,11 +452,11 @@ async function renderControls(pCont, pParent) {
 
             if (ctl.attr('maxlength')) {
                 $input.attr('maxlength', ctl.attr('maxlength'));
-            } else if (textField && textField.Type == 1 && textField.Length > 0) {
-                $input.attr('maxlength', textField.Length);
+            } else if (textField && textField.type == 1 && textField.length > 0) {
+                $input.attr('maxlength', textField.length);
             }
 
-            if (textField && textField.Type == 3) {
+            if (textField && textField.type == 3) {
                 $input.attr('data-numeral', numeral.options.defaultFormat)
             }
 

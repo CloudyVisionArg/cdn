@@ -294,6 +294,7 @@ function inputDataList(pInput, pSource) {
         ac.params.filling = true;
         getControlFolder(objPropCI(pSource, 'folder'), objPropCI(pSource, 'rootFolder')).then(
             function (fld) {
+                debugger;
                 var f = objPropCI(pSource, 'field');
                 folderSearchGroups(fld['FldId'], f, '', f + ' is not null and ' + f + ' <> \'\'').then(
                     function (res) {
