@@ -12,7 +12,6 @@ if (!forceOnline) {
         arrOfflineCols = cols;
     });
 }
-debugger;
 var selectionMode = false;
 
 var propEditPage = 'App7_editPage';
