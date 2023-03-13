@@ -953,7 +953,7 @@ function pageInit(e, page) {
         } else {
             debugger;
             dSession.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
-                function (res) {
+                function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
                     var arrFields = $el.attr('data-fill-fields').split(',');
@@ -962,9 +962,9 @@ function pageInit(e, page) {
                     if (arrFields.length > 0) dataFields = arrFields.join(',');
 
                     fillSelect($el,
-                        folderSearch(res['FldId'], $el.attr('data-fill-fields'),
-                            $el.attr('data-fill-formula'), $el.attr('data-fill-order')
-                        ),
+                        fld.search({ fields: $el.attr('data-fill-fields'),
+                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
+                        }),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
                     );
                 },
