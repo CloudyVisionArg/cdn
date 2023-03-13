@@ -1213,8 +1213,7 @@ async function fillControls() {
     }
 }
 
-// todo doc2 folder2 seguir de aca
-function fillAttachments(pEl) {
+async function fillAttachments(pEl) {
     var $ul = pEl.find('ul');
     $ul.empty();
 
@@ -1222,56 +1221,13 @@ function fillAttachments(pEl) {
     var tag = pEl.attr('data-attachments').toLowerCase();
 
     if (doc_id) {
-        doc2.attachments().then(
-            res => {
-                for (let [key, att] of res) {
-                    if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
-                        getAttachment(att, readonly).appendTo($ul);
-                    }
-                }
-            },
-            err => {
-                logAndToast('attachments error: ' + errMsg(err));
+        var atts = await doc2.attachments();
+        for (let [key, att] of res) {
+            //if (tag == 'all' || (att.group && att.group.toLowerCase() == tag)) { // todo: tiene q quedar esta cdo este group
+            if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
+                getAttachment(att, readonly).appendTo($ul);
             }
-        );
-
-        /*
-        DoorsAPI.attachments(doc_id).then(
-            function (res) {
-                // Filtra por el tag
-                var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
-
-                if (atts.length > 0) {
-                    // Ordena descendente
-                    atts.sort(function (a, b) {
-                        return a.AttId >= b.AttId ? -1 : 1;
-                    });
-
-                    // Arma un array de AccId
-                    var ids = atts.map(att => att.AccId);
-                    // Saca los repetidos
-                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                    // Levanta los accounts, completa el nombre y renderiza
-                    accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                        function (accs) {
-                            atts.forEach(att => {
-                                att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
-                                getAttachment(att, readonly).appendTo($ul);
-                            });
-                        }
-                    )
-
-                } else {
-                    noAttachs();
-                }
-            },
-
-            function (err) {
-                logAndToast('attachments error: ' + errMsg(err));
-            }
-        );
-        */
-
+        }
     } else {
         noAttachs();
     }
@@ -1297,6 +1253,7 @@ function fillAttachments(pEl) {
     }
 }
 
+// todo doc2 folder2 seguir de aca
 function downloadAtt(e) {
     var $att = $(this);
     var attId = $att.attr('data-att-id');
