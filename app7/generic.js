@@ -1492,7 +1492,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields.has($el.attr('data-textfield')) ? doc2.fields($el.attr('data-textfield')) : undefined;
+        var field = doc2.fields().has($el.attr('data-textfield')) ? doc2.fields($el.attr('data-textfield')) : undefined;
 
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
