@@ -97,8 +97,7 @@ var $acc = $(`
 `).appendTo($pageCont);
 
 var $ul = $acc.find('ul');
-$ul.append('holaaaa');
-
+getTextarea('code', 'Pre-save script', ':)').appendTo($ul);
 
 
 // Boton importar
