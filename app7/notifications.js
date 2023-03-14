@@ -202,7 +202,7 @@ $btn.on('click', function (e) {
         onClick: dummyClick("select all"),
     },
     {
-        text: 'Marcar Todas como leídas',
+        text: 'Marcar Todas como le&iacute;das',
         onClick: dummyClick("todas leidas"),
         
     },
@@ -217,11 +217,11 @@ pageActions = app7.actions.create({ buttons: stdPageActions });
 
 var stdSelModeActions = [
     {
-        text: 'Marcar Como Leídas',
+        text: 'Marcar Como Le&iacute;das',
         onClick: dummyClick("leidas"),
     },
     {
-        text: 'Marcar Como No Leídas',
+        text: 'Marcar Como No Le&iacute;das',
         onClick: dummyClick("no leidas"),
     },
     {
