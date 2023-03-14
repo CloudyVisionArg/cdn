@@ -87,6 +87,7 @@ class CustomAppNotification {
 
 }
 
+var selectionMode = false;
 
 console.log("notifications")
 
@@ -235,10 +236,10 @@ function pageInitMembers(e, page) {
         items: [],
         // usar renderItem
         renderItem: function(item){
-            let iconTrash_ios = $("<i />", {"class":"btnDelete f7-icons ios-only", "contenedor_id":item.Id, "text":"trash"})
+          /* let iconTrash_ios = $("<i />", {"class":"btnDelete f7-icons ios-only", "contenedor_id":item.Id, "text":"trash"})
             let iconTrash_md = $("<i />", {"class":"btnDelete material-icons-outlined md-only", "contenedor_id":item.Id, "text":"delete"})
             let iconSobre_ios = $("<i />", {"class":"btnRead f7-icons ios-only", "contenedor_id":item.Id, "text":item.readicon_ios})
-            let iconSobre_md = $("<i />", {"class":"btnRead material-icons-outlined md-only", "contenedor_id":item.Id, "text":item.readicon_md})
+            let iconSobre_md = $("<i />", {"class":"btnRead material-icons-outlined md-only", "contenedor_id":item.Id, "text":item.readicon_md})*/
                     
             const fechaDelivery = new Date(item["DeliveryDate"])
             let fechaNotif = resolveDeliverydDate(fechaDelivery);
