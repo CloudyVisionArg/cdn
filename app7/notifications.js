@@ -148,6 +148,8 @@ var $page =   getPage({
 
 $page.addClass('notifications');
 
+var $navbar = $page.find('.navbar');
+
 $pageCont = $page.find('.page-content');
 //todo: cargar la pag en iframe (ver codelib pruebas)
 
