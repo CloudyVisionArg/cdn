@@ -141,6 +141,7 @@ var $page =   getPage({
                 id: 'notifications' + getGuid(),
                 title: "Notificaciones",
                 leftbutton: 'search',
+                rightbutton: 'menu',
                 searchbar: 2,
                 subnavbar: false,
                 pulltorefresh: true,
