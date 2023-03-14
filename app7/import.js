@@ -80,15 +80,17 @@ var $ulMap = $('<ul/>').appendTo($list);
 // Opciones
 
 var $acc = $(`
-<div class="accordion-item corp-item" style="margin-top: 20px;">
-    <a href="" class="item-link item-content">
-        <div class="item-inner">
-            <div class="item-title">Opciones</div>
-        </div>
-    </a>
-    <div class="accordion-item-content" style="padding-left: 8px;">
-        <div class="list no-hairlines-md">
-            <ul />
+<div class="block block-strong">
+    <div class="accordion-item corp-item" style="margin-top: 20px;">
+        <a href="" class="item-link item-content">
+            <div class="item-inner">
+                <div class="item-title">Opciones</div>
+            </div>
+        </a>
+        <div class="accordion-item-content" style="padding-left: 8px;">
+            <div class="list no-hairlines-md">
+                <ul />
+            </div>
         </div>
     </div>
 </div>
