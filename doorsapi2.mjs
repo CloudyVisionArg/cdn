@@ -1649,7 +1649,9 @@ export class Field {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         
-        if (this.type == 2) {
+        if (this.type == 1) {
+            this.#json.Value = (value == undefined || value == null) ? null : value.toString();
+        } else if (this.type == 2) {
             var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
         } else if (this.type == 3) {
@@ -2172,6 +2174,7 @@ export class Properties extends DoorsMap {
         this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
             res => {
+                if (!Array.isArray(res)) debugger;
                 res.forEach(el => {
                     var prop = new Property(el, me);
                     super.set(prop.name, prop);
