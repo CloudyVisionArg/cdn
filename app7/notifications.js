@@ -12,6 +12,7 @@ Para incluirlo, agregar la opcion de menu de la sig forma:
 
 IMPORTANTE: Los iconos deben estar wrappeados en el DIV para que funcione la animacion
 */
+var pageActions, selModeActions;
 
 class CustomAppNotification {
     constructor(Id,DevicePlatform,ReadDate,EraseDate,DeliveryDate,Title,Body,ExtraData) {
