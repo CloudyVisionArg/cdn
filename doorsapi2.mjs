@@ -1514,6 +1514,10 @@ export class Document {
         return this.fields('subject').value;
     }
 
+    set subject(value) {
+        this.fields('subject').value = value;
+    }
+
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
