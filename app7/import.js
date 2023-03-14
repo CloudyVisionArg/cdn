@@ -81,7 +81,7 @@ var $ulMap = $('<ul/>').appendTo($list);
 
 var $acc = $(`
 <div class="block block-strong">
-    <div class="accordion-item corp-item" style="margin-top: 20px;">
+    <div class="accordion-item corp-item">
         <a href="" class="item-link item-content">
             <div class="item-inner">
                 <div class="item-title">Opciones</div>
