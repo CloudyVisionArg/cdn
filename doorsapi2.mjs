@@ -2300,6 +2300,7 @@ export class Property {
             return new Promise((resolve, reject) => {
                 if (this.value != value) {
                     this.#json.Value = value;
+                    debugger;
                     this.session.restClient.fetch(this.parent.restUrl, 'PUT', [this.#json], 'arrProperties')
                         .then(resolve, reject);
                 } else {
