@@ -731,12 +731,14 @@ function getTextarea(pId, pLabel, pValue) {
         class: 'item-input-wrap',
     }).appendTo($itemInner);
     
-    $('<textarea/>', {
+    var $ta = $('<textarea/>', {
         class: 'resizable',
         id: pId,
         placeholder: pLabel,
-        value: pValue,
+        //value: pValue,
     }).appendTo($inputWrap);
+
+    if (pValue) $ta.append(pValue);
 
     $('<span/>', {
         class: 'input-clear-button',
