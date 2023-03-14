@@ -79,7 +79,7 @@ var $ulMap = $('<ul/>').appendTo($list);
 
 // Opciones
 
-$pageCont.append(`
+var $acc = $(`
 <div class="accordion-item corp-item" style="margin-top: 20px;">
     <a href="" class="item-link item-content">
         <div class="item-inner">
@@ -92,7 +92,11 @@ $pageCont.append(`
         </div>
     </div>
 </div>
-`);
+`).appendTo($pageCont);
+
+var $ul = $acc.find('ul');
+$ul.append('holaaaa');
+
 
 
 // Boton importar
