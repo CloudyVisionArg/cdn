@@ -166,6 +166,15 @@ $btn.click(function (e) {
     searchBar.enable();
 })
 
+ // Boton Cancelar Selection Mode
+ $btn = getLink({ text: 'Cancelar' });
+ $btn.attr('id', 'buttonCancel');
+ $btn.appendTo($page.find('.navbar-inner .right'));
+ $btn.on('click', function (e) {
+     toggleSelectionMode();
+ });
+ $btn.hide();
+
 
 // Inicializa el Searchbar
 var timeout;
@@ -607,3 +616,4 @@ function taphold(e) {
             };
 */
             
+
