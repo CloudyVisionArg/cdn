@@ -626,7 +626,7 @@ function toggleSelectionMode() {
 
         if (searchBar.enabled) {
             $navbar.addClass('with-searchbar-expandable-enabled');
-            searchBar.$el.show();
+            searchBar.el.show();
         }
         //$views.parent().removeClass('disabled');
         $navbar.find('#buttonSearch').show();
@@ -645,7 +645,7 @@ function toggleSelectionMode() {
         });
 
         if (searchBar.enabled) {
-            searchBar.$el.hide();
+            searchBar.el.hide();
             $navbar.removeClass('with-searchbar-expandable-enabled');
         }
         //$views.parent().addClass('disabled');
