@@ -176,6 +176,69 @@ $btn.click(function (e) {
  });
  $btn.hide();
 
+// Boton Acciones
+$btn = getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
+$btn.attr('id', 'buttonActions');
+$btn.appendTo($page.find('.navbar-inner .left'));
+$btn.on('click', function (e) {
+    selModeActions.open();
+});
+$btn.css('margin-left', '0px');
+$btn.hide();
+
+
+// Boton Menu (fldActions)
+$btn = $page.find('.navbar-inner .right .link')
+$btn.attr('id', 'buttonMenu');
+$btn.on('click', function (e) {
+    pageActions.open();
+});
+
+ // Acciones de carpeta
+ var stdPageActions = [
+    {
+        text: 'Seleccionar Todo',
+        onClick: dummyClick("select all"),
+    },
+    {
+        text: 'Marcar Todas como leídas',
+        onClick: dummyClick("todas leidas"),
+        
+    },
+    {
+        text: 'Cancelar',
+        color: 'red',
+        close: true,
+    },
+];
+
+pageActions = app7.actions.create({ buttons: stdPageActions });
+
+var stdSelModeActions = [
+    {
+        text: 'Marcar Como Leídas',
+        onClick: dummyClick("leidas"),
+    },
+    {
+        text: 'Marcar Como No Leídas',
+        onClick: dummyClick("no leidas"),
+    },
+    {
+        text: 'Borrar',
+        onClick: dummyClick("borrar"),
+    },
+    {
+        text: 'Cancelar',
+        color: 'red',
+        close: true,
+    },
+];
+
+selModeActions = app7.actions.create({ buttons: stdSelModeActions });
+
+function dummyClick(texto){
+    console.log(texto);
+}
 
 // Inicializa el Searchbar
 var timeout;
