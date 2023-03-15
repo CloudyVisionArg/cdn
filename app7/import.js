@@ -209,6 +209,8 @@ async function loadXls(file) {
 }
 
 async function doImport() {
+    const cronStart = new Date().getTime();
+
     $btnImport.addClass('disabled');
     $blockLog.empty();
     $blockLog.append('Importando ' + (sheet._rangeRows() - 1) + ' filas...' + '<br/>');
@@ -248,7 +250,9 @@ async function doImport() {
             $blockLog.append('Fila vacia<br/>');
         }
     }
-    $blockLog.append('<br/><b>Proceso terminado</b>');
+
+    const cron = new Date().getTime();
+    $blockLog.append(`<br/><b>Proceso terminado en ${parseInt((cron - cronStart) / 1000)} segs</b>`);
     $btnCopy.removeClass('disabled')
 }
 
