@@ -77,7 +77,6 @@ var $list = $('<div/>', {
 
 var $ulMap = $('<ul/>').appendTo($list);
 
-
 /* suspendido por ahora, la idea es poner un script q se ejecute antes del save
 // Opciones
 
