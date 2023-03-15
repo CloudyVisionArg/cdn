@@ -2174,17 +2174,19 @@ export class Properties extends DoorsMap {
             '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
             '&objectName=' + encURIC(restArgs.objName);
 
+        // todo: si da error armar la coleccion vacia
         this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
             res => {
-                if (!Array.isArray(res)) debugger;
-                res.forEach(el => {
-                    var prop = new Property(el, me);
-                    super.set(prop.name, prop);
-                })
+                if (Array.isArray(res)) {
+                    res.forEach(el => {
+                        var prop = new Property(el, me);
+                        super.set(prop.name, prop);
+                    })
+                }
             },
             err => {
-                throw err;
+                // No hago nada, queda la coleccion vacia
             }
         )
     }
