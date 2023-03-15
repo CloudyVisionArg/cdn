@@ -77,6 +77,8 @@ var $list = $('<div/>', {
 
 var $ulMap = $('<ul/>').appendTo($list);
 
+
+/* suspendido por ahora, la idea es poner un script q se ejecute antes del save
 // Opciones
 
 var $acc = $(`
@@ -98,7 +100,7 @@ var $acc = $(`
 
 var $ul = $acc.find('ul');
 getTextarea('code', 'Pre-save script', ':)').appendTo($ul);
-
+*/
 
 // Boton importar
 var $block = $('<div/>', {
@@ -247,7 +249,7 @@ async function doImport() {
             $blockLog.append('Fila vacia<br/>');
         }
     }
-    $blockLog.append('<br/>Proceso terminado');
+    $blockLog.append('<br/><b>Proceso terminado</b>');
     $btnCopy.removeClass('disabled')
 }
 
