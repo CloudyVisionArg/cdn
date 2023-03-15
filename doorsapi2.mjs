@@ -577,8 +577,7 @@ export class Account {
 
     /*
     childAccounts() -> Devuelve un map de cuentas hijas
-    childAccounts(account) -> Devuelve una cuenta hija. Puedo pasar name o id. Da error si no esta.
-    childAccounts(account, true) -> Igual que el anterior, pero si no esta devuelve undefined.
+    childAccounts(account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
 
     Los metodos childAccountsRecursive, parentAccounts y parentAccountsRecursive trabajan igual
     */
@@ -1610,7 +1609,7 @@ export class Field {
         return this.#json.Precision;
     }
 
-    // todo: solo para form, add o remove igual
+    // todo: solo para field de form, add o remove igual
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
