@@ -273,6 +273,7 @@ var searchBar = app7.searchbar.create({
 var $notificationsVirtualList
 var $pageCont = $page.find(".page-content");
 var $divActions = $("<div/>",{"class":"actions-container"}).appendTo($pageCont);
+$divActions.hide();
 var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
