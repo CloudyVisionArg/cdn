@@ -1225,7 +1225,6 @@ async function fillAttachments(pEl) {
         for (let [key, att] of atts) {
             //if (tag == 'all' || (att.group && att.group.toLowerCase() == tag)) { // todo: tiene q quedar esta cdo este group
             if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
-                debugger;
                 getAttachment(att, readonly).appendTo($ul);
             }
         }
