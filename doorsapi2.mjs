@@ -1306,7 +1306,7 @@ export class Document {
                 if (value != undefined) ret.value = value;
                 return ret;
             } else {
-                //console.log('Field not found: ' + name);
+                if (name != '[NULL]') console.log('Field not found: ' + name);
                 return undefined;
             }
 
