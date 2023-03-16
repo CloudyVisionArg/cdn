@@ -272,7 +272,7 @@ var searchBar = app7.searchbar.create({
 
 var $notificationsVirtualList
 var $pageCont = $page.find(".page-content");
-var $divActions = $("<div/>").appendTo($pageCont);
+var $divActions = $("<div/>",{"class":"actions-container"}).appendTo($pageCont);
 var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
@@ -629,6 +629,7 @@ function toggleSelectionMode() {
             searchBar.el.show();
         }
         //$views.parent().removeClass('disabled');
+        $divActions.hide();
         $navbar.find('#buttonSearch').show();
         $navbar.find('#buttonMenu').show();
         $navbar.find('#buttonActions').hide();
@@ -648,7 +649,8 @@ function toggleSelectionMode() {
             searchBar.el.hide();
             $navbar.removeClass('with-searchbar-expandable-enabled');
         }
-        //$views.parent().addClass('disabled');
+        //$views.parent().addClass('disabled');        
+        $divActions.show();
         $navbar.find('#buttonSearch').hide();
         $navbar.find('#buttonMenu').hide();
         $navbar.find('#buttonActions').show();
