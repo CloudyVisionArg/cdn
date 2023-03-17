@@ -612,7 +612,11 @@ function getItemContent(obj) {
     }
     
     obj.getAttributeNames().forEach((item)=>{
-        $cont.attr(item, obj.getAttribute(item));
+        if(item == "class"){
+            $cont.addClass(obj.getAttribute(item))
+        }else{
+            $cont.attr(item, obj.getAttribute(item));
+        }
     })
 
     return $cont;
