@@ -139,6 +139,7 @@ function crearCarteles(pCartel,index,array){
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
         content: text,
+        backdropUnique: true,
         on: {       
             open: function () {
                 console.log('Popover open ' + pCartel["popover_id"]);
