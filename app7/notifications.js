@@ -652,7 +652,6 @@ function toggleSelectionMode() {
         selectionMode = true;
 
         $get('.media-list a.item-link.item-content').replaceWith(function () {
-            debugger;
             $itemContent = getItemContent(this);
             $itemContent.append($(this).contents());
             return $itemContent;
