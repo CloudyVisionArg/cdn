@@ -586,12 +586,14 @@ function injectCSS(css){
 
 //Funciones traidas de explorer para utilizar seleccion en vez de botones individuales
 
-function getItemContent() {
+function getItemContent(obj) {
     var $cont;
 
+    obj.classList.remove("item-checkbox","item-link")
+   
     if (selectionMode) {
         $cont = $('<label/>', {
-            class: 'item-checkbox item-content',
+            class: 'item-checkbox',
         });
     
         $('<input/>', {
@@ -605,9 +607,13 @@ function getItemContent() {
     } else {
         $cont = $('<a/>', {
             href: '#',
-            class: 'item-link item-content',
+            class: 'item-link',
         });
     }
+    
+    obj.getAttributeNames().forEach((item)=>{
+        $cont.attr(item, obj.getAttribute(item));
+    })
 
     return $cont;
 }
@@ -620,7 +626,7 @@ function toggleSelectionMode() {
         selectionMode = false;
 
         $get('.media-list label.item-checkbox.item-content').replaceWith(function () {
-            var $itemContent = getItemContent();
+            var $itemContent = getItemContent(this);
             $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
             return $itemContent;
         });
@@ -642,7 +648,7 @@ function toggleSelectionMode() {
 
         $get('.media-list a.item-link.item-content').replaceWith(function () {
             debugger;
-            $itemContent = getItemContent();
+            $itemContent = getItemContent(this);
             $itemContent.append($(this).contents());
             return $itemContent;
         });
