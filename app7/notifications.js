@@ -611,10 +611,11 @@ function getItemContent(obj) {
         });
     }
     
+    //para que no se pierdan los atributos custom del elemento
     obj.getAttributeNames().forEach((item)=>{
         if(item == "class"){
-            $cont.addClass(obj.getAttribute(item))
-        }else{
+            $cont.addClass(obj.getAttribute(item))        
+        }else if(item != "href"){
             $cont.attr(item, obj.getAttribute(item));
         }
     })
