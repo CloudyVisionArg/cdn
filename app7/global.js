@@ -1919,8 +1919,20 @@ function audioRecorder(pCallback) {
         content: $sheet[0],
     }).open();
     
+
+
     function record() {
-        debugger;
+        (_isCapacitor())
+        ? recordCapacitor() 
+        : recordCordova()
+    }
+
+    function recordCapacitor(){
+        //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+    }
+
+    function recordCordova(){
+
         save = false;
         var now = new Date();
         var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
