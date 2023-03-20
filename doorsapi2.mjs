@@ -1186,6 +1186,10 @@ export class Document {
     }
 
     get aclInherits() {
+        return (this.fields('inherits').value ? true : false);
+    }
+
+    set aclInherits(value) {
         //todo
         debugger;
     }
