@@ -157,7 +157,11 @@ $pageCont = $page.find('.page-content');
 
 // Evento del Pull To Refresh
 $pageCont.on('ptr:refresh', function (e) {
-    pageInitMembers(e, globalPage);
+    if (selectionMode) {
+        toast('Refresh disabled in selection mode');
+    } else {
+        pageInitMembers(e, globalPage);        
+    }
     e.originalEvent.detail(); // done
 });
 
