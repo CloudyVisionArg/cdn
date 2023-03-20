@@ -225,15 +225,15 @@ pageActions = app7.actions.create({ buttons: stdPageActions });
 var stdSelModeActions = [
     {
         text: 'Marcar Como Le&iacute;das',
-        onClick: notificationsReadSelected(),
+        onClick: notificationsReadSelected,
     },
     {
         text: 'Marcar Como No Le&iacute;das',
-        onClick: notificationsUnReadSelected(),
+        onClick: notificationsUnReadSelected,
     },
     {
         text: 'Borrar',
-        onClick: notificationsDeleteSelected(),
+        onClick: notificationsDeleteSelected,
     },
     {
         text: 'Cancelar',
