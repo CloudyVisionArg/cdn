@@ -380,20 +380,21 @@ function clearMembers(){
 
 //Esta funcion pasar a algun lugar donde este fe
 function searchNotifications(){
-    debugger;
-    DoorsAPI.notifications(getDevice()).then((res)=>{
-        clearMembers();
-        let notificationsArr = res.filter(n=>n.EraseDate == null)
-        var arrCustomNot = []
+    if (!selectionMode){
+        DoorsAPI.notifications(getDevice()).then((res)=>{
+            clearMembers();
+            let notificationsArr = res.filter(n=>n.EraseDate == null)
+            var arrCustomNot = []
 
-        for(var idx=0; idx < notificationsArr.length; idx++){
-            const notif = new CustomAppNotification();
-            notif.Parse(notificationsArr[idx]);
-            arrCustomNot.push(notif);
-        }      
+            for(var idx=0; idx < notificationsArr.length; idx++){
+                const notif = new CustomAppNotification();
+                notif.Parse(notificationsArr[idx]);
+                arrCustomNot.push(notif);
+            }      
 
-        renderMembers(arrCustomNot)
-    })
+            renderMembers(arrCustomNot)
+        })
+    }
 }
 
 /**
