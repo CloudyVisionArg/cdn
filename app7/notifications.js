@@ -203,7 +203,7 @@ $btn.on('click', function (e) {
     },
     {
         text: 'Marcar Todas como le&iacute;das',
-        onClick: dummyClick("todas leidas"),
+        onClick: notificationsReadAll(),
         
     },
     {
@@ -212,6 +212,13 @@ $btn.on('click', function (e) {
         close: true,
     },
 ];
+
+
+function notificationsReadAll(){
+    DoorsAPI.notificationsReadAll().then(()=>{
+        searchNotifications();
+    })
+}
 
 pageActions = app7.actions.create({ buttons: stdPageActions });
 
@@ -430,6 +437,51 @@ function renderMembers(notificationsArr){
     listItems.deleteAllItems();
     listItems.appendItems(notificationsArr); 
     
+}
+
+function getSelected() {
+    var selected = [];
+    $('input[type="checkbox"]:checked', listMembers).each(function (ix, el) {
+        selected.push(parseInt($(this).closest('li').attr('id')));
+    })
+    return selected;
+}
+
+function notificacionesLeerSeleccionadas(arrSeleccionadas){
+    arrSeleccionadas.forEach((id)=>{
+        DoorsAPI.notificationsRead(id).then(
+            ()=>{
+                $("#" + id).removeClass("msgunread");
+                $("#" + id).addClass("msgread");
+                setNotificationUnReadCounter($(".msgunread").length); 
+            },
+            (err)=>{
+                let msg = "Error: La notificación no pudo ser marcada como no leída.";
+                console.log(err);
+                console.log(msg);
+                toast(msg);
+            });
+    })
+}
+
+function notificacionesBorrarSeleccionadas(arrSeleccionadas){
+    arrSeleccionadas.forEach((id)=>{
+        let notifPadre = $("#" + id);
+    
+        notifPadre.removeClass("msgread");
+        notifPadre.removeClass("msgunread");
+        notifPadre.addClass("msgdeleted");
+        DoorsAPI.notificationsDelete(id).then(()=>{
+            $("#" + id).parent().remove();
+            setNotificationUnReadCounter($(".msgunread").length); 
+        },
+        (err)=>{
+            let msg = "Error: La notificación no pudo ser eliminada.";
+            console.log(err);
+            console.log(msg);
+            toast(msg);
+        });
+    })
 }
 
 function clickOnTrash(ev) {
