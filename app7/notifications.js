@@ -454,7 +454,6 @@ function getSelected(invertSelection = false) {
 }
 
 function notificationsMenuSelectAll(){
-    debugger;
     toggleSelectionMode();
     let allNotif = $('input[type="checkbox"]', $listMembers);
     allNotif.prop("checked", true);
