@@ -199,11 +199,11 @@ $btn.on('click', function (e) {
  var stdPageActions = [
     {
         text: 'Seleccionar Todo',
-        onClick: notificationsMenuSelectAll(),
+        onClick: notificationsMenuSelectAll,
     },
     {
         text: 'Marcar Todas como le&iacute;das',
-        onClick: notificationsReadAll(),
+        onClick: notificationsReadAll,
         
     },
     {
