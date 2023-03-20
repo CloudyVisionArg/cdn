@@ -199,7 +199,7 @@ $btn.on('click', function (e) {
  var stdPageActions = [
     {
         text: 'Seleccionar Todo',
-        onClick: dummyClick("select all"),
+        onClick: notificationsMenuSelectAll(),
     },
     {
         text: 'Marcar Todas como le&iacute;das',
@@ -225,15 +225,15 @@ pageActions = app7.actions.create({ buttons: stdPageActions });
 var stdSelModeActions = [
     {
         text: 'Marcar Como Le&iacute;das',
-        onClick: dummyClick("leidas"),
+        onClick: notificationsReadSelected(),
     },
     {
         text: 'Marcar Como No Le&iacute;das',
-        onClick: dummyClick("no leidas"),
+        onClick: notificationsUnReadSelected(),
     },
     {
         text: 'Borrar',
-        onClick: dummyClick("borrar"),
+        onClick: notificationsDeleteSelected(),
     },
     {
         text: 'Cancelar',
@@ -437,6 +437,8 @@ function renderMembers(notificationsArr){
     
 }
 
+
+
 function getSelected(invertSelection = false) {
     var selected = [];
     if(!invertSelection){
@@ -451,7 +453,13 @@ function getSelected(invertSelection = false) {
     return selected;
 }
 
-function notificacionesLeerSeleccionadas(){
+function notificationsMenuSelectAll(){
+    toggleSelectionMode()
+    let allNotif = $('input[type="checkbox"]', $listMembers);
+    allNotif.prop("checked", true);
+}
+
+function notificationsReadSelected(){
     let arrSeleccionadas = getSelected();
     arrSeleccionadas.forEach((id)=>{
         DoorsAPI.notificationsRead(id).then(
@@ -469,7 +477,25 @@ function notificacionesLeerSeleccionadas(){
     })
 }
 
-function notificacionesBorrarSeleccionadas(){
+function notificationsUnReadSelected(){
+    let arrSeleccionadas = getSelected();
+    arrSeleccionadas.forEach((id)=>{
+        DoorsAPI.notificationsUnRead(id).then(
+            ()=>{
+                $("#" + id).removeClass("msgread");
+                $("#" + id).addClass("msgunread");
+                setNotificationUnReadCounter($(".msgunread").length); 
+            },
+            (err)=>{
+                let msg = "Error: La notificación no pudo ser marcada como no leída.";
+                console.log(err);
+                console.log(msg);
+                toast(msg);
+            });
+    })
+}
+
+function notificationsDeleteSelected(){
     let arrSeleccionadas = getSelected()
     arrSeleccionadas.forEach((id)=>{
         let notifPadre = $("#" + id);
