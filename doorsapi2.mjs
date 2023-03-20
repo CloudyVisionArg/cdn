@@ -1191,7 +1191,7 @@ export class Document {
         } else {
             return new Promise((resolve, reject) => {
                 var url = 'documents/' + this.id + '/aclinherits/' + value;
-                this.session.restClient.fetch(url, 'POST', {}, '').then(
+                this.session.restClient.fetch(url, 'POST', '', '').then(
                     res => {
                         debugger
 
