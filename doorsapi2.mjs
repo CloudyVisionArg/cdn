@@ -1171,7 +1171,8 @@ export class Document {
     }
 
     acl() {
-        //todo
+        var url = 'documents/' + this.id + '/acl/';
+        return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     aclGrant(account, access) {
@@ -1180,15 +1181,19 @@ export class Document {
     }
 
     aclInherited() {
-        //todo
+        var url = 'documents/' + this.id + '/aclinherited/';
+        return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     get aclInherits() {
         //todo
+        debugger;
     }
 
     aclOwn() {
         //todo
+        var url = 'documents/' + this.id + '/aclown/';
+        return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     aclRevoke(account, access) {
