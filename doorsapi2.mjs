@@ -1185,13 +1185,24 @@ export class Document {
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
-    get aclInherits() {
-        return (this.fields('inherits').value ? true : false);
-    }
+    aclInherits(value) {
+        if (value == undefined) {
+            return (this.fields('inherits').value ? true : false);
+        } else {
+            return new Promise((resolve, reject) => {
+                var url = 'documents/' + this.id + '/aclinherits/' + value;
+                this.session.restClient.fetch(url, 'POST', {}, '').then(
+                    res => {
+                        debugger
 
-    set aclInherits(value) {
-        //todo
-        debugger;
+                    },
+                    err => {
+                        debugger;
+
+                    }
+                )
+            });
+        }
     }
 
     aclOwn() {
