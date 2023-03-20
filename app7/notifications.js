@@ -441,7 +441,7 @@ function renderMembers(notificationsArr){
 
 function getSelected() {
     var selected = [];
-    $('input[type="checkbox"]:checked', listMembers).each(function (ix, el) {
+    $('input[type="checkbox"]:checked', $listMembers).each(function (ix, el) {
         selected.push(parseInt($(this).closest('li').attr('id')));
     })
     return selected;
