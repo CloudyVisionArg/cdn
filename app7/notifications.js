@@ -415,7 +415,7 @@ function renderMembers(notificationsArr){
         bntSelectAll.text("Seleccionar todas").appendTo(actionsRow);
 
         let bntInvSelection = $("<button />", {"class":"button"});
-        bntInvSelection.text("Invertir selecci&oacute;n").appendTo(actionsRow);
+        bntInvSelection.text("Invertir selecci&#243;n").appendTo(actionsRow);
 
         bntInvSelection.on("click", function(){
             let notifSeleccionadas = $('input[type="checkbox"]:checked', $listMembers);
