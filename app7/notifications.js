@@ -407,24 +407,22 @@ function renderMembers(notificationsArr){
             
         let actionsRow = $("<div />", {"class":"item-row segmented"}).appendTo(contenedor);
             
-        let bntDeleteAll = $("<button />", {"class":"button"})
-        bntDeleteAll.text("Borrar todas").appendTo(actionsRow);
+        let bntSelectAll = $("<button />", {"class":"button"});
+        bntSelectAll.text("Seleccionar todas").appendTo(actionsRow);
 
-        let bntReadAll = $("<button />", {"class":"button"})
-        bntReadAll.text("Leer todas").appendTo(actionsRow);
+        let bntInvSelection = $("<button />", {"class":"button"});
+        bntInvSelection.text("Invertir selección").appendTo(actionsRow);
 
-        bntReadAll.on("click", function(){
-            DoorsAPI.notificationsReadAll().then(()=>{
-                searchNotifications();
-            })
+        bntInvSelection.on("click", function(){
+            let notifSeleccionadas = $('input[type="checkbox"]:checked', $listMembers);
+            let notifNoSeleccionadas = $('input[type="checkbox"]:not(:checked)', $listMembers);
+            notifSeleccionadas.prop("checked", false);
+            notifNoSeleccionadas.prop("checked", true);
         })
 
-        bntDeleteAll.on("click", function(){
-            app7.dialog.confirm('Esta acción no puede deshacerse','¿Desea borrar todas las notificaciones?', function () {
-                DoorsAPI.notificationsDeleteAll().then(()=>{
-                    searchNotifications();
-                })
-            });            
+        bntSelectAll.on("click", function(){
+            let allNotif = $('input[type="checkbox"]', $listMembers);
+            allNotif.prop("checked", true);
         })
 
 
@@ -439,15 +437,22 @@ function renderMembers(notificationsArr){
     
 }
 
-function getSelected() {
+function getSelected(invertSelection = false) {
     var selected = [];
-    $('input[type="checkbox"]:checked', $listMembers).each(function (ix, el) {
-        selected.push(parseInt($(this).closest('li').attr('id')));
-    })
+    if(!invertSelection){
+        $('input[type="checkbox"]:checked', $listMembers).each(function (ix, el) {
+            selected.push(parseInt($(this).closest('label').attr('id')));
+        })
+    }else{
+        $('input[type="checkbox"]:not(:checked)', $listMembers).each(function (ix, el) {
+            selected.push(parseInt($(this).closest('label').attr('id')));
+        })
+    }
     return selected;
 }
 
-function notificacionesLeerSeleccionadas(arrSeleccionadas){
+function notificacionesLeerSeleccionadas(){
+    let arrSeleccionadas = getSelected();
     arrSeleccionadas.forEach((id)=>{
         DoorsAPI.notificationsRead(id).then(
             ()=>{
@@ -464,7 +469,8 @@ function notificacionesLeerSeleccionadas(arrSeleccionadas){
     })
 }
 
-function notificacionesBorrarSeleccionadas(arrSeleccionadas){
+function notificacionesBorrarSeleccionadas(){
+    let arrSeleccionadas = getSelected()
     arrSeleccionadas.forEach((id)=>{
         let notifPadre = $("#" + id);
     
