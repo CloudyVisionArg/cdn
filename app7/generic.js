@@ -1531,13 +1531,13 @@ async function saveDoc(exitOnSuccess) {
 
     DoorsAPI.documentSave(docJson).then((d) => {
         dSession.documentsGetFromId(d.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
-            doc = doc3.toJSON();
-            docJson = doc3.toJSON();
-            pageEl.crm.doc = docJson;
             doc2 = doc3;
-
+            doc = doc2.toJSON();
+            docJson = doc2.toJSON();
             doc_id = doc2.id;
-            pageEl.crm.doc_id = doc_id;
+            
+            pageEl.crm.doc = doc2;
+            pageEl.crm.doc_id = doc2.id;
             pageEl.crm.saved = true;
 
             saveAtt().then(async (res) => {
