@@ -941,16 +941,14 @@ export class Attachment {
         return new Promise(async (resolve, reject) => {
             var attMap = await me.parent.attachments();
             if (me.isNew) {
-                debugger; // scar d la coleccion
                 attMap.delete(me.name);
-                resolve(me);
+                resolve(true);
             } else {
                 var url = 'documents/' + me.parent.id + '/attachments';
                 me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
                     res => {
-                        debugger; // scar d la coleccion
-                        attMap.delete(me.name);
-                        resolve (me);
+                        if (res) attMap.delete(me.name);
+                        resolve(res);
                     },
                     reject
                 );
@@ -968,13 +966,13 @@ export class Attachment {
             var fs = await me.fileStream;
             var blob = (fs instanceof Blob ? fs : new Blob([fs]));
             formData.append('attachment', blob, me.name);
-            //formData.append('description', me.description);
-            //formData.append('group', me.group);
+            formData.append('description', me.description);
+            formData.append('group', me.group);
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
                     debugger;
-                    me.#json = await res.responseJson();
+                    me.#json = await res.json();
                     resolve(me);
                 },
                 reject
