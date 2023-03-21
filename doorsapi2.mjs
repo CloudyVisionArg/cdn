@@ -856,9 +856,8 @@ export class Attachment {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
                 me.session.restClient.fetchRaw(url, 'GET', '').then(
                     async res => {
-                        debugger;
                         me.#json.File = await res.arrayBuffer();
-                        resolve(res);
+                        resolve(me.#json.File);
                     },
                     reject
                 )
