@@ -1520,6 +1520,7 @@ async function saveDoc(exitOnSuccess) {
     });
 
     // Evento BeforeSave
+    // todo: el error aca deberia cancelar la operacion
     var ev = getEvent('BeforeSave');
     if (ev) {
         try {
@@ -1529,13 +1530,30 @@ async function saveDoc(exitOnSuccess) {
         }
     };
 
+    try {
+        await doc2.save();
+        doc = doc2.toJSON();
+        docJson = doc2.toJSON();
+        doc_id = doc2.id;
+
+        pageEl.crm.doc = doc2;
+        pageEl.crm.doc_id = doc2.id;
+        pageEl.crm.saved = true;
+
+        await saveAtt();
+    } catch (err) {
+        errMgr(err);
+    }
+
+
+
     DoorsAPI.documentSave(docJson).then((d) => {
         dSession.documentsGetFromId(d.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
             doc2 = doc3;
             doc = doc2.toJSON();
             docJson = doc2.toJSON();
             doc_id = doc2.id;
-            
+
             pageEl.crm.doc = doc2;
             pageEl.crm.doc_id = doc2.id;
             pageEl.crm.saved = true;
