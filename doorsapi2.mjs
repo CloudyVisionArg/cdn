@@ -3370,7 +3370,8 @@ class RestClient {
                             res => {
                                 debugger;
                                 let json = JSON.parse(res);
-                                reject(new Error(me.session.utils.errMsg(json)));
+                                reject(me.session.utils.newErr(json));
+                                //reject(new Error(me.session.utils.errMsg(json)));
                             }
                         );
                     }
