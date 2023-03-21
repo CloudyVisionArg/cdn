@@ -972,7 +972,11 @@ export class Attachment {
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
                     debugger;
-                    me.#json = await res.json();
+                    let resJson = await res.json();
+                    me.#json = resJson.InternalObject[0];
+                    me.#json.AccName = (await me.session.loggedUser).name;
+                    this.#json.File = fs;
+
                     resolve(me);
                 },
                 reject
