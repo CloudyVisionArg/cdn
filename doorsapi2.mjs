@@ -965,8 +965,9 @@ export class Attachment {
         return new Promise(async (resolve, reject) => {
             var formData = new FormData();
             // todo: probar
-            var arrBuf = await me.fileStream;
-            formData.append('attachment', new Blob([arrBuf]), me.name);
+            var fs = await me.fileStream;
+            var blob = (fs instanceof Blob ? fs : new Blob([fs]));
+            formData.append('attachment', blob, me.name);
             //formData.append('description', me.description);
             //formData.append('group', me.group);
             var url = 'documents/' + me.parent.id + '/attachments';
