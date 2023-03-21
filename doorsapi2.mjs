@@ -3364,9 +3364,9 @@ class RestClient {
                             },
                             reject
                         )
-                        } else {
-                            reject(new Error(response.status + ' (' + response.statusText + ')'))
-                        }
+                    } else {
+                        reject(new Error(response.status + ' (' + response.statusText + ')'))
+                    }
                 },
                 err => {
                     reject(me.session.utils.newErr(err));
