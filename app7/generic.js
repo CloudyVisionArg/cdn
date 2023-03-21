@@ -1529,14 +1529,14 @@ async function saveDoc(exitOnSuccess) {
         }
     };
 
-    DoorsAPI.documentSave(docJson).then((doc2) => {
-        dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
+    DoorsAPI.documentSave(docJson).then((d) => {
+        dSession.documentsGetFromId(d.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
             doc = doc3.toJSON();
             docJson = doc3.toJSON();
             pageEl.crm.doc = docJson;
             doc2 = doc3;
 
-            doc_id = getDocField(docJson, 'doc_id').Value;
+            doc_id = doc2.id;
             pageEl.crm.doc_id = doc_id;
             pageEl.crm.saved = true;
 
