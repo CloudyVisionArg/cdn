@@ -3322,7 +3322,7 @@ class RestClient {
                     }
                     else {
                         if (response.status !== 200 || parsedJson.ExceptionMessage) {
-                            reject(me.session.utils.newErr(parsedJson));
+                            reject(new Error(me.session.utils.errMsg(json)));
                         }
                     }
                     resolve(parsedJson);
@@ -3370,7 +3370,7 @@ class RestClient {
                             res => {
                                 debugger;
                                 let json = JSON.parse(res);
-                                reject(me.session.utils.newErr(json));
+                                reject(new Error(me.session.utils.errMsg(json)));
                             }
                         );
                     }
