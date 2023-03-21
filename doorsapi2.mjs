@@ -3368,9 +3368,10 @@ class RestClient {
                         response.text().then(
                             res => {
                                 debugger;
+                                let json = JSON.parse(res);
+                                reject(me.session.utils.newErr(json));
                             }
                         );
-                        reject(new Error(response.status + ' (' + response.statusText + ')'))
                     }
                 },
                 err => {
