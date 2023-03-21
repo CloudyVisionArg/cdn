@@ -967,8 +967,8 @@ export class Attachment {
             // todo: probar
             var arrBuf = await me.fileStream;
             formData.append('attachment', new Blob([arrBuf]), me.name);
-            formData.append('description', me.description);
-            formData.append('group', me.group);
+            //formData.append('description', me.description);
+            //formData.append('group', me.group);
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchBuff(url, 'POST', formData).then(
                 res => {
