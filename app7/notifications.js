@@ -12,6 +12,7 @@ Para incluirlo, agregar la opcion de menu de la sig forma:
 
 IMPORTANTE: Los iconos deben estar wrappeados en el DIV para que funcione la animacion
 */
+var pageActions, selModeActions;
 
 class CustomAppNotification {
     constructor(Id,DevicePlatform,ReadDate,EraseDate,DeliveryDate,Title,Body,ExtraData) {
@@ -87,6 +88,7 @@ class CustomAppNotification {
 
 }
 
+var selectionMode = false;
 
 console.log("notifications")
 
@@ -140,6 +142,7 @@ var $page =   getPage({
                 id: 'notifications' + getGuid(),
                 title: "Notificaciones",
                 leftbutton: 'search',
+                rightbutton: 'menu',
                 searchbar: 2,
                 subnavbar: false,
                 pulltorefresh: true,
@@ -147,12 +150,18 @@ var $page =   getPage({
 
 $page.addClass('notifications');
 
+var $navbar = $page.find('.navbar');
+
 $pageCont = $page.find('.page-content');
 //todo: cargar la pag en iframe (ver codelib pruebas)
 
 // Evento del Pull To Refresh
 $pageCont.on('ptr:refresh', function (e) {
-    pageInitMembers(e, globalPage);
+    if (selectionMode) {
+        toast('Refresh disabled in selection mode');
+    } else {
+        pageInitMembers(e, globalPage);        
+    }
     e.originalEvent.detail(); // done
 });
 
@@ -163,11 +172,90 @@ $btn.click(function (e) {
     searchBar.enable();
 })
 
+ // Boton Cancelar Selection Mode
+ $btn = getLink({ text: 'Cancelar' });
+ $btn.attr('id', 'buttonCancel');
+ $btn.appendTo($page.find('.navbar-inner .right'));
+ $btn.on('click', function (e) {
+     toggleSelectionMode();
+ });
+ $btn.hide();
+
+// Boton Acciones
+$btn = getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
+$btn.attr('id', 'buttonActions');
+$btn.appendTo($page.find('.navbar-inner .left'));
+$btn.on('click', function (e) {
+    selModeActions.open();
+});
+$btn.css('margin-left', '0px');
+$btn.hide();
+
+
+// Boton Menu (fldActions)
+$btn = $page.find('.navbar-inner .right .link')
+$btn.attr('id', 'buttonMenu');
+$btn.on('click', function (e) {
+    pageActions.open();
+});
+
+ // Acciones de carpeta
+ var stdPageActions = [
+    {
+        text: 'Seleccionar Todo',
+        onClick: notificationsMenuSelectAll,
+    },
+    {
+        text: 'Marcar Todas como le&iacute;das',
+        onClick: notificationsReadAll,
+        
+    },
+    {
+        text: 'Cancelar',
+        color: 'red',
+        close: true,
+    },
+];
+
+
+function notificationsReadAll(){
+    DoorsAPI.notificationsReadAll().then(()=>{
+        searchNotifications();
+    })
+}
+
+pageActions = app7.actions.create({ buttons: stdPageActions });
+
+var stdSelModeActions = [
+    {
+        text: 'Marcar Como Le&iacute;das',
+        onClick: notificationsReadSelected,
+    },
+    {
+        text: 'Marcar Como No Le&iacute;das',
+        onClick: notificationsUnReadSelected,
+    },
+    {
+        text: 'Borrar',
+        onClick: notificationsDeleteSelected,
+    },
+    {
+        text: 'Cancelar',
+        color: 'red',
+        close: true,
+    },
+];
+
+selModeActions = app7.actions.create({ buttons: stdSelModeActions });
+
+function dummyClick(texto){
+    console.log(texto);
+}
 
 // Inicializa el Searchbar
 var timeout;
 var searchBar = app7.searchbar.create({
-    el: $page.find('.searchbar'),
+    el: $page.find('form.searchbar')[0],
     customSearch: true,
     on: {
         search: function (e, query, previousQuery) {
@@ -195,9 +283,21 @@ var searchBar = app7.searchbar.create({
 
 var $notificationsVirtualList
 var $pageCont = $page.find(".page-content");
-var $divActions = $("<div/>").appendTo($pageCont);
+var $divActions = $("<div/>",{"class":"actions-container"}).appendTo($pageCont);
+$divActions.hide();
 var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
+
+// Evento taphold
+if (device.platform == 'browser') {
+    console.log("BROSER TAPHOLD CONTEXTMENU")
+    // El taphold no anda en el browser
+    $listMembers.on('contextmenu', 'a', taphold);
+} else {
+    console.log("NOT BROSER TAPHOLD TAPHOLD")
+    $listMembers.on('taphold', 'a', taphold);
+};
+//$listMembers.on('taphold', 'a', taphold);
 
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "I"){
@@ -222,11 +322,6 @@ function pageInitMembers(e, page) {
         items: [],
         // usar renderItem
         renderItem: function(item){
-            let iconTrash_ios = $("<i />", {"class":"btnDelete f7-icons ios-only", "contenedor_id":item.Id, "text":"trash"})
-            let iconTrash_md = $("<i />", {"class":"btnDelete material-icons-outlined md-only", "contenedor_id":item.Id, "text":"delete"})
-            let iconSobre_ios = $("<i />", {"class":"btnRead f7-icons ios-only", "contenedor_id":item.Id, "text":item.readicon_ios})
-            let iconSobre_md = $("<i />", {"class":"btnRead material-icons-outlined md-only", "contenedor_id":item.Id, "text":item.readicon_md})
-                    
             const fechaDelivery = new Date(item["DeliveryDate"])
             let fechaNotif = resolveDeliverydDate(fechaDelivery);
 
@@ -245,17 +340,8 @@ function pageInitMembers(e, page) {
             let title = $("<div />", {"class":"item-after","text":fechaNotif})
             title.appendTo(titleRow);
             
-            //let textRow = $("<div />", {"class":"item-row"}).appendTo(contenedor);
-            let text = $("<div />", {"class":"item-text","text":item.Body});
+            let text = $("<div />", {"class":"item-subtitle","text":item.Body});
             text.appendTo(contenedor);
-
-            let iconRow = $("<div />", {"class":"item-row"}).appendTo(contenedor);
-            let iconContainer = $("<div />", {"class":"item-cell","style":"text-align:end"});
-            iconTrash_ios.appendTo(iconContainer);
-            iconTrash_md.appendTo(iconContainer);
-            iconSobre_ios.appendTo(iconContainer);
-            iconSobre_md.appendTo(iconContainer);
-            iconContainer.appendTo(iconRow);
             
             return ul.html();
         },
@@ -278,19 +364,21 @@ function clearMembers(){
 
 //Esta funcion pasar a algun lugar donde este fe
 function searchNotifications(){
-    DoorsAPI.notifications(getDevice()).then((res)=>{
-        clearMembers();
-        let notificationsArr = res.filter(n=>n.EraseDate == null)
-        var arrCustomNot = []
+    if (!selectionMode){
+        DoorsAPI.notifications(getDevice()).then((res)=>{
+            clearMembers();
+            let notificationsArr = res.filter(n=>n.EraseDate == null)
+            var arrCustomNot = []
 
-        for(var idx=0; idx < notificationsArr.length; idx++){
-            const notif = new CustomAppNotification();
-            notif.Parse(notificationsArr[idx]);
-            arrCustomNot.push(notif);
-        }      
+            for(var idx=0; idx < notificationsArr.length; idx++){
+                const notif = new CustomAppNotification();
+                notif.Parse(notificationsArr[idx]);
+                arrCustomNot.push(notif);
+            }      
 
-        renderMembers(arrCustomNot)
-    })
+            renderMembers(arrCustomNot)
+        })
+    }
 }
 
 /**
@@ -309,24 +397,22 @@ function renderMembers(notificationsArr){
             
         let actionsRow = $("<div />", {"class":"item-row segmented"}).appendTo(contenedor);
             
-        let bntDeleteAll = $("<button />", {"class":"button"})
-        bntDeleteAll.text("Borrar todas").appendTo(actionsRow);
+        let bntSelectAll = $("<button />", {"class":"button"});
+        bntSelectAll.text("Seleccionar todas").appendTo(actionsRow);
 
-        let bntReadAll = $("<button />", {"class":"button"})
-        bntReadAll.text("Leer todas").appendTo(actionsRow);
+        let bntInvSelection = $("<button />", {"class":"button"});
+        bntInvSelection.text("Invertir seleccion").appendTo(actionsRow);
 
-        bntReadAll.on("click", function(){
-            DoorsAPI.notificationsReadAll().then(()=>{
-                searchNotifications();
-            })
+        bntInvSelection.on("click", function(){
+            let notifSeleccionadas = $('input[type="checkbox"]:checked', $listMembers);
+            let notifNoSeleccionadas = $('input[type="checkbox"]:not(:checked)', $listMembers);
+            notifSeleccionadas.prop("checked", false);
+            notifNoSeleccionadas.prop("checked", true);
         })
 
-        bntDeleteAll.on("click", function(){
-            app7.dialog.confirm('Esta acción no puede deshacerse','¿Desea borrar todas las notificaciones?', function () {
-                DoorsAPI.notificationsDeleteAll().then(()=>{
-                    searchNotifications();
-                })
-            });            
+        bntSelectAll.on("click", function(){
+            let allNotif = $('input[type="checkbox"]', $listMembers);
+            allNotif.prop("checked", true);
         })
 
 
@@ -339,6 +425,85 @@ function renderMembers(notificationsArr){
     listItems.deleteAllItems();
     listItems.appendItems(notificationsArr); 
     
+}
+
+
+
+function getSelected(invertSelection = false) {
+    var selected = [];
+    if(!invertSelection){
+        $('input[type="checkbox"]:checked', $listMembers).each(function (ix, el) {
+            selected.push(parseInt($(this).closest('label').attr('id')));
+        })
+    }else{
+        $('input[type="checkbox"]:not(:checked)', $listMembers).each(function (ix, el) {
+            selected.push(parseInt($(this).closest('label').attr('id')));
+        })
+    }
+    return selected;
+}
+
+function notificationsMenuSelectAll(){
+    toggleSelectionMode();
+    let allNotif = $('input[type="checkbox"]', $listMembers);
+    allNotif.prop("checked", true);
+}
+
+function notificationsReadSelected(){
+    let arrSeleccionadas = getSelected();
+    arrSeleccionadas.forEach((id)=>{
+        DoorsAPI.notificationsRead(id).then(
+            ()=>{
+                $("#" + id).removeClass("msgunread");
+                $("#" + id).addClass("msgread");
+                setNotificationUnReadCounter($(".msgunread").length); 
+            },
+            (err)=>{
+                let msg = "Error: La notificación no pudo ser marcada como no leída.";
+                console.log(err);
+                console.log(msg);
+                toast(msg);
+            });
+    })
+}
+
+function notificationsUnReadSelected(){
+    let arrSeleccionadas = getSelected();
+    arrSeleccionadas.forEach((id)=>{
+        DoorsAPI.notificationsUnRead(id).then(
+            ()=>{
+                $("#" + id).removeClass("msgread");
+                $("#" + id).addClass("msgunread");
+                setNotificationUnReadCounter($(".msgunread").length); 
+            },
+            (err)=>{
+                let msg = "Error: La notificación no pudo ser marcada como no leída.";
+                console.log(err);
+                console.log(msg);
+                toast(msg);
+            });
+    })
+}
+
+function notificationsDeleteSelected(){
+    let arrSeleccionadas = getSelected()
+    arrSeleccionadas.forEach((id)=>{
+        let notifPadre = $("#" + id);
+    
+        notifPadre.removeClass("msgread");
+        notifPadre.removeClass("msgunread");
+        notifPadre.addClass("msgdeleted");
+        DoorsAPI.notificationsDelete(id).then(()=>{
+            $("#" + id).parent().remove();
+            setNotificationUnReadCounter($(".msgunread").length); 
+        },
+        (err)=>{
+            let msg = "Error: La notificación no pudo ser eliminada.";
+            console.log(err);
+            console.log(msg);
+            toast(msg);
+        });
+    })
 }
 
 function clickOnTrash(ev) {
@@ -409,20 +574,23 @@ function clickOnEnvelope(ev) {
 }
 
 function clickOnAnchor(ev) {
-    let ExtraData = JSON.parse($(ev.target).closest("a").attr("extradata"))
-    let doc_id = ExtraData.doc_id;
-    let fld_id = ExtraData.fld_id;
-    if($(ev.target).closest("a").hasClass("msgunread")){
-        $(ev.target).closest("a").removeClass("msgunread");
-        $(ev.target).closest("a").addClass("msgread");
-        setNotificationUnReadCounter($(".msgunread").length);
+    if(ev.target.closest("a")){
+        if(ev.target.closest("a").hasAttribute("extradata")){
+            let ExtraData = JSON.parse(ev.target.closest("a").getAttribute("extradata"))
+            let doc_id = ExtraData.doc_id;
+            let fld_id = ExtraData.fld_id;
+            if($(ev.target).closest("a").hasClass("msgunread")){
+                $(ev.target).closest("a").removeClass("msgunread");
+                $(ev.target).closest("a").addClass("msgread");
+                setNotificationUnReadCounter($(".msgunread").length);
+            }
+            DoorsAPI.notificationsRead($(ev.target).closest("a").attr("id"));
+            searchNotifications()
+            if(doc_id !== undefined && fld_id !== undefined){
+                f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id); 
+            }
+        }
     }
-    DoorsAPI.notificationsRead($(ev.target).closest("a").attr("id"));
-    searchNotifications()
-    if(doc_id !== undefined && fld_id !== undefined){
-        f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id); 
-    }
-    
 };        
 
 function setNotificationUnReadCounter(unReadCount){
@@ -457,8 +625,13 @@ resolveRoute({ resolve: resolve, pageEl: $page, pageInit: function (e, page) {
 
 function resolveDeliverydDate(deliveryDate) {
     const diffDays = moment().diff(deliveryDate, 'days') + 1;
+    var filterDeliveryDate = "DD/MM/YYYY hh:mm";
+    if(moment().year() - moment(deliveryDate).year() > 0){
+        filterDeliveryDate = "DD/MM hh:mm";
+    }
+
     if (diffDays > 1) {
-        return moment(deliveryDate).format("DD/MM/YYYY hh:mm");
+        return moment(deliveryDate).format(filterDeliveryDate);
     }
     return moment(deliveryDate).fromNow();
 }
@@ -482,4 +655,101 @@ function injectCSS(css){
     el.innerHTML = css;
     document.head.appendChild(el);
     return el;
+};
+
+
+function getItemContent(obj) {
+    var $cont;
+
+    obj.classList.remove("item-checkbox","item-link")
+   
+    if (selectionMode) {
+        $cont = $('<label/>', {
+            class: 'item-checkbox',
+        });
+    
+        $('<input/>', {
+            type: 'checkbox',
+        }).appendTo($cont);
+    
+        $('<i/>', {
+            class: 'icon icon-checkbox',
+        }).appendTo($cont);
+    
+    } else {
+        $cont = $('<a/>', {
+            href: '#',
+            class: 'item-link',
+        });
+    }
+    
+    //para que no se pierdan los atributos custom del elemento
+    obj.getAttributeNames().forEach((item)=>{
+        if(item == "class"){
+            $cont.addClass(obj.getAttribute(item))        
+        }else if(item != "href"){
+            $cont.attr(item, obj.getAttribute(item));
+        }
+    })
+
+    return $cont;
+}
+
+function toggleSelectionMode() {
+    var $itemContent;
+
+    if (selectionMode) {
+        // Desactivar
+        selectionMode = false;
+
+        $get('.media-list label.item-checkbox.item-content').replaceWith(function () {
+            var $itemContent = getItemContent(this);
+            $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
+            return $itemContent;
+        });
+
+        if (searchBar.enabled) {
+            $navbar.addClass('with-searchbar-expandable-enabled');
+            searchBar.el.show();
+        }
+  
+        $divActions.hide();
+        $navbar.find('#buttonSearch').show();
+        $navbar.find('#buttonMenu').show();
+        $navbar.find('#buttonActions').hide();
+        $navbar.find('#buttonCancel').hide();
+
+    } else {
+        // Activar
+        selectionMode = true;
+
+        $get('.media-list a.item-link.item-content').replaceWith(function () {
+            $itemContent = getItemContent(this);
+            $itemContent.append($(this).contents());
+            return $itemContent;
+        });
+
+        if (searchBar.enabled) {
+            searchBar.el.hide();
+            $navbar.removeClass('with-searchbar-expandable-enabled');
+        }
+  
+        $divActions.show();
+        $navbar.find('#buttonSearch').hide();
+        $navbar.find('#buttonMenu').hide();
+        $navbar.find('#buttonActions').show();
+        $navbar.find('#buttonCancel').show();
+    }
+
+    app7.navbar.size($navbar);
+}
+
+function taphold(e) {
+    console.log("TAPHOLD");
+    var $list = $(this).closest('div.list');
+    if ($list.hasClass('media-list')) {
+        var $li = $(this).closest('li');
+        toggleSelectionMode();
+        $li.find('input:checkbox').prop('checked', true);
+    };
 };
