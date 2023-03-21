@@ -3365,6 +3365,11 @@ class RestClient {
                             reject
                         )
                     } else {
+                        response.text().then(
+                            res => {
+                                debugger;
+                            }
+                        );
                         reject(new Error(response.status + ' (' + response.statusText + ')'))
                     }
                 },
