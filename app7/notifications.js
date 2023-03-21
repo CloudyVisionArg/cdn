@@ -255,7 +255,7 @@ function dummyClick(texto){
 // Inicializa el Searchbar
 var timeout;
 var searchBar = app7.searchbar.create({
-    el: $page.find('.searchbar'),
+    el: $page.find('form.searchbar')[0],
     customSearch: true,
     on: {
         search: function (e, query, previousQuery) {
