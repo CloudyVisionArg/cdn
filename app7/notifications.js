@@ -289,7 +289,7 @@ var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-c
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 // Evento taphold
-/*if (device.platform == 'browser') {
+if (device.platform == 'browser') {
     console.log("BROSER TAPHOLD CONTEXTMENU")
     // El taphold no anda en el browser
     $listMembers.on('contextmenu', 'a', taphold);
@@ -297,9 +297,7 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
     console.log("NOT BROSER TAPHOLD TAPHOLD")
     $listMembers.on('taphold', 'a', taphold);
 };
-
-$listMembers.on('contextmenu', 'a', taphold);*/
-$listMembers.on('taphold', 'a', taphold);
+//$listMembers.on('taphold', 'a', taphold);
 
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "I"){
@@ -324,11 +322,6 @@ function pageInitMembers(e, page) {
         items: [],
         // usar renderItem
         renderItem: function(item){
-          /* let iconTrash_ios = $("<i />", {"class":"btnDelete f7-icons ios-only", "contenedor_id":item.Id, "text":"trash"})
-            let iconTrash_md = $("<i />", {"class":"btnDelete material-icons-outlined md-only", "contenedor_id":item.Id, "text":"delete"})
-            let iconSobre_ios = $("<i />", {"class":"btnRead f7-icons ios-only", "contenedor_id":item.Id, "text":item.readicon_ios})
-            let iconSobre_md = $("<i />", {"class":"btnRead material-icons-outlined md-only", "contenedor_id":item.Id, "text":item.readicon_md})*/
-                    
             const fechaDelivery = new Date(item["DeliveryDate"])
             let fechaNotif = resolveDeliverydDate(fechaDelivery);
 
@@ -347,17 +340,8 @@ function pageInitMembers(e, page) {
             let title = $("<div />", {"class":"item-after","text":fechaNotif})
             title.appendTo(titleRow);
             
-            //let textRow = $("<div />", {"class":"item-row"}).appendTo(contenedor);
             let text = $("<div />", {"class":"item-subtitle","text":item.Body});
             text.appendTo(contenedor);
-
-            /*let iconRow = $("<div />", {"class":"item-row"}).appendTo(contenedor);
-            let iconContainer = $("<div />", {"class":"item-cell","style":"text-align:end"});
-            iconTrash_ios.appendTo(iconContainer);
-            iconTrash_md.appendTo(iconContainer);
-            iconSobre_ios.appendTo(iconContainer);
-            iconSobre_md.appendTo(iconContainer);
-            iconContainer.appendTo(iconRow);*/
             
             return ul.html();
         },
@@ -728,7 +712,7 @@ function toggleSelectionMode() {
             $navbar.addClass('with-searchbar-expandable-enabled');
             searchBar.el.show();
         }
-        //$views.parent().removeClass('disabled');
+  
         $divActions.hide();
         $navbar.find('#buttonSearch').show();
         $navbar.find('#buttonMenu').show();
@@ -749,7 +733,7 @@ function toggleSelectionMode() {
             searchBar.el.hide();
             $navbar.removeClass('with-searchbar-expandable-enabled');
         }
-        //$views.parent().addClass('disabled');        
+  
         $divActions.show();
         $navbar.find('#buttonSearch').hide();
         $navbar.find('#buttonMenu').hide();
@@ -769,18 +753,3 @@ function taphold(e) {
         $li.find('input:checkbox').prop('checked', true);
     };
 };
-
-
-//attachear al div que está por debajo de pagecontent
-            
- /*
-            // Evento taphold
-            if (device.platform == 'browser') {
-                // El taphold no anda en el browser
-                $viewDiv.on('contextmenu', 'a', taphold);
-            } else {
-                $viewDiv.on('taphold', 'a', taphold);
-            };
-*/
-            
-
