@@ -3334,6 +3334,7 @@ class RestClient {
     }
 
     fetchBuff(url, method, data) {
+        var me = this;
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
         /* todo: implementar ApiKey
