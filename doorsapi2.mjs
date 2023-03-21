@@ -936,12 +936,48 @@ export class Attachment {
         return this.#properties.set(property, value);
     }
 
-    get removed() {
-        return this.#json.Removed;
+    remove() {
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            var attMap = await me.parent.attachments();
+            if (me.isNew) {
+                debugger; // scar d la coleccion
+                attMap.delete(me.name);
+                resolve(me);
+            } else {
+                var url = 'documents/' + me.parent.id + '/attachments';
+                me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
+                    res => {
+                        debugger; // scar d la coleccion
+                        attMap.delete(me.name);
+                        resolve (me);
+                    },
+                    reject
+                );
+            }
+        });
     }
 
-    remove() {
-        this.#json.Removed = true;
+    save() {
+        if (!this.isNew) throw new Error('I\'m not new');
+
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            var formData = new FormData();
+            // todo: probar
+            var arrBuf = await me.fileStream;
+            formData.append('attachment', new Blob([arrBuf]), me.name);
+            formData.append('description', me.description);
+            formData.append('group', me.group);
+            var url = 'documents/' + me.parent.id + '/attachments';
+            me.session.restClient.fetchBuff(url, 'POST', formData).then(
+                res => {
+                    debugger; //actualizo el json del attach
+                    resolve(me);
+                },
+                reject
+            );
+        });
     }
 
     get session() {
@@ -1261,6 +1297,7 @@ export class Document {
                                     accs => {
                                         res.forEach(el => {
                                             el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                                            debugger; //chequear si el json tiene el isNew
                                             me.#attachmentsMap.set(el.Name, new Attachment(el, me));
                                         });
                                         me.#attachmentsMap._loaded = true;
@@ -1463,68 +1500,82 @@ export class Document {
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             me.#json = res;
-                            saveAttachs(resolve, reject);
+                            resolve(me);
                         },
                         reject
                     )
                 },
                 reject
             );
+        });
+    }
 
-            function saveAttachs(resolve, reject) {
-                var proms = [];
-                var rm = [];
-                var attMap = me.#attachmentsMap;
+    /*
+    saveAttachments() {
+        // todo: esto deberia ser parte del save (issue #261)
+        var me = this;
+        var proms = [];
+        var rm = [];
+        var attMap = me.#attachmentsMap;
 
-                me.session.utils.asyncLoop(attMap.size, async loop => {
-                    var key = Array.from(attMap.keys())[loop.iteration()];
-                    var el = attMap.get(key);      
+        return new Promise((resolve, reject) => {
 
-                    if (el.isNew) {
-                        var formData = new FormData();
-                        // todo: probar
-                        var arrBuf = await el.fileStream;
-                        formData.append('attachment', new Blob([arrBuf]), el.name);
-                        formData.append('description', el.description);
-                        formData.append('group', el.group);
-                        var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
+        });
 
-                    } else if (el.removed) {
-                        rm.push(el.id);
-                    }
-                    loop.next();
 
-                }, () => {
-                    if (rm.length > 0) {
-                        var url = 'documents/' + me.id + '/attachments';
-                        proms.push(me.session.restClient.fetch(url, 'DELETE', rm, 'arrayAttId'));
-                    }
-    
-                    Promise.all(proms).then(
-                        res => {
-                            //todo: actualizar el json de los attachs
+        for ([key, value] of attMap) {
+        }
 
-                            attMap.forEach((el, key) => {
-                                if (el.removed) {
-                                    attMap.delete(key)
-                                } else if (el.isNew) {
-                                    el.isNew = false;
-                                }
-                            });
 
-                            resolve(me)
-                        },
-                        err => {
-                            debugger;
-                            console.error(err);
-                            reject(err);
-                        }
-                    )
-                })
+
+        me.session.utils.asyncLoop(attMap.size, async loop => {
+            var key = Array.from(attMap.keys())[loop.iteration()];
+            var el = attMap.get(key);      
+
+            if (el.isNew) {
+                var formData = new FormData();
+                // todo: probar
+                var arrBuf = await el.fileStream;
+                formData.append('attachment', new Blob([arrBuf]), el.name);
+                formData.append('description', el.description);
+                formData.append('group', el.group);
+                var url = 'documents/' + me.id + '/attachments';
+                proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
+
+            } else if (el.removed) {
+                rm.push(el.id);
             }
+            loop.next();
+
+        }, () => {
+            if (rm.length > 0) {
+                var url = 'documents/' + me.id + '/attachments';
+                proms.push(me.session.restClient.fetch(url, 'DELETE', rm, 'arrayAttId'));
+            }
+
+            Promise.all(proms).then(
+                res => {
+                    //todo: actualizar el json de los attachs
+
+                    attMap.forEach((el, key) => {
+                        if (el.removed) {
+                            attMap.delete(key)
+                        } else if (el.isNew) {
+                            el.isNew = false;
+                        }
+                    });
+
+                    resolve(me)
+                },
+                err => {
+                    debugger;
+                    console.error(err);
+                    reject(err);
+                }
+            )
         })
     }
+    */
 
     get session() {
         return this.#session;
