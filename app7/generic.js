@@ -1534,6 +1534,7 @@ async function saveDoc(exitOnSuccess) {
             doc = doc3.toJSON();
             docJson = doc3.toJSON();
             pageEl.crm.doc = docJson;
+            doc2 = doc3;
 
             doc_id = getDocField(docJson, 'doc_id').Value;
             pageEl.crm.doc_id = doc_id;
