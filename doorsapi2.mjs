@@ -1298,7 +1298,6 @@ export class Document {
                                     accs => {
                                         res.forEach(el => {
                                             el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                            debugger; //chequear si el json tiene el isNew
                                             me.#attachmentsMap.set(el.Name, new Attachment(el, me));
                                         });
                                         me.#attachmentsMap._loaded = true;
@@ -3323,7 +3322,7 @@ class RestClient {
                     }
                     else {
                         if (response.status !== 200 || parsedJson.ExceptionMessage) {
-                            reject(me.session.utils.newErr(json));
+                            reject(me.session.utils.newErr(parsedJson));
                         }
                     }
                     resolve(parsedJson);
