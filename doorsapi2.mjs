@@ -854,9 +854,10 @@ export class Attachment {
         return new Promise((resolve, reject) => {
             if (!me.#json.File) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
-                me.session.restClient.fetchBuff(url, 'GET', '').then(
-                    res => {
-                        me.#json.File = res;
+                me.session.restClient.fetchRaw(url, 'GET', '').then(
+                    async res => {
+                        debugger;
+                        me.#json.File = await res.arrayBuffer();
                         resolve(res);
                     },
                     reject
@@ -971,9 +972,10 @@ export class Attachment {
             //formData.append('description', me.description);
             //formData.append('group', me.group);
             var url = 'documents/' + me.parent.id + '/attachments';
-            me.session.restClient.fetchBuff(url, 'POST', formData).then(
-                res => {
-                    debugger; //actualizo el json del attach
+            me.session.restClient.fetchRaw(url, 'POST', formData).then(
+                async res => {
+                    debugger;
+                    me.#json = await res.responseJson();
                     resolve(me);
                 },
                 reject
@@ -3333,7 +3335,7 @@ class RestClient {
         });
     }
 
-    fetchBuff(url, method, data) {
+    fetchRaw(url, method, data) {
         var me = this;
         var completeUrl = this.ServerBaseUrl + '/' + url;
 
@@ -3359,12 +3361,7 @@ class RestClient {
             }).then(
                 response => {
                     if (response.ok) {
-                        response.arrayBuffer().then(
-                            res => {
-                                resolve(res);
-                            },
-                            reject
-                        )
+                        resolve(response);
                     } else {
                         response.text().then(
                             res => {
