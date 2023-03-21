@@ -674,8 +674,6 @@ function injectCSS(css){
 };
 
 
-//Funciones traidas de explorer para utilizar seleccion en vez de botones individuales
-
 function getItemContent(obj) {
     var $cont;
 
