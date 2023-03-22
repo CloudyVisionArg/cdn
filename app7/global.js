@@ -2054,10 +2054,11 @@ function audioRecorder(pCallback) {
             (res)=>{
                 getFile(res.uri).then(
                     function (file) {
-                        att.URL = file.localURL;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
+                        pCallback(file);
+                        // att.URL = file.localURL;
+                        // att.Name = file.name;
+                        // att.Size = file.size;
+                        // renderNewAtt(att, $attachs);
                     },(err)=>{
                         debugger;
                     });
