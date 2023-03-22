@@ -1731,21 +1731,31 @@ function saveDoc(exitOnSuccess) {
         console.log(pErr);
     }
 }
-function removeAttFromCache(fileUrl){
+async function removeAttFromCache(fileUrl){
     if(_isCapacitor()){
         //Resolver esto y obtener unicamente el nombre.
-        fileUrl = fileUrl.replace('http://localhost/__cdvfile_cache__/', '');
-        Capacitor.Plugins.Filesystem.deleteFile({
-            path: fileUrl,
-            directory: Directory.Cache
-        }).then(
-            (s)=>{
+        //fileUrl = fileUrl.replace('http://localhost/__cdvfile_cache__/', '');
+        fileUrl = fileUrl.substr(fileUrl.lastIndexOf('/') + 1);
+        try{
+            result = await Capacitor.Plugins.Filesystem.deleteFile({
+                    path: fileUrl,
+                    directory: Directory.Cache,
+                });
                 console.log('Archivo ' +  fileUrl + ' eliminado del cache del app');
-            },
-            (e)=>{
-                console.log('Error intentando quitar el archivo ' +  fileUrl + ' del cache del app');
-            }
-        );
+        }catch(e){
+            console.log('Error intentando quitar el archivo ' +  fileUrl + ' del cache del app');
+        }
+        // Capacitor.Plugins.Filesystem.deleteFile({
+        //     path: fileUrl,
+        //     directory: Directory.Cache,
+        // }).then(
+        //     (s)=>{
+        //         console.log('Archivo ' +  fileUrl + ' eliminado del cache del app');
+        //     },
+        //     (e)=>{
+        //         console.log('Error intentando quitar el archivo ' +  fileUrl + ' del cache del app');
+        //     }
+        // );
     }
 }
 
