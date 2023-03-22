@@ -179,7 +179,8 @@ function renderPopovers(pArrPopovers){
     for (let i = 0; i < arrCartelesVista.length; i++) {                
 
         arrCartelesVista[i].on('beforeOpen', function () {
-            if($(arrCartelesVista[i]["selector"]).length > 0){                
+            if($(arrCartelesVista[i]["selector"]).length > 0){  
+                debugger;              
                 arrCartelesVista[i].backdropEl = getSurroundingBackdrop(arrCartelesVista[i]["selector"])
                 arrCartelesVista[i].open(arrCartelesVista[i]["selector"]);
             }else{
