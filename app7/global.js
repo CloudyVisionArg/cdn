@@ -2029,12 +2029,12 @@ function audioRecorder(pCallback) {
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         var now = new Date();
         let millis = recordingData.value.msDuration;
-        const minutes = Math.floor(millis / 60000);
-        const seconds = ((millis % 60000) / 1000).toFixed(0);
-        const durationString = (seconds == 60) ?
-        (minutes+1) + ":00" :
-        minutes + ":" + (seconds < 10 ? "0" : "") + seconds
-
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        let durationString = (seconds == 60) ?
+            (minutes+1) + ":00" :
+            minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+        debugger;
         let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + + '_min_' + durationString.replaceAll(':', '-') + '.aac';
 
         Capacitor.Plugins.Filesystem.writeFile({
