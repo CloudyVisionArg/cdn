@@ -2042,9 +2042,21 @@ function audioRecorder(pCallback) {
         var now = new Date();
         let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '.aac';
 
-        let dur = recordingData.value.msDuration;
-        let min = Math.trunc(dur / 60);
-        fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + fileName;
+        let millis = recordingData.value.msDuration;
+       // let min = Math.trunc(dur / 60);
+        debugger;
+        //fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + fileName;
+
+        const minutes = Math.floor(millis / 60000);
+        const seconds = ((millis % 60000) / 1000).toFixed(0);
+        const res = (seconds == 60) ?
+        (minutes+1) + ":00" :
+        minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+        
+        fileName = res + '_min_' + fileName;
+
+
+
 
         Capacitor.Plugins.Filesystem.writeFile({
             path : fileName,
