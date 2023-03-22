@@ -1927,29 +1927,25 @@ function audioRecorder(pCallback) {
         : recordCordova()
     }
 
-    function recordCapacitor(){
+    async function recordCapacitor(){
         //TODO: https://github.com/tchvu3/capacitor-voice-recorder
-        Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission()
-        .then((result) => {
-            debugger;
-            //La primera vez viene como voice recording = granted? 
-            if(result.value){
-                Capacitor.Plugins.VoiceRecorder.startRecording()
-                .then((result) => {
-                    debugger;
-                    console.log("startRecording ok");
-                    console.log(result.value);
-                })
-                .catch(error => {
-                    debugger;
-                    console.log("startRecording error");
-                    console.log(error);
-                });
-            }
-        })
-        
+        const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+        if(result.value){
+            save = false;
+            var now = new Date();
+            const startRecordingResult = await Capacitor.Plugins.VoiceRecorder.startRecording();
+            $recBtnRow.hide();
+            $saveBtnRow.show();
+            $timer.css('opacity', '100%');
 
-
+            timer = new Date();
+            interv = setInterval(function () {
+                var secs = Math.trunc((new Date() - timer) / 1000);
+                var mins = Math.trunc(secs / 60);
+                secs = secs - mins * 60;
+                $timer.html(mins + ':' + leadingZeros(secs, 2));
+            }, 200);
+        }
 
         // Capacitor.VoiceRecorder.stopRecording()
         // .then((result) => { 
@@ -2022,14 +2018,49 @@ function audioRecorder(pCallback) {
         }, 200);
     }
     
-    function save() {
+
+    function save(){
+        debugger;
+        if(_isCapacitor()){
+            saveCapacitor();
+        }else{
+            saveCordova();
+        }
+    }
+
+    function cancel(){
+        if(_isCapacitor()){
+            cancelCapacitor();
+        }else{
+            cancelCordova();
+        }
+    }
+
+    async function saveCapacitor() {
+        save = true;
+        const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        debugger;
+        clearInterval(interv);
+    }
+
+    function saveCordova() {
         save = true;
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
     }
-    
-    function cancel() {
+
+    async function cancelCapacitor() {
+        clearInterval(interv);
+        const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        //mediaRec.release();
+        $timer.html('0:00');
+        $timer.css('opacity', '20%');
+        $recBtnRow.show();
+        $saveBtnRow.hide();
+    }
+
+    function cancelCordova() {
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
