@@ -1932,8 +1932,8 @@ function audioRecorder(pCallback) {
         Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission()
         .then((result) => {
             debugger;
-            console.log(result.value);
-            if(result.value){
+            //Esto no vuelve como dice la documentacion!?
+            if(result['voice recording']== 'granted'){
                 Capacitor.Plugins.VoiceRecorder.startRecording()
                 .then((result) => {
                     debugger;
