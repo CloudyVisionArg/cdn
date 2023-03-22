@@ -1,3 +1,4 @@
+//todo: agregar soporte await a todos los eval
 /*
 app7-generic
 generic del APP7
@@ -8,6 +9,8 @@ Framework7: https://framework7.io/docs/
 */
 
 var fld_id, doc_id, doc, folder, cacheDir;
+var docJson, folderJson;
+var doc2, folder2; // todo: Eliminar cdo se pueda usar doc y folder
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -56,37 +59,6 @@ function errMgr(pErr) {
     });
 }
 
-if (fld_id) {
-    DoorsAPI.foldersGetById(fld_id).then(
-        function (res) {
-            folder = res;
-            getDoc();
-        },
-        errMgr
-    )
-}
-
-function getDoc() {
-    if (doc_id) {
-        DoorsAPI.documentsGetById(doc_id).then(
-            function (res) {
-                doc = res;
-                getControlsFolder();
-            },
-            errMgr
-        );
-
-    } else {
-        DoorsAPI.documentsNew(fld_id).then(
-            function (res) {
-                doc = res;
-                getControlsFolder();
-            },
-            errMgr
-        );
-    }
-}
-
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
     window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
@@ -99,49 +71,47 @@ if (device.platform != 'browser') {
     );
 }
 
-function getControlsFolder() {
-    var cf = objPropCI(doc.Tags, 'controlsFolder');
+(async () => {
+    try {
+        folder2 = await dSession.folder(fld_id);
+        folder = folder2.toJSON();
+        folderJson = folder2.toJSON();
 
-    if (cf) {
-        DoorsAPI.foldersGetByPath(folder.RootFolderId, cf).then(
-            function (res) {
-                controlsFolder = res;
-                loadControls();
-            },
-            function (err) {
-                renderPage(); // Dibuja igual, sin controles
-            }
-        );
-
-    } else {
-        DoorsAPI.foldersGetByName(fld_id, 'controls').then(
-            function (res) {
-                controlsFolder = res;
-                loadControls();
-            },
-            function (err) {
-                renderPage(); // Dibuja igual, sin controles
-            }
-        );
-    };
-}
-
-function loadControls() {
-    folderSearch(controlsFolder['FldId'], '', '', 'parent, order, column').then(
-        function (res) {
-            controls = res;
-            getControlsRights(controls);
-            renderPage();
-        },
-        function (err) {
-            console.log(pErr);
-            renderPage(); // Dibuja igual, sin controles
+        if (doc_id) {
+            doc2 = await folder2.documents(doc_id);
+        } else {
+            doc2 = await folder2.documentsNew();
         }
-    )
+        doc = doc2.toJSON();
+        docJson = doc2.toJSON();
+
+        loadControls();
+
+    } catch (err) {
+        errMgr(err)
+    }
+})();
+
+async function loadControls() {
+    var cf = objPropCI(doc2.tags, 'controlsFolder');
+
+    try {
+        if (cf) {
+            controlsFolder = await folder2.app.folders(cf);
+        } else {
+            controlsFolder = await folder2.folders('controls');
+        }
+        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+        getControlsRights(controls);
+        renderPage();    
+
+    } catch(err) {
+        renderPage(); // Dibuja igual, sin controles
+    }
 }
 
 function getControlsRights(pControls) {
-    var cr = objPropCI(doc.Tags, 'controlsRights');
+    var cr = objPropCI(doc2.tags, 'controlsRights');
     if (cr) {
         try {
             controlsRights = $.parseXML(cr);
@@ -177,7 +147,7 @@ function getControlsRights(pControls) {
     })
 }
 
-function renderPage() {
+async function renderPage() {
     var $tabbar, $tabbarInner, $tabs;
 
     // page
@@ -197,7 +167,7 @@ function renderPage() {
         */
         if (!pageEl.crm.saved) {
             // Si nunca guarde evito el refresh del explorer
-            $page.prev().find('.refresh-on-focus').each((ix, el) => {
+            $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
                 $(el).removeClass('refresh-on-focus');
             })
         }
@@ -279,11 +249,11 @@ function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        doc.CustomFields.forEach(field => {
-            if (!field.HeaderTable && field.Name != 'DOC_ID') {
+        for (let [key, field] of doc2.fields()) {
+            if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
             }
-        });
+        }
 
         $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
         $ctl.find('.list').on('click', 'a', downloadAtt);
@@ -305,15 +275,11 @@ function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        doc.CustomFields.forEach(field => {
-            if (field.HeaderTable) {
+        for (let [key, field] of doc2.fields()) {
+            if (!field.custom && field.headerTable) {
                 getDefaultControl(field).appendTo($ul);
             }
-        })
-
-        doc.HeadFields.forEach(field => {
-            getDefaultControl(field).appendTo($ul);
-        })
+        }
 
         // tabHist
 
@@ -334,7 +300,7 @@ function renderPage() {
         var ev = getEvent('BeforeRender');
         if (ev) {
             try {
-                eval(ev);
+                await evalCode(ev);
             } catch (err) {
                 console.log('Error in BeforeRender: ' + errMsg(err));
             }
@@ -343,7 +309,7 @@ function renderPage() {
         // Membrete
 
         $ul = $('<ul/>')
-        renderControls($ul, '[NULL]');
+        await renderControls($ul, '[NULL]');
 
         if ($ul.html()) {
             $('<div/>', {
@@ -388,7 +354,7 @@ function renderPage() {
                 }).appendTo($tabs);
 
                 $ul = $('<ul/>')
-                renderControls($ul, tab['NAME']);
+                await renderControls($ul, tab['NAME']);
 
                 if ($ul.html()) {
                     $('<div/>', {
@@ -400,10 +366,17 @@ function renderPage() {
         }
     }
 
+    // evalCode con context de renderPage
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
+
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
-function renderControls(pCont, pParent) {
+async function renderControls(pCont, pParent) {
     var ctl, type, $this, domAttr, label, $input, aux, f7ctl;
     var tf, textField, vf, valueField;
 
@@ -441,18 +414,12 @@ function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(doc, tf);
-            if (!textField) {
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            textField = doc2.fields(tf);
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(doc, vf);
-            if (!valueField) {
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
+            valueField = doc2.fields(vf);
         };
 
 
@@ -476,11 +443,11 @@ function renderControls(pCont, pParent) {
 
             if (ctl.attr('maxlength')) {
                 $input.attr('maxlength', ctl.attr('maxlength'));
-            } else if (textField && textField.Type == 1 && textField.Length > 0) {
-                $input.attr('maxlength', textField.Length);
+            } else if (textField && textField.type == 1 && textField.length > 0) {
+                $input.attr('maxlength', textField.length);
             }
 
-            if (textField && textField.Type == 3) {
+            if (textField && textField.type == 3) {
                 $input.attr('data-numeral', numeral.options.defaultFormat)
             }
 
@@ -654,7 +621,7 @@ function renderControls(pCont, pParent) {
             $this = getCollapsible(ctl['NAME'], ctl['DESCRIPTION']);
 
             var $ul = $('<ul/>')
-            renderControls($ul, ctl['NAME']);
+            await renderControls($ul, ctl['NAME']);
 
             if ($ul.html()) {
                 $('<div/>', {
@@ -746,7 +713,7 @@ function renderControls(pCont, pParent) {
 
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
-                rootFolder: folder.RootFolderId,
+                rootFolder: folder2.rootFolderId,
                 searchFields: ctl.attr('searchfields'),
                 extraFields: ctl.attr('returnfields'),
                 formula: ctl.attr('searchfilter'),
@@ -871,7 +838,7 @@ function renderControls(pCont, pParent) {
         }
 
         try {
-            if (ctl['APP7_SCRIPT']) eval(ctl['APP7_SCRIPT']);
+            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
         } catch (err) {
             console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
         }
@@ -893,34 +860,39 @@ function renderControls(pCont, pParent) {
 
         if ($this) $this.appendTo(pCont);
     }
+
+    // evalCode con context de renderControls
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getDefaultControl(pField) {
-    var $ret, $input, label;
+    var $ret, $input;
 
-    label = pField.Description ? pField.Description : pField.Name;
-
-    if (pField.Type == 1) {
-        if (pField.Length > 0 && pField.Length < 500) {
-            $ret = getInputText(pField.Name, label);
+    if (pField.type == 1) {
+        if (pField.length > 0 && pField.length < 500) {
+            $ret = getInputText(pField.name, pField.label);
             $input = $ret.find('input');
         } else {
-            $ret = getTextarea(pField.Name, label);
+            $ret = getTextarea(pField.name, pField.label);
             $input = $ret.find('textarea');
         }
 
-    } else if (pField.Type == 2) {
-        $ret = getDTPicker(pField.Name, label, 'datetime-local');
+    } else if (pField.type == 2) {
+        $ret = getDTPicker(pField.name, pField.label, 'datetime-local');
         $input = $ret.find('input');
 
-    } else if (pField.Type == 3) {
-        $ret = getInputText(pField.Name, label);
+    } else if (pField.type == 3) {
+        $ret = getInputText(pField.name, pField.label);
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
-    if (!pField.Updatable) inputReadonly($input, true);
-    if ($input) $input.attr('data-textfield', pField.Name.toLowerCase())
+    if (!pField.updatable) inputReadonly($input, true);
+    if ($input) $input.attr('data-textfield', pField.name.toLowerCase())
 
     return $ret;
 }
@@ -971,8 +943,8 @@ function pageInit(e, page) {
             );
 
         } else {
-            getControlFolder($el.attr('data-fill-folder'), folder.RootFolderId).then(
-                function (res) {
+            folder2.app.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
+                function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
                     var arrFields = $el.attr('data-fill-fields').split(',');
@@ -981,9 +953,9 @@ function pageInit(e, page) {
                     if (arrFields.length > 0) dataFields = arrFields.join(',');
 
                     fillSelect($el,
-                        folderSearch(res['FldId'], $el.attr('data-fill-fields'),
-                            $el.attr('data-fill-formula'), $el.attr('data-fill-order')
-                        ),
+                        fld.search({ fields: $el.attr('data-fill-fields'),
+                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
+                        }),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
                     );
                 },
@@ -1005,11 +977,11 @@ function pageInit(e, page) {
     }
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
-    setTimeout(function waiting() {
+    setTimeout(async function waiting() {
         if ($page.find('[data-filling]').length > 0) {
             setTimeout(waiting, 100);
         } else {
-            fillControls(doc);
+            await fillControls();
             app7.preloader.hide();
         }
     }, 0);
@@ -1019,8 +991,10 @@ function pageInit(e, page) {
         saveDoc,
         fld_id,
         folder,
+        folderJson,
         doc_id,
         doc,
+        docJson,
         $navbar,
     };
 }
@@ -1030,10 +1004,10 @@ function $get(pSelector) {
     return $(pSelector, f7Page.pageEl);
 }
 
-function fillControls() {
-    if (!doc.IsNew) {
-        var title = getDocField(doc, 'subject').Value;
-        if (!title) title = 'Doc #' + doc.DocId;
+async function fillControls() {
+    if (!doc2.isNew) {
+        var title = doc2.fields('subject').value;
+        if (!title) title = 'Doc #' + doc2.id;
         $navbar.find('.title').html(title);
 
         var $docLog = $get('[data-doclog]');
@@ -1058,35 +1032,20 @@ function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(doc, tf);
-            if (textField) {
-                text = textField.Value;
-            } else {
-                text = null;
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            textField = doc2.fields(tf);
+            text = textField ? textField.value : null;
         };
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(doc, vf);
-            if (valueField) {
-                value = valueField.Value;
-            } else {
-                value = null;
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
+            valueField = doc2.fields(vf);
+            value = valueField ? valueField.value : null;
         };
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            var xmlField = getDocField(doc, xf);
-            if (xmlField) {
-                xml = xmlField.Value;
-            } else {
-                xml = null;
-                console.log('No se encontro el campo ' + xf.toUpperCase());
-            }
+            xmlField = doc2.fields(xf);
+            xml = xmlField ? xmlField.value : null;
         };
 
         if (el.tagName == 'INPUT') {
@@ -1106,7 +1065,7 @@ function fillControls() {
                         el._value(value);
         
                     } else {
-                        if (textField && textField.Type == 2) {
+                        if (textField && textField.type == 2) {
                             if (text) {
                                 setInputVal($el, formatDate(text));
                             } else {
@@ -1224,7 +1183,7 @@ function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         var field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, getDocField(doc, field).Value);
+                            pCont.attr(pAttr, doc2.fields(field).value);
                         }
                     }
                 });
@@ -1240,14 +1199,21 @@ function fillControls() {
     var ev = getEvent('AfterRender');
     if (ev) {
         try {
-            eval(ev);
+            await evalCode(ev);
         } catch (err) {
             console.log('Error in AfterRender: ' + errMsg(err));
         }
     };
+
+    // evalCode con context de fillControls
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
-function fillAttachments(pEl) {
+async function fillAttachments(pEl) {
     var $ul = pEl.find('ul');
     $ul.empty();
 
@@ -1255,41 +1221,13 @@ function fillAttachments(pEl) {
     var tag = pEl.attr('data-attachments').toLowerCase();
 
     if (doc_id) {
-        DoorsAPI.attachments(doc_id).then(
-            function (res) {
-                // Filtra por el tag
-                var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
-
-                if (atts.length > 0) {
-                    // Ordena descendente
-                    atts.sort(function (a, b) {
-                        return a.AttId >= b.AttId ? -1 : 1;
-                    });
-
-                    // Arma un array de AccId
-                    var ids = atts.map(att => att.AccId);
-                    // Saca los repetidos
-                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                    // Levanta los accounts, completa el nombre y renderiza
-                    accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                        function (accs) {
-                            atts.forEach(att => {
-                                att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
-                                getAttachment(att, readonly).appendTo($ul);
-                            });
-                        }
-                    )
-
-                } else {
-                    noAttachs();
-                }
-            },
-
-            function (err) {
-                logAndToast('attachments error: ' + errMsg(err));
+        var atts = await doc2.attachments();
+        for (let [key, att] of atts) {
+            //if (tag == 'all' || (att.group && att.group.toLowerCase() == tag)) { // todo: tiene q quedar esta cdo este group
+            if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
+                getAttachment(att, readonly).appendTo($ul);
             }
-        );
-
+        }
     } else {
         noAttachs();
     }
@@ -1315,6 +1253,7 @@ function fillAttachments(pEl) {
     }
 }
 
+// todo doc2 folder2 seguir de aca
 function downloadAtt(e) {
     var $att = $(this);
     var attId = $att.attr('data-att-id');
@@ -1570,8 +1509,7 @@ function renderNewAtt(pAtt, pCont) {
     $li.prependTo(pCont.find('ul'));
 }
 
-function saveDoc(exitOnSuccess) {
-    debugger;
+async function saveDoc(exitOnSuccess) {
     if (saving) return;
     saving = true;
     $navbar.find('.right .button').addClass('disabled');
@@ -1579,75 +1517,64 @@ function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-textfield'));
+        var field = doc2.fields($el.attr('data-textfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text') {
-                    if ($el.attr('data-numeral') || field.Type == 3) {
-                        field.Value = numeral($el.val()).value();
-                    } else if (field.Type == 2) {
-                        var mom = moment($el.val(), 'L LT');
-                        if (mom.isValid()) {
-                            field.Value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
-                        } else {
-                            field.Value = null;
-                        }
+                    if ($el.attr('data-numeral')) {
+                        field.value = numeral($el.val()).value();
                     } else {
-                        field.Value = $el.val();
+                        field.value = $el.val();
                     };
 
                 } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                    field.Value = getDTPickerVal($el);
+                    field.value = getDTPickerVal($el);
 
                 } else if (type == 'checkbox') {
-                    field.Value = el.checked ? '1' : '0';
+                    field.value = el.checked ? '1' : '0';
 
                 } else if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
 
             } else if (el.tagName == 'SELECT') {
                 var aux = getSelectText($el);
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'DIV') {
                 if ($el.hasClass('text-editor')) {
-                    field.Value = app7.textEditor.get($el[0]).getValue();
+                    field.value = app7.textEditor.get($el[0]).getValue();
                 }
 
             } else if (el.tagName == 'A') {
                 if ($el.attr('data-autocomplete')) {
-                    field.Value = $el.find('.item-after').html();
+                    field.value = $el.find('.item-after').html();
                 }
             } else if(el.tagName == 'TEXTAREA') {
-                field.Value = $el.val();
+                field.value = $el.val();
             }
         }
     });
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-valuefield'));
+        var field = doc2.fields($el.attr('data-valuefield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
                 var aux = getSelectVal($el);
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = el._value();
+                    field.value = el._value();
 
                 } else {
                     var type = $el.attr('type').toLowerCase();
                     if (type == 'hidden') {
-                        if (field.Type == 3) {
-                            field.Value = numeral($el.val()).value();
-                        } else {
-                            field.Value = $el.val();
-                        };
+                        field.value = $el.val();
                     }
                 }
             }
@@ -1656,62 +1583,72 @@ function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(doc, $el.attr('data-xmlfield'));
+        var field = doc2.fields($el.attr('data-xmlfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
             }
         }
     });
 
     // Evento BeforeSave
+    // todo: el error aca deberia cancelar la operacion
     var ev = getEvent('BeforeSave');
     if (ev) {
         try {
-            eval(ev);
+            await evalCode(ev);
         } catch (err) {
             console.log('Error in BeforeSave: ' + errMsg(err));
         }
     };
 
-    DoorsAPI.documentSave(doc).then((doc2) => {
-        dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
-            doc = doc3.toJSON();
-            pageEl.crm.doc = doc;
+    try {
+        await doc2.save();
+        doc = doc2.toJSON();
+        docJson = doc2.toJSON();
+        doc_id = doc2.id;
 
-            doc_id = getDocField(doc, 'doc_id').Value;
-            pageEl.crm.doc_id = doc_id;
-            pageEl.crm.saved = true;
+        pageEl.crm.doc = doc2;
+        pageEl.crm.doc_id = doc2.id;
+        pageEl.crm.saved = true;
 
-            saveAtt().then((res) => {
-                // Evento AfterSave
-                var ev = getEvent('AfterSave');
-                if (ev) {
-                    try {
-                        eval(ev);
-                    } catch (err) {
-                        console.log('Error in AfterSave: ' + errMsg(err));
-                    }
-                };
+        await saveAtt();
 
-                saving = false;
-                app7.preloader.hide();
-                $navbar.find('.right .button').removeClass('disabled');
-                toast('Cambios guardados');
+        // Evento AfterSave
+        var ev = getEvent('AfterSave');
+        if (ev) {
+            try {
+                await evalCode(ev);
+            } catch (err) {
+                console.log('Error in AfterSave: ' + errMsg(err));
+            }
+        };
 
-                if (exitOnSuccess) {
-                    f7Page.view.router.back();
-                } else {
-                    fillControls();
-                }
+        saving = false;
+        app7.preloader.hide();
+        $navbar.find('.right .button').removeClass('disabled');
+        toast('Cambios guardados');
 
-            }, errMgr);
-        }, errMgr);
-    }, errMgr);
+        if (exitOnSuccess) {
+            f7Page.view.router.back();
+        } else {
+            await fillControls();
+        }
+        
+    } catch (err) {
+        errMgr(err);
+    }
+
+    // evalCode con context de saveDoc
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 
     function errMgr(pErr) {
         saving = false;
@@ -1760,18 +1697,23 @@ async function removeAttFromCache(fileUrl){
 }
 
 function saveAtt() {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
         var calls = [];
         var arrDel = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
+        var attMap = await doc2.attachments();
+        debugger;
 
         if ($attsToSave.length == 0) {
             resolve('OK');
             
         } else {
+            //todo: cambiar x un async loop
             $attsToSave.each(function () {
+                debugger;
                 var $this = $(this);
                 var tag = $this.closest('li.accordion-item').attr('data-attachments');
+                tag = (tag == 'all' ? null : tag);
                 var attName = $this.attr('data-att-name');
                 var attAction = $this.attr('data-att-action');
                 
@@ -1782,22 +1724,20 @@ function saveAtt() {
                         function (file) {
                             var reader = new FileReader();
                             reader.onloadend = function (e) {
-                                var blobData = new Blob([this.result], { type: file.type });
-                                var formData = new FormData();
-                                // todo: como subimos el Tag?
-                                formData.append('attachment', blobData, file.name);
-                                DoorsAPI.attachmentsSave(doc_id, formData).then(
-                                    function (res) {
+                                debugger;
+                                var att = doc2.attachmentsAdd(file.name);
+                                att.fileStream = new Blob([this.result], { type: file.type });
+                                att.description = tag;
+                                att.group = tag;
+                                att.save().then(
+                                    res => { 
                                         removeAttFromCache($this.attr('data-att-url'));
-                                        endCall(attName, 'OK');
+                                        endCall(attName, 'OK') 
                                     },
-                                    function (err) {
-                                        endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-                                    }
+                                    err => { endCall(attName, 'save error: ' + errMsg(err)) }
                                 )
                             };
                             reader.readAsArrayBuffer(file);
-    
                         },
                         function (err) {
                             endCall(attName, 'file error: ' + errMsg(err));
@@ -1805,22 +1745,17 @@ function saveAtt() {
                     )
                     
                 } else if (attAction == 'delete') {
-                    arrDel.push($this.attr('data-att-id'));
+                    debugger;
+                    var att = attMap.find(el => el.id == $this.attr('data-att-id'));
+                    if (att) {
+                        beginCall(att.name, 'delete');
+                        att.delete().then(
+                            res => { endCall(att.name, 'OK') },
+                            err => { endCall(att.name, 'delete error: ' + errMsg(err)) }
+                        );
+                    }
                 }
             });
-
-            if (arrDel.length > 0) {
-                var sDel = arrDel.join(',');
-                beginCall(sDel, 'delete')
-                DoorsAPI.attachmentsDelete(doc_id, arrDel).then(
-                    function (res) {
-                        endCall(sDel, 'OK');
-                    },
-                    function (err) {
-                        endCall(sDel, 'attachmentsDelete error: ' + errMsg(err));
-                    }
-                );
-            }
         }
 
         function beginCall(pName, pAction) {

@@ -20,6 +20,7 @@ var propFldActions = 'App7_fldActions';
 var propDocActions = 'App7_docActions';
 var propViewsFilter = 'App7_viewsFilter';
 var propInit = 'App7_explorerInit';
+var propImport = 'App7_import';
 var maxLen = 200;
 
 actionsPopup = getActionsPopup();
@@ -228,7 +229,7 @@ dSession.foldersGetFromId(fld_id).then(
             $title.css('cursor', 'pointer');
             $title.click(function () {
                 var fld = prompt('Ingrese el fldId'); // todo: mostrar popup con el treeview para elegir la carpeta
-                if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld);
+                if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld + '&fixed=0&back=1');
             });
         }
 
@@ -320,6 +321,14 @@ function pageInit(e, page) {
             },
         ];
 
+        var prop = findProp(folder.Properties, propImport);
+        if (prop) {
+            try { var importProp = JSON.parse(prop) } catch(err) { console.error(err) };
+            if (importProp && importProp.disabled) {
+                stdFldActions.splice(1, 1);
+            }
+        }
+
         var prop = findProp(folder.Properties, propFldActions);
         if (!prop) prop = findProp(folder.Form.Properties, propFldActions);
         if (prop) {
@@ -406,6 +415,7 @@ function pageInit(e, page) {
         refreshOnFocus,
         folder,
         $navbar,
+        import: importProp,
     };
 }
 

@@ -27,13 +27,13 @@ export class Session extends doorsapi2.Session {
         var authToken = me.getToken();
 
         if (!authToken) {
-            me.logon(pSuccess, pFailure);
+            me.appLogon(pSuccess, pFailure);
         } else {
             me.authToken = authToken;
             Doors.RESTFULL.AuthToken = authToken;
             me.isLogged.then(function (res) {
                 if (!res) {
-                    me.logon(pSuccess, pFailure);
+                    me.appLogon(pSuccess, pFailure);
                 } else {
                     if (pSuccess) pSuccess();
                 }
@@ -44,7 +44,7 @@ export class Session extends doorsapi2.Session {
         }
     }
 
-    logon(pSuccess, pFailure) {
+    appLogon(pSuccess, pFailure) {
         var me = this;
 
         var endPoint = window.localStorage.getItem('endPoint');
@@ -89,23 +89,27 @@ export class Session extends doorsapi2.Session {
         });
     }
 
-    logoff() {
+    appLogoff() {
         super.logoff();
         Doors.RESTFULL.AuthToken = '';
         Doors.RESTFULL.ServerUrl = '';
-        window.localStorage.setItem('instance', '');
-        window.localStorage.setItem('instanceDesc', '');
-        window.localStorage.setItem('endPoint', '');
-        window.localStorage.setItem('appName', '');
-        window.localStorage.setItem('userName', '');
-        window.localStorage.setItem('userPassword', '');
-        window.localStorage.setItem('authToken', '');
-        window.localStorage.setItem('authTokenTime', '');
-        window.localStorage.setItem('sync_table', ''); 
+        localStorage.removeItem('instance');
+        localStorage.removeItem('instanceDesc');
+        localStorage.removeItem('endPoint');
+        localStorage.removeItem('appName');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userPassword');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('authTokenTime');
+        localStorage.removeItem('sync_table'); 
     }
 
-    loggedUser() {
-        return JSON.parse(window.localStorage.getItem('loggedUser'));
+    loggedUser(spr) {
+        if (spr) {
+            return super.loggedUser;
+        } else {
+            return JSON.parse(window.localStorage.getItem('loggedUser'));
+        }
     }
 
     hasGroup(pGroup) {

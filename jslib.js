@@ -4,6 +4,7 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+numbersOnly(pText)
 sheetFuncs (sheet)
 isObject(value)
 accountsSearch(filter, order, forceOnline)
@@ -30,12 +31,22 @@ addOption(ctl, option, value)
 xmlDecodeDate(pDate)
 xmlEncodeDate(pDate)
 timeZone()
+cDate(pDate)
 ISODate(pDate)
 ISOTime(pDate, pSeconds)
 leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+/**
+ * Quita todos los caracteres que no sean numeros
+ * @param {*} pText 
+ * @returns 
+ */
+function numbersOnly(pText) {
+	return pText.replace(/\D/g, '');
+}
 
 /*
 Funciones que facilitan el barrido de una hoja excel
@@ -57,6 +68,12 @@ function sheetFuncs (sheet) {
             r: r + this._range.s.r,
             c: c + this._range.s.c,
         })];
+    }
+
+    //Devuelve el .v de un cell, validando ya si es undefined https://github.com/SheetJS/sheetjs/issues/1600
+    sheet._rangeCellsV = function (r, c) {
+        let cell = this._rangeCells(r, c);
+        return cell ? cell.v : cell;
     }
 };
 
@@ -116,7 +133,7 @@ function accountsSearch(filter, order, forceOnline) {
             }
 
             function onlineSearch() {
-                cache = DoorsAPI.accountsSearch(filter, order);
+                cache = dSession.directory.accountsSearch(filter, order);
                 setCache(key, cache, 60); // Cachea por 60 segundos
                 cache.then(resolve, reject);
             }
@@ -129,11 +146,9 @@ Cache de uso gral
 setCache('myKey', myValue, 60); // Almacena por 60 segundos
 myVar = getCache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
 */
-var _cache;
-
 function getCache(pKey) {
-    if (Array.isArray(_cache)) {
-        let f = _cache.find(el => el.key == pKey);
+    if (Array.isArray(getCache._cache)) {
+        let f = getCache._cache.find(el => el.key == pKey);
         if (f) {
             if (!f.expires || f.expires > Date.now()) {
                 console.log('Cache hit: ' + pKey);
@@ -144,7 +159,7 @@ function getCache(pKey) {
 }
 
 function setCache(pKey, pValue, pSeconds) {
-    if (!Array.isArray(_cache)) _cache = [];
+    if (!Array.isArray(getCache._cache)) getCache._cache = [];
 
     var exp, sec = parseInt(pSeconds);
     if (!isNaN(sec)) {
@@ -152,12 +167,12 @@ function setCache(pKey, pValue, pSeconds) {
     } else {
         exp = Date.now() + 300000; // 5' por defecto
     }
-    let f = _cache.find(el => el.key == pKey);
+    let f = getCache._cache.find(el => el.key == pKey);
     if (f) {
         f.value = pValue;
         f.expires = exp;
     } else {
-        _cache.push({ key: pKey, value: pValue, expires: exp });
+        getCache._cache.push({ key: pKey, value: pValue, expires: exp });
     }
 }
 
@@ -183,7 +198,7 @@ function fileSize(size) {
 /*
 Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
 que debo esperar antes de realizar la prox iteracion. Si en iterations
-Paso 0 o undefined, se repite el loop hasta loop.break()
+paso undefined, se repite el loop hasta loop.break()
 
 asyncLoop(10,
     function (loop) {
@@ -204,11 +219,9 @@ function asyncLoop(iterations, loopFunc, callback) {
 	var done = false;
 	var loop = {
 	    next: function() {
-	        if (done) {
-            	return;
-	        }
+	        if (done) return;
 	
-	        if (!iterations || index < iterations) {
+	        if (iterations == undefined || index < iterations) {
 	            index++;
 	            loopFunc(loop);
 	        } else {
@@ -230,25 +243,9 @@ function asyncLoop(iterations, loopFunc, callback) {
 	return loop;
 }
 
-/*
-Devuelve un folder por ID o PATH
-Si es por PATH hay que pasar el RootFolderId
-Cachea por 60 segundos
-*/
-function getFolder(pFolder, pRootFolderId) {
-    return new Promise(function (resolve, reject) {
-        var key = 'getFolder|' + pFolder + '|' + pRootFolderId;
-        var cache = getCache(key);
-        if (cache == undefined) {
-            if (!isNaN(parseInt(pFolder))) {
-                cache = DoorsAPI.foldersGetById(pFolder);
-            } else {
-                cache = DoorsAPI.foldersGetByPath(pRootFolderId, pFolder);
-            }
-            setCache(key, cache, 60); // Cachea el folder por 60 segundos
-        };
-        cache.then(resolve, reject);
-    });
+// Implementado en dSession.folder (usar ese) 
+async function getFolder(pFolder, pCurrentFolderId) {
+    return (await dSession.folder(pFolder, pCurrentFolderId)).toJSON();
 }
 
 
@@ -496,35 +493,65 @@ function timeZone() {
 	return ret;	
 }
 
-function ISODate(pDate) {
+/**
+ * Convierte a Date
+ * @param {*} pDate 
+ * @returns 
+ */
+function cDate(pDate) {
     var dt;
+    if (pDate == null || pDate == undefined) return null;
+    
     if (Object.prototype.toString.call(pDate) === '[object Date]') {
         dt = pDate;
     } else {
-        dt = new Date(pDate);
+        dt = moment(pDate, 'L LTS').toDate(); // moment con locale
+        if (isNaN(dt.getTime())) dt = moment(pDate).toDate(); // moment sin locale
+        if (isNaN(dt.getTime())) dt = new Date(pDate); // nativo
     }
     if(!isNaN(dt.getTime())) {
-        return dt.getFullYear() + '-' + leadingZeros(dt.getMonth() + 1, 2) + '-' +
-            leadingZeros(dt.getDate(), 2);
+        return dt;
     } else {
         return null;
     }
 }
 
+/**
+ * Devuelve la fecha en formato YYYY-MM-DD
+ * @param {*} pDate 
+ * @returns 
+ */
+function ISODate(pDate) {
+    var dt = cDate(pDate);
+	if (dt) {
+        return dt.toISOString().substring(0, 10);
+	} else {
+        return null;
+	}
+}
+
+/**
+ * Devuelve la hora en formato HH:MM:SS
+ * @param {*} pDate 
+ * @param {*} pSeconds 
+ * @returns 
+ */
 function ISOTime(pDate, pSeconds) {
-    if (Object.prototype.toString.call(pDate) === '[object Date]') {
-        dt = pDate;
-    } else {
-        var dt = new Date(pDate);
-    }
-    if(!isNaN(dt.getTime())) {
+    var dt = cDate(pDate);
+	if (dt) {
         return leadingZeros(dt.getHours(), 2) + ':' + leadingZeros(dt.getMinutes(), 2) +
             (pSeconds ? ':' + leadingZeros(dt.getSeconds(), 2) : '');
-    } else {
+	} else {
         return null;
-    }
+	}
 }
 
+/**
+ * Completa con ceros a la izquierda
+ * @param {*} pString 
+ * @param {*} pLength 
+ * @returns 
+ */
 function leadingZeros(pString, pLength) {
     return ('0'.repeat(pLength) + pString).slice(-pLength);
 }

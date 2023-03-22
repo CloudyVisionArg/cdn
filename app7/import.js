@@ -1,5 +1,6 @@
+var folder, sheet, refresh;
+var f7Page;
 var fld_id = routeTo.query.fld_id;
-var folder, sheet;
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
@@ -9,8 +10,6 @@ dSession.foldersGetFromId(fld_id).then(
     errMgr
 );
 
-var f7Page;
-
 var $page = getPage({
     id: 'import',
     title: 'Importar',
@@ -18,6 +17,7 @@ var $page = getPage({
 });
 
 $page.find('.navbar-inner .left .link').on('click', function (e) {
+    if (refresh) f7Page.pageFrom.pageEl.crm.reloadView();
     f7Page.view.router.back();
 });
 
@@ -45,6 +45,9 @@ $fileName.change(e => {
         $inputFile.val('');
         $ulMap.empty();
         sheet = undefined;
+        $btnImport.addClass('disabled');
+        $btnCopy.addClass('disabled');
+        $blockLog.empty();
     }
 });
 
@@ -59,8 +62,9 @@ $clip.click(e => {
     $inputFile.click();
 });
 
-$inputFile.change(async e => {
-    loadXls(e.target.files[0]);
+$inputFile.change(e => {
+    if (e.target.files.length > 0)
+        loadXls(e.target.files[0]);
 });
 
 // Mapeo de campos
@@ -73,80 +77,183 @@ var $list = $('<div/>', {
 
 var $ulMap = $('<ul/>').appendTo($list);
 
+/* suspendido por ahora, la idea es poner un script q se ejecute antes del save
+// Opciones
+
+var $acc = $(`
+<div class="block block-strong">
+    <div class="accordion-item corp-item">
+        <a href="" class="item-link item-content">
+            <div class="item-inner">
+                <div class="item-title">Opciones</div>
+            </div>
+        </a>
+        <div class="accordion-item-content" style="padding-left: 8px;">
+            <div class="list no-hairlines-md">
+                <ul />
+            </div>
+        </div>
+    </div>
+</div>
+`).appendTo($pageCont);
+
+var $ul = $acc.find('ul');
+getTextarea('code', 'Pre-save script', ':)').appendTo($ul);
+*/
+
 // Boton importar
-var $list = $('<div/>', {
-    class: 'list inline-labels no-hairlines-md',
-    style: 'margin-top: 0;',
+var $block = $('<div/>', {
+    class: 'block block-strong',
 }).appendTo($pageCont);
 
-var $ul = $('<ul/>').appendTo($list);
+var $btnImport = $('<button>', {
+    class: 'button button-fill disabled',
+}).append('Importar').appendTo($block);
 
-var $ctl = getButton('Importar').appendTo($ul);
-$ctl.find('button').click(doImport);
+$btnImport.click(doImport);
+
+// Block de log
+var $blockLog = $('<div/>', {
+    class: 'block',
+    style: 'overflow-wrap: anywhere;',
+}).appendTo($pageCont);
+
+// Boton Copy
+var $block = $('<div/>', {
+    class: 'block block-strong',
+}).appendTo($pageCont);
+
+var $btnCopy = $('<button>', {
+    class: 'button button-fill disabled',
+}).append('Copiar log al portapapeles').appendTo($block);
+
+$btnCopy.click(() => {
+    navigator.clipboard.writeText($blockLog[0].innerText || $blockLog[0].textContent).then(
+        () => { toast('Listo!') },
+        (err) => { toast(errMsg(err)) }
+    );
+});
 
 resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 
 function pageInit(e, page) {
     f7Page = page;
-
-    //setInputVal($get('#scripts'), localStorage.getItem('scripts'));
 }
 
 async function loadXls(file) {
-    $fileName.val(file.name);
-    const data = await file.arrayBuffer();
-    /* data is an ArrayBuffer */
-    const book = XLSX.read(data);
-    sheet = book.Sheets[book.SheetNames[0]];
-    sheetFuncs(sheet);
-
-    // Lee los campos del folder
-    var form = await folder.form;
-    var fields = [];
-    form.fieldsMap.forEach(f => {
-        if (f.custom && !f.headerTable && f.updatable && !f.computed) {
-            fields.push(f.name.toLowerCase());
-        }
-    });
-    fields.sort();
-
+    $btnImport.addClass('disabled');
+    $btnCopy.addClass('disabled');
+    $blockLog.empty();
     $ulMap.empty();
-    var headers = [];
 
-    // Carga el mapeo
-    for (var i = 0; i < sheet._rangeCols(); i++) {
-        headers.push(sheet._rangeCells(0, i).v);
+    try {
+        setInputVal($fileName, file.name);
+        const data = await file.arrayBuffer();
+        const book = XLSX.read(data);
+        sheet = book.Sheets[book.SheetNames[0]];
+        sheetFuncs(sheet);
 
-        let $selCtl = getSelect(undefined, headers[i]);
-        $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
+        // Lee los campos habilitados
+        try {
+            let sett = f7Page.pageFrom.pageEl.crm.import.fields;
+            if (sett) {
+                var fieldsSett = sett.split(',');
+                fieldsSett.forEach((el, ix) => {
+                    fieldsSett[ix] = el.trim().toLowerCase();
+                });
+            }
 
-        var $sel = $selCtl.find('select');
-        addOption($sel[0], '(no importar)', '[NULL]'); 
-        fields.forEach(it => {
-            addOption($sel[0], it);
-        })
-        $sel.val(headers[i]);
-        if ($sel[0].selectedIndex < 0) $sel[0].selectedIndex = 0;
+        } catch(err) {
+            console.error(err);
+        };
 
-        $selCtl.appendTo($ulMap);
+        // Lee los campos del folder
+        var form = await folder.form;
+        var fields = [];
+        form.fields().forEach(f => {
+            if (f.custom && !f.headerTable && f.updatable && !f.computed) {
+                let fName = f.name.toLowerCase();
+                if (!fieldsSett || fieldsSett.find(el => el == fName)) {
+                    fields.push(f.name.toLowerCase());
+                }
+            }
+        });
+        fields.sort();
+
+        var headers = [];
+
+        // Carga el mapeo
+        for (var i = 0; i < sheet._rangeCols(); i++) {
+            headers.push(String(sheet._rangeCellsV(0, i)));
+
+            let $selCtl = getSelect(undefined, headers[i]);
+            $selCtl.find('.item-title').removeClass('item-floating-label').addClass('item-label');
+
+            var $sel = $selCtl.find('select');
+            addOption($sel[0], '(no importar)', '[NULL]'); 
+            fields.forEach(it => {
+                addOption($sel[0], it);
+            })
+            $sel.val(headers[i].toLowerCase());
+            if ($sel[0].selectedIndex < 0) $sel[0].selectedIndex = 0;
+
+            $selCtl.appendTo($ulMap);
+        }
+
+        $btnImport.removeClass('disabled');
+
+    } catch (err) {
+        toast(errMsg(err));
+        console.error(err);
     }
 }
 
-function doImport() {
+async function doImport() {
+    const cronStart = new Date().getTime();
+
+    $btnImport.addClass('disabled');
+    $blockLog.empty();
+    $blockLog.append('Importando ' + (sheet._rangeRows() - 1) + ' filas...' + '<br/>');
+
     var mapeo = [];
     $ulMap.find('select').each((ix, el) => {
         mapeo[ix] = getSelectVal($(el));
     });
 
     for (var i = 1; i < sheet._rangeRows(); i++) {
-        let empty = true;
-        // Busca filas no vacias
-        if (mapeo.find((el, ix) => (el && sheet._rangeCells(i, ix).v))) {
-            console.log(i)
-        };
+        $blockLog.append('<br/>Importando fila ' + (i + 1) + '<br/>');
+
+        // Filas no vacias
+        if (mapeo.find((el, ix) => (el && sheet._rangeCellsV(i, ix)))) {
+            try {
+                $blockLog.append('Creando el documento<br/>');
+                let doc = await folder.documentsNew();
+                mapeo.forEach((el, ix) => {
+                    if (el) {
+                        let val = sheet._rangeCellsV(i, ix);
+                        val = (val === undefined ? null : val);
+                        doc.fields(el).value = val;
+                        $blockLog.append(el + ' = ' + val + '<br/>');
+                    }
+                });
+                $blockLog.append('Guardando el documento<br/>');
+                await doc.save();
+                $blockLog.append('OK!<br/>');
+                refresh = true;
+                //await doc.delete(); // sacar en prod!!
+
+            } catch (err) {
+                $blockLog.append('<span style="color: red;">ERROR: ' + errMsg(err) + '</span><br/>');
+            }
+
+        } else {
+            $blockLog.append('Fila vacia<br/>');
+        }
     }
 
-
+    const cron = new Date().getTime();
+    $blockLog.append(`<br/><b>Proceso terminado en ${parseInt((cron - cronStart) / 1000)} segs</b>`);
+    $btnCopy.removeClass('disabled')
 }
 
 // Usar solo despues del pageInit
