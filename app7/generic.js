@@ -1604,7 +1604,7 @@ function saveAtt() {
             resolve('OK');
             
         } else {
-            $attsToSave.each(function () {
+            $attsToSave.each(async () => {
                 debugger;
                 var $this = $(this);
                 var tag = $this.closest('li.accordion-item').attr('data-attachments');
