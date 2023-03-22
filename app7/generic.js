@@ -1635,8 +1635,8 @@ function saveAtt() {
                         function (err) {
                             endCall(attName, 'file error: ' + errMsg(err));
                         }
-                        */
                     )
+                        */
                     
                 } else if (attAction == 'delete') {
                     debugger;
