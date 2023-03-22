@@ -1599,12 +1599,14 @@ function saveAtt() {
         var arrDel = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
         var attMap = await doc2.attachments();
+        debugger;
 
         if ($attsToSave.length == 0) {
             resolve('OK');
             
         } else {
-            $attsToSave.each(async () => {
+            //todo: cambiar x un async loop
+            $attsToSave.each(function () {
                 debugger;
                 var $this = $(this);
                 var tag = $this.closest('li.accordion-item').attr('data-attachments');
@@ -1615,9 +1617,9 @@ function saveAtt() {
                 if (attAction == 'save') {
                     beginCall(attName, attAction);
 
-                    var file = await getFile($this.attr('data-att-url'));
-                    debugger;
-                    var reader = new FileReader();
+                    getFile($this.attr('data-att-url')).then(
+                        function (file) {
+                            var reader = new FileReader();
                             reader.onloadend = function (e) {
                                 debugger;
                                 var att = doc2.attachmentsAdd(file.name);
@@ -1630,13 +1632,11 @@ function saveAtt() {
                                 )
                             };
                             reader.readAsArrayBuffer(file);
-                            /*
                         },
                         function (err) {
                             endCall(attName, 'file error: ' + errMsg(err));
                         }
                     )
-                        */
                     
                 } else if (attAction == 'delete') {
                     debugger;
