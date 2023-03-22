@@ -1701,15 +1701,6 @@ function audioRecorder(pCallback) {
 
                             getFile(cordova.file.dataDirectory  + src).then(
                                 (succ)=>{
-                                    debugger;
-                                },
-                                (err)=>{
-                                    debugger;
-                                }
-                                );
-                            
-                            fileSystem.root.getFile(src, { create: false, exclusive: false	},
-                                function (fileEntry) {
                                     addDuration(fileSystem, fileEntry, mediaRec, function (file) {
                                         if (pCallback) {
                                             pCallback(file);
@@ -1718,10 +1709,25 @@ function audioRecorder(pCallback) {
                                     });
 
                                 },
-                                function (err) {
+                                (err)=>{
                                     logAndToast('getFile error: ' + err.code);
                                 }
-                            );
+                                );
+                            
+                            // fileSystem.root.getFile(src, { create: false, exclusive: false	},
+                            //     function (fileEntry) {
+                            //         addDuration(fileSystem, fileEntry, mediaRec, function (file) {
+                            //             if (pCallback) {
+                            //                 pCallback(file);
+                            //             };
+                            //             sheet.close();
+                            //         });
+
+                            //     },
+                            //     function (err) {
+                            //         logAndToast('getFile error: ' + err.code);
+                            //     }
+                            // );
                         }
                     );
                 };
