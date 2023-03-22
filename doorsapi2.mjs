@@ -971,11 +971,12 @@ export class Attachment {
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
-                    debugger;
                     let resJson = await res.json();
                     me.#json = resJson.InternalObject[0];
-                    me.#json.AccName = (await me.session.loggedUser).name;
-                    this.#json.File = fs;
+                    me.session.loggedUser.then(
+                        res => { me.#json.AccName = res.name }
+                    )
+                    me.#json.File = fs;
 
                     resolve(me);
                 },
