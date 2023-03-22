@@ -1934,6 +1934,8 @@ function audioRecorder(pCallback) {
         if(result.value){
             save = false;
             var now = new Date();
+            
+            const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
             const startRecordingResult = await Capacitor.Plugins.VoiceRecorder.startRecording();
             $recBtnRow.hide();
             $saveBtnRow.show();
