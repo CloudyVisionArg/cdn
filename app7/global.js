@@ -2042,9 +2042,8 @@ function audioRecorder(pCallback) {
     }
 
     async function saveCapacitor() {
-        save = true;
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-        debugger;
+        var now = new Date();
         var fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
         fileName += "_" +  recordingData.value.msDuration;
         Capacitor.Plugins.Filesystem.writeFile({
@@ -2059,8 +2058,12 @@ function audioRecorder(pCallback) {
                         att.Name = file.name;
                         att.Size = file.size;
                         renderNewAtt(att, $attachs);
-                    },errMgr);
-            },errMgr);
+                    },(err)=>{
+                        debugger;
+                    });
+            },(err)=>{
+                debugger;            
+            });
         debugger;
         clearInterval(interv);
         sheet.close();
