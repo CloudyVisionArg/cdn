@@ -1717,7 +1717,7 @@ function audioRecorder(pCallback) {
                                 (err)=>{
                                     logAndToast('getFile error: ' + err.code);
                                 }
-                                );
+                            );
                             
                             // fileSystem.root.getFile(src, { create: false, exclusive: false	},
                             //     function (fileEntry) {
