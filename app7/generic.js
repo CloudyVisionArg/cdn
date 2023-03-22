@@ -1630,10 +1630,12 @@ function saveAtt() {
                                 )
                             };
                             reader.readAsArrayBuffer(file);
+                            /*
                         },
                         function (err) {
                             endCall(attName, 'file error: ' + errMsg(err));
                         }
+                        */
                     )
                     
                 } else if (attAction == 'delete') {
