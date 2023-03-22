@@ -305,6 +305,6 @@ function getSurroundingBackdrop(focusElSelector){
         "height":focusEl.height + "px",
         "fill":"red"
     }).appendTo(svgBackDrop);
-
-    return divBackDrop;
+    //divBackDrop[0] devuelve el html 
+    return divBackDrop[0];
 }
