@@ -1605,6 +1605,7 @@ function saveAtt() {
             
         } else {
             $attsToSave.each(function () {
+                debugger;
                 var $this = $(this);
                 var tag = $this.closest('li.accordion-item').attr('data-attachments');
                 tag = (tag == 'all' ? null : tag);
