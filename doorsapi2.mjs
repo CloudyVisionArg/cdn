@@ -3355,7 +3355,6 @@ class RestClient {
                 cache: 'no-cache',
                 headers: {
                     'AuthToken': this.AuthToken,
-                    'Content-Type': 'multipart/form-data',
                 },
                 body: data ? data : null,
 
