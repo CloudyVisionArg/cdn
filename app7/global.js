@@ -1700,13 +1700,18 @@ function audioRecorder(pCallback) {
                         function (fileSystem) {
 
                             getFile(cordova.file.dataDirectory  + src).then(
-                                (succ)=>{
-                                    addDuration(fileSystem, fileEntry, mediaRec, function (file) {
-                                        if (pCallback) {
-                                            pCallback(file);
-                                        };
-                                        sheet.close();
-                                    });
+                                (file)=>{
+                                    if (pCallback) {
+                                        pCallback(file);
+                                    };
+                                    sheet.close();
+
+                                    // addDuration(fileSystem, fileEntry, mediaRec, function (file) {
+                                    //     if (pCallback) {
+                                    //         pCallback(file);
+                                    //     };
+                                    //     sheet.close();
+                                    // });
 
                                 },
                                 (err)=>{
@@ -1770,6 +1775,8 @@ function audioRecorder(pCallback) {
         $recBtnRow.show();
         $saveBtnRow.hide();
     }
+
+
 
     function addDuration(pFileSystem, pFileEntry, pMediaRec, pCallback) {
         // Agrega la duracion al nombre del archivo, usa moveTo para renombrar
