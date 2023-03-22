@@ -2040,7 +2040,7 @@ function audioRecorder(pCallback) {
     async function saveCapacitor() {
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         var now = new Date();
-        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '.aac';
+        
 
         let millis = recordingData.value.msDuration;
        // let min = Math.trunc(dur / 60);
@@ -2049,14 +2049,11 @@ function audioRecorder(pCallback) {
 
         const minutes = Math.floor(millis / 60000);
         const seconds = ((millis % 60000) / 1000).toFixed(0);
-        const res = (seconds == 60) ?
+        const durationString = (seconds == 60) ?
         (minutes+1) + ":00" :
         minutes + ":" + (seconds < 10 ? "0" : "") + seconds
-        
-        fileName = res + '_min_' + fileName;
 
-
-
+        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + + '_min_' + durationString.replaceAll(':', '-') + '.aac';
 
         Capacitor.Plugins.Filesystem.writeFile({
             path : fileName,
