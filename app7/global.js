@@ -2040,8 +2040,12 @@ function audioRecorder(pCallback) {
     async function saveCapacitor() {
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         var now = new Date();
-        var fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
-        fileName += "_" +  recordingData.value.msDuration + '.aac';
+        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '.aac';
+
+        let dur = recordingData.value.msDuration;
+        let min = Math.trunc(dur / 60);
+        fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + fileName;
+
         Capacitor.Plugins.Filesystem.writeFile({
             path : fileName,
             data : recordingData.value.recordDataBase64,
@@ -2051,17 +2055,12 @@ function audioRecorder(pCallback) {
                 getFile(res.uri).then(
                     function (file) {
                         pCallback(file);
-                        // att.URL = file.localURL;
-                        // att.Name = file.name;
-                        // att.Size = file.size;
-                        // renderNewAtt(att, $attachs);
                     },(err)=>{
-                        debugger;
+                        console.log("Error obteniendo el audio.")
                     });
             },(err)=>{
-                debugger;            
+                console.log("Error escribiendo el audio.")
             });
-        debugger;
         clearInterval(interv);
         sheet.close();
     }
@@ -2075,8 +2074,10 @@ function audioRecorder(pCallback) {
 
     async function cancelCapacitor() {
         clearInterval(interv);
-        const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-        //mediaRec.release();
+        const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+        if(currentStatusResult.status != 'NONE'){
+            const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        }
         $timer.html('0:00');
         $timer.css('opacity', '20%');
         $recBtnRow.show();
