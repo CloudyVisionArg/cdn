@@ -1,3 +1,8 @@
+window._isCapacitor = function(){
+    try{    return (Capacitor != undefined);}
+    catch(e){return false;}
+};
+
 /***********************************************************
  * Control para conversaciones y datos base
  * Requiere: JQuery, Fontawesome, moment, emojis, jslib

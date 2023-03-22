@@ -33,14 +33,41 @@ function recorder(opts){
 
 
     this.record = function() {
-        if (typeof(cordova) == 'object') {
-            return this.recordFromCordova();
-        }
-        else{
-            return this.recordFromWeb();
+        if(_isCapacitor()){
+            return this.recordCapacitor();
+        } 
+        else {
+            if (typeof(cordova) == 'object') {
+                return this.recordFromCordova();
+            }
+            else{
+                return this.recordFromWeb();
+            }
         }
     };
 
+    var capacitorCallback = null;
+    var capacitorCallbackError = null;
+    var capacitorFilename = null;
+    this.recordCapacitor = function(){
+        return new Promise(async(resolve,reject)=>{
+            capacitorCallback = resolve;
+            capacitorCallbackError = reject;
+            //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+            //Evaluar mejor los permisos 
+            const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+            if(result.value){
+                const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                if(currentStatusResult.status != 'NONE'){
+                    const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                }
+                let now = new Date();
+                capacitorFilename = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + ".aac";
+                const startRecordingResult = await Capacitor.Plugins.VoiceRecorder.startRecording();
+            }
+        })
+        
+    }
 
     function addDuration(pFileSystem, pFileEntry, pMediaRec, pCallback) {
         // Agrega la duracion al nombre del archivo, usa moveTo para renombrar
@@ -93,15 +120,60 @@ function recorder(opts){
 
     this.stopRecording = function(){
         debugger;
-        if(mediaRec != null){
-            if(typeof(cordova) == 'object'){
-                mediaRec.stopRecord();
-                mediaRec.release();
-            }
-            else{
-                mediaRec.stop();
+        if(_isCapacitor()){
+            saveCapacitor();
+        }
+        else{
+            if(mediaRec != null){
+                if(typeof(cordova) == 'object'){
+                    mediaRec.stopRecord();
+                    mediaRec.release();
+                }
+                else{
+                    mediaRec.stop();
+                }
             }
         }
+    }
+
+    async function saveCapacitor() {
+        const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        var now = new Date();
+        let millis = recordingData.value.msDuration;
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        let durationString = (seconds == 60) ?
+            (minutes+1) + ":00" :
+            minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+        //let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+        
+        var dur = millis / 1000;
+        var min = Math.trunc(dur / 60);
+        
+        var completeName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + capacitorFilename;
+        //let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+
+        //Guarda en cache.
+        //Habria que borrarlo posteriormente al guardado
+        Capacitor.Plugins.Filesystem.writeFile({
+            path : completeName,
+            data : recordingData.value.recordDataBase64,
+            directory: Directory.Cache,
+        }).then(
+            (res)=>{
+                getFile(res.uri).then(
+                    function (file) {
+                        if(capacitorCallback !=null){
+                            capacitorCallback(file);
+                        }
+                    },(err)=>{
+                        console.log("Error obteniendo el audio.");
+                        capacitorCallbackError(err);
+                    });
+            },(err)=>{
+                console.log("Error escribiendo el audio.");
+                capacitorCallbackError(err);
+            });
     }
 
     this.recordFromCordova = function(){
