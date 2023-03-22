@@ -1698,6 +1698,16 @@ function audioRecorder(pCallback) {
                 if (save) {
                     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
                         function (fileSystem) {
+
+                            getFile(cordova.file.dataDirectory  + src).then(
+                                (succ)=>{
+                                    debugger;
+                                },
+                                (err)=>{
+                                    debugger;
+                                }
+                                );
+                            
                             fileSystem.root.getFile(src, { create: false, exclusive: false	},
                                 function (fileEntry) {
                                     addDuration(fileSystem, fileEntry, mediaRec, function (file) {
