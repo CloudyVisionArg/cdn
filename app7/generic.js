@@ -1734,7 +1734,8 @@ function saveDoc(exitOnSuccess) {
 function removeAttFromCache(fileUrl){
     if(_isCapacitor()){
         Capacitor.Plugins.Filesystem.deleteFile({
-            path: fileUrl
+            path: fileUrl,
+            directory: Directory.Cache
         }).then(
             (s)=>{
                 console.log('Archivo ' +  fileUrl + ' eliminado del cache del app');
