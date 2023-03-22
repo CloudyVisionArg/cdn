@@ -1929,10 +1929,11 @@ function audioRecorder(pCallback) {
 
     async function recordCapacitor(){
         //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+        var now = new Date();
         const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
         if(result.value){
             save = false;
-            var now = new Date();
+            
             const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
             if(currentStatusResult.status != 'NONE'){
                 const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
@@ -2043,6 +2044,7 @@ function audioRecorder(pCallback) {
     async function saveCapacitor() {
         save = true;
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        debugger;
         var fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
         fileName += "_" +  recordingData.value.msDuration;
         Capacitor.Plugins.Filesystem.writeFile({
