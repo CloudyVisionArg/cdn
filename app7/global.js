@@ -1929,7 +1929,7 @@ function audioRecorder(pCallback) {
 
     async function recordCapacitor(){
         //TODO: https://github.com/tchvu3/capacitor-voice-recorder
-        var now = new Date();
+        //Evaluar mejor los permisos 
         const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
         if(result.value){
             save = false;
@@ -1951,18 +1951,6 @@ function audioRecorder(pCallback) {
                 $timer.html(mins + ':' + leadingZeros(secs, 2));
             }, 200);
         }
-
-        // Capacitor.VoiceRecorder.stopRecording()
-        // .then((result) => { 
-        //     debugger;
-        //     console.log("stopRecording ok");
-        //     console.log(result.value);
-        // })
-        // .catch(error => {
-        //     debugger;
-        //     console.log("stopRecording error");
-        //     console.log(error);
-        // })
     }
 
     function recordCordova(){
@@ -2040,13 +2028,7 @@ function audioRecorder(pCallback) {
     async function saveCapacitor() {
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         var now = new Date();
-        
-
         let millis = recordingData.value.msDuration;
-       // let min = Math.trunc(dur / 60);
-        debugger;
-        //fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + fileName;
-
         const minutes = Math.floor(millis / 60000);
         const seconds = ((millis % 60000) / 1000).toFixed(0);
         const durationString = (seconds == 60) ?
