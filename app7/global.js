@@ -2067,8 +2067,11 @@ function audioRecorder(pCallback) {
     async function cancelCapacitor() {
         clearInterval(interv);
         const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+        console.log("VoiceRecorder.getCurrentStatus : " + currentStatusResult.status);
         if(currentStatusResult.status != 'NONE'){
-            const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+            const stopRecordingResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+            console.log("VoiceRecorder.stopRecording : " + stopRecordingResult.value);
+            //Evaluar el resultado para logearlo
         }
         $timer.html('0:00');
         $timer.css('opacity', '20%');

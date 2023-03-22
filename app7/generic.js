@@ -1731,6 +1731,9 @@ function saveDoc(exitOnSuccess) {
         console.log(pErr);
     }
 }
+function removeAttFromCache(fileUrl){
+    console.log(" quitaria del cache el file : " + fileUrl);
+}
 
 function saveAtt() {
     return new Promise(function (resolve, reject) {
@@ -1761,6 +1764,7 @@ function saveAtt() {
                                 formData.append('attachment', blobData, file.name);
                                 DoorsAPI.attachmentsSave(doc_id, formData).then(
                                     function (res) {
+                                        removeAttFromCache($this.attr('data-att-url'));
                                         endCall(attName, 'OK');
                                     },
                                     function (err) {
