@@ -1733,6 +1733,8 @@ function saveDoc(exitOnSuccess) {
 }
 function removeAttFromCache(fileUrl){
     if(_isCapacitor()){
+        //Resolver esto y obtener unicamente el nombre.
+        fileUrl = fileUrl.replace('http://localhost/__cdvfile_cache__/', '');
         Capacitor.Plugins.Filesystem.deleteFile({
             path: fileUrl,
             directory: Directory.Cache
