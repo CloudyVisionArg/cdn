@@ -2034,9 +2034,10 @@ function audioRecorder(pCallback) {
         let durationString = (seconds == 60) ?
             (minutes+1) + ":00" :
             minutes + ":" + (seconds < 10 ? "0" : "") + seconds
-        debugger;
-        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
 
+        //Guarda en cache.
+        //Habria que borrarlo posteriormente al guardado
         Capacitor.Plugins.Filesystem.writeFile({
             path : fileName,
             data : recordingData.value.recordDataBase64,
