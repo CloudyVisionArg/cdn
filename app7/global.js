@@ -1980,7 +1980,6 @@ function audioRecorder(pCallback) {
             // success callback
             function() {
                 if (save) {
-                    debugger;
                     window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
                         function (fileSystem) {
                             fileSystem.root.getFile(src, { create: false, exclusive: false	},
@@ -2001,7 +2000,6 @@ function audioRecorder(pCallback) {
                     );
                 };
             },
-        
             // error callback
             function (err) {
                 logAndToast('Media error: ' + err.code);
@@ -2009,7 +2007,6 @@ function audioRecorder(pCallback) {
         );
         
         mediaRec.startRecord();
-        
         $recBtnRow.hide();
         $saveBtnRow.show();
         $timer.css('opacity', '100%');
@@ -2025,7 +2022,6 @@ function audioRecorder(pCallback) {
     
 
     function save(){
-        debugger;
         if(_isCapacitor()){
             saveCapacitor();
         }else{
@@ -2045,7 +2041,7 @@ function audioRecorder(pCallback) {
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         var now = new Date();
         var fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
-        fileName += "_" +  recordingData.value.msDuration;
+        fileName += "_" +  recordingData.value.msDuration + '.aac';
         Capacitor.Plugins.Filesystem.writeFile({
             path : fileName,
             data : recordingData.value.recordDataBase64,
