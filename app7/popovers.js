@@ -179,7 +179,8 @@ function renderPopovers(pArrPopovers){
     for (let i = 0; i < arrCartelesVista.length; i++) {                
 
         arrCartelesVista[i].on('beforeOpen', function () {
-            if($(arrCartelesVista[i]["selector"]).length > 0){
+            if($(arrCartelesVista[i]["selector"]).length > 0){                
+                arrCartelesVista[i].backdropEl = getSurroundingBackdrop(arrCartelesVista[i]["selector"])
                 arrCartelesVista[i].open(arrCartelesVista[i]["selector"]);
             }else{
                 arrCartelesVista[i].emit("closedWithoutDisplay");
@@ -259,3 +260,50 @@ function injectCSS(css){
     document.head.appendChild(el);
     return el;
 };
+
+function getSurroundingBackdrop(focusElSelector){
+    let displayh = window.screen.height;
+    let displayw= window.screen.width;
+
+    let divBackDrop = $("<div/>", {"class": "customBackDrop", "style" : "height:" + displayh + "px; width:" + displayw + "px;"});
+    let focusEl = document.querySelector(focusElSelector).getBoundingClientRect();
+    //svgBackDrop.viewbox width y heigth deben ser iguales a los valores del div
+    let svgBackDrop = $("<svg/>",{
+        "xmlns":"http://www.w3.org/2000/svg",
+        "viewBox":"0 0 " + displayw + " " + displayh
+    }).appendTo(divBackDrop);
+
+    $("<rect/>", {
+        "x":0,
+        "y":0,
+        "width":"100%",
+        "height":focusEl.y + "px",
+        "fill":"red"
+    }).appendTo(svgBackDrop);
+    
+    $("<rect/>", {
+        "x":0,
+        "y":focusEl.bottom + "px",
+        "width":"100%",
+        "height":(displayh - focusEl.bottom) + "px",
+        "fill":"red"
+    }).appendTo(svgBackDrop);
+
+    $("<rect/>", {
+        "x":0,
+        "y":focusEl.y + "px",
+        "width":focusEl.x+ "px",
+        "height":focusEl.height + "px",
+        "fill":"red"
+    }).appendTo(svgBackDrop);
+
+    $("<rect/>", {
+        "x":focusEl.right + "px",
+        "y":focusEl.y + "px",
+        "width":(displayw - focusEl.right) + "px",
+        "height":focusEl.height + "px",
+        "fill":"red"
+    }).appendTo(svgBackDrop);
+
+    return divBackDrop;
+}
