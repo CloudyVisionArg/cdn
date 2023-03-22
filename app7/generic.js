@@ -1359,6 +1359,7 @@ function addAtt(e) {
     if (action == 'camera') {
         navigator.camera.getPicture(
             function (fileURL) {
+                debugger;
                 getFile(fileURL).then(
                     function (file) {
                         att.URL = file.localURL;
