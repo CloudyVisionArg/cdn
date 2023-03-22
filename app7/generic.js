@@ -1732,7 +1732,18 @@ function saveDoc(exitOnSuccess) {
     }
 }
 function removeAttFromCache(fileUrl){
-    console.log(" quitaria del cache el file : " + fileUrl);
+    if(_isCapacitor()){
+        Capacitor.Plugins.Filesystem.deleteFile({
+            path: fileUrl
+        }).then(
+            (s)=>{
+                console.log('Archivo ' +  fileUrl + ' eliminado del cache del app');
+            },
+            (e)=>{
+                console.log('Error intentando quitar el archivo ' +  fileUrl + ' del cache del app');
+            }
+        );
+    }
 }
 
 function saveAtt() {
