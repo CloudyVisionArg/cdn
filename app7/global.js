@@ -1930,7 +1930,7 @@ function audioRecorder(pCallback) {
     function recordCapacitor(){
         //TODO: https://github.com/tchvu3/capacitor-voice-recorder
         debugger;
-        Capacitor.VoiceRecorder.startRecording()
+        Capacitor.Plugins.VoiceRecorder.startRecording()
         .then((result) => {
             debugger;
             console.log("startRecording ok");
