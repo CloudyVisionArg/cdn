@@ -1690,12 +1690,13 @@ function audioRecorder(pCallback) {
         } else {
             src += '.aac';
         }
-    
-        mediaRec = new Media('cdvfile://localhost/temporary/' + src,
+        
+        //mediaRec = new Media('cdvfile://localhost/temporary/' + src,
+        mediaRec = new Media(cordova.file.dataDirectory  + src,
             // success callback
             function() {
                 if (save) {
-                    window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
+                    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
                         function (fileSystem) {
                             fileSystem.root.getFile(src, { create: false, exclusive: false	},
                                 function (fileEntry) {
