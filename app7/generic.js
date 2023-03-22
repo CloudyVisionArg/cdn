@@ -1615,9 +1615,9 @@ function saveAtt() {
                 if (attAction == 'save') {
                     beginCall(attName, attAction);
 
-                    getFile($this.attr('data-att-url')).then(
-                        function (file) {
-                            var reader = new FileReader();
+                    var file = await getFile($this.attr('data-att-url'));
+                    debugger;
+                    var reader = new FileReader();
                             reader.onloadend = function (e) {
                                 debugger;
                                 var att = doc2.attachmentsAdd(file.name);
