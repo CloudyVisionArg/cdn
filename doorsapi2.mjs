@@ -962,12 +962,12 @@ export class Attachment {
         var me = this;
         return new Promise(async (resolve, reject) => {
             var formData = new FormData();
-            // todo: probar
             var fs = await me.fileStream;
             var blob = (fs instanceof Blob ? fs : new Blob([fs]));
             formData.append('attachment', blob, me.name);
             formData.append('description', me.description);
             formData.append('group', me.group);
+            // todo: probar si graba description y group
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
@@ -3354,7 +3354,8 @@ class RestClient {
                 method: method,
                 cache: 'no-cache',
                 headers: {
-                    'AuthToken': this.AuthToken
+                    'AuthToken': this.AuthToken,
+                    'Content-Type': 'multipart/form-data',
                 },
                 body: data ? data : null,
 
