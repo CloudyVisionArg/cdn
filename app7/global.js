@@ -1929,6 +1929,7 @@ function audioRecorder(pCallback) {
 
     async function recordCapacitor(){
         //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+        debugger;
         const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
         if(result.value){
             save = false;
