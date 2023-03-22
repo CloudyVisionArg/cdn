@@ -973,9 +973,7 @@ export class Attachment {
                 async res => {
                     let resJson = await res.json();
                     me.#json = resJson.InternalObject[0];
-                    me.session.loggedUser.then(
-                        res => { debugger; me.#json.AccName = res.name }
-                    )
+                    me.#json.AccName = (await me.session.loggedUser).name;
                     me.#json.File = fs;
 
                     resolve(me);
