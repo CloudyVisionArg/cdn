@@ -1929,12 +1929,10 @@ function audioRecorder(pCallback) {
 
     async function recordCapacitor(){
         //TODO: https://github.com/tchvu3/capacitor-voice-recorder
-        debugger;
         const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
         if(result.value){
             save = false;
             var now = new Date();
-            
             const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
             if(currentStatusResult.status != 'NONE'){
                 const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
@@ -2045,9 +2043,25 @@ function audioRecorder(pCallback) {
     async function saveCapacitor() {
         save = true;
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        var fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
+        fileName += "_" +  recordingData.value.msDuration;
+        Capacitor.Plugins.Filesystem.writeFile({
+            path : fileName,
+            data : recordingData.value.recordDataBase64,
+            directory: Directory.Cache,
+        }).then(
+            (res)=>{
+                getFile(res.uri).then(
+                    function (file) {
+                        att.URL = file.localURL;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        renderNewAtt(att, $attachs);
+                    },errMgr);
+            },errMgr);
         debugger;
         clearInterval(interv);
-        $saveBtnRow.hide();
+        sheet.close();
     }
 
     function saveCordova() {
