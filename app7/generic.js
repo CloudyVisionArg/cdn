@@ -1611,10 +1611,11 @@ async function saveDoc(exitOnSuccess) {
 }
 
 function saveAtt() {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
         var calls = [];
         var arrDel = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
+        var attMap = await doc2.attachments();
 
         if ($attsToSave.length == 0) {
             resolve('OK');
@@ -1623,6 +1624,7 @@ function saveAtt() {
             $attsToSave.each(function () {
                 var $this = $(this);
                 var tag = $this.closest('li.accordion-item').attr('data-attachments');
+                tag = (tag == 'all' ? null : tag);
                 var attName = $this.attr('data-att-name');
                 var attAction = $this.attr('data-att-action');
                 
@@ -1631,19 +1633,19 @@ function saveAtt() {
 
                     getFile($this.attr('data-att-url')).then(
                         function (file) {
-                            debugger;
                             var reader = new FileReader();
                             reader.onloadend = function (e) {
-                                var blobData = new Blob([this.result], { type: file.type });
-                                var formData = new FormData();
-                                // todo: como subimos el Tag?
-                                formData.append('attachment', blobData, file.name);
-                                DoorsAPI.attachmentsSave(doc_id, formData).then(
-                                    function (res) {
+                                debugger;
+                                var att = doc2.attachmentsAdd(file.name);
+                                att.fileStream = new Blob([this.result], { type: file.type });
+                                att.description = tag;
+                                att.group = tag;
+                                att.save().then(
+                                    res => {
                                         endCall(attName, 'OK');
                                     },
-                                    function (err) {
-                                        endCall(attName, 'attachmentsSave error: ' + errMsg(err));
+                                    err => {
+                                        endCall(attName, 'save error: ' + errMsg(err));
                                     }
                                 )
                             };
@@ -1657,22 +1659,19 @@ function saveAtt() {
                     )
                     
                 } else if (attAction == 'delete') {
-                    arrDel.push($this.attr('data-att-id'));
+                    debugger;
+                    var att = attMap.find(el => el.id == $this.attr('data-att-id'));
+                    beginCall(att.name, 'delete');
+                    att.delete().then(
+                        res => {
+                            endCall(att.name, 'OK');
+                        },
+                        err => {
+                            endCall(att.name, 'delete error: ' + errMsg(err));
+                        }
+                    );
                 }
             });
-
-            if (arrDel.length > 0) {
-                var sDel = arrDel.join(',');
-                beginCall(sDel, 'delete')
-                DoorsAPI.attachmentsDelete(doc_id, arrDel).then(
-                    function (res) {
-                        endCall(sDel, 'OK');
-                    },
-                    function (err) {
-                        endCall(sDel, 'attachmentsDelete error: ' + errMsg(err));
-                    }
-                );
-            }
         }
 
         function beginCall(pName, pAction) {

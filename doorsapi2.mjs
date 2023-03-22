@@ -822,6 +822,11 @@ export class Attachment {
         return this.#json.Created;
     }
 
+    // Alias de remove
+    delete() {
+        return this.remove();
+    }
+
     get description() {
         return this.#json.Description;
     }
