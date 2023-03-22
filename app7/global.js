@@ -1929,6 +1929,31 @@ function audioRecorder(pCallback) {
 
     function recordCapacitor(){
         //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+        debugger;
+        Capacitor.VoiceRecorder.startRecording()
+        .then((result) => {
+            debugger;
+            console.log("startRecording ok");
+            console.log(result.value);
+        })
+        .catch(error => {
+            debugger;
+            console.log("startRecording error");
+            console.log(error);
+        });
+
+
+        // Capacitor.VoiceRecorder.stopRecording()
+        // .then((result) => { 
+        //     debugger;
+        //     console.log("stopRecording ok");
+        //     console.log(result.value);
+        // })
+        // .catch(error => {
+        //     debugger;
+        //     console.log("stopRecording error");
+        //     console.log(error);
+        // })
     }
 
     function recordCordova(){
