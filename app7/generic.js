@@ -1541,48 +1541,31 @@ async function saveDoc(exitOnSuccess) {
         pageEl.crm.saved = true;
 
         await saveAtt();
+
+        // Evento AfterSave
+        var ev = getEvent('AfterSave');
+        if (ev) {
+            try {
+                await evalCode(ev);
+            } catch (err) {
+                console.log('Error in AfterSave: ' + errMsg(err));
+            }
+        };
+
+        saving = false;
+        app7.preloader.hide();
+        $navbar.find('.right .button').removeClass('disabled');
+        toast('Cambios guardados');
+
+        if (exitOnSuccess) {
+            f7Page.view.router.back();
+        } else {
+            await fillControls();
+        }
+        
     } catch (err) {
         errMgr(err);
     }
-
-
-
-    DoorsAPI.documentSave(docJson).then((d) => {
-        dSession.documentsGetFromId(d.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
-            doc2 = doc3;
-            doc = doc2.toJSON();
-            docJson = doc2.toJSON();
-            doc_id = doc2.id;
-
-            pageEl.crm.doc = doc2;
-            pageEl.crm.doc_id = doc2.id;
-            pageEl.crm.saved = true;
-
-            saveAtt().then(async (res) => {
-                // Evento AfterSave
-                var ev = getEvent('AfterSave');
-                if (ev) {
-                    try {
-                        await evalCode(ev);
-                    } catch (err) {
-                        console.log('Error in AfterSave: ' + errMsg(err));
-                    }
-                };
-
-                saving = false;
-                app7.preloader.hide();
-                $navbar.find('.right .button').removeClass('disabled');
-                toast('Cambios guardados');
-
-                if (exitOnSuccess) {
-                    f7Page.view.router.back();
-                } else {
-                    await fillControls();
-                }
-
-            }, errMgr);
-        }, errMgr);
-    }, errMgr);
 
     // evalCode con context de saveDoc
     async function evalCode(code) {
@@ -1641,17 +1624,11 @@ function saveAtt() {
                                 att.description = tag;
                                 att.group = tag;
                                 att.save().then(
-                                    res => {
-                                        endCall(attName, 'OK');
-                                    },
-                                    err => {
-                                        endCall(attName, 'save error: ' + errMsg(err));
-                                    }
+                                    res => { endCall(attName, 'OK') },
+                                    err => { endCall(attName, 'save error: ' + errMsg(err)) }
                                 )
                             };
                             reader.readAsArrayBuffer(file);
-                            //reader.readAsText(file);
-    
                         },
                         function (err) {
                             endCall(attName, 'file error: ' + errMsg(err));
@@ -1661,15 +1638,13 @@ function saveAtt() {
                 } else if (attAction == 'delete') {
                     debugger;
                     var att = attMap.find(el => el.id == $this.attr('data-att-id'));
-                    beginCall(att.name, 'delete');
-                    att.delete().then(
-                        res => {
-                            endCall(att.name, 'OK');
-                        },
-                        err => {
-                            endCall(att.name, 'delete error: ' + errMsg(err));
-                        }
-                    );
+                    if (att) {
+                        beginCall(att.name, 'delete');
+                        att.delete().then(
+                            res => { endCall(att.name, 'OK') },
+                            err => { endCall(att.name, 'delete error: ' + errMsg(err)) }
+                        );
+                    }
                 }
             });
         }
