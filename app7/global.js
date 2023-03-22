@@ -2047,6 +2047,7 @@ function audioRecorder(pCallback) {
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         debugger;
         clearInterval(interv);
+        $saveBtnRow.hide();
     }
 
     function saveCordova() {
