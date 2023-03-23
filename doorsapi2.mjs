@@ -1342,7 +1342,7 @@ export class Document {
             IsNew: true,
         }, this);
 
-        me.session.loggedUser.then(
+        this.session.loggedUser.then(
             res => {
                 debugger;
                 att.AccId = res.id;
