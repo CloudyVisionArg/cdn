@@ -72,7 +72,7 @@ export class Session extends doorsapi2.Session {
         super.logon(userName, password, instance).then(function (token) {
             Doors.RESTFULL.AuthToken = token;
             me.setToken(token);
-            DoorsAPI.loggedUser().then(function (user) {
+            super.loggedUser().then(function (user) {
                 window.localStorage.setItem('loggedUser', JSON.stringify(user));
             });
             DoorsAPI.currentInstance().then(function (inst) {
@@ -106,7 +106,7 @@ export class Session extends doorsapi2.Session {
 
     loggedUser(spr) {
         if (spr) {
-            return super.loggedUser;
+            return super.loggedUser();
         } else {
             return JSON.parse(window.localStorage.getItem('loggedUser'));
         }

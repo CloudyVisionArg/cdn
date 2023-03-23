@@ -362,7 +362,7 @@ export class Session {
         return this.restClient.fetch(url, 'POST', {}, '');
     };
 
-    get loggedUser() {
+    loggedUser() {
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#loggedUser) {
@@ -985,7 +985,7 @@ export class Attachment {
                     let newJson = resJson.InternalObject.find(el => el.AttId == newId);
                     if (me.name != newJson.Name) reject(new Error('Same name expected'));
                     me.#json = newJson
-                    me.#json.AccName = (await me.session.loggedUser).name;
+                    me.#json.AccName = (await me.session.loggedUser()).name;
                     me.#json.File = fs;
 
                     resolve(me);
@@ -1341,7 +1341,7 @@ export class Document {
             IsNew: true,
         }, this);
 
-        this.session.loggedUser.then(
+        this.session.loggedUser().then(
             res => {
                 att.AccId = res.id;
                 att.AccName = res.name;
