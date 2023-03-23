@@ -9,9 +9,8 @@ Cordova: https://cordova.apache.org/docs/en/latest/
 Framework7: https://framework7.io/docs/
 */
 
-var fld_id, doc_id, doc, folder, cacheDir;
-var docJson, folderJson;
-var doc2, folder2; // todo: Eliminar cdo se pueda usar doc y folder
+var fld_id, doc_id, cacheDir;
+var doc, docJson, folder, folderJson;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -74,17 +73,15 @@ if (device.platform != 'browser') {
 
 (async () => {
     try {
-        folder2 = await dSession.folder(fld_id);
-        folder = folder2.toJSON();
-        folderJson = folder2.toJSON();
+        folder = await dSession.folder(fld_id);
+        folderJson = folder.toJSON();
 
         if (doc_id) {
-            doc2 = await folder2.documents(doc_id);
+            doc = await folder.documents(doc_id);
         } else {
-            doc2 = await folder2.documentsNew();
+            doc = await folder.documentsNew();
         }
-        doc = doc2.toJSON();
-        docJson = doc2.toJSON();
+        docJson = doc.toJSON();
 
         loadControls();
 
@@ -94,13 +91,13 @@ if (device.platform != 'browser') {
 })();
 
 async function loadControls() {
-    var cf = objPropCI(doc2.tags, 'controlsFolder');
+    var cf = objPropCI(doc.tags, 'controlsFolder');
 
     try {
         if (cf) {
-            controlsFolder = await folder2.app.folders(cf);
+            controlsFolder = await folder.app.folders(cf);
         } else {
-            controlsFolder = await folder2.folders('controls');
+            controlsFolder = await folder.folders('controls');
         }
         controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
@@ -112,7 +109,7 @@ async function loadControls() {
 }
 
 function getControlsRights(pControls) {
-    var cr = objPropCI(doc2.tags, 'controlsRights');
+    var cr = objPropCI(doc.tags, 'controlsRights');
     if (cr) {
         try {
             controlsRights = $.parseXML(cr);
@@ -250,7 +247,7 @@ async function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        for (let [key, field] of doc2.fields()) {
+        for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
             }
@@ -276,7 +273,7 @@ async function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        for (let [key, field] of doc2.fields()) {
+        for (let [key, field] of doc.fields()) {
             if (!field.custom && field.headerTable) {
                 getDefaultControl(field).appendTo($ul);
             }
@@ -416,12 +413,12 @@ async function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            textField = doc2.fields(tf);
+            textField = doc.fields(tf);
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            valueField = doc2.fields(vf);
+            valueField = doc.fields(vf);
         };
 
 
@@ -715,7 +712,7 @@ async function renderControls(pCont, pParent) {
 
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
-                rootFolder: folder2.rootFolderId,
+                rootFolder: folder.rootFolderId,
                 searchFields: ctl.attr('searchfields'),
                 extraFields: ctl.attr('returnfields'),
                 formula: ctl.attr('searchfilter'),
@@ -946,7 +943,7 @@ function pageInit(e, page) {
             );
 
         } else {
-            folder2.app.folder($el.attr('data-fill-folder')).then(
+            folder.app.folder($el.attr('data-fill-folder')).then(
                 function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
@@ -1008,9 +1005,9 @@ function $get(pSelector) {
 }
 
 async function fillControls() {
-    if (!doc2.isNew) {
-        var title = doc2.fields('subject').value;
-        if (!title) title = 'Doc #' + doc2.id;
+    if (!doc.isNew) {
+        var title = doc.fields('subject').value;
+        if (!title) title = 'Doc #' + doc.id;
         $navbar.find('.title').html(title);
 
         var $docLog = $get('[data-doclog]');
@@ -1035,19 +1032,19 @@ async function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            textField = doc2.fields(tf);
+            textField = doc.fields(tf);
             text = textField ? textField.value : null;
         };
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            valueField = doc2.fields(vf);
+            valueField = doc.fields(vf);
             value = valueField ? valueField.value : null;
         };
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            xmlField = doc2.fields(xf);
+            xmlField = doc.fields(xf);
             xml = xmlField ? xmlField.value : null;
         };
 
@@ -1186,7 +1183,7 @@ async function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         var field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, doc2.fields(field).value);
+                            pCont.attr(pAttr, doc.fields(field).value);
                         }
                     }
                 });
@@ -1225,7 +1222,7 @@ async function fillAttachments(pEl) {
     var tag = pEl.attr('data-attachments').toLowerCase();
 
     if (doc_id) {
-        var atts = await doc2.attachments();
+        var atts = await doc.attachments();
         for (let [key, att] of atts) {
             //if (tag == 'all' || (att.group && att.group.toLowerCase() == tag)) { // todo: tiene q quedar esta cdo este group
             if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
@@ -1271,7 +1268,7 @@ async function downloadAtt(e) {
         app7.preloader.show();
 
         try {
-            var att = (await doc2.attachments()).find(el => el.id == attId);
+            var att = (await doc.attachments()).find(el => el.id == attId);
             var fs = await att.fileStream;
 
             app7.preloader.hide();
@@ -1473,7 +1470,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-textfield'));
+        var field = doc.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
@@ -1516,7 +1513,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-valuefield'));
+        var field = doc.fields($el.attr('data-valuefield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
@@ -1539,7 +1536,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-xmlfield'));
+        var field = doc.fields($el.attr('data-xmlfield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
@@ -1558,13 +1555,12 @@ async function saveDoc(exitOnSuccess) {
             await evalCode(ev);
         };
 
-        await doc2.save();
-        doc = doc2.toJSON();
-        docJson = doc2.toJSON();
-        doc_id = doc2.id;
+        await doc.save();
+        docJson = doc.toJSON();
+        doc_id = doc.id;
 
-        pageEl.crm.doc = doc2;
-        pageEl.crm.doc_id = doc2.id;
+        pageEl.crm.doc = doc;
+        pageEl.crm.doc_id = doc.id;
         pageEl.crm.saved = true;
 
         try {
@@ -1628,7 +1624,7 @@ function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
-        var attMap = await doc2.attachments();
+        var attMap = await doc.attachments();
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
             var $this = $($attsToSave[loop.iteration()]);
@@ -1648,7 +1644,7 @@ function saveAtt() {
                 var reader = new FileReader();
                 reader.onloadend = async function (e) {
                     try {
-                        var att = doc2.attachmentsAdd(file.name);
+                        var att = doc.attachmentsAdd(file.name);
                         att.fileStream = new Blob([this.result], { type: file.type });
                         att.description = tag;
                         att.group = tag;
