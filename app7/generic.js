@@ -1627,7 +1627,6 @@ function saveAtt() {
         var errors = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
         var attMap = await doc2.attachments();
-        debugger;
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
             debugger;
@@ -1640,7 +1639,6 @@ function saveAtt() {
             if (attAction == 'save') {
                 var file;
                 var attUrl = $this.attr('data-att-url');
-                debugger;
                 if (attUrl) {
                     file = await getFile($this.attr('data-att-url'));
                 } else {
@@ -1663,13 +1661,11 @@ function saveAtt() {
                             error: err,
                         });
                     }
-                    debugger;
                     loop.next();
                 };
                 reader.readAsArrayBuffer(file);
 
             } else if (attAction == 'delete') {
-                debugger;
                 var att = attMap.find(el => el.id == $this.attr('data-att-id'));
                 if (att) {
                     try {
