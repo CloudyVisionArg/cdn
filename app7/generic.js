@@ -1650,6 +1650,7 @@ function saveAtt() {
                         att.fileStream = new Blob([this.result], { type: file.type });
                         att.description = tag;
                         att.group = tag;
+                        hola();
                         await att.save();
 
                     } catch (err) {
