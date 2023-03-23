@@ -1270,7 +1270,6 @@ async function downloadAtt(e) {
     } else {
         app7.preloader.show();
 
-        debugger;
         try {
             var att = (await doc2.attachments()).find(el => el.id == attId);
             var fs = await att.fileStream;
