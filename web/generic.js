@@ -415,7 +415,7 @@ async function renderPage() {
     $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
     $delBtn.click(function () {
         if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
-            DoorsAPI.documentDelete(fld_id, doc_id).then(
+            doc.delete().then(
                 function (res) {
                     toast('El documento ha sido enviado a la papelera');
                     exitForm();
