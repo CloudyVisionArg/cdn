@@ -1257,8 +1257,7 @@ async function fillAttachments(pEl) {
     }
 }
 
-// todo doc2 folder2 seguir de aca
-function downloadAtt(e) {
+async function downloadAtt(e) {
     var $att = $(this);
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
@@ -1271,47 +1270,49 @@ function downloadAtt(e) {
     } else {
         app7.preloader.show();
 
-        DoorsAPI.attachmentsGetById(doc_id, attId).then(
-            function (res) {
-                app7.preloader.hide();
+        debugger;
+        try {
+            var att = (await doc.attachments()).find(el => el.id = attId);
+            var fs = await att.fileStream;
 
-                var blob = new Blob([res]);
+            app7.preloader.hide();
 
-                if (device.platform == 'browser') {
-                    saveAs(blob, attName);
+            var blob = new Blob([res]);
 
-                } else {
-                    cacheDir.getFile(attName, { create: true },
-                        function (file) {
-                            file.createWriter(
-                                function (fileWriter) {
-                                    fileWriter.onwriteend = function (e) {
-                                        $att.attr('data-att-url', file.toURL());
-                                        openAtt(file.toURL());
-                                    };
+            if (device.platform == 'browser') {
+                saveAs(blob, attName);
 
-                                    fileWriter.onerror = function (err) {
-                                        console.error('fileWriter error: ' + errMsg(err));
-                                    };
+            } else {
+                cacheDir.getFile(attName, { create: true },
+                    function (file) {
+                        file.createWriter(
+                            function (fileWriter) {
+                                fileWriter.onwriteend = function (e) {
+                                    $att.attr('data-att-url', file.toURL());
+                                    openAtt(file.toURL());
+                                };
 
-                                    fileWriter.write(blob);
-                                },
-                                function (err) {
-                                    logAndToast('createWriter error: ' + errMsg(err));
-                                }
-                            )
-                        },
-                        function (err) {
-                            logAndToast('getFile error: ' + errMsg(err));
-                        }
-                    )
-                }
-            },
-            function (err) {
-                app7.preloader.hide();
-                logAndToast('attachmentsGetById error: ' + errMsg(err))
+                                fileWriter.onerror = function (err) {
+                                    console.error('fileWriter error: ' + errMsg(err));
+                                };
+
+                                fileWriter.write(blob);
+                            },
+                            function (err) {
+                                logAndToast('createWriter error: ' + errMsg(err));
+                            }
+                        )
+                    },
+                    function (err) {
+                        logAndToast('getFile error: ' + errMsg(err));
+                    }
+                )
             }
-        )
+
+        } catch(err) {
+            app7.preloader.hide();
+            logAndToast('download att error: ' + errMsg(err))
+        }
     }
 }
 
