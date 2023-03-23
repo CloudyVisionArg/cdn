@@ -1403,7 +1403,6 @@ function addAtt(e) {
             $file.change(function (e) {
                 let inp = e.target;
                 if (inp.files.length > 0) {
-                    debugger;
                     var file = inp.files[0];
                     att.File = file;
                     att.Name = file.name;
