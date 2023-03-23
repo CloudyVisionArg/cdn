@@ -134,7 +134,6 @@ function getToken() {
 }
 
 async function loadControls() {
-    debugger;
 	var cf = objPropCI(doc.tags, 'controlsFolder');
 	
     try {
@@ -344,10 +343,14 @@ async function renderPage() {
         // CON CONTROLES
 
         // Evento BeforeRender
-        debugger; // probar q pasa c error aca
         var ev = getEvent('BeforeRender');
         if (ev) {
-            await evalCode(ev);
+            try {
+                await evalCode(ev);
+            } catch(err) {
+                console.error(err);
+                toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+            }
         };
 
         // Membrete
