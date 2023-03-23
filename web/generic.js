@@ -134,6 +134,7 @@ function getToken() {
 }
 
 async function loadControls() {
+    debugger;
 	var cf = objPropCI(doc.tags, 'controlsFolder');
 	
     try {
@@ -190,8 +191,6 @@ function getControlsRights(pControls) {
 }
 
 async function renderPage() {
-    debugger;
-    
     var $body = $('body');
     var $d = $(document);
 
