@@ -1405,8 +1405,8 @@ function addAtt(e) {
                 if (inp.files.length > 0) {
                     debugger;
                     var file = inp.files[0];
-                    att.URL = file.localURL;
-                    att.Name = res.name;
+                    att.File = file;
+                    att.Name = file.name;
                     att.Size = file.size;
                     renderNewAtt(att, $attachs);
                 }
@@ -1454,7 +1454,12 @@ function renderNewAtt(pAtt, pCont) {
     pAtt.AccName = dSession.loggedUser()['Name'];
     var $li = getAttachment(pAtt);
     var $att = $li.find('a.item-link');
-    $att.attr('data-att-url', pAtt.URL);
+    if (pAtt.URL) {
+        $att.attr('data-att-url', pAtt.URL);
+    } else if (pAtt.file) {
+        debugger;
+        $att[0]._file = pAtt.file;
+    }
     $att.attr('data-att-action', 'save');
     $li.prependTo(pCont.find('ul'));
 }
@@ -1635,7 +1640,14 @@ function saveAtt() {
             var attAction = $this.attr('data-att-action');
 
             if (attAction == 'save') {
-                var file = await getFile($this.attr('data-att-url'));
+                var file;
+                var attUrl = $this.attr('data-att-url');
+                debugger;
+                if (attUrl) {
+                    file = await getFile($this.attr('data-att-url'));
+                } else {
+                    file = $this[0]._file;
+                }
                 var reader = new FileReader();
                 reader.onloadend = async function (e) {
                     try {
