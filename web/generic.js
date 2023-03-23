@@ -141,7 +141,7 @@ async function loadControls() {
 	    if (cf) {
 		    controlsFolder = await folder.app.folders(cf);
     	} else {
-            controlsFolder = await folder2.folders('controls');
+            controlsFolder = await folder.folders('controls');
         }
         controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
