@@ -983,6 +983,7 @@ export class Attachment {
                     let resJson = await res.json();
                     let newId = Math.max(...resJson.InternalObject.map(el => el.AttId));
                     me.#json = resJson.InternalObject.find(el => el.AttId == newId);
+                    debugger; // chequear el nombre
                     me.#json.AccName = (await me.session.loggedUser).name;
                     me.#json.File = fs;
 

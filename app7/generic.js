@@ -298,13 +298,10 @@ async function renderPage() {
         // CON CONTROLES
 
         // Evento BeforeRender
+        debugger; // probar q pasa c error aca
         var ev = getEvent('BeforeRender');
         if (ev) {
-            try {
-                await evalCode(ev);
-            } catch (err) {
-                console.log('Error in BeforeRender: ' + errMsg(err));
-            }
+            await evalCode(ev);
         };
 
         // Membrete
@@ -944,7 +941,7 @@ function pageInit(e, page) {
             );
 
         } else {
-            folder2.app.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
+            folder2.app.folder($el.attr('data-fill-folder')).then(
                 function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
@@ -1079,6 +1076,7 @@ async function fillControls() {
                 }
 
             } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                debugger;
                 setDTPickerVal($el, text);
 
             } else if (type == 'checkbox') {
@@ -1483,6 +1481,7 @@ async function saveDoc(exitOnSuccess) {
                     };
 
                 } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                    debugger;
                     field.value = getDTPickerVal($el);
 
                 } else if (type == 'checkbox') {

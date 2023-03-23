@@ -93,7 +93,15 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
         folderJson = folder.toJSON();
         folder.form; // Para q cargue el form
         if (folder.type == 1) {
-            getDoc();
+            if (doc_id) {
+                doc = await folder.documents(doc_id);
+            } else {
+                doc = await folder.documentsNew();
+            }
+            docJson = doc.toJSON();
+
+            loadControls();
+
         } else {
             end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
         }
@@ -125,55 +133,22 @@ function getToken() {
     });
 }
 
-async function getDoc() {
-	if (doc_id) {
-        doc = await folder.documents(doc_id);
-    } else {
-        doc = await folder.documentsNew();
-    }
-    docJson = doc.toJSON();
-    getControlsFolder();
-}
-
-function getControlsFolder() {
+async function loadControls() {
 	var cf = objPropCI(doc.tags, 'controlsFolder');
 	
-	if (cf) {
-		DoorsAPI.foldersGetByPath(folder.app.rootFolderId, cf).then(
-			function (res) {
-				controlsFolder = res;
-				loadControls();
-			},
-			function (err) {
-				renderPage(); // Dibuja igual, sin controles
-			}
-		);
-		
-	} else {
-		DoorsAPI.foldersGetByName(fld_id, 'controls').then(
-			function (res) {
-				controlsFolder = res;
-				loadControls();
-			},
-			function (err) {
-				renderPage(); // Dibuja igual, sin controles
-			}
-		);
-	};
-}
+    try {
+	    if (cf) {
+		    controlsFolder = await folder.app.folders(cf);
+    	} else {
+            controlsFolder = await folder2.folders('controls');
+        }
+        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+        getControlsRights(controls);
+        renderPage();
 
-function loadControls() {
-	DoorsAPI.folderSearch(controlsFolder['FldId'], '', '', 'parent, order, column', 0, null, 0).then(
-		function (res) {
-			controls = res;
-			getControlsRights(controls);
-			renderPage();
-		},
-		function (err) {
-			console.log(pErr);
-			renderPage(); // Dibuja igual, sin controles
-		}
-	)
+    } catch(err) {
+        renderPage(); // Dibuja igual, sin controles
+    }
 }
 
 function getControlsRights(pControls) {
@@ -214,7 +189,7 @@ function getControlsRights(pControls) {
 	})
 }
 
-function renderPage() {
+async function renderPage() {
     var $body = $('body');
     var $d = $(document);
 
@@ -368,18 +343,15 @@ function renderPage() {
         // CON CONTROLES
 
         // Evento BeforeRender
+        debugger; // probar q pasa c error aca
         var ev = getEvent('BeforeRender');
         if (ev) {
-            try {
-                eval(ev);
-            } catch (err) {
-                console.log('Error in BeforeRender: ' + errMsg(err));
-            }
+            await evalCode(ev);
         };
 
         // Membrete
 
-        renderControls($cont, '[NULL]');
+        await renderControls($cont, '[NULL]');
 
         // TABS
 
@@ -417,7 +389,7 @@ function renderPage() {
                     id: tab['NAME'],
                 }).appendTo($tabCont);
 
-                renderControls($tab, tab['NAME']);
+                await renderControls($tab, tab['NAME']);
             }
         }
     };
@@ -476,8 +448,8 @@ function renderPage() {
             );
 
         } else {
-            getFolder($el.attr('data-fill-folder'), folder.app.rootFolderId).then(
-                function (res) {
+            folder.app.folder($el.attr('data-fill-folder')).then(
+                function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
                     var arrFields = $el.attr('data-fill-fields').split(',');
@@ -486,9 +458,9 @@ function renderPage() {
                     if (arrFields.length > 0) dataFields = arrFields.join(',');
 
                     fillSelect($el,
-                        DoorsAPI.folderSearch(res['FldId'], $el.attr('data-fill-fields'),
-                            $el.attr('data-fill-formula'), $el.attr('data-fill-order')
-                        ),
+                        fld.search({ fields: $el.attr('data-fill-fields'),
+                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
+                        }),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
                     );
                 },
@@ -511,6 +483,13 @@ function renderPage() {
             preloader.hide();
         }
     }, 0);
+
+    // evalCode con context de renderPage
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getRow(pRow, pCont, pCol) {
@@ -599,7 +578,7 @@ function getDefaultControl(pField) {
     return $ret;
 }
 
-function renderControls(pCont, pParent) {
+async function renderControls(pCont, pParent) {
     var $row, $col, ctl, type, $this, domAttr, label, $input, aux, bsctl;
     var tf, textField, vf, valueField;
 
@@ -637,17 +616,11 @@ function renderControls(pCont, pParent) {
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
             var textField = doc.fields(tf);
-            if (!textField) {
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
             var valueField = doc.fields(vf);
-            if (!valueField) {
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
         };
 
         $row = getRow($row, pCont, ctl['COLUMN']);
@@ -863,7 +836,7 @@ function renderControls(pCont, pParent) {
 
             bsctl = $this.find('.collapse')[0].bscollapse;
 
-            renderControls($this.find('fieldset'), ctl['NAME']);
+            await renderControls($this.find('fieldset'), ctl['NAME']);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('fieldset').attr('disabled', 'disabled');
@@ -1040,7 +1013,7 @@ function renderControls(pCont, pParent) {
         if ($this) $this.appendTo($col);
 
         try {
-            if (ctl['SCRIPTBEFORERENDER']) eval(ctl['SCRIPTBEFORERENDER']);
+            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER']);
         } catch (err) {
             console.log('Error in ' + ctl['NAME'] + '.SCRIPTBEFORERENDER: ' + errMsg(err));
         }
@@ -1060,6 +1033,13 @@ function renderControls(pCont, pParent) {
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
     }
+
+    // evalCode con context de renderControls
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }    
 }
 
 async function fillControls() {
