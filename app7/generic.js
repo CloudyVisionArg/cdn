@@ -1392,22 +1392,47 @@ function addAtt(e) {
         );
         
     } else if (action == 'doc') {
-        chooser.getFileMetadata().then(
-            function (res) {
-                if (res) {
-                    getFile(res.uri).then(
-                        function (file) {
-                            att.URL = file.localURL;
-                            att.Name = res.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    )
+        if (device.platform == 'browser') {
+
+            // El input para leer archivos
+            let $file = $('<input/>', {
+                type: 'file',
+                style: 'display: none;'
+            }).appendTo(document.body);
+
+            $file.change(function (e) {
+                let inp = e.target;
+                if (inp.files.length > 0) {
+                    debugger;
+                    var file = inp.files[0];
+                    att.URL = file.localURL;
+                    att.Name = res.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
                 }
-            },
-            errMgr
-        )
+                $file.remove();
+            })
+
+            $file.click();
+    
+        } else {
+            chooser.getFileMetadata().then(
+                function (res) {
+                    if (res) {
+                        getFile(res.uri).then(
+                            function (file) {
+                                att.URL = file.localURL;
+                                att.Name = res.name;
+                                att.Size = file.size;
+                                renderNewAtt(att, $attachs);
+                            },
+                            errMgr
+                        )
+                    }
+                },
+                errMgr
+            )
+        }
         
     } else if (action == 'audio') {
         audioRecorder(function (file) {
