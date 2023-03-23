@@ -1456,7 +1456,7 @@ function renderNewAtt(pAtt, pCont) {
     debugger;
     if (pAtt.URL) {
         $att.attr('data-att-url', pAtt.URL);
-    } else if (pAtt.file) {
+    } else if (pAtt.File) {
         $att[0]._file = pAtt.File;
     }
     $att.attr('data-att-action', 'save');
