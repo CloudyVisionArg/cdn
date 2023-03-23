@@ -2890,7 +2890,8 @@ export class Utilities {
     isoDate(date) {
         var dt = this.cDate(date);
         if (dt) {
-            return dt.toISOString().substring(0, 10);
+            return dt.getFullYear() + '-' + this.lZeros(dt.getMonth() + 1, 2) + '-' +
+                this.lZeros(dt.getDate(), 2);
         } else {
             return null;
         }
