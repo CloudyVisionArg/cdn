@@ -51,6 +51,7 @@ arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' 
 arrScriptsPos.push({ id: 'lib-filesaver' });
 
 (async () => {
+    debugger;
     await include(arrScriptsPre);
     preloader.show();
     await include(arrScripts);
