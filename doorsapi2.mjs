@@ -982,8 +982,10 @@ export class Attachment {
                 async res => {
                     let resJson = await res.json();
                     let newId = Math.max(...resJson.InternalObject.map(el => el.AttId));
-                    me.#json = resJson.InternalObject.find(el => el.AttId == newId);
+                    let newJson = resJson.InternalObject.find(el => el.AttId == newId);
                     debugger; // chequear el nombre
+                    if (me.name != resJson.Name) throw new Error('Same name expected');
+                    me.#json = newJson
                     me.#json.AccName = (await me.session.loggedUser).name;
                     me.#json.File = fs;
 
