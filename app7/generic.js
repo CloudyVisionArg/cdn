@@ -1564,11 +1564,16 @@ async function saveDoc(exitOnSuccess) {
         pageEl.crm.doc_id = doc2.id;
         pageEl.crm.saved = true;
 
-        var attErrs;
+        var attErr;
         saveAtt().then(
             res => {},
-            err => { console.log(attErrs = err) }
+            err => {
+                attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+                console.log(attErr);
+                console.log(err);
+            }
         );
+        debugger;
 
         // Evento AfterSave
         var ev = getEvent('AfterSave');
@@ -1580,8 +1585,8 @@ async function saveDoc(exitOnSuccess) {
         app7.preloader.hide();
         $navbar.find('.right .button').removeClass('disabled');
 
-        if (attErrs) {
-            toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion');
+        if (attErr) {
+            toast(attErr);
         } else {
             toast('Cambios guardados');
         }
