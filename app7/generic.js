@@ -1277,7 +1277,7 @@ async function downloadAtt(e) {
 
             app7.preloader.hide();
 
-            var blob = new Blob([res]);
+            var blob = new Blob([fs]);
 
             if (device.platform == 'browser') {
                 saveAs(blob, attName);
