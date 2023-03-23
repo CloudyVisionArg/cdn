@@ -1628,6 +1628,7 @@ function saveAtt() {
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
         var attMap = await doc2.attachments();
 
+        debugger;
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
             var $this = $($attsToSave[loop.iteration()]);
             var tag = $this.closest('li.accordion-item').attr('data-attachments');
