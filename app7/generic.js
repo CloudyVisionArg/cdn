@@ -1629,7 +1629,6 @@ function saveAtt() {
         var attMap = await doc2.attachments();
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
-            debugger;
             var $this = $($attsToSave[loop.iteration()]);
             var tag = $this.closest('li.accordion-item').attr('data-attachments');
             tag = (tag == 'all' ? null : tag);
@@ -1651,7 +1650,6 @@ function saveAtt() {
                         att.fileStream = new Blob([this.result], { type: file.type });
                         att.description = tag;
                         att.group = tag;
-                        debugger;
                         await att.save();
 
                     } catch (err) {
