@@ -1458,7 +1458,7 @@ function renderNewAtt(pAtt, pCont) {
         $att.attr('data-att-url', pAtt.URL);
     } else if (pAtt.file) {
         debugger;
-        $att[0]._file = pAtt.file;
+        $att[0]._file = pAtt.File;
     }
     $att.attr('data-att-action', 'save');
     $li.prependTo(pCont.find('ul'));
