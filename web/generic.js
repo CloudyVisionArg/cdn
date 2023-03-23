@@ -1079,40 +1079,23 @@ async function fillControls() {
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
             textField = doc.fields(tf);
-            if (textField) {
-                text = textField.value;
-            } else {
-                text = null;
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            text = textField ? textField.value : null;
         };
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
             valueField = doc.fields(vf);
-            if (valueField) {
-                value = valueField.value;
-            } else {
-                value = null;
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
+            value = valueField ? valueField.value : null;
         };
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
             xmlField = doc.fields(xf);
-            if (xmlField) {
-                xml = xmlField.value;
-            } else {
-                xml = null;
-                console.log('No se encontro el campo ' + xf.toUpperCase());
-            }
+            xml = xmlField ? xmlField.value : null;
         };
 
         if (el.tagName == 'INPUT') {
-            
             let type = $el.attr('type').toLowerCase();
-
             if (type == 'text') {
                 var format = $el.attr('data-numeral');
                 if (format) {
@@ -1180,8 +1163,9 @@ async function fillControls() {
         }
     });
 
+    // todo: todo esto hay q reemplazarlo segun el nuevo autocomplete
+    /*
     $('[data-autocomplete]').each(function (ix, el) {
-        // todo: todo esto hay q reemplazarlo segun el nuevo autocomplete
         var $el = $(el);
         var ac = app7.autocomplete.get($el);
         var $li = $el.closest('li');
@@ -1230,6 +1214,7 @@ async function fillControls() {
         }
         //ac.emit('change', ac.value);
     })
+    */
 
     // Inicializa los chats de Whatsapp
     let $wappChats = $('div.wapp-chat');
@@ -1267,12 +1252,19 @@ async function fillControls() {
     let ev = getEvent('AfterRender');
     if (ev) {
         try {
-            eval(ev);
+            evalCode(ev);
         } catch (err) {
-            console.log('Error in AfterRender: ' + errMsg(err));
+            console.error(err);
+            toast('AfterRender error: ' + dSession.utils.errMsg(err));
         }
     };
 
+    // evalCode con context de fillControls
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getEvent(pEvent) {
