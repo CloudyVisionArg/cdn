@@ -980,8 +980,10 @@ export class Attachment {
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
+                    debugger;
                     let resJson = await res.json();
-                    me.#json = resJson.InternalObject[0];
+                    let newId = Math.max(...resJson.InternalObject.map(el => el.AttId));
+                    me.#json = resJson.InternalObject.find(el => el.AttId == newId);
                     me.#json.AccName = (await me.session.loggedUser).name;
                     me.#json.File = fs;
 
