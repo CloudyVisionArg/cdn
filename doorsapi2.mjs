@@ -1342,6 +1342,14 @@ export class Document {
             IsNew: true,
         }, this);
 
+        me.session.loggedUser.then(
+            res => {
+                debugger;
+                att.AccId = res.id;
+                att.AccName = res.name;
+            }
+        )
+        
         this.#attachmentsMap.set(name, att);
         return att;
     }
