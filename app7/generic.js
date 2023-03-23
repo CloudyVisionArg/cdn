@@ -1548,18 +1548,13 @@ async function saveDoc(exitOnSuccess) {
         }
     });
 
-    // Evento BeforeSave
-    // todo: el error aca deberia cancelar la operacion
-    var ev = getEvent('BeforeSave');
-    if (ev) {
-        try {
-            await evalCode(ev);
-        } catch (err) {
-            console.log('Error in BeforeSave: ' + errMsg(err));
-        }
-    };
-
     try {
+        // Evento BeforeSave
+        var ev = getEvent('BeforeSave');
+        if (ev) {
+            await evalCode(ev);
+        };
+
         await doc2.save();
         doc = doc2.toJSON();
         docJson = doc2.toJSON();
@@ -1569,22 +1564,27 @@ async function saveDoc(exitOnSuccess) {
         pageEl.crm.doc_id = doc2.id;
         pageEl.crm.saved = true;
 
-        await saveAtt();
+        var attErrs;
+        saveAtt().then(
+            res => {},
+            err => { console.log(attErrs = err) }
+        );
 
         // Evento AfterSave
         var ev = getEvent('AfterSave');
         if (ev) {
-            try {
-                await evalCode(ev);
-            } catch (err) {
-                console.log('Error in AfterSave: ' + errMsg(err));
-            }
+            await evalCode(ev);
         };
 
         saving = false;
         app7.preloader.hide();
         $navbar.find('.right .button').removeClass('disabled');
-        toast('Cambios guardados');
+
+        if (attErrs) {
+            toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion');
+        } else {
+            toast('Cambios guardados');
+        }
 
         if (exitOnSuccess) {
             f7Page.view.router.back();
