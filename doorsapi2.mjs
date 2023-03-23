@@ -985,7 +985,7 @@ export class Attachment {
                     let newJson = resJson.InternalObject.find(el => el.AttId == newId);
                     if (me.name != newJson.Name) reject(new Error('Same name expected'));
                     me.#json = newJson
-                    me.#json.AccName = (await me.session.loggedUser()).name;
+                    me.#json.AccName = (await me.session.loggedUser(true)).name;
                     me.#json.File = fs;
 
                     resolve(me);
@@ -1341,8 +1341,8 @@ export class Document {
             IsNew: true,
         }, this);
 
-        debugger;
-        this.session.loggedUser().then(
+        // Le paso true para q si es la app7-session llame a super
+        this.session.loggedUser(true).then(
             res => {
                 att.AccId = res.id;
                 att.AccName = res.name;
