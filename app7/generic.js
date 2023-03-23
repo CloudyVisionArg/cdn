@@ -1661,7 +1661,7 @@ function saveAtt() {
                         errors.push({
                             file: attName,
                             action: 'save',
-                            error: err,
+                            error: dSession.utils.errMsg(err),
                         });
                     }
                     loop.next();
