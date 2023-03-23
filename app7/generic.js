@@ -1680,6 +1680,7 @@ function saveAtt() {
                 loop.next();
             }
         }, () => {
+            debugger;
             if (errors.length == 0) {
                 resolve(true);
             } else {
