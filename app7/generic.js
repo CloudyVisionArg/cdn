@@ -1579,7 +1579,7 @@ async function saveDoc(exitOnSuccess) {
                 await evalCode(ev);
             };
         } catch (err) {
-            var asErr = 'Error en AfterSave: ' + dSession.utils.errMsg(err);
+            var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
             console.error(err);
         }
 
@@ -1616,17 +1616,7 @@ async function saveDoc(exitOnSuccess) {
         saving = false;
         app7.preloader.hide();
         $navbar.find('.right .button').removeClass('disabled');
-        if (Array.isArray(pErr)) {
-            if (pErr.length == 1) {
-                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result, 5000);
-
-            } else {
-                // Error de saveAtt
-                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion', 5000);
-            }
-        } else {
-            toast(errMsg(pErr).replaceAll('\r\n', '<br>'), 5000);
-        }
+        toast(dSession.utils.errMsg(pErr).replaceAll('\r\n', '<br>'), 5000);
         console.error(pErr);
     }
 }
