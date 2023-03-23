@@ -1019,7 +1019,8 @@ async function renderControls(pCont, pParent) {
         try {
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER']);
         } catch (err) {
-            console.log('Error in ' + ctl['NAME'] + '.SCRIPTBEFORERENDER: ' + errMsg(err));
+            console.error(err);
+            toast('Control ' + ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
         }
         /*
         Objetos disponibles en este script:
