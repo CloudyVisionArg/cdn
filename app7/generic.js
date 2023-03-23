@@ -1453,10 +1453,10 @@ function renderNewAtt(pAtt, pCont) {
     pAtt.AccName = dSession.loggedUser()['Name'];
     var $li = getAttachment(pAtt);
     var $att = $li.find('a.item-link');
+    debugger;
     if (pAtt.URL) {
         $att.attr('data-att-url', pAtt.URL);
     } else if (pAtt.file) {
-        debugger;
         $att[0]._file = pAtt.File;
     }
     $att.attr('data-att-action', 'save');
