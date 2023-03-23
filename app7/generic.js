@@ -1676,8 +1676,8 @@ function saveAtt() {
                             error: err,
                         });
                     }
-                    loop.next();
                 }
+                loop.next();
             }
         }, () => {
             if (errors.length == 0) {
