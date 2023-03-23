@@ -1076,7 +1076,6 @@ async function fillControls() {
                 }
 
             } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                debugger;
                 setDTPickerVal($el, text);
 
             } else if (type == 'checkbox') {
@@ -1481,7 +1480,6 @@ async function saveDoc(exitOnSuccess) {
                     };
 
                 } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                    debugger;
                     field.value = getDTPickerVal($el);
 
                 } else if (type == 'checkbox') {
