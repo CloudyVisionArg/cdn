@@ -291,6 +291,10 @@ export class Session {
         return this.documentsGetFromId(docId);
     }
 
+    /**
+     * 
+     * @returns {Promise<Document>}
+     */
     documentsGetFromId(docId) {
         var me = this;
         return new Promise((resolve, reject) => {

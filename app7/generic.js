@@ -1,3 +1,4 @@
+
 //todo: agregar soporte await a todos los eval
 /*
 app7-generic
@@ -1595,77 +1596,67 @@ async function saveDoc(exitOnSuccess) {
 
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
-        var calls = [];
-        var arrDel = [];
+        var errors = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
         var attMap = await doc2.attachments();
         debugger;
 
-        if ($attsToSave.length == 0) {
-            resolve('OK');
-            
-        } else {
-            //todo: cambiar x un async loop
-            $attsToSave.each(function () {
-                debugger;
-                var $this = $(this);
-                var tag = $this.closest('li.accordion-item').attr('data-attachments');
-                tag = (tag == 'all' ? null : tag);
-                var attName = $this.attr('data-att-name');
-                var attAction = $this.attr('data-att-action');
-                
-                if (attAction == 'save') {
-                    beginCall(attName, attAction);
+        dSession.utils.asyncLoop($attsToSave.length, async loop => {
+            debugger;
+            var $this = $attsToSave[loop.iteration];
+            var tag = $this.closest('li.accordion-item').attr('data-attachments');
+            tag = (tag == 'all' ? null : tag);
+            var attName = $this.attr('data-att-name');
+            var attAction = $this.attr('data-att-action');
 
-                    getFile($this.attr('data-att-url')).then(
-                        function (file) {
-                            var reader = new FileReader();
-                            reader.onloadend = function (e) {
-                                debugger;
-                                var att = doc2.attachmentsAdd(file.name);
-                                att.fileStream = new Blob([this.result], { type: file.type });
-                                att.description = tag;
-                                att.group = tag;
-                                att.save().then(
-                                    res => { endCall(attName, 'OK') },
-                                    err => { endCall(attName, 'save error: ' + errMsg(err)) }
-                                )
-                            };
-                            reader.readAsArrayBuffer(file);
-                        },
-                        function (err) {
-                            endCall(attName, 'file error: ' + errMsg(err));
-                        }
-                    )
-                    
-                } else if (attAction == 'delete') {
-                    debugger;
-                    var att = attMap.find(el => el.id == $this.attr('data-att-id'));
-                    if (att) {
-                        beginCall(att.name, 'delete');
-                        att.delete().then(
-                            res => { endCall(att.name, 'OK') },
-                            err => { endCall(att.name, 'delete error: ' + errMsg(err)) }
-                        );
+            if (attAction == 'save') {
+                var file = await getFile($this.attr('data-att-url'));
+                var reader = new FileReader();
+                reader.onloadend = async function (e) {
+                    try {
+                        var att = doc2.attachmentsAdd(file.name);
+                        att.fileStream = new Blob([this.result], { type: file.type });
+                        att.description = tag;
+                        att.group = tag;
+                        debugger;
+                        await att.save();
+
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'save',
+                            error: err,
+                        });
                     }
-                }
-            });
-        }
+                    debugger;
+                    loop.next();
+                };
+                reader.readAsArrayBuffer(file);
 
-        function beginCall(pName, pAction) {
-            calls.push({ name: pName, action: pAction, result: 'pending' });
-        }
-        
-        function endCall(pName, pResult) {
-            calls.find(el => el.name == pName && el.result == 'pending').result = pResult;
-            if (!calls.find(el => el.result == 'pending')) {
-                if (calls.find(el => el.result != 'OK')) {
-                    reject(calls.filter(el => el.result != 'OK'));
-                } else {
-                    resolve('OK');
+            } else if (attAction == 'delete') {
+                debugger;
+                var att = attMap.find(el => el.id == $this.attr('data-att-id'));
+                if (att) {
+                    try {
+                        await att.delete();
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'delete',
+                            error: err,
+                        });
+                    }
+                    loop.next();
                 }
             }
-        }
+        }, () => {
+            if (errors.length == 0) {
+                resolve(true);
+            } else {
+                reject(errors);
+            }
+        });
+
     });
 }
 
