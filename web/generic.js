@@ -1252,7 +1252,7 @@ async function fillControls() {
     let ev = getEvent('AfterRender');
     if (ev) {
         try {
-            evalCode(ev);
+            await evalCode(ev);
         } catch (err) {
             console.error(err);
             toast('AfterRender error: ' + dSession.utils.errMsg(err));
