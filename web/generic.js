@@ -1419,22 +1419,22 @@ function saveDoc(pExit) {
             fillControls();
         }
 
+    } catch(err) {
+        errMgr(err);
+    }
+
+    // evalCode con context de saveDoc
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 
     function errMgr(pErr) {
         saving = false;
         preloader.hide();
-        if (Array.isArray(pErr)) {
-            if (pErr.length == 1) {
-                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result);
-
-            } else {
-                // Error de saveAtt
-                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion');
-            }
-        } else {
-            toast(errMsg(pErr));
-        }
-        console.log(pErr);
+        toast(dSession.utils.errMsg(pErr));
+        console.error(pErr);
     }
 }
 
