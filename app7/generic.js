@@ -1565,14 +1565,13 @@ async function saveDoc(exitOnSuccess) {
         pageEl.crm.saved = true;
 
         var attErr;
-        saveAtt().then(
-            res => {},
-            err => {
-                attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
-                console.log(attErr);
-                console.log(err);
-            }
-        );
+        try {
+            await saveAtt();
+        } catch (err) {
+            attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            console.log(attErr);
+            console.log(err);
+        }
         debugger;
 
         // Evento AfterSave
