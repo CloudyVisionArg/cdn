@@ -1564,21 +1564,24 @@ async function saveDoc(exitOnSuccess) {
         pageEl.crm.doc_id = doc2.id;
         pageEl.crm.saved = true;
 
-        var attErr;
         try {
             await saveAtt();
         } catch (err) {
-            attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
             console.log(attErr);
             console.log(err);
         }
-        debugger;
 
         // Evento AfterSave
-        var ev = getEvent('AfterSave');
-        if (ev) {
-            await evalCode(ev);
-        };
+        try {
+            var ev = getEvent('AfterSave');
+            if (ev) {
+                await evalCode(ev);
+            };
+        } catch (err) {
+            var asErr = 'Error en AfterSave: ' + dSession.utils.errMsg(err);
+            console.error(err);
+        }
 
         saving = false;
         app7.preloader.hide();
@@ -1586,6 +1589,8 @@ async function saveDoc(exitOnSuccess) {
 
         if (attErr) {
             toast(attErr);
+        } else if (asErr) {
+            toast(asErr);
         } else {
             toast('Cambios guardados');
         }
@@ -1622,7 +1627,7 @@ async function saveDoc(exitOnSuccess) {
         } else {
             toast(errMsg(pErr).replaceAll('\r\n', '<br>'), 5000);
         }
-        console.log(pErr);
+        console.error(pErr);
     }
 }
 
@@ -1654,7 +1659,6 @@ function saveAtt() {
                         att.fileStream = new Blob([this.result], { type: file.type });
                         att.description = tag;
                         att.group = tag;
-                        hola();
                         await att.save();
 
                     } catch (err) {
