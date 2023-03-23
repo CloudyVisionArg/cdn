@@ -362,6 +362,7 @@ export class Session {
         return this.restClient.fetch(url, 'POST', {}, '');
     };
 
+    // En el app pasarle true para que llame este, sino llama el q devuelve el json
     loggedUser() {
         var me = this;
         return new Promise((resolve, reject) => {
