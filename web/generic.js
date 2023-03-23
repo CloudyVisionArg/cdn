@@ -1374,7 +1374,7 @@ async function saveDoc(pExit) {
 
     try {
         // Evento BeforeSave
-        let ev = getEvent('BeforeSave');
+        var ev = getEvent('BeforeSave');
         if (ev) {
             await evalCode(ev);
         };
