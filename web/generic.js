@@ -1274,7 +1274,7 @@ function getEvent(pEvent) {
     }
 }
 
-function saveDoc(pExit) {
+async function saveDoc(pExit) {
     if (saving) return;
     saving = true;
     preloader.show();
