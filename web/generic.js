@@ -1372,43 +1372,53 @@ function saveDoc(pExit) {
         }
     });
 
-    // Evento BeforeSave
-    let ev = getEvent('BeforeSave');
-    if (ev) {
-        try {
-            eval(ev);
-        } catch (err) {
-            console.log('Error in BeforeSave: ' + errMsg(err));
-        }
-    };
+    try {
+        // Evento BeforeSave
+        let ev = getEvent('BeforeSave');
+        if (ev) {
+            await evalCode(ev);
+        };
 
-    doc.save().then(() => {
+        await doc.save();
         docJson = doc.toJSON();
-        doc_id = doc.fields('doc_id').value;
+        doc_id = doc.id;
 
-        saveAtt().then(
-            function (res) {
-                // Evento AfterSave
-                let ev = getEvent('AfterSave');
-                if (ev) {
-                    try {
-                        eval(ev);
-                    } catch (err) {
-                        console.log('Error in AfterSave: ' + errMsg(err));
-                    }
-                };
+        try {
+            await saveAtt();
+        } catch(err) {
+            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            console.log(attErr);
+            console.log(err);
+        }
 
-                saving = false;
-                preloader.hide();
-                if (pExit) {
-                    exitForm();
-                } else {
-                    toast('Cambios guardados');
-                    fillControls();
-                }
-            }, errMgr
-        );
-    }, errMgr);
+        // Evento AfterSave
+        try {
+            var ev = getEvent('AfterSave');
+            if (ev) {
+                await evalCode(ev);
+            };
+        } catch (err) {
+            var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
+            console.error(err);
+        }
+
+        saving = false;
+        preloader.hide();
+
+        if (attErr) {
+            toast(attErr);
+        } else if (asErr) {
+            toast(asErr);
+        }
+
+        if (pExit) {
+            var timeOut = (attErr || asErr ? 5000 : 0);
+            setTimeout(exitForm, timeOut);
+        } else {
+            toast('Cambios guardados');
+            fillControls();
+        }
+
 
     function errMgr(pErr) {
         saving = false;
