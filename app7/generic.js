@@ -1632,7 +1632,7 @@ function saveAtt() {
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
             debugger;
-            var $this = $attsToSave[loop.iteration()];
+            var $this = $($attsToSave[loop.iteration()]);
             var tag = $this.closest('li.accordion-item').attr('data-attachments');
             tag = (tag == 'all' ? null : tag);
             var attName = $this.attr('data-att-name');
