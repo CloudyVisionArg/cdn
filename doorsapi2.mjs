@@ -984,7 +984,7 @@ export class Attachment {
                     let newId = Math.max(...resJson.InternalObject.map(el => el.AttId));
                     let newJson = resJson.InternalObject.find(el => el.AttId == newId);
                     debugger; // chequear el nombre
-                    if (me.name != newJson.Name) throw new Error('Same name expected');
+                    if (me.name == newJson.Name) throw new Error('Same name expected');
                     me.#json = newJson
                     me.#json.AccName = (await me.session.loggedUser).name;
                     me.#json.File = fs;
@@ -1349,7 +1349,7 @@ export class Document {
                 att.AccName = res.name;
             }
         )
-        
+
         this.#attachmentsMap.set(name, att);
         return att;
     }
