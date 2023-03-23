@@ -1439,74 +1439,61 @@ async function saveDoc(pExit) {
 }
 
 function saveAtt() {
-    return new Promise(function (resolve, reject) {
-        var calls = [];
-        var arrDel = [];
+    return new Promise(async (resolve, reject) => {
+        var errors = [];
         var $attsToSave = $('div[data-attachments] [data-att-action]');
+        var attMap = await doc.attachments();
 
-        if ($attsToSave.length == 0) {
-            resolve('OK');
-            
-        } else {
-            $attsToSave.each(function () {
-                var $this = $(this);
-                var tag = $this.closest('input-group').attr('data-attachments');
-                var attName = $this.attr('data-att-name');
-                var attAction = $this.attr('data-att-action');
-                
-                if (attAction == 'save') {
-                    beginCall(attName, attAction);
-                
-                    var file = this._file;
-                    var reader = new FileReader();
-                    reader.onloadend = function (e) {
-                        var blobData = new Blob([this.result], { type: file.type });
-                        var formData = new FormData();
-                        // todo: como subimos el Tag?
-                        formData.append('attachment', blobData, file.name);
-                        DoorsAPI.attachmentsSave(doc_id, formData).then(
-                            function (res) {
-                                endCall(attName, 'OK');
-                            },
-                            function (err) {
-                                endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-                            }
-                        )
-                    };
-                    reader.readAsArrayBuffer(file);
-                    
-                } else if (attAction == 'delete') {
-                    arrDel.push($this.attr('data-att-id'));
-                }
-            });
+        dSession.utils.asyncLoop($attsToSave.length, async loop => {
+            var $this = $($attsToSave[loop.iteration()]);
+            var tag = $this.closest('li.accordion-item').attr('data-attachments');
+            tag = (tag == 'all' ? null : tag);
+            var attName = $this.attr('data-att-name');
+            var attAction = $this.attr('data-att-action');
 
-            if (arrDel.length > 0) {
-                var sDel = arrDel.join(',');
-                beginCall(sDel, 'delete')
-                DoorsAPI.attachmentsDelete(doc_id, arrDel).then(
-                    function (res) {
-                        endCall(sDel, 'OK');
-                    },
-                    function (err) {
-                        endCall(sDel, 'attachmentsDelete error: ' + errMsg(err));
+            if (attAction == 'save') {
+                var file = $this[0]._file;
+                var reader = new FileReader();
+                reader.onloadend = async function (e) {
+                    try {
+                        var att = doc.attachmentsAdd(file.name);
+                        att.fileStream = new Blob([this.result], { type: file.type });
+                        att.description = tag;
+                        att.group = tag;
+                        await att.save();
+
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'save',
+                            error: dSession.utils.errMsg(err),
+                        });
                     }
-                );
-            }
-        }
+                    loop.next();
+                };
+                reader.readAsArrayBuffer(file);
 
-        function beginCall(pName, pAction) {
-            calls.push({ name: pName, action: pAction, result: 'pending' });
-        }
-        
-        function endCall(pName, pResult) {
-            calls.find(el => el.name == pName && el.result == 'pending').result = pResult;
-            if (!calls.find(el => el.result == 'pending')) {
-                if (calls.find(el => el.result != 'OK')) {
-                    reject(calls.filter(el => el.result != 'OK'));
-                } else {
-                    resolve('OK');
+            } else if (attAction == 'delete') {
+                var att = attMap.find(el => el.id == $this.attr('data-att-id'));
+                if (att) {
+                    try {
+                        await att.delete();
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'delete',
+                            error: err,
+                        });
+                    }
                 }
+                loop.next();
             }
-        }
+        }, () => {
+            if (errors.length == 0) {
+                resolve(true);
+            } else {
+                reject(errors);
+            }
+        });
     });
 }
