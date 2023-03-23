@@ -842,7 +842,8 @@ async function renderControls(pCont, pParent) {
         try {
             if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
         } catch (err) {
-            console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
+            console.error(err);
+            toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
         }
         /*
         Objetos disponibles en este script:
@@ -1203,7 +1204,8 @@ async function fillControls() {
         try {
             await evalCode(ev);
         } catch (err) {
-            console.log('Error in AfterRender: ' + errMsg(err));
+            console.error(err);
+            toast('AfterRender error: ' + dSession.utils.errMsg(err));
         }
     };
 
