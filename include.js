@@ -67,6 +67,8 @@ function registeredScripts() {
     */
 
     
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 246 });
+
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 245 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 245 });
@@ -84,7 +86,6 @@ function registeredScripts() {
 
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 244 });
     scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 238 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 236 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 229 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
