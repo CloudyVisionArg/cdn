@@ -1060,11 +1060,11 @@ function deleteClick() {
                     $block.append('Borrando docId ' + selected[loop.iteration()] + ': ');
                     DoorsAPI.documentDelete(fld_id, selected[loop.iteration()]).then(
                         function (res) {
-                            $block.append('ok<br/>');
+                            $block.append('OK!<br/>');
                             loop.next();
                         },
                         function (err) {
-                            $block.append(errMsg(err) + '<br/>');
+                            $block.append('<span style="color: red;">ERROR: ' + errMsg(err) + '</span><br/>');
                             loop.next();
                         }
                     )
