@@ -1057,7 +1057,7 @@ function deleteClick() {
         
             asyncLoop(selected.length,
                 function (loop) {
-                    $block.append('Borrando docId ' + selected[loop.iteration()] + ': ');
+                    $block.append('Borrando doc #' + selected[loop.iteration()] + ': ');
                     DoorsAPI.documentDelete(fld_id, selected[loop.iteration()]).then(
                         function (res) {
                             $block.append('OK!<br/>');
