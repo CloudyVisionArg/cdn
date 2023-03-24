@@ -1070,7 +1070,7 @@ function deleteClick() {
                     )
                 },
                 function() {
-                    $block.append('Proceso finalizado<br/>');
+                    $block.append('<br/><b>Proceso finalizado</b>');
                     $closeBtn.removeClass('disabled');
                 }
             );
