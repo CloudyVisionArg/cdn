@@ -67,7 +67,7 @@ function registeredScripts() {
     */
 
     
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 246 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 247 });
 
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 245 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
