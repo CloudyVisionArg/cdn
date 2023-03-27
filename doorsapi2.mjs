@@ -233,7 +233,7 @@ export class Session {
     #tags;
     #db;
     #utils;
-    #loggedUser;
+    #currentUser;
     #push;
     
     constructor(serverUrl, authToken) {
@@ -264,6 +264,24 @@ export class Session {
         };
         return this.restClient.fetch(url, 'POST', data, '');
     };
+
+    get currentUser() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#currentUser) {
+                var url = 'session/loggedUser';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        me.#currentUser = new User(res, me);
+                        resolve(me.#currentUser);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#currentUser);
+            }
+        });
+    }
 
     // Metodos de base de datos
     get db() {
@@ -361,25 +379,6 @@ export class Session {
         var url = 'session/islogged';
         return this.restClient.fetch(url, 'POST', {}, '');
     };
-
-    // En el app pasarle true para que llame este, sino llama el q devuelve el json
-    loggedUser() {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            if (!me.#loggedUser) {
-                var url = 'session/loggedUser';
-                me.restClient.fetch(url, 'GET', '', '').then(
-                    res => {
-                        me.#loggedUser = new User(res, me);
-                        resolve(me.#loggedUser);
-                    },
-                    reject
-                )
-            } else {
-                resolve(me.#loggedUser);
-            }
-        });
-    }
 
     logoff() {
         var me = this;
@@ -986,7 +985,7 @@ export class Attachment {
                     let newJson = resJson.InternalObject.find(el => el.AttId == newId);
                     if (me.name != newJson.Name) reject(new Error('Same name expected'));
                     me.#json = newJson
-                    me.#json.AccName = (await me.session.loggedUser(true)).name;
+                    me.#json.AccName = (await me.session.currentUser).name;
                     me.#json.File = fs;
 
                     resolve(me);
@@ -1342,8 +1341,7 @@ export class Document {
             IsNew: true,
         }, this);
 
-        // Le paso true para q si es la app7-session llame a super
-        this.session.loggedUser(true).then(
+        this.session.currentUser.then(
             res => {
                 att.AccId = res.id;
                 att.AccName = res.name;

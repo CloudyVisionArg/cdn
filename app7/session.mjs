@@ -1,4 +1,4 @@
-export class Session extends doorsapi2.Session {
+export class AppSession extends doorsapi2.Session {
     freeVersion;
     #tokenTimeout = 120;
 
@@ -104,12 +104,8 @@ export class Session extends doorsapi2.Session {
         localStorage.removeItem('sync_table'); 
     }
 
-    loggedUser(spr) {
-        if (spr) {
-            return super.loggedUser();
-        } else {
-            return JSON.parse(window.localStorage.getItem('loggedUser'));
-        }
+    loggedUser() {
+        return JSON.parse(window.localStorage.getItem('loggedUser'));
     }
 
     hasGroup(pGroup) {
