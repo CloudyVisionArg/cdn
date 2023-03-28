@@ -775,6 +775,7 @@ function loadViewSection(pContainer, pCallback) {
                         $a = $('<a/>', {
                             href: '',
                             class: 'item-link item-content',
+                            draggable: false,
                         }).appendTo($li);
 
                         $div = $('<div/>', {
