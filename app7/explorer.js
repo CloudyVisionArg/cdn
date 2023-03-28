@@ -196,8 +196,10 @@ dSession.foldersGetFromId(fld_id).then(
             // Evento taphold
             if (device.platform == 'browser') {
                 // El taphold no anda en el browser
+                console.log("EXPLORER TAPHOLD BROWSER");
                 $viewDiv.on('contextmenu', 'a', taphold);
             } else {
+                console.log("EXPLORER TAPHOLD MOBILE");
                 $viewDiv.on('taphold', 'a', taphold);
             };
             
@@ -420,6 +422,7 @@ function pageInit(e, page) {
 }
 
 function taphold(e) {
+    debugger;
     var $list = $(this).closest('div.list');
     if ($list.hasClass('media-list')) {
         var $li = $(this).closest('li');
