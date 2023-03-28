@@ -597,7 +597,7 @@ function loadViewSection(pContainer, pCallback) {
                     $list = $('<div/>', {
                         class: 'list media-list chevron-center text-select-none',
                         style: 'margin-top: 0;',
-                        draggable: 'false',
+                        draggable: 'true',
                     }).appendTo(pContainer);
 
                     $ul = $('<ul/>').appendTo($list);
