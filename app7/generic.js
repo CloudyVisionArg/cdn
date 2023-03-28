@@ -1587,9 +1587,9 @@ async function saveDoc(exitOnSuccess) {
         $navbar.find('.right .button').removeClass('disabled');
 
         if (attErr) {
-            toast(attErr);
+            toast(attErr, 0);
         } else if (asErr) {
-            toast(asErr);
+            toast(asErr, 0);
         } else {
             toast('Cambios guardados');
         }
@@ -1615,7 +1615,7 @@ async function saveDoc(exitOnSuccess) {
         saving = false;
         app7.preloader.hide();
         $navbar.find('.right .button').removeClass('disabled');
-        toast(dSession.utils.errMsg(pErr).replaceAll('\r\n', '<br>'), 5000);
+        toast(dSession.utils.errMsg(pErr).replaceAll('\r\n', '<br>'), 0);
         console.error(pErr);
     }
 }

@@ -1269,7 +1269,7 @@ function toast(message, duration, position) {
     //duration: milliseconds
     //position: 'top', 'center', 'bottom'
 
-    //if (duration === undefined) duration = 3000;
+    if (duration === undefined) duration = 3000;
     if (position === undefined) position = 'bottom';
 
     app7.toast.create({
