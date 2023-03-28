@@ -12,6 +12,7 @@ window._isCapacitor = function(){
 
 
 
+
 /**
  * Tipo de mensaje base. Propiedades requeridas y renderizado simple
  * Para tener multiples tipos de mensaje, heredar de esta clase y sobreescribir de la siguiente forma
