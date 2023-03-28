@@ -194,14 +194,14 @@ dSession.foldersGetFromId(fld_id).then(
             });
             
             // Evento taphold
-            // if (device.platform == 'browser') {
+             if (device.platform !== 'browser') {
                 // El taphold no anda en el browser
                 console.log("EXPLORER TAPHOLD BROWSER");
                 $viewDiv.on('contextmenu', 'a', taphold);
-            // } else {
-            //     console.log("EXPLORER TAPHOLD MOBILE");
-            //     $viewDiv.on('taphold', 'a', taphold);
-            // };
+             } else {
+                 console.log("EXPLORER TAPHOLD MOBILE");
+                 $viewDiv.on('taphold', 'a', taphold);
+             };
             
             // Fin Accordion Ajax
 
