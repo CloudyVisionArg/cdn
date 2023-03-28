@@ -597,6 +597,7 @@ function loadViewSection(pContainer, pCallback) {
                     $list = $('<div/>', {
                         class: 'list media-list chevron-center text-select-none',
                         style: 'margin-top: 0;',
+                        draggable: 'false',
                     }).appendTo(pContainer);
 
                     $ul = $('<ul/>').appendTo($list);
@@ -867,7 +868,7 @@ function getItemContent() {
         $cont = $('<a/>', {
             href: '#',
             class: 'item-link item-content',
-            draggable: 'false',
+            
         });
     }
 
