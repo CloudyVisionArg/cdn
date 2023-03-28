@@ -176,9 +176,9 @@ $btn.click(function (e) {
  $btn = getLink({ text: 'Cancelar' });
  $btn.attr('id', 'buttonCancel');
  $btn.appendTo($page.find('.navbar-inner .right'));
- $btn.on('click', function (e) {
-     toggleSelectionMode();
- });
+//  $btn.on('click', function (e) {
+//     //  toggleSelectionMode();
+//  });
  $btn.hide();
 
 // Boton Acciones
@@ -347,7 +347,7 @@ function pageInitMembers(e, page) {
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"mark bg-orange","text":"Mark"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":"swipeout-delete","text":"Delete"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe","text":"Delete"}).appendTo(swipActionRight);
 
             return ul.html();
         },
@@ -450,7 +450,7 @@ function getSelected(invertSelection = false) {
 }
 
 function notificationsMenuSelectAll(){
-    toggleSelectionMode();
+    // toggleSelectionMode();
     let allNotif = $('input[type="checkbox"]', $listMembers);
     allNotif.prop("checked", true);
 }
@@ -701,61 +701,61 @@ function getItemContent(obj) {
     return $cont;
 }
 
-function toggleSelectionMode() {
-    var $itemContent;
+// function toggleSelectionMode() {
+//     var $itemContent;
 
-    if (selectionMode) {
-        // Desactivar
-        selectionMode = false;
+//     if (selectionMode) {
+//         // Desactivar
+//         selectionMode = false;
 
-        $get('.media-list label.item-checkbox.item-content').replaceWith(function () {
-            var $itemContent = getItemContent(this);
-            $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
-            return $itemContent;
-        });
+//         $get('.media-list label.item-checkbox.item-content').replaceWith(function () {
+//             var $itemContent = getItemContent(this);
+//             $itemContent.append($(this).children(':not(input:checkbox, i.icon-checkbox)'));
+//             return $itemContent;
+//         });
 
-        if (searchBar.enabled) {
-            $navbar.addClass('with-searchbar-expandable-enabled');
-            searchBar.el.show();
-        }
+//         if (searchBar.enabled) {
+//             $navbar.addClass('with-searchbar-expandable-enabled');
+//             searchBar.el.show();
+//         }
   
-        $divActions.hide();
-        $navbar.find('#buttonSearch').show();
-        $navbar.find('#buttonMenu').show();
-        $navbar.find('#buttonActions').hide();
-        $navbar.find('#buttonCancel').hide();
+//         $divActions.hide();
+//         $navbar.find('#buttonSearch').show();
+//         $navbar.find('#buttonMenu').show();
+//         $navbar.find('#buttonActions').hide();
+//         $navbar.find('#buttonCancel').hide();
 
-    } else {
-        // Activar
-        selectionMode = true;
+//     } else {
+//         // Activar
+//         selectionMode = true;
 
-        $get('.media-list a.item-link.item-content').replaceWith(function () {
-            $itemContent = getItemContent(this);
-            $itemContent.append($(this).contents());
-            return $itemContent;
-        });
+//         $get('.media-list a.item-link.item-content').replaceWith(function () {
+//             $itemContent = getItemContent(this);
+//             $itemContent.append($(this).contents());
+//             return $itemContent;
+//         });
 
-        if (searchBar.enabled) {
-            searchBar.el.hide();
-            $navbar.removeClass('with-searchbar-expandable-enabled');
-        }
+//         if (searchBar.enabled) {
+//             searchBar.el.hide();
+//             $navbar.removeClass('with-searchbar-expandable-enabled');
+//         }
   
-        $divActions.show();
-        $navbar.find('#buttonSearch').hide();
-        $navbar.find('#buttonMenu').hide();
-        $navbar.find('#buttonActions').show();
-        $navbar.find('#buttonCancel').show();
-    }
+//         $divActions.show();
+//         $navbar.find('#buttonSearch').hide();
+//         $navbar.find('#buttonMenu').hide();
+//         $navbar.find('#buttonActions').show();
+//         $navbar.find('#buttonCancel').show();
+//     }
 
-    app7.navbar.size($navbar);
-}
+//     app7.navbar.size($navbar);
+// }
 
-function taphold(e) {
-    console.log("TAPHOLD");
-    var $list = $(this).closest('div.list');
-    if ($list.hasClass('media-list')) {
-        var $li = $(this).closest('li');
-        toggleSelectionMode();
-        $li.find('input:checkbox').prop('checked', true);
-    };
-};
+// function taphold(e) {
+//     console.log("TAPHOLD");
+//     var $list = $(this).closest('div.list');
+//     if ($list.hasClass('media-list')) {
+//         var $li = $(this).closest('li');
+//         toggleSelectionMode();
+//         $li.find('input:checkbox').prop('checked', true);
+//     };
+// };
