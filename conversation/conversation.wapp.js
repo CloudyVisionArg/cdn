@@ -516,7 +516,8 @@ function whatsAppDataProvider(opts){
 	};
 
 	this.sendCamera = function (pChat) {
-		me.getPicture(Camera.PictureSourceType.CAMERA, 
+		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
+		me.getPicture(source,
 			function (file) {
 				me.sendMedia(file, pChat);
 			}
@@ -524,7 +525,8 @@ function whatsAppDataProvider(opts){
 	};
 
 	this.sendPhoto = function (pChat) {
-		me.getPicture(Camera.PictureSourceType.PHOTOLIBRARY, 
+		let source = _isCapacitor() ? CameraSource.Photos : Camera.PictureSourceType.PHOTOLIBRARY;
+		me.getPicture(source, 
 			function (file) {
 				me.sendMedia(file, pChat);
 			}
@@ -532,18 +534,34 @@ function whatsAppDataProvider(opts){
 	};
 
 	this.getPicture = function (pSource, pCallback) {
-		navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    function (file) {
-						if (pCallback) pCallback(file);
-                    },
-                    errMgr
-                )
-            },
-            errMgr,
-            cameraOptions(pSource)
-        );
+
+		/*if(_isCapacitor()){
+            Capacitor.Plugins.FilePicker.pickFiles().then(*/
+
+		if (_isCapacitor()) {
+			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
+			// quizas estaria bueno 
+			const opts = cameraOptionsCapacitor(pSource);
+			Capacitor.Plugins.Camera.getPhoto(opts).then((res)=>{
+				onFileSelected(res.path);
+			}, errMgr);
+		} else {
+			navigator.camera.getPicture(
+				function (fileURL) {
+					onFileSelected(fileURL);
+				},
+				errMgr,
+				cameraOptions(pSource)
+			);
+		}
+		function onFileSelected(fileUrl){
+			getFile(fileUrl).then(
+				function (file) {
+					if (pCallback) pCallback(file);
+				},
+				errMgr
+			)
+		}
 
 		function errMgr(pMsg) {
 			debugger;
@@ -721,31 +739,66 @@ function whatsAppDataProvider(opts){
 
 	this.sendFile = function(){
 		let me = this;
-		if (typeof(cordova) == 'object') {
-			chooser.getFileMetadata().then(
-				function (res) {
-					if (res) {
-						//res.uri = "file://" + res.uri; //.replace("content://",);
+
+		if(_isCapacitor()){
+            //Obtengo el archivo seleccionado, lo copio al cache del app y desde ahi dejo asociado.
+            //Esto deberia tener un momento en el cual se borra del cache estos files despues de subirlos.
+            Capacitor.Plugins.FilePicker.pickFiles().then((res)=>{
+			const files = res.files;
+
+			//lee el archivo
+			Capacitor.Plugins.Filesystem.readFile({
+				path: files[0].path,
+			}).then((contents) => {
+				//Escribe en cache
+				Capacitor.Plugins.Filesystem.writeFile({
+					path : files[0].name,
+					data : contents.data,
+					directory: Directory.Cache,
+				}).then(
+					(res)=>{
 						getFile(res.uri).then(
 							function (file) {
-								//att.URL = file.localURL;
-								//att.Name = res.name;
-								//att.Size = file.size;
 								me.sendMedia(file);
-							},
-							function(err){
-								alert(errMsg(err));
-							}
-						)
+							},function(erro){
+								alert(errMsg(erro));
+							});
+						},function(er){
+							alert(errMsg(er));
+						});
+					},function(er){
+						alert(errMsg(er));
+					});
+			},function(er){
+				alert(errMsg(er));
+			});			
+        }else{
+			if (typeof(cordova) == 'object') {
+				chooser.getFileMetadata().then(
+					function (res) {
+						if (res) {
+							//res.uri = "file://" + res.uri; //.replace("content://",);
+							getFile(res.uri).then(
+								function (file) {
+									//att.URL = file.localURL;
+									//att.Name = res.name;
+									//att.Size = file.size;
+									me.sendMedia(file);
+								},
+								function(err){
+									alert(errMsg(err));
+								}
+							)
+						}
+					},
+					function(erro){
+						alert(errMsg(erro));
 					}
-				},
-				function(erro){
-					alert(errMsg(erro));
-				}
-			)
-		}
-		else{
-			this.sendFileWeb("");
+				)
+			}
+			else{
+				this.sendFileWeb("");
+			}
 		}
 	}
 
@@ -857,7 +910,7 @@ function whatsAppDataProvider(opts){
 						{
 							text: '<i class="f7-icons">doc</i>&nbsp;&nbsp;Documento',
 							onClick: function () {
-								toast('En desarrollo');
+								//toast('En desarrollo');
 								me.sendFile();
 							}
 						},
