@@ -194,12 +194,13 @@ dSession.foldersGetFromId(fld_id).then(
             });
             
             // Evento taphold
-            if (device.platform == 'browser') {
+             if (device.platform == 'browser' || device.platform == 'Android') {
                 // El taphold no anda en el browser
+                // En Android tampoco funciona el taphold
                 $viewDiv.on('contextmenu', 'a', taphold);
-            } else {
-                $viewDiv.on('taphold', 'a', taphold);
-            };
+             } else {                 
+                 $viewDiv.on('taphold', 'a', taphold);
+             };
             
             // Fin Accordion Ajax
 
@@ -427,6 +428,7 @@ function taphold(e) {
         $li.find('input:checkbox').prop('checked', true);
     };
 };
+
 
 function toggleSelectionMode() {
     var $itemContent;
