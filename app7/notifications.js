@@ -701,6 +701,10 @@ function getItemContent(obj) {
     return $cont;
 }
 
+const notifOnDeleted = () => {
+    console.log('notifOnDeleted Triggered');
+}
+
 // function toggleSelectionMode() {
 //     var $itemContent;
 
