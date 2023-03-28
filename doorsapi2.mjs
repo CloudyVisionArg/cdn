@@ -161,6 +161,9 @@ export function inNode() {
 
 
 export class DoorsMap extends Map {
+    /**
+     * Metodo interno, no usar.
+     */
     _parseKey(key) {
         var k;
         if (typeof key === 'string') {
@@ -171,7 +174,9 @@ export class DoorsMap extends Map {
         return k;
     }
 
-    // Alias de set
+    /**
+     * Alias de set.
+     */
     add(key, value) {
         return this.set(key, value);
     }
@@ -180,12 +185,17 @@ export class DoorsMap extends Map {
         return super.delete(this._parseKey(key));
     }
 
-    // Alias de has
+    /**
+     * Alias de has.
+     */
     exists(key) {
         return this.has(key);
     }
 
-    // map.find((value, key) => { if ... return true })
+    /**
+     * Busca y retorna un elemento.
+     * map.find((value, key) => { if ... return true }
+     */
     find(cbFunc) {
         var me = this;
         for (let [key, value] of super.entries()) {
@@ -204,17 +214,23 @@ export class DoorsMap extends Map {
         return super.has(this._parseKey(key));
     }
 
-    // Alias de get
+    /**
+     * Alias de get.
+     */
     item(key) {
         return this.get(key);
     }
 
-    // Alias de size
+    /**
+     * Alias de size.
+     */
     get length() {
         return super.size;
     }
 
-    // Alias de delete
+    /**
+     * Alias de delete.
+     */
     remove(key) {
         return this.delete(key);
     }
@@ -242,6 +258,9 @@ export class Session {
         this.#authToken = authToken;
     }
     
+    /**
+     * @returns {string}
+     */
     get authToken() {
         return this.#authToken;
     }
@@ -357,7 +376,7 @@ export class Session {
             if (!isNaN(parseInt(folder))) {
                 cache = this.foldersGetFromId(folder);
             } else {
-                cache = this.foldersGetFromPath(folder, (curFolderId ? curFolderId : 1001));
+                cache = this.foldersGetFromPath(folder, curFolderId);
             }
             this.utils.cache(key, cache, 60); // Cachea por 60 segundos
         };
@@ -466,12 +485,16 @@ export class Session {
         return this.#push;
     }
 
-    // Backward compat
+    /**
+     * Backward compat. Usar dSession.push.register.
+     */
     pushRegistration(settings) {
         return this.push.register(settings);
     }
 
-    // Backward compat
+    /**
+     * Backward compat. Usar dSession.push.unreg.
+     */
     pushUnreg(regType, regId) {
         return this.push.unreg(regType, regId);
     }
@@ -646,7 +669,7 @@ export class Account {
     }
 
     /**
-     * Account => User
+     * Convierte a User
      * @returns {User}
      */
     cast2User() {
@@ -789,6 +812,9 @@ export class Account {
         this.#json.Name = value;
     }
 
+    /**
+     * @returns {number}
+     */
     get objectType() {
         return Account.objectType;
     }
@@ -887,6 +913,7 @@ export class Account {
         return this.#session;
     }
 
+    //todo: retorna bool o number?
     get system() {
         return this.#json.System;
     }
@@ -1008,16 +1035,23 @@ export class Attachment {
         this.#parent = document;
     }
 
+    /**
+     * @returns {Date}
+     */
     get created() {
-        // todo: pasar a fecha
-        return this.#json.Created;
+        return this.session.utils.cDate(this.#json.Created);
     }
 
-    // Alias de remove
+    /**
+     * Alias de remove
+     */
     delete() {
         return this.remove();
     }
 
+    /**
+     * @returns {string}
+     */
     get description() {
         return this.#json.Description;
     }
@@ -1027,6 +1061,9 @@ export class Attachment {
         this.#json.Description = value;
     }
 
+    /**
+     * @returns {string}
+     */
     get extension() {
         return this.#json.Extension;
     }
@@ -1045,6 +1082,9 @@ export class Attachment {
         this.#json.External = value;
     }
 
+    /**
+     * @returns {Promise<ArrayBuffer>}
+     */
     get fileStream() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1069,6 +1109,9 @@ export class Attachment {
         this.#json.File = value;
     }
 
+    /**
+     * @returns {string}
+     */
     get group() {
         return this.#json.group;
     }
@@ -1078,6 +1121,9 @@ export class Attachment {
         this.#json.group = value;
     }
 
+    /**
+     * @returns {number}
+     */
     get id() {
         return this.#json.AttId;
     }
@@ -1090,6 +1136,9 @@ export class Attachment {
         this.#json.IsNew = value;
     }
 
+    /**
+     * @returns {string}
+     */
     get name() {
         return this.#json.Name;
     }
@@ -1098,6 +1147,10 @@ export class Attachment {
         return Attachment.objectType;
     }
 
+    /**
+     * Creador del adjunto.
+     * @returns {Promise<User>}
+     */
     get owner() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1115,14 +1168,25 @@ export class Attachment {
         });
     }
 
+    /**
+     * ACC_ID del creador del adjunto.
+     * @returns {number}
+     */
     get ownerId() {
         return this.#json.AccId
     }
 
+    /**
+     * NAME del creador del adjunto.
+     * @returns {string}
+     */
     get ownerName() {
         return this.#json.AccName
     }
 
+    /**
+     * @returns {Document}
+     */
     get parent() {
         return this.#parent;
     }
@@ -1138,6 +1202,10 @@ export class Attachment {
         return this.#properties.set(property, value);
     }
 
+    /**
+     * Borra el adjunto inmediatamente.
+     * @returns {Promise}
+     */
     remove() {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -1158,6 +1226,10 @@ export class Attachment {
         });
     }
 
+    /**
+     * Guarda el adjunto inmediatamente.
+     * @returns {Promise}
+     */
     save() {
         if (!this.isNew) throw new Error('I\'m not new');
 
@@ -1188,19 +1260,31 @@ export class Attachment {
         });
     }
 
+    /**
+     * @returns {Session}
+     */
     get session() {
         return this.parent.session;
     }
 
+    /**
+     * @returns {number}
+     */
     get size() {
         return this.#json.Size;
     }
 
+    /**
+     * @returns {Object}
+     */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
+    /**
+     * @returns {string}
+     */
     toJSON() {
         return this.#json;
     }
@@ -1224,10 +1308,17 @@ export class Database {
         this.#session = session;
     }
 
+    /**
+     * No implementado aun
+     */
     async execute(sql) {
         // todo
     }
 
+    /**
+     * Obtiene el siguiente valor de la secuencia.
+     * @returns {Promise<number>}
+     */
     async nextVal(sequence) {
         var res = await this.session.utils.execVbs(`
             Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
@@ -1236,7 +1327,10 @@ export class Database {
         return parseInt(await res.text());
     }
 
-    // OJO: Las columnas en null no bajan en el xml
+    /**
+     * Ejecuta una consulta a la base de datos.
+     * @returns {Promise<Object[]>}
+     */
     async openRecordset(sql) {
         sql = sql.replaceAll('"', '""');
         sql = sql.replaceAll('\n', ' ');
@@ -1281,11 +1375,17 @@ export class Database {
         return ret;
     }
 
-    // Alias de sqlEncode
+    /**
+     * Alias de sqlEncode.
+     */
     sqlEnc(value, type) {
         return this.sqlEncode(value, type);
     }
 
+    /**
+     * Encodea un valor para SQL. type: 1=char / 2=date / 3=number.
+     * @returns {string}
+     */
     sqlEncode(value, type) {
         if (value == null) {
             return 'NULL';
@@ -1319,10 +1419,16 @@ export class Database {
         };
     }
     
+    /**
+     * @returns {Session}
+     */
     get session() {
         return this.#session;
     }
 
+    /**
+     * No implementado aun
+     */
     setVal(sequence, value) {
         // todo
     }
@@ -1365,6 +1471,10 @@ export class Directory {
         });
     }
 
+    /**
+     * Crea un nuevo account. type: 1=User / 2=Group.
+     * @returns {(Promise<User>|Promise<Account>)}
+     */
     accountsNew(type) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1390,11 +1500,18 @@ export class Directory {
         })
     }
 
+    /**
+     * Busca accounts.
+     * @returns {Promise<Object[]>}
+     */
     accountsSearch(filter, order) {
         let url = '/accounts/search?filter=' + encURIC(filter) + '&order=' + encURIC(order);
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+     * @returns {Session}
+     */
     get session() {
         return this.#session;
     }
@@ -1424,23 +1541,40 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
+    /**
+     * Access Control List propio y heredado.
+     * @returns {Promise<Object[]>}
+     */
     acl() {
         var url = 'documents/' + this.id + '/acl/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+     * Otorga el permiso access a la cuenta account (id).
+     * Access: read / modifiy / delete / admin.
+     * @returns {Promise}
+     */
     aclGrant(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.fetch(url, 'POST', {}, '');
     }
 
+    /**
+     * Access Control List heredado.
+     * @returns {Promise<Object[]>}
+     */
     aclInherited() {
         var url = 'documents/' + this.id + '/aclinherited/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+     * Devuelve o establece si se heredan permisos.
+     * todo: no esta andando.
+     * @returns {Promise}
+     */
     aclInherits(value) {
-        //todo: no esta andando
         if (value == undefined) {
             return (this.fields('inherits').value ? true : false);
         } else {
@@ -1460,17 +1594,30 @@ export class Document {
         }
     }
 
+    /**
+     * Access Control List propio.
+     * @returns {Promise<Object[]>}
+     */
     aclOwn() {
-        //todo
         var url = 'documents/' + this.id + '/aclown/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+     * Revoca el permiso access a la cuenta account (id).
+     * Access: read / modifiy / delete / admin.
+     * @returns {Promise}
+     */
     aclRevoke(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
+    /**
+     * Revoca todos los permisos de la cuenta account (id).
+     * Si account no se especifica revoca todos los permisos de todas las cuentas.
+     * @returns {Promise}
+     */
     aclRevokeAll(account) {
         var url = 'documents/' + this.id + '/acl/revokeAll';
         if (account) {
@@ -1480,6 +1627,10 @@ export class Document {
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
+    /**
+     * Devuelve la coleccion de adjuntos, o uno en particular si se especifica attachment (name).
+     * @returns {(Promise<DoorsMap>|Promise<Attachment>)}
+     */
     attachments(attachment) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1536,6 +1687,10 @@ export class Document {
         });
     }
 
+    /**
+     * Crea y devuelve un nuevo adjunto con nombre name.
+     * @returns {Attachment}
+     */
     attachmentsAdd(name) {
         if (!name) throw new Error('name is required');
 
