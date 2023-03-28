@@ -66,10 +66,10 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
 
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 249 });
+    //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 245 });
     
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 248 });
-
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 245 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 245 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 245 });
