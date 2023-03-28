@@ -347,7 +347,7 @@ function pageInitMembers(e, page) {
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"mark bg-orange","text":"Mark"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe","text":"Delete"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":"swipeout-delete","text":"Delete"}).appendTo(swipActionRight);
 
             return ul.html();
         },
