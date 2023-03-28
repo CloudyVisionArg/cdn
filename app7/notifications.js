@@ -322,13 +322,13 @@ function pageInitMembers(e, page) {
         items: [],
         // usar renderItem
         renderItem: function(item){
-            const fechaDelivery = new Date(item["DeliveryDate"])
+            const fechaDelivery = new Date(item["DeliveryDate"]);
             let fechaNotif = resolveDeliverydDate(fechaDelivery);
 
-            let ul  = $("<ul />")
-            let li  = $("<li />").appendTo(ul)
-
-            let a   = $("<a />", {"class":"item-link item-content " + item.readclass, "extradata": JSON.stringify(item.ExtraData), "href":"#", "id":item.Id}).appendTo(li);
+            let ul  = $("<ul />");
+            let li  = $("<li />", {"class":"swipeout"}).appendTo(ul);
+            let swipContent = $("<div/>",{"class":"swipeout-content"}).appendTo(li);
+            let a   = $("<a />", {"class":"item-link item-content " + item.readclass, "extradata": JSON.stringify(item.ExtraData), "href":"#", "id":item.Id}).appendTo(swipContent);
                     
             let contenedor = $("<div />",{"class":"item-inner "}).appendTo(a);
             
@@ -343,6 +343,12 @@ function pageInitMembers(e, page) {
             let text = $("<div />", {"class":"item-subtitle","text":item.Body});
             text.appendTo(contenedor);
             
+            //let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
+            let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
+            
+            let swipBtnMark = $("<a/>",{"class":"mark bg-orange","text":"Mark"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe","text":"Delete"}).appendTo(swipActionRight);
+
             return ul.html();
         },
         height: (item)=>{
