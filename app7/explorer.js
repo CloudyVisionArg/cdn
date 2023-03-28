@@ -194,11 +194,10 @@ dSession.foldersGetFromId(fld_id).then(
             });
             
             // Evento taphold
-             if (device.platform !== 'browser') {
+             if (device.platform == 'browser' || device.platform == 'Android') {
                 // El taphold no anda en el browser
-                $viewDiv.on('contextmenu', 'a', taphold2);
-             } else {
-                 $viewDiv.on('contextmenu', 'a', taphold2);
+                $viewDiv.on('contextmenu', 'a', taphold);
+             } else {                 
                  $viewDiv.on('taphold', 'a', taphold);
              };
             
@@ -421,7 +420,6 @@ function pageInit(e, page) {
 }
 
 function taphold(e) {
-    console.log("taphold");
     var $list = $(this).closest('div.list');
     if ($list.hasClass('media-list')) {
         var $li = $(this).closest('li');
@@ -430,15 +428,6 @@ function taphold(e) {
     };
 };
 
-function taphold2(e) {
-    console.log("contextmenu");
-    var $list = $(this).closest('div.list');
-    if ($list.hasClass('media-list')) {
-        var $li = $(this).closest('li');
-        toggleSelectionMode();
-        $li.find('input:checkbox').prop('checked', true);
-    };
-};
 
 function toggleSelectionMode() {
     var $itemContent;
