@@ -1710,18 +1710,31 @@ export class Document {
         return att;
     }
 
+    /**
+     * No implementado aun
+     */
     copy(folder) {
         // todo
     }
 
+    /**
+     * @returns {Date}
+     */
     get created() {
         return this.fields('created').value;
     }
 
+    /**
+     * No implementado aun
+     */
     currentAccess(access, explicit) {
         // todo
     }
 
+    /**
+     * Borra el documento, si purge=true no se envia a la papelera
+     * @returns {Promise}
+     */
     delete(purge) {
         var me = this;
         var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
@@ -1730,6 +1743,12 @@ export class Document {
         //todo: en q estado queda el objeto?
     }
 
+    /**
+     * () -> Devuelve la coleccion.
+     * (name) -> Devuelve el field (undefined si no lo encuentra).
+     * (name, value) -> Setea el valor del field.
+     * @returns {(DoorsMap|Field)}
+     */
     fields(name, value) {
         var me = this;
 
@@ -1763,14 +1782,25 @@ export class Document {
         }
     }
 
+    /**
+     * Alias de parent
+     * @returns {Folder}
+     */
     get folder() {
         return this.parent
     }
 
+    /**
+     * Alias de parentId
+     * @returns {number}
+     */
     get folderId() {
         return this.parentId
     }
 
+    /**
+     * @returns {Promise<Form>}
+     */
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1789,30 +1819,51 @@ export class Document {
         });
     }
 
+    /**
+     * @returns {number}
+     */
     get formId() {
         return this.fields('frm_id').value;
     }
 
+    /**
+     * @returns {string}
+     */
     get icon() {
         return this.fields('icon').value;
     }
 
+    /**
+     * @returns {number}
+     */
     get id() {
         return this.#json.DocId;
     }
 
+    /**
+     * @returns {boolean}
+     */
     get isNew() {
         return this.#json.IsNew;
     }
 
+    /**
+     * No implementado aun
+     */
     log() {
         // todo
     }
 
+    /**
+     * @returns {number}
+     */
     get objectType() {
         return Document.objectType;
     }
 
+    /**
+     * @returns {Date}
+     */
     get modified() {
         return this.fields('modified').value;
     }
