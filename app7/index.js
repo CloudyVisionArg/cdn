@@ -102,7 +102,7 @@ var app = {
             version: BuildInfo.version,
             theme: theme,
             touch: {
-                tapHold: false, // enable tap hold events
+                tapHold: true, // enable tap hold events
             },
             swipeout: {
                 removeElements: false,
