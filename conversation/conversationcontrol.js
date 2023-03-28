@@ -303,11 +303,10 @@ function conversationControl(opt) {
 				//Si es el primero, obtengo el html y lo renderizo
 				pMsg.getMessageHtml(pMsg).then(function (msgRow) {
 					$cont.append(msgRow);
+					scrollToBottom();
 					resolve(msgRow);
 				});
 			} else {
-				
-
 				pMsg.getMessageHtml(pMsg).then(function (msgRow) {
 					var existingMessage = $msgs.filter('[data-sid="' + pMsg.sid + '"]');
 					//Ya existe y esta dibujado
@@ -320,6 +319,7 @@ function conversationControl(opt) {
 							console.log("actualizando interfaz de mensaje " + pMsg.sid);
 							existingMessage.replaceWith(msgRow);
 						}
+						scrollToBottom();
 						resolve(msgRow);
 						return;
 					} else {
@@ -338,10 +338,28 @@ function conversationControl(opt) {
 							//$cont.append(msgRow);
 						}
 					}
+					scrollToBottom();
 					resolve(msgRow);
 				});
 			}
 		});
+	};
+
+	var scrollToBottom = function () {
+		try {
+			var $cont = $mainContainer.find('div.wapp-messages');
+			var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
+			if (atBottom) {
+				if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
+					$cont.scrollTop($cont[0].scrollHeight);
+				}
+			}
+			else{
+				$cont.scrollTop($cont[0].scrollHeight);
+			}
+		} catch (error) {
+			console.log("Error al hacer scroll al final del chat: " + error);
+		}
 	};
 	
 	
@@ -741,6 +759,87 @@ function conversationControl(opt) {
 		});
 	};
 
+	/**
+	 * function displayMenu(tree, element) {
+		// Check if Framework7 is defined
+		if (typeof Framework7 !== 'undefined') {
+		// If Framework7 is defined, create a new popup
+		var popup = Framework7.popup.create({
+			content: '<ul></ul>'
+		});
+	
+		// Get the ul element from the popup content
+		var ul = $(popup.el).find('ul');
+		} else {
+		// If Framework7 is not defined, create a new dropdown
+		var dropdown = $('<div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select Message Type</button><ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"></ul></div>');
+	
+		// Get the ul element from the dropdown
+		var ul = dropdown.find('ul');
+		}
+	
+		// Loop through each item in the tree
+		tree.forEach(function(item) {
+		// Create a new li element
+		var li = $('<li>');
+	
+		// Create a new a element
+		var a = $('<a>').text(item.name);
+	
+		// Check if the item has children
+		if (item.children && item.children.length > 0) {
+			// If the item has children, recursively call the displayMenu function to create a nested list
+			var nestedMenu = displayMenu(item.children);
+			// Add the nested list to the li element
+			li.append(nestedMenu);
+		}
+	
+		// Add the a element to the li element
+		li.append(a);
+	
+		// Add the li element to the ul element
+		ul.append(li);
+		});
+	
+		// Check if Framework7 is defined
+		if (typeof Framework7 !== 'undefined') {
+		// If Framework7 is defined, open the popup
+		popup.open();
+		} else {
+		// If Framework7 is not defined, add the dropdown to the specified element
+		$(element).append(dropdown);
+		}
+	}
+	
+
+	var tree = [  
+		{    
+			name: 'Text',
+			type: "",
+			children: [      
+				{        
+					name: 'Single Line'
+				},      
+				{        
+					name: 'Multi Line'      
+				}    
+			]
+		},
+		{
+		name: 'Voice'
+		},
+		{
+		name: 'Video'
+		},
+		{
+		name: 'File'
+		}
+	];
+
+	var element = '#myDropdown';
+
+	displayMenu(tree, element);
+	 */
 	var insertWebMessageTypesOptionsMenu = function($menu){
 		var $liTmp = $('<li/>', {
 			class: 'dropdown-submenu',
