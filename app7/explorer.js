@@ -196,10 +196,9 @@ dSession.foldersGetFromId(fld_id).then(
             // Evento taphold
              if (device.platform !== 'browser') {
                 // El taphold no anda en el browser
-                console.log("EXPLORER TAPHOLD BROWSER");
-                $viewDiv.on('contextmenu', 'a', taphold);
+                $viewDiv.on('contextmenu', 'a', taphold2);
              } else {
-                 console.log("EXPLORER TAPHOLD MOBILE");
+                 $viewDiv.on('contextmenu', 'a', taphold2);
                  $viewDiv.on('taphold', 'a', taphold);
              };
             
@@ -422,7 +421,17 @@ function pageInit(e, page) {
 }
 
 function taphold(e) {
-    debugger;
+    console.log("taphold");
+    var $list = $(this).closest('div.list');
+    if ($list.hasClass('media-list')) {
+        var $li = $(this).closest('li');
+        toggleSelectionMode();
+        $li.find('input:checkbox').prop('checked', true);
+    };
+};
+
+function taphold2(e) {
+    console.log("contextmenu");
     var $list = $(this).closest('div.list');
     if ($list.hasClass('media-list')) {
         var $li = $(this).closest('li');
