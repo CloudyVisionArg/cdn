@@ -71,7 +71,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 250 });
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 250 });
 
     /*
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 245 });
@@ -79,10 +78,9 @@ function registeredScripts() {
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 224 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 245 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 249 });
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
-    //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 245 });
     */
     
+    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 245 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 244 });
