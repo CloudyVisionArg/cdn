@@ -328,7 +328,7 @@ function pageInitMembers(e, page) {
             let ul  = $("<ul />")
             let li  = $("<li />").appendTo(ul)
 
-            let a   = $("<a />", {"class":"item-link item-content " + item.readclass, "extradata": JSON.stringify(item.ExtraData), "href":"#", "id":item.Id}).appendTo(li);
+            let a   = $("<a />", {"draggable":false,"class":"item-link item-content " + item.readclass, "extradata": JSON.stringify(item.ExtraData), "href":"#", "id":item.Id}).appendTo(li);
                     
             let contenedor = $("<div />",{"class":"item-inner "}).appendTo(a);
             

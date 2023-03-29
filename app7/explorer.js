@@ -868,6 +868,7 @@ function getItemContent() {
         $cont = $('<a/>', {
             href: '#',
             class: 'item-link item-content',
+            draggable: 'false',
         });
     }
 
