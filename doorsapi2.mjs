@@ -2235,7 +2235,8 @@ export class Folder {
     /**
      * No implementado aun.
      * Otorga el permiso access a la cuenta account (id).
-     * Access: todo: enumerar permisos de folder.
+     * Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
+     * doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
      * @returns {Promise}
      */
     aclGrant(account, access) {
@@ -2274,7 +2275,8 @@ export class Folder {
 
     /**
      * Revoca el permiso access a la cuenta account (id).
-     * Access: todo: enumerar permisos de folder.
+     * Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
+     * doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
      * @returns {Promise}
      */
     aclRevoke(account, access) {
@@ -2300,6 +2302,9 @@ export class Folder {
         */
     }
 
+    /**
+     * @returns {Application}
+     */
     get app() {
         if (!this.#app) {
             this.#app = new Application(this);
@@ -2307,16 +2312,26 @@ export class Folder {
         return this.#app;
     }
 
-    // Alias de documentsDelete
+    /**
+     * Alias de documentsDelete.
+     * @returns {Promise}
+     */
     delete(documents, purge) {
         return this.documentsDelete(documents, purge);
     }
 
-    // Alias de documents
+    /**
+     * Alias de documents.
+     * @returns {Promise<Document>}
+     */
     doc(document) {
         return this.documents(document);
     }
     
+    /**
+     * Obtiene un documento. document puede ser el id o una formula que devuelva un solo elemento.
+     * @returns {Promise<Document>}
+     */
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -2347,20 +2362,30 @@ export class Folder {
         });
     }
 
+    /**
+     * Borra multiples documentos. documents puede ser un array de ids o una formula.
+     * @returns {Promise}
+     */
     documentsDelete(documents, purge) {
         if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
+            // id o array de ids
             var url = 'folders/' + this.id + '/documents/?tobin=' + 
                 encURIC(purge == true ? false : true);
             return this.session.restClient.fetch(url, 'DELETE', 
                 Array.isArray(documents) ? documents : [documents], 'docIds');
 
         } else {
+            // formula
             // todo: tobin??
             var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
             return this.session.restClient.fetch(url, 'DELETE', {}, '');
         }
     }
 
+    /**
+     * Crea un nuevo documento.
+     * @returns {Promise<Document>}
+     */
     documentsNew() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2374,6 +2399,11 @@ export class Folder {
         })
     }
 
+    /**
+     * () -> Devuelve la lista de carpetas hijas.
+     * (name) -> Devuelve la carpeta hija con nombre name.
+     * @returns {Promise<Folder>}
+     */
     folders(name) {
         //todo: si no viene name devolver la lista
         var me = this;
@@ -2388,11 +2418,18 @@ export class Folder {
         });
     }
 
-    // Alias de type
+    /**
+     * Alias de type.
+     * @returns {number}
+     */
     get folderType() {
         return this.type;
     }
 
+    /**
+     * Retorna el form relacionado
+     * @returns {Promise<Form>}
+     */
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2412,14 +2449,24 @@ export class Folder {
         });
     }
 
+    /**
+     * Retorna el id del form relacionado
+     * @returns {number}
+     */
     get formId() {
         return this.#json.FrmId;
     }
 
+    /**
+     * @returns {number}
+     */
     get id() {
         return this.#json.FldId;
     }
 
+    /**
+     * @returns {string}
+     */
     get name() {
         return this.#json.Name;
     }
@@ -2428,15 +2475,25 @@ export class Folder {
         this.#json.Name = value;
     }
 
-    // Alias de documentsNew
+    /**
+     * Alias de documentsNew.
+     * @returns {Promise<Document>}
+     */
     newDoc() {
         return this.documentsNew();
     }
 
+    /**
+     * @returns {number}
+     */
     get objectType() {
         return Folder.objectType;
     }
 
+    /**
+     * Retorna la carpeta padre.
+     * @returns {Promise<Folder>}
+     */
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2458,6 +2515,10 @@ export class Folder {
         });
     }
 
+    /**
+     * Retorna el id de la carpeta padre.
+     * @returns {number}
+     */
     get parentId() {
         return this.#json.ParentFolder;
     }
@@ -2473,11 +2534,19 @@ export class Folder {
         return this.#properties.set(property, value);
     }
 
+    /**
+     * Retorna el id de la carpeta raiz de la aplicacion.
+     * @returns {number}
+     */
     get rootFolderId() {
         return this.#json.RootFolderId;
     }
 
-    // options: { fields, formula, order, maxDocs, recursive, maxTextLength }
+    /**
+     * Busca documentos.
+     * options: { fields, formula, order, maxDocs, recursive, maxTextLength }.
+     * @returns {Promise<Object[]>}
+     */
     search(options) {
         var opt = {
             fields: '',
@@ -2497,7 +2566,11 @@ export class Folder {
         return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
-    // options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }
+    /**
+     * Busqueda agrupada de documentos.
+     * options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }.
+     * @returns {Promise<Object[]>}
+     */
     searchGroups(options) {
         var opt = {
             groups: undefined,
@@ -2520,19 +2593,31 @@ export class Folder {
         return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
+    /**
+     * @returns {Session}
+     */
     get session() {
         return this.#session;
     }
 
+    /**
+     * @returns {Object}
+     */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
+    /**
+     * @returns {string}
+     */
     toJSON() {
         return this.#json;
     }
 
+    /**
+     * @returns {number}
+     */
     get type() {
         return this.#json.Type;
     }
@@ -2548,16 +2633,21 @@ export class Folder {
         return this.#userProperties.set(property, value);
     }
 
-    views(view) {
+    /**
+     * () -> Devuelve la coleccion.
+     * (name) -> Devuelve la vista name.
+     * @returns {(Promise<DoorsMap>|Promise<View>)}
+     */
+    views(name) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (view != undefined) {
+            if (name != undefined) {
                 me.views().then(
                     res => {
-                        if (res.has(view)) {
-                            resolve(res.get(view));
+                        if (res.has(name)) {
+                            resolve(res.get(name));
                         } else {
-                            reject(new Error('View not found: ' + view));
+                            reject(new Error('View not found: ' + name));
                         }
                     },
                     reject
@@ -2602,6 +2692,10 @@ export class Folder {
         })
     }
 
+    /**
+     * Crea una nueva vista.
+     * @returns {Promise<View>}
+     */
     async viewsAdd() {
         var url = 'folders/' + this.id + '/views/new';
         var res = await this.session.restClient.fetch(url, 'GET', '', '');
