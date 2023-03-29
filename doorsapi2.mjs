@@ -1868,10 +1868,17 @@ export class Document {
         return this.fields('modified').value;
     }
 
+    /**
+     * No implementado aun
+     */
     move(folder) {
         // todo
     }
 
+    /**
+     * Creador del documento.
+     * @returns {Promise<User>}
+     */
     get owner() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1889,10 +1896,18 @@ export class Document {
         });
     }
 
+    /**
+     * ACC_ID del creador del documento.
+     * @returns {number}
+     */
     get ownerId() {
         return this.fields('acc_id').value;
     }
 
+    /**
+     * Retorna la carpeta contenedora.
+     * @returns {Promise<Folder>}
+     */
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1910,6 +1925,10 @@ export class Document {
         });
     }
 
+    /**
+     * Retorna el FLD_ID de la carpeta contenedora.
+     * @returns {number}
+     */
     get parentId() {
         return this.fields('fld_id').value;
     }
@@ -1925,6 +1944,11 @@ export class Document {
         return this.#properties.set(property, value);
     }
 
+    /**
+     * Guarda el documento.
+     * No guarda adjuntos, estos deben guardarse o borrarse individualmente.
+     * @returns {Promise<Document>}
+     */
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1949,74 +1973,18 @@ export class Document {
     /*
     saveAttachments() {
         // todo: esto deberia ser parte del save (issue #261)
-        var me = this;
-        var proms = [];
-        var rm = [];
-        var attMap = me.#attachmentsMap;
-
-        return new Promise((resolve, reject) => {
-
-        });
-
-
-        for ([key, value] of attMap) {
-        }
-
-
-
-        me.session.utils.asyncLoop(attMap.size, async loop => {
-            var key = Array.from(attMap.keys())[loop.iteration()];
-            var el = attMap.get(key);      
-
-            if (el.isNew) {
-                var formData = new FormData();
-                // todo: probar
-                var arrBuf = await el.fileStream;
-                formData.append('attachment', new Blob([arrBuf]), el.name);
-                formData.append('description', el.description);
-                formData.append('group', el.group);
-                var url = 'documents/' + me.id + '/attachments';
-                proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
-
-            } else if (el.removed) {
-                rm.push(el.id);
-            }
-            loop.next();
-
-        }, () => {
-            if (rm.length > 0) {
-                var url = 'documents/' + me.id + '/attachments';
-                proms.push(me.session.restClient.fetch(url, 'DELETE', rm, 'arrayAttId'));
-            }
-
-            Promise.all(proms).then(
-                res => {
-                    //todo: actualizar el json de los attachs
-
-                    attMap.forEach((el, key) => {
-                        if (el.removed) {
-                            attMap.delete(key)
-                        } else if (el.isNew) {
-                            el.isNew = false;
-                        }
-                    });
-
-                    resolve(me)
-                },
-                err => {
-                    debugger;
-                    console.error(err);
-                    reject(err);
-                }
-            )
-        })
-    }
     */
 
+    /**
+     * @returns {Session}
+     */
     get session() {
         return this.#session;
     }
 
+    /**
+     * @returns {string}
+     */
     get subject() {
         return this.fields('subject').value;
     }
@@ -2025,11 +1993,18 @@ export class Document {
         this.fields('subject').value = value;
     }
 
+    /**
+     * @returns {Object}
+     */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
+    /**
+     * Agrega msg como entrada de log, con los minutos y segundos,
+     * en un tag llamado log.
+     */
     tagLog(msg) {
         var log = this.tags.log;
         if (!log) log = '';
@@ -2040,6 +2015,10 @@ export class Document {
         this.tags.log = log;
     }
 
+    /**
+     * Convierte a JSON
+     * @returns {string}
+     */
     toJSON() {
         return this.#json;
     }
@@ -2077,15 +2056,22 @@ export class Field {
         return this.#json.Custom;
     }
 
+    /**
+     * @returns {string}
+     */
     get description() {
         return this.#json.Description;
     }
 
+    /**
+     * @returns {string}
+     */
     get descriptionRaw() {
         return this.#json.DescriptionRaw;
     }
 
     get formId() {
+        debugger; // chequear
         return this.#json.Id;
     }
 
@@ -2093,6 +2079,10 @@ export class Field {
         return this.#json.HeaderTable;
     }
 
+    /**
+     * Retorna description si existe, sino el name con la 1ra letra en mayuscula.
+     * @returns {string}
+     */
     get label() {
         var ret = this.description;
         if (!ret) ret = this.name.substring(0, 1).toUpperCase() + this.name.substring(1).toLowerCase();
@@ -2139,10 +2129,16 @@ export class Field {
         return this.#json.Scale;
     }
 
+    /**
+     * @returns {Session}
+     */
     get session() {
         return this.parent.session;
     }
 
+    /**
+     * @returns {string}
+     */
     toJSON() {
         return this.#json;
     }
@@ -2196,6 +2192,10 @@ export class Field {
         return this.#json.ValueChanged;
     }
 
+    /**
+     * Retorna true si value es null, undefined o ''.
+     * @returns {boolean}
+     */
     get valueEmpty() {
         return (this.value == null || this.value == undefined || this.value == '');
     }
@@ -2223,10 +2223,21 @@ export class Folder {
         if (parent) this.#parent = parent;
     }
 
+    /**
+     * No implementado aun.
+     * Access Control List propio y heredado.
+     * @returns {Promise<Object[]>}
+     */
     acl() {
         //todo
     }
 
+    /**
+     * No implementado aun.
+     * Otorga el permiso access a la cuenta account (id).
+     * Access: todo: enumerar permisos de folder.
+     * @returns {Promise}
+     */
     aclGrant(account, access) {
         /* todo
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
@@ -2234,18 +2245,38 @@ export class Folder {
         */
     }
 
+    /**
+     * No implementado aun.
+     * Access Control List heredado.
+     * @returns {Promise<Object[]>}
+     */
     aclInherited() {
         //todo
     }
 
-    get aclInherits() {
+    /**
+     * No implementado aun.
+     * Devuelve o establece si se heredan permisos.
+     * @returns {Promise}
+     */
+    aclInherits(value) {
         //todo
     }
 
+    /**
+     * No implementado aun.
+     * Access Control List propio.
+     * @returns {Promise<Object[]>}
+     */
     aclOwn() {
         //todo
     }
 
+    /**
+     * Revoca el permiso access a la cuenta account (id).
+     * Access: todo: enumerar permisos de folder.
+     * @returns {Promise}
+     */
     aclRevoke(account, access) {
         /* todo
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
@@ -2253,6 +2284,11 @@ export class Folder {
         */
     }
 
+    /**
+     * Revoca todos los permisos de la cuenta account (id).
+     * Si account no se especifica revoca todos los permisos de todas las cuentas.
+     * @returns {Promise}
+     */
     aclRevokeAll(account) {
         /* todo
         var url = 'documents/' + this.id + '/acl/revokeAll';
