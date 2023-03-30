@@ -992,11 +992,12 @@ async function addListenersCapacitor (pCallback) {
         const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
         //App in foreground    
         if(status.isActive){
+            debugger;
             app7.notification.create({
                 title: data.title,
-                subtitle: "CLOUDY CRM 27",
+                subtitle: "CLOUDY CRM 7",
                 text: data.body,
-                closeTimeout: 10000,
+                closeOnClick : true,
                 on: {
                     click: function (notif) {
                         notif.close();
