@@ -994,8 +994,8 @@ async function addListenersCapacitor (pCallback) {
         if(status.isActive){
             debugger;
             app7.notification.create({
-                title: data.title,
-                subtitle: "CLOUDY CRM 7",
+                title: "CLOUDY CRM 7",
+                subtitle: data.title,
                 text: data.body,
                 closeOnClick : true,
                 on: {
