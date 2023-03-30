@@ -80,7 +80,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 249 });
     */
     
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 245 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 244 });
@@ -97,6 +96,7 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
+    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 149 });
