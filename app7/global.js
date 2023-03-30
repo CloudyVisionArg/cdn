@@ -993,9 +993,9 @@ async function addListenersCapacitor (pCallback) {
         //App in foreground    
         if(status.isActive){
             app7.notification.create({
-                title: 'CLOUDY CRM7',
-                subtitle: data.title,
-                text: data.message,
+                title: data.title,
+                subtitle: "CLOUDY CRM 7",
+                text: data.body,
                 closeTimeout: 10000,
                 on: {
                     click: function (notif) {
