@@ -979,8 +979,8 @@ async function addListenersCapacitor (pCallback) {
         console.log("pushNotificationReceived -status: " + status);
         console.log(notification);
         /* Utilizo el formato legacy de mensajes para las app en cordova */
-        data.title = notification.title;
-        data.body = notification.body;
+        data.title = notification.data.title;
+        data.body = notification.data.body;
         data.additionalData = notification.data;
         data.additionalData.foreground = status.isActive;
         //TODO: data.additionalData.coldstart = 
