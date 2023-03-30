@@ -979,24 +979,27 @@ async function addListenersCapacitor (pCallback) {
         console.log("pushNotificationReceived -status: " + status);
         console.log(notification);
         /* Utilizo el formato legacy de mensajes para las app en cordova */
-        data.title = notification.title;
-        data.body = notification.body;
+        data.title = notification.data.title;
+        data.body = notification.data.body;
         data.additionalData = notification.data;
         data.additionalData.foreground = status.isActive;
         //TODO: data.additionalData.coldstart = 
         //TODO: data.additionalData.dismissed = 
 
         if (window.refreshNotifications) window.refreshNotifications();
-        //window.dispatchEvent(new CustomEvent('pushNotification', { detail: { data } }));
         
+        var notifEv = new CustomEvent('pushNotification', { detail: { data } });
+        window.dispatchEvent(notifEv)
+
         const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
         //App in foreground    
         if(status.isActive){
+            debugger;
             app7.notification.create({
-                title: 'CLOUDY CRM7',
+                title: "CLOUDY CRM 7",
                 subtitle: data.title,
-                text: data.message,
-                closeTimeout: 10000,
+                text: data.body,
+                closeOnClick : true,
                 on: {
                     click: function (notif) {
                         notif.close();
