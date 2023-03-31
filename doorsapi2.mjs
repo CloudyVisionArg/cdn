@@ -261,7 +261,7 @@ export class Session {
     }
 
     set apiKey(value) {
-        this.#authToken = value;
+        this.#apiKey = value;
         this._reset();
     }
 
