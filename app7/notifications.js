@@ -343,11 +343,13 @@ function pageInitMembers(e, page) {
             let text = $("<div />", {"class":"item-subtitle","text":item.Body});
             text.appendTo(contenedor);
             
-            //let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
+            let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"mark bg-orange","text":"Marcar Como Leido"}).appendTo(swipActionRight);
             let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe swipeout-delete","text":"Borrar"}).appendTo(swipActionRight);
+
+            let swipBtnClose = $("<a/>",{"class":"swipeout-overswipe swipeout-close","text":"Cerrar?"}).appendTo(swipActionLeft);
 
             return ul.html();
         },
