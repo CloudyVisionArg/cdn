@@ -1565,7 +1565,7 @@ export class Document {
                         debugger;
                         if (res) {
                             me.#json.AclInherits = (value ? true : false);
-                            me.fields('inherits').value = (value ? 1 : 0);
+                            me.fields('inherits').toJSON().Value = (value ? 1 : 0);
                         }
                         resolve(res);
                     },
