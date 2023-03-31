@@ -1562,7 +1562,6 @@ export class Document {
                 var url = 'documents/' + this.id + '/aclinherits/' + value;
                 this.session.restClient.fetch(url, 'POST', {}, '').then(
                     res => {
-                        debugger;
                         if (res) {
                             me.#json.AclInherits = (value ? true : false);
                             me.fields('inherits').toJSON().Value = (value ? 1 : 0);
@@ -3903,7 +3902,7 @@ class RestClient {
             // Opciones por defecto estan marcadas con un *
             fetch(completeUrl, {
                 method: method, // *GET, POST, PUT, DELETE, etc.
-                //mode: 'cors', // no-cors, *cors, same-origin
+                mode: 'cors', // no-cors, *cors, same-origin
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 //credentials: 'omit', // include, *same-origin, omit
                 headers: headers,
