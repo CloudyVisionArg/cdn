@@ -161,9 +161,7 @@ export function inNode() {
 
 
 export class DoorsMap extends Map {
-    /**
-     * Metodo interno, no usar.
-     */
+    /** Metodo interno, no usar */
     _parseKey(key) {
         var k;
         if (typeof key === 'string') {
@@ -174,9 +172,7 @@ export class DoorsMap extends Map {
         return k;
     }
 
-    /**
-     * Alias de set.
-     */
+    /** Alias de set */
     add(key, value) {
         return this.set(key, value);
     }
@@ -185,17 +181,15 @@ export class DoorsMap extends Map {
         return super.delete(this._parseKey(key));
     }
 
-    /**
-     * Alias de has.
-     */
+    /** Alias de has */
     exists(key) {
         return this.has(key);
     }
 
     /**
-     * Busca y retorna un elemento.
-     * map.find((value, key) => { if ... return true }
-     */
+    Busca y retorna un elemento.
+    map.find((value, key) => { if ... return true }
+    */
     find(cbFunc) {
         var me = this;
         for (let [key, value] of super.entries()) {
@@ -214,23 +208,17 @@ export class DoorsMap extends Map {
         return super.has(this._parseKey(key));
     }
 
-    /**
-     * Alias de get.
-     */
+    /** Alias de get */
     item(key) {
         return this.get(key);
     }
 
-    /**
-     * Alias de size.
-     */
+    /** Alias de size */
     get length() {
         return super.size;
     }
 
-    /**
-     * Alias de delete.
-     */
+    /** Alias de delete */
     remove(key) {
         return this.delete(key);
     }
@@ -246,6 +234,7 @@ export class Session {
     #directory;
     #serverUrl;
     #authToken;
+    #apiKey;
     #tags;
     #db;
     #utils;
@@ -253,28 +242,45 @@ export class Session {
     #push;
     
     constructor(serverUrl, authToken) {
-        this.#restClient = new RestClient(serverUrl, authToken, this);
+        this.#restClient = new RestClient(this);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
     }
     
+    /** Metodo interno, no usar */
+    _reset() {
+        this.#tags = undefined;
+        this.#currentUser = undefined;
+    }
+
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
+    get apiKey() {
+        return this.#apiKey;
+    }
+
+    set apiKey(value) {
+        this.#authToken = value;
+        this._reset();
+    }
+
+    /**
+    @returns {string}
+    */
     get authToken() {
         return this.#authToken;
     }
 
     set authToken(value) {
         this.#authToken = value;
-        this.restClient.AuthToken = value;
-        this.#tags = undefined;
+        this._reset();
     }
 
     /**
-     * Cambia la contraseña del usuario logueado.
-     * @returns {Promise}
-     */
+    Cambia la contraseña del usuario logueado.
+    @returns {Promise}
+    */
     changePassword(login, oldPassword, newPassword, instance) {
         var url = 'session/changepassword';
 
@@ -288,9 +294,9 @@ export class Session {
     };
 
     /**
-     * Devuelve el usuario logueado.
-     * @returns {Promise<User>}
-     */
+    Devuelve el usuario logueado.
+    @returns {Promise<User>}
+    */
     get currentUser() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -310,9 +316,9 @@ export class Session {
     }
 
     /**
-     * Metodos de base de datos.
-     * @returns {Database}
-     */
+    Metodos de base de datos.
+    @returns {Database}
+    */
     get db() {
         if (!this.#db) {
             this.#db = new Database(this);
@@ -320,18 +326,15 @@ export class Session {
         return this.#db;
     }
 
-    /**
-     * Alias de directory.
-     * @returns {Directory}
-     */
+    /** Alias de directory */
     get dir() {
         return this.directory;
     }
 
     /**
-     * Metodos de manejo del directorio.
-     * @returns {Directory}
-     */
+    Metodos de manejo del directorio.
+    @returns {Directory}
+    */
     get directory() {
         if (!this.#directory) {
             this.#directory = new Directory(this);
@@ -339,18 +342,15 @@ export class Session {
         return this.#directory;
     }
 
-    /**
-     * Alias de documentsGetFromId.
-     * @returns {Promise<Document>}
-     */
+    /** Alias de documentsGetFromId */
     doc(docId) {
         return this.documentsGetFromId(docId);
     }
 
     /**
-     * Obtiene un documento por su doc_id.
-     * @returns {Promise<Document>}
-     */
+    Obtiene un documento por su doc_id.
+    @returns {Promise<Document>}
+    */
     documentsGetFromId(docId) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -365,10 +365,10 @@ export class Session {
     }
 
     /**
-     * Llama a foldersGetFromId o foldersGetFromPath (segun los parametros).
-     * Almacena en cache por 60 segs.
-     * @returns {Promise<Folder>}
-     */
+    Llama a foldersGetFromId o foldersGetFromPath (segun los parametros).
+    Almacena en cache por 60 segs.
+    @returns {Promise<Folder>}
+    */
     folder(folder, curFolderId) {
         var key = 'folder|' + folder + '|' + curFolderId;
         var cache = this.utils.cache(key);
@@ -383,18 +383,15 @@ export class Session {
         return cache;
     }
 
-    /**
-     * Alias de folder.
-     * @returns {Promise<Folder>}
-     */
+    /** Alias de folder */
     folders(folder, curFolderId) {
         return this.folder(folder, curFolderId);
     }
 
     /**
-     * Retorna un folder por su fld_id.
-     * @returns {Promise<Folder>}
-     */
+    Retorna un folder por su fld_id.
+    @returns {Promise<Folder>}
+    */
     foldersGetFromId(fldId) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -409,14 +406,14 @@ export class Session {
     };
 
     /**
-     * Retorna un folder por su path.
-     * Si curFolderId no se envia se asume 1001.
-     * @returns {Promise<Folder>}
-     */
+    Retorna un folder por su path.
+    Si curFolderId no se envia se asume 1001.
+    @returns {Promise<Folder>}
+    */
     foldersGetFromPath(fldPath, curFolderId) {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + (curFolderId ? curFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
+            var url = 'folders/' + (curFolderId ? curFolderId : 1001) + '/children?folderpath=' + me.utils.encUriC(fldPath);
             me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
@@ -427,18 +424,18 @@ export class Session {
     };
 
     /**
-     * Devuelve true si estoy logueado.
-     * @returns {Promise<boolean>}
-     */
+    Devuelve true si estoy logueado.
+    @returns {Promise<boolean>}
+    */
     get isLogged() {
         var url = 'session/islogged';
         return this.restClient.fetch(url, 'POST', {}, '');
     };
 
     /**
-     * Cierra la sesion.
-     * @returns {Promise}
-     */
+    Cierra la sesion.
+    @returns {Promise}
+    */
     logoff() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -451,9 +448,9 @@ export class Session {
     };
 
     /**
-     * Inicia la sesion. Devuelve el authToken.
-     * @returns {Promise<string>}
-     */
+    Inicia la sesion. Devuelve el authToken.
+    @returns {Promise<string>}
+    */
     logon(login, password, instance, liteMode) {
         var me = this;
         var url = 'session/logon';
@@ -475,9 +472,9 @@ export class Session {
     };
 
     /**
-     * Metodos para manejo de notificaciones push.
-     * @returns {Push}
-     */
+    Metodos para manejo de notificaciones push.
+    @returns {Push}
+    */
     get push() {
         if (!this.#push) {
             this.#push = new Push(this);
@@ -485,16 +482,12 @@ export class Session {
         return this.#push;
     }
 
-    /**
-     * Backward compat. Usar dSession.push.register.
-     */
+    /** Backward compat. Usar dSession.push.register. */
     pushRegistration(settings) {
         return this.push.register(settings);
     }
 
-    /**
-     * Backward compat. Usar dSession.push.unreg.
-     */
+    /** Backward compat. Usar dSession.push.unreg. */
     pushUnreg(regType, regId) {
         return this.push.unreg(regType, regId);
     }
@@ -504,9 +497,9 @@ export class Session {
     }
 
     /**
-     * Devuelve o setea runSyncEventsOnClient.
-     * @returns {Promise}
-     */
+    Devuelve o setea runSyncEventsOnClient.
+    @returns {Promise}
+    */
     runSyncEventsOnClient(value) {
         if (value == undefined) {
             var url = 'session/syncevents/runOnClient';
@@ -518,28 +511,27 @@ export class Session {
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get serverUrl() {
         return this.#serverUrl;
     }
 
     set serverUrl(value) {
         this.#serverUrl = value;
-        this.restClient.ServerBaseUrl = value;
-        this.#tags == undefined
+        this._reset();
     }
 
     /**
-     * Devuelve o setea un setting de instancia.
-     * @returns {Promise}
-     */
+    Devuelve o setea un setting de instancia.
+    @returns {Promise}
+    */
     settings(setting, value) {
         var url = 'settings';
         var method, param, paramName;
 
         if (value == undefined) {
-            url += '/' + encURIC(setting);
+            url += '/' + this.utils.encUriC(setting);
             method = 'GET';
             param = '';
             paramName = ''
@@ -556,9 +548,9 @@ export class Session {
     }
 
     /**
-     * Devuelve los tags de session.
-     * @returns {Promise<Object>}
-     */
+    Devuelve los tags de session.
+    @returns {Promise<Object>}
+    */
     get tags() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -578,9 +570,9 @@ export class Session {
     }
 
     /**
-     * Metodos varios.
-     * @returns {Utilities}
-     */
+    Metodos varios.
+    @returns {Utilities}
+    */
     get utils() {
         if (!this.#utils) {
             this.#utils = new Utilities(this);
@@ -602,9 +594,7 @@ export class Account {
         this.#session = session;
     }
 
-    /**
-     * Metodo interno, no usar.
-     */
+    /** Metodo interno, no usar */
     _accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -629,9 +619,7 @@ export class Account {
         });
     }
 
-    /**
-     * Metodo interno, no usar.
-     */
+    /** Metodo interno, no usar */
     _accountsList(property, endPoint) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -651,9 +639,7 @@ export class Account {
         });
     }
 
-    /**
-     * Metodo interno, no usar.
-     */
+    /** Metodo interno, no usar */
     _accountsMap(accounts) {
         var me = this;
         var map = new DoorsMap();
@@ -669,9 +655,9 @@ export class Account {
     }
 
     /**
-     * Convierte a User
-     * @returns {User}
-     */
+    Convierte a User
+    @returns {User}
+    */
     cast2User() {
         if (this.type == 1) {
             return new User(this.#json, this.#session);
@@ -681,10 +667,10 @@ export class Account {
     }
 
     /**
-     * () -> Devuelve un map de cuentas hijas.
-     * (account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
-     * @returns {(Promise<Account>|Promise<DoorsMap>)}
-     */
+    () -> Devuelve un map de cuentas hijas.
+    (account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
+    */
     childAccounts(account) {
         if (account == undefined) {
             return this._accountsList('ChildAccountsList', 'childAccounts');
@@ -694,9 +680,9 @@ export class Account {
     }
 
     /**
-     * Agrega una o varias cuentas hijas.
-     * @returns {Promise}
-     */
+    Agrega una o varias cuentas hijas.
+    @returns {Promise}
+    */
     async childAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
@@ -706,10 +692,10 @@ export class Account {
     }
 
     /**
-     * () -> Devuelve un map de cuentas hijas recursivo.
-     * (account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
-     * @returns {(Promise<Account>|Promise<DoorsMap>)}
-     */
+    () -> Devuelve un map de cuentas hijas recursivo.
+    (account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
+    */
     childAccountsRecursive(account) {
         if (account == undefined) {
             return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
@@ -719,9 +705,9 @@ export class Account {
     }
 
     /**
-     * Quita una o varias cuentas hijas.
-     * @returns {Promise}
-     */
+    Quita una o varias cuentas hijas.
+    @returns {Promise}
+    */
     async childAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
@@ -731,9 +717,9 @@ export class Account {
     }
 
     /**
-     * Borra la cuenta.
-     * @returns {Promise}
-     */
+    Borra la cuenta.
+    @returns {Promise}
+    */
     delete(expropiateObjects) {
         var expObj = expropiateObjects ? true : false;
         var url = 'accounts/' + this.id + '?expropiateObjects=' + expObj;
@@ -741,8 +727,8 @@ export class Account {
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get description() {
         return this.#json.Description;
     }
@@ -752,8 +738,8 @@ export class Account {
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get email() {
         return this.#json.Email;
     }
@@ -763,47 +749,47 @@ export class Account {
     }
 
     /**
-     * Devuelve true si la tiene de hija. account puede ser name o id.
-     * @returns {Promise<boolean>}
-     */
+    Devuelve true si la tiene de hija. account puede ser name o id.
+    @returns {Promise<boolean>}
+    */
     async hasChild(account, recursive) {
         var acc = await this['childAccounts' + (recursive ? 'Recursive' : '')](account, true);
         return acc ? true : false;
     }
 
     /**
-     * Devuelve true si la tiene de padre. account puede ser name o id.
-     * @returns {Promise<boolean>}
-     */
+    Devuelve true si la tiene de padre. account puede ser name o id.
+    @returns {Promise<boolean>}
+    */
     async hasParent(account, recursive) {
         var acc = await this['parentAccounts' + (recursive ? 'Recursive' : '')](account, true);
         return acc ? true : false;
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get id() {
         return this.#json.AccId;
     }
 
     /**
-     * @returns {boolean}
-     */
+    @returns {boolean}
+    */
     get isAdmin() {
         return this.#json.IsAdmin;
     }
 
     /**
-     * @returns {boolean}
-     */
+    @returns {boolean}
+    */
     get isNew() {
         return this.#json.IsNew;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get name() {
         return this.#json.Name;
     }
@@ -813,17 +799,17 @@ export class Account {
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get objectType() {
         return Account.objectType;
     }
 
     /**
-     * () -> Devuelve un map de cuentas padre.
-     * (account) -> Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
-     * @returns {(Promise<Account>|Promise<DoorsMap>)}
-     */
+    () -> Devuelve un map de cuentas padre.
+    (account) -> Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
+    */
     parentAccounts(account) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsList', 'parentAccounts');
@@ -833,9 +819,9 @@ export class Account {
     }
 
     /**
-     * Agrega una o varias cuentas padre.
-     * @returns {Promise}
-     */
+    Agrega una o varias cuentas padre.
+    @returns {Promise}
+    */
     async parentAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
@@ -845,10 +831,10 @@ export class Account {
     }
 
     /**
-     * () -> Devuelve un map de cuentas padre recursivo.
-     * (account) -> Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
-     * @returns {(Promise<Account>|Promise<DoorsMap>)}
-     */
+    () -> Devuelve un map de cuentas padre recursivo.
+    (account) -> Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
+    */
     parentAccountsRecursive(account) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
@@ -858,9 +844,9 @@ export class Account {
     }
 
     /**
-     * Quita una o varias cuentas hijas.
-     * @returns {Promise}
-     */
+    Quita una o varias cuentas hijas.
+    @returns {Promise}
+    */
     async parentAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
@@ -870,20 +856,20 @@ export class Account {
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la property.
-     * (property, value) -> Setea el valor de la property.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la property.
+    (property, value) -> Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
     /**
-     * Guarda.
-     * @returns {Promise<Account>}
-     */
+    Guarda.
+    @returns {Promise<Account>}
+    */
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -907,8 +893,8 @@ export class Account {
     }
 
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
@@ -919,33 +905,33 @@ export class Account {
     }
 
     /**
-     * @returns {Object}
-     */
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get type() {
         return this.#json.Type;
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la userProperty.
-     * (property, value) -> Setea el valor de la userProperty.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la userProperty.
+    (property, value) -> Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -962,32 +948,32 @@ export class Application {
     }
 
     /**
-     * Alias de folders.
-     * @returns {Promise<Folder>}
-     */
+    Alias de folders.
+    @returns {Promise<Folder>}
+    */
     folder(folderPath) {
         return this.folders(folderPath);
     }
 
     /**
-     * Retorna un folder por su path.
-     * @returns {Promise<Folder>}
-     */
+    Retorna un folder por su path.
+    @returns {Promise<Folder>}
+    */
     folders(folderPath) {
         return this.session.folder(folderPath, this.rootFolderId);
     }
 
     /**
-     * @returns {Folder}
-     */
+    @returns {Folder}
+    */
     get parent() {
         return this.#parent;
     }
 
     /**
-     * Retorna el root folder del app.
-     * @returns {Promise<Folder>}
-     */
+    Retorna el root folder del app.
+    @returns {Promise<Folder>}
+    */
     get rootFolder() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1006,16 +992,16 @@ export class Application {
     }
 
     /**
-     * Retorna el root folder id del app.
-     * @returns {number}
-     */
+    Retorna el root folder id del app.
+    @returns {number}
+    */
     get rootFolderId() {
         return this.#parent.toJSON().RootFolderId;
     }
 
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.parent.session;
     }
@@ -1036,22 +1022,20 @@ export class Attachment {
     }
 
     /**
-     * @returns {Date}
-     */
+    @returns {Date}
+    */
     get created() {
         return this.session.utils.cDate(this.#json.Created);
     }
 
-    /**
-     * Alias de remove
-     */
+    /** Alias de remove */
     delete() {
         return this.remove();
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get description() {
         return this.#json.Description;
     }
@@ -1062,8 +1046,8 @@ export class Attachment {
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get extension() {
         return this.#json.Extension;
     }
@@ -1083,8 +1067,8 @@ export class Attachment {
     }
 
     /**
-     * @returns {Promise<ArrayBuffer>}
-     */
+    @returns {Promise<ArrayBuffer>}
+    */
     get fileStream() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1110,8 +1094,8 @@ export class Attachment {
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get group() {
         return this.#json.group;
     }
@@ -1122,8 +1106,8 @@ export class Attachment {
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get id() {
         return this.#json.AttId;
     }
@@ -1137,8 +1121,8 @@ export class Attachment {
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get name() {
         return this.#json.Name;
     }
@@ -1148,9 +1132,9 @@ export class Attachment {
     }
 
     /**
-     * Creador del adjunto.
-     * @returns {Promise<User>}
-     */
+    Creador del adjunto.
+    @returns {Promise<User>}
+    */
     get owner() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1169,43 +1153,43 @@ export class Attachment {
     }
 
     /**
-     * ACC_ID del creador del adjunto.
-     * @returns {number}
-     */
+    ACC_ID del creador del adjunto.
+    @returns {number}
+    */
     get ownerId() {
         return this.#json.AccId
     }
 
     /**
-     * NAME del creador del adjunto.
-     * @returns {string}
-     */
+    NAME del creador del adjunto.
+    @returns {string}
+    */
     get ownerName() {
         return this.#json.AccName
     }
 
     /**
-     * @returns {Document}
-     */
+    @returns {Document}
+    */
     get parent() {
         return this.#parent;
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la property.
-     * (property, value) -> Setea el valor de la property.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la property.
+    (property, value) -> Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
     /**
-     * Borra el adjunto inmediatamente.
-     * @returns {Promise}
-     */
+    Borra el adjunto inmediatamente.
+    @returns {Promise}
+    */
     remove() {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -1227,9 +1211,9 @@ export class Attachment {
     }
 
     /**
-     * Guarda el adjunto inmediatamente.
-     * @returns {Promise}
-     */
+    Guarda el adjunto inmediatamente.
+    @returns {Promise}
+    */
     save() {
         if (!this.isNew) throw new Error('I\'m not new');
 
@@ -1261,40 +1245,40 @@ export class Attachment {
     }
 
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.parent.session;
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get size() {
         return this.#json.Size;
     }
 
     /**
-     * @returns {Object}
-     */
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la userProperty.
-     * (property, value) -> Setea el valor de la userProperty.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la userProperty.
+    (property, value) -> Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -1308,17 +1292,15 @@ export class Database {
         this.#session = session;
     }
 
-    /**
-     * No implementado aun
-     */
+    /** No implementado aun */
     async execute(sql) {
         // todo
     }
 
     /**
-     * Obtiene el siguiente valor de la secuencia.
-     * @returns {Promise<number>}
-     */
+    Obtiene el siguiente valor de la secuencia.
+    @returns {Promise<number>}
+    */
     async nextVal(sequence) {
         var res = await this.session.utils.execVbs(`
             Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
@@ -1328,9 +1310,9 @@ export class Database {
     }
 
     /**
-     * Ejecuta una consulta a la base de datos.
-     * @returns {Promise<Object[]>}
-     */
+    Ejecuta una consulta a la base de datos.
+    @returns {Promise<Object[]>}
+    */
     async openRecordset(sql) {
         sql = sql.replaceAll('"', '""');
         sql = sql.replaceAll('\n', ' ');
@@ -1375,17 +1357,15 @@ export class Database {
         return ret;
     }
 
-    /**
-     * Alias de sqlEncode.
-     */
+    /** Alias de sqlEncode. */
     sqlEnc(value, type) {
         return this.sqlEncode(value, type);
     }
 
     /**
-     * Encodea un valor para SQL. type: 1=char / 2=date / 3=number.
-     * @returns {string}
-     */
+    Encodea un valor para SQL. type: 1=char / 2=date / 3=number.
+    @returns {string}
+    */
     sqlEncode(value, type) {
         if (value == null) {
             return 'NULL';
@@ -1420,15 +1400,13 @@ export class Database {
     }
     
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
 
-    /**
-     * No implementado aun
-     */
+    /** No implementado aun */
     setVal(sequence, value) {
         // todo
     }
@@ -1442,16 +1420,16 @@ export class Directory {
     }
 
     /**
-     * Devuelve un account por name o id.
-     * @returns {Promise<Account>}
-     */
+    Devuelve un account por name o id.
+    @returns {Promise<Account>}
+    */
     accounts(account) {
         var me = this;
         return new Promise((resolve, reject) => {
             var url;
             if (isNaN(parseInt(account))) {
-                //url = 'accounts?accName=' + encURIC(account);
-                url = 'accounts/name/' + encURIC(account);
+                //url = 'accounts?accName=' + me.session.utils.encUriC(account);
+                url = 'accounts/name/' + me.session.utils.encUriC(account);
             } else {
                 // todo: cambiar por /accounts/{accId}
                 url = 'accounts?accIds=' + account;
@@ -1472,9 +1450,9 @@ export class Directory {
     }
 
     /**
-     * Crea un nuevo account. type: 1=User / 2=Group.
-     * @returns {(Promise<User>|Promise<Account>)}
-     */
+    Crea un nuevo account. type: 1=User / 2=Group.
+    @returns {(Promise<User>|Promise<Account>)}
+    */
     accountsNew(type) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1501,17 +1479,18 @@ export class Directory {
     }
 
     /**
-     * Busca accounts.
-     * @returns {Promise<Object[]>}
-     */
+    Busca accounts.
+    @returns {Promise<Object[]>}
+    */
     accountsSearch(filter, order) {
-        let url = '/accounts/search?filter=' + encURIC(filter) + '&order=' + encURIC(order);
+        let url = '/accounts/search?filter=' + this.session.utils.encUriC(filter) + 
+            '&order=' + this.session.utils.encUriC(order);
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
@@ -1542,38 +1521,38 @@ export class Document {
     }
 
     /**
-     * Access Control List propio y heredado.
-     * @returns {Promise<Object[]>}
-     */
+    Access Control List propio y heredado.
+    @returns {Promise<Object[]>}
+    */
     acl() {
         var url = 'documents/' + this.id + '/acl/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     /**
-     * Otorga el permiso access a la cuenta account (id).
-     * Access: read / modifiy / delete / admin.
-     * @returns {Promise}
-     */
+    Otorga el permiso access a la cuenta account (id).
+    Access: read / modifiy / delete / admin.
+    @returns {Promise}
+    */
     aclGrant(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.fetch(url, 'POST', {}, '');
     }
 
     /**
-     * Access Control List heredado.
-     * @returns {Promise<Object[]>}
-     */
+    Access Control List heredado.
+    @returns {Promise<Object[]>}
+    */
     aclInherited() {
         var url = 'documents/' + this.id + '/aclinherited/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     /**
-     * Devuelve o establece si se heredan permisos.
-     * todo: no esta andando.
-     * @returns {Promise}
-     */
+    Devuelve o establece si se heredan permisos.
+    todo: no esta andando.
+    @returns {Promise}
+    */
     aclInherits(value) {
         if (value == undefined) {
             return (this.fields('inherits').value ? true : false);
@@ -1595,29 +1574,29 @@ export class Document {
     }
 
     /**
-     * Access Control List propio.
-     * @returns {Promise<Object[]>}
-     */
+    Access Control List propio.
+    @returns {Promise<Object[]>}
+    */
     aclOwn() {
         var url = 'documents/' + this.id + '/aclown/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     /**
-     * Revoca el permiso access a la cuenta account (id).
-     * Access: read / modifiy / delete / admin.
-     * @returns {Promise}
-     */
+    Revoca el permiso access a la cuenta account (id).
+    Access: read / modifiy / delete / admin.
+    @returns {Promise}
+    */
     aclRevoke(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
     /**
-     * Revoca todos los permisos de la cuenta account (id).
-     * Si account no se especifica revoca todos los permisos de todas las cuentas.
-     * @returns {Promise}
-     */
+    Revoca todos los permisos de la cuenta account (id).
+    Si account no se especifica revoca todos los permisos de todas las cuentas.
+    @returns {Promise}
+    */
     aclRevokeAll(account) {
         var url = 'documents/' + this.id + '/acl/revokeAll';
         if (account) {
@@ -1628,9 +1607,9 @@ export class Document {
     }
 
     /**
-     * Devuelve la coleccion de adjuntos, o uno en particular si se especifica attachment (name).
-     * @returns {(Promise<DoorsMap>|Promise<Attachment>)}
-     */
+    Devuelve la coleccion de adjuntos, o uno en particular si se especifica attachment (name).
+    @returns {(Promise<DoorsMap>|Promise<Attachment>)}
+    */
     attachments(attachment) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1688,9 +1667,9 @@ export class Document {
     }
 
     /**
-     * Crea y devuelve un nuevo adjunto con nombre name.
-     * @returns {Attachment}
-     */
+    Crea y devuelve un nuevo adjunto con nombre name.
+    @returns {Attachment}
+    */
     attachmentsAdd(name) {
         if (!name) throw new Error('name is required');
 
@@ -1710,45 +1689,40 @@ export class Document {
         return att;
     }
 
-    /**
-     * No implementado aun
-     */
+    /** No implementado aun */
     copy(folder) {
         // todo
     }
 
     /**
-     * @returns {Date}
-     */
+    @returns {Date}
+    */
     get created() {
         return this.fields('created').value;
     }
 
-    /**
-     * No implementado aun
-     */
+    /** No implementado aun */
     currentAccess(access, explicit) {
         // todo
     }
 
     /**
-     * Borra el documento, si purge=true no se envia a la papelera
-     * @returns {Promise}
-     */
+    Borra el documento, si purge=true no se envia a la papelera
+    @returns {Promise}
+    */
     delete(purge) {
-        var me = this;
-        var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
-            encURIC(purge == true ? false : true);
-        return me.session.restClient.fetch(url, 'DELETE', [me.id], 'docIds');
+        var url = 'folders/' + this.parentId + '/documents/?tobin=' + 
+            this.session.utils.encUriC(purge == true ? false : true);
+        return this.session.restClient.fetch(url, 'DELETE', [this.id], 'docIds');
         //todo: en q estado queda el objeto?
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (name) -> Devuelve el field (undefined si no lo encuentra).
-     * (name, value) -> Setea el valor del field.
-     * @returns {(DoorsMap|Field)}
-     */
+    () -> Devuelve la coleccion.
+    (name) -> Devuelve el field (undefined si no lo encuentra).
+    (name, value) -> Setea el valor del field.
+    @returns {(DoorsMap|Field)}
+    */
     fields(name, value) {
         var me = this;
 
@@ -1782,25 +1756,19 @@ export class Document {
         }
     }
 
-    /**
-     * Alias de parent
-     * @returns {Folder}
-     */
+    /** Alias de parent */
     get folder() {
         return this.parent
     }
 
-    /**
-     * Alias de parentId
-     * @returns {number}
-     */
+    /** Alias de parentId */
     get folderId() {
         return this.parentId
     }
 
     /**
-     * @returns {Promise<Form>}
-     */
+    @returns {Promise<Form>}
+    */
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1820,65 +1788,61 @@ export class Document {
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get formId() {
         return this.fields('frm_id').value;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get icon() {
         return this.fields('icon').value;
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get id() {
         return this.#json.DocId;
     }
 
     /**
-     * @returns {boolean}
-     */
+    @returns {boolean}
+    */
     get isNew() {
         return this.#json.IsNew;
     }
 
-    /**
-     * No implementado aun
-     */
+    /** No implementado aun */
     log() {
         // todo
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get objectType() {
         return Document.objectType;
     }
 
     /**
-     * @returns {Date}
-     */
+    @returns {Date}
+    */
     get modified() {
         return this.fields('modified').value;
     }
 
-    /**
-     * No implementado aun
-     */
+    /** No implementado aun */
     move(folder) {
         // todo
     }
 
     /**
-     * Creador del documento.
-     * @returns {Promise<User>}
-     */
+    Creador del documento.
+    @returns {Promise<User>}
+    */
     get owner() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1897,17 +1861,17 @@ export class Document {
     }
 
     /**
-     * ACC_ID del creador del documento.
-     * @returns {number}
-     */
+    ACC_ID del creador del documento.
+    @returns {number}
+    */
     get ownerId() {
         return this.fields('acc_id').value;
     }
 
     /**
-     * Retorna la carpeta contenedora.
-     * @returns {Promise<Folder>}
-     */
+    Retorna la carpeta contenedora.
+    @returns {Promise<Folder>}
+    */
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1926,29 +1890,29 @@ export class Document {
     }
 
     /**
-     * Retorna el FLD_ID de la carpeta contenedora.
-     * @returns {number}
-     */
+    Retorna el FLD_ID de la carpeta contenedora.
+    @returns {number}
+    */
     get parentId() {
         return this.fields('fld_id').value;
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la property.
-     * (property, value) -> Setea el valor de la property.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la property.
+    (property, value) -> Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
     /**
-     * Guarda el documento.
-     * No guarda adjuntos, estos deben guardarse o borrarse individualmente.
-     * @returns {Promise<Document>}
-     */
+    Guarda el documento.
+    No guarda adjuntos, estos deben guardarse o borrarse individualmente.
+    @returns {Promise<Document>}
+    */
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1976,15 +1940,15 @@ export class Document {
     */
 
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get subject() {
         return this.fields('subject').value;
     }
@@ -1994,17 +1958,17 @@ export class Document {
     }
 
     /**
-     * @returns {Object}
-     */
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
     /**
-     * Agrega msg como entrada de log, con los minutos y segundos,
-     * en un tag llamado log.
-     */
+    Agrega msg como entrada de log, con los minutos y segundos,
+    en un tag llamado log.
+    */
     tagLog(msg) {
         var log = this.tags.log;
         if (!log) log = '';
@@ -2016,19 +1980,19 @@ export class Document {
     }
 
     /**
-     * Convierte a JSON
-     * @returns {string}
-     */
+    Convierte a JSON
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la userProperty.
-     * (property, value) -> Setea el valor de la userProperty.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la userProperty.
+    (property, value) -> Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -2057,15 +2021,15 @@ export class Field {
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get description() {
         return this.#json.Description;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get descriptionRaw() {
         return this.#json.DescriptionRaw;
     }
@@ -2080,9 +2044,9 @@ export class Field {
     }
 
     /**
-     * Retorna description si existe, sino el name con la 1ra letra en mayuscula.
-     * @returns {string}
-     */
+    Retorna description si existe, sino el name con la 1ra letra en mayuscula.
+    @returns {string}
+    */
     get label() {
         var ret = this.description;
         if (!ret) ret = this.name.substring(0, 1).toUpperCase() + this.name.substring(1).toLowerCase();
@@ -2115,11 +2079,11 @@ export class Field {
 
     // todo: solo para field de form, add o remove igual
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la property.
-     * (property, value) -> Setea el valor de la property.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la property.
+    (property, value) -> Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
@@ -2130,15 +2094,15 @@ export class Field {
     }
 
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.parent.session;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
@@ -2152,11 +2116,11 @@ export class Field {
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la userProperty.
-     * (property, value) -> Setea el valor de la userProperty.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la userProperty.
+    (property, value) -> Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -2193,9 +2157,9 @@ export class Field {
     }
 
     /**
-     * Retorna true si value es null, undefined o ''.
-     * @returns {boolean}
-     */
+    Retorna true si value es null, undefined o ''.
+    @returns {boolean}
+    */
     get valueEmpty() {
         return (this.value == null || this.value == undefined || this.value == '');
     }
@@ -2224,21 +2188,21 @@ export class Folder {
     }
 
     /**
-     * No implementado aun.
-     * Access Control List propio y heredado.
-     * @returns {Promise<Object[]>}
-     */
+    No implementado aun.
+    Access Control List propio y heredado.
+    @returns {Promise<Object[]>}
+    */
     acl() {
         //todo
     }
 
     /**
-     * No implementado aun.
-     * Otorga el permiso access a la cuenta account (id).
-     * Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
-     * doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
-     * @returns {Promise}
-     */
+    No implementado aun.
+    Otorga el permiso access a la cuenta account (id).
+    Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
+    doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
+    @returns {Promise}
+    */
     aclGrant(account, access) {
         /* todo
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
@@ -2247,38 +2211,39 @@ export class Folder {
     }
 
     /**
-     * No implementado aun.
-     * Access Control List heredado.
-     * @returns {Promise<Object[]>}
-     */
+    No implementado aun.
+    Access Control List heredado.
+    @returns {Promise<Object[]>}
+    */
     aclInherited() {
         //todo
     }
 
     /**
-     * No implementado aun.
-     * Devuelve o establece si se heredan permisos.
-     * @returns {Promise}
-     */
+    No implementado aun.
+    Devuelve o establece si se heredan permisos.
+    @returns {Promise}
+    */
     aclInherits(value) {
         //todo
     }
 
     /**
-     * No implementado aun.
-     * Access Control List propio.
-     * @returns {Promise<Object[]>}
-     */
+    No implementado aun.
+    Access Control List propio.
+    @returns {Promise<Object[]>}
+    */
     aclOwn() {
         //todo
     }
 
     /**
-     * Revoca el permiso access a la cuenta account (id).
-     * Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
-     * doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
-     * @returns {Promise}
-     */
+    No implementado aun.
+    Revoca el permiso access a la cuenta account (id).
+    Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
+    doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
+    @returns {Promise}
+    */
     aclRevoke(account, access) {
         /* todo
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
@@ -2287,10 +2252,11 @@ export class Folder {
     }
 
     /**
-     * Revoca todos los permisos de la cuenta account (id).
-     * Si account no se especifica revoca todos los permisos de todas las cuentas.
-     * @returns {Promise}
-     */
+    No implementado aun.
+    Revoca todos los permisos de la cuenta account (id).
+    Si account no se especifica revoca todos los permisos de todas las cuentas.
+    @returns {Promise}
+    */
     aclRevokeAll(account) {
         /* todo
         var url = 'documents/' + this.id + '/acl/revokeAll';
@@ -2303,8 +2269,8 @@ export class Folder {
     }
 
     /**
-     * @returns {Application}
-     */
+    @returns {Application}
+    */
     get app() {
         if (!this.#app) {
             this.#app = new Application(this);
@@ -2313,25 +2279,25 @@ export class Folder {
     }
 
     /**
-     * Alias de documentsDelete.
-     * @returns {Promise}
-     */
+    Alias de documentsDelete.
+    @returns {Promise}
+    */
     delete(documents, purge) {
         return this.documentsDelete(documents, purge);
     }
 
     /**
-     * Alias de documents.
-     * @returns {Promise<Document>}
-     */
+    Alias de documents.
+    @returns {Promise<Document>}
+    */
     doc(document) {
         return this.documents(document);
     }
     
     /**
-     * Obtiene un documento. document puede ser el id o una formula que devuelva un solo elemento.
-     * @returns {Promise<Document>}
-     */
+    Obtiene un documento. document puede ser el id o una formula que devuelva un solo elemento.
+    @returns {Promise<Document>}
+    */
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -2363,29 +2329,29 @@ export class Folder {
     }
 
     /**
-     * Borra multiples documentos. documents puede ser un array de ids o una formula.
-     * @returns {Promise}
-     */
+    Borra multiples documentos. documents puede ser un array de ids o una formula.
+    @returns {Promise}
+    */
     documentsDelete(documents, purge) {
         if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
             // id o array de ids
             var url = 'folders/' + this.id + '/documents/?tobin=' + 
-                encURIC(purge == true ? false : true);
+                this.session.utils.encUriC(purge == true ? false : true);
             return this.session.restClient.fetch(url, 'DELETE', 
                 Array.isArray(documents) ? documents : [documents], 'docIds');
 
         } else {
             // formula
             // todo: tobin??
-            var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
+            var url = 'folders/' + this.id + '/documents/' + this.session.utils.encUriC(documents);
             return this.session.restClient.fetch(url, 'DELETE', {}, '');
         }
     }
 
     /**
-     * Crea un nuevo documento.
-     * @returns {Promise<Document>}
-     */
+    Crea un nuevo documento.
+    @returns {Promise<Document>}
+    */
     documentsNew() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2400,15 +2366,15 @@ export class Folder {
     }
 
     /**
-     * () -> Devuelve la lista de carpetas hijas.
-     * (name) -> Devuelve la carpeta hija con nombre name.
-     * @returns {Promise<Folder>}
-     */
+    () -> Devuelve la lista de carpetas hijas.
+    (name) -> Devuelve la carpeta hija con nombre name.
+    @returns {Promise<Folder>}
+    */
     folders(name) {
         //todo: si no viene name devolver la lista
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
+            var url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session, me));
@@ -2419,17 +2385,17 @@ export class Folder {
     }
 
     /**
-     * Alias de type.
-     * @returns {number}
-     */
+    Alias de type.
+    @returns {number}
+    */
     get folderType() {
         return this.type;
     }
 
     /**
-     * Retorna el form relacionado
-     * @returns {Promise<Form>}
-     */
+    Retorna el form relacionado
+    @returns {Promise<Form>}
+    */
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2450,23 +2416,23 @@ export class Folder {
     }
 
     /**
-     * Retorna el id del form relacionado
-     * @returns {number}
-     */
+    Retorna el id del form relacionado
+    @returns {number}
+    */
     get formId() {
         return this.#json.FrmId;
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get id() {
         return this.#json.FldId;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     get name() {
         return this.#json.Name;
     }
@@ -2475,25 +2441,22 @@ export class Folder {
         this.#json.Name = value;
     }
 
-    /**
-     * Alias de documentsNew.
-     * @returns {Promise<Document>}
-     */
+    /** Alias de documentsNew */
     newDoc() {
         return this.documentsNew();
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get objectType() {
         return Folder.objectType;
     }
 
     /**
-     * Retorna la carpeta padre.
-     * @returns {Promise<Folder>}
-     */
+    Retorna la carpeta padre.
+    @returns {Promise<Folder>}
+    */
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2516,37 +2479,37 @@ export class Folder {
     }
 
     /**
-     * Retorna el id de la carpeta padre.
-     * @returns {number}
-     */
+    Retorna el id de la carpeta padre.
+    @returns {number}
+    */
     get parentId() {
         return this.#json.ParentFolder;
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la property.
-     * (property, value) -> Setea el valor de la property.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la property.
+    (property, value) -> Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
     /**
-     * Retorna el id de la carpeta raiz de la aplicacion.
-     * @returns {number}
-     */
+    Retorna el id de la carpeta raiz de la aplicacion.
+    @returns {number}
+    */
     get rootFolderId() {
         return this.#json.RootFolderId;
     }
 
     /**
-     * Busca documentos.
-     * options: { fields, formula, order, maxDocs, recursive, maxTextLength }.
-     * @returns {Promise<Object[]>}
-     */
+    Busca documentos.
+    options: { fields, formula, order, maxDocs, recursive, maxTextLength }.
+    @returns {Promise<Object[]>}
+    */
     search(options) {
         var opt = {
             fields: '',
@@ -2558,19 +2521,20 @@ export class Folder {
         };
         Object.assign(opt, options);
 
+        var encUriC = this.session.utils.encUriC;
         var url = 'folders/' + this.id + '/documents';
-        var params = 'fields=' + encURIC(opt.fields) + '&formula=' + encURIC(opt.formula) + 
-            '&order=' + encURIC(opt.order) + '&maxDocs=' + encURIC(opt.maxDocs) + 
-            '&recursive=' + encURIC(opt.recursive) + '&maxDescrLength=' + encURIC(opt.maxTextLen);
+        var params = 'fields=' + encUriC(opt.fields) + '&formula=' + encUriC(opt.formula) + 
+            '&order=' + encUriC(opt.order) + '&maxDocs=' + encUriC(opt.maxDocs) + 
+            '&recursive=' + encUriC(opt.recursive) + '&maxDescrLength=' + encUriC(opt.maxTextLen);
 
         return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
     /**
-     * Busqueda agrupada de documentos.
-     * options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }.
-     * @returns {Promise<Object[]>}
-     */
+    Busqueda agrupada de documentos.
+    options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }.
+    @returns {Promise<Object[]>}
+    */
     searchGroups(options) {
         var opt = {
             groups: undefined,
@@ -2584,60 +2548,61 @@ export class Folder {
         }
         Object.assign(opt, options);
 
+        var encUriC = this.session.utils.encUriC;
         var url = 'folders/' + this.id + '/documents/grouped';
-        var params = 'groups=' + encURIC(opt.groups) + '&totals=' + encURIC(opt.totals) +
-            '&formula=' + encURIC(opt.formula) + '&order=' + encURIC(opt.order) + 
-            '&maxDocs=' + encURIC(opt.maxDocs) + '&recursive=' + encURIC(opt.recursive) + 
-            '&groupsOrder=' + encURIC(opt.groupsOrder) + '&totalsOrder=' + encURIC(opt.totalsOrder);
+        var params = 'groups=' + encUriC(opt.groups) + '&totals=' + encUriC(opt.totals) +
+            '&formula=' + encUriC(opt.formula) + '&order=' + encUriC(opt.order) + 
+            '&maxDocs=' + encUriC(opt.maxDocs) + '&recursive=' + encUriC(opt.recursive) + 
+            '&groupsOrder=' + encUriC(opt.groupsOrder) + '&totalsOrder=' + encUriC(opt.totalsOrder);
 
         return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
     /**
-     * @returns {Session}
-     */
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
 
     /**
-     * @returns {Object}
-     */
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
     /**
-     * @returns {string}
-     */
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
     /**
-     * @returns {number}
-     */
+    @returns {number}
+    */
     get type() {
         return this.#json.Type;
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la userProperty.
-     * (property, value) -> Setea el valor de la userProperty.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la userProperty.
+    (property, value) -> Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (name) -> Devuelve la vista name.
-     * @returns {(Promise<DoorsMap>|Promise<View>)}
-     */
+    () -> Devuelve la coleccion.
+    (name) -> Devuelve la vista name.
+    @returns {(Promise<DoorsMap>|Promise<View>)}
+    */
     views(name) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2693,9 +2658,9 @@ export class Folder {
     }
 
     /**
-     * Crea una nueva vista.
-     * @returns {Promise<View>}
-     */
+    Crea una nueva vista.
+    @returns {Promise<View>}
+    */
     async viewsAdd() {
         var url = 'folders/' + this.id + '/views/new';
         var res = await this.session.restClient.fetch(url, 'GET', '', '');
@@ -2786,11 +2751,11 @@ export class Form {
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la property.
-     * (property, value) -> Setea el valor de la property.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la property.
+    (property, value) -> Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
@@ -2810,11 +2775,11 @@ export class Form {
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la userProperty.
-     * (property, value) -> Setea el valor de la userProperty.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la userProperty.
+    (property, value) -> Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -2852,7 +2817,7 @@ export class Properties extends DoorsMap {
 
         this.#restUrl = (this.user ? 'user' : '') + 'properties?objectId=' + restArgs.objId + 
             '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
-            '&objectName=' + encURIC(restArgs.objName);
+            '&objectName=' + this.session.utils.encUriC(restArgs.objName);
 
         // todo: si da error armar la coleccion vacia
         this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
@@ -3091,7 +3056,8 @@ export class Push {
 
     unregister(regType, regId) {
         var url = 'notifications/devices';
-        var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
+        var params = 'providerType=' + this.session.utils.encUriC(regType) + 
+            '&registrationId=' + this.session.utils.encUriC(regId);
         return this.session.restClient.fetch(url, 'DELETE', params, '');
     }
 }
@@ -3269,7 +3235,7 @@ export class Utilities {
         this.#cache = [];
     }
 
-    /*
+    /**
     Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
     que debo esperar antes de realizar la prox iteracion. Si en iterations
     paso undefined, se repite el loop hasta loop.break()
@@ -3317,7 +3283,7 @@ export class Utilities {
         return loop;
     }
 
-    /*
+    /**
     Cache de uso gral
     dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
     myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
@@ -3347,7 +3313,10 @@ export class Utilities {
         }
     }
 
-    // Convierte a Date
+    /**
+    Convierte a Date
+    @returns {Date}
+    */
     cDate(date) {
         var dt;
         if (date == null || date == undefined) return null;
@@ -3366,12 +3335,15 @@ export class Utilities {
         }
     }
 
-    // Alias de cNumber
+    /** Alias de cNumber */
     cNum(number) {
         return this.cNumber(number);
     }
 
-    // Convierte a Number
+    /**
+    Convierte a number
+    @returns {number}
+    */
     cNumber(number) {
         var num;
         if (Object.prototype.toString.call(number) === '[object Number]') {
@@ -3382,7 +3354,7 @@ export class Utilities {
         return num;
     }
 
-    // https://code.google.com/archive/p/crypto-js/
+    /** https://code.google.com/archive/p/crypto-js/ */
     get cryptoJS() {
         return _CryptoJS;
     }
@@ -3399,14 +3371,22 @@ export class Utilities {
         return _CryptoJS.AES.encrypt(pString, pPass).toString();
     }
 
-    // Recibe un err, lo convierte a Error, loguea y dispara
+    /**
+    Hace un encodeURIComponent, devolviendo '' si value es null o undefined.
+    @returns {string}
+    */
+    encUriC(value) {
+        return (value == null || value == undefined) ? '' : encodeURIComponent(value);
+    }
+
+    /** Recibe un err, lo convierte a Error, loguea y dispara */
     errMgr(err) {
         var e = this.newErr(err);
         console.error(e);
         throw e;
     }
    
-    // Devuelve el mensaje de un objeto err
+    /** Devuelve el mensaje de un objeto err */
     errMsg(err) {
         if (typeof(err) == 'string') {
             return err;
@@ -3476,12 +3456,12 @@ export class Utilities {
         return inNode();
     }
 
-    // Retorna true si value es un objeto puro {}
+    /** Retorna true si value es un objeto puro {} */
     isObject(value) {
         return Object.prototype.toString.call(value) === '[object Object]';
     }
 
-    // Devuelve la fecha en formato YYYY-MM-DD
+    /** Devuelve la fecha en formato YYYY-MM-DD */
     isoDate(date) {
         var dt = this.cDate(date);
         if (dt) {
@@ -3492,7 +3472,7 @@ export class Utilities {
         }
     }
 
-    // Devuelve la hora en formato HH:MM:SS
+    /** Devuelve la hora en formato HH:MM:SS */
     isoTime(date, seconds) {
         var dt = this.cDate(date);
         if (dt) {
@@ -3503,16 +3483,19 @@ export class Utilities {
         }
     }
 
-    // Completa con ceros a la izquierda
+    /** Completa con ceros a la izquierda */
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
     }
 
-    // https://momentjs.com/docs/
+    /** https://momentjs.com/docs/ */
     get moment() {
         return _moment;
     }
 
+    /**
+    @returns {DoorsMap}
+    */
     newDoorsMap() {
         return new DoorsMap();
     }
@@ -3527,16 +3510,19 @@ export class Utilities {
         return e;
     }
 
-    // http://numeraljs.com/
+    /** http://numeraljs.com/ */
     get numeral() {
         return _numeral;
     }
 
-    // https://github.com/sindresorhus/serialize-error
+    /** https://github.com/sindresorhus/serialize-error */
     serializeError(err) {
         return _serializeError.serializeError(err);
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
@@ -3559,7 +3545,7 @@ export class Utilities {
         return ret;	
     }
 
-    // Alias de xmlDecode
+    /** Alias de xmlDecode */
     xmlDec(value, type) {
         return this.xmlDecode(value, type);
     }
@@ -3582,7 +3568,7 @@ export class Utilities {
         }
     }
 
-    // Alias de xmlEncode
+    /** Alias de xmlEncode */
     xmlEnc(value, type) {
         return this.xmlEncode(value, type);
     }
@@ -3606,7 +3592,9 @@ export class Utilities {
         }
     }
 
-    // options: https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+    /**
+    options: https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+    */
     xmlParser(options) {
         return new _fastXmlParser.XMLParser(options);
     }
@@ -3814,11 +3802,11 @@ export class View {
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la property.
-     * (property, value) -> Setea el valor de la property.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la property.
+    (property, value) -> Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
@@ -3861,11 +3849,11 @@ export class View {
     }
 
     /**
-     * () -> Devuelve la coleccion.
-     * (property) -> Devuelve el valor de la userProperty.
-     * (property, value) -> Setea el valor de la userProperty.
-     * @returns {(Promise<Properties>|Promise<string>)}
-     */
+    () -> Devuelve la coleccion.
+    (property) -> Devuelve el valor de la userProperty.
+    (property, value) -> Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -3874,13 +3862,9 @@ export class View {
 
 
 class RestClient {
-    AuthToken = null;
-    ServerBaseUrl = null;
     #session;
 
-    constructor(serverUrl, authToken, session) {
-        this.AuthToken = authToken;
-        this.ServerBaseUrl = serverUrl;
+    constructor(session) {
         this.#session = session;
     }
 
@@ -3888,7 +3872,10 @@ class RestClient {
         var me = this;
         let data = null;
         //TODO Check if ends with /
-        let completeUrl = this.ServerBaseUrl + "/" + url;
+        let completeUrl = this.session.serverUrl + "/" + url;
+
+        var headers = credentials();
+        headers['Content-Type'] = 'application/json';
 
         if (parameters !== undefined && parameters !== null) {
             //URL parameters
@@ -3914,10 +3901,7 @@ class RestClient {
                 mode: 'cors', // no-cors, *cors, same-origin
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 credentials: 'omit', // include, *same-origin, omit
-                headers: {
-                    'Content-Type': 'application/json',
-                    'AuthToken': this.AuthToken
-                },
+                headers: headers,
                 redirect: 'manual', // manual, *follow, error
                 referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
                 body: data != null ? data : null // body data type must match "Content-Type" header
@@ -3956,25 +3940,15 @@ class RestClient {
 
     fetchRaw(url, method, data) {
         var me = this;
-        var completeUrl = this.ServerBaseUrl + '/' + url;
-
-        /* todo: implementar ApiKey
-        if (Doors.RESTFULL.ApiKey != null) {
-            xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
-        }
-        else {
-            xhr.setRequestHeader("AuthToken", this.AuthToken);
-        }
-        */
+        var completeUrl = this.session.serverUrl + '/' + url;
+        var headers = credentials();
 
         return new Promise((resolve, reject) => {
             // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
             fetch(completeUrl, {
                 method: method,
                 cache: 'no-cache',
-                headers: {
-                    'AuthToken': this.AuthToken,
-                },
+                headers: headers,
                 body: data ? data : null,
 
             }).then(
@@ -4000,6 +3974,9 @@ class RestClient {
 
     };
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
@@ -4016,8 +3993,16 @@ class RestClient {
         }
         return stringParam;
     }
-};
 
-function encURIC(value) {
-    return (value == null || value == undefined) ? '' : encodeURIComponent(value);
-}
+    credentials() {
+        var ret = {};
+        if (this.session.authToken) {
+            ret.AuthToken = this.session.authToken;
+        } else if (this.session.apiKey) {
+            headers.ApiKey = this.session.apiKey;
+        } else {
+            throw new Error('Authentication required');
+        }
+        return ret;
+    }
+};
