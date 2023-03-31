@@ -1550,7 +1550,6 @@ export class Document {
 
     /**
     Devuelve o establece si se heredan permisos.
-    todo: no esta andando.
     @returns {Promise<boolean>}
     */
     aclInherits(value) {
@@ -1570,8 +1569,7 @@ export class Document {
                         resolve(res);
                     },
                     err => {
-                        debugger;
-
+                        reject(me.session.utils.newErr(err));
                     }
                 )
             });
