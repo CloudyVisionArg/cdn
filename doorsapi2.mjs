@@ -3899,16 +3899,12 @@ class RestClient {
         }
 
         return new Promise((resolve, reject) => {
-            // Opciones por defecto estan marcadas con un *
+            // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
             fetch(completeUrl, {
-                method: method, // *GET, POST, PUT, DELETE, etc.
-                //mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                //credentials: 'omit', // include, *same-origin, omit
+                method: method,
+                cache: 'no-cache',
                 headers: headers,
-                //redirect: 'manual', // manual, *follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: data != null ? data : null // body data type must match "Content-Type" header
+                body: data != null ? data : null,
             }).then((response) => {
                 //TODO
                 /* var firstCharCode = body.charCodeAt(0);
