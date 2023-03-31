@@ -1560,6 +1560,7 @@ export class Document {
             var me = this;
             return new Promise((resolve, reject) => {
                 var url = 'documents/' + this.id + '/aclinherits/' + value;
+                debugger;
                 this.session.restClient.fetch(url, 'POST', {}, '').then(
                     res => {
                         if (res) {
