@@ -1563,6 +1563,7 @@ export class Document {
                 this.session.restClient.fetch(url, 'POST', {}, '').then(
                     res => {
                         debugger;
+                        me.#json;
                         resolve(res);
                     },
                     err => {
