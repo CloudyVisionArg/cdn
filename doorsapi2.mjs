@@ -1563,7 +1563,10 @@ export class Document {
                 this.session.restClient.fetch(url, 'POST', {}, '').then(
                     res => {
                         debugger;
-                        me.#json;
+                        if (res) {
+                            me.#json.AclInherits = (value ? true : false);
+                            me.fields('inherits').value = (value ? 1 : 0);
+                        }
                         resolve(res);
                     },
                     err => {
