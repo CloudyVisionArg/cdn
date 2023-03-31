@@ -1551,18 +1551,19 @@ export class Document {
     /**
     Devuelve o establece si se heredan permisos.
     todo: no esta andando.
-    @returns {Promise}
+    @returns {Promise<boolean>}
     */
     aclInherits(value) {
         if (value == undefined) {
             return (this.fields('inherits').value ? true : false);
         } else {
+            var me = this;
             return new Promise((resolve, reject) => {
                 var url = 'documents/' + this.id + '/aclinherits/' + value;
                 this.session.restClient.fetch(url, 'POST', {}, '').then(
                     res => {
-                        debugger
-
+                        debugger;
+                        resolve(res);
                     },
                     err => {
                         debugger;
