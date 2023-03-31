@@ -3999,7 +3999,7 @@ class RestClient {
         if (this.session.authToken) {
             ret.AuthToken = this.session.authToken;
         } else if (this.session.apiKey) {
-            headers.ApiKey = this.session.apiKey;
+            ret.ApiKey = this.session.apiKey;
         }
         return ret;
     }
