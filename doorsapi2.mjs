@@ -3872,9 +3872,9 @@ class RestClient {
         var me = this;
         let data = null;
         //TODO Check if ends with /
-        let completeUrl = this.session.serverUrl + "/" + url;
+        let completeUrl = me.session.serverUrl + '/' + url;
 
-        var headers = credentials();
+        var headers = me.credentials();
         headers['Content-Type'] = 'application/json';
 
         if (parameters !== undefined && parameters !== null) {
@@ -3940,8 +3940,8 @@ class RestClient {
 
     fetchRaw(url, method, data) {
         var me = this;
-        var completeUrl = this.session.serverUrl + '/' + url;
-        var headers = credentials();
+        var completeUrl = me.session.serverUrl + '/' + url;
+        var headers = me.credentials();
 
         return new Promise((resolve, reject) => {
             // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
