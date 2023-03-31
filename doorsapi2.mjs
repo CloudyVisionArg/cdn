@@ -4000,8 +4000,6 @@ class RestClient {
             ret.AuthToken = this.session.authToken;
         } else if (this.session.apiKey) {
             headers.ApiKey = this.session.apiKey;
-        } else {
-            throw new Error('Authentication required');
         }
         return ret;
     }
