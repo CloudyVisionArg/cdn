@@ -233,10 +233,13 @@ function recorder(opts){
                 mediaRec.ondataavailable = e => {
                   chunks.push(e.data);
                   if(mediaRec.state == 'inactive'){
-                    let blob = new Blob(chunks, {type: media.type })
-                    url = URL.createObjectURL(blob);
+                    var now = new Date();
+                    var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
+                    let file = new File(chunks, `${src}.ogg`,{ 'type' : 'audio/ogg' })
+                    //let blob = new Blob(chunks, {type: media.type })
+                    url = URL.createObjectURL(file);
                     stream.getTracks().forEach( track => track.stop() );
-                    resolve({localURL:url, blob:blob});
+                    resolve(file);
 
                   }
                 };
