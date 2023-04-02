@@ -343,13 +343,13 @@ function pageInitMembers(e, page) {
             let text = $("<div />", {"class":"item-subtitle","text":item.Body});
             text.appendTo(contenedor);
             
-            let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
+            //let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
-            let swipBtnMark = $("<a/>",{"class":"mark bg-orange","text":"Marcar Como Leido"}).appendTo(swipActionRight);
+            let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
             let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe swipeout-delete","text":"Borrar"}).appendTo(swipActionRight);
 
-            let swipBtnClose = $("<a/>",{"class":"swipeout-overswipe swipeout-close","text":"Cerrar?"}).appendTo(swipActionLeft);
+            //let swipBtnClose = $("<a/>",{"class":"swipeout-overswipe swipeout-close","text":"Cerrar?"}).appendTo(swipActionLeft);
 
             return ul.html();
         },
@@ -517,13 +517,13 @@ function notificationsDeleteSelected(){
 function clickOnTrash(ev) {
     ev.stopPropagation();
 
-    let notifPadre = $("a#" +  $(ev.target).attr("contenedor_id"));
+    let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
     
-    notifPadre.removeClass("msgread");
-    notifPadre.removeClass("msgunread");
-    notifPadre.addClass("msgdeleted");
-    DoorsAPI.notificationsDelete( $(ev.target).attr("contenedor_id")).then(()=>{
-        $("a#" +  $(ev.target).attr("contenedor_id")).parent().remove();
+    notifLink.removeClass("msgread");
+    notifLink.removeClass("msgunread");
+    notifLink.addClass("msgdeleted");
+    DoorsAPI.notificationsDelete(notifLink.attr("id")).then(()=>{
+        //$("a#" +  $(ev.target).attr("contenedor_id")).parent().remove();
         setNotificationUnReadCounter($(".msgunread").length); 
     },
     (err)=>{
@@ -538,16 +538,19 @@ function clickOnEnvelope(ev) {
     console.log("read fired");
     console.log("rowid:" + $(ev.target).attr("contenedor_id"))
     ev.stopPropagation();
-    if($("a#" + $(ev.target).attr("contenedor_id")).hasClass("msgread")){
-        DoorsAPI.notificationsUnRead($(ev.target).attr("contenedor_id")).then(
+
+    let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
+
+    if(notifLink.hasClass("msgread")){
+        DoorsAPI.notificationsUnRead(notifLink.attr("id")).then(
             ()=>{
-                $("a#" + $(ev.target).attr("contenedor_id")).removeClass("msgread");
-                $("a#" + $(ev.target).attr("contenedor_id")).addClass("msgunread");
-                if($(ev.target).hasClass("ios-only")){
-                    $(ev.target).text("envelope")
-                }else{
-                    $(ev.target).text("mail")
-                }                
+                notifLink.removeClass("msgread");
+                notifLink.addClass("msgunread");
+                //if($(ev.target).hasClass("ios-only")){
+                //    $(ev.target).text("envelope")
+                //}else{
+                //    $(ev.target).text("mail")
+                //}                
                 console.log("unread cliecked unread", $(".msgunread").length);
                 setNotificationUnReadCounter($(".msgunread").length); 
             },
@@ -560,16 +563,16 @@ function clickOnEnvelope(ev) {
         );
         
     }else{
-        DoorsAPI.notificationsRead($(ev.target).attr("contenedor_id")).then(
+        DoorsAPI.notificationsRead(notifLink.attr("id")).then(
             ()=>{
                 console.log("read cliecked unread", $(".msgunread").length);
-                $("a#" + $(ev.target).attr("contenedor_id")).removeClass("msgunread");
-                $("a#" + $(ev.target).attr("contenedor_id")).addClass("msgread");
-                if($(ev.target).hasClass("ios-only")){
-                    $(ev.target).text("envelope_open")
-                }else{
-                    $(ev.target).text("drafts")
-                }      
+                notifLink.removeClass("msgunread");
+                notifLink.addClass("msgread");
+                //if($(ev.target).hasClass("ios-only")){
+                //    $(ev.target).text("envelope_open")
+                //}else{
+                //    $(ev.target).text("drafts")
+                //}      
                 setNotificationUnReadCounter($(".msgunread").length); 
             },
             (err)=>{
