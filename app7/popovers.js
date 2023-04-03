@@ -141,7 +141,7 @@ function crearCarteles(pCartel,index,array){
         content: text,
         on: {       
             open: function () {
-                console.log('Popover open ' + pCartel["popover_id"]);
+                //console.log('Popover open ' + pCartel["popover_id"]);
             },
             opened: function () {
                 console.log('Popover opened ' + pCartel["popover_id"]);
@@ -224,7 +224,6 @@ function generarCarteles(pScope){
     
 
     if (popoversFolder) {
-        console.log("existe popoversFolder")
         DoorsAPI.folderSearch(popoversFolder.FldId, "*", finalFormula, "order", 0, false, 0).then(
             function(res){            
                 for(let idx = 0; idx < res.length; idx++){
@@ -245,7 +244,6 @@ function generarCarteles(pScope){
             }
         );
     }else{
-        console.log("no existe popoversFolder")
         renderPopovers(arrCartelesFijos);
     }
 }
