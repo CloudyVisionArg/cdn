@@ -3347,7 +3347,7 @@ export class Utilities {
             // set
             this.#cache.set(key, {
                 value: value,
-                expires: Date.now + (seconds ? seconds * 1000 : 300000),
+                expires: Date.now() + (seconds ? seconds * 1000 : 300000),
             });
         }
 
