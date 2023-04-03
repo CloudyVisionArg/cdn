@@ -3340,7 +3340,7 @@ export class Utilities {
         if (value == undefined) {
             // get
             if (this.#cache.has(key) && this.#cache.get(key).expires > Date.now()) {
-                console.log('Cache hit: ' + key);
+                //console.log('Cache hit: ' + key);
                 return this.#cache.get(key).value;
             }
 
