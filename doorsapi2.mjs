@@ -4,7 +4,8 @@ Cdo esta sea estandar reemplazar los _metodo con #metodo
 https://caniuse.com/?search=private%20methods
 */
 
-//swagger: http://tests.cloudycrm.net/apidocs
+// swagger: http://w3.cloudycrm.net/apidocs
+// https://github.com/DefinitelyTyped/DefinitelyTyped (types para intelliSense)
 
 var incjs = {};
 var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser;
@@ -188,7 +189,10 @@ export class DoorsMap extends Map {
 
     /**
     Busca y retorna un elemento.
-    map.find((value, key) => { if ... return true }
+    @example
+    map.find((value, key) => {
+        if ... return true
+    }
     */
     find(cbFunc) {
         var me = this;
@@ -667,8 +671,9 @@ export class Account {
     }
 
     /**
-    () -> Devuelve un map de cuentas hijas.
-    (account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
+    @example
+    childAccounts() // Devuelve un map de cuentas hijas.
+    childAccounts(account) // Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     childAccounts(account) {
@@ -680,7 +685,7 @@ export class Account {
     }
 
     /**
-    Agrega una o varias cuentas hijas.
+    Agrega una o varias (array) cuentas hijas.
     @returns {Promise}
     */
     async childAccountsAdd(accounts) {
@@ -692,8 +697,9 @@ export class Account {
     }
 
     /**
-    () -> Devuelve un map de cuentas hijas recursivo.
-    (account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
+    @example
+    childAccountsRecursive() // Devuelve un map de cuentas hijas recursivo.
+    childAccountsRecursive(account) // Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     childAccountsRecursive(account) {
@@ -806,8 +812,9 @@ export class Account {
     }
 
     /**
-    () -> Devuelve un map de cuentas padre.
-    (account) -> Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
+    @example
+    parentAccounts() // Devuelve un map de cuentas padre.
+    parentAccounts(account) // Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     parentAccounts(account) {
@@ -831,8 +838,9 @@ export class Account {
     }
 
     /**
-    () -> Devuelve un map de cuentas padre recursivo.
-    (account) -> Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
+    @example
+    parentAccountsRecursive() // Devuelve un map de cuentas padre recursivo.
+    parentAccountsRecursive(account) // Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     parentAccountsRecursive(account) {
@@ -856,9 +864,10 @@ export class Account {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la property.
-    (property, value) -> Setea el valor de la property.
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     properties(property, value) {
@@ -927,9 +936,10 @@ export class Account {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la userProperty.
-    (property, value) -> Setea el valor de la userProperty.
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     userProperties(property, value) {
@@ -1176,9 +1186,10 @@ export class Attachment {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la property.
-    (property, value) -> Setea el valor de la property.
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     properties(property, value) {
@@ -1274,9 +1285,10 @@ export class Attachment {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la userProperty.
-    (property, value) -> Setea el valor de la userProperty.
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     userProperties(property, value) {
@@ -1720,9 +1732,10 @@ export class Document {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (name) -> Devuelve el field (undefined si no lo encuentra).
-    (name, value) -> Setea el valor del field.
+    @example
+    fields() // Devuelve la coleccion.
+    fields(name) // Devuelve el field (undefined si no lo encuentra).
+    fields(name, value) // Setea el valor del field.
     @returns {(DoorsMap|Field)}
     */
     fields(name, value) {
@@ -1900,9 +1913,10 @@ export class Document {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la property.
-    (property, value) -> Setea el valor de la property.
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     properties(property, value) {
@@ -1990,9 +2004,10 @@ export class Document {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la userProperty.
-    (property, value) -> Setea el valor de la userProperty.
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     userProperties(property, value) {
@@ -2081,9 +2096,10 @@ export class Field {
 
     // todo: solo para field de form, add o remove igual
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la property.
-    (property, value) -> Setea el valor de la property.
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     properties(property, value) {
@@ -2118,9 +2134,10 @@ export class Field {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la userProperty.
-    (property, value) -> Setea el valor de la userProperty.
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     userProperties(property, value) {
@@ -2368,8 +2385,9 @@ export class Folder {
     }
 
     /**
-    () -> Devuelve la lista de carpetas hijas.
-    (name) -> Devuelve la carpeta hija con nombre name.
+    @example
+    folders() // Devuelve la lista de carpetas hijas.
+    folders(name) // Devuelve la carpeta hija con nombre name.
     @returns {Promise<Folder>}
     */
     folders(name) {
@@ -2489,9 +2507,10 @@ export class Folder {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la property.
-    (property, value) -> Setea el valor de la property.
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     properties(property, value) {
@@ -2509,7 +2528,15 @@ export class Folder {
 
     /**
     Busca documentos.
-    options: { fields, formula, order, maxDocs, recursive, maxTextLength }.
+    @example
+    search({
+        fields // Lista de campos separados por coma (vacio devuelve todos).
+        formula // Filtro SQL.
+        order // Campos de orden.
+        maxDocs // Cant max de documentos. Def 1000. 0 = sin limite.
+        recursive // Busca tb en carpetas hijas con el mismo form.
+        maxTextLength // Largo max de los campos de texto. Def 100. 0 = sin limite.
+    }
     @returns {Promise<Object[]>}
     */
     search(options) {
@@ -2534,7 +2561,17 @@ export class Folder {
 
     /**
     Busqueda agrupada de documentos.
-    options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }.
+    @example
+    searchGroups({
+        groups // Campos de grupo separados por coma.
+        totals // 
+        formula // Filtro SQL.
+        order // 
+        maxDocs //
+        recursive //
+        groupsOrder //
+        totalsOrder //
+    }
     @returns {Promise<Object[]>}
     */
     searchGroups(options) {
@@ -2590,9 +2627,10 @@ export class Folder {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la userProperty.
-    (property, value) -> Setea el valor de la userProperty.
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     userProperties(property, value) {
@@ -2601,8 +2639,9 @@ export class Folder {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (name) -> Devuelve la vista name.
+    @example
+    views() // Devuelve la coleccion.
+    views(name) // Devuelve la vista name.
     @returns {(Promise<DoorsMap>|Promise<View>)}
     */
     views(name) {
@@ -2753,9 +2792,10 @@ export class Form {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la property.
-    (property, value) -> Setea el valor de la property.
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     properties(property, value) {
@@ -2777,9 +2817,10 @@ export class Form {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la userProperty.
-    (property, value) -> Setea el valor de la userProperty.
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     userProperties(property, value) {
@@ -2978,19 +3019,6 @@ export class Push {
         return this.session.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
     }
 
-    /*
-    Envia una notificacion push
-    msg = {
-        to: accId (pueden ser grupos), puede ser un array
-        title: titulo,
-        body: cuerpo,
-        data: { todos los datos que quiera agregar, ej:
-            doc_id: 555,
-            fld_id: 111,
-            (el guid se genera solo)
-        }
-    }
-    */
     // todo dejar esta cdo se cierre el issue 251
     /*
     send(msg) {
@@ -3019,6 +3047,21 @@ export class Push {
     }
     */
 
+    /**
+    Envia una notificacion push
+    @example
+    send({
+        to // accId (pueden ser grupos), puede ser un array
+        title // Titulo.
+        body // Cuerpo.
+        data: { // Los datos que quiera agregar, ej:
+            doc_id: 555,
+            fld_id: 111,
+            // (el guid se genera solo)
+        }
+    }
+    @returns {Promise}
+    */
     async send(msg) {
         msg.to = Array.isArray(msg.to) ? msg.to : [msg.to];
         for (var el of msg.to) {
@@ -3234,25 +3277,25 @@ export class Utilities {
     
     constructor(session) {
         this.#session = session;
-        this.#cache = [];
+        this.#cache = new DoorsMap();
     }
 
     /**
     Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
     que debo esperar antes de realizar la prox iteracion. Si en iterations
     paso undefined, se repite el loop hasta loop.break()
-
+    @example
     asyncLoop(10,
         function (loop) {
-            console.log(loop.iteration());
+            console.log(loop.iteration()); // Nro de iteracion
             setTimeout(function () {
-                loop.next();
+                loop.next(); // Ejecuta la prox iteracion
             }, 0);
             
-            //loop.break(); // Para finalizar el loop
+            //loop.break(); // Finaliza el loop
         },
         function() {
-            console.log('cycle ended')
+            console.log('Loop terminado')
         }
     );
     */
@@ -3287,10 +3330,27 @@ export class Utilities {
 
     /**
     Cache de uso gral
-    dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
-    myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+    @example
+    cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+    cache('myKey', myValue, 60); // Almacena myValue con la clave myKey por 60 segundos.
+    cache('myKey', myValue); // Almacena por 300 segs (5 mins), valor por defecto de seconds.
     */
     cache(key, value, seconds) {
+        if (value == undefined) {
+            // get
+            if (this.#cache.has(key) && this.#cache.get(key).expires > Date.now()) {
+                return this.#cache.get(key).value;
+            }
+
+        } else {
+            // set
+            this.#cache.set(key, {
+                value: value,
+                expires: Date.now + (seconds ? seconds * 1000 : 300000),
+            });
+        }
+
+        /*
         let f = this.#cache.find(el => el.key == key);
         if (value == undefined) { // get
             if (f) {
@@ -3313,6 +3373,7 @@ export class Utilities {
                 this.#cache.push({ key: key, value: value, expires: exp });
             }
         }
+        */
     }
 
     /**
@@ -3804,9 +3865,10 @@ export class View {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la property.
-    (property, value) -> Setea el valor de la property.
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     properties(property, value) {
@@ -3851,9 +3913,10 @@ export class View {
     }
 
     /**
-    () -> Devuelve la coleccion.
-    (property) -> Devuelve el valor de la userProperty.
-    (property, value) -> Setea el valor de la userProperty.
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
     @returns {(Promise<Properties>|Promise<string>)}
     */
     userProperties(property, value) {
@@ -3925,12 +3988,14 @@ class RestClient {
                     }
                     else {
                         if (response.status !== 200 || parsedJson.ExceptionMessage) {
+                            debugger;
                             reject(me.session.utils.newErr(parsedJson));
                         }
                     }
                     resolve(parsedJson);
                 });
             }).catch((error) => {
+                debugger;
                 reject(me.session.utils.newErr(error));
             });
         });
@@ -3964,6 +4029,7 @@ class RestClient {
                     }
                 },
                 err => {
+                    debugger;
                     reject(me.session.utils.newErr(err));
                 }
             )
