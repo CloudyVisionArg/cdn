@@ -3336,6 +3336,7 @@ export class Utilities {
     cache('myKey', myValue); // Almacena por 300 segs (5 mins), valor por defecto de seconds.
     */
     cache(key, value, seconds) {
+        debugger;
         if (value == undefined) {
             // get
             if (this.#cache.has(key) && this.#cache.get(key).expires > Date.now()) {
