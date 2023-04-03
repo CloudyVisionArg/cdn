@@ -3329,9 +3329,10 @@ export class Utilities {
     }
 
     /**
-    Cache de uso gral
+    Cache de uso gral. El cache se almacena en la instancia del objeto Session,
+    y solo trabaja en el ambito de la misma.
     @example
-    cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+    cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiró
     cache('myKey', myValue, 60); // Almacena myValue con la clave myKey por 60 segundos.
     cache('myKey', myValue); // Almacena por 300 segs (5 mins), valor por defecto de seconds.
     */
@@ -3350,31 +3351,6 @@ export class Utilities {
                 expires: Date.now() + (seconds ? seconds * 1000 : 300000),
             });
         }
-
-        /*
-        let f = this.#cache.find(el => el.key == key);
-        if (value == undefined) { // get
-            if (f) {
-                if (!f.expires || f.expires > Date.now()) {
-                    console.log('Cache hit: ' + key);
-                    return f.value;
-                }
-            }
-        } else { // set
-            var exp, sec = parseInt(seconds);
-            if (!isNaN(sec)) {
-                exp = Date.now() + sec * 1000;
-            } else {
-                exp = Date.now() + 300000; // 5' por defecto
-            }
-            if (f) {
-                f.value = value;
-                f.expires = exp;
-            } else {
-                this.#cache.push({ key: key, value: value, expires: exp });
-            }
-        }
-        */
     }
 
     /**
