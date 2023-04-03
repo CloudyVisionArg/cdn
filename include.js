@@ -65,8 +65,8 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 253 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 251 });
 
     //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 250 });
     //scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 229 });
