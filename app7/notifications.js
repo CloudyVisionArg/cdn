@@ -350,6 +350,7 @@ function pageInitMembers(e, page) {
             let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
             let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar","onclick":`clickOnEnvelope`}).appendTo(swipActionRight);
 
+            
             //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
             //swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
                         
