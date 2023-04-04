@@ -542,6 +542,7 @@ function clickOnTrash(ev) {
 }
 
 function clickOnEnvelope(ev) {
+    debugger;
     console.log("CLICKONENVELOPE")
     console.log("read fired");
     console.log("rowid:" + $(ev.target).attr("contenedor_id"))
