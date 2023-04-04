@@ -542,7 +542,7 @@ function clickOnTrash(ev) {
     });
 }
 
-function clickOnEnvelope(ev) {
+var clickOnEnvelope = function (ev) {
     debugger;
     console.log("CLICKONENVELOPE")
     console.log("read fired");
