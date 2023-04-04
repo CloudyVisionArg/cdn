@@ -301,7 +301,7 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 //$listMembers.on('taphold', 'a', taphold);
 
 $ulMembers.on("click",(ev)=>{
-    if(ev.target.tagName === "A"){
+    //if(ev.target.tagName === "A"){
         if(ev.target.classList.contains("swipeoutBtnRead")){
             clickOnEnvelope(ev);
         }else if(ev.target.classList.contains("swipeoutBtnDel")){
@@ -309,9 +309,9 @@ $ulMembers.on("click",(ev)=>{
         }else{
             clickOnAnchor(ev);
         }
-    }else{
-        clickOnAnchor(ev);
-    }
+    //}else{
+    //    clickOnAnchor(ev);
+    //}
 })
 
 var f7Page;
