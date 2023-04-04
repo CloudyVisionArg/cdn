@@ -271,7 +271,7 @@ function Sync() {
             
             DoorsAPI.folderSearch(pSyncObj['folder'], pSyncObj['fields'], formula, 'doc_id', maxRecords, null, maxTextLen).then(
                 function (result) {
-                    if (!result.length) console.log(`got ${ pSyncObj['folder'] }: ${ result.length } rows in ${ (new Date).getTime() - tmr } secs`);
+                    if (!result.length) console.log(`sync ${ pSyncObj['folder'] }: ${ result.length } updates in ${ (new Date).getTime() - tmr } secs`);
                     
                     var dt = (new Date).toJSON();
                     if (result.length == 0) {
