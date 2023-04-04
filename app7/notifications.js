@@ -302,7 +302,7 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "A"){
-        if(ev.target.classList.contains("swipeout-delete")){
+        if(ev.target.classList.contains("swipeout-overswipe")){
             clickOnEnvelope(ev);
         //}else if(ev.target.classList.contains("botonleer")){
         //    clickOnTrash(ev);
