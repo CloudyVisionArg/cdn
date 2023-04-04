@@ -93,7 +93,15 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
         folderJson = folder.toJSON();
         folder.form; // Para q cargue el form
         if (folder.type == 1) {
-            getDoc();
+            if (doc_id) {
+                doc = await folder.documents(doc_id);
+            } else {
+                doc = await folder.documentsNew();
+            }
+            docJson = doc.toJSON();
+
+            loadControls();
+
         } else {
             end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
         }
@@ -125,55 +133,22 @@ function getToken() {
     });
 }
 
-async function getDoc() {
-	if (doc_id) {
-        doc = await folder.documents(doc_id);
-    } else {
-        doc = await folder.documentsNew();
-    }
-    docJson = doc.toJSON();
-    getControlsFolder();
-}
-
-function getControlsFolder() {
+async function loadControls() {
 	var cf = objPropCI(doc.tags, 'controlsFolder');
 	
-	if (cf) {
-		DoorsAPI.foldersGetByPath(folder.app.rootFolderId, cf).then(
-			function (res) {
-				controlsFolder = res;
-				loadControls();
-			},
-			function (err) {
-				renderPage(); // Dibuja igual, sin controles
-			}
-		);
-		
-	} else {
-		DoorsAPI.foldersGetByName(fld_id, 'controls').then(
-			function (res) {
-				controlsFolder = res;
-				loadControls();
-			},
-			function (err) {
-				renderPage(); // Dibuja igual, sin controles
-			}
-		);
-	};
-}
+    try {
+	    if (cf) {
+		    controlsFolder = await folder.app.folders(cf);
+    	} else {
+            controlsFolder = await folder.folders('controls');
+        }
+        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+        getControlsRights(controls);
+        renderPage();
 
-function loadControls() {
-	DoorsAPI.folderSearch(controlsFolder['FldId'], '', '', 'parent, order, column', 0, null, 0).then(
-		function (res) {
-			controls = res;
-			getControlsRights(controls);
-			renderPage();
-		},
-		function (err) {
-			console.log(pErr);
-			renderPage(); // Dibuja igual, sin controles
-		}
-	)
+    } catch(err) {
+        renderPage(); // Dibuja igual, sin controles
+    }
 }
 
 function getControlsRights(pControls) {
@@ -214,7 +189,7 @@ function getControlsRights(pControls) {
 	})
 }
 
-function renderPage() {
+async function renderPage() {
     var $body = $('body');
     var $d = $(document);
 
@@ -371,15 +346,16 @@ function renderPage() {
         var ev = getEvent('BeforeRender');
         if (ev) {
             try {
-                eval(ev);
-            } catch (err) {
-                console.log('Error in BeforeRender: ' + errMsg(err));
+                await evalCode(ev);
+            } catch(err) {
+                console.error(err);
+                toast('BeforeRender error: ' + dSession.utils.errMsg(err));
             }
         };
 
         // Membrete
 
-        renderControls($cont, '[NULL]');
+        await renderControls($cont, '[NULL]');
 
         // TABS
 
@@ -417,7 +393,7 @@ function renderPage() {
                     id: tab['NAME'],
                 }).appendTo($tabCont);
 
-                renderControls($tab, tab['NAME']);
+                await renderControls($tab, tab['NAME']);
             }
         }
     };
@@ -439,7 +415,7 @@ function renderPage() {
     $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
     $delBtn.click(function () {
         if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
-            DoorsAPI.documentDelete(fld_id, doc_id).then(
+            doc.delete().then(
                 function (res) {
                     toast('El documento ha sido enviado a la papelera');
                     exitForm();
@@ -476,8 +452,8 @@ function renderPage() {
             );
 
         } else {
-            getFolder($el.attr('data-fill-folder'), folder.app.rootFolderId).then(
-                function (res) {
+            folder.app.folder($el.attr('data-fill-folder')).then(
+                function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
                     var arrFields = $el.attr('data-fill-fields').split(',');
@@ -486,9 +462,9 @@ function renderPage() {
                     if (arrFields.length > 0) dataFields = arrFields.join(',');
 
                     fillSelect($el,
-                        DoorsAPI.folderSearch(res['FldId'], $el.attr('data-fill-fields'),
-                            $el.attr('data-fill-formula'), $el.attr('data-fill-order')
-                        ),
+                        fld.search({ fields: $el.attr('data-fill-fields'),
+                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
+                        }),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
                     );
                 },
@@ -511,6 +487,13 @@ function renderPage() {
             preloader.hide();
         }
     }, 0);
+
+    // evalCode con context de renderPage
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getRow(pRow, pCont, pCol) {
@@ -599,7 +582,7 @@ function getDefaultControl(pField) {
     return $ret;
 }
 
-function renderControls(pCont, pParent) {
+async function renderControls(pCont, pParent) {
     var $row, $col, ctl, type, $this, domAttr, label, $input, aux, bsctl;
     var tf, textField, vf, valueField;
 
@@ -637,17 +620,11 @@ function renderControls(pCont, pParent) {
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
             var textField = doc.fields(tf);
-            if (!textField) {
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
             var valueField = doc.fields(vf);
-            if (!valueField) {
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
         };
 
         $row = getRow($row, pCont, ctl['COLUMN']);
@@ -863,7 +840,7 @@ function renderControls(pCont, pParent) {
 
             bsctl = $this.find('.collapse')[0].bscollapse;
 
-            renderControls($this.find('fieldset'), ctl['NAME']);
+            await renderControls($this.find('fieldset'), ctl['NAME']);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.find('fieldset').attr('disabled', 'disabled');
@@ -1040,9 +1017,10 @@ function renderControls(pCont, pParent) {
         if ($this) $this.appendTo($col);
 
         try {
-            if (ctl['SCRIPTBEFORERENDER']) eval(ctl['SCRIPTBEFORERENDER']);
+            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER']);
         } catch (err) {
-            console.log('Error in ' + ctl['NAME'] + '.SCRIPTBEFORERENDER: ' + errMsg(err));
+            console.error(err);
+            toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
         }
         /*
         Objetos disponibles en este script:
@@ -1060,6 +1038,13 @@ function renderControls(pCont, pParent) {
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
     }
+
+    // evalCode con context de renderControls
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }    
 }
 
 async function fillControls() {
@@ -1094,40 +1079,23 @@ async function fillControls() {
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
             textField = doc.fields(tf);
-            if (textField) {
-                text = textField.value;
-            } else {
-                text = null;
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            text = textField ? textField.value : null;
         };
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
             valueField = doc.fields(vf);
-            if (valueField) {
-                value = valueField.value;
-            } else {
-                value = null;
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
+            value = valueField ? valueField.value : null;
         };
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
             xmlField = doc.fields(xf);
-            if (xmlField) {
-                xml = xmlField.value;
-            } else {
-                xml = null;
-                console.log('No se encontro el campo ' + xf.toUpperCase());
-            }
+            xml = xmlField ? xmlField.value : null;
         };
 
         if (el.tagName == 'INPUT') {
-            
             let type = $el.attr('type').toLowerCase();
-
             if (type == 'text') {
                 var format = $el.attr('data-numeral');
                 if (format) {
@@ -1195,8 +1163,9 @@ async function fillControls() {
         }
     });
 
+    // todo: todo esto hay q reemplazarlo segun el nuevo autocomplete
+    /*
     $('[data-autocomplete]').each(function (ix, el) {
-        // todo: todo esto hay q reemplazarlo segun el nuevo autocomplete
         var $el = $(el);
         var ac = app7.autocomplete.get($el);
         var $li = $el.closest('li');
@@ -1245,6 +1214,7 @@ async function fillControls() {
         }
         //ac.emit('change', ac.value);
     })
+    */
 
     // Inicializa los chats de Whatsapp
     let $wappChats = $('div.wapp-chat');
@@ -1282,12 +1252,19 @@ async function fillControls() {
     let ev = getEvent('AfterRender');
     if (ev) {
         try {
-            eval(ev);
+            await evalCode(ev);
         } catch (err) {
-            console.log('Error in AfterRender: ' + errMsg(err));
+            console.error(err);
+            toast('AfterRender error: ' + dSession.utils.errMsg(err));
         }
     };
 
+    // evalCode con context de fillControls
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getEvent(pEvent) {
@@ -1297,7 +1274,7 @@ function getEvent(pEvent) {
     }
 }
 
-function saveDoc(pExit) {
+async function saveDoc(pExit) {
     if (saving) return;
     saving = true;
     preloader.show();
@@ -1395,131 +1372,128 @@ function saveDoc(pExit) {
         }
     });
 
-    // Evento BeforeSave
-    let ev = getEvent('BeforeSave');
-    if (ev) {
-        try {
-            eval(ev);
-        } catch (err) {
-            console.log('Error in BeforeSave: ' + errMsg(err));
-        }
-    };
+    try {
+        // Evento BeforeSave
+        var ev = getEvent('BeforeSave');
+        if (ev) {
+            await evalCode(ev);
+        };
 
-    doc.save().then(() => {
+        await doc.save();
         docJson = doc.toJSON();
-        doc_id = doc.fields('doc_id').value;
+        doc_id = doc.id;
 
-        saveAtt().then(
-            function (res) {
-                // Evento AfterSave
-                let ev = getEvent('AfterSave');
-                if (ev) {
-                    try {
-                        eval(ev);
-                    } catch (err) {
-                        console.log('Error in AfterSave: ' + errMsg(err));
-                    }
-                };
+        try {
+            await saveAtt();
+        } catch(err) {
+            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            console.log(attErr);
+            console.log(err);
+        }
 
-                saving = false;
-                preloader.hide();
-                if (pExit) {
-                    exitForm();
-                } else {
-                    toast('Cambios guardados');
-                    fillControls();
-                }
-            }, errMgr
-        );
-    }, errMgr);
+        // Evento AfterSave
+        try {
+            var ev = getEvent('AfterSave');
+            if (ev) {
+                await evalCode(ev);
+            };
+        } catch (err) {
+            var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
+            console.error(err);
+        }
+
+        saving = false;
+        preloader.hide();
+
+        if (attErr) {
+            toast(attErr);
+        } else if (asErr) {
+            toast(asErr);
+        }
+
+        if (pExit) {
+            var timeOut = (attErr || asErr ? 5000 : 0);
+            setTimeout(exitForm, timeOut);
+        } else {
+            toast('Cambios guardados');
+            fillControls();
+        }
+
+    } catch(err) {
+        errMgr(err);
+    }
+
+    // evalCode con context de saveDoc
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 
     function errMgr(pErr) {
         saving = false;
         preloader.hide();
-        if (Array.isArray(pErr)) {
-            if (pErr.length == 1) {
-                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result);
-
-            } else {
-                // Error de saveAtt
-                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion');
-            }
-        } else {
-            toast(errMsg(pErr));
-        }
-        console.log(pErr);
+        toast(dSession.utils.errMsg(pErr));
+        console.error(pErr);
     }
 }
 
 function saveAtt() {
-    return new Promise(function (resolve, reject) {
-        var calls = [];
-        var arrDel = [];
+    return new Promise(async (resolve, reject) => {
+        var errors = [];
         var $attsToSave = $('div[data-attachments] [data-att-action]');
+        var attMap = await doc.attachments();
 
-        if ($attsToSave.length == 0) {
-            resolve('OK');
-            
-        } else {
-            $attsToSave.each(function () {
-                var $this = $(this);
-                var tag = $this.closest('input-group').attr('data-attachments');
-                var attName = $this.attr('data-att-name');
-                var attAction = $this.attr('data-att-action');
-                
-                if (attAction == 'save') {
-                    beginCall(attName, attAction);
-                
-                    var file = this._file;
-                    var reader = new FileReader();
-                    reader.onloadend = function (e) {
-                        var blobData = new Blob([this.result], { type: file.type });
-                        var formData = new FormData();
-                        // todo: como subimos el Tag?
-                        formData.append('attachment', blobData, file.name);
-                        DoorsAPI.attachmentsSave(doc_id, formData).then(
-                            function (res) {
-                                endCall(attName, 'OK');
-                            },
-                            function (err) {
-                                endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-                            }
-                        )
-                    };
-                    reader.readAsArrayBuffer(file);
-                    
-                } else if (attAction == 'delete') {
-                    arrDel.push($this.attr('data-att-id'));
-                }
-            });
+        dSession.utils.asyncLoop($attsToSave.length, async loop => {
+            var $this = $($attsToSave[loop.iteration()]);
+            var tag = $this.closest('li.accordion-item').attr('data-attachments');
+            tag = (tag == 'all' ? null : tag);
+            var attName = $this.attr('data-att-name');
+            var attAction = $this.attr('data-att-action');
 
-            if (arrDel.length > 0) {
-                var sDel = arrDel.join(',');
-                beginCall(sDel, 'delete')
-                DoorsAPI.attachmentsDelete(doc_id, arrDel).then(
-                    function (res) {
-                        endCall(sDel, 'OK');
-                    },
-                    function (err) {
-                        endCall(sDel, 'attachmentsDelete error: ' + errMsg(err));
+            if (attAction == 'save') {
+                var file = $this[0]._file;
+                var reader = new FileReader();
+                reader.onloadend = async function (e) {
+                    try {
+                        var att = doc.attachmentsAdd(file.name);
+                        att.fileStream = new Blob([this.result], { type: file.type });
+                        att.description = tag;
+                        att.group = tag;
+                        await att.save();
+
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'save',
+                            error: dSession.utils.errMsg(err),
+                        });
                     }
-                );
-            }
-        }
+                    loop.next();
+                };
+                reader.readAsArrayBuffer(file);
 
-        function beginCall(pName, pAction) {
-            calls.push({ name: pName, action: pAction, result: 'pending' });
-        }
-        
-        function endCall(pName, pResult) {
-            calls.find(el => el.name == pName && el.result == 'pending').result = pResult;
-            if (!calls.find(el => el.result == 'pending')) {
-                if (calls.find(el => el.result != 'OK')) {
-                    reject(calls.filter(el => el.result != 'OK'));
-                } else {
-                    resolve('OK');
+            } else if (attAction == 'delete') {
+                var att = attMap.find(el => el.id == $this.attr('data-att-id'));
+                if (att) {
+                    try {
+                        await att.delete();
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'delete',
+                            error: err,
+                        });
+                    }
                 }
+                loop.next();
             }
-        }
+        }, () => {
+            if (errors.length == 0) {
+                resolve(true);
+            } else {
+                reject(errors);
+            }
+        });
     });
 }

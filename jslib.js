@@ -524,7 +524,8 @@ function cDate(pDate) {
 function ISODate(pDate) {
     var dt = cDate(pDate);
 	if (dt) {
-        return dt.toISOString().substring(0, 10);
+        return dt.getFullYear() + '-' + leadingZeros(dt.getMonth() + 1, 2) + '-' +
+            leadingZeros(dt.getDate(), 2);
 	} else {
         return null;
 	}

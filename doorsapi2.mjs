@@ -4,7 +4,8 @@ Cdo esta sea estandar reemplazar los _metodo con #metodo
 https://caniuse.com/?search=private%20methods
 */
 
-//swagger: http://tests.cloudycrm.net/apidocs
+// swagger: http://w3.cloudycrm.net/apidocs
+// https://github.com/DefinitelyTyped/DefinitelyTyped (types para intelliSense)
 
 var incjs = {};
 var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser;
@@ -161,6 +162,7 @@ export function inNode() {
 
 
 export class DoorsMap extends Map {
+    /** Metodo interno, no usar */
     _parseKey(key) {
         var k;
         if (typeof key === 'string') {
@@ -171,7 +173,7 @@ export class DoorsMap extends Map {
         return k;
     }
 
-    // Alias de set
+    /** Alias de set */
     add(key, value) {
         return this.set(key, value);
     }
@@ -180,12 +182,18 @@ export class DoorsMap extends Map {
         return super.delete(this._parseKey(key));
     }
 
-    // Alias de has
+    /** Alias de has */
     exists(key) {
         return this.has(key);
     }
 
-    // map.find((value, key) => { if ... return true })
+    /**
+    Busca y retorna un elemento.
+    @example
+    map.find((value, key) => {
+        if ... return true
+    }
+    */
     find(cbFunc) {
         var me = this;
         for (let [key, value] of super.entries()) {
@@ -204,17 +212,17 @@ export class DoorsMap extends Map {
         return super.has(this._parseKey(key));
     }
 
-    // Alias de get
+    /** Alias de get */
     item(key) {
         return this.get(key);
     }
 
-    // Alias de size
+    /** Alias de size */
     get length() {
         return super.size;
     }
 
-    // Alias de delete
+    /** Alias de delete */
     remove(key) {
         return this.delete(key);
     }
@@ -230,29 +238,53 @@ export class Session {
     #directory;
     #serverUrl;
     #authToken;
+    #apiKey;
     #tags;
     #db;
     #utils;
-    #loggedUser;
+    #currentUser;
     #push;
     
     constructor(serverUrl, authToken) {
-        this.#restClient = new RestClient(serverUrl, authToken, this);
+        this.#restClient = new RestClient(this);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
     }
     
+    /** Metodo interno, no usar */
+    _reset() {
+        this.#tags = undefined;
+        this.#currentUser = undefined;
+    }
+
+    /**
+    @returns {string}
+    */
+    get apiKey() {
+        return this.#apiKey;
+    }
+
+    set apiKey(value) {
+        this.#apiKey = value;
+        this._reset();
+    }
+
+    /**
+    @returns {string}
+    */
     get authToken() {
         return this.#authToken;
     }
 
     set authToken(value) {
         this.#authToken = value;
-        this.restClient.AuthToken = value;
-        this.#tags = undefined;
+        this._reset();
     }
 
-    // Cambia la contraseña del usuario logueado
+    /**
+    Cambia la contraseña del usuario logueado.
+    @returns {Promise}
+    */
     changePassword(login, oldPassword, newPassword, instance) {
         var url = 'session/changepassword';
 
@@ -265,7 +297,32 @@ export class Session {
         return this.restClient.fetch(url, 'POST', data, '');
     };
 
-    // Metodos de base de datos
+    /**
+    Devuelve el usuario logueado.
+    @returns {Promise<User>}
+    */
+    get currentUser() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#currentUser) {
+                var url = 'session/loggedUser';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        me.#currentUser = new User(res, me);
+                        resolve(me.#currentUser);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#currentUser);
+            }
+        });
+    }
+
+    /**
+    Metodos de base de datos.
+    @returns {Database}
+    */
     get db() {
         if (!this.#db) {
             this.#db = new Database(this);
@@ -273,12 +330,15 @@ export class Session {
         return this.#db;
     }
 
-    // Alias de directory
+    /** Alias de directory */
     get dir() {
         return this.directory;
     }
 
-    // Metodos de manejo del directorio
+    /**
+    Metodos de manejo del directorio.
+    @returns {Directory}
+    */
     get directory() {
         if (!this.#directory) {
             this.#directory = new Directory(this);
@@ -286,11 +346,15 @@ export class Session {
         return this.#directory;
     }
 
-    // Alias de documentsGetFromId
+    /** Alias de documentsGetFromId */
     doc(docId) {
         return this.documentsGetFromId(docId);
     }
 
+    /**
+    Obtiene un documento por su doc_id.
+    @returns {Promise<Document>}
+    */
     documentsGetFromId(docId) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -304,9 +368,10 @@ export class Session {
         });
     }
 
-    /*
-    Llama a foldersGetFromId o foldersGetFromPath (segun los parametros)
-    Almacena en cache por 60 segs
+    /**
+    Llama a foldersGetFromId o foldersGetFromPath (segun los parametros).
+    Almacena en cache por 60 segs.
+    @returns {Promise<Folder>}
     */
     folder(folder, curFolderId) {
         var key = 'folder|' + folder + '|' + curFolderId;
@@ -315,18 +380,22 @@ export class Session {
             if (!isNaN(parseInt(folder))) {
                 cache = this.foldersGetFromId(folder);
             } else {
-                cache = this.foldersGetFromPath(folder, (curFolderId ? curFolderId : 1001));
+                cache = this.foldersGetFromPath(folder, curFolderId);
             }
             this.utils.cache(key, cache, 60); // Cachea por 60 segundos
         };
         return cache;
     }
 
-    // Alias de folder
+    /** Alias de folder */
     folders(folder, curFolderId) {
         return this.folder(folder, curFolderId);
     }
 
+    /**
+    Retorna un folder por su fld_id.
+    @returns {Promise<Folder>}
+    */
     foldersGetFromId(fldId) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -340,10 +409,15 @@ export class Session {
         })
     };
 
+    /**
+    Retorna un folder por su path.
+    Si curFolderId no se envia se asume 1001.
+    @returns {Promise<Folder>}
+    */
     foldersGetFromPath(fldPath, curFolderId) {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + (curFolderId ? curFolderId : 1001) + '/children?folderpath=' + encURIC(fldPath);
+            var url = 'folders/' + (curFolderId ? curFolderId : 1001) + '/children?folderpath=' + me.utils.encUriC(fldPath);
             me.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me));
@@ -353,29 +427,19 @@ export class Session {
         })
     };
 
+    /**
+    Devuelve true si estoy logueado.
+    @returns {Promise<boolean>}
+    */
     get isLogged() {
         var url = 'session/islogged';
         return this.restClient.fetch(url, 'POST', {}, '');
     };
 
-    get loggedUser() {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            if (!me.#loggedUser) {
-                var url = 'session/loggedUser';
-                me.restClient.fetch(url, 'GET', '', '').then(
-                    res => {
-                        me.#loggedUser = new User(res, me);
-                        resolve(me.#loggedUser);
-                    },
-                    reject
-                )
-            } else {
-                resolve(me.#loggedUser);
-            }
-        });
-    }
-
+    /**
+    Cierra la sesion.
+    @returns {Promise}
+    */
     logoff() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -387,6 +451,10 @@ export class Session {
         })
     };
 
+    /**
+    Inicia la sesion. Devuelve el authToken.
+    @returns {Promise<string>}
+    */
     logon(login, password, instance, liteMode) {
         var me = this;
         var url = 'session/logon';
@@ -407,7 +475,10 @@ export class Session {
         });
     };
 
-    // Metodos para manejo de notificaciones push
+    /**
+    Metodos para manejo de notificaciones push.
+    @returns {Push}
+    */
     get push() {
         if (!this.#push) {
             this.#push = new Push(this);
@@ -415,12 +486,12 @@ export class Session {
         return this.#push;
     }
 
-    // Backward compat
+    /** Backward compat. Usar dSession.push.register. */
     pushRegistration(settings) {
         return this.push.register(settings);
     }
 
-    // Backward compat
+    /** Backward compat. Usar dSession.push.unreg. */
     pushUnreg(regType, regId) {
         return this.push.unreg(regType, regId);
     }
@@ -429,6 +500,10 @@ export class Session {
         return this.#restClient;
     }
 
+    /**
+    Devuelve o setea runSyncEventsOnClient.
+    @returns {Promise}
+    */
     runSyncEventsOnClient(value) {
         if (value == undefined) {
             var url = 'session/syncevents/runOnClient';
@@ -439,22 +514,28 @@ export class Session {
         }
     }
 
+    /**
+    @returns {string}
+    */
     get serverUrl() {
         return this.#serverUrl;
     }
 
     set serverUrl(value) {
         this.#serverUrl = value;
-        this.restClient.ServerBaseUrl = value;
-        this.#tags == undefined
+        this._reset();
     }
 
+    /**
+    Devuelve o setea un setting de instancia.
+    @returns {Promise}
+    */
     settings(setting, value) {
         var url = 'settings';
         var method, param, paramName;
 
         if (value == undefined) {
-            url += '/' + encURIC(setting);
+            url += '/' + this.utils.encUriC(setting);
             method = 'GET';
             param = '';
             paramName = ''
@@ -470,6 +551,10 @@ export class Session {
         return this.restClient.fetch(url, method, param, paramName);
     }
 
+    /**
+    Devuelve los tags de session.
+    @returns {Promise<Object>}
+    */
     get tags() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -488,7 +573,10 @@ export class Session {
         })
     }
 
-    // Metodos varios
+    /**
+    Metodos varios.
+    @returns {Utilities}
+    */
     get utils() {
         if (!this.#utils) {
             this.#utils = new Utilities(this);
@@ -510,6 +598,7 @@ export class Account {
         this.#session = session;
     }
 
+    /** Metodo interno, no usar */
     _accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -534,6 +623,7 @@ export class Account {
         });
     }
 
+    /** Metodo interno, no usar */
     _accountsList(property, endPoint) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -553,6 +643,7 @@ export class Account {
         });
     }
 
+    /** Metodo interno, no usar */
     _accountsMap(accounts) {
         var me = this;
         var map = new DoorsMap();
@@ -567,6 +658,10 @@ export class Account {
         return this.type;
     }
 
+    /**
+    Convierte a User
+    @returns {User}
+    */
     cast2User() {
         if (this.type == 1) {
             return new User(this.#json, this.#session);
@@ -575,11 +670,11 @@ export class Account {
         }
     }
 
-    /*
-    childAccounts() -> Devuelve un map de cuentas hijas
-    childAccounts(account) -> Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
-
-    Los metodos childAccountsRecursive, parentAccounts y parentAccountsRecursive trabajan igual
+    /**
+    @example
+    childAccounts() // Devuelve un map de cuentas hijas.
+    childAccounts(account) // Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     childAccounts(account) {
         if (account == undefined) {
@@ -589,6 +684,10 @@ export class Account {
         }
     }
 
+    /**
+    Agrega una o varias (array) cuentas hijas.
+    @returns {Promise}
+    */
     async childAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
@@ -597,6 +696,12 @@ export class Account {
         return res;
     }
 
+    /**
+    @example
+    childAccountsRecursive() // Devuelve un map de cuentas hijas recursivo.
+    childAccountsRecursive(account) // Devuelve una cuenta hija. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
+    */
     childAccountsRecursive(account) {
         if (account == undefined) {
             return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
@@ -605,6 +710,10 @@ export class Account {
         }
     }
 
+    /**
+    Quita una o varias cuentas hijas.
+    @returns {Promise}
+    */
     async childAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/childAccounts';
@@ -613,12 +722,19 @@ export class Account {
         return res;
     }
 
+    /**
+    Borra la cuenta.
+    @returns {Promise}
+    */
     delete(expropiateObjects) {
         var expObj = expropiateObjects ? true : false;
         var url = 'accounts/' + this.id + '?expropiateObjects=' + expObj;
         return this.session.restClient.fetch(url, 'DELETE', '', '');
     }
 
+    /**
+    @returns {string}
+    */
     get description() {
         return this.#json.Description;
     }
@@ -627,6 +743,9 @@ export class Account {
         this.#json.Description = value;
     }
 
+    /**
+    @returns {string}
+    */
     get email() {
         return this.#json.Email;
     }
@@ -635,29 +754,48 @@ export class Account {
         this.#json.Email = value;
     }
 
-    // account puede ser name o id
+    /**
+    Devuelve true si la tiene de hija. account puede ser name o id.
+    @returns {Promise<boolean>}
+    */
     async hasChild(account, recursive) {
         var acc = await this['childAccounts' + (recursive ? 'Recursive' : '')](account, true);
         return acc ? true : false;
     }
 
+    /**
+    Devuelve true si la tiene de padre. account puede ser name o id.
+    @returns {Promise<boolean>}
+    */
     async hasParent(account, recursive) {
         var acc = await this['parentAccounts' + (recursive ? 'Recursive' : '')](account, true);
         return acc ? true : false;
     }
 
+    /**
+    @returns {number}
+    */
     get id() {
         return this.#json.AccId;
     }
 
+    /**
+    @returns {boolean}
+    */
     get isAdmin() {
         return this.#json.IsAdmin;
     }
 
+    /**
+    @returns {boolean}
+    */
     get isNew() {
         return this.#json.IsNew;
     }
 
+    /**
+    @returns {string}
+    */
     get name() {
         return this.#json.Name;
     }
@@ -666,10 +804,19 @@ export class Account {
         this.#json.Name = value;
     }
 
+    /**
+    @returns {number}
+    */
     get objectType() {
         return Account.objectType;
     }
 
+    /**
+    @example
+    parentAccounts() // Devuelve un map de cuentas padre.
+    parentAccounts(account) // Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
+    */
     parentAccounts(account) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsList', 'parentAccounts');
@@ -678,6 +825,10 @@ export class Account {
         }
     }
 
+    /**
+    Agrega una o varias cuentas padre.
+    @returns {Promise}
+    */
     async parentAccountsAdd(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
@@ -686,6 +837,12 @@ export class Account {
         return res;
     }
 
+    /**
+    @example
+    parentAccountsRecursive() // Devuelve un map de cuentas padre recursivo.
+    parentAccountsRecursive(account) // Devuelve una cuenta padre. Puedo pasar name o id. Si no esta devuelve undefined.
+    @returns {(Promise<Account>|Promise<DoorsMap>)}
+    */
     parentAccountsRecursive(account) {
         if (account == undefined) {
             return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
@@ -694,6 +851,10 @@ export class Account {
         }
     }
 
+    /**
+    Quita una o varias cuentas hijas.
+    @returns {Promise}
+    */
     async parentAccountsRemove(accounts) {
         var accs = Array.isArray(accounts) ? accounts : [accounts];
         var url = 'accounts/' + this.id + '/parentAccounts';
@@ -702,11 +863,22 @@ export class Account {
         return res;
     }
 
+    /**
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
+    /**
+    Guarda.
+    @returns {Promise<Account>}
+    */
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -729,27 +901,47 @@ export class Account {
         })
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
 
+    //todo: retorna bool o number?
     get system() {
         return this.#json.System;
     }
 
+    /**
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
+    /**
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
+    /**
+    @returns {number}
+    */
     get type() {
         return this.#json.Type;
     }
 
+    /**
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -765,19 +957,33 @@ export class Application {
         this.#parent = parent
     }
 
-    // Alias de folders
+    /**
+    Alias de folders.
+    @returns {Promise<Folder>}
+    */
     folder(folderPath) {
         return this.folders(folderPath);
     }
 
+    /**
+    Retorna un folder por su path.
+    @returns {Promise<Folder>}
+    */
     folders(folderPath) {
         return this.session.folder(folderPath, this.rootFolderId);
     }
 
+    /**
+    @returns {Folder}
+    */
     get parent() {
         return this.#parent;
     }
 
+    /**
+    Retorna el root folder del app.
+    @returns {Promise<Folder>}
+    */
     get rootFolder() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -795,10 +1001,17 @@ export class Application {
         })
     }
 
+    /**
+    Retorna el root folder id del app.
+    @returns {number}
+    */
     get rootFolderId() {
         return this.#parent.toJSON().RootFolderId;
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.parent.session;
     }
@@ -818,15 +1031,21 @@ export class Attachment {
         this.#parent = document;
     }
 
+    /**
+    @returns {Date}
+    */
     get created() {
-        return this.#json.Created;
+        return this.session.utils.cDate(this.#json.Created);
     }
 
-    // Alias de remove
+    /** Alias de remove */
     delete() {
         return this.remove();
     }
 
+    /**
+    @returns {string}
+    */
     get description() {
         return this.#json.Description;
     }
@@ -836,6 +1055,9 @@ export class Attachment {
         this.#json.Description = value;
     }
 
+    /**
+    @returns {string}
+    */
     get extension() {
         return this.#json.Extension;
     }
@@ -854,6 +1076,9 @@ export class Attachment {
         this.#json.External = value;
     }
 
+    /**
+    @returns {Promise<ArrayBuffer>}
+    */
     get fileStream() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -878,6 +1103,9 @@ export class Attachment {
         this.#json.File = value;
     }
 
+    /**
+    @returns {string}
+    */
     get group() {
         return this.#json.group;
     }
@@ -887,6 +1115,9 @@ export class Attachment {
         this.#json.group = value;
     }
 
+    /**
+    @returns {number}
+    */
     get id() {
         return this.#json.AttId;
     }
@@ -899,6 +1130,9 @@ export class Attachment {
         this.#json.IsNew = value;
     }
 
+    /**
+    @returns {string}
+    */
     get name() {
         return this.#json.Name;
     }
@@ -907,6 +1141,10 @@ export class Attachment {
         return Attachment.objectType;
     }
 
+    /**
+    Creador del adjunto.
+    @returns {Promise<User>}
+    */
     get owner() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -924,23 +1162,45 @@ export class Attachment {
         });
     }
 
+    /**
+    ACC_ID del creador del adjunto.
+    @returns {number}
+    */
     get ownerId() {
         return this.#json.AccId
     }
 
+    /**
+    NAME del creador del adjunto.
+    @returns {string}
+    */
     get ownerName() {
         return this.#json.AccName
     }
 
+    /**
+    @returns {Document}
+    */
     get parent() {
         return this.#parent;
     }
 
+    /**
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
+    /**
+    Borra el adjunto inmediatamente.
+    @returns {Promise}
+    */
     remove() {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -961,6 +1221,10 @@ export class Attachment {
         });
     }
 
+    /**
+    Guarda el adjunto inmediatamente.
+    @returns {Promise}
+    */
     save() {
         if (!this.isNew) throw new Error('I\'m not new');
 
@@ -977,8 +1241,11 @@ export class Attachment {
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
                     let resJson = await res.json();
-                    me.#json = resJson.InternalObject[0];
-                    me.#json.AccName = (await me.session.loggedUser).name;
+                    let newId = Math.max(...resJson.InternalObject.map(el => el.AttId));
+                    let newJson = resJson.InternalObject.find(el => el.AttId == newId);
+                    if (me.name != newJson.Name) reject(new Error('Same name expected'));
+                    me.#json = newJson
+                    me.#json.AccName = (await me.session.currentUser).name;
                     me.#json.File = fs;
 
                     resolve(me);
@@ -988,23 +1255,42 @@ export class Attachment {
         });
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.parent.session;
     }
 
+    /**
+    @returns {number}
+    */
     get size() {
         return this.#json.Size;
     }
 
+    /**
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
+    /**
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
+    /**
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -1018,10 +1304,15 @@ export class Database {
         this.#session = session;
     }
 
+    /** No implementado aun */
     async execute(sql) {
         // todo
     }
 
+    /**
+    Obtiene el siguiente valor de la secuencia.
+    @returns {Promise<number>}
+    */
     async nextVal(sequence) {
         var res = await this.session.utils.execVbs(`
             Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
@@ -1030,7 +1321,10 @@ export class Database {
         return parseInt(await res.text());
     }
 
-    // OJO: Las columnas en null no bajan en el xml
+    /**
+    Ejecuta una consulta a la base de datos.
+    @returns {Promise<Object[]>}
+    */
     async openRecordset(sql) {
         sql = sql.replaceAll('"', '""');
         sql = sql.replaceAll('\n', ' ');
@@ -1075,11 +1369,15 @@ export class Database {
         return ret;
     }
 
-    // Alias de sqlEncode
+    /** Alias de sqlEncode. */
     sqlEnc(value, type) {
         return this.sqlEncode(value, type);
     }
 
+    /**
+    Encodea un valor para SQL. type: 1=char / 2=date / 3=number.
+    @returns {string}
+    */
     sqlEncode(value, type) {
         if (value == null) {
             return 'NULL';
@@ -1113,10 +1411,14 @@ export class Database {
         };
     }
     
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
 
+    /** No implementado aun */
     setVal(sequence, value) {
         // todo
     }
@@ -1129,13 +1431,17 @@ export class Directory {
         this.#session = session;
     }
 
+    /**
+    Devuelve un account por name o id.
+    @returns {Promise<Account>}
+    */
     accounts(account) {
         var me = this;
         return new Promise((resolve, reject) => {
             var url;
             if (isNaN(parseInt(account))) {
-                //url = 'accounts?accName=' + encURIC(account);
-                url = 'accounts/name/' + encURIC(account);
+                //url = 'accounts?accName=' + me.session.utils.encUriC(account);
+                url = 'accounts/name/' + me.session.utils.encUriC(account);
             } else {
                 // todo: cambiar por /accounts/{accId}
                 url = 'accounts?accIds=' + account;
@@ -1155,6 +1461,10 @@ export class Directory {
         });
     }
 
+    /**
+    Crea un nuevo account. type: 1=User / 2=Group.
+    @returns {(Promise<User>|Promise<Account>)}
+    */
     accountsNew(type) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1180,11 +1490,19 @@ export class Directory {
         })
     }
 
+    /**
+    Busca accounts.
+    @returns {Promise<Object[]>}
+    */
     accountsSearch(filter, order) {
-        let url = '/accounts/search?filter=' + encURIC(filter) + '&order=' + encURIC(order);
+        let url = '/accounts/search?filter=' + this.session.utils.encUriC(filter) + 
+            '&order=' + this.session.utils.encUriC(order);
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
@@ -1214,53 +1532,85 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
+    /**
+    Access Control List propio y heredado.
+    @returns {Promise<Object[]>}
+    */
     acl() {
         var url = 'documents/' + this.id + '/acl/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+    Otorga el permiso access a la cuenta account (id).
+    Access: read / modifiy / delete / admin.
+    @returns {Promise}
+    */
     aclGrant(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.fetch(url, 'POST', {}, '');
     }
 
+    /**
+    Access Control List heredado.
+    @returns {Promise<Object[]>}
+    */
     aclInherited() {
         var url = 'documents/' + this.id + '/aclinherited/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+    Devuelve o establece si se heredan permisos.
+    @returns {Promise<boolean>}
+    */
     aclInherits(value) {
-        //todo: no esta andando
         if (value == undefined) {
             return (this.fields('inherits').value ? true : false);
         } else {
+            var me = this;
             return new Promise((resolve, reject) => {
                 var url = 'documents/' + this.id + '/aclinherits/' + value;
                 this.session.restClient.fetch(url, 'POST', {}, '').then(
                     res => {
-                        debugger
-
+                        if (res) {
+                            me.#json.AclInherits = (value ? true : false);
+                            me.fields('inherits').toJSON().Value = (value ? 1 : 0);
+                        }
+                        resolve(res);
                     },
                     err => {
-                        debugger;
-
+                        reject(me.session.utils.newErr(err));
                     }
                 )
             });
         }
     }
 
+    /**
+    Access Control List propio.
+    @returns {Promise<Object[]>}
+    */
     aclOwn() {
-        //todo
         var url = 'documents/' + this.id + '/aclown/';
         return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
+    /**
+    Revoca el permiso access a la cuenta account (id).
+    Access: read / modifiy / delete / admin.
+    @returns {Promise}
+    */
     aclRevoke(account, access) {
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
+    /**
+    Revoca todos los permisos de la cuenta account (id).
+    Si account no se especifica revoca todos los permisos de todas las cuentas.
+    @returns {Promise}
+    */
     aclRevokeAll(account) {
         var url = 'documents/' + this.id + '/acl/revokeAll';
         if (account) {
@@ -1270,6 +1620,10 @@ export class Document {
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
     }
 
+    /**
+    Devuelve la coleccion de adjuntos, o uno en particular si se especifica attachment (name).
+    @returns {(Promise<DoorsMap>|Promise<Attachment>)}
+    */
     attachments(attachment) {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1326,6 +1680,10 @@ export class Document {
         });
     }
 
+    /**
+    Crea y devuelve un nuevo adjunto con nombre name.
+    @returns {Attachment}
+    */
     attachmentsAdd(name) {
         if (!name) throw new Error('name is required');
 
@@ -1334,30 +1692,52 @@ export class Document {
             IsNew: true,
         }, this);
 
+        this.session.currentUser.then(
+            res => {
+                att.AccId = res.id;
+                att.AccName = res.name;
+            }
+        )
+
         this.#attachmentsMap.set(name, att);
         return att;
     }
 
+    /** No implementado aun */
     copy(folder) {
         // todo
     }
 
+    /**
+    @returns {Date}
+    */
     get created() {
         return this.fields('created').value;
     }
 
+    /** No implementado aun */
     currentAccess(access, explicit) {
         // todo
     }
 
+    /**
+    Borra el documento, si purge=true no se envia a la papelera
+    @returns {Promise}
+    */
     delete(purge) {
-        var me = this;
-        var url = 'folders/' + me.parentId + '/documents/?tobin=' + 
-            encURIC(purge == true ? false : true);
-        return me.session.restClient.fetch(url, 'DELETE', [me.id], 'docIds');
+        var url = 'folders/' + this.parentId + '/documents/?tobin=' + 
+            this.session.utils.encUriC(purge == true ? false : true);
+        return this.session.restClient.fetch(url, 'DELETE', [this.id], 'docIds');
         //todo: en q estado queda el objeto?
     }
 
+    /**
+    @example
+    fields() // Devuelve la coleccion.
+    fields(name) // Devuelve el field (undefined si no lo encuentra).
+    fields(name, value) // Setea el valor del field.
+    @returns {(DoorsMap|Field)}
+    */
     fields(name, value) {
         var me = this;
 
@@ -1391,14 +1771,19 @@ export class Document {
         }
     }
 
+    /** Alias de parent */
     get folder() {
         return this.parent
     }
 
+    /** Alias de parentId */
     get folderId() {
         return this.parentId
     }
 
+    /**
+    @returns {Promise<Form>}
+    */
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1417,38 +1802,62 @@ export class Document {
         });
     }
 
+    /**
+    @returns {number}
+    */
     get formId() {
         return this.fields('frm_id').value;
     }
 
+    /**
+    @returns {string}
+    */
     get icon() {
         return this.fields('icon').value;
     }
 
+    /**
+    @returns {number}
+    */
     get id() {
         return this.#json.DocId;
     }
 
+    /**
+    @returns {boolean}
+    */
     get isNew() {
         return this.#json.IsNew;
     }
 
+    /** No implementado aun */
     log() {
         // todo
     }
 
+    /**
+    @returns {number}
+    */
     get objectType() {
         return Document.objectType;
     }
 
+    /**
+    @returns {Date}
+    */
     get modified() {
         return this.fields('modified').value;
     }
 
+    /** No implementado aun */
     move(folder) {
         // todo
     }
 
+    /**
+    Creador del documento.
+    @returns {Promise<User>}
+    */
     get owner() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1466,10 +1875,18 @@ export class Document {
         });
     }
 
+    /**
+    ACC_ID del creador del documento.
+    @returns {number}
+    */
     get ownerId() {
         return this.fields('acc_id').value;
     }
 
+    /**
+    Retorna la carpeta contenedora.
+    @returns {Promise<Folder>}
+    */
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1487,15 +1904,31 @@ export class Document {
         });
     }
 
+    /**
+    Retorna el FLD_ID de la carpeta contenedora.
+    @returns {number}
+    */
     get parentId() {
         return this.fields('fld_id').value;
     }
 
+    /**
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
+    /**
+    Guarda el documento.
+    No guarda adjuntos, estos deben guardarse o borrarse individualmente.
+    @returns {Promise<Document>}
+    */
     save() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1520,74 +1953,18 @@ export class Document {
     /*
     saveAttachments() {
         // todo: esto deberia ser parte del save (issue #261)
-        var me = this;
-        var proms = [];
-        var rm = [];
-        var attMap = me.#attachmentsMap;
-
-        return new Promise((resolve, reject) => {
-
-        });
-
-
-        for ([key, value] of attMap) {
-        }
-
-
-
-        me.session.utils.asyncLoop(attMap.size, async loop => {
-            var key = Array.from(attMap.keys())[loop.iteration()];
-            var el = attMap.get(key);      
-
-            if (el.isNew) {
-                var formData = new FormData();
-                // todo: probar
-                var arrBuf = await el.fileStream;
-                formData.append('attachment', new Blob([arrBuf]), el.name);
-                formData.append('description', el.description);
-                formData.append('group', el.group);
-                var url = 'documents/' + me.id + '/attachments';
-                proms.push(me.session.restClient.fetchBuff(url, 'POST', formData));
-
-            } else if (el.removed) {
-                rm.push(el.id);
-            }
-            loop.next();
-
-        }, () => {
-            if (rm.length > 0) {
-                var url = 'documents/' + me.id + '/attachments';
-                proms.push(me.session.restClient.fetch(url, 'DELETE', rm, 'arrayAttId'));
-            }
-
-            Promise.all(proms).then(
-                res => {
-                    //todo: actualizar el json de los attachs
-
-                    attMap.forEach((el, key) => {
-                        if (el.removed) {
-                            attMap.delete(key)
-                        } else if (el.isNew) {
-                            el.isNew = false;
-                        }
-                    });
-
-                    resolve(me)
-                },
-                err => {
-                    debugger;
-                    console.error(err);
-                    reject(err);
-                }
-            )
-        })
-    }
     */
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
 
+    /**
+    @returns {string}
+    */
     get subject() {
         return this.fields('subject').value;
     }
@@ -1596,11 +1973,18 @@ export class Document {
         this.fields('subject').value = value;
     }
 
+    /**
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
+    /**
+    Agrega msg como entrada de log, con los minutos y segundos,
+    en un tag llamado log.
+    */
     tagLog(msg) {
         var log = this.tags.log;
         if (!log) log = '';
@@ -1611,10 +1995,21 @@ export class Document {
         this.tags.log = log;
     }
 
+    /**
+    Convierte a JSON
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
+    /**
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -1642,15 +2037,22 @@ export class Field {
         return this.#json.Custom;
     }
 
+    /**
+    @returns {string}
+    */
     get description() {
         return this.#json.Description;
     }
 
+    /**
+    @returns {string}
+    */
     get descriptionRaw() {
         return this.#json.DescriptionRaw;
     }
 
     get formId() {
+        debugger; // chequear
         return this.#json.Id;
     }
 
@@ -1658,6 +2060,10 @@ export class Field {
         return this.#json.HeaderTable;
     }
 
+    /**
+    Retorna description si existe, sino el name con la 1ra letra en mayuscula.
+    @returns {string}
+    */
     get label() {
         var ret = this.description;
         if (!ret) ret = this.name.substring(0, 1).toUpperCase() + this.name.substring(1).toLowerCase();
@@ -1689,6 +2095,13 @@ export class Field {
     }
 
     // todo: solo para field de form, add o remove igual
+    /**
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
@@ -1698,10 +2111,16 @@ export class Field {
         return this.#json.Scale;
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.parent.session;
     }
 
+    /**
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
@@ -1714,6 +2133,13 @@ export class Field {
         return this.#json.Updatable;
     }
 
+    /**
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -1749,6 +2175,10 @@ export class Field {
         return this.#json.ValueChanged;
     }
 
+    /**
+    Retorna true si value es null, undefined o ''.
+    @returns {boolean}
+    */
     get valueEmpty() {
         return (this.value == null || this.value == undefined || this.value == '');
     }
@@ -1776,10 +2206,22 @@ export class Folder {
         if (parent) this.#parent = parent;
     }
 
+    /**
+    No implementado aun.
+    Access Control List propio y heredado.
+    @returns {Promise<Object[]>}
+    */
     acl() {
         //todo
     }
 
+    /**
+    No implementado aun.
+    Otorga el permiso access a la cuenta account (id).
+    Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
+    doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
+    @returns {Promise}
+    */
     aclGrant(account, access) {
         /* todo
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
@@ -1787,18 +2229,40 @@ export class Folder {
         */
     }
 
+    /**
+    No implementado aun.
+    Access Control List heredado.
+    @returns {Promise<Object[]>}
+    */
     aclInherited() {
         //todo
     }
 
-    get aclInherits() {
+    /**
+    No implementado aun.
+    Devuelve o establece si se heredan permisos.
+    @returns {Promise}
+    */
+    aclInherits(value) {
         //todo
     }
 
+    /**
+    No implementado aun.
+    Access Control List propio.
+    @returns {Promise<Object[]>}
+    */
     aclOwn() {
         //todo
     }
 
+    /**
+    No implementado aun.
+    Revoca el permiso access a la cuenta account (id).
+    Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
+    doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
+    @returns {Promise}
+    */
     aclRevoke(account, access) {
         /* todo
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
@@ -1806,6 +2270,12 @@ export class Folder {
         */
     }
 
+    /**
+    No implementado aun.
+    Revoca todos los permisos de la cuenta account (id).
+    Si account no se especifica revoca todos los permisos de todas las cuentas.
+    @returns {Promise}
+    */
     aclRevokeAll(account) {
         /* todo
         var url = 'documents/' + this.id + '/acl/revokeAll';
@@ -1817,6 +2287,9 @@ export class Folder {
         */
     }
 
+    /**
+    @returns {Application}
+    */
     get app() {
         if (!this.#app) {
             this.#app = new Application(this);
@@ -1824,16 +2297,26 @@ export class Folder {
         return this.#app;
     }
 
-    // Alias de documentsDelete
+    /**
+    Alias de documentsDelete.
+    @returns {Promise}
+    */
     delete(documents, purge) {
         return this.documentsDelete(documents, purge);
     }
 
-    // Alias de documents
+    /**
+    Alias de documents.
+    @returns {Promise<Document>}
+    */
     doc(document) {
         return this.documents(document);
     }
     
+    /**
+    Obtiene un documento. document puede ser el id o una formula que devuelva un solo elemento.
+    @returns {Promise<Document>}
+    */
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
@@ -1864,20 +2347,30 @@ export class Folder {
         });
     }
 
+    /**
+    Borra multiples documentos. documents puede ser un array de ids o una formula.
+    @returns {Promise}
+    */
     documentsDelete(documents, purge) {
         if (!isNaN(parseInt(documents)) || Array.isArray(documents)) {
+            // id o array de ids
             var url = 'folders/' + this.id + '/documents/?tobin=' + 
-                encURIC(purge == true ? false : true);
+                this.session.utils.encUriC(purge == true ? false : true);
             return this.session.restClient.fetch(url, 'DELETE', 
                 Array.isArray(documents) ? documents : [documents], 'docIds');
 
         } else {
+            // formula
             // todo: tobin??
-            var url = 'folders/' + this.id + '/documents/' + encURIC(documents);
+            var url = 'folders/' + this.id + '/documents/' + this.session.utils.encUriC(documents);
             return this.session.restClient.fetch(url, 'DELETE', {}, '');
         }
     }
 
+    /**
+    Crea un nuevo documento.
+    @returns {Promise<Document>}
+    */
     documentsNew() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1891,11 +2384,17 @@ export class Folder {
         })
     }
 
+    /**
+    @example
+    folders() // Devuelve la lista de carpetas hijas.
+    folders(name) // Devuelve la carpeta hija con nombre name.
+    @returns {Promise<Folder>}
+    */
     folders(name) {
         //todo: si no viene name devolver la lista
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + me.id + '/children?foldername=' + encURIC(name);
+            var url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session, me));
@@ -1905,11 +2404,18 @@ export class Folder {
         });
     }
 
-    // Alias de type
+    /**
+    Alias de type.
+    @returns {number}
+    */
     get folderType() {
         return this.type;
     }
 
+    /**
+    Retorna el form relacionado
+    @returns {Promise<Form>}
+    */
     get form() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1929,14 +2435,24 @@ export class Folder {
         });
     }
 
+    /**
+    Retorna el id del form relacionado
+    @returns {number}
+    */
     get formId() {
         return this.#json.FrmId;
     }
 
+    /**
+    @returns {number}
+    */
     get id() {
         return this.#json.FldId;
     }
 
+    /**
+    @returns {string}
+    */
     get name() {
         return this.#json.Name;
     }
@@ -1945,15 +2461,22 @@ export class Folder {
         this.#json.Name = value;
     }
 
-    // Alias de documentsNew
+    /** Alias de documentsNew */
     newDoc() {
         return this.documentsNew();
     }
 
+    /**
+    @returns {number}
+    */
     get objectType() {
         return Folder.objectType;
     }
 
+    /**
+    Retorna la carpeta padre.
+    @returns {Promise<Folder>}
+    */
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
@@ -1975,20 +2498,47 @@ export class Folder {
         });
     }
 
+    /**
+    Retorna el id de la carpeta padre.
+    @returns {number}
+    */
     get parentId() {
         return this.#json.ParentFolder;
     }
 
+    /**
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
     }
 
+    /**
+    Retorna el id de la carpeta raiz de la aplicacion.
+    @returns {number}
+    */
     get rootFolderId() {
         return this.#json.RootFolderId;
     }
 
-    // options: { fields, formula, order, maxDocs, recursive, maxTextLength }
+    /**
+    Busca documentos.
+    @example
+    search({
+        fields // Lista de campos separados por coma (vacio devuelve todos).
+        formula // Filtro SQL.
+        order // Campos de orden.
+        maxDocs // Cant max de documentos. Def 1000. 0 = sin limite.
+        recursive // Busca tb en carpetas hijas con el mismo form.
+        maxTextLength // Largo max de los campos de texto. Def 100. 0 = sin limite.
+    }
+    @returns {Promise<Object[]>}
+    */
     search(options) {
         var opt = {
             fields: '',
@@ -2000,15 +2550,30 @@ export class Folder {
         };
         Object.assign(opt, options);
 
+        var encUriC = this.session.utils.encUriC;
         var url = 'folders/' + this.id + '/documents';
-        var params = 'fields=' + encURIC(opt.fields) + '&formula=' + encURIC(opt.formula) + 
-            '&order=' + encURIC(opt.order) + '&maxDocs=' + encURIC(opt.maxDocs) + 
-            '&recursive=' + encURIC(opt.recursive) + '&maxDescrLength=' + encURIC(opt.maxTextLen);
+        var params = 'fields=' + encUriC(opt.fields) + '&formula=' + encUriC(opt.formula) + 
+            '&order=' + encUriC(opt.order) + '&maxDocs=' + encUriC(opt.maxDocs) + 
+            '&recursive=' + encUriC(opt.recursive) + '&maxDescrLength=' + encUriC(opt.maxTextLen);
 
         return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
-    // options: { groups, totals, formula, order, maxDocs, recursive, groupsOrder, totalsOrder }
+    /**
+    Busqueda agrupada de documentos.
+    @example
+    searchGroups({
+        groups // Campos de grupo separados por coma.
+        totals // 
+        formula // Filtro SQL.
+        order // 
+        maxDocs //
+        recursive //
+        groupsOrder //
+        totalsOrder //
+    }
+    @returns {Promise<Object[]>}
+    */
     searchGroups(options) {
         var opt = {
             groups: undefined,
@@ -2022,47 +2587,73 @@ export class Folder {
         }
         Object.assign(opt, options);
 
+        var encUriC = this.session.utils.encUriC;
         var url = 'folders/' + this.id + '/documents/grouped';
-        var params = 'groups=' + encURIC(opt.groups) + '&totals=' + encURIC(opt.totals) +
-            '&formula=' + encURIC(opt.formula) + '&order=' + encURIC(opt.order) + 
-            '&maxDocs=' + encURIC(opt.maxDocs) + '&recursive=' + encURIC(opt.recursive) + 
-            '&groupsOrder=' + encURIC(opt.groupsOrder) + '&totalsOrder=' + encURIC(opt.totalsOrder);
+        var params = 'groups=' + encUriC(opt.groups) + '&totals=' + encUriC(opt.totals) +
+            '&formula=' + encUriC(opt.formula) + '&order=' + encUriC(opt.order) + 
+            '&maxDocs=' + encUriC(opt.maxDocs) + '&recursive=' + encUriC(opt.recursive) + 
+            '&groupsOrder=' + encUriC(opt.groupsOrder) + '&totalsOrder=' + encUriC(opt.totalsOrder);
 
         return this.session.restClient.fetch(url, 'GET', params, '');
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
 
+    /**
+    @returns {Object}
+    */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
     }
 
+    /**
+    @returns {string}
+    */
     toJSON() {
         return this.#json;
     }
 
+    /**
+    @returns {number}
+    */
     get type() {
         return this.#json.Type;
     }
 
+    /**
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
     }
 
-    views(view) {
+    /**
+    @example
+    views() // Devuelve la coleccion.
+    views(name) // Devuelve la vista name.
+    @returns {(Promise<DoorsMap>|Promise<View>)}
+    */
+    views(name) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (view != undefined) {
+            if (name != undefined) {
                 me.views().then(
                     res => {
-                        if (res.has(view)) {
-                            resolve(res.get(view));
+                        if (res.has(name)) {
+                            resolve(res.get(name));
                         } else {
-                            reject(new Error('View not found: ' + view));
+                            reject(new Error('View not found: ' + name));
                         }
                     },
                     reject
@@ -2107,6 +2698,10 @@ export class Folder {
         })
     }
 
+    /**
+    Crea una nueva vista.
+    @returns {Promise<View>}
+    */
     async viewsAdd() {
         var url = 'folders/' + this.id + '/views/new';
         var res = await this.session.restClient.fetch(url, 'GET', '', '');
@@ -2196,6 +2791,13 @@ export class Form {
         return Form.objectType;
     }
 
+    /**
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
@@ -2214,6 +2816,13 @@ export class Form {
         return this.#json;
     }
 
+    /**
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -2251,7 +2860,7 @@ export class Properties extends DoorsMap {
 
         this.#restUrl = (this.user ? 'user' : '') + 'properties?objectId=' + restArgs.objId + 
             '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
-            '&objectName=' + encURIC(restArgs.objName);
+            '&objectName=' + this.session.utils.encUriC(restArgs.objName);
 
         // todo: si da error armar la coleccion vacia
         this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
@@ -2410,19 +3019,6 @@ export class Push {
         return this.session.restClient.fetch(url, 'POST', settings, 'notificationReceiver');
     }
 
-    /*
-    Envia una notificacion push
-    msg = {
-        to: accId (pueden ser grupos), puede ser un array
-        title: titulo,
-        body: cuerpo,
-        data: { todos los datos que quiera agregar, ej:
-            doc_id: 555,
-            fld_id: 111,
-            (el guid se genera solo)
-        }
-    }
-    */
     // todo dejar esta cdo se cierre el issue 251
     /*
     send(msg) {
@@ -2451,6 +3047,21 @@ export class Push {
     }
     */
 
+    /**
+    Envia una notificacion push
+    @example
+    send({
+        to // accId (pueden ser grupos), puede ser un array
+        title // Titulo.
+        body // Cuerpo.
+        data: { // Los datos que quiera agregar, ej:
+            doc_id: 555,
+            fld_id: 111,
+            // (el guid se genera solo)
+        }
+    }
+    @returns {Promise}
+    */
     async send(msg) {
         msg.to = Array.isArray(msg.to) ? msg.to : [msg.to];
         for (var el of msg.to) {
@@ -2490,7 +3101,8 @@ export class Push {
 
     unregister(regType, regId) {
         var url = 'notifications/devices';
-        var params = 'providerType=' + encURIC(regType) + '&registrationId=' + encURIC(regId);
+        var params = 'providerType=' + this.session.utils.encUriC(regType) + 
+            '&registrationId=' + this.session.utils.encUriC(regId);
         return this.session.restClient.fetch(url, 'DELETE', params, '');
     }
 }
@@ -2665,25 +3277,25 @@ export class Utilities {
     
     constructor(session) {
         this.#session = session;
-        this.#cache = [];
+        this.#cache = new DoorsMap();
     }
 
-    /*
+    /**
     Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
     que debo esperar antes de realizar la prox iteracion. Si en iterations
     paso undefined, se repite el loop hasta loop.break()
-
+    @example
     asyncLoop(10,
         function (loop) {
-            console.log(loop.iteration());
+            console.log(loop.iteration()); // Nro de iteracion
             setTimeout(function () {
-                loop.next();
+                loop.next(); // Ejecuta la prox iteracion
             }, 0);
             
-            //loop.break(); // Para finalizar el loop
+            //loop.break(); // Finaliza el loop
         },
         function() {
-            console.log('cycle ended')
+            console.log('Loop terminado')
         }
     );
     */
@@ -2716,37 +3328,35 @@ export class Utilities {
         return loop;
     }
 
-    /*
-    Cache de uso gral
-    dSession.cache('myKey', myValue, 60); // Almacena por 60 segundos
-    myVar = dSession.cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiro
+    /**
+    Cache de uso gral. El cache se almacena en la instancia del objeto Session,
+    y solo trabaja en el ambito de la misma.
+    @example
+    cache('myKey'); // Obtiene el valor almacenado en el cache, devuelve undefined si no esta o expiró
+    cache('myKey', myValue, 60); // Almacena myValue con la clave myKey por 60 segundos.
+    cache('myKey', myValue); // Almacena por 300 segs (5 mins), valor por defecto de seconds.
     */
     cache(key, value, seconds) {
-        let f = this.#cache.find(el => el.key == key);
-        if (value == undefined) { // get
-            if (f) {
-                if (!f.expires || f.expires > Date.now()) {
-                    console.log('Cache hit: ' + key);
-                    return f.value;
-                }
+        if (value == undefined) {
+            // get
+            if (this.#cache.has(key) && this.#cache.get(key).expires > Date.now()) {
+                //console.log('Cache hit: ' + key);
+                return this.#cache.get(key).value;
             }
-        } else { // set
-            var exp, sec = parseInt(seconds);
-            if (!isNaN(sec)) {
-                exp = Date.now() + sec * 1000;
-            } else {
-                exp = Date.now() + 300000; // 5' por defecto
-            }
-            if (f) {
-                f.value = value;
-                f.expires = exp;
-            } else {
-                this.#cache.push({ key: key, value: value, expires: exp });
-            }
+
+        } else {
+            // set
+            this.#cache.set(key, {
+                value: value,
+                expires: Date.now() + (seconds ? seconds * 1000 : 300000),
+            });
         }
     }
 
-    // Convierte a Date
+    /**
+    Convierte a Date
+    @returns {Date}
+    */
     cDate(date) {
         var dt;
         if (date == null || date == undefined) return null;
@@ -2765,12 +3375,15 @@ export class Utilities {
         }
     }
 
-    // Alias de cNumber
+    /** Alias de cNumber */
     cNum(number) {
         return this.cNumber(number);
     }
 
-    // Convierte a Number
+    /**
+    Convierte a number
+    @returns {number}
+    */
     cNumber(number) {
         var num;
         if (Object.prototype.toString.call(number) === '[object Number]') {
@@ -2781,7 +3394,7 @@ export class Utilities {
         return num;
     }
 
-    // https://code.google.com/archive/p/crypto-js/
+    /** https://code.google.com/archive/p/crypto-js/ */
     get cryptoJS() {
         return _CryptoJS;
     }
@@ -2798,14 +3411,22 @@ export class Utilities {
         return _CryptoJS.AES.encrypt(pString, pPass).toString();
     }
 
-    // Recibe un err, lo convierte a Error, loguea y dispara
+    /**
+    Hace un encodeURIComponent, devolviendo '' si value es null o undefined.
+    @returns {string}
+    */
+    encUriC(value) {
+        return (value == null || value == undefined) ? '' : encodeURIComponent(value);
+    }
+
+    /** Recibe un err, lo convierte a Error, loguea y dispara */
     errMgr(err) {
         var e = this.newErr(err);
         console.error(e);
         throw e;
     }
    
-    // Devuelve el mensaje de un objeto err
+    /** Devuelve el mensaje de un objeto err */
     errMsg(err) {
         if (typeof(err) == 'string') {
             return err;
@@ -2875,22 +3496,23 @@ export class Utilities {
         return inNode();
     }
 
-    // Retorna true si value es un objeto puro {}
+    /** Retorna true si value es un objeto puro {} */
     isObject(value) {
         return Object.prototype.toString.call(value) === '[object Object]';
     }
 
-    // Devuelve la fecha en formato YYYY-MM-DD
+    /** Devuelve la fecha en formato YYYY-MM-DD */
     isoDate(date) {
         var dt = this.cDate(date);
         if (dt) {
-            return dt.toISOString().substring(0, 10);
+            return dt.getFullYear() + '-' + this.lZeros(dt.getMonth() + 1, 2) + '-' +
+                this.lZeros(dt.getDate(), 2);
         } else {
             return null;
         }
     }
 
-    // Devuelve la hora en formato HH:MM:SS
+    /** Devuelve la hora en formato HH:MM:SS */
     isoTime(date, seconds) {
         var dt = this.cDate(date);
         if (dt) {
@@ -2901,16 +3523,19 @@ export class Utilities {
         }
     }
 
-    // Completa con ceros a la izquierda
+    /** Completa con ceros a la izquierda */
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
     }
 
-    // https://momentjs.com/docs/
+    /** https://momentjs.com/docs/ */
     get moment() {
         return _moment;
     }
 
+    /**
+    @returns {DoorsMap}
+    */
     newDoorsMap() {
         return new DoorsMap();
     }
@@ -2925,16 +3550,19 @@ export class Utilities {
         return e;
     }
 
-    // http://numeraljs.com/
+    /** http://numeraljs.com/ */
     get numeral() {
         return _numeral;
     }
 
-    // https://github.com/sindresorhus/serialize-error
+    /** https://github.com/sindresorhus/serialize-error */
     serializeError(err) {
         return _serializeError.serializeError(err);
     }
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
@@ -2957,7 +3585,7 @@ export class Utilities {
         return ret;	
     }
 
-    // Alias de xmlDecode
+    /** Alias de xmlDecode */
     xmlDec(value, type) {
         return this.xmlDecode(value, type);
     }
@@ -2980,7 +3608,7 @@ export class Utilities {
         }
     }
 
-    // Alias de xmlEncode
+    /** Alias de xmlEncode */
     xmlEnc(value, type) {
         return this.xmlEncode(value, type);
     }
@@ -3004,7 +3632,9 @@ export class Utilities {
         }
     }
 
-    // options: https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+    /**
+    options: https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
+    */
     xmlParser(options) {
         return new _fastXmlParser.XMLParser(options);
     }
@@ -3211,6 +3841,13 @@ export class View {
         this.#json.Private = value;
     }
 
+    /**
+    @example
+    properties() // Devuelve la coleccion.
+    properties(property) // Devuelve el valor de la property.
+    properties(property, value) // Setea el valor de la property.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
         return this.#properties.set(property, value);
@@ -3252,6 +3889,13 @@ export class View {
         this.#json.Type = value;
     }
 
+    /**
+    @example
+    userProperties() // Devuelve la coleccion.
+    userProperties(property) // Devuelve el valor de la userProperty.
+    userProperties(property, value) // Setea el valor de la userProperty.
+    @returns {(Promise<Properties>|Promise<string>)}
+    */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
@@ -3260,13 +3904,9 @@ export class View {
 
 
 class RestClient {
-    AuthToken = null;
-    ServerBaseUrl = null;
     #session;
 
-    constructor(serverUrl, authToken, session) {
-        this.AuthToken = authToken;
-        this.ServerBaseUrl = serverUrl;
+    constructor(session) {
         this.#session = session;
     }
 
@@ -3274,7 +3914,10 @@ class RestClient {
         var me = this;
         let data = null;
         //TODO Check if ends with /
-        let completeUrl = this.ServerBaseUrl + "/" + url;
+        let completeUrl = me.session.serverUrl + '/' + url;
+
+        var headers = me.credentials();
+        headers['Content-Type'] = 'application/json';
 
         if (parameters !== undefined && parameters !== null) {
             //URL parameters
@@ -3294,19 +3937,12 @@ class RestClient {
         }
 
         return new Promise((resolve, reject) => {
-            // Opciones por defecto estan marcadas con un *
+            // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
             fetch(completeUrl, {
-                method: method, // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'omit', // include, *same-origin, omit
-                headers: {
-                    'Content-Type': 'application/json',
-                    'AuthToken': this.AuthToken
-                },
-                redirect: 'manual', // manual, *follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: data != null ? data : null // body data type must match "Content-Type" header
+                method: method,
+                cache: 'no-cache',
+                headers: headers,
+                body: data != null ? data : null,
             }).then((response) => {
                 //TODO
                 /* var firstCharCode = body.charCodeAt(0);
@@ -3329,12 +3965,14 @@ class RestClient {
                     }
                     else {
                         if (response.status !== 200 || parsedJson.ExceptionMessage) {
+                            debugger;
                             reject(me.session.utils.newErr(parsedJson));
                         }
                     }
                     resolve(parsedJson);
                 });
             }).catch((error) => {
+                debugger;
                 reject(me.session.utils.newErr(error));
             });
         });
@@ -3342,25 +3980,15 @@ class RestClient {
 
     fetchRaw(url, method, data) {
         var me = this;
-        var completeUrl = this.ServerBaseUrl + '/' + url;
-
-        /* todo: implementar ApiKey
-        if (Doors.RESTFULL.ApiKey != null) {
-            xhr.setRequestHeader("ApiKey", Doors.RESTFULL.ApiKey);
-        }
-        else {
-            xhr.setRequestHeader("AuthToken", this.AuthToken);
-        }
-        */
+        var completeUrl = me.session.serverUrl + '/' + url;
+        var headers = me.credentials();
 
         return new Promise((resolve, reject) => {
             // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
             fetch(completeUrl, {
                 method: method,
                 cache: 'no-cache',
-                headers: {
-                    'AuthToken': this.AuthToken,
-                },
+                headers: headers,
                 body: data ? data : null,
 
             }).then(
@@ -3378,6 +4006,7 @@ class RestClient {
                     }
                 },
                 err => {
+                    debugger;
                     reject(me.session.utils.newErr(err));
                 }
             )
@@ -3386,6 +4015,9 @@ class RestClient {
 
     };
 
+    /**
+    @returns {Session}
+    */
     get session() {
         return this.#session;
     }
@@ -3402,8 +4034,14 @@ class RestClient {
         }
         return stringParam;
     }
-};
 
-function encURIC(value) {
-    return (value == null || value == undefined) ? '' : encodeURIComponent(value);
-}
+    credentials() {
+        var ret = {};
+        if (this.session.authToken) {
+            ret.AuthToken = this.session.authToken;
+        } else if (this.session.apiKey) {
+            ret.ApiKey = this.session.apiKey;
+        }
+        return ret;
+    }
+};

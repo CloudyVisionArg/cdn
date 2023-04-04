@@ -1744,7 +1744,7 @@ Devuelve el markup de un attachment para agregar
 al ul del control anterior
 */
 function getAttachment(pAttach, pReadonly) {
-    if (pAttach instanceof doorsapi2.Attachment) pAttach = pAttach.toJSON();
+    var att = (pAttach instanceof doorsapi2.Attachment) ? pAttach.toJSON() : pAttach;
 
     var $li = $('<li/>', {
         class: 'swipeout',
@@ -1757,8 +1757,8 @@ function getAttachment(pAttach, pReadonly) {
     var $itemCont = $('<a/>', {
         href: '#',
         class: 'item-link item-content',
-        'data-att-id': pAttach.AttId,
-        'data-att-name': pAttach.Name,
+        'data-att-id': att.AttId,
+        'data-att-name': att.Name,
     }).appendTo($swipeCont);
 
     var $itemInner = $('<div/>', {
@@ -1772,15 +1772,15 @@ function getAttachment(pAttach, pReadonly) {
     $('<div/>', {
         class: 'item-title',
         style: 'white-space: normal; font-weight: var(--f7-list-item-subtitle-font-weight);',
-    }).append(htmlEncode(pAttach.Name)).appendTo($itemTitleRow);
+    }).append(htmlEncode(att.Name)).appendTo($itemTitleRow);
 
     $('<div/>', {
         class: 'item-after',
-    }).append(fileSize(pAttach.Size)).appendTo($itemTitleRow);
+    }).append(fileSize(att.Size)).appendTo($itemTitleRow);
 
     $('<div/>', {
         class: 'item-text',
-    }).append(pAttach.AccName + ' ' + moment(pAttach.Created).fromNow()).appendTo($itemInner);
+    }).append(att.AccName + ' ' + moment(att.Created).fromNow()).appendTo($itemInner);
 
     if (!pReadonly) {
         var $swipeActions = $('<div/>', {

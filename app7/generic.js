@@ -1,3 +1,4 @@
+
 //todo: agregar soporte await a todos los eval
 /*
 app7-generic
@@ -8,9 +9,8 @@ Cordova: https://cordova.apache.org/docs/en/latest/
 Framework7: https://framework7.io/docs/
 */
 
-var fld_id, doc_id, doc, folder, cacheDir;
-var docJson, folderJson;
-var doc2, folder2; // todo: Eliminar cdo se pueda usar doc y folder
+var fld_id, doc_id, cacheDir;
+var doc, docJson, folder, folderJson;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -73,17 +73,15 @@ if (device.platform != 'browser') {
 
 (async () => {
     try {
-        folder2 = await dSession.folder(fld_id);
-        folder = folder2.toJSON();
-        folderJson = folder2.toJSON();
+        folder = await dSession.folder(fld_id);
+        folderJson = folder.toJSON();
 
         if (doc_id) {
-            doc2 = await folder2.documents(doc_id);
+            doc = await folder.documents(doc_id);
         } else {
-            doc2 = await folder2.documentsNew();
+            doc = await folder.documentsNew();
         }
-        doc = doc2.toJSON();
-        docJson = doc2.toJSON();
+        docJson = doc.toJSON();
 
         loadControls();
 
@@ -93,13 +91,13 @@ if (device.platform != 'browser') {
 })();
 
 async function loadControls() {
-    var cf = objPropCI(doc2.tags, 'controlsFolder');
+    var cf = objPropCI(doc.tags, 'controlsFolder');
 
     try {
         if (cf) {
-            controlsFolder = await folder2.app.folders(cf);
+            controlsFolder = await folder.app.folders(cf);
         } else {
-            controlsFolder = await folder2.folders('controls');
+            controlsFolder = await folder.folders('controls');
         }
         controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
@@ -111,7 +109,7 @@ async function loadControls() {
 }
 
 function getControlsRights(pControls) {
-    var cr = objPropCI(doc2.tags, 'controlsRights');
+    var cr = objPropCI(doc.tags, 'controlsRights');
     if (cr) {
         try {
             controlsRights = $.parseXML(cr);
@@ -249,7 +247,7 @@ async function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        for (let [key, field] of doc2.fields()) {
+        for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
             }
@@ -275,7 +273,7 @@ async function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        for (let [key, field] of doc2.fields()) {
+        for (let [key, field] of doc.fields()) {
             if (!field.custom && field.headerTable) {
                 getDefaultControl(field).appendTo($ul);
             }
@@ -301,8 +299,9 @@ async function renderPage() {
         if (ev) {
             try {
                 await evalCode(ev);
-            } catch (err) {
-                console.log('Error in BeforeRender: ' + errMsg(err));
+            } catch(err) {
+                console.error(err);
+                toast('BeforeRender error: ' + dSession.utils.errMsg(err));
             }
         };
 
@@ -414,12 +413,12 @@ async function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            textField = doc2.fields(tf);
+            textField = doc.fields(tf);
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            valueField = doc2.fields(vf);
+            valueField = doc.fields(vf);
         };
 
 
@@ -713,7 +712,7 @@ async function renderControls(pCont, pParent) {
 
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
-                rootFolder: folder2.rootFolderId,
+                rootFolder: folder.rootFolderId,
                 searchFields: ctl.attr('searchfields'),
                 extraFields: ctl.attr('returnfields'),
                 formula: ctl.attr('searchfilter'),
@@ -840,7 +839,8 @@ async function renderControls(pCont, pParent) {
         try {
             if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
         } catch (err) {
-            console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
+            console.error(err);
+            toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
         }
         /*
         Objetos disponibles en este script:
@@ -943,7 +943,7 @@ function pageInit(e, page) {
             );
 
         } else {
-            folder2.app.folder($el.attr('data-fill-folder'), folder2.rootFolderId).then(
+            folder.app.folder($el.attr('data-fill-folder')).then(
                 function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
@@ -1005,9 +1005,9 @@ function $get(pSelector) {
 }
 
 async function fillControls() {
-    if (!doc2.isNew) {
-        var title = doc2.fields('subject').value;
-        if (!title) title = 'Doc #' + doc2.id;
+    if (!doc.isNew) {
+        var title = doc.fields('subject').value;
+        if (!title) title = 'Doc #' + doc.id;
         $navbar.find('.title').html(title);
 
         var $docLog = $get('[data-doclog]');
@@ -1032,19 +1032,19 @@ async function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            textField = doc2.fields(tf);
+            textField = doc.fields(tf);
             text = textField ? textField.value : null;
         };
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            valueField = doc2.fields(vf);
+            valueField = doc.fields(vf);
             value = valueField ? valueField.value : null;
         };
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            xmlField = doc2.fields(xf);
+            xmlField = doc.fields(xf);
             xml = xmlField ? xmlField.value : null;
         };
 
@@ -1183,7 +1183,7 @@ async function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         var field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, doc2.fields(field).value);
+                            pCont.attr(pAttr, doc.fields(field).value);
                         }
                     }
                 });
@@ -1201,7 +1201,8 @@ async function fillControls() {
         try {
             await evalCode(ev);
         } catch (err) {
-            console.log('Error in AfterRender: ' + errMsg(err));
+            console.error(err);
+            toast('AfterRender error: ' + dSession.utils.errMsg(err));
         }
     };
 
@@ -1221,7 +1222,7 @@ async function fillAttachments(pEl) {
     var tag = pEl.attr('data-attachments').toLowerCase();
 
     if (doc_id) {
-        var atts = await doc2.attachments();
+        var atts = await doc.attachments();
         for (let [key, att] of atts) {
             //if (tag == 'all' || (att.group && att.group.toLowerCase() == tag)) { // todo: tiene q quedar esta cdo este group
             if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
@@ -1253,8 +1254,7 @@ async function fillAttachments(pEl) {
     }
 }
 
-// todo doc2 folder2 seguir de aca
-function downloadAtt(e) {
+async function downloadAtt(e) {
     var $att = $(this);
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
@@ -1267,47 +1267,48 @@ function downloadAtt(e) {
     } else {
         app7.preloader.show();
 
-        DoorsAPI.attachmentsGetById(doc_id, attId).then(
-            function (res) {
-                app7.preloader.hide();
+        try {
+            var att = (await doc.attachments()).find(el => el.id == attId);
+            var fs = await att.fileStream;
 
-                var blob = new Blob([res]);
+            app7.preloader.hide();
 
-                if (device.platform == 'browser') {
-                    saveAs(blob, attName);
+            var blob = new Blob([fs]);
 
-                } else {
-                    cacheDir.getFile(attName, { create: true },
-                        function (file) {
-                            file.createWriter(
-                                function (fileWriter) {
-                                    fileWriter.onwriteend = function (e) {
-                                        $att.attr('data-att-url', file.toURL());
-                                        openAtt(file.toURL());
-                                    };
+            if (device.platform == 'browser') {
+                saveAs(blob, attName);
 
-                                    fileWriter.onerror = function (err) {
-                                        console.error('fileWriter error: ' + errMsg(err));
-                                    };
+            } else {
+                cacheDir.getFile(attName, { create: true },
+                    function (file) {
+                        file.createWriter(
+                            function (fileWriter) {
+                                fileWriter.onwriteend = function (e) {
+                                    $att.attr('data-att-url', file.toURL());
+                                    openAtt(file.toURL());
+                                };
 
-                                    fileWriter.write(blob);
-                                },
-                                function (err) {
-                                    logAndToast('createWriter error: ' + errMsg(err));
-                                }
-                            )
-                        },
-                        function (err) {
-                            logAndToast('getFile error: ' + errMsg(err));
-                        }
-                    )
-                }
-            },
-            function (err) {
-                app7.preloader.hide();
-                logAndToast('attachmentsGetById error: ' + errMsg(err))
+                                fileWriter.onerror = function (err) {
+                                    console.error('fileWriter error: ' + errMsg(err));
+                                };
+
+                                fileWriter.write(blob);
+                            },
+                            function (err) {
+                                logAndToast('createWriter error: ' + errMsg(err));
+                            }
+                        )
+                    },
+                    function (err) {
+                        logAndToast('getFile error: ' + errMsg(err));
+                    }
+                )
             }
-        )
+
+        } catch(err) {
+            app7.preloader.hide();
+            logAndToast('download att error: ' + errMsg(err))
+        }
     }
 }
 
@@ -1504,7 +1505,11 @@ function renderNewAtt(pAtt, pCont) {
     pAtt.AccName = dSession.loggedUser()['Name'];
     var $li = getAttachment(pAtt);
     var $att = $li.find('a.item-link');
-    $att.attr('data-att-url', pAtt.URL);
+    if (pAtt.URL) {
+        $att.attr('data-att-url', pAtt.URL);
+    } else if (pAtt.File) {
+        $att[0]._file = pAtt.File;
+    }
     $att.attr('data-att-action', 'save');
     $li.prependTo(pCont.find('ul'));
 }
@@ -1517,7 +1522,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-textfield'));
+        var field = doc.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
@@ -1560,7 +1565,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-valuefield'));
+        var field = doc.fields($el.attr('data-valuefield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
@@ -1583,7 +1588,7 @@ async function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = doc2.fields($el.attr('data-xmlfield'));
+        var field = doc.fields($el.attr('data-xmlfield'));
 
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
@@ -1595,43 +1600,51 @@ async function saveDoc(exitOnSuccess) {
         }
     });
 
-    // Evento BeforeSave
-    // todo: el error aca deberia cancelar la operacion
-    var ev = getEvent('BeforeSave');
-    if (ev) {
-        try {
-            await evalCode(ev);
-        } catch (err) {
-            console.log('Error in BeforeSave: ' + errMsg(err));
-        }
-    };
-
     try {
-        await doc2.save();
-        doc = doc2.toJSON();
-        docJson = doc2.toJSON();
-        doc_id = doc2.id;
+        // Evento BeforeSave
+        var ev = getEvent('BeforeSave');
+        if (ev) {
+            await evalCode(ev);
+        };
 
-        pageEl.crm.doc = doc2;
-        pageEl.crm.doc_id = doc2.id;
+        await doc.save();
+        docJson = doc.toJSON();
+        doc_id = doc.id;
+
+        pageEl.crm.doc = doc;
+        pageEl.crm.doc_id = doc.id;
         pageEl.crm.saved = true;
 
-        await saveAtt();
+        try {
+            await saveAtt();
+        } catch (err) {
+            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            console.log(attErr);
+            console.log(err);
+        }
 
         // Evento AfterSave
-        var ev = getEvent('AfterSave');
-        if (ev) {
-            try {
+        try {
+            var ev = getEvent('AfterSave');
+            if (ev) {
                 await evalCode(ev);
-            } catch (err) {
-                console.log('Error in AfterSave: ' + errMsg(err));
-            }
-        };
+            };
+        } catch (err) {
+            var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
+            console.error(err);
+        }
 
         saving = false;
         app7.preloader.hide();
         $navbar.find('.right .button').removeClass('disabled');
-        toast('Cambios guardados');
+
+        if (attErr) {
+            toast(attErr, 0);
+        } else if (asErr) {
+            toast(asErr, 0);
+        } else {
+            toast('Cambios guardados');
+        }
 
         if (exitOnSuccess) {
             f7Page.view.router.back();
@@ -1654,124 +1667,75 @@ async function saveDoc(exitOnSuccess) {
         saving = false;
         app7.preloader.hide();
         $navbar.find('.right .button').removeClass('disabled');
-        if (Array.isArray(pErr)) {
-            if (pErr.length == 1) {
-                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result, 5000);
-
-            } else {
-                // Error de saveAtt
-                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion', 5000);
-            }
-        } else {
-            toast(errMsg(pErr).replaceAll('\r\n', '<br>'), 5000);
-        }
-        console.log(pErr);
-    }
-}
-async function removeAttFromCache(fileUrl){
-    if(_isCapacitor()){
-        //Resolver esto y obtener unicamente el nombre.
-        //fileUrl = fileUrl.replace('http://localhost/__cdvfile_cache__/', '');
-        fileUrl = fileUrl.substr(fileUrl.lastIndexOf('/') + 1);
-        try{
-            result = await Capacitor.Plugins.Filesystem.deleteFile({
-                    path: fileUrl,
-                    directory: Directory.Cache,
-                });
-                console.log('Archivo ' +  fileUrl + ' eliminado del cache del app');
-        }catch(e){
-            console.log('Error intentando quitar el archivo ' +  fileUrl + ' del cache del app');
-        }
-        // Capacitor.Plugins.Filesystem.deleteFile({
-        //     path: fileUrl,
-        //     directory: Directory.Cache,
-        // }).then(
-        //     (s)=>{
-        //         console.log('Archivo ' +  fileUrl + ' eliminado del cache del app');
-        //     },
-        //     (e)=>{
-        //         console.log('Error intentando quitar el archivo ' +  fileUrl + ' del cache del app');
-        //     }
-        // );
+        toast(dSession.utils.errMsg(pErr).replaceAll('\r\n', '<br>'), 0);
+        console.error(pErr);
     }
 }
 
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
-        var calls = [];
-        var arrDel = [];
+        var errors = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
-        var attMap = await doc2.attachments();
-        debugger;
+        var attMap = await doc.attachments();
 
-        if ($attsToSave.length == 0) {
-            resolve('OK');
-            
-        } else {
-            //todo: cambiar x un async loop
-            $attsToSave.each(function () {
-                debugger;
-                var $this = $(this);
-                var tag = $this.closest('li.accordion-item').attr('data-attachments');
-                tag = (tag == 'all' ? null : tag);
-                var attName = $this.attr('data-att-name');
-                var attAction = $this.attr('data-att-action');
-                
-                if (attAction == 'save') {
-                    beginCall(attName, attAction);
+        dSession.utils.asyncLoop($attsToSave.length, async loop => {
+            var $this = $($attsToSave[loop.iteration()]);
+            var tag = $this.closest('li.accordion-item').attr('data-attachments');
+            tag = (tag == 'all' ? null : tag);
+            var attName = $this.attr('data-att-name');
+            var attAction = $this.attr('data-att-action');
 
-                    getFile($this.attr('data-att-url')).then(
-                        function (file) {
-                            var reader = new FileReader();
-                            reader.onloadend = function (e) {
-                                debugger;
-                                var att = doc2.attachmentsAdd(file.name);
-                                att.fileStream = new Blob([this.result], { type: file.type });
-                                att.description = tag;
-                                att.group = tag;
-                                att.save().then(
-                                    res => { 
-                                        removeAttFromCache($this.attr('data-att-url'));
-                                        endCall(attName, 'OK') 
-                                    },
-                                    err => { endCall(attName, 'save error: ' + errMsg(err)) }
-                                )
-                            };
-                            reader.readAsArrayBuffer(file);
-                        },
-                        function (err) {
-                            endCall(attName, 'file error: ' + errMsg(err));
-                        }
-                    )
-                    
-                } else if (attAction == 'delete') {
-                    debugger;
-                    var att = attMap.find(el => el.id == $this.attr('data-att-id'));
-                    if (att) {
-                        beginCall(att.name, 'delete');
-                        att.delete().then(
-                            res => { endCall(att.name, 'OK') },
-                            err => { endCall(att.name, 'delete error: ' + errMsg(err)) }
-                        );
+            if (attAction == 'save') {
+                var file;
+                var attUrl = $this.attr('data-att-url');
+                if (attUrl) {
+                    file = await getFile($this.attr('data-att-url'));
+                } else {
+                    file = $this[0]._file;
+                }
+                var reader = new FileReader();
+                reader.onloadend = async function (e) {
+                    try {
+                        var att = doc.attachmentsAdd(file.name);
+                        att.fileStream = new Blob([this.result], { type: file.type });
+                        att.description = tag;
+                        att.group = tag;
+                        await att.save();
+
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'save',
+                            error: dSession.utils.errMsg(err),
+                        });
+                    }
+                    loop.next();
+                };
+                reader.readAsArrayBuffer(file);
+
+            } else if (attAction == 'delete') {
+                var att = attMap.find(el => el.id == $this.attr('data-att-id'));
+                if (att) {
+                    try {
+                        await att.delete();
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'delete',
+                            error: err,
+                        });
                     }
                 }
-            });
-        }
-
-        function beginCall(pName, pAction) {
-            calls.push({ name: pName, action: pAction, result: 'pending' });
-        }
-        
-        function endCall(pName, pResult) {
-            calls.find(el => el.name == pName && el.result == 'pending').result = pResult;
-            if (!calls.find(el => el.result == 'pending')) {
-                if (calls.find(el => el.result != 'OK')) {
-                    reject(calls.filter(el => el.result != 'OK'));
-                } else {
-                    resolve('OK');
-                }
+                loop.next();
             }
-        }
+        }, () => {
+            if (errors.length == 0) {
+                resolve(true);
+            } else {
+                reject(errors);
+            }
+        });
+
     });
 }
 
