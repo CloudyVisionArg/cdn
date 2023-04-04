@@ -349,8 +349,8 @@ function pageInitMembers(e, page) {
             
             let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
             let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar","onclick":`((el)=>{
-                console.log(this)
-                let notifLink = this.parent().siblings(".swipeout-content").find("a.item-link");
+                
+                let notifLink = $(this).parent().siblings(".swipeout-content").find("a.item-link");
 
                 if(notifLink.hasClass("msgread")){
                     DoorsAPI.notificationsUnRead(notifLink.attr("id")).then(
