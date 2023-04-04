@@ -302,7 +302,7 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "A"){
-        if(ev.target.classList.contains("swipeout-overswipe")){
+        if(ev.target.classList.contains("swipeoutBtnDel")){
             clickOnEnvelope(ev);
         //}else if(ev.target.classList.contains("botonleer")){
         //    clickOnTrash(ev);
@@ -350,8 +350,8 @@ function pageInitMembers(e, page) {
             //let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
-            let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe","text":"Borrar"}).appendTo(swipActionRight);
+            let swipBtnMark = $("<a/>",{"class":"swipeoutBtnRead swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":"swipeoutBtnDel swipeout-overswipe swipeout-delete","text":"Borrar"}).appendTo(swipActionRight);
 
 
             //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
