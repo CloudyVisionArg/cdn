@@ -61,7 +61,7 @@ var app = {
 
 
         // Verificacion de plugins
-        if(Capacitor){
+        if(typeof(Capacitor) != 'undefined'){
             console.log("Capacitor App");
             if (!Capacitor.Plugins.Camera) console.log('Plugin error: @capacitor/camera');
             if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
