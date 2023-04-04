@@ -347,10 +347,10 @@ function pageInitMembers(e, page) {
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe swipeout-delete","text":"Borrar"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe swipeout-delete","text":"Borrar","onclick":"clickOnEnvelope(ev)"}).appendTo(swipActionRight);
 
-            swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
-            swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
+            //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
+            //swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
                         
                 
                         
