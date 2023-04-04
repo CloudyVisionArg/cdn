@@ -309,6 +309,8 @@ $ulMembers.on("click",(ev)=>{
         }else{
             clickOnAnchor(ev);
         }
+    }else{
+        clickOnAnchor(ev);
     }
 })
 
