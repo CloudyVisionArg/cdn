@@ -87,53 +87,7 @@ class CustomAppNotification {
     };
 
 }
-function clickOnEnvelope() {
-    
 
-    let notifLink = $(this).parent().siblings(".swipeout-content").find("a.item-link");
-
-    if(notifLink.hasClass("msgread")){
-        DoorsAPI.notificationsUnRead(notifLink.attr("id")).then(
-            ()=>{
-                notifLink.removeClass("msgread");
-                notifLink.addClass("msgunread");
-                //if($(ev.target).hasClass("ios-only")){
-                //    $(ev.target).text("envelope")
-                //}else{
-                //    $(ev.target).text("mail")
-                //}                
-                console.log("unread cliecked unread", $(".msgunread").length);
-                setNotificationUnReadCounter($(".msgunread").length); 
-            },
-            (err)=>{
-                let msg = "Error: La notificación no pudo marcada como leaída.";
-                console.log(err);
-                console.log(msg);
-                toast(msg);
-            }
-        );
-        
-    }else{
-        DoorsAPI.notificationsRead(notifLink.attr("id")).then(
-            ()=>{
-                console.log("read cliecked unread", $(".msgunread").length);
-                notifLink.removeClass("msgunread");
-                notifLink.addClass("msgread");
-                //if($(ev.target).hasClass("ios-only")){
-                //    $(ev.target).text("envelope_open")
-                //}else{
-                //    $(ev.target).text("drafts")
-                //}      
-                setNotificationUnReadCounter($(".msgunread").length); 
-            },
-            (err)=>{
-                let msg = "Error: La notificación no pudo marcada como no leaída.";
-                console.log(err);
-                console.log(msg);
-                toast(msg);
-            });
-    } 
-}
 
 var selectionMode = false;
 
@@ -347,14 +301,14 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 //$listMembers.on('taphold', 'a', taphold);
 
 $ulMembers.on("click",(ev)=>{
-    if(ev.target.tagName === "I"){
-        if(ev.target.classList.contains("btnRead")){
-            clickOnEnvelope(ev);
-        }else if(ev.target.classList.contains("btnDelete")){
-            clickOnTrash(ev);
+    if(ev.target.tagName === "A"){
+        if(ev.target.classList.contains("swipeout-delete")){
+            clickOnEnvelope();
+        //}else if(ev.target.classList.contains("botonleer")){
+        //    clickOnTrash(ev);
+        }else{
+            clickOnAnchor(ev);
         }
-    }else{
-        clickOnAnchor(ev);
     }
 })
 
@@ -395,7 +349,7 @@ function pageInitMembers(e, page) {
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar","onclick":`clickOnEnvelope`}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar"}).appendTo(swipActionRight);
 
 
             //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
