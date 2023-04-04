@@ -348,7 +348,51 @@ function pageInitMembers(e, page) {
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar","onclick":"((ev)=>{console.log(ev)})();"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar","onclick":`((el)=>{
+                let notifLink = el.parent().siblings(".swipeout-content").find("a.item-link");
+
+                if(notifLink.hasClass("msgread")){
+                    DoorsAPI.notificationsUnRead(notifLink.attr("id")).then(
+                        ()=>{
+                            notifLink.removeClass("msgread");
+                            notifLink.addClass("msgunread");
+                            //if($(ev.target).hasClass("ios-only")){
+                            //    $(ev.target).text("envelope")
+                            //}else{
+                            //    $(ev.target).text("mail")
+                            //}                
+                            console.log("unread cliecked unread", $(".msgunread").length);
+                            setNotificationUnReadCounter($(".msgunread").length); 
+                        },
+                        (err)=>{
+                            let msg = "Error: La notificación no pudo marcada como leaída.";
+                            console.log(err);
+                            console.log(msg);
+                            toast(msg);
+                        }
+                    );
+                    
+                }else{
+                    DoorsAPI.notificationsRead(notifLink.attr("id")).then(
+                        ()=>{
+                            console.log("read cliecked unread", $(".msgunread").length);
+                            notifLink.removeClass("msgunread");
+                            notifLink.addClass("msgread");
+                            //if($(ev.target).hasClass("ios-only")){
+                            //    $(ev.target).text("envelope_open")
+                            //}else{
+                            //    $(ev.target).text("drafts")
+                            //}      
+                            setNotificationUnReadCounter($(".msgunread").length); 
+                        },
+                        (err)=>{
+                            let msg = "Error: La notificación no pudo marcada como no leaída.";
+                            console.log(err);
+                            console.log(msg);
+                            toast(msg);
+                        });
+                } 
+            }})(this);`}).appendTo(swipActionRight);
 
             //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
             //swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
@@ -542,11 +586,10 @@ function clickOnTrash(ev) {
     });
 }
 
-function clickOnEnvelope(ev) {
-    debugger;
-    ev.stopPropagation();
+function clickOnEnvelope(el) {
+    
 
-    let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
+    let notifLink = el.parent().siblings(".swipeout-content").find("a.item-link");
 
     if(notifLink.hasClass("msgread")){
         DoorsAPI.notificationsUnRead(notifLink.attr("id")).then(
