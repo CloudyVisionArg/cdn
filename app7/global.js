@@ -919,13 +919,13 @@ function cleanDb(pCallback) {
 }
 
 function pushReg() {
-    (Capacitor) //Si esta disponible Capacitor
+    (_isCapacitor()) //Si esta disponible Capacitor
     ? pushRegistrationCapacitor()
     : pushRegCordova(); //Legacy
 }
 
 function pushUnreg(pCallback) {
-    (Capacitor) //Si esta disponible Capacitor
+    (_isCapacitor()) //Si esta disponible Capacitor
     ? pushUnregCapacitor(pCallback)
     : pushUnregCordova(pCallback);
 }
