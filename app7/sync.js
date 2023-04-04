@@ -99,7 +99,7 @@ function Sync() {
     }
 
     function syncPriv(full, callback) {
-        console.log('syncing');
+        console.log('Sync start');
 
         var fullSync = (full == true);
         self.syncing(true);
@@ -141,7 +141,7 @@ function Sync() {
                                     syncAccounts(function () {
                                         self.syncing(--calls > 0);
                                         if (!self.syncing()) {
-                                            console.log('sync finished');
+                                            console.log('Sync end');
                                             if (callback) callback();
                                         }
                                     });
@@ -271,7 +271,7 @@ function Sync() {
             
             DoorsAPI.folderSearch(pSyncObj['folder'], pSyncObj['fields'], formula, 'doc_id', maxRecords, null, maxTextLen).then(
                 function (result) {
-                    if (!result.length) console.log(`sync ${ pSyncObj['folder'] }: ${ result.length } updates in ${ (new Date).getTime() - tmr } secs`);
+                    if (!result.length) console.log(`syncing ${ pSyncObj['folder'] }: ${ result.length } updates in ${ (new Date).getTime() - tmr } secs`);
                     
                     var dt = (new Date).toJSON();
                     if (result.length == 0) {
