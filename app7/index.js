@@ -26,7 +26,7 @@ initScripts.push({ id: 'app7-index.css' });
     await include(initScripts);
     
     doorsapi2 = await import(scriptSrc('doorsapi2'));
-    var sessionMod = await import(scriptSrc('app7-session'));
+    var sessionMod = await import(scriptSrc('app7-session', 'capacitor_merge_master'));
     dSession = new sessionMod.AppSession();
 
     app.initialize();    
