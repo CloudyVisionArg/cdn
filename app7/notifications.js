@@ -327,7 +327,7 @@ function pageInitMembers(e, page) {
 
             let ul  = $("<ul />"); 
             let li  = $("<li />", {"class":"swipeout"}).appendTo(ul);
-            li[0].on('deleted',()=>{console.log("DELETEDD")});
+            li.on('deleted',()=>{console.log("DELETEDD")});
             let swipContent = $("<div/>",{"class":"swipeout-content"}).appendTo(li);
             let a   = $("<a />", {"class":"item-link item-content " + item.readclass, "extradata": JSON.stringify(item.ExtraData), "href":"#", "id":item.Id}).appendTo(swipContent);
                     
