@@ -163,7 +163,7 @@ function Sync() {
                                 syncTable(pSyncObj, function () {
                                     self.syncing(--calls > 0);
                                     if (!self.syncing()) {
-                                        console.log('sync finished');
+                                        console.log('Sync end');
                                         if (callback) callback();
                                     }
                                 });
@@ -175,7 +175,7 @@ function Sync() {
                 },
                 function (err, tx) {
                     if (!self.syncing()) {
-                        console.log('sync finished with error');
+                        console.log('Sync end with error');
                         if (callback) callback();
                     }
                 }
