@@ -348,7 +348,7 @@ function pageInitMembers(e, page) {
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar","onclick":"((ev)=>{clickOnEnvelope(ev)})();"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":" swipeout-delete swipeout-overswipe","text":"Borrar","onclick":"((ev)=>{console.log(ev)})();"}).appendTo(swipActionRight);
 
             //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
             //swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
@@ -542,11 +542,8 @@ function clickOnTrash(ev) {
     });
 }
 
-var clickOnEnvelope = function (ev) {
+function clickOnEnvelope(ev) {
     debugger;
-    console.log("CLICKONENVELOPE")
-    console.log("read fired");
-    console.log("rowid:" + $(ev.target).attr("contenedor_id"))
     ev.stopPropagation();
 
     let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
