@@ -392,7 +392,7 @@ function pageInitMembers(e, page) {
                             toast(msg);
                         });
                 } 
-            }})(this);`}).appendTo(swipActionRight);
+            })(this);`}).appendTo(swipActionRight);
 
             //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
             //swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
