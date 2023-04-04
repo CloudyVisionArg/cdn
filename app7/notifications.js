@@ -325,8 +325,8 @@ function pageInitMembers(e, page) {
             const fechaDelivery = new Date(item["DeliveryDate"]);
             let fechaNotif = resolveDeliverydDate(fechaDelivery);
 
-            let ul  = $("<ul />");
-            let li  = $("<li />", {"class":"swipeout"}).appendTo(ul);
+            let ul  = $("<ul />"); 
+            let li  = $("<li />", {"class":"swipeout","@swipeout:deleted":"${clickOnEnvelope}"}).appendTo(ul);
             let swipContent = $("<div/>",{"class":"swipeout-content"}).appendTo(li);
             let a   = $("<a />", {"class":"item-link item-content " + item.readclass, "extradata": JSON.stringify(item.ExtraData), "href":"#", "id":item.Id}).appendTo(swipContent);
                     
