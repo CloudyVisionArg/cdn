@@ -203,8 +203,8 @@ $btn.on('click', function (e) {
  // Acciones de carpeta
  var stdPageActions = [
     {
-        text: 'Seleccionar Todo',
-        onClick: notificationsMenuSelectAll,
+        text: 'Borrar Todas',
+        onClick: notificationsDeleteAll,
     },
     {
         text: 'Marcar Todas como le&iacute;das',
@@ -221,6 +221,12 @@ $btn.on('click', function (e) {
 
 function notificationsReadAll(){
     DoorsAPI.notificationsReadAll().then(()=>{
+        searchNotifications();
+    })
+}
+
+function notificationsDeleteAll(){
+    DoorsAPI.notificationsDeleteAll().then(()=>{
         searchNotifications();
     })
 }
@@ -289,19 +295,7 @@ $divActions.hide();
 var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
-// Evento taphold
-// if (device.platform == 'browser') {
-//     console.log("BROSER TAPHOLD CONTEXTMENU")
-//     // El taphold no anda en el browser
-//     $listMembers.on('contextmenu', 'a', taphold);
-// } else {
-//     console.log("NOT BROSER TAPHOLD TAPHOLD")
-//     $listMembers.on('taphold', 'a', taphold);
-// };
-//$listMembers.on('taphold', 'a', taphold);
-
 $ulMembers.on("click",(ev)=>{
-    //if(ev.target.tagName === "A"){
         if(ev.target.classList.contains("swipeoutBtnRead")){
             clickOnEnvelope(ev);
         }else if(ev.target.classList.contains("swipeoutBtnDel")){
@@ -309,9 +303,6 @@ $ulMembers.on("click",(ev)=>{
         }else{
             clickOnAnchor(ev);
         }
-    //}else{
-    //    clickOnAnchor(ev);
-    //}
 })
 
 var f7Page;
