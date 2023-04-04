@@ -327,7 +327,7 @@ function pageInitMembers(e, page) {
 
             let ul  = $("<ul />"); 
             let li  = $("<li />", {"class":"swipeout"}).appendTo(ul);
-            li.on('swipeout:deleted',()=>{console.log("DELETEDD")});
+            
             let swipContent = $("<div/>",{"class":"swipeout-content"}).appendTo(li);
             let a   = $("<a />", {"class":"item-link item-content " + item.readclass, "extradata": JSON.stringify(item.ExtraData), "href":"#", "id":item.Id}).appendTo(swipContent);
                     
@@ -348,7 +348,7 @@ function pageInitMembers(e, page) {
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
             let swipBtnMark = $("<a/>",{"class":"swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe swipeout-delete","text":"Borrar","onclick":"clickOnEnvelope(ev)"}).appendTo(swipActionRight);
+            let swipBtnDel = $("<a/>",{"class":"swipeout-overswipe swipeout-delete","text":"Borrar","onclick":"(()=>{console.log(this)})();"}).appendTo(swipActionRight);
 
             //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
             //swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
@@ -778,3 +778,5 @@ const notifOnDeleted = () => {
 //         $li.find('input:checkbox').prop('checked', true);
 //     };
 // };
+
+
