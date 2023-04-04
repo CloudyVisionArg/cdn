@@ -303,7 +303,7 @@ var $ulMembers = $("<ul/>").appendTo($listMembers);
 $ulMembers.on("click",(ev)=>{
     if(ev.target.tagName === "A"){
         if(ev.target.classList.contains("swipeout-delete")){
-            clickOnEnvelope();
+            clickOnEnvelope(ev);
         //}else if(ev.target.classList.contains("botonleer")){
         //    clickOnTrash(ev);
         }else{
@@ -546,10 +546,10 @@ function clickOnTrash(ev) {
     });
 }
 
-function clickOnEnvelope() {
+function clickOnEnvelope(ev) {
     
 
-    let notifLink = $(this).parent().siblings(".swipeout-content").find("a.item-link");
+    let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
 
     if(notifLink.hasClass("msgread")){
         DoorsAPI.notificationsUnRead(notifLink.attr("id")).then(
