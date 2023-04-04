@@ -521,6 +521,7 @@ function notificationsDeleteSelected(){
 }
 
 function clickOnTrash(ev) {
+    console.log("CLICKONTRASH")
     ev.stopPropagation();
 
     let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
@@ -541,6 +542,7 @@ function clickOnTrash(ev) {
 }
 
 function clickOnEnvelope(ev) {
+    console.log("CLICKONENVELOPE")
     console.log("read fired");
     console.log("rowid:" + $(ev.target).attr("contenedor_id"))
     ev.stopPropagation();
