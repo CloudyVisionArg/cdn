@@ -760,8 +760,7 @@ function conversationControl(opt) {
 		});
 	};
 
-	/**
-	 * function displayMenu(tree, element) {
+	function displayMenu(tree, element) {
 		// Check if Framework7 is defined
 		if (typeof Framework7 !== 'undefined') {
 		// If Framework7 is defined, create a new popup
@@ -815,66 +814,131 @@ function conversationControl(opt) {
 
 	var tree = [  
 		{    
-			name: 'Text',
-			type: "",
-			children: [      
-				{        
-					name: 'Single Line'
-				},      
-				{        
-					name: 'Multi Line'      
-				}    
+			name: 'Nota',
+			type: "notaMsg",
+			children: null
+		},
+		{
+			name: 'Email',
+			type: "emailMsg",
+			children: null
+		},
+		{
+			name: 'Whatsapp',
+			type: "wappMsg",
+			children: [
+				{
+					name: 'Audio',
+					type: "wappMsg",
+					children: null
+				},
+				{
+					name: 'Archivo',
+					type: "wappMsg",
+					children: null
+				},
+				{
+					name: "Plantilla",
+					type: "wappMsg",
+					children: null
+				}
 			]
-		},
-		{
-		name: 'Voice'
-		},
-		{
-		name: 'Video'
-		},
-		{
-		name: 'File'
 		}
 	];
 
 	var element = '#myDropdown';
 
-	displayMenu(tree, element);
-	 */
+	//displayMenu(tree, element);
+
 	var insertWebMessageTypesOptionsMenu = function($menu){
-		var $liTmp = $('<li/>', {
+		/*var $liTmp = $('<li/>', {
 			class: 'dropdown-submenu',
-		}).appendTo($menu);
+		}).appendTo($menu);*/
 		
 		for (let index = 0; index < me.dataProvider.msgproviders.length; index++) {
 			const prov = me.dataProvider.msgproviders[index];
 			for (let p = 0; p < prov.supportedTypes.length; p++) {
 				const typeName = prov.supportedTypes[p];
-				if(me.options.quickMessageTypes.indexOf(typeName) == -1) continue;
-				let msgInst = null;
-				try {
-					eval("msgInst = new " + typeName + "();");
-					if(msgInst != null)	{
-						var $li = $('<li/>').appendTo($menu);
-						let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
-						var thisInstance = me;
-						$actionLink.click(function (e) {
-							var $this = $(this);
-							$(thisInstance.options.selector + " .message-type-button > i").attr('class',"").attr("class",$this.children('i').attr('class'));
-							$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
-							$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
-							if(thisInstance.options.quickMessageChanged){
-								thisInstance.options.quickMessageChanged(msgInst.constructor.name);
-							}
-						});
+				let foundType = null;
+				let typeIndex = -1;
+				for (let index = 0; index < me.options.quickMessageTypes.length; index++) {
+					const element = me.options.quickMessageTypes[index];
+					if(typeof(element) == "string"){
+						if(element == typeName){
+							foundType = element;
+							typeIndex = index;
+						}
 					}
-				} catch (error) {
-					
+					if(typeof(element) == "object"){
+						if(element.type == typeName){
+							foundType = element;
+							typeIndex = index;
+						}
+					}
 				}
+
+				if(foundType == null) continue;
 				
+				appendWebMessageTypeOption($menu, foundType, typeName);
 			}
 		}
 	};
+
+	var appendWebMessageTypeOption = function($menu, menuOption, typeName){
+		let msgInst = null;
+		try {
+			eval("msgInst = new " + typeName + "();");
+			if(msgInst != null)	{
+				var $li = $('<li/>').appendTo($menu);
+				let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + menuOption.name).appendTo($li);
+				var thisInstance = me;
+				$actionLink.click(function (e) {
+					var $this = $(this);
+					$(thisInstance.options.selector + " .message-type-button > i").attr('class',"").attr("class",$this.children('i').attr('class'));
+					$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
+					$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
+					if(thisInstance.options.quickMessageChanged){
+						thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+					}
+					if(typeof(menuOption) == "object"){
+						if(menuOption.children && menuOption.children.length > 0){
+							//$this.parents(".dropup").addClass('open');
+							e.stopPropagation();
+						}
+					}
+				});
+				if(typeof(menuOption) == "object"){
+				 	if(menuOption.children && menuOption.children.length > 0){
+						$(this).parent().toggleClass('open');
+						// $($menu).find("li ul.dropdown-menu").on('click', function(e) {
+						// 	debugger;
+						// 	e.stopPropagation();
+						// });
+					}
+				}
+				  
+
+				// if(typeof(menuOption) == "object"){
+				// 	if(menuOption.children && menuOption.children.length > 0){
+				// 		$li.addClass('dropdown-submenu');
+				// 		var $ul = $('<ul/>', {
+				// 			class: 'dropdown-menu',
+				// 		}).appendTo($li);
+				// 		for (let index = 0; index < menuOption.children.length; index++) {
+				// 			const child = menuOption.children[index];
+				// 			appendWebMessageTypeOption($ul, child, child.type);
+				// 		}
+				// 	}
+				// }
+			}
+		} catch (error) {
+			//TODO
+		}
+
+
+		
+	}
+
 
 	var insertMobileMessageTypeOptionsMenu = function($div){
 		$media = $('<i/>', {
