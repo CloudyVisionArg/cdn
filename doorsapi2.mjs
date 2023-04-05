@@ -590,7 +590,7 @@ export class Session {
     */
     webInit() {
         var me = this;
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             debugger;
             me.serverUrl = window.location.origin + '/restful';
 
@@ -599,17 +599,18 @@ export class Session {
                 me.authToken = tkn;
                 resolve(true);
             } else {
-                fetch('/c/tkn.asp').then(
-                    res => {
-                        if (res.length < 100) {
-                            me.authToken = res;
-                            resolve(true);
-                        } else {
-                            resolve(false);
-                        }
-                    },
-                    err => { reject() }
-                );
+                try {
+                    let res = await fetch('/c/tkn.asp');
+                    let txt = await res.text();
+                    if (txt.length < 100) {
+                        me.authToken = txt;
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                } catch(err) {
+                    reject(err);
+                }
             }
         });
     }
