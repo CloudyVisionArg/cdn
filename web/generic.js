@@ -58,7 +58,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
 
-    if (!await dSession.webInit()) {
+    if (!await dSession.webInit() || !await dSession.isLogged) {
         end('La sesion no ha sido iniciada');
         return;
     }
@@ -67,12 +67,6 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     Doors.RESTFULL.AuthToken = dSession.authToken;
 
     include(arrScriptsPos);
-
-    let isLogged = await dSession.isLogged;
-    if (!isLogged) {
-        end('La sesion no ha sido iniciada');
-        return;
-    }
 
     await dSession.runSyncEventsOnClient(false);
 
