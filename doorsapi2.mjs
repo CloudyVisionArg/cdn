@@ -583,6 +583,36 @@ export class Session {
         };
         return this.#utils;
     }
+
+    /**
+    Obtiene serverUrl del window.location y authToken de las cookies.
+    @returns {Promise<boolean>}
+    */
+    webInit() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            debugger;
+            me.serverUrl = window.location.origin + '/restful';
+
+            let tkn = me.utils.cookie('AuthToken');
+            if (tkn) {
+                me.authToken = tkn;
+                resolve(true);
+            } else {
+                fetch('/c/tkn.asp').then(
+                    res => {
+                        if (res.length < 100) {
+                            me.authToken = res;
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    },
+                    err => { reject() }
+                );
+            }
+        });
+    }
 };
 
 
@@ -3392,6 +3422,21 @@ export class Utilities {
             num = _numeral(number).value();
         }
         return num;
+    }
+
+    /**
+    Devuelve el valor de una cookie, solo para la web.
+    */
+    cookie(name) {
+        var cookies = decodeURIComponent(document.cookie).split('; ');
+        var key = name + '=';
+        var ret;
+        cookies.forEach(val => {
+            if (val.indexOf(key) === 0) {
+                ret = val.substring(key.length);
+            }
+        })
+        return ret;
     }
 
     /** https://code.google.com/archive/p/crypto-js/ */

@@ -4,7 +4,9 @@
 var $$ = Dom7;
 var app7;
 var db;
-var doorsapi2, dSession;
+var doorsapi2;
+/** @type {import('../doorsapi2.mjs').Session} */
+var dSession;
 
 var initScripts = [];
 
