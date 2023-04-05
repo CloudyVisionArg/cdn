@@ -591,7 +591,6 @@ export class Session {
     webInit() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            debugger;
             me.serverUrl = window.location.origin + '/restful';
 
             let tkn = me.utils.cookie('AuthToken');
@@ -602,7 +601,7 @@ export class Session {
                 try {
                     let res = await fetch('/c/tkn.asp');
                     let txt = await res.text();
-                    if (txt.length < 100) {
+                    if (txt.length < 70) {
                         me.authToken = txt;
                         resolve(true);
                     } else {
