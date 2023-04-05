@@ -57,7 +57,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
-    dSession.webInit();
+    await dSession.webInit();
 
     let tkn = await getToken();
     if (!tkn) {
