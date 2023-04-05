@@ -65,21 +65,23 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
-	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 255 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 255 });
+
+    /*
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 244 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 253 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 245 });
+    */
+
+    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
-
-    //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 250 });
-    //scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 229 });
-	//scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 189 });
-
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 250 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 245 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 244 });
     scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 238 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
