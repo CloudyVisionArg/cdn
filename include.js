@@ -18,16 +18,17 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 255 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 255 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 256 });
+	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 256 });
 
     /*
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 244 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 253 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 245 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 255 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 255 });
+	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
     */
 
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
@@ -57,7 +58,6 @@ function registeredScripts() {
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
 	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
-	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
