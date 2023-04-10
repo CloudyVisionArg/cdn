@@ -1,53 +1,6 @@
-/*
-include permite cargar una biblioteca Javascript o CSS en forma dinamica.
-La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
-
-Ej:
-
-	await include('emojis');
-	
-	include('emojis', function () {
-		// emojis loaded
-	});
-	
-Puedo verificar si la biblioteca se termino de cargar con el metodo scriptLoaded:
-
-	scriptLoaded('emojis', function () {
-		// emojis loaded
-	});
-
-Puedo especificar la version (tag del commit)
-
-	await include('emojis', 15);
-
-U obtener el ultimo commit, sin caches, pidiendo la version 0
-
-	await include('emojis', 0);
-
-O el ultimo commit de un branch, pasando el nombre del mismo (case sensitive)
-
-	await include('emojis', 'MyBranch');
-
-Puedo usarlo para mis propios script especificando el src:
-
-	await include('myScript', 'http://path/to/my/script.js');
-
-Tambien puedo armar un array de includes y cargarlos todos juntos:
-
-	var scripts = [];
-	scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
-	scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
-	scripts.push({ id: 'doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
-	scripts.push({ id: 'web-javascript', version: 0 }); // Ult commit
-	scripts.push({ id: 'web-javascript', version: 'MyBranch' }); // Ult commit del branch MyBranch
-	
-	await include(scripts);
-    // all scripts loaded
-
-Si el src termina en '.css' se creara un <link>, sino un <script>
+/**
+Devuelve un array con los scripts registrados.
 */
-
-// Scripts registrados
 function registeredScripts() {
 	var scripts = [];
 
@@ -122,19 +75,59 @@ function registeredScripts() {
 	return scripts;
 }
 
-/*
-Argumentos:
-0:
-	- string -> Id del script
-	- array -> Inclusion multiple [{ id, version o src, depends[id] }] (version se considera antes que src)
-1: 
-	- string -> SRC del script custom
-	- number o string -> Tag si es numero (0 = lastCommit), Branch sino
-	- function -> Callback
-2:
-	- function -> Callback
-*/
+/**
+Carga una biblioteca Javascript o CSS en forma dinamica.
+La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
 
+args[0]
+- string -> Id del script
+- array -> Inclusion multiple [{ id, version o src, depends[id] }] (version se considera antes que src)
+
+args[1]
+- string -> SRC del script custom
+- number o string -> Tag si es numero (0 = lastCommit), Branch sino
+- function -> Callback
+
+args[2]
+- function -> Callback
+
+@example
+
+await include('emojis');
+// emojis loaded
+
+include('emojis', function () {
+    // emojis loaded
+});
+	
+// Puedo especificar la version (tag del commit)
+
+await include('emojis', 15);
+
+// U obtener el ultimo commit, sin caches, pidiendo la version 0
+
+await include('emojis', 0);
+
+// O el ultimo commit de un branch, pasando el nombre del mismo (case sensitive)
+
+await include('emojis', 'MyBranch');
+
+// Puedo usarlo para mis propios script especificando el src. Si el src termina en '.css' se creara un <link>, sino un <script>.
+
+await include('myScript', 'http://path/to/my/script.js');
+
+// Tambien puedo armar un array de includes y cargarlos todos juntos:
+
+var scripts = [];
+scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
+scripts.push({ id: 'doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
+scripts.push({ id: 'web-javascript', version: 0 }); // Ult commit
+scripts.push({ id: 'web-javascript', version: 'MyBranch' }); // Ult commit del branch MyBranch
+
+await include(scripts);
+// all scripts loaded
+*/
 function include() {
     return new Promise((resolve, reject) => {
         var src, pSrc, pVer, pCallback;
@@ -303,6 +296,10 @@ function scriptLoaded(scriptId, callback) {
     }
 };
 
+/**
+Retorna el src (url) del script registrado con scriptId.
+Si especifico version se devuelve el src de esa version.
+*/
 function scriptSrc(scriptId, version) {
 	var src;
 	var scripts = registeredScripts();

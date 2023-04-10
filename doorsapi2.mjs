@@ -1,4 +1,10 @@
 /*
+Para conectarse por ssh a windows:
+https://learn.microsoft.com/es-mx/windows-server/administration/openssh/openssh_install_firstuse
+https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication
+https://superuser.com/questions/1635361/starting-openssh-server-in-windows-with-debug-messages-enabled-d
+*/
+/*
 todo: Safari soporta metodos privados recien en la v15.
 Cdo esta sea estandar reemplazar los _metodo con #metodo
 https://caniuse.com/?search=private%20methods
@@ -588,7 +594,7 @@ export class Session {
     Obtiene serverUrl del window.location y authToken de las cookies.
     @returns {Promise<boolean>}
     */
-    webInit() {
+    webSession() {
         var me = this;
         return new Promise(async (resolve, reject) => {
             me.serverUrl = window.location.origin + '/restful';

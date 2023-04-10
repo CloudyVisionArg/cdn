@@ -58,7 +58,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
 
-    if (!await dSession.webInit() || !await dSession.isLogged) {
+    if (!await dSession.webSession() || !await dSession.isLogged) {
         end('La sesion no ha sido iniciada');
         return;
     }
@@ -82,7 +82,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     if (fld_id) {
         folder = await dSession.foldersGetFromId(fld_id);
         folderJson = folder.toJSON();
-        folder.form; // Para q cargue el form
+        folder.form; // Para q vaya cargando el form
         if (folder.type == 1) {
             if (doc_id) {
                 doc = await folder.documents(doc_id);
@@ -105,23 +105,6 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 function end(pErr) {
     logAndToast(errMsg(pErr), { delay: 10000 });
     preloader.hide();
-}
-
-function getToken() {
-    return new Promise((resolve, reject) => {
-        let tkn = getCookie('AuthToken');
-        if (tkn) {
-            resolve(tkn);
-        } else {
-            $.get('/c/tkn.asp', function (data) {
-                if (data.length < 100) {
-                    resolve(data);
-                } else {
-                    resolve('');
-                }
-            })
-        }
-    });
 }
 
 async function loadControls() {
@@ -1015,7 +998,7 @@ async function renderControls(pCont, pParent) {
         }
         /*
         Objetos disponibles en este script:
-            doc: El objeto que se esta abriendo
+            doc: El documento que se esta abriendo
             folder: La carpeta actual
             controlsFolder: La carpeta de controles
             controls: El search a la carpeta de controles completo
@@ -1379,7 +1362,7 @@ async function saveDoc(pExit) {
         } catch(err) {
             var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
             console.log(attErr);
-            console.log(err);
+            console.error(err);
         }
 
         // Evento AfterSave
