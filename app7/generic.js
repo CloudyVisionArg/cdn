@@ -294,16 +294,18 @@ async function renderPage() {
 
         // CON CONTROLES
 
-        // Evento BeforeRender
-        var ev = getEvent('BeforeRender');
-        if (ev) {
-            try {
-                await evalCode(ev);
-            } catch(err) {
-                console.error(err);
-                toast('BeforeRender error: ' + dSession.utils.errMsg(err));
-            }
-        };
+        try {
+            // Evento beforeRender
+            pageEl.dispatchEvent(new CustomEvent('beforeRender'));
+
+            // Control Event BeforeRender
+            var ev = getEvent('BeforeRender');
+            if (ev) await evalCode(ev);
+
+        } catch(err) {
+            console.error(err);
+            toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+        }
 
         // Membrete
 
@@ -363,13 +365,6 @@ async function renderPage() {
                 }
             }
         }
-    }
-
-    // evalCode con context de renderPage
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
     }
 
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
@@ -1195,22 +1190,17 @@ async function fillControls() {
         fillAttachments($(el));
     });
 
-    // Evento AfterRender
-    var ev = getEvent('AfterRender');
-    if (ev) {
-        try {
-            await evalCode(ev);
-        } catch (err) {
-            console.error(err);
-            toast('AfterRender error: ' + dSession.utils.errMsg(err));
-        }
-    };
+    try {
+        // Evento afterFillControls
+        pageEl.dispatchEvent(new CustomEvent('afterFillControls'));
 
-    // evalCode con context de fillControls
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
+        // Control Event AfterRender
+        var ev = getEvent('AfterRender');
+        if (ev) await evalCode(ev);
+
+    } catch (err) {
+        console.error(err);
+        toast('AfterRender error: ' + dSession.utils.errMsg(err));
     }
 }
 
@@ -1549,11 +1539,12 @@ async function saveDoc(exitOnSuccess) {
     });
 
     try {
-        // Evento BeforeSave
+        // Evento beforeSave
+        pageEl.dispatchEvent(new CustomEvent('beforeSave'));
+
+        // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
-        if (ev) {
-            await evalCode(ev);
-        };
+        if (ev) await evalCode(ev);
 
         await doc.save();
         docJson = doc.toJSON();
@@ -1571,12 +1562,14 @@ async function saveDoc(exitOnSuccess) {
             console.log(err);
         }
 
-        // Evento AfterSave
         try {
+            // Evento afterSave
+            pageEl.dispatchEvent(new CustomEvent('afterSave'));
+
+            // Control Event AfterSave
             var ev = getEvent('AfterSave');
-            if (ev) {
-                await evalCode(ev);
-            };
+            if (ev) await evalCode(ev);
+
         } catch (err) {
             var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
             console.error(err);
@@ -1602,13 +1595,6 @@ async function saveDoc(exitOnSuccess) {
         
     } catch (err) {
         errMgr(err);
-    }
-
-    // evalCode con context de saveDoc
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
     }
 
     function errMgr(pErr) {
@@ -1692,6 +1678,13 @@ function getEvent(pEvent) {
         var ev = controls.find(el => el['NAME'] && el['NAME'].toUpperCase() == pEvent.toUpperCase());
         if (ev) return ev['APP7_SCRIPT'];
     }
+}
+
+// evalCode con context root
+async function evalCode(code) {
+    var pipe = {};
+    eval(`pipe.fn = async () => {\n\n${code}\n};`);
+    await pipe.fn();
 }
 
 /*
