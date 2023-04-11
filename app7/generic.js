@@ -296,7 +296,7 @@ async function renderPage() {
 
         try {
             // Evento beforeRender
-            pageEl.dispatchEvent(new CustomEvent('beforeRender'));
+            $page[0].dispatchEvent(new CustomEvent('beforeRender'));
 
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
@@ -1192,7 +1192,7 @@ async function fillControls() {
 
     try {
         // Evento afterFillControls
-        pageEl.dispatchEvent(new CustomEvent('afterFillControls'));
+        $page[0].dispatchEvent(new CustomEvent('afterFillControls'));
 
         // Control Event AfterRender
         var ev = getEvent('AfterRender');
@@ -1540,7 +1540,7 @@ async function saveDoc(exitOnSuccess) {
 
     try {
         // Evento beforeSave
-        pageEl.dispatchEvent(new CustomEvent('beforeSave'));
+        $page[0].dispatchEvent(new CustomEvent('beforeSave'));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
@@ -1564,7 +1564,7 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            pageEl.dispatchEvent(new CustomEvent('afterSave'));
+            $page[0].dispatchEvent(new CustomEvent('afterSave'));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
