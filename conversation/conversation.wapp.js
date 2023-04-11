@@ -823,14 +823,14 @@ function whatsAppDataProvider(opts){
 				class: 'dropdown-menu',
 			}).appendTo(container);
 
-			var $liAudio = $('<li/>').appendTo($menu);
+			/*var $liAudio = $('<li/>').appendTo($menu);
 			var $audioLink = $('<a/>').append('Audio');
 			$audioLink.appendTo($liAudio);
 			$audioLink.click(function (e) {
 				//me.sendFileWeb($cont[0]);
 				//TODO
 				me.sendAudio(container);
-			});
+			});*/
 
 			var $li = $('<li/>').appendTo($menu);
 			
