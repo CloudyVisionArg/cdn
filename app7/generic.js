@@ -977,6 +977,10 @@ function pageInit(e, page) {
             setTimeout(waiting, 100);
         } else {
             await fillControls();
+
+            // Evento afterPageInit
+            $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
+            
             app7.preloader.hide();
         }
     }, 0);
