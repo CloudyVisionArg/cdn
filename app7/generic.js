@@ -156,6 +156,8 @@ async function renderPage() {
         rightbutton: 'save',
     });
 
+    $page.on('afterFillControls', () => {debugger;});
+
     $page.find('.navbar-inner .left .link').on('click', function (e) {
         // todo: ver si se puede detectar si hubo cambios
         /*
