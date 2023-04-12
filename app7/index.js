@@ -41,6 +41,7 @@ var app = {
 
     // Application Constructor
     initialize: function() {
+        debugger;
         console.log('app.init');
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
