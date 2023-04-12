@@ -9,8 +9,9 @@ var messengerOpts = {
     formula: "FROM = '982374598723498' OR TO = '982374598723498'",
 	pageId: "",
     sessionStatusContainer: "", /*Esto no haría falta? */
-    modalContainer: "",
+	modalContainer: "",
 	from: "982374598723498",
+	fromFriendlyName: "",
 	to: "398457983748578",
 	toFriendlyName: "",
     loggedUser:null,

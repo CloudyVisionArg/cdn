@@ -22,7 +22,8 @@ i.fa-pencil-square-o{
 }
 .wapp-messages {
     max-height: unset !important;
-	height:100%;
+    min-height: 40px !important;
+    height: 100%;
 }
 .wapp-messages .wapp-message-time {
     margin-left: 0px !important;

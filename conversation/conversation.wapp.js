@@ -8,7 +8,9 @@ var wappOpts = {
     rootFldId: 5318,
     formula: "FROM = '+5493876112574' OR TO = '+5493876112574'",
     sessionStatusContainer: "",
-    modalContainer: "",
+	modalContainer: "",
+	fromFriendlyName: "",
+	isDefault: 0,
 	from: "+539123456789",
 	to: "+5493876112574",
     loggedUser:null,
@@ -397,7 +399,7 @@ function whatsAppDataProvider(opts){
 		
 		function render(pDate) {
 			var light, remain;
-
+			debugger;
 			if (pDate) {
 				var hours = (new Date() - new Date(pDate)) / (60 * 60 * 1000);
 				if (hours < 24) {
