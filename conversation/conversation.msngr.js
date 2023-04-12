@@ -679,7 +679,7 @@ function messengerDataProvider(opts){
 	};
 
 	this.sendFileWeb = function (pChat) {
-		var $file = $('#wappFile');
+		var $file = $('#msngrFile');
 		$file.prop('data-chat', pChat);
 		$file.click();
 	};
@@ -1307,7 +1307,7 @@ $(document).ready(function () {
 		// El input para leer archivos
 		let $file = $('<input/>', {
 			type: 'file',
-			id: 'wappFile',
+			id: 'msngrFile',
 			style: 'display: none;'
 		}).appendTo(document.body);
 

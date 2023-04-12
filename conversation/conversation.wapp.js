@@ -585,7 +585,7 @@ function whatsAppDataProvider(opts){
 				}
 			);
 		} else {
-			sendMedia2(pFile.blob);
+			sendMedia2(pFile);
 		};
         
 		function sendMedia2(file2) {
@@ -735,7 +735,7 @@ function whatsAppDataProvider(opts){
 
 	this.sendFileWeb = function (pChat) {
 		var $file = $('#wappFile');
-		$file.prop('data-chat', pChat);
+		$file.prop('data-chat', "");
 		$file.click();
 	};
 
@@ -825,21 +825,21 @@ function whatsAppDataProvider(opts){
 				class: 'dropdown-menu',
 			}).appendTo(container);
 
-			var $liAudio = $('<li/>').appendTo($menu);
+			/*var $liAudio = $('<li/>').appendTo($menu);
 			var $audioLink = $('<a/>').append('Audio');
 			$audioLink.appendTo($liAudio);
 			$audioLink.click(function (e) {
 				//me.sendFileWeb($cont[0]);
 				//TODO
 				me.sendAudio(container);
-			});
+			});*/
 
 			var $li = $('<li/>').appendTo($menu);
 			
 			var $file = $('<a/>').append('Archivo');
 			$file.appendTo($li);
 			$file.click(function (e) {
-				me.sendFileWeb($cont[0]);
+				me.sendFileWeb("");
 			});
 
 			var $liTmp = $('<li/>', {
@@ -884,6 +884,7 @@ function whatsAppDataProvider(opts){
 
 			var $li = $('<li/>').appendTo($menu);
 			$('<a/>').append('Cancelar').appendTo($li);
+			$menu.css("display","block")
 
 		} else {
 			// Cordova
