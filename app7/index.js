@@ -46,6 +46,7 @@ var app = {
     },
 
     onDeviceReady: function() {
+        debugger;
         document.addEventListener('pause', this.onPause.bind(this), false);
         document.addEventListener('resume', this.onResume.bind(this), false);
 
