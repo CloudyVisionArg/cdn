@@ -41,13 +41,11 @@ var app = {
 
     // Application Constructor
     initialize: function() {
-        debugger;
         console.log('app.init');
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
     onDeviceReady: function() {
-        debugger;
         document.addEventListener('pause', this.onPause.bind(this), false);
         document.addEventListener('resume', this.onResume.bind(this), false);
 
