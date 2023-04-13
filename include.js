@@ -18,12 +18,11 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 258 });
-    //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 250 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 259 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 259 });
 
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 256 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
