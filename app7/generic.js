@@ -1,5 +1,4 @@
 
-//todo: agregar soporte await a todos los eval
 /*
 app7-generic
 generic del APP7
