@@ -174,13 +174,13 @@ $btn.click(function (e) {
 })
 
  // Boton Cancelar Selection Mode
- $btn = getLink({ text: 'Cancelar' });
- $btn.attr('id', 'buttonCancel');
- $btn.appendTo($page.find('.navbar-inner .right'));
+// $btn = getLink({ text: 'Cancelar' });
+// $btn.attr('id', 'buttonCancel');
+// $btn.appendTo($page.find('.navbar-inner .right'));
 //  $btn.on('click', function (e) {
 //     //  toggleSelectionMode();
 //  });
- $btn.hide();
+// $btn.hide();
 
 // Boton Acciones
 $btn = getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
@@ -233,27 +233,6 @@ function notificationsDeleteAll(){
 
 pageActions = app7.actions.create({ buttons: stdPageActions });
 
-var stdSelModeActions = [
-    {
-        text: 'Marcar Como Le&iacute;das',
-        onClick: notificationsReadSelected,
-    },
-    {
-        text: 'Marcar Como No Le&iacute;das',
-        onClick: notificationsUnReadSelected,
-    },
-    {
-        text: 'Borrar',
-        onClick: notificationsDeleteSelected,
-    },
-    {
-        text: 'Cancelar',
-        color: 'red',
-        close: true,
-    },
-];
-
-selModeActions = app7.actions.create({ buttons: stdSelModeActions });
 
 function dummyClick(texto){
     console.log(texto);
@@ -341,16 +320,17 @@ function pageInitMembers(e, page) {
             //let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
             let swipActionRight = $("<div/>",{"class":"swipeout-actions-right"}).appendTo(li);
             
-            let swipBtnMark = $("<a/>",{"class":"swipeoutBtnRead swipeout-close","text":"Marcar Como Leido"}).appendTo(swipActionRight);
-            let swipBtnDel = $("<a/>",{"class":"swipeoutBtnDel swipeout-overswipe swipeout-delete","text":"Borrar"}).appendTo(swipActionRight);
-
-
-            //swipBtnDel.on("click",(ev)=>{clickOnTrash(ev);})
-            //swipBtnMark.on("click",(ev)=>{clickOnEnvelope(ev);})
+            let swipBtnMark = $("<a/>",{"class":"swipeoutBtnRead swipeout-close"}).appendTo(swipActionRight);
                         
-                
-                        
-                    
+            let iconSwipBtnMark_ios = $("<i/>",{"class":"f7-icons if-not-md","text":item.readicon_ios}).appendTo(swipBtnMark);
+            let iconSwipBtnMark_android = $("<i/>",{"class":"material-icons md-only","text":item.readicon_md}).appendTo(swipBtnMark);
+            
+            let swipBtnDel = $("<a/>",{"class":"swipeoutBtnDel swipeout-overswipe swipeout-delete"}).appendTo(swipActionRight);
+
+            let iconSwipBtnDel_ios = $("<i/>",{"class":"f7-icons if-not-md","text":"trash_fill"}).appendTo(swipBtnDel);
+            let iconSwipBtnDel_android = $("<i/>",{"class":"material-icons md-only","text":"delete_sweep"}).appendTo(swipBtnDel);
+            
+            
             //let swipBtnClose = $("<a/>",{"class":"swipeout-overswipe swipeout-close","text":"Cerrar?"}).appendTo(swipActionLeft);
 
             return ul.html();
