@@ -527,11 +527,11 @@ function clickOnEnvelope(ev) {
             ()=>{
                 notifLink.removeClass("msgread");
                 notifLink.addClass("msgunread");
-                //if($(ev.target).hasClass("ios-only")){
-                //    $(ev.target).text("envelope")
-                //}else{
-                //    $(ev.target).text("mail")
-                //}                
+                if($(ev.target).hasClass("ios-only")){
+                    $(ev.target).text("envelope")
+                }else{
+                    $(ev.target).text("mail")
+                }                
                 console.log("unread cliecked unread", $(".msgunread").length);
                 setNotificationUnReadCounter($(".msgunread").length); 
             },
@@ -549,11 +549,11 @@ function clickOnEnvelope(ev) {
                 console.log("read cliecked unread", $(".msgunread").length);
                 notifLink.removeClass("msgunread");
                 notifLink.addClass("msgread");
-                //if($(ev.target).hasClass("ios-only")){
-                //    $(ev.target).text("envelope_open")
-                //}else{
-                //    $(ev.target).text("drafts")
-                //}      
+                if($(ev.target).hasClass("ios-only")){
+                    $(ev.target).text("envelope_open")
+                }else{
+                   $(ev.target).text("drafts")
+                }      
                 setNotificationUnReadCounter($(".msgunread").length); 
             },
             (err)=>{
