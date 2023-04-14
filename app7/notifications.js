@@ -518,7 +518,7 @@ function clickOnTrash(ev) {
 }
 
 function clickOnEnvelope(ev) {
-    
+    debugger;
 
     let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
 
