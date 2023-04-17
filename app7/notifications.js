@@ -519,7 +519,7 @@ function clickOnTrash(ev) {
 
 function clickOnEnvelope(ev) {
     debugger;
-
+    console.log($(ev.target));
     let notifLink = $(ev.target).parent().siblings(".swipeout-content").find("a.item-link");
 
     if(notifLink.hasClass("msgread")){
