@@ -300,23 +300,23 @@ async function showConsole(allowClose) {
                             'base64:localStorage.txt//' + localStorageBase64(),
                         ],
                     });
-        
-                    function localStorageBase64() {
-                        var arr = new Array();
-                        for (var i = 0; i < localStorage.length; i++) {
-                            if (localStorage.key(i) != 'consoleLog') {
-                                arr.push(localStorage.key(i));
-                            }
-                        }
-                        var arrOrd = arr.sort();
-                
-                        var ret = '';
-                        for (var i = 0; i < arrOrd.length; i++) {
-                            ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
-                        }
-                        return window.btoa(ret);
-                    }
                 } 
+                
+                function localStorageBase64() {
+                    var arr = new Array();
+                    for (var i = 0; i < localStorage.length; i++) {
+                        if (localStorage.key(i) != 'consoleLog') {
+                            arr.push(localStorage.key(i));
+                        }
+                    }
+                    var arrOrd = arr.sort();
+            
+                    var ret = '';
+                    for (var i = 0; i < arrOrd.length; i++) {
+                        ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                    }
+                    return window.btoa(ret);
+                }
             });
 
             $get('#restart').click(function (e) {
