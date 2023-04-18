@@ -1320,6 +1320,14 @@ export class Attachment {
         return this.#json;
     }
 
+    get toRemove() {
+        return this.#json.toRemove;
+    }
+
+    set toRemove(value) {
+        this.#json.toRemove = value;
+    }
+
     /**
     @example
     userProperties() // Devuelve la coleccion.

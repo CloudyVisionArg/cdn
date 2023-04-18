@@ -18,6 +18,7 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
+    
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 259 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 259 });
 
