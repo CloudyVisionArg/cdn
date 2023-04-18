@@ -61,6 +61,7 @@ function errMgr(pErr) {
 
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
+    debugger;
     window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
         function (dir) {
             cacheDir = dir;
