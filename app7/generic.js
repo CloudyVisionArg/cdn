@@ -63,14 +63,15 @@ function errMgr(pErr) {
 if (device.platform != 'browser') {
     debugger;
     if(_isCapacitor()){
-        window.resolveLocalFileSystemURL(Directory.Cache,
-            function (dir) {
-                cacheDir = dir;
-            },
-            function (err) {
-                console.log('resolveLocalFileSystemURL error: ' + err.code);
-            }
-        );
+        // window.resolveLocalFileSystemURL(Directory.Cache,
+        //     function (dir) {
+        //         cacheDir = dir;
+        //     },
+        //     function (err) {
+        //         console.log('resolveLocalFileSystemURL error: ' + err.code);
+        //     }
+        // );
+        cacheDir = null;
     }
     else{
         window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
