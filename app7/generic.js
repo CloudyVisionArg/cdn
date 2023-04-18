@@ -71,7 +71,16 @@ if (device.platform != 'browser') {
         //         console.log('resolveLocalFileSystemURL error: ' + err.code);
         //     }
         // );
-        cacheDir = null;
+        Capacitor.Plugins.Filesystem.getUri({path:"", directory :Directory.Cache }).then(
+            function(succ){
+                debugger;
+                var x = succ;
+                cacheDir = null;
+            },
+            function(err){
+                cacheDir = null;
+            }
+        );
     }
     else{
         window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
