@@ -62,14 +62,26 @@ function errMgr(pErr) {
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
     debugger;
-    window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
-        function (dir) {
-            cacheDir = dir;
-        },
-        function (err) {
-            console.log('resolveLocalFileSystemURL error: ' + err.code);
-        }
-    );
+    if(_isCapacitor()){
+        window.resolveLocalFileSystemURL(Directory.Cache,
+            function (dir) {
+                cacheDir = dir;
+            },
+            function (err) {
+                console.log('resolveLocalFileSystemURL error: ' + err.code);
+            }
+        );
+    }
+    else{
+        window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
+            function (dir) {
+                cacheDir = dir;
+            },
+            function (err) {
+                console.log('resolveLocalFileSystemURL error: ' + err.code);
+            }
+        );
+    }
 }
 
 (async () => {
