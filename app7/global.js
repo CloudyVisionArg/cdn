@@ -271,9 +271,8 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
-                debugger;
                 if(_isCapacitor()){
-                    Capacitor.Plugins.EmailComposerPlugin.open({
+                    Capacitor.Plugins.EmailComposer.open({
                         to: 'soporte@cloudycrm.net',
                         subject: 'Cloudy CRM - App issue',
                         body: 'Por favor describanos su problema',
