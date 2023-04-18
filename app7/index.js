@@ -109,6 +109,27 @@ var app = {
             swipeout: {
                 removeElements: false,
             },
+            methods: {
+                onBackKeyDown: function() {
+        
+                    var leftp = app7.panel.left && app7.panel.left.opened;
+                    var rightp = app7.panel.right && app7.panel.right.opened;
+        
+                    if ( leftp || rightp ) {
+                        app7.panel.close();
+                        return false;
+                    }else if ($$('.modal-in').length > 0) {
+                        app7.dialog.close();
+                        app7.popup.close();
+                        app7.popover.close();
+                        return false;
+                    } else if (app7.view.current.history.length == 1) {        
+                        navigator.app.exitApp();
+                    } else {
+                        app7.view.current.router.back();
+                    }
+                }
+            },
             routes: [
                 {
                     path: '/explorer/',
