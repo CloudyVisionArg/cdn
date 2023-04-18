@@ -103,6 +103,7 @@ var app = {
             id: BuildInfo.packageName,
             version: BuildInfo.version,
             theme: theme,
+            pushState: true,
             touch: {
                 tapHold: true, // enable tap hold events
             },
