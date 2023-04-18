@@ -271,31 +271,53 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
-                cordova.plugins.email.open({
-                    to: 'soporte@cloudycrm.net',
-                    subject: 'Cloudy CRM - App issue',
-                    body: 'Por favor describanos su problema',
-                    attachments: [
-                        'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
-                        'base64:localStorage.txt//' + localStorageBase64(),
-                    ],
-                });
-    
-                function localStorageBase64() {
-                    var arr = new Array();
-                    for (var i = 0; i < localStorage.length; i++) {
-                        if (localStorage.key(i) != 'consoleLog') {
-                            arr.push(localStorage.key(i));
-                        }
-                    }
-                    var arrOrd = arr.sort();
-            
-                    var ret = '';
-                    for (var i = 0; i < arrOrd.length; i++) {
-                        ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
-                    }
-                    return window.btoa(ret);
+                debugger;
+                if(_isCapacitor()){
+                    Capacitor.Plugins.EmailComposerPlugin.open({
+                        to: 'soporte@cloudycrm.net',
+                        subject: 'Cloudy CRM - App issue',
+                        body: 'Por favor describanos su problema',
+                        attachments: [
+                            {
+                                type: 'base64',
+                                path: window.btoa(window.localStorage.getItem('consoleLog')),
+                                name: "console.txt"
+                            },
+                            {
+                                type: 'base64',
+                                path: localStorageBase64(),
+                                name: "localStorage.txt"
+                            }
+                        ]
+                    });
                 }
+                else{
+                    cordova.plugins.email.open({
+                        to: 'soporte@cloudycrm.net',
+                        subject: 'Cloudy CRM - App issue',
+                        body: 'Por favor describanos su problema',
+                        attachments: [
+                            'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
+                            'base64:localStorage.txt//' + localStorageBase64(),
+                        ],
+                    });
+        
+                    function localStorageBase64() {
+                        var arr = new Array();
+                        for (var i = 0; i < localStorage.length; i++) {
+                            if (localStorage.key(i) != 'consoleLog') {
+                                arr.push(localStorage.key(i));
+                            }
+                        }
+                        var arrOrd = arr.sort();
+                
+                        var ret = '';
+                        for (var i = 0; i < arrOrd.length; i++) {
+                            ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                        }
+                        return window.btoa(ret);
+                    }
+                } 
             });
 
             $get('#restart').click(function (e) {

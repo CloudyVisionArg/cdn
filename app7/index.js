@@ -68,6 +68,8 @@ var app = {
             if (!Capacitor.Plugins.FileOpener) console.log('Plugin error: @capacitor-community/file-opener');
             if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
             if (!Capacitor.Plugins.PushNotification) console.log('Plugin error:  @capacitor/push-notifications');
+            if (!Capacitor.Plugins.EmailComposerPlugin) console.log('Plugin error:  https://github.com/EinfachHans/capacitor-email-composer');
+            
         }    
         else{
             console.log("Cordova App");
@@ -78,14 +80,12 @@ var app = {
             if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
             if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
             if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
-            if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
+            if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
         }
 
         //Comunes o compatibles entre Cordova y Capacitor
         if (!device) console.log('Plugin error: cordova-plugin-device');
-        if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
-        if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
         if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
