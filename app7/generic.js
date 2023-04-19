@@ -1279,6 +1279,89 @@ async function fillAttachments(pEl) {
 }
 
 async function downloadAtt(e) {
+    if(_isCapacitor()){
+        await downloadAttCapacitor();
+    }else{
+        await downloadAttCordova();
+    }
+}
+
+async function downloadAttCapacitor(){
+    debugger;
+    var $att = $(this);
+    var attId = $att.attr('data-att-id');
+    var attName = $att.attr('data-att-name');
+    var attURL = $att.attr('data-att-url');
+    if (attURL) {
+        // Ya se descargo antes o es nuevo
+        openAtt(attURL); //TODO
+
+    } else {
+        app7.preloader.show();
+
+        try {
+            var att = (await doc.attachments()).find(el => el.id == attId);
+            var fs = await att.fileStream;
+
+            app7.preloader.hide();
+
+            var blob = new Blob([fs]);
+
+            if (device.platform == 'browser') {
+                saveAs(blob, attName);
+
+            } else {
+                Capacitor.Plugins.Filesystem.writeFile(
+                    {
+                        path : attName,
+                        data: blob,
+                        directory : Directory.Cache,
+                    }
+                ).then(
+                    (fileWriteResultSucc)=>{
+                        debugger;
+                        $att.attr('data-att-url', fileWriteResultSucc.toURL());
+                        openAtt(file.toURL());
+                    },
+                    (fileWriteResultErr)=>{
+                        console.error('Capcitor writeFile error: ' + errMsg(fileWriteResultErr));
+                    }                    
+                )
+                
+                // cacheDir.getFile(attName, { create: true },
+                //     function (file) {
+                //         file.createWriter(
+                //             function (fileWriter) {
+                //                 fileWriter.onwriteend = function (e) {
+                //                     $att.attr('data-att-url', file.toURL());
+                //                     openAtt(file.toURL());
+                //                 };
+
+                //                 fileWriter.onerror = function (err) {
+                //                     console.error('fileWriter error: ' + errMsg(err));
+                //                 };
+
+                //                 fileWriter.write(blob);
+                //             },
+                //             function (err) {
+                //                 logAndToast('createWriter error: ' + errMsg(err));
+                //             }
+                //         )
+                //     },
+                //     function (err) {
+                //         logAndToast('getFile error: ' + errMsg(err));
+                //     }
+                // )
+            }
+
+        } catch(err) {
+            app7.preloader.hide();
+            logAndToast('download att error: ' + errMsg(err))
+        }
+    }
+}
+
+async function downloadAttCordova(){
     var $att = $(this);
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
