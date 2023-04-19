@@ -1306,7 +1306,8 @@ async function downloadAttCapacitor($att){
             app7.preloader.hide();
 
             var blob = new Blob([fs]);
-
+            var res1 = window.btoa(fs);
+            var res2 = window.btoa(fs);
             if (device.platform == 'browser') {
                 saveAs(blob, attName);
 
