@@ -61,27 +61,8 @@ function errMgr(pErr) {
 
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
-    debugger;
     if(_isCapacitor()){
-        // window.resolveLocalFileSystemURL(Directory.Cache,
-        //     function (dir) {
-        //         cacheDir = dir;
-        //     },
-        //     function (err) {
-        //         console.log('resolveLocalFileSystemURL error: ' + err.code);
-        //     }
-        // );
-        // Capacitor.Plugins.Filesystem.getUri({path:"", directory :Directory.Cache }).then(
-        //     function(succ){
-        //         debugger;
-        //         var x = succ;
-        //         cacheDir = null;
-        //     },
-        //     function(err){
-        //         cacheDir = null;
-        //     }
-        // );
-            cacheDir = null;
+        cacheDir = null; //Capacitor no tiene get para directorio
     }
     else{
         window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
@@ -1296,8 +1277,6 @@ function _arrayBufferToBase64( buffer ) {
 }
 
 async function downloadAttCapacitor($att){
-    debugger;
-    
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1576,7 +1555,8 @@ function addAtt(e) {
                                 directory: Directory.Cache,
                             }).then(
                                 (res)=>{
-                                    getFileFromCache(files[0].name).then((file)=>{
+                                    getFileStatFromCache(files[0].name).then((file)=>{
+                                        debugger;
                                         att.URL = file.localURL;
                                         att.Name = file.name;
                                         att.Size = file.size;
