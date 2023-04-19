@@ -1798,25 +1798,12 @@ function saveAtt() {
                 if(_isCapacitor()){
                     var f = await getFileFromCache(attName);
                     file = new Blob([f.data], { type: f.type });
-                }
-                else{
-                    var attUrl = $this.attr('data-att-url');
-                    if (attUrl) {
-                        file = await getFile($this.attr('data-att-url'));
-                    } else {
-                        file = $this[0]._file;
-                    }
-                }
-                var reader = new FileReader();
-                reader.onloadend = async function (e) {
                     try {
                         var att = doc.attachmentsAdd(attName);
-                        att.fileStream = new Blob([this.result], { type: file.type });
-                        //att.fileStream = new Blob([this.result]);
+                        att.fileStream = file;
                         att.description = tag;
                         att.group = tag;
                         await att.save();
-
                     } catch (err) {
                         errors.push({
                             file: attName,
@@ -1825,8 +1812,35 @@ function saveAtt() {
                         });
                     }
                     loop.next();
-                };
-                reader.readAsArrayBuffer(file);
+                }
+                else{
+                    var attUrl = $this.attr('data-att-url');
+                    if (attUrl) {
+                        file = await getFile($this.attr('data-att-url'));
+                    } else {
+                        file = $this[0]._file;
+                    }
+                    var reader = new FileReader();
+                    reader.onloadend = async function (e) {
+                        try {
+                            var att = doc.attachmentsAdd(attName);
+                            att.fileStream = new Blob([this.result], { type: file.type });
+                            //att.fileStream = new Blob([this.result]);
+                            att.description = tag;
+                            att.group = tag;
+                            await att.save();
+    
+                        } catch (err) {
+                            errors.push({
+                                file: attName,
+                                action: 'save',
+                                error: dSession.utils.errMsg(err),
+                            });
+                        }
+                        loop.next();
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
 
             } else if (attAction == 'delete') {
                 var att = attMap.find(el => el.id == $this.attr('data-att-id'));
