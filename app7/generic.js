@@ -1427,17 +1427,22 @@ async function downloadAttCordova($att){
 }
 
 function openAtt(pURL) {
-    if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
-        window.resolveLocalFileSystemURL(pURL,
-            function (fileEntry) {
-                openFile(fileEntry.nativeURL);
-            },
-            function (err) {
-                logAndToast('resolveLocalFileSystemURL error: ' + errMsg(err));
-            }
-        )
-    } else {
+    if(_isCapacitor()){
         openFile(pURL);
+    }
+    else{
+        if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
+            window.resolveLocalFileSystemURL(pURL,
+                function (fileEntry) {
+                    openFile(fileEntry.nativeURL);
+                },
+                function (err) {
+                    logAndToast('resolveLocalFileSystemURL error: ' + errMsg(err));
+                }
+            )
+        } else {
+            openFile(pURL);
+        }
     }
 
     function openFile(pFile) {
