@@ -1564,7 +1564,7 @@ function addAtt(e) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (res)=>{
                     const files = res.files;
-                    //lee el archivo
+                    //lee el archivo independientemente del origne
                     Capacitor.Plugins.Filesystem.readFile({
                             path: files[0].path,
                         }).then((contents) => {
@@ -1575,13 +1575,12 @@ function addAtt(e) {
                                 directory: Directory.Cache,
                             }).then(
                                 (res)=>{
-                                    getFile(res.uri).then(
-                                        function (file) {
-                                            att.URL = file.localURL;
-                                            att.Name = file.name;
-                                            att.Size = file.size;
-                                            renderNewAtt(att, $attachs);
-                                        },errMgr);
+                                    getFileFromCache(res.uri).then((file)=>{
+                                        att.URL = file.localURL;
+                                        att.Name = file.name;
+                                        att.Size = file.size;
+                                        renderNewAtt(att, $attachs);
+                                    },errMgr)
                                 },errMgr);
                         },errMgr);
                 },errMgr);

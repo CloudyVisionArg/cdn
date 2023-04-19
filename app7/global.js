@@ -1822,6 +1822,7 @@ function cameraOptionsCapacitor(pSource){
 	};
 }
 
+//Get file solo para uso de Cordova
 function getFile(pFileURL) {
     return new Promise(function (resolve, reject) {
         if (device.platform == 'Android' && pFileURL.substring(0, 10) == 'content://') {
@@ -1844,6 +1845,22 @@ function getFile(pFileURL) {
             console.log(pErr);
             reject(pErr);
         }
+    });
+};
+
+//Get file solo para uso de Capacitor
+function getFileFromCache(pFileURL) {
+    return new Promise(function (resolve, reject) {
+        Capacitor.Plugins.Filesystem.readFile({
+            path :pFileURL,
+            directory : Directory.Cache
+        }).then(
+            (fileReadSucc)=>{
+                resolve(fileReadSucc);
+            },
+            (fileReadErr)=>{
+                errMgr(fileReadErr);
+        });
     });
 };
 
@@ -2024,7 +2041,7 @@ function audioRecorder(pCallback) {
             directory: Directory.Cache,
         }).then(
             (res)=>{
-                getFile(res.uri).then(
+                getFileFromCache(res.uri).then(
                     function (file) {
                         pCallback(file);
                     },(err)=>{
