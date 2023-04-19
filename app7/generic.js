@@ -1786,7 +1786,8 @@ function saveAtt() {
                 var file;
                 debugger;
                 if(_isCapacitor()){
-                    file = await getFileFromCache(attName)
+                    var fileStr = await getFileFromCache(attName);
+                    file = new Blob([fileStr]); 
                 }
                 else{
                     var attUrl = $this.attr('data-att-url');
