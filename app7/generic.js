@@ -1276,6 +1276,16 @@ function _arrayBufferToBase64( buffer ) {
     return window.btoa( binary );
 }
 
+function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
 async function downloadAttCapacitor($att){
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
@@ -1787,7 +1797,7 @@ function saveAtt() {
                 debugger;
                 if(_isCapacitor()){
                     var f = await getFileFromCache(attName);
-                    file = new Blob([f.data], { type: f.type }); 
+                    file = _base64ToArrayBuffer(f.data);
                 }
                 else{
                     var attUrl = $this.attr('data-att-url');
