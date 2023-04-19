@@ -1786,8 +1786,8 @@ function saveAtt() {
                 var file;
                 debugger;
                 if(_isCapacitor()){
-                    var fileStr = await getFileFromCache(attName);
-                    file = new Blob([fileStr]); 
+                    var f = await getFileFromCache(attName);
+                    file = new Blob([f.data], { type: f.type }); 
                 }
                 else{
                     var attUrl = $this.attr('data-att-url');
@@ -1801,8 +1801,8 @@ function saveAtt() {
                 reader.onloadend = async function (e) {
                     try {
                         var att = doc.attachmentsAdd(attName);
-                        //att.fileStream = new Blob([this.result], { type: file.type });
-                        att.fileStream = new Blob([this.result]);
+                        att.fileStream = new Blob([this.result], { type: file.type });
+                        //att.fileStream = new Blob([this.result]);
                         att.description = tag;
                         att.group = tag;
                         await att.save();
