@@ -1848,7 +1848,7 @@ function getFile(pFileURL) {
     });
 };
 
-function getFileStatFromCache(pFileURL) {
+async function getFileStatFromCache(pFileURL) {
     return new Promise(function (resolve, reject) {
         Capacitor.Plugins.Filesystem.stat({
             path :pFileURL,
@@ -1863,14 +1863,16 @@ function getFileStatFromCache(pFileURL) {
     });
 }
 //Get file solo para uso de Capacitor
-function getFileFromCache(pFileName) {
+async function getFileFromCache(pFileName) {
     return new Promise(function (resolve, reject) {
         Capacitor.Plugins.Filesystem.readFile({
             path : pFileName,
             directory : Directory.Cache
         }).then(
-            (fileReadSucc)=>{
-                resolve(fileReadSucc.data);
+            async (fileReadSucc)=>{
+                let file = await getFileStatFromCache(pFileName)
+                file.data = fileReadSucc.data;
+                resolve(file);
             },
             (fileReadErr)=>{
                 reject(fileReadErr);
