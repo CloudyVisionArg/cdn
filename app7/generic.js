@@ -1797,7 +1797,14 @@ function saveAtt() {
                 debugger;
                 if(_isCapacitor()){
                     var f = await getFileFromCache(attName);
-                    file = new Blob([f.data], { type: f.type });
+                    
+                    const rawData = atob(f.data);
+                    const bytes = new Array(rawData.length);
+                    for (var x = 0; x < rawData.length; x++) {
+                        bytes[x] = rawData.charCodeAt(x);
+                    }
+                    const arr = new Uint8Array(bytes);
+                    file = new Blob([arr], { type: f.type });
                     try {
                         var att = doc.attachmentsAdd(attName);
                         att.fileStream = file;
