@@ -1328,7 +1328,7 @@ async function downloadAttCapacitor($att){
                 ).then(
                     (fileWriteResultSucc)=>{
                         $att.attr('data-att-url', fileWriteResultSucc.uri);
-                        openAtt(file.toURL());
+                        openAtt(fileWriteResultSucc.uri);
                     },
                     (fileWriteResultErr)=>{
                         console.error('Capcitor writeFile error: ' + errMsg(fileWriteResultErr));
