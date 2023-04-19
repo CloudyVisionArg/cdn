@@ -1280,15 +1280,15 @@ async function fillAttachments(pEl) {
 
 async function downloadAtt(e) {
     if(_isCapacitor()){
-        await downloadAttCapacitor();
+        await downloadAttCapacitor($(this));
     }else{
-        await downloadAttCordova();
+        await downloadAttCordova($(this));
     }
 }
 
-async function downloadAttCapacitor(){
+async function downloadAttCapacitor($att){
     debugger;
-    var $att = $(this);
+    
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1361,8 +1361,8 @@ async function downloadAttCapacitor(){
     }
 }
 
-async function downloadAttCordova(){
-    var $att = $(this);
+async function downloadAttCordova($att){
+
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
