@@ -1569,6 +1569,7 @@ function addAtt(e) {
                             path: files[0].path,
                         }).then((contents) => {
                             //Escribe en cache
+                            debugger;
                             Capacitor.Plugins.Filesystem.writeFile({
                                 path : files[0].name,
                                 data : contents.data,
