@@ -1557,8 +1557,8 @@ function addAtt(e) {
                                 (res)=>{
                                     getFileStatFromCache(files[0].name).then((file)=>{
                                         debugger;
-                                        att.URL = file.localURL;
-                                        att.Name = file.name;
+                                        att.URL = file.uri;
+                                        att.Name = files[0].name;
                                         att.Size = file.size;
                                         renderNewAtt(att, $attachs);
                                     },errMgr)
