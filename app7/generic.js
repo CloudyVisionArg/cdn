@@ -1311,15 +1311,14 @@ async function downloadAttCapacitor($att){
         try {
             var att = (await doc.attachments()).find(el => el.id == attId);
             var fs = await att.fileStream;
-            var data = _arrayBufferToBase64(fs)
+            
             app7.preloader.hide();
 
-            var blob = new Blob([fs]);
-
             if (device.platform == 'browser') {
+                var blob = new Blob([fs]);
                 saveAs(blob, attName);
-
             } else {
+                let data = _arrayBufferToBase64(fs);
                 Capacitor.Plugins.Filesystem.writeFile(
                     {
                         path : attName,
@@ -1328,8 +1327,7 @@ async function downloadAttCapacitor($att){
                     }
                 ).then(
                     (fileWriteResultSucc)=>{
-                        debugger;
-                        $att.attr('data-att-url', fileWriteResultSucc.toURL());
+                        $att.attr('data-att-url', fileWriteResultSucc.uri);
                         openAtt(file.toURL());
                     },
                     (fileWriteResultErr)=>{
