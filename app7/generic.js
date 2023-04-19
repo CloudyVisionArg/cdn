@@ -1285,6 +1285,15 @@ async function downloadAtt(e) {
         await downloadAttCordova($(this));
     }
 }
+function _arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+}
 
 async function downloadAttCapacitor($att){
     debugger;
@@ -1302,12 +1311,11 @@ async function downloadAttCapacitor($att){
         try {
             var att = (await doc.attachments()).find(el => el.id == attId);
             var fs = await att.fileStream;
-
+            var data = _arrayBufferToBase64(fs)
             app7.preloader.hide();
 
             var blob = new Blob([fs]);
-            var res1 = window.btoa(fs);
-            var res2 = window.btoa(fs);
+
             if (device.platform == 'browser') {
                 saveAs(blob, attName);
 
@@ -1315,7 +1323,7 @@ async function downloadAttCapacitor($att){
                 Capacitor.Plugins.Filesystem.writeFile(
                     {
                         path : attName,
-                        data: blob,
+                        data: data,
                         directory : Directory.Cache,
                     }
                 ).then(
