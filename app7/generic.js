@@ -1576,7 +1576,7 @@ function addAtt(e) {
                                 directory: Directory.Cache,
                             }).then(
                                 (res)=>{
-                                    getFileFromCache(res.uri).then((file)=>{
+                                    getFileFromCache(files[0].name).then((file)=>{
                                         att.URL = file.localURL;
                                         att.Name = file.name;
                                         att.Size = file.size;
