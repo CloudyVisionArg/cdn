@@ -1784,17 +1784,24 @@ function saveAtt() {
 
             if (attAction == 'save') {
                 var file;
-                var attUrl = $this.attr('data-att-url');
-                if (attUrl) {
-                    file = await getFile($this.attr('data-att-url'));
-                } else {
-                    file = $this[0]._file;
+                debugger;
+                if(_isCapacitor()){
+                    file = await getFileFromCache(attName)
+                }
+                else{
+                    var attUrl = $this.attr('data-att-url');
+                    if (attUrl) {
+                        file = await getFile($this.attr('data-att-url'));
+                    } else {
+                        file = $this[0]._file;
+                    }
                 }
                 var reader = new FileReader();
                 reader.onloadend = async function (e) {
                     try {
-                        var att = doc.attachmentsAdd(file.name);
-                        att.fileStream = new Blob([this.result], { type: file.type });
+                        var att = doc.attachmentsAdd(attName);
+                        //att.fileStream = new Blob([this.result], { type: file.type });
+                        att.fileStream = new Blob([this.result]);
                         att.description = tag;
                         att.group = tag;
                         await att.save();

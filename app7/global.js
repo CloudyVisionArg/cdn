@@ -1863,14 +1863,14 @@ function getFileStatFromCache(pFileURL) {
     });
 }
 //Get file solo para uso de Capacitor
-function getFileFromCache(pFileURL) {
+function getFileFromCache(pFileName) {
     return new Promise(function (resolve, reject) {
         Capacitor.Plugins.Filesystem.readFile({
-            path :pFileURL,
+            path : pFileName,
             directory : Directory.Cache
         }).then(
             (fileReadSucc)=>{
-                resolve(fileReadSucc);
+                resolve(fileReadSucc.data);
             },
             (fileReadErr)=>{
                 reject(fileReadErr);
