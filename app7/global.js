@@ -1851,6 +1851,7 @@ function getFile(pFileURL) {
 //Get file solo para uso de Capacitor
 function getFileFromCache(pFileURL) {
     return new Promise(function (resolve, reject) {
+        debugger;
         Capacitor.Plugins.Filesystem.readFile({
             path :pFileURL,
             directory : Directory.Cache
@@ -1859,7 +1860,7 @@ function getFileFromCache(pFileURL) {
                 resolve(fileReadSucc);
             },
             (fileReadErr)=>{
-                errMgr(fileReadErr);
+                reject(fileReadErr);
         });
     });
 };
