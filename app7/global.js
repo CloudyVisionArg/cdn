@@ -2033,7 +2033,7 @@ function audioRecorder(pCallback) {
             (minutes+1) + ":00" :
             minutes + ":" + (seconds < 10 ? "0" : "") + seconds
         let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
-
+        debugger;
         //Guarda en cache.
         //Habria que borrarlo posteriormente al guardado
         Capacitor.Plugins.Filesystem.writeFile({
@@ -2042,6 +2042,7 @@ function audioRecorder(pCallback) {
             directory: Directory.Cache,
         }).then(
             (res)=>{
+                debugger;
                 getFileFromCache(res.uri).then(
                     function (file) {
                         pCallback(file);
