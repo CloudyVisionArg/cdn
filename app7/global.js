@@ -1850,7 +1850,6 @@ function getFile(pFileURL) {
 
 function getFileStatFromCache(pFileURL) {
     return new Promise(function (resolve, reject) {
-        debugger;
         Capacitor.Plugins.Filesystem.stat({
             path :pFileURL,
             directory : Directory.Cache
@@ -1866,7 +1865,6 @@ function getFileStatFromCache(pFileURL) {
 //Get file solo para uso de Capacitor
 function getFileFromCache(pFileURL) {
     return new Promise(function (resolve, reject) {
-        debugger;
         Capacitor.Plugins.Filesystem.readFile({
             path :pFileURL,
             directory : Directory.Cache
@@ -2023,6 +2021,7 @@ function audioRecorder(pCallback) {
     
 
     function save(){
+        debugger;
         if(_isCapacitor()){
             saveCapacitor();
         }else{
