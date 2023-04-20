@@ -1363,7 +1363,9 @@ async function downloadAttCordova($att){
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
-
+    debugger;
+    const res = Capacitor.Plugins.Filesystem.getUri({path:"attName", directory: Directory.Cache});
+    attURL= res.uri;
     if (attURL) {
         // Ya se descargo antes o es nuevo
         openAtt(attURL);
@@ -1783,7 +1785,7 @@ async function saveDoc(exitOnSuccess) {
 async function removeAttFromCache(fileName){
     if(_isCapacitor()){
         try{
-            result = await Capacitor.Plugins.Filesystem.deleteFile({
+            const result = await Capacitor.Plugins.Filesystem.deleteFile({
                     path: fileName,
                     directory: Directory.Cache,
                 });
