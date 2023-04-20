@@ -1812,7 +1812,7 @@ function saveAtt() {
                         att.description = tag;
                         att.group = tag;
                         await att.save();
-                        $this.attr('data-att-url','');
+                        $this.removeAttr('data-att-url');
                     } catch (err) {
                         errors.push({
                             file: attName,
