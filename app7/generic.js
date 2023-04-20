@@ -1513,16 +1513,25 @@ function addAtt(e) {
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
                     debugger;
-                    console.log(photoResultSucc.path);
-                    getFile(res.path).then(
+                    Capacitor.Plugins.Filesystem.getStat(photoResultSucc.path).then(
                         function (file) {
-                            att.URL = file.localURL;
+                            att.URL = photoResultSucc.path;
                             att.Name = file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
                         },
                         errMgr
                     );
+
+                    // getFile(res.path).then(
+                    //     function (file) {
+                    //         att.URL = file.localURL;
+                    //         att.Name = file.name;
+                    //         att.Size = file.size;
+                    //         renderNewAtt(att, $attachs);
+                    //     },
+                    //     errMgr
+                    // );
                 }, errMgr
             );
         }else{
