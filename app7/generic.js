@@ -1321,7 +1321,7 @@ async function downloadAttCapacitor($att){
                 if(fs instanceof Blob){
                     arrayBuffer = await fs.arrayBuffer();
                 }
-                const data = _arrayBufferToBase64(ab);
+                const data = _arrayBufferToBase64(arrayBuffer);
                 //Fin Workaround.
 
                 Capacitor.Plugins.Filesystem.writeFile(
