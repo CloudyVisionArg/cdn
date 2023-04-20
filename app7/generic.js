@@ -1780,6 +1780,20 @@ async function saveDoc(exitOnSuccess) {
     }
 }
 
+async function removeAttFromCache(fileName){
+    if(_isCapacitor()){
+        try{
+            result = await Capacitor.Plugins.Filesystem.deleteFile({
+                    path: fileName,
+                    directory: Directory.Cache,
+                });
+                console.log('Archivo ' +  fileName + ' eliminado del cache del app');
+        }catch(e){
+            console.log('Error intentando quitar el archivo ' +  fileName + ' del cache del app');
+        }
+    }
+}
+
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
@@ -1811,6 +1825,7 @@ function saveAtt() {
                         att.description = tag;
                         att.group = tag;
                         await att.save();
+                        await removeAttFromCache(attName);
                         $this.removeAttr('data-att-url');
                     } catch (err) {
                         errors.push({
