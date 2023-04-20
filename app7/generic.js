@@ -1294,7 +1294,7 @@ async function downloadAttCapacitor($att){
     var attURL = $att.attr('data-att-url');
     if (attURL) {
         // Ya se descargo antes o es nuevo
-        openAtt(attURL); //TODO
+        openAtt(attURL);
 
     } else {
         app7.preloader.show();
@@ -1310,7 +1310,7 @@ async function downloadAttCapacitor($att){
                 saveAs(blob, attName);
             } else {
                 /*
-                NOTE: 
+                WARNING: 
                     Cuando el adjunto se agrega y se guarda 
                     att.fileStream es un Blob;
                     si es un existente previo es un ArrayBuffer!
@@ -1324,6 +1324,7 @@ async function downloadAttCapacitor($att){
                 const data = _arrayBufferToBase64(arrayBuffer);
                 //Fin Workaround.
 
+                //WARNING: Si al archivo lo descarga, queda en el cache de la aplicacion. Cuando se limpia?
                 Capacitor.Plugins.Filesystem.writeFile(
                     {
                         path : attName,
@@ -1510,7 +1511,9 @@ function addAtt(e) {
             // quizas estaria bueno 
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (res)=>{
+                (photoResultSucc)=>{
+                    debugger;
+                    console.log(photoResultSucc.path);
                     getFile(res.path).then(
                         function (file) {
                             att.URL = file.localURL;
