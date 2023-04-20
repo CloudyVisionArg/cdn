@@ -1288,6 +1288,7 @@ function _base64ToArrayBuffer(base64) {
 }
 
 async function downloadAttCapacitor($att){
+    debugger;
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1309,6 +1310,7 @@ async function downloadAttCapacitor($att){
                 saveAs(blob, attName);
             } else {
                 let data = _arrayBufferToBase64(fs);
+                console.log(data);
                 Capacitor.Plugins.Filesystem.writeFile(
                     {
                         path : attName,
@@ -1323,32 +1325,7 @@ async function downloadAttCapacitor($att){
                     (fileWriteResultErr)=>{
                         console.error('Capcitor writeFile error: ' + errMsg(fileWriteResultErr));
                     }                    
-                )
-                
-                // cacheDir.getFile(attName, { create: true },
-                //     function (file) {
-                //         file.createWriter(
-                //             function (fileWriter) {
-                //                 fileWriter.onwriteend = function (e) {
-                //                     $att.attr('data-att-url', file.toURL());
-                //                     openAtt(file.toURL());
-                //                 };
-
-                //                 fileWriter.onerror = function (err) {
-                //                     console.error('fileWriter error: ' + errMsg(err));
-                //                 };
-
-                //                 fileWriter.write(blob);
-                //             },
-                //             function (err) {
-                //                 logAndToast('createWriter error: ' + errMsg(err));
-                //             }
-                //         )
-                //     },
-                //     function (err) {
-                //         logAndToast('getFile error: ' + errMsg(err));
-                //     }
-                // )
+                );
             }
 
         } catch(err) {
