@@ -1309,8 +1309,23 @@ async function downloadAttCapacitor($att){
                 var blob = new Blob([fs]);
                 saveAs(blob, attName);
             } else {
-                let data = _arrayBufferToBase64(fs);
-                console.log(data);
+                let data;
+                /*
+                NOTE: 
+                    Cuando el adjunto se agrega y se guarda 
+                    att.fileStream es un Blob;
+                    si es un existente previo es un ArrayBuffer!
+                */
+
+                //Workaround para esta diferencia.
+                if(fs instanceof ArrayBuffer){
+                    data = _arrayBufferToBase64(fs);
+                }
+                else{
+                    data = await fs.arrayBuffer();
+                }
+                //Fin Workaround.
+
                 Capacitor.Plugins.Filesystem.writeFile(
                     {
                         path : attName,
