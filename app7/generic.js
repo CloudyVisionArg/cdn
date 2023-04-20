@@ -1796,7 +1796,8 @@ function saveAtt() {
                     for (var x = 0; x < rawData.length; x++) {
                         bytes[x] = rawData.charCodeAt(x);
                     }
-                    const arr = new Uint8Array(bytes);
+                    //const arr = new Uint8Array(bytes);
+                    const arr = bytes.buffer;
                     file = new Blob([arr], { type: fileFromCache.type });
                     try {
                         var att = doc.attachmentsAdd(attName);
