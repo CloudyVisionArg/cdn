@@ -1309,7 +1309,6 @@ async function downloadAttCapacitor($att){
                 var blob = new Blob([fs]);
                 saveAs(blob, attName);
             } else {
-                let data;
                 /*
                 NOTE: 
                     Cuando el adjunto se agrega y se guarda 
@@ -1318,12 +1317,11 @@ async function downloadAttCapacitor($att){
                 */
 
                 //Workaround para esta diferencia.
-                if(fs instanceof ArrayBuffer){
-                    data = _arrayBufferToBase64(fs);
+                let arrayBuffer = fs;
+                if(fs instanceof Blob){
+                    arrayBuffer = await fs.arrayBuffer();
                 }
-                else{
-                    data = await fs.arrayBuffer();
-                }
+                const data = _arrayBufferToBase64(ab);
                 //Fin Workaround.
 
                 Capacitor.Plugins.Filesystem.writeFile(
