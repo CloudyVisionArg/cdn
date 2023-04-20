@@ -1260,6 +1260,7 @@ async function fillAttachments(pEl) {
 }
 
 async function downloadAtt(e) {
+    debugger;
     if(_isCapacitor()){
         await downloadAttCapacitor($(this));
     }else{
