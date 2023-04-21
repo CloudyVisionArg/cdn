@@ -317,9 +317,6 @@ async function renderPage() {
         // CON CONTROLES
 
         try {
-            // Evento beforeRender
-            document.dispatchEvent(new CustomEvent('beforeRender'));
-
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);

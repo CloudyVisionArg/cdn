@@ -1074,9 +1074,28 @@ export class Attachment {
         return this.session.utils.cDate(this.#json.Created);
     }
 
-    /** Alias de remove */
+    /**
+    Borra el adjunto inmediatamente.
+    @returns {Promise}
+    */
     delete() {
-        return this.remove();
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            var attMap = await me.parent.attachments();
+            if (me.isNew) {
+                attMap.delete(me.name);
+                resolve(true);
+            } else {
+                var url = 'documents/' + me.parent.id + '/attachments';
+                me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
+                    res => {
+                        if (res) attMap.delete(me.name);
+                        resolve(res);
+                    },
+                    reject
+                );
+            }
+        });
     }
 
     /**
@@ -1233,28 +1252,9 @@ export class Attachment {
         return this.#properties.set(property, value);
     }
 
-    /**
-    Borra el adjunto inmediatamente.
-    @returns {Promise}
-    */
+    /** Alias de delete */
     remove() {
-        var me = this;
-        return new Promise(async (resolve, reject) => {
-            var attMap = await me.parent.attachments();
-            if (me.isNew) {
-                attMap.delete(me.name);
-                resolve(true);
-            } else {
-                var url = 'documents/' + me.parent.id + '/attachments';
-                me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
-                    res => {
-                        if (res) attMap.delete(me.name);
-                        resolve(res);
-                    },
-                    reject
-                );
-            }
-        });
+        return this.delete();
     }
 
     /**
@@ -1313,6 +1313,14 @@ export class Attachment {
         return this.#json.Tags;
     }
 
+    get toDelete() {
+        return this.#json.toDelete;
+    }
+
+    set toDelete(value) {
+        this.#json.toDelete = value;
+    }
+
     /**
     @returns {string}
     */
@@ -1320,12 +1328,13 @@ export class Attachment {
         return this.#json;
     }
 
+    /** Alias de toDelete */
     get toRemove() {
-        return this.#json.toRemove;
+        return this.toDelete;
     }
 
     set toRemove(value) {
-        this.#json.toRemove = value;
+        this.toDelete = value;
     }
 
     /**
@@ -1564,6 +1573,7 @@ export class Document {
     #userProperties;
     #owner;
     #form;
+    #log;
 
     // todo: como pasamos los attachs en memoria?
     // https://gist.github.com/jonathanlurie/04fa6343e64f750d03072ac92584b5df
@@ -1874,9 +1884,25 @@ export class Document {
         return this.#json.IsNew;
     }
 
-    /** No implementado aun */
+    /**
+    @returns {Object}
+    */
     log() {
-        // todo
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#log) {
+                var url = 'documents/' + me.id + '/fieldslog';
+                me.session.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        me.#log = res;
+                        resolve(me.#log);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#log);
+            }
+        });
     }
 
     /**
@@ -1979,6 +2005,8 @@ export class Document {
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
+                    me.#log = undefined;
+
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
