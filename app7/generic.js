@@ -1477,9 +1477,9 @@ function addAtt(e) {
                     writeFileInCache("test.jpg", photoResultSucc.dataUrl).then(
                         (writeFileResultSucc)=>{
                             debugger;
-                            getFileFromCache(writeFileResultSucc.path).then(
+                            getFileFromCache(writeFileResultSucc.uri).then(
                                 (readFileResultSucc)=>{
-                                    att.URL = writeFileResultSucc.path;
+                                    att.URL = writeFileResultSucc.uri;
                                     att.Name = readFileResultSucc.name;
                                     att.Size = readFileResultSucc.size;
                                     renderNewAtt(att, $attachs);
