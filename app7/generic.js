@@ -1476,6 +1476,7 @@ function addAtt(e) {
 
                     writeFileInCache("test.jpg", photoResultSucc.dataUrl).then(
                         (writeFileResultSucc)=>{
+                            debugger;
                             getFileFromCache(writeFileResultSucc.path).then(
                                 (readFileResultSucc)=>{
                                     att.URL = writeFileResultSucc.path;
