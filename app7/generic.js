@@ -1495,35 +1495,6 @@ function addAtt(e) {
                             errMgr
                         }
                     );
-
-                    debugger;
-                    // Capacitor.Plugins.Filesystem.readFile(photoResultSucc.path).then(
-                    //     (readFileResultSucc) => {
-                    //         writeFileInCache(readFileResultSucc.name, readFileResultSucc.data).then(
-                    //             (writeFileResultSucc)=>{
-                    //                 att.URL = writeFileResultSucc.path;
-                    //                 att.Name = writeFileResultSucc.name;
-                    //                 att.Size = writeFileResultSucc.size;
-                    //                 renderNewAtt(att, $attachs);
-                    //             },
-                    //             (writeFileResultErr)=>{
-                    //                 errMgr
-                    //             }
-                    //         );
-                    //     },
-                    //     (readFileResultErr) => {
-                    //         errMgr
-                    //     }
-                    //);
-                    // Capacitor.Plugins.Filesystem.stat(photoResultSucc.path).then(
-                    //     function (file) {
-                    //         att.URL = photoResultSucc.path;
-                    //         att.Name = file.name;
-                    //         att.Size = file.size;
-                    //         renderNewAtt(att, $attachs);
-                    //     },
-                    //     errMgr
-                    // );
                 }, errMgr
             );
         }
