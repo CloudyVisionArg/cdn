@@ -345,7 +345,7 @@ function scriptSrc(scriptId, version) {
 }
 
 function gitCdn(options) {
-    var url = 'http://10.21.21.223:8080/github?';
+    var url = 'http://10.21.21.223:8081/github?';
     url += getOpt(options, 'owner');
     url += getOpt(options, 'repo');
     url += getOpt(options, 'path');
