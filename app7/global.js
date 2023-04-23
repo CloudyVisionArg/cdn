@@ -1814,7 +1814,7 @@ function cameraOptionsCapacitor(pSource){
 		//mediaType: Camera.MediaType.ALLMEDIA,
 		//allowEdit: (device.platform == 'iOS'),
 		correctOrientation: true, //Corrects Android orientation quirks
-        resultType: CameraResultType.Uri,
+        resultType: CameraResultType.DataUrl,
 		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
 		//targetHeight: 
 		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.

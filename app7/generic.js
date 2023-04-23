@@ -1473,6 +1473,7 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
+                    debugger;
                     Capacitor.Plugins.Filesystem.readFile(photoResultSucc.path).then(
                         (readFileResultSucc) => {
                             writeFileInCache(readFileResultSucc.name, readFileResultSucc.data).then(
