@@ -343,3 +343,55 @@ function scriptSrc(scriptId, version) {
 
 	return src;
 }
+
+function gitCdn(options) {
+    debugger;
+
+    var url = 'http://10.21.21.223:8081/github?';
+    url += getOpt(options, 'owner');
+    url += getOpt(options, 'repo');
+    url += getOpt(options, 'path');
+    url += getOpt(options, 'ref');
+    url += getOpt(options, 'fresh');
+
+    function getOpt(options, option) {
+        if (options[option] != undefined) {
+            return option + '=' + encodeURIComponent(options[option]);
+        } else {
+            return '';
+        }
+    }
+
+    return new Promise((resolve, reject) => {
+        fetch(url).then(
+            async res => {
+                if (res.ok) {
+                    resolve(await res.text());
+                } else {
+                    res.text().then(
+                        async txt => {
+                            try {
+                                var json = JSON.parse(txt);
+                                // importa serialize si no esta
+                                if (!window.serializeError) {
+                                    mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+                                    window.serializeError = mod.default;
+                                }
+                                var err = serializeError.deserializeError(json);
+                                reject(err);
+
+                            } catch(err) {
+                                reject(new Error(res.status + ' (' + res.statusText) + ')');
+                            }
+                        }
+                    );
+                }
+
+            },
+            err => {
+                debugger;
+                reject(err);
+            }
+        )
+    });
+}

@@ -269,7 +269,6 @@ export class Session {
     get apiKey() {
         return this.#apiKey;
     }
-
     set apiKey(value) {
         this.#apiKey = value;
         this._reset();
@@ -281,7 +280,6 @@ export class Session {
     get authToken() {
         return this.#authToken;
     }
-
     set authToken(value) {
         this.#authToken = value;
         this._reset();
@@ -526,7 +524,6 @@ export class Session {
     get serverUrl() {
         return this.#serverUrl;
     }
-
     set serverUrl(value) {
         this.#serverUrl = value;
         this._reset();
@@ -774,7 +771,6 @@ export class Account {
     get description() {
         return this.#json.Description;
     }
-
     set description(value) {
         this.#json.Description = value;
     }
@@ -785,7 +781,6 @@ export class Account {
     get email() {
         return this.#json.Email;
     }
-
     set email(value) {
         this.#json.Email = value;
     }
@@ -835,7 +830,6 @@ export class Account {
     get name() {
         return this.#json.Name;
     }
-
     set name(value) {
         this.#json.Name = value;
     }
@@ -1104,7 +1098,6 @@ export class Attachment {
     get description() {
         return this.#json.Description;
     }
-
     set description(value) {
         if (!this.isNew) throw new Error('Read-only property');
         this.#json.Description = value;
@@ -1116,7 +1109,6 @@ export class Attachment {
     get extension() {
         return this.#json.Extension;
     }
-
     set extension(value) {
         if (!this.isNew) throw new Error('Read-only property');
         this.#json.Extension = value;
@@ -1125,7 +1117,6 @@ export class Attachment {
     get external() {
         return this.#json.External;
     }
-
     set external(value) {
         if (!this.isNew) throw new Error('Read-only property');
         this.#json.External = value;
@@ -1152,7 +1143,6 @@ export class Attachment {
             }
         });
     }
-
     set fileStream(value) {
         if (!this.isNew) throw new Error('Read-only property');
         this.#json.File = value;
@@ -1164,7 +1154,6 @@ export class Attachment {
     get group() {
         return this.#json.group;
     }
-
     set group(value) {
         if (!this.isNew) throw new Error('Read-only property');
         this.#json.group = value;
@@ -1180,7 +1169,6 @@ export class Attachment {
     get isNew() {
         return this.#json.IsNew;
     }
-
     set isNew(value) {
         this.#json.IsNew = value;
     }
@@ -1316,7 +1304,6 @@ export class Attachment {
     get toDelete() {
         return this.#json.toDelete;
     }
-
     set toDelete(value) {
         this.#json.toDelete = value;
     }
@@ -1332,7 +1319,6 @@ export class Attachment {
     get toRemove() {
         return this.toDelete;
     }
-
     set toRemove(value) {
         this.toDelete = value;
     }
@@ -1422,7 +1408,7 @@ export class Database {
         return ret;
     }
 
-    /** Alias de sqlEncode. */
+    /** Alias de sqlEncode */
     sqlEnc(value, type) {
         return this.sqlEncode(value, type);
     }
@@ -1871,6 +1857,16 @@ export class Document {
     }
 
     /**
+    @returns {string}
+    */
+    get iconRaw() {
+        //todo
+    }
+    set iconRaw(value) {
+        //todo
+    }
+
+    /**
     @returns {number}
     */
     get id() {
@@ -1885,7 +1881,8 @@ export class Document {
     }
 
     /**
-    @returns {Object}
+    Log de cambios.
+    @returns {Promise<Object[]>}
     */
     log() {
         var me = this;
@@ -2022,10 +2019,19 @@ export class Document {
         });
     }
 
-    /*
-    saveAttachments() {
-        // todo: esto deberia ser parte del save (issue #261)
+    /**
+    Guarda los adjuntos.
+    todo: Esto deberia ser parte del save (issue #261)
     */
+    async saveAttachments() {
+        for ([key, value] of await this.attachments()) {
+            if (value.toRemove) {
+                await value.remove();
+            } else if (value.isNew) {
+                await value.save();
+            }
+        }
+    }
 
     /**
     @returns {Session}
@@ -2040,7 +2046,6 @@ export class Document {
     get subject() {
         return this.fields('subject').value;
     }
-
     set subject(value) {
         this.fields('subject').value = value;
     }
@@ -2122,6 +2127,9 @@ export class Field {
     get descriptionRaw() {
         return this.#json.DescriptionRaw;
     }
+    set descriptionRaw(value) {
+        //todo
+    }
 
     get formId() {
         debugger; // chequear
@@ -2130,6 +2138,10 @@ export class Field {
 
     get headerTable() {
         return this.#json.HeaderTable;
+    }
+
+    get isNew() {
+        //todo
     }
 
     /**
@@ -2145,6 +2157,9 @@ export class Field {
     get length() {
         return this.#json.Length;
     }
+    set length(value) {
+        //todo
+    }
 
     get name() {
         return this.#json.Name;
@@ -2152,6 +2167,9 @@ export class Field {
 
     get nullable() {
         return this.#json.Nullable;
+    }
+    set nullable(value) {
+        //todo
     }
 
     get objectType() {
@@ -2164,6 +2182,9 @@ export class Field {
 
     get precision() {
         return this.#json.Precision;
+    }
+    set precision(value) {
+        //todo
     }
 
     // todo: solo para field de form, add o remove igual
@@ -2182,6 +2203,9 @@ export class Field {
     get scale() {
         return this.#json.Scale;
     }
+    set scale(value) {
+        //todo
+    }
 
     /**
     @returns {Session}
@@ -2199,6 +2223,9 @@ export class Field {
     
     get type() {
         return this.#json.Type;
+    }
+    set type(value) {
+        //todo
     }
 
     get updatable() {
@@ -2224,7 +2251,6 @@ export class Field {
             return this.#json.Value;
         }
     }
-
     set value(value) {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
@@ -2359,6 +2385,10 @@ export class Folder {
         */
     }
 
+    ancestors() {
+        //todo
+    }
+
     /**
     @returns {Application}
     */
@@ -2369,12 +2399,57 @@ export class Folder {
         return this.#app;
     }
 
-    /**
-    Alias de documentsDelete.
-    @returns {Promise}
-    */
-    delete(documents, purge) {
-        return this.documentsDelete(documents, purge);
+    asyncEvents() {
+        //todo
+    }
+
+    asyncEventsList() {
+        //todo
+    }
+
+    get charData() {
+        //todo
+    }
+    set charData(value) {
+        //todo
+    }
+
+    get comments() {
+        //todo
+    }
+    set comments(value) {
+        //todo
+    }
+
+    copy() {
+        //todo
+    }
+
+    get created() {
+        //todo
+    }
+
+    currentAccess(access, explicit) {
+        //todo
+    }
+
+    delete() {
+        //todo
+    }
+
+    descendants() {
+        //todo
+    }
+
+    get description() {
+        //todo
+    }
+
+    get descriptionRaw() {
+        //todo
+    }
+    set descriptionRaw(value) {
+        //todo
     }
 
     /**
@@ -2419,6 +2494,10 @@ export class Folder {
         });
     }
 
+    documentsCount() {
+        //todo
+    }
+
     /**
     Borra multiples documentos. documents puede ser un array de ids o una formula.
     @returns {Promise}
@@ -2456,6 +2535,21 @@ export class Folder {
         })
     }
 
+    events() {
+        //todo
+    }
+
+    eventsList() {
+        //todo
+    }
+
+    get externalAttachments() {
+        //todo
+    }
+    set externalAttachments(value) {
+        //todo
+    }
+
     /**
     @example
     folders() // Devuelve la lista de carpetas hijas.
@@ -2476,10 +2570,15 @@ export class Folder {
         });
     }
 
-    /**
-    Alias de type.
-    @returns {number}
-    */
+    foldersList() {
+        //todo
+    }
+
+    foldersNew() {
+        //todo
+    }
+
+    /** Alias de type */
     get folderType() {
         return this.type;
     }
@@ -2515,11 +2614,75 @@ export class Folder {
         return this.#json.FrmId;
     }
 
+    get haveDocuments() {
+        //todo
+    }
+
+    get haveFolders() {
+        //todo
+    }
+
+    get haveViews() {
+        //todo
+    }
+
+    get href() {
+        //todo
+    }
+
+    get hrefRaw() {
+        //todo
+    }
+    set hrefRaw(value) {
+        //todo
+    }
+
+    get icon() {
+        //todo
+    }
+
+    get iconRaw() {
+        //todo
+    }
+    set iconRaw(value) {
+        //todo
+    }
+
+    get iconVector() {
+        //todo
+    }
+    set iconVector(value) {
+        //todo
+    }
+
     /**
     @returns {number}
     */
     get id() {
         return this.#json.FldId;
+    }
+
+    get isEmpty() {
+        //todo
+    }
+
+    get isNew() {
+        //todo
+    }
+
+    get logConf() {
+        //todo
+    }
+    set logConf(value) {
+        //todo
+    }
+
+    get modified() {
+        //todo
+    }
+
+    move() {
+        //todo
     }
 
     /**
@@ -2528,7 +2691,6 @@ export class Folder {
     get name() {
         return this.#json.Name;
     }
-
     set name(value) {
         this.#json.Name = value;
     }
@@ -2543,6 +2705,39 @@ export class Folder {
     */
     get objectType() {
         return Folder.objectType;
+    }
+
+    /**
+    Creador del Folder.
+    @returns {Promise<User>}
+    */
+    get owner() {
+        //todo
+        /*
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#owner) {
+                me.session.directory.accounts(me.ownerId).then(
+                    res => {
+                        me.#owner = res.cast2User();
+                        resolve(me.#owner);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#owner);
+            }
+        });
+        */
+    }
+
+    /**
+    ACC_ID del creador del Folder.
+    @returns {number}
+    */
+    get ownerId() {
+        //todo
+        //return this.#json.AccId
     }
 
     /**
@@ -2578,6 +2773,10 @@ export class Folder {
         return this.#json.ParentFolder;
     }
 
+    path(onlyNames) {
+        //todo
+    }
+
     /**
     @example
     properties() // Devuelve la coleccion.
@@ -2596,6 +2795,10 @@ export class Folder {
     */
     get rootFolderId() {
         return this.#json.RootFolderId;
+    }
+
+    save() {
+        //todo
     }
 
     /**
@@ -2676,12 +2879,35 @@ export class Folder {
         return this.#session;
     }
 
+    get sourceFolder() {
+        //todo
+    }
+
+    get styleScriptActiveCode() {
+        //todo
+    }
+
+    get styleScriptDefinition() {
+        //todo
+    }
+    set styleScriptDefinition(value) {
+        //todo
+    }
+
+    get system() {
+        //todo
+    }
+
     /**
     @returns {Object}
     */
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
         return this.#json.Tags;
+    }
+
+    get target() {
+        //todo
     }
 
     /**
@@ -2770,11 +2996,20 @@ export class Folder {
         })
     }
 
+    /** Alias de viewsNew. */
+    viewsAdd() {
+        return new this.viewsNew();
+    }
+
+    viewsList() {
+        //todo
+    }
+
     /**
     Crea una nueva vista.
     @returns {Promise<View>}
     */
-    async viewsAdd() {
+    async viewsNew() {
         var url = 'folders/' + this.id + '/views/new';
         var res = await this.session.restClient.fetch(url, 'GET', '', '');
         this.#viewsMap = undefined;
@@ -2825,8 +3060,46 @@ export class Form {
         */
     }
 
+    actions() {
+        //todo
+    }
+
+    get application() {
+        //todo
+    }
+    set application(value) {
+        //todo
+    }
+
+    copy() {
+        //todo
+    }
+
+    get created() {
+        //todo
+    }
+
+    currentAccess(access, explicit) {
+        //todo
+    }
+
+    delete() {
+        //todo
+    }
+
     get description() {
         return this.#json.Description;
+    }
+    set description(value) {
+        //todo
+    }
+
+    events() {
+        //todo
+    }
+
+    eventsList() {
+        //todo
     }
 
     fields(field) {
@@ -2855,12 +3128,78 @@ export class Form {
         }
     }
 
+    get guid() {
+        //todo
+    }
+    set guid(value) {
+        //todo
+    }
+
+    get icon() {
+        //todo
+    }
+
+    get iconRaw() {
+        //todo
+    }
+    set iconRaw(value) {
+        //todo
+    }
+
+    get id() {
+        //todo
+    }
+
+    get isNew() {
+        //todo
+    }
+
+    get modified() {
+        //todo
+    }
+
     get name() {
         return this.#json.Name;
+    }
+    set name(value) {
+        this.#json.Name = value;
     }
 
     get objectType() {
         return Form.objectType;
+    }
+
+    /**
+    Creador del Form.
+    @returns {Promise<User>}
+    */
+    get owner() {
+        //todo
+        /*
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#owner) {
+                me.session.directory.accounts(me.ownerId).then(
+                    res => {
+                        me.#owner = res.cast2User();
+                        resolve(me.#owner);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#owner);
+            }
+        });
+        */
+    }
+
+    /**
+    ACC_ID del creador del Form.
+    @returns {number}
+    */
+    get ownerId() {
+        //todo
+        //return this.#json.AccId
     }
 
     /**
@@ -2875,8 +3214,35 @@ export class Form {
         return this.#properties.set(property, value);
     }
 
+    get readonly() {
+        //todo
+    }
+
+    save() {
+        //todo
+    }
+
+    search() {
+        //todo
+    }
+
+    searchGroups() {
+        //todo
+    }
+
     get session() {
         return this.#session;
+    }
+
+    get styleScriptActiveCode() {
+        //todo
+    }
+
+    get styleScriptDefinition() {
+        //todo
+    }
+    set styleScriptDefinition(value) {
+        //todo
     }
 
     get tags() {
@@ -2888,6 +3254,17 @@ export class Form {
         return this.#json;
     }
 
+    get url() {
+        //todo
+    }
+
+    get urlRaw() {
+        //todo
+    }
+    set urlRaw(value) {
+        //todo
+    }
+    
     /**
     @example
     userProperties() // Devuelve la coleccion.
@@ -3166,7 +3543,7 @@ export class Push {
         }
     }
 
-    // Alias de unregister
+    /** Alias de unregister. */
     unreg(regType, regId) {
         return this.unregister(regType, regId);
     }
@@ -3184,7 +3561,6 @@ export class User extends Account {
     get adfsLogon() {
         return this.toJSON().AdfsLogon;
     }
-
     set adfsLogon(value) {
         this.toJSON().AdfsLogon = value;
     }
@@ -3192,7 +3568,6 @@ export class User extends Account {
     get business() {
         return this.toJSON().Business;
     }
-
     set business(value) {
         this.toJSON().Business = value;
     }
@@ -3200,7 +3575,6 @@ export class User extends Account {
     get canNotChangePwd() {
         return this.toJSON().CanNotChangePwd;
     }
-
     set canNotChangePwd(value) {
         this.toJSON().CanNotChangePwd = value;
     }
@@ -3208,7 +3582,6 @@ export class User extends Account {
     get changePwdNextLogon() {
         return this.toJSON().ChangePwdNextLogon;
     }
-
     set changePwdNextLogon(value) {
         this.toJSON().ChangePwdNextLogon = value;
     }
@@ -3216,7 +3589,6 @@ export class User extends Account {
     get disabled() {
         return this.toJSON().Disabled;
     }
-
     set disabled(value) {
         this.toJSON().Disabled = value;
     }
@@ -3224,7 +3596,6 @@ export class User extends Account {
     get fullName() {
         return this.toJSON().FullName;
     }
-
     set fullName(value) {
         this.toJSON().FullName = value;
     }
@@ -3232,7 +3603,6 @@ export class User extends Account {
     get gestarLogon() {
         return this.toJSON().GestarLogon;
     }
-
     set gestarLogon(value) {
         this.toJSON().GestarLogon = value;
     }
@@ -3240,7 +3610,6 @@ export class User extends Account {
     get hasApiKey() {
         return this.toJSON().HasApiKey;
     }
-
     set hasApiKey(value) {
         this.toJSON().HasApiKey = value;
     }
@@ -3248,7 +3617,6 @@ export class User extends Account {
     get language() {
         return this.toJSON().LngId;
     }
-
     set language(value) {timeDiff
         this.toJSON().LngId = value;
     }
@@ -3256,7 +3624,6 @@ export class User extends Account {
     get ldapLogon() {
         return this.toJSON().LDAPLogon;
     }
-
     set ldapLogon(value) {timeDiff
         this.toJSON().LDAPLogon = value;
     }
@@ -3264,7 +3631,6 @@ export class User extends Account {
     get ldapServer() {
         return this.toJSON().LDAPServer;
     }
-
     set ldapServer(value) {timeDiff
         this.toJSON().LDAPServer = value;
     }
@@ -3272,7 +3638,6 @@ export class User extends Account {
     get login() {
         return this.toJSON().Login;
     }
-
     set login(value) {
         this.toJSON().Login = value;
     }
@@ -3280,7 +3645,6 @@ export class User extends Account {
     get password() {
         return this.toJSON().Password;
     }
-
     set password(value) {
         this.toJSON().Password = value;
     }
@@ -3288,7 +3652,6 @@ export class User extends Account {
     get phone() {
         return this.toJSON().Phone;
     }
-
     set phone(value) {
         this.toJSON().Phone = value;
     }
@@ -3296,7 +3659,6 @@ export class User extends Account {
     get pictureProfile() {
         return this.toJSON().PictureProfile;
     }
-
     set pictureProfile(value) {
         this.toJSON().PictureProfile = value;
     }
@@ -3304,7 +3666,6 @@ export class User extends Account {
     get pwdChanged() {
         return this.toJSON().PwdChanged;
     }
-
     set pwdChanged(value) {
         this.toJSON().PwdChanged = value;
     }
@@ -3312,7 +3673,6 @@ export class User extends Account {
     get pwdNeverExpires() {
         return this.toJSON().PwdNeverExpires;
     }
-
     set pwdNeverExpires(value) {
         this.toJSON().PwdNeverExpires = value;
     }
@@ -3320,7 +3680,6 @@ export class User extends Account {
     get theme() {
         return this.toJSON().Theme;
     }
-
     set theme(value) {
         this.toJSON().Theme = value;
     }
@@ -3328,7 +3687,6 @@ export class User extends Account {
     get timeDiff() {
         return this.toJSON().TimeDiff;
     }
-
     set timeDiff(value) {
         this.toJSON().TimeDiff = value;
     }
@@ -3336,7 +3694,6 @@ export class User extends Account {
     get winLogon() {
         return this.toJSON().WinLogon;
     }
-
     set winLogon(value) {
         this.toJSON().WinLogon = value;
     }
@@ -3817,7 +4174,6 @@ export class View {
     get comments() {
         return this.#json.Comments;
     }
-
     set comments(value) {
         this.#json.Comments = value;
     }
@@ -3825,7 +4181,6 @@ export class View {
     get definition() {
         return this._asyncGet('Definition');
     }
-
     set definition(value) {
         this.#json.Definition = value;
     }
@@ -3833,7 +4188,6 @@ export class View {
     get description() {
         return this.#json.Description;
     }
-
     set description(value) {
         this.#json.Description = value;
     }
@@ -3841,7 +4195,6 @@ export class View {
     get descriptionRaw() {
         return this._asyncGet('DescriptionRaw');
     }
-
     set descriptionRaw(value) {
         this.#json.DescriptionRaw = value;
     }
@@ -3869,7 +4222,6 @@ export class View {
     get name() {
         return this.#json.Name;
     }
-
     set name(value) {
         this.#json.Name = value;
     }
@@ -3923,7 +4275,6 @@ export class View {
     get private() {
         return this.#json.Private;
     }
-
     set private(value) {
         this.#json.Private = value;
     }
@@ -3959,7 +4310,6 @@ export class View {
     get styleScript() {
         return this._asyncGet('StyleScriptDefinition');
     }
-
     set styleScript(value) {
         this.#json.StyleScriptDefinition = value;
     }
@@ -3971,7 +4321,6 @@ export class View {
     get type() {
         return this.#json.Type;
     }
-
     set type(value) {
         this.#json.Type = value;
     }
