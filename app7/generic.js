@@ -1473,12 +1473,20 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
+
                     writeFileInCache("test.jpg", photoResultSucc.dataUrl).then(
                         (writeFileResultSucc)=>{
-                            att.URL = writeFileResultSucc.path;
-                            att.Name = writeFileResultSucc.name;
-                            att.Size = writeFileResultSucc.size;
-                            renderNewAtt(att, $attachs);
+                            getFileFromCache(writeFileResultSucc.path).then(
+                                (readFileResultSucc)=>{
+                                    att.URL = writeFileResultSucc.path;
+                                    att.Name = readFileResultSucc.name;
+                                    att.Size = readFileResultSucc.size;
+                                    renderNewAtt(att, $attachs);
+                                },
+                                (readFileResultErr)=>{
+                                    errMgr
+                                }
+                            );
                         },
                         (writeFileResultErr)=>{
                             errMgr
