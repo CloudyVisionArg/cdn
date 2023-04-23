@@ -1478,7 +1478,6 @@ function addAtt(e) {
                     var fileName = time + ".jpeg";
                     writeFileInCache(fileName, photoResultSucc.dataUrl).then(
                         (writeFileResultSucc)=>{
-                            debugger;
                             getFileFromCache(fileName).then(
                                 (readFileResultSucc)=>{
                                     att.URL = writeFileResultSucc.uri;
