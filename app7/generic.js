@@ -1474,7 +1474,7 @@ function addAtt(e) {
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
                     let date = new Date();
-                    time = date.getTime();
+                    let time = date.getTime();
                     var fileName = time + ".jpeg";
                     writeFileInCache(fileName, photoResultSucc.dataUrl).then(
                         (writeFileResultSucc)=>{
