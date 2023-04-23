@@ -1482,7 +1482,7 @@ function addAtt(e) {
                             getFileFromCache(fileName).then(
                                 (readFileResultSucc)=>{
                                     att.URL = writeFileResultSucc.uri;
-                                    att.Name = readFileResultSucc.name;
+                                    att.Name = fileName;
                                     att.Size = readFileResultSucc.size;
                                     renderNewAtt(att, $attachs);
                                 },
