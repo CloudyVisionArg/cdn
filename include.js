@@ -356,7 +356,7 @@ function gitCdn(options) {
 
     function getOpt(options, option) {
         if (options[option] != undefined) {
-            return option + '=' + encodeURIComponent(options[option]);
+            return option + '=' + encodeURIComponent(options[option]) + '&';
         } else {
             return '';
         }
