@@ -1473,25 +1473,37 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    debugger;
-                    Capacitor.Plugins.Filesystem.readFile(photoResultSucc.path).then(
-                        (readFileResultSucc) => {
-                            writeFileInCache(readFileResultSucc.name, readFileResultSucc.data).then(
-                                (writeFileResultSucc)=>{
-                                    att.URL = writeFileResultSucc.path;
-                                    att.Name = writeFileResultSucc.name;
-                                    att.Size = writeFileResultSucc.size;
-                                    renderNewAtt(att, $attachs);
-                                },
-                                (writeFileResultErr)=>{
-                                    errMgr
-                                }
-                            );
+                    writeFileInCache("test.jpg", photoResultSucc.dataUrl).then(
+                        (writeFileResultSucc)=>{
+                            att.URL = writeFileResultSucc.path;
+                            att.Name = writeFileResultSucc.name;
+                            att.Size = writeFileResultSucc.size;
+                            renderNewAtt(att, $attachs);
                         },
-                        (readFileResultErr) => {
+                        (writeFileResultErr)=>{
                             errMgr
                         }
                     );
+
+                    debugger;
+                    // Capacitor.Plugins.Filesystem.readFile(photoResultSucc.path).then(
+                    //     (readFileResultSucc) => {
+                    //         writeFileInCache(readFileResultSucc.name, readFileResultSucc.data).then(
+                    //             (writeFileResultSucc)=>{
+                    //                 att.URL = writeFileResultSucc.path;
+                    //                 att.Name = writeFileResultSucc.name;
+                    //                 att.Size = writeFileResultSucc.size;
+                    //                 renderNewAtt(att, $attachs);
+                    //             },
+                    //             (writeFileResultErr)=>{
+                    //                 errMgr
+                    //             }
+                    //         );
+                    //     },
+                    //     (readFileResultErr) => {
+                    //         errMgr
+                    //     }
+                    //);
                     // Capacitor.Plugins.Filesystem.stat(photoResultSucc.path).then(
                     //     function (file) {
                     //         att.URL = photoResultSucc.path;
