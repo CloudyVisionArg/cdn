@@ -1880,6 +1880,14 @@ async function getFileFromCache(pFileName) {
     });
 };
 
+async function writeFileInCache(pFileName, pFileData) {
+    return Capacitor.Plugins.Filesystem.writeFile({
+        path : pFileName,
+        data : pFileData,
+        directory: Directory.Cache
+    });
+}
+
 function audioRecorder(pCallback) {
     var mediaRec, interv, timer, save;
 
