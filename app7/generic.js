@@ -1510,7 +1510,7 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    Capacitor.Plugins.Filesystem.getStat(photoResultSucc.path).then(
+                    Capacitor.Plugins.Filesystem.stat(photoResultSucc.path).then(
                         function (file) {
                             att.URL = photoResultSucc.path;
                             att.Name = file.name;
