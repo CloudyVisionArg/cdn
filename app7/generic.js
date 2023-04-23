@@ -1473,11 +1473,13 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-
-                    writeFileInCache("test.jpg", photoResultSucc.dataUrl).then(
+                    let date = new Date();
+                    time = date.getTime();
+                    var fileName = time + ".jpeg";
+                    writeFileInCache(fileName, photoResultSucc.dataUrl).then(
                         (writeFileResultSucc)=>{
                             debugger;
-                            getFileFromCache(writeFileResultSucc.uri).then(
+                            getFileFromCache(fileName).then(
                                 (readFileResultSucc)=>{
                                     att.URL = writeFileResultSucc.uri;
                                     att.Name = readFileResultSucc.name;
