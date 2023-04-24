@@ -2823,11 +2823,11 @@ export class Folder {
     }
     */
 
-    /*
     get modified() {
         //todo
+        debugger;
+        return this.#json.Name;
     }
-    */
 
     /*
     move() {
