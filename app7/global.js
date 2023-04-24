@@ -2084,7 +2084,7 @@ function audioRecorder(pCallback) {
         writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
             (res)=>{
                 debugger;
-                getFileFromCache(res.uri).then(
+                getFileStatFromCache(res.uri).then(
                     function (file) {
                         pCallback(file);
                     },(err)=>{
