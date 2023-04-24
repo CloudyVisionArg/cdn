@@ -1945,13 +1945,13 @@ function audioRecorder(pCallback) {
         class: 'col button button-large button-round button-outline',
     }).append('Cancelar').appendTo($saveBtnRow);
     
-    $btn.click(cancel);
+    $btn.click(cancelAudio);
     
     var $btn = $('<button/>', {
         class: 'col button button-large button-round button-fill',
     }).append('Guardar').appendTo($saveBtnRow);
     
-    $btn.click(save);
+    $btn.click(saveAudio);
     
     // Abre el sheet
     var sheet = app7.sheet.create({
@@ -2049,24 +2049,24 @@ function audioRecorder(pCallback) {
     }
     
 
-    function save(){
+    function saveAudio(){
         debugger;
         if(_isCapacitor()){
-            saveCapacitor();
+            saveAudioCapacitor();
         }else{
-            saveCordova();
+            saveAudioCordova();
         }
     }
 
-    function cancel(){
+    function cancelAudio(){
         if(_isCapacitor()){
-            cancelCapacitor();
+            cancelAudioCapacitor();
         }else{
-            cancelCordova();
+            cancelAudioCordova();
         }
     }
 
-    async function saveCapacitor() {
+    async function saveAudioCapacitor() {
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         var now = new Date();
         let millis = recordingData.value.msDuration;
@@ -2084,10 +2084,10 @@ function audioRecorder(pCallback) {
         // })
         writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
             (res)=>{
-                debugger;
                 Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
                     (file)=> {
-                        debugger;
+                        file.localURL = file.uri;
+                        file.name = fileName;
                         pCallback(file);
                     },(err)=>{
                         console.log("Error obteniendo el audio.")
@@ -2107,14 +2107,14 @@ function audioRecorder(pCallback) {
         sheet.close();
     }
 
-    function saveCordova() {
+    function saveAudioCordova() {
         save = true;
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
     }
 
-    async function cancelCapacitor() {
+    async function cancelAudioCapacitor() {
         clearInterval(interv);
         const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
         console.log("VoiceRecorder.getCurrentStatus : " + currentStatusResult.status);
@@ -2129,7 +2129,7 @@ function audioRecorder(pCallback) {
         $saveBtnRow.hide();
     }
 
-    function cancelCordova() {
+    function canceAudiolCordova() {
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
