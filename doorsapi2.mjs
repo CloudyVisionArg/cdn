@@ -2756,45 +2756,34 @@ export class Folder {
     }
     */
 
-    /*
     get href() {
-        //todo
+        return this.#json.Href;
     }
-    */
 
-    /*
     get hrefRaw() {
-        //todo
+        return this.#json.HrefRaw;
     }
     set hrefRaw(value) {
-        //todo
+        this.#json.HrefRaw = value;
     }
-    */
 
-    /*
     get icon() {
-        //todo
+        return this.#json.Icon;
     }
-    */
 
     get iconRaw() {
-        //todo
-        debugger;
+        return this.#json.IconRaw;
     }
-    /*
     set iconRaw(value) {
-        //todo
+        this.#json.IconRaw = value;
     }
-    */
 
-    /*
     get iconVector() {
-        //todo
+        return this.#json.IconVector;
     }
     set iconVector(value) {
-        //todo
+        this.#json.IconVector = value;
     }
-    */
 
     /**
     @returns {number}
@@ -2813,14 +2802,15 @@ export class Folder {
         return this.#json.IsNew;
     }
 
-    /*
+    /**
+    @returns {Object[]}
+    */
     get logConf() {
-        //todo
+        return this.#json.LogConf;
     }
     set logConf(value) {
-        //todo
+        this.#json.LogConf = value;
     }
-    */
 
     get modified() {
         return this.session.utils.cDate(this.#json.Modified);
