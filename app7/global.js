@@ -2093,13 +2093,13 @@ function audioRecorder(pCallback) {
                         console.log("Error obteniendo el audio.")
                     }
                 );
-                getFileStatFromCache(res.uri).then(
-                    (file)=> {
-                        debugger;
-                        pCallback(file);
-                    },(err)=>{
-                        console.log("Error obteniendo el audio.")
-                    });
+                // getFileStatFromCache(res.uri).then(
+                //     (file)=> {
+                //         debugger;
+                //         pCallback(file);
+                //     },(err)=>{
+                //         console.log("Error obteniendo el audio.")
+                //     });
             },(err)=>{
                 console.log("Error escribiendo el audio.")
             });
