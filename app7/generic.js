@@ -1521,11 +1521,11 @@ function addAtt(e) {
             opts.resultType = CameraResultType.Uri
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    debugger;
+                    var filename = photoResultSucc.path.replace(/^.*[\\\/]/, '');
                     Capacitor.Plugins.Filesystem.stat({path: photoResultSucc.path}).then(
                         function (file) {
                             att.URL = photoResultSucc.path;
-                            att.Name = file.name;
+                            att.Name =filename;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
                         },
