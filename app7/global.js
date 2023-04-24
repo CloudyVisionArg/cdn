@@ -1888,6 +1888,18 @@ async function writeFileInCache(pFileName, pFileData) {
     });
 }
 
+async function writeFileInCachePath(pFilePath) {
+    let readFileResult = await Capacitor.Plugins.Filesystem.readFile({
+        path : pFilePath,
+    });
+    debugger;
+    return Capacitor.Plugins.Filesystem.writeFile({
+        path : pFileName,
+        data : pFileData,
+        directory: Directory.Cache
+    });
+}
+
 function audioRecorder(pCallback) {
     var mediaRec, interv, timer, save;
 

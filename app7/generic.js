@@ -1521,6 +1521,7 @@ function addAtt(e) {
             opts.resultType = CameraResultType.Uri
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
+                    writeFileInCachePath(photoResultSucc.path).then((s)=>{debugger;},(e)=>{debugger;});
                     var filename = photoResultSucc.path.replace(/^.*[\\\/]/, '');
                     Capacitor.Plugins.Filesystem.stat({path: photoResultSucc.path}).then(
                         function (file) {
@@ -1531,16 +1532,6 @@ function addAtt(e) {
                         },
                         errMgr
                     );
-
-                    // getFile(res.path).then(
-                    //     function (file) {
-                    //         att.URL = file.localURL;
-                    //         att.Name = file.name;
-                    //         att.Size = file.size;
-                    //         renderNewAtt(att, $attachs);
-                    //     },
-                    //     errMgr
-                    // );
                 }, errMgr
             );
         }else{
