@@ -1542,7 +1542,7 @@ function addAtt(e) {
                     const files = pickFilesResultSucc.files;
                     writeFileInCachePath(files[0].path).then(
                         (file)=>{
-                            att.URL = file.localURL;
+                            att.URL = file.uri;
                             att.Name = file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);

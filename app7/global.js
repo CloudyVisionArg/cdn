@@ -1889,8 +1889,11 @@ async function writeFileInCache(pFileName, pFileData) {
     });
 }
 
-async function writeFileInCachePath(pFilePath) {
+async function writeFileInCachePath(pFilePath, pFileName) {
     var filename = pFilePath.replace(/^.*[\\\/]/, '');
+    if(pFileName){
+        filename = pFileName;
+    }
     let readFileResult = await Capacitor.Plugins.Filesystem.readFile({
         path : pFilePath,
     });
