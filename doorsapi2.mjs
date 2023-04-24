@@ -2808,11 +2808,10 @@ export class Folder {
     }
     */
 
-    /*
     get isNew() {
+        debugger;
         //todo
     }
-    */
 
     /*
     get logConf() {
