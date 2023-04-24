@@ -1862,6 +1862,7 @@ async function getFileStatFromCache(pFileURL) {
         });
     });
 }
+
 //Get file solo para uso de Capacitor
 async function getFileFromCache(pFileName) {
     return new Promise(function (resolve, reject) {
@@ -2084,8 +2085,17 @@ function audioRecorder(pCallback) {
         writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
             (res)=>{
                 debugger;
+                Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
+                    (file)=> {
+                        debugger;
+                        pCallback(file);
+                    },(err)=>{
+                        console.log("Error obteniendo el audio.")
+                    }
+                );
                 getFileStatFromCache(res.uri).then(
-                    function (file) {
+                    (file)=> {
+                        debugger;
                         pCallback(file);
                     },(err)=>{
                         console.log("Error obteniendo el audio.")
