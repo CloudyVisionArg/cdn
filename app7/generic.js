@@ -1515,29 +1515,20 @@ function addAtt(e) {
 
     } else if (action == 'photo') {
         if (_isCapacitor()) {
-            //NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
-            // quizas estaria bueno 
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
-            opts.resultType = CameraResultType.Uri
+            opts.resultType = CameraResultType.Uri;
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
                     writeFileInCachePath(photoResultSucc.path).then(
-                        (s)=>{
-                            debugger;
-                        },
-                        (e)=>{
-                            debugger;
-                        });
-                    var filename = photoResultSucc.path.replace(/^.*[\\\/]/, '');
-                    Capacitor.Plugins.Filesystem.stat({path: photoResultSucc.path}).then(
-                        function (file) {
-                            att.URL = photoResultSucc.path;
-                            att.Name =filename;
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
                         },
-                        errMgr
-                    );
+                        (e)=>{
+                            errMgr
+                        });
                 }, errMgr
             );
         }else{
