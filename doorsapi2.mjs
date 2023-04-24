@@ -2388,6 +2388,7 @@ export class Folder {
     #userProperties;
     #form;
     #viewsMap;
+    #owner;
 
     constructor(folder, session, parent) {
         this.#json = folder;
@@ -2860,9 +2861,7 @@ export class Folder {
     Creador del Folder.
     @returns {Promise<User>}
     */
-    /*
     get owner() {
-        //todo
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#owner) {
@@ -2878,15 +2877,12 @@ export class Folder {
             }
         });
     }
-    */
 
     /**
     ACC_ID del creador del Folder.
     @returns {number}
     */
     get ownerId() {
-        //todo
-        debugger;
         return this.#json.AccId
     }
 
