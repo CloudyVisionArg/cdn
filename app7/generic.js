@@ -1471,27 +1471,39 @@ function addAtt(e) {
     if (action == 'camera') {
         if (_isCapacitor()) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
+            opts.resultType = CameraResultType.Uri;
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    var fileName = new Date().getTime() + ".jpeg";
-                    writeFileInCache(fileName, photoResultSucc.dataUrl).then(
-                        (writeFileResultSucc)=>{
-                            getFileFromCache(fileName).then(
-                                (readFileResultSucc)=>{
-                                    att.URL = writeFileResultSucc.uri;
-                                    att.Name = fileName;
-                                    att.Size = readFileResultSucc.size;
-                                    renderNewAtt(att, $attachs);
-                                },
-                                (readFileResultErr)=>{
-                                    errMgr
-                                }
-                            );
+                    debugger;
+                    writeFileInCachePath(photoResultSucc.path).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
                         },
-                        (writeFileResultErr)=>{
+                        (e)=>{
                             errMgr
-                        }
-                    );
+                        });
+                    var fileName = new Date().getTime() + ".jpeg";
+                    // writeFileInCache(fileName, photoResultSucc.dataUrl).then(
+                    //     (writeFileResultSucc)=>{
+                    //         getFileFromCache(fileName).then(
+                    //             (readFileResultSucc)=>{
+                    //                 att.URL = writeFileResultSucc.uri;
+                    //                 att.Name = fileName;
+                    //                 att.Size = readFileResultSucc.size;
+                    //                 renderNewAtt(att, $attachs);
+                    //             },
+                    //             (readFileResultErr)=>{
+                    //                 errMgr
+                    //             }
+                    //         );
+                    //     },
+                    //     (writeFileResultErr)=>{
+                    //         errMgr
+                    //     }
+                    // );
                 }, errMgr
             );
         }
