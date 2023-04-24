@@ -1473,9 +1473,7 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    let date = new Date();
-                    let time = date.getTime();
-                    var fileName = time + ".jpeg";
+                    var fileName = new Date().getTime() + ".jpeg";
                     writeFileInCache(fileName, photoResultSucc.dataUrl).then(
                         (writeFileResultSucc)=>{
                             getFileFromCache(fileName).then(
@@ -1522,6 +1520,7 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
+                    debugger;
                     Capacitor.Plugins.Filesystem.stat(photoResultSucc.path).then(
                         function (file) {
                             att.URL = photoResultSucc.path;
