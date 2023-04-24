@@ -1518,10 +1518,11 @@ function addAtt(e) {
             //NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
             // quizas estaria bueno 
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
+            opts.resultType = CameraResultType.Uri
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
                     debugger;
-                    Capacitor.Plugins.Filesystem.stat(photoResultSucc.path).then(
+                    Capacitor.Plugins.Filesystem.stat({path: photoResultSucc.path}).then(
                         function (file) {
                             att.URL = photoResultSucc.path;
                             att.Name = file.name;
