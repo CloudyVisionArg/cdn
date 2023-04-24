@@ -2076,12 +2076,6 @@ function audioRecorder(pCallback) {
             (minutes+1) + ":00" :
             minutes + ":" + (seconds < 10 ? "0" : "") + seconds
         let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
-        debugger;
-        // Capacitor.Plugins.Filesystem.writeFile({
-        //     path : fileName,
-        //     data : recordingData.value.recordDataBase64,
-        //     directory: Directory.Cache,
-        // })
         writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
             (res)=>{
                 Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
@@ -2090,18 +2084,11 @@ function audioRecorder(pCallback) {
                         file.name = fileName;
                         pCallback(file);
                     },(err)=>{
-                        console.log("Error obteniendo el audio.")
+                        console.log("Error obteniendo el audio.", err)
                     }
                 );
-                // getFileStatFromCache(res.uri).then(
-                //     (file)=> {
-                //         debugger;
-                //         pCallback(file);
-                //     },(err)=>{
-                //         console.log("Error obteniendo el audio.")
-                //     });
             },(err)=>{
-                console.log("Error escribiendo el audio.")
+                console.log("Error escribiendo el audio.", err)
             });
         clearInterval(interv);
         sheet.close();
