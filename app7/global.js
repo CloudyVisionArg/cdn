@@ -1872,6 +1872,7 @@ async function getFileFromCache(pFileName) {
             async (fileReadSucc)=>{
                 let file = await getFileStatFromCache(pFileName)
                 file.data = fileReadSucc.data;
+                file.name = pFileName;
                 resolve(file);
             },
             (fileReadErr)=>{
