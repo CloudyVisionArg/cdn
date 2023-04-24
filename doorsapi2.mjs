@@ -2777,10 +2777,11 @@ export class Folder {
     }
     */
 
-    /*
     get iconRaw() {
         //todo
+        debugger;
     }
+    /*
     set iconRaw(value) {
         //todo
     }
