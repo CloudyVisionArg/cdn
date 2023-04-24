@@ -1540,7 +1540,7 @@ function addAtt(e) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (pickFilesResultSucc)=>{
                     const files = pickFilesResultSucc.files;
-                    writeFileInCachePath(files[0].path).then(
+                    writeFileInCachePath(files[0].path, files[0].name).then(
                         (file)=>{
                             att.URL = file.uri;
                             att.Name = file.name;
