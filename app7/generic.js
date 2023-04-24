@@ -1471,29 +1471,19 @@ function addAtt(e) {
     if (action == 'camera') {
         if (_isCapacitor()) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
+            opts.resultType = CameraResultType.Uri;
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    let date = new Date();
-                    let time = date.getTime();
-                    var fileName = time + ".jpeg";
-                    writeFileInCache(fileName, photoResultSucc.dataUrl).then(
-                        (writeFileResultSucc)=>{
-                            getFileFromCache(fileName).then(
-                                (readFileResultSucc)=>{
-                                    att.URL = writeFileResultSucc.uri;
-                                    att.Name = fileName;
-                                    att.Size = readFileResultSucc.size;
-                                    renderNewAtt(att, $attachs);
-                                },
-                                (readFileResultErr)=>{
-                                    errMgr
-                                }
-                            );
+                    writeFileInCachePath(photoResultSucc.path).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
                         },
-                        (writeFileResultErr)=>{
+                        (e)=>{
                             errMgr
-                        }
-                    );
+                        });
                 }, errMgr
             );
         }
@@ -1517,44 +1507,29 @@ function addAtt(e) {
 
     } else if (action == 'photo') {
         if (_isCapacitor()) {
-            //NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
-            // quizas estaria bueno 
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
+            opts.resultType = CameraResultType.Uri;
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    Capacitor.Plugins.Filesystem.stat(photoResultSucc.path).then(
-                        function (file) {
-                            att.URL = photoResultSucc.path;
-                            att.Name = file.name;
+                    writeFileInCachePath(photoResultSucc.path).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    );
-
-                    // getFile(res.path).then(
-                    //     function (file) {
-                    //         att.URL = file.localURL;
-                    //         att.Name = file.name;
-                    //         att.Size = file.size;
-                    //         renderNewAtt(att, $attachs);
-                    //     },
-                    //     errMgr
-                    // );
+                        }, errMgr);
                 }, errMgr
             );
         }else{
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
-                        function (file) {
+                        (file)=> {
                             att.URL = file.localURL;
                             att.Name = file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    )
+                        }, errMgr);
                 },
                 errMgr,
                 cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
@@ -1562,24 +1537,18 @@ function addAtt(e) {
         }
     } else if (action == 'doc') {
         if(_isCapacitor()){
-            //Obtengo el archivo seleccionado, lo copio al cache del app y desde ahi dejo asociado.
-            //Esto deberia tener un momento en el cual se borra del cache estos files despues de subirlos.
             Capacitor.Plugins.FilePicker.pickFiles().then(
-                (res)=>{
-                    const files = res.files;
-                    //lee el archivo independientemente del origen
-                    Capacitor.Plugins.Filesystem.readFile({
-                            path: files[0].path,
-                        }).then((contents) => {
-                            writeFileInCache(files[0].name, contents.data).then(()=>{
-                                getFileStatFromCache(files[0].name).then((file)=>{
-                                    att.URL = file.uri;
-                                    att.Name = files[0].name;
-                                    att.Size = file.size;
-                                    renderNewAtt(att, $attachs);
-                                },errMgr)
-                            },errMgr);
-                        },errMgr);
+                (pickFilesResultSucc)=>{
+                    const files = pickFilesResultSucc.files;
+                    writeFileInCachePath(files[0].path, files[0].name).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    );
                 },errMgr);
         }else{
             chooser.getFileMetadata().then(

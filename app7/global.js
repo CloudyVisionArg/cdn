@@ -1872,6 +1872,7 @@ async function getFileFromCache(pFileName) {
             async (fileReadSucc)=>{
                 let file = await getFileStatFromCache(pFileName)
                 file.data = fileReadSucc.data;
+                file.name = pFileName;
                 resolve(file);
             },
             (fileReadErr)=>{
@@ -1886,6 +1887,23 @@ async function writeFileInCache(pFileName, pFileData) {
         data : pFileData,
         directory: Directory.Cache
     });
+}
+
+async function writeFileInCachePath(pFilePath, pFileName) {
+    var filename = pFilePath.replace(/^.*[\\\/]/, '');
+    if(pFileName){
+        filename = pFileName;
+    }
+    let readFileResult = await Capacitor.Plugins.Filesystem.readFile({
+        path : pFilePath,
+    });
+    
+    await Capacitor.Plugins.Filesystem.writeFile({
+        path : filename,
+        data : readFileResult.data,
+        directory: Directory.Cache
+    });
+    return getFileFromCache(filename);
 }
 
 function audioRecorder(pCallback) {
