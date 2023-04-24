@@ -2809,8 +2809,7 @@ export class Folder {
     */
 
     get isNew() {
-        debugger;
-        //todo
+        return this.#json.IsNew;
     }
 
     /*
