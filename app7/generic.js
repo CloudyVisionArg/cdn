@@ -1474,7 +1474,6 @@ function addAtt(e) {
             opts.resultType = CameraResultType.Uri;
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    debugger;
                     writeFileInCachePath(photoResultSucc.path).then(
                         (file)=>{
                             att.URL = file.uri;
@@ -1485,25 +1484,6 @@ function addAtt(e) {
                         (e)=>{
                             errMgr
                         });
-                    var fileName = new Date().getTime() + ".jpeg";
-                    // writeFileInCache(fileName, photoResultSucc.dataUrl).then(
-                    //     (writeFileResultSucc)=>{
-                    //         getFileFromCache(fileName).then(
-                    //             (readFileResultSucc)=>{
-                    //                 att.URL = writeFileResultSucc.uri;
-                    //                 att.Name = fileName;
-                    //                 att.Size = readFileResultSucc.size;
-                    //                 renderNewAtt(att, $attachs);
-                    //             },
-                    //             (readFileResultErr)=>{
-                    //                 errMgr
-                    //             }
-                    //         );
-                    //     },
-                    //     (writeFileResultErr)=>{
-                    //         errMgr
-                    //     }
-                    // );
                 }, errMgr
             );
         }
@@ -1537,24 +1517,19 @@ function addAtt(e) {
                             att.Name =file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
-                        },
-                        (e)=>{
-                            errMgr
-                        });
+                        }, errMgr);
                 }, errMgr
             );
         }else{
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
-                        function (file) {
+                        (file)=> {
                             att.URL = file.localURL;
                             att.Name = file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    )
+                        }, errMgr);
                 },
                 errMgr,
                 cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
@@ -1562,24 +1537,18 @@ function addAtt(e) {
         }
     } else if (action == 'doc') {
         if(_isCapacitor()){
-            //Obtengo el archivo seleccionado, lo copio al cache del app y desde ahi dejo asociado.
-            //Esto deberia tener un momento en el cual se borra del cache estos files despues de subirlos.
             Capacitor.Plugins.FilePicker.pickFiles().then(
-                (res)=>{
-                    const files = res.files;
-                    //lee el archivo independientemente del origen
-                    Capacitor.Plugins.Filesystem.readFile({
-                            path: files[0].path,
-                        }).then((contents) => {
-                            writeFileInCache(files[0].name, contents.data).then(()=>{
-                                getFileStatFromCache(files[0].name).then((file)=>{
-                                    att.URL = file.uri;
-                                    att.Name = files[0].name;
-                                    att.Size = file.size;
-                                    renderNewAtt(att, $attachs);
-                                },errMgr)
-                            },errMgr);
-                        },errMgr);
+                (pickFilesResultSucc)=>{
+                    const files = pickFilesResultSucc.files;
+                    writeFileInCachePath(files[0].path).then(
+                        (file)=>{
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    );
                 },errMgr);
         }else{
             chooser.getFileMetadata().then(
