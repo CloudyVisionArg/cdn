@@ -368,6 +368,7 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
+                        //todo: binario?
                         resolve(await res.text());
                     } else {
                         res.text().then(

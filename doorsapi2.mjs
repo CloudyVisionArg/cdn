@@ -113,9 +113,13 @@ async function loadUtils() {
             res = await import('serialize-error');
             _serializeError = res;
         } else {
-            res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
-            _serializeError = res.default;
-            window.serializeError = _serializeError;
+            if (window.serializeError) {
+                _serializeError = window.serializeError;
+            } else {
+                res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+                _serializeError = res.default;
+                window.serializeError = _serializeError;
+            }
         }
     }
 
@@ -127,9 +131,13 @@ async function loadUtils() {
             var res = await import('fast-xml-parser');
             _fastXmlParser = res.default;
         } else {
-            var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
-            _fastXmlParser = res.default;
-            window.fastXmlParser = _fastXmlParser;
+            if (window.fastXmlParser) {
+                _fastXmlParser = window.fastXmlParser;
+            } else {
+                var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
+                _fastXmlParser = res.default;
+                window.fastXmlParser = _fastXmlParser;
+            }
         }
     }
 
@@ -432,6 +440,57 @@ export class Session {
     };
 
     /**
+    Retorna el arbol de carpetas.
+    @returns {Promise<Object>}
+    */
+    /*
+    foldersTree() {
+        //todo
+    }
+    */
+
+    /**
+    Retorna la lista de formularios, o un formulario si especifico el id.
+    @returns {Promise<DoorsMap>|Promise<Form>}
+    */
+    /*
+    forms(id) {
+        //todo
+    }
+    */
+
+    /**
+    Crea un nuevo formulario.
+    @returns {Promise<Form>}
+    */
+    /*
+    formsNew() {
+        //todo
+    }
+    */
+
+    /**
+    searchForms As String, searchText As String, [Formula As String], [orderField As String], [orderDirection As DoorsOrderFieldDirection])
+    */
+    /*
+    globalSearch(options) {
+        //todo
+    }
+    */
+
+    /*
+    get instanceDescription() {
+        //todo
+    }
+    */
+
+    /*
+    get instanceName() {
+        //todo
+    }
+    */
+
+    /**
     Devuelve true si estoy logueado.
     @returns {Promise<boolean>}
     */
@@ -439,6 +498,12 @@ export class Session {
         var url = 'session/islogged';
         return this.restClient.fetch(url, 'POST', {}, '');
     };
+
+    /*
+    get liteMode() {
+        //todo
+    }
+    */
 
     /**
     Cierra la sesion.
@@ -1344,9 +1409,11 @@ export class Database {
     }
 
     /** No implementado aun */
+    /*
     async execute(sql) {
         // todo
     }
+    */
 
     /**
     Obtiene el siguiente valor de la secuencia.
@@ -1458,9 +1525,11 @@ export class Database {
     }
 
     /** No implementado aun */
+    /*
     setVal(sequence, value) {
         // todo
     }
+    */
 }
 
 export class Directory {
@@ -1744,9 +1813,11 @@ export class Document {
     }
 
     /** No implementado aun */
+    /*
     copy(folder) {
-        // todo
+        //todo
     }
+    */
 
     /**
     @returns {Date}
@@ -1756,9 +1827,11 @@ export class Document {
     }
 
     /** No implementado aun */
+    /*
     currentAccess(access, explicit) {
-        // todo
+        //todo
     }
+    */
 
     /**
     Borra el documento, si purge=true no se envia a la papelera
@@ -1859,12 +1932,14 @@ export class Document {
     /**
     @returns {string}
     */
+    /*
     get iconRaw() {
         //todo
     }
     set iconRaw(value) {
         //todo
     }
+    */
 
     /**
     @returns {number}
@@ -1917,9 +1992,11 @@ export class Document {
     }
 
     /** No implementado aun */
+    /*
     move(folder) {
-        // todo
+        //todo
     }
+    */
 
     /**
     Creador del documento.
@@ -2127,9 +2204,11 @@ export class Field {
     get descriptionRaw() {
         return this.#json.DescriptionRaw;
     }
+    /*
     set descriptionRaw(value) {
         //todo
     }
+    */
 
     get formId() {
         debugger; // chequear
@@ -2140,9 +2219,11 @@ export class Field {
         return this.#json.HeaderTable;
     }
 
+    /*
     get isNew() {
         //todo
     }
+    */
 
     /**
     Retorna description si existe, sino el name con la 1ra letra en mayuscula.
@@ -2157,9 +2238,11 @@ export class Field {
     get length() {
         return this.#json.Length;
     }
+    /*
     set length(value) {
         //todo
     }
+    */
 
     get name() {
         return this.#json.Name;
@@ -2168,9 +2251,11 @@ export class Field {
     get nullable() {
         return this.#json.Nullable;
     }
+    /*
     set nullable(value) {
         //todo
     }
+    */
 
     get objectType() {
         return Field.objectType;
@@ -2183,9 +2268,11 @@ export class Field {
     get precision() {
         return this.#json.Precision;
     }
+    /*
     set precision(value) {
         //todo
     }
+    */
 
     // todo: solo para field de form, add o remove igual
     /**
@@ -2203,9 +2290,11 @@ export class Field {
     get scale() {
         return this.#json.Scale;
     }
+    /*
     set scale(value) {
         //todo
     }
+    */
 
     /**
     @returns {Session}
@@ -2224,9 +2313,11 @@ export class Field {
     get type() {
         return this.#json.Type;
     }
+    /*
     set type(value) {
         //todo
     }
+    */
 
     get updatable() {
         return this.#json.Updatable;
@@ -2305,89 +2396,95 @@ export class Folder {
     }
 
     /**
-    No implementado aun.
     Access Control List propio y heredado.
     @returns {Promise<Object[]>}
     */
+    /*
     acl() {
         //todo
     }
+    */
 
     /**
-    No implementado aun.
     Otorga el permiso access a la cuenta account (id).
     Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
     doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
     @returns {Promise}
     */
+    /*
     aclGrant(account, access) {
-        /* todo
+        // todo
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.fetch(url, 'POST', {}, '');
-        */
     }
+    */
 
     /**
-    No implementado aun.
     Access Control List heredado.
     @returns {Promise<Object[]>}
     */
+    /*
     aclInherited() {
         //todo
     }
+    */
 
     /**
-    No implementado aun.
     Devuelve o establece si se heredan permisos.
     @returns {Promise}
     */
+    /*
     aclInherits(value) {
         //todo
     }
+    */
 
     /**
-    No implementado aun.
     Access Control List propio.
     @returns {Promise<Object[]>}
     */
+    /*
     aclOwn() {
         //todo
     }
+    */
 
     /**
-    No implementado aun.
     Revoca el permiso access a la cuenta account (id).
     Access: fld_create / fld_read / fld_view / fld_admin / doc_create / doc_read / doc_modify / 
     doc_delete / doc_admin / vie_create / vie_create_priv / vie_read / vie_modify / vie_admin.
     @returns {Promise}
     */
+    /*
     aclRevoke(account, access) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
-        */
     }
+    */
 
     /**
-    No implementado aun.
     Revoca todos los permisos de la cuenta account (id).
     Si account no se especifica revoca todos los permisos de todas las cuentas.
     @returns {Promise}
     */
+    /*
     aclRevokeAll(account) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/revokeAll';
         if (account) {
             // Si viene account es un revokeAll para esa cuenta
             url += '/' + account;
         }
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
-        */
     }
+    */
 
+    /*
     ancestors() {
         //todo
     }
+    */
 
     /**
     @returns {Application}
@@ -2399,58 +2496,80 @@ export class Folder {
         return this.#app;
     }
 
+    /*
     asyncEvents() {
         //todo
     }
+    */
 
+    /*
     asyncEventsList() {
         //todo
     }
+    */
 
+    /*
     get charData() {
         //todo
     }
     set charData(value) {
         //todo
     }
+    */
 
+    /*
     get comments() {
         //todo
     }
     set comments(value) {
         //todo
     }
+    */
 
+    /*
     copy() {
         //todo
     }
+    */
 
+    /*
     get created() {
         //todo
     }
+    */
 
+    /*
     currentAccess(access, explicit) {
         //todo
     }
+    */
 
+    /*
     delete() {
         //todo
     }
+    */
 
+    /*
     descendants() {
         //todo
     }
+    */
 
+    /*
     get description() {
         //todo
     }
+    */
 
+    /*
     get descriptionRaw() {
         //todo
     }
     set descriptionRaw(value) {
         //todo
     }
+    */
 
     /**
     Alias de documents.
@@ -2535,20 +2654,26 @@ export class Folder {
         })
     }
 
+    /*
     events() {
         //todo
     }
+    */
 
+    /*
     eventsList() {
         //todo
     }
+    */
 
+    /*
     get externalAttachments() {
         //todo
     }
     set externalAttachments(value) {
         //todo
     }
+    */
 
     /**
     @example
@@ -2570,13 +2695,11 @@ export class Folder {
         });
     }
 
-    foldersList() {
-        //todo
-    }
-
+    /*
     foldersNew() {
         //todo
     }
+    */
 
     /** Alias de type */
     get folderType() {
@@ -2614,46 +2737,62 @@ export class Folder {
         return this.#json.FrmId;
     }
 
+    /*
     get haveDocuments() {
         //todo
     }
+    */
 
+    /*
     get haveFolders() {
         //todo
     }
+    */
 
+    /*
     get haveViews() {
         //todo
     }
+    */
 
+    /*
     get href() {
         //todo
     }
+    */
 
+    /*
     get hrefRaw() {
         //todo
     }
     set hrefRaw(value) {
         //todo
     }
+    */
 
+    /*
     get icon() {
         //todo
     }
+    */
 
+    /*
     get iconRaw() {
         //todo
     }
     set iconRaw(value) {
         //todo
     }
+    */
 
+    /*
     get iconVector() {
         //todo
     }
     set iconVector(value) {
         //todo
     }
+    */
 
     /**
     @returns {number}
@@ -2662,28 +2801,38 @@ export class Folder {
         return this.#json.FldId;
     }
 
+    /*
     get isEmpty() {
         //todo
     }
+    */
 
+    /*
     get isNew() {
         //todo
     }
+    */
 
+    /*
     get logConf() {
         //todo
     }
     set logConf(value) {
         //todo
     }
+    */
 
+    /*
     get modified() {
         //todo
     }
+    */
 
+    /*
     move() {
         //todo
     }
+    */
 
     /**
     @returns {string}
@@ -2711,9 +2860,9 @@ export class Folder {
     Creador del Folder.
     @returns {Promise<User>}
     */
+    /*
     get owner() {
         //todo
-        /*
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#owner) {
@@ -2728,8 +2877,8 @@ export class Folder {
                 resolve(me.#owner);
             }
         });
-        */
     }
+    */
 
     /**
     ACC_ID del creador del Folder.
@@ -2737,7 +2886,8 @@ export class Folder {
     */
     get ownerId() {
         //todo
-        //return this.#json.AccId
+        debugger;
+        return this.#json.AccId
     }
 
     /**
@@ -2773,9 +2923,11 @@ export class Folder {
         return this.#json.ParentFolder;
     }
 
+    /*
     path(onlyNames) {
         //todo
     }
+    */
 
     /**
     @example
@@ -2797,9 +2949,11 @@ export class Folder {
         return this.#json.RootFolderId;
     }
 
+    /*
     save() {
         //todo
     }
+    */
 
     /**
     Busca documentos.
@@ -2879,24 +3033,32 @@ export class Folder {
         return this.#session;
     }
 
+    /*
     get sourceFolder() {
         //todo
     }
+    */
 
+    /*
     get styleScriptActiveCode() {
         //todo
     }
+    */
 
+    /*
     get styleScriptDefinition() {
         //todo
     }
     set styleScriptDefinition(value) {
         //todo
     }
+    */
 
+    /*
     get system() {
         //todo
     }
+    */
 
     /**
     @returns {Object}
@@ -2906,9 +3068,11 @@ export class Folder {
         return this.#json.Tags;
     }
 
+    /*
     get target() {
         //todo
     }
+    */
 
     /**
     @returns {string}
@@ -3001,10 +3165,6 @@ export class Folder {
         return new this.viewsNew();
     }
 
-    viewsList() {
-        //todo
-    }
-
     /**
     Crea una nueva vista.
     @returns {Promise<View>}
@@ -3031,76 +3191,99 @@ export class Form {
         this.#session = session;
     }
 
+    /*
     acl() {
         //todo
     }
+    */
 
+    /*
     aclGrant(account, access) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.fetch(url, 'POST', {}, '');
-        */
     }
+    */
 
+    /*
     aclRevoke(account, access) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
-        */
     }
+    */
 
+    /*
     aclRevokeAll(account) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/revokeAll';
         if (account) {
             // Si viene account es un revokeAll para esa cuenta
             url += '/' + account;
         }
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
-        */
     }
+    */
 
+    /*
     actions() {
         //todo
     }
+    */
 
+    /*
     get application() {
         //todo
     }
     set application(value) {
         //todo
     }
+    */
 
+    /*
     copy() {
         //todo
     }
+    */
 
+    /*
     get created() {
         //todo
     }
+    */
 
+    /*
     currentAccess(access, explicit) {
         //todo
     }
+    */
 
+    /*
     delete() {
         //todo
     }
+    */
 
     get description() {
         return this.#json.Description;
     }
+    /*
     set description(value) {
         //todo
     }
+    */
 
+    /*
     events() {
         //todo
     }
+    */
 
+    /*
     eventsList() {
         //todo
     }
+    */
 
     fields(field) {
         var me = this;
@@ -3128,35 +3311,47 @@ export class Form {
         }
     }
 
+    /*
     get guid() {
         //todo
     }
     set guid(value) {
         //todo
     }
+    */
 
+    /*
     get icon() {
         //todo
     }
+    */
 
+    /*
     get iconRaw() {
         //todo
     }
     set iconRaw(value) {
         //todo
     }
+    */
 
+    /*
     get id() {
         //todo
     }
+    */
 
+    /*
     get isNew() {
         //todo
     }
+    */
 
+    /*
     get modified() {
         //todo
     }
+    */
 
     get name() {
         return this.#json.Name;
@@ -3173,9 +3368,9 @@ export class Form {
     Creador del Form.
     @returns {Promise<User>}
     */
+    /*
     get owner() {
         //todo
-        /*
         var me = this;
         return new Promise((resolve, reject) => {
             if (!me.#owner) {
@@ -3190,17 +3385,19 @@ export class Form {
                 resolve(me.#owner);
             }
         });
-        */
     }
+    */
 
     /**
     ACC_ID del creador del Form.
     @returns {number}
     */
+    /*
     get ownerId() {
         //todo
-        //return this.#json.AccId
+        return this.#json.AccId
     }
+    */
 
     /**
     @example
@@ -3214,36 +3411,48 @@ export class Form {
         return this.#properties.set(property, value);
     }
 
+    /*
     get readonly() {
         //todo
     }
+    */
 
+    /*
     save() {
         //todo
     }
+    */
 
+    /*
     search() {
         //todo
     }
+    */
 
+    /*
     searchGroups() {
         //todo
     }
+    */
 
     get session() {
         return this.#session;
     }
 
+    /*
     get styleScriptActiveCode() {
         //todo
     }
+    */
 
+    /*
     get styleScriptDefinition() {
         //todo
     }
     set styleScriptDefinition(value) {
         //todo
     }
+    */
 
     get tags() {
         if (!this.#json.Tags) this.#json.Tags = {};
@@ -3254,16 +3463,20 @@ export class Form {
         return this.#json;
     }
 
+    /*
     get url() {
         //todo
     }
+    */
 
+    /*
     get urlRaw() {
         //todo
     }
     set urlRaw(value) {
         //todo
     }
+    */
     
     /**
     @example
@@ -4126,46 +4339,57 @@ export class View {
         return this.#json;
     }
 
+    /*
     acl() {
         //todo
     }
+    */
 
+    /*
     aclGrant(account, access) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/' + access + '/grant/' + account;
         return this.session.restClient.fetch(url, 'POST', {}, '');
-        */
     }
+    */
 
+    /*
     aclInherited() {
         //todo
     }
+    */
 
+    /*
     get aclInherits() {
         //todo
     }
+    */
 
+    /*
     aclOwn() {
         //todo
     }
+    */
 
+    /*
     aclRevoke(account, access) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/' + access + '/revoke/' + account;
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
-        */
     }
+    */
 
+    /*
     aclRevokeAll(account) {
-        /* todo
+        //todo
         var url = 'documents/' + this.id + '/acl/revokeAll';
         if (account) {
             // Si viene account es un revokeAll para esa cuenta
             url += '/' + account;
         }
         return this.session.restClient.fetch(url, 'DELETE', {}, '');
-        */
     }
+    */
     
     get created() {
         return this.session.utils.cDate(this.#json.Created);
