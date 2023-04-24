@@ -1354,9 +1354,7 @@ async function downloadAttCordova($att){
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
-    debugger;
-    const res = Capacitor.Plugins.Filesystem.getUri({path:"attName", directory: Directory.Cache});
-    attURL= res.uri;
+
     if (attURL) {
         // Ya se descargo antes o es nuevo
         openAtt(attURL);
@@ -1474,15 +1472,27 @@ function addAtt(e) {
         if (_isCapacitor()) {
             const opts = cameraOptionsCapacitor(CameraSource.Camera);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (res)=>{
-                    getFile(res.path).then(
-                        function (file) {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
+                (photoResultSucc)=>{
+                    let date = new Date();
+                    let time = date.getTime();
+                    var fileName = time + ".jpeg";
+                    writeFileInCache(fileName, photoResultSucc.dataUrl).then(
+                        (writeFileResultSucc)=>{
+                            getFileFromCache(fileName).then(
+                                (readFileResultSucc)=>{
+                                    att.URL = writeFileResultSucc.uri;
+                                    att.Name = fileName;
+                                    att.Size = readFileResultSucc.size;
+                                    renderNewAtt(att, $attachs);
+                                },
+                                (readFileResultErr)=>{
+                                    errMgr
+                                }
+                            );
                         },
-                        errMgr
+                        (writeFileResultErr)=>{
+                            errMgr
+                        }
                     );
                 }, errMgr
             );
@@ -1512,8 +1522,7 @@ function addAtt(e) {
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
-                    debugger;
-                    Capacitor.Plugins.Filesystem.getStat(photoResultSucc.path).then(
+                    Capacitor.Plugins.Filesystem.stat(photoResultSucc.path).then(
                         function (file) {
                             att.URL = photoResultSucc.path;
                             att.Name = file.name;
@@ -1558,24 +1567,18 @@ function addAtt(e) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (res)=>{
                     const files = res.files;
-                    //lee el archivo independientemente del origne
+                    //lee el archivo independientemente del origen
                     Capacitor.Plugins.Filesystem.readFile({
                             path: files[0].path,
                         }).then((contents) => {
-                            //Escribe en cache
-                            Capacitor.Plugins.Filesystem.writeFile({
-                                path : files[0].name,
-                                data : contents.data,
-                                directory: Directory.Cache,
-                            }).then(
-                                (res)=>{
-                                    getFileStatFromCache(files[0].name).then((file)=>{
-                                        att.URL = file.uri;
-                                        att.Name = files[0].name;
-                                        att.Size = file.size;
-                                        renderNewAtt(att, $attachs);
-                                    },errMgr)
-                                },errMgr);
+                            writeFileInCache(files[0].name, contents.data).then(()=>{
+                                getFileStatFromCache(files[0].name).then((file)=>{
+                                    att.URL = file.uri;
+                                    att.Name = files[0].name;
+                                    att.Size = file.size;
+                                    renderNewAtt(att, $attachs);
+                                },errMgr)
+                            },errMgr);
                         },errMgr);
                 },errMgr);
         }else{
