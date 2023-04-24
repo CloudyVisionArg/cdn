@@ -2824,9 +2824,7 @@ export class Folder {
     */
 
     get modified() {
-        //todo
-        debugger;
-        return this.#json.Name;
+        return this.session.utils.cDate(this.#json.Modified);
     }
 
     /*
