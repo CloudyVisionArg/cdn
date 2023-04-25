@@ -571,6 +571,7 @@ function clickOnAnchor(ev) {
             let ExtraData = JSON.parse(ev.target.closest("a").getAttribute("extradata"))
             let doc_id = ExtraData.doc_id;
             let fld_id = ExtraData.fld_id;
+            debugger;
             if($(ev.target).closest("a").hasClass("msgunread")){
                 $(ev.target).closest("a").removeClass("msgunread");
                 $(ev.target).closest("a").addClass("msgread");
