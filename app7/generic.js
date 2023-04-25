@@ -1,3 +1,4 @@
+
 /*
 app7-generic
 generic del APP7
@@ -7,8 +8,8 @@ Cordova: https://cordova.apache.org/docs/en/latest/
 Framework7: https://framework7.io/docs/
 */
 
-var fld_id, doc_id, doc, folder, cacheDir;
-var docJson, folderJson, controlsFolderJson;
+var fld_id, doc_id, cacheDir;
+var doc, docJson, folder, folderJson;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
@@ -57,97 +58,62 @@ function errMgr(pErr) {
     });
 }
 
-if (fld_id) {
-    DoorsAPI.foldersGetById(fld_id).then(
-        function (res) {
-            folder = res;
-            folderJson = res;
-            getDoc();
-        },
-        errMgr
-    )
-}
-
-function getDoc() {
-    if (doc_id) {
-        DoorsAPI.documentsGetById(doc_id).then(
-            function (res) {
-                doc = res;
-                docJson = res;
-                getControlsFolder();
+// Directorio para guardar adjuntos
+if (device.platform != 'browser') {
+    if(_isCapacitor()){
+        cacheDir = null; //Capacitor no tiene get para directorio
+    }
+    else{
+        window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
+            function (dir) {
+                cacheDir = dir;
             },
-            errMgr
-        );
-
-    } else {
-        DoorsAPI.documentsNew(fld_id).then(
-            function (res) {
-                doc = res;
-                docJson = res;
-                getControlsFolder();
-            },
-            errMgr
+            function (err) {
+                console.log('resolveLocalFileSystemURL error: ' + err.code);
+            }
         );
     }
 }
 
-// Directorio para guardar adjuntos
-if (device.platform != 'browser') {
-    window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
-        function (dir) {
-            cacheDir = dir;
-        },
-        function (err) {
-            console.log('resolveLocalFileSystemURL error: ' + err.code);
+(async () => {
+    try {
+        folder = await dSession.folder(fld_id);
+        folderJson = folder.toJSON();
+
+        if (doc_id) {
+            doc = await folder.documents(doc_id);
+        } else {
+            doc = await folder.documentsNew();
         }
-    );
-}
+        docJson = doc.toJSON();
 
-function getControlsFolder() {
-    var cf = objPropCI(docJson.Tags, 'controlsFolder');
+        loadControls();
 
-    if (cf) {
-        DoorsAPI.foldersGetByPath(folderJson.RootFolderId, cf).then(
-            function (res) {
-                controlsFolder = res;
-                controlsFolderJson = res;
-                loadControls();
-            },
-            function (err) {
-                renderPage(); // Dibuja igual, sin controles
-            }
-        );
+    } catch (err) {
+        errMgr(err)
+    }
+})();
 
-    } else {
-        DoorsAPI.foldersGetByName(fld_id, 'controls').then(
-            function (res) {
-                controlsFolder = res;
-                controlsFolderJson = res;
-                loadControls();
-            },
-            function (err) {
-                renderPage(); // Dibuja igual, sin controles
-            }
-        );
-    };
-}
+async function loadControls() {
+    var cf = objPropCI(doc.tags, 'controlsFolder');
 
-function loadControls() {
-    folderSearch(controlsFolder['FldId'], '', '', 'parent, order, column').then(
-        function (res) {
-            controls = res;
-            getControlsRights(controls);
-            renderPage();
-        },
-        function (err) {
-            console.log(pErr);
-            renderPage(); // Dibuja igual, sin controles
+    try {
+        if (cf) {
+            controlsFolder = await folder.app.folders(cf);
+        } else {
+            controlsFolder = await folder.folders('controls');
         }
-    )
+        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+        getControlsRights(controls);
+        renderPage();    
+
+    } catch(err) {
+        renderPage(); // Dibuja igual, sin controles
+    }
 }
 
 function getControlsRights(pControls) {
-    var cr = objPropCI(docJson.Tags, 'controlsRights');
+    var cr = objPropCI(doc.tags, 'controlsRights');
     if (cr) {
         try {
             controlsRights = $.parseXML(cr);
@@ -183,7 +149,7 @@ function getControlsRights(pControls) {
     })
 }
 
-function renderPage() {
+async function renderPage() {
     var $tabbar, $tabbarInner, $tabs;
 
     // page
@@ -285,11 +251,11 @@ function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        docJson.CustomFields.forEach(field => {
-            if (!field.HeaderTable && field.Name != 'DOC_ID') {
+        for (let [key, field] of doc.fields()) {
+            if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
                 getDefaultControl(field).appendTo($ul);
             }
-        });
+        }
 
         $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
         $ctl.find('.list').on('click', 'a', downloadAtt);
@@ -311,15 +277,11 @@ function renderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        docJson.CustomFields.forEach(field => {
-            if (field.HeaderTable) {
+        for (let [key, field] of doc.fields()) {
+            if (!field.custom && field.headerTable) {
                 getDefaultControl(field).appendTo($ul);
             }
-        })
-
-        docJson.HeadFields.forEach(field => {
-            getDefaultControl(field).appendTo($ul);
-        })
+        }
 
         // tabHist
 
@@ -336,20 +298,20 @@ function renderPage() {
 
         // CON CONTROLES
 
-        // Evento BeforeRender
-        var ev = getEvent('BeforeRender');
-        if (ev) {
-            try {
-                eval(ev);
-            } catch (err) {
-                console.log('Error in BeforeRender: ' + errMsg(err));
-            }
-        };
+        try {
+            // Control Event BeforeRender
+            var ev = getEvent('BeforeRender');
+            if (ev) await evalCode(ev);
+
+        } catch(err) {
+            console.error(err);
+            toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+        }
 
         // Membrete
 
         $ul = $('<ul/>')
-        renderControls($ul, '[NULL]');
+        await renderControls($ul, '[NULL]');
 
         if ($ul.html()) {
             $('<div/>', {
@@ -394,7 +356,7 @@ function renderPage() {
                 }).appendTo($tabs);
 
                 $ul = $('<ul/>')
-                renderControls($ul, tab['NAME']);
+                await renderControls($ul, tab['NAME']);
 
                 if ($ul.html()) {
                     $('<div/>', {
@@ -409,7 +371,7 @@ function renderPage() {
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
-function renderControls(pCont, pParent) {
+async function renderControls(pCont, pParent) {
     var ctl, type, $this, domAttr, label, $input, aux, f7ctl;
     var tf, textField, vf, valueField;
 
@@ -447,18 +409,12 @@ function renderControls(pCont, pParent) {
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(docJson, tf);
-            if (!textField) {
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            textField = doc.fields(tf);
         };
 
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(docJson, vf);
-            if (!valueField) {
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
+            valueField = doc.fields(vf);
         };
 
 
@@ -482,11 +438,11 @@ function renderControls(pCont, pParent) {
 
             if (ctl.attr('maxlength')) {
                 $input.attr('maxlength', ctl.attr('maxlength'));
-            } else if (textField && textField.Type == 1 && textField.Length > 0) {
-                $input.attr('maxlength', textField.Length);
+            } else if (textField && textField.type == 1 && textField.length > 0) {
+                $input.attr('maxlength', textField.length);
             }
 
-            if (textField && textField.Type == 3) {
+            if (textField && textField.type == 3) {
                 $input.attr('data-numeral', numeral.options.defaultFormat)
             }
 
@@ -660,7 +616,7 @@ function renderControls(pCont, pParent) {
             $this = getCollapsible(ctl['NAME'], ctl['DESCRIPTION']);
 
             var $ul = $('<ul/>')
-            renderControls($ul, ctl['NAME']);
+            await renderControls($ul, ctl['NAME']);
 
             if ($ul.html()) {
                 $('<div/>', {
@@ -752,7 +708,7 @@ function renderControls(pCont, pParent) {
 
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
-                rootFolder: folderJson.RootFolderId,
+                rootFolder: folder.rootFolderId,
                 searchFields: ctl.attr('searchfields'),
                 extraFields: ctl.attr('returnfields'),
                 formula: ctl.attr('searchfilter'),
@@ -877,9 +833,10 @@ function renderControls(pCont, pParent) {
         }
 
         try {
-            if (ctl['APP7_SCRIPT']) eval(ctl['APP7_SCRIPT']);
+            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
         } catch (err) {
-            console.log('Error in ' + ctl['NAME'] + '.APP7_SCRIPT: ' + errMsg(err));
+            console.error(err);
+            toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
         }
         /*
         Objetos disponibles en este script:
@@ -899,34 +856,39 @@ function renderControls(pCont, pParent) {
 
         if ($this) $this.appendTo(pCont);
     }
+
+    // evalCode con context de renderControls
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getDefaultControl(pField) {
-    var $ret, $input, label;
+    var $ret, $input;
 
-    label = pField.Description ? pField.Description : pField.Name;
-
-    if (pField.Type == 1) {
-        if (pField.Length > 0 && pField.Length < 500) {
-            $ret = getInputText(pField.Name, label);
+    if (pField.type == 1) {
+        if (pField.length > 0 && pField.length < 500) {
+            $ret = getInputText(pField.name, pField.label);
             $input = $ret.find('input');
         } else {
-            $ret = getTextarea(pField.Name, label);
+            $ret = getTextarea(pField.name, pField.label);
             $input = $ret.find('textarea');
         }
 
-    } else if (pField.Type == 2) {
-        $ret = getDTPicker(pField.Name, label, 'datetime-local');
+    } else if (pField.type == 2) {
+        $ret = getDTPicker(pField.name, pField.label, 'datetime-local');
         $input = $ret.find('input');
 
-    } else if (pField.Type == 3) {
-        $ret = getInputText(pField.Name, label);
+    } else if (pField.type == 3) {
+        $ret = getInputText(pField.name, pField.label);
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
     };
 
-    if (!pField.Updatable) inputReadonly($input, true);
-    if ($input) $input.attr('data-textfield', pField.Name.toLowerCase())
+    if (!pField.updatable) inputReadonly($input, true);
+    if ($input) $input.attr('data-textfield', pField.name.toLowerCase())
 
     return $ret;
 }
@@ -977,8 +939,8 @@ function pageInit(e, page) {
             );
 
         } else {
-            getControlFolder($el.attr('data-fill-folder'), folderJson.RootFolderId).then(
-                function (res) {
+            folder.app.folder($el.attr('data-fill-folder')).then(
+                function (fld) {
                     var arrFields, textField, valueField, dataFields;
 
                     var arrFields = $el.attr('data-fill-fields').split(',');
@@ -987,9 +949,9 @@ function pageInit(e, page) {
                     if (arrFields.length > 0) dataFields = arrFields.join(',');
 
                     fillSelect($el,
-                        folderSearch(res['FldId'], $el.attr('data-fill-fields'),
-                            $el.attr('data-fill-formula'), $el.attr('data-fill-order')
-                        ),
+                        fld.search({ fields: $el.attr('data-fill-fields'),
+                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
+                        }),
                         $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
                     );
                 },
@@ -1011,11 +973,15 @@ function pageInit(e, page) {
     }
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
-    setTimeout(function waiting() {
+    setTimeout(async function waiting() {
         if ($page.find('[data-filling]').length > 0) {
             setTimeout(waiting, 100);
         } else {
-            fillControls(docJson);
+            await fillControls();
+
+            // Evento afterPageInit
+            $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
+            
             app7.preloader.hide();
         }
     }, 0);
@@ -1038,10 +1004,10 @@ function $get(pSelector) {
     return $(pSelector, f7Page.pageEl);
 }
 
-function fillControls() {
-    if (!docJson.IsNew) {
-        var title = getDocField(docJson, 'subject').Value;
-        if (!title) title = 'Doc #' + docJson.DocId;
+async function fillControls() {
+    if (!doc.isNew) {
+        var title = doc.fields('subject').value;
+        if (!title) title = 'Doc #' + doc.id;
         $navbar.find('.title').html(title);
 
         var $docLog = $get('[data-doclog]');
@@ -1066,35 +1032,20 @@ function fillControls() {
 
         tf = $el.attr('data-textfield');
         if (tf && tf != '[NULL]') {
-            var textField = getDocField(docJson, tf);
-            if (textField) {
-                text = textField.Value;
-            } else {
-                text = null;
-                console.log('No se encontro el campo ' + tf.toUpperCase());
-            }
+            textField = doc.fields(tf);
+            text = textField ? textField.value : null;
         };
 
         vf = $el.attr('data-valuefield');
         if (vf && vf != '[NULL]') {
-            var valueField = getDocField(docJson, vf);
-            if (valueField) {
-                value = valueField.Value;
-            } else {
-                value = null;
-                console.log('No se encontro el campo ' + vf.toUpperCase());
-            }
+            valueField = doc.fields(vf);
+            value = valueField ? valueField.value : null;
         };
 
         xf = $el.attr('data-xmlfield');
         if (xf && xf != '[NULL]') {
-            var xmlField = getDocField(docJson, xf);
-            if (xmlField) {
-                xml = xmlField.Value;
-            } else {
-                xml = null;
-                console.log('No se encontro el campo ' + xf.toUpperCase());
-            }
+            xmlField = doc.fields(xf);
+            xml = xmlField ? xmlField.value : null;
         };
 
         if (el.tagName == 'INPUT') {
@@ -1114,7 +1065,7 @@ function fillControls() {
                         el._value(value);
         
                     } else {
-                        if (textField && textField.Type == 2) {
+                        if (textField && textField.type == 2) {
                             if (text) {
                                 setInputVal($el, formatDate(text));
                             } else {
@@ -1232,7 +1183,7 @@ function fillControls() {
                     function setFieldAttr(pCont, pAttr) {
                         var field = pCont.attr(pAttr + '-field');
                         if (field) {
-                            pCont.attr(pAttr, getDocField(docJson, field).Value);
+                            pCont.attr(pAttr, doc.fields(field).value);
                         }
                     }
                 });
@@ -1244,18 +1195,21 @@ function fillControls() {
         fillAttachments($(el));
     });
 
-    // Evento AfterRender
-    var ev = getEvent('AfterRender');
-    if (ev) {
-        try {
-            eval(ev);
-        } catch (err) {
-            console.log('Error in AfterRender: ' + errMsg(err));
-        }
-    };
+    try {
+        // Evento afterFillControls
+        $page[0].dispatchEvent(new CustomEvent('afterFillControls'));
+
+        // Control Event AfterRender
+        var ev = getEvent('AfterRender');
+        if (ev) await evalCode(ev);
+
+    } catch (err) {
+        console.error(err);
+        toast('AfterRender error: ' + dSession.utils.errMsg(err));
+    }
 }
 
-function fillAttachments(pEl) {
+async function fillAttachments(pEl) {
     var $ul = pEl.find('ul');
     $ul.empty();
 
@@ -1263,41 +1217,13 @@ function fillAttachments(pEl) {
     var tag = pEl.attr('data-attachments').toLowerCase();
 
     if (doc_id) {
-        DoorsAPI.attachments(doc_id).then(
-            function (res) {
-                // Filtra por el tag
-                var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
-
-                if (atts.length > 0) {
-                    // Ordena descendente
-                    atts.sort(function (a, b) {
-                        return a.AttId >= b.AttId ? -1 : 1;
-                    });
-
-                    // Arma un array de AccId
-                    var ids = atts.map(att => att.AccId);
-                    // Saca los repetidos
-                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                    // Levanta los accounts, completa el nombre y renderiza
-                    accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                        function (accs) {
-                            atts.forEach(att => {
-                                att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
-                                getAttachment(att, readonly).appendTo($ul);
-                            });
-                        }
-                    )
-
-                } else {
-                    noAttachs();
-                }
-            },
-
-            function (err) {
-                logAndToast('attachments error: ' + errMsg(err));
+        var atts = await doc.attachments();
+        for (let [key, att] of atts) {
+            //if (tag == 'all' || (att.group && att.group.toLowerCase() == tag)) { // todo: tiene q quedar esta cdo este group
+            if (tag == 'all' || (att.description && att.description.toLowerCase() == tag)) {
+                getAttachment(att, readonly).appendTo($ul);
             }
-        );
-
+        }
     } else {
         noAttachs();
     }
@@ -1323,8 +1249,98 @@ function fillAttachments(pEl) {
     }
 }
 
-function downloadAtt(e) {
-    var $att = $(this);
+async function downloadAtt(e) {
+    debugger;
+    if(_isCapacitor()){
+        await downloadAttCapacitor($(this));
+    }else{
+        await downloadAttCordova($(this));
+    }
+}
+function _arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+}
+
+function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+async function downloadAttCapacitor($att){
+    debugger;
+    var attId = $att.attr('data-att-id');
+    var attName = $att.attr('data-att-name');
+    var attURL = $att.attr('data-att-url');
+    if (attURL) {
+        // Ya se descargo antes o es nuevo
+        openAtt(attURL);
+
+    } else {
+        app7.preloader.show();
+
+        try {
+            var att = (await doc.attachments()).find(el => el.id == attId);
+            var fs = await att.fileStream;
+            
+            app7.preloader.hide();
+
+            if (device.platform == 'browser') {
+                var blob = new Blob([fs]);
+                saveAs(blob, attName);
+            } else {
+                /*
+                WARNING: 
+                    Cuando el adjunto se agrega y se guarda 
+                    att.fileStream es un Blob;
+                    si es un existente previo es un ArrayBuffer!
+                */
+
+                //Workaround para esta diferencia.
+                let arrayBuffer = fs;
+                if(fs instanceof Blob){
+                    arrayBuffer = await fs.arrayBuffer();
+                }
+                const data = _arrayBufferToBase64(arrayBuffer);
+                //Fin Workaround.
+
+                //WARNING: Si al archivo lo descarga, queda en el cache de la aplicacion. Cuando se limpia?
+                Capacitor.Plugins.Filesystem.writeFile(
+                    {
+                        path : attName,
+                        data: data,
+                        directory : Directory.Cache,
+                    }
+                ).then(
+                    (fileWriteResultSucc)=>{
+                        $att.attr('data-att-url', fileWriteResultSucc.uri);
+                        openAtt(fileWriteResultSucc.uri);
+                    },
+                    (fileWriteResultErr)=>{
+                        console.error('Capcitor writeFile error: ' + errMsg(fileWriteResultErr));
+                    }                    
+                );
+            }
+
+        } catch(err) {
+            app7.preloader.hide();
+            logAndToast('download att error: ' + errMsg(err))
+        }
+    }
+}
+
+async function downloadAttCordova($att){
+
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1336,74 +1352,91 @@ function downloadAtt(e) {
     } else {
         app7.preloader.show();
 
-        DoorsAPI.attachmentsGetById(doc_id, attId).then(
-            function (res) {
-                app7.preloader.hide();
+        try {
+            var att = (await doc.attachments()).find(el => el.id == attId);
+            var fs = await att.fileStream;
 
-                var blob = new Blob([res]);
+            app7.preloader.hide();
 
-                if (device.platform == 'browser') {
-                    saveAs(blob, attName);
+            var blob = new Blob([fs]);
 
-                } else {
-                    cacheDir.getFile(attName, { create: true },
-                        function (file) {
-                            file.createWriter(
-                                function (fileWriter) {
-                                    fileWriter.onwriteend = function (e) {
-                                        $att.attr('data-att-url', file.toURL());
-                                        openAtt(file.toURL());
-                                    };
+            if (device.platform == 'browser') {
+                saveAs(blob, attName);
 
-                                    fileWriter.onerror = function (err) {
-                                        console.error('fileWriter error: ' + errMsg(err));
-                                    };
+            } else {
+                cacheDir.getFile(attName, { create: true },
+                    function (file) {
+                        file.createWriter(
+                            function (fileWriter) {
+                                fileWriter.onwriteend = function (e) {
+                                    $att.attr('data-att-url', file.toURL());
+                                    openAtt(file.toURL());
+                                };
 
-                                    fileWriter.write(blob);
-                                },
-                                function (err) {
-                                    logAndToast('createWriter error: ' + errMsg(err));
-                                }
-                            )
-                        },
-                        function (err) {
-                            logAndToast('getFile error: ' + errMsg(err));
-                        }
-                    )
-                }
-            },
-            function (err) {
-                app7.preloader.hide();
-                logAndToast('attachmentsGetById error: ' + errMsg(err))
+                                fileWriter.onerror = function (err) {
+                                    console.error('fileWriter error: ' + errMsg(err));
+                                };
+
+                                fileWriter.write(blob);
+                            },
+                            function (err) {
+                                logAndToast('createWriter error: ' + errMsg(err));
+                            }
+                        )
+                    },
+                    function (err) {
+                        logAndToast('getFile error: ' + errMsg(err));
+                    }
+                )
             }
-        )
+
+        } catch(err) {
+            app7.preloader.hide();
+            logAndToast('download att error: ' + errMsg(err))
+        }
     }
 }
 
 function openAtt(pURL) {
-    if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_cache__")) {
-        window.resolveLocalFileSystemURL(pURL,
-            function (fileEntry) {
-                openFile(fileEntry.nativeURL);
-            },
-            function (err) {
-                logAndToast('resolveLocalFileSystemURL error: ' + errMsg(err));
-            }
-        )
-    } else {
+    if(_isCapacitor()){
         openFile(pURL);
+    }
+    else{
+        if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
+            window.resolveLocalFileSystemURL(pURL,
+                function (fileEntry) {
+                    openFile(fileEntry.nativeURL);
+                },
+                function (err) {
+                    logAndToast('resolveLocalFileSystemURL error: ' + errMsg(err));
+                }
+            )
+        } else {
+            openFile(pURL);
+        }
     }
 
     function openFile(pFile) {
-        // Abre el archivo con fileOpener2
-        cordova.plugins.fileOpener2.open(pFile, undefined, {
-            success: function () {
-                console.log('File opened');
-            },
-            error: function (err) {
-                logAndToast('fileOpener2 error: ' + err.message);
-            },
-        });
+        if(_isCapacitor()){
+            Capacitor.Plugins.FileOpener.open({filePath : pFile}).then(
+                ()=> {
+                    console.log('File opened');
+                },
+                (err)=> {
+                    logAndToast('Capacitor.Plugins.FileOpener error: ' + err.message);
+                }, 
+            );
+        }else{
+            // Abre el archivo con fileOpener2
+            cordova.plugins.fileOpener2.open(pFile, undefined, {
+                success: function () {
+                    console.log('File opened');
+                },
+                error: function (err) {
+                    logAndToast('fileOpener2 error: ' + err.message);
+                },
+            });
+        }
     }
 }
 
@@ -1424,58 +1457,107 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
-
+    debugger;
     if (action == 'camera') {
-        navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    function (file) {
-                        att.URL = file.localURL;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    },
-                    errMgr
-                )
-            },
-            errMgr,
-            cameraOptions(Camera.PictureSourceType.CAMERA)
-        )
-
-    } else if (action == 'photo') {
-        navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    function (file) {
-                        att.URL = file.localURL;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    },
-                    errMgr
-                )
-            },
-            errMgr,
-            cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-        );
-        
-    } else if (action == 'doc') {
-        chooser.getFileMetadata().then(
-            function (res) {
-                if (res) {
-                    getFile(res.uri).then(
+        if (_isCapacitor()) {
+            const opts = cameraOptionsCapacitor(CameraSource.Camera);
+            opts.resultType = CameraResultType.Uri;
+            Capacitor.Plugins.Camera.getPhoto(opts).then(
+                (photoResultSucc)=>{
+                    writeFileInCachePath(photoResultSucc.path).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        (e)=>{
+                            errMgr
+                        });
+                }, errMgr
+            );
+        }
+        else {
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
                         function (file) {
                             att.URL = file.localURL;
-                            att.Name = res.name;
+                            att.Name = file.name;
                             att.Size = file.size;
                             renderNewAtt(att, $attachs);
                         },
                         errMgr
                     )
-                }
-            },
-            errMgr
-        )
+                },
+                errMgr,
+                cameraOptions(Camera.PictureSourceType.CAMERA)
+            )
+        }
+
+    } else if (action == 'photo') {
+        if (_isCapacitor()) {
+            const opts = cameraOptionsCapacitor(CameraSource.Photos);
+            opts.resultType = CameraResultType.Uri;
+            Capacitor.Plugins.Camera.getPhoto(opts).then(
+                (photoResultSucc)=>{
+                    writeFileInCachePath(photoResultSucc.path).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        }, errMgr);
+                }, errMgr
+            );
+        }else{
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        (file)=> {
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        }, errMgr);
+                },
+                errMgr,
+                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            );
+        }
+    } else if (action == 'doc') {
+        if(_isCapacitor()){
+            Capacitor.Plugins.FilePicker.pickFiles().then(
+                (pickFilesResultSucc)=>{
+                    const files = pickFilesResultSucc.files;
+                    writeFileInCachePath(files[0].path, files[0].name).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    );
+                },errMgr);
+        }else{
+            chooser.getFileMetadata().then(
+                function (res) {
+                    if (res) {
+                        getFile(res.uri).then(
+                            function (file) {
+                                att.URL = file.localURL;
+                                att.Name = res.name;
+                                att.Size = file.size;
+                                renderNewAtt(att, $attachs);
+                            },
+                            errMgr
+                        )
+                    }
+                },
+                errMgr
+            );
+        }
         
     } else if (action == 'audio') {
         audioRecorder(function (file) {
@@ -1497,12 +1579,16 @@ function renderNewAtt(pAtt, pCont) {
     pAtt.AccName = dSession.loggedUser()['Name'];
     var $li = getAttachment(pAtt);
     var $att = $li.find('a.item-link');
-    $att.attr('data-att-url', pAtt.URL);
+    if (pAtt.URL) {
+        $att.attr('data-att-url', pAtt.URL);
+    } else if (pAtt.File) {
+        $att[0]._file = pAtt.File;
+    }
     $att.attr('data-att-action', 'save');
     $li.prependTo(pCont.find('ul'));
 }
 
-function saveDoc(exitOnSuccess) {
+async function saveDoc(exitOnSuccess) {
     if (saving) return;
     saving = true;
     $navbar.find('.right .button').addClass('disabled');
@@ -1510,75 +1596,64 @@ function saveDoc(exitOnSuccess) {
 
     $get('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJson, $el.attr('data-textfield'));
+        var field = doc.fields($el.attr('data-textfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text') {
-                    if ($el.attr('data-numeral') || field.Type == 3) {
-                        field.Value = numeral($el.val()).value();
-                    } else if (field.Type == 2) {
-                        var mom = moment($el.val(), 'L LT');
-                        if (mom.isValid()) {
-                            field.Value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
-                        } else {
-                            field.Value = null;
-                        }
+                    if ($el.attr('data-numeral')) {
+                        field.value = numeral($el.val()).value();
                     } else {
-                        field.Value = $el.val();
+                        field.value = $el.val();
                     };
 
                 } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                    field.Value = getDTPickerVal($el);
+                    field.value = getDTPickerVal($el);
 
                 } else if (type == 'checkbox') {
-                    field.Value = el.checked ? '1' : '0';
+                    field.value = el.checked ? '1' : '0';
 
                 } else if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
 
             } else if (el.tagName == 'SELECT') {
                 var aux = getSelectText($el);
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'DIV') {
                 if ($el.hasClass('text-editor')) {
-                    field.Value = app7.textEditor.get($el[0]).getValue();
+                    field.value = app7.textEditor.get($el[0]).getValue();
                 }
 
             } else if (el.tagName == 'A') {
                 if ($el.attr('data-autocomplete')) {
-                    field.Value = $el.find('.item-after').html();
+                    field.value = $el.find('.item-after').html();
                 }
             } else if(el.tagName == 'TEXTAREA') {
-                field.Value = $el.val();
+                field.value = $el.val();
             }
         }
     });
 
     $get('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJson, $el.attr('data-valuefield'));
+        var field = doc.fields($el.attr('data-valuefield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'SELECT') {
                 var aux = getSelectVal($el);
-                field.Value = Array.isArray(aux) ? aux.join(';') : aux;
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
                 if ($el.hasClass('maps-autocomplete')) {
-                    field.Value = el._value();
+                    field.value = el._value();
 
                 } else {
                     var type = $el.attr('type').toLowerCase();
                     if (type == 'hidden') {
-                        if (field.Type == 3) {
-                            field.Value = numeral($el.val()).value();
-                        } else {
-                            field.Value = $el.val();
-                        };
+                        field.value = $el.val();
                     }
                 }
             }
@@ -1587,160 +1662,203 @@ function saveDoc(exitOnSuccess) {
 
     $get('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
-        var field = getDocField(docJson, $el.attr('data-xmlfield'));
+        var field = doc.fields($el.attr('data-xmlfield'));
 
-        if (field && field.Updatable) {
+        if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'hidden') {
-                    field.Value = $el.val();
+                    field.value = $el.val();
                 }
             }
         }
     });
 
-    // Evento BeforeSave
-    var ev = getEvent('BeforeSave');
-    if (ev) {
+    try {
+        // Evento beforeSave
+        $page[0].dispatchEvent(new CustomEvent('beforeSave'));
+
+        // Control Event BeforeSave
+        var ev = getEvent('BeforeSave');
+        if (ev) await evalCode(ev);
+
+        await doc.save();
+        docJson = doc.toJSON();
+        doc_id = doc.id;
+
+        pageEl.crm.doc = doc;
+        pageEl.crm.doc_id = doc.id;
+        pageEl.crm.saved = true;
+
         try {
-            eval(ev);
+            await saveAtt();
         } catch (err) {
-            console.log('Error in BeforeSave: ' + errMsg(err));
+            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            console.log(attErr);
+            console.log(err);
         }
-    };
 
-    DoorsAPI.documentSave(docJson).then((doc2) => {
-        dSession.documentsGetFromId(doc2.DocId).then((doc3) => { // TODO: Sacar cdo se cierre el issue #237
-            doc = doc3.toJSON();
-            docJson = doc3.toJSON();
-            pageEl.crm.doc = docJson;
+        try {
+            // Evento afterSave
+            $page[0].dispatchEvent(new CustomEvent('afterSave'));
 
-            doc_id = getDocField(docJson, 'doc_id').Value;
-            pageEl.crm.doc_id = doc_id;
-            pageEl.crm.saved = true;
+            // Control Event AfterSave
+            var ev = getEvent('AfterSave');
+            if (ev) await evalCode(ev);
 
-            saveAtt().then((res) => {
-                // Evento AfterSave
-                var ev = getEvent('AfterSave');
-                if (ev) {
-                    try {
-                        eval(ev);
-                    } catch (err) {
-                        console.log('Error in AfterSave: ' + errMsg(err));
-                    }
-                };
+        } catch (err) {
+            var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
+            console.error(err);
+        }
 
-                saving = false;
-                app7.preloader.hide();
-                $navbar.find('.right .button').removeClass('disabled');
-                toast('Cambios guardados');
+        saving = false;
+        app7.preloader.hide();
+        $navbar.find('.right .button').removeClass('disabled');
 
-                if (exitOnSuccess) {
-                    f7Page.view.router.back();
-                } else {
-                    fillControls();
-                }
+        if (attErr) {
+            toast(attErr, 0);
+        } else if (asErr) {
+            toast(asErr, 0);
+        } else {
+            toast('Cambios guardados');
+        }
 
-            }, errMgr);
-        }, errMgr);
-    }, errMgr);
+        if (exitOnSuccess) {
+            f7Page.view.router.back();
+        } else {
+            await fillControls();
+        }
+        
+    } catch (err) {
+        errMgr(err);
+    }
 
     function errMgr(pErr) {
         saving = false;
         app7.preloader.hide();
         $navbar.find('.right .button').removeClass('disabled');
-        if (Array.isArray(pErr)) {
-            if (pErr.length == 1) {
-                toast('Error al \'' + pErr[0].action + '\' el adjunto \'' + pErr[0].name + '\': ' + pErr[0].result, 5000);
+        toast(dSession.utils.errMsg(pErr).replaceAll('\r\n', '<br>'), 0);
+        console.error(pErr);
+    }
+}
 
-            } else {
-                // Error de saveAtt
-                toast('Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion', 5000);
-            }
-        } else {
-            toast(errMsg(pErr).replaceAll('\r\n', '<br>'), 5000);
+async function removeAttFromCache(fileName){
+    if(_isCapacitor()){
+        try{
+            const result = await Capacitor.Plugins.Filesystem.deleteFile({
+                    path: fileName,
+                    directory: Directory.Cache,
+                });
+                console.log('Archivo ' +  fileName + ' eliminado del cache del app');
+        }catch(e){
+            console.log('Error intentando quitar el archivo ' +  fileName + ' del cache del app');
         }
-        console.log(pErr);
     }
 }
 
 function saveAtt() {
-    return new Promise(function (resolve, reject) {
-        var calls = [];
-        var arrDel = [];
+    return new Promise(async (resolve, reject) => {
+        var errors = [];
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
+        var attMap = await doc.attachments();
 
-        if ($attsToSave.length == 0) {
-            resolve('OK');
-            
-        } else {
-            $attsToSave.each(function () {
-                var $this = $(this);
-                var tag = $this.closest('li.accordion-item').attr('data-attachments');
-                var attName = $this.attr('data-att-name');
-                var attAction = $this.attr('data-att-action');
-                
-                if (attAction == 'save') {
-                    beginCall(attName, attAction);
+        dSession.utils.asyncLoop($attsToSave.length, async loop => {
+            var $this = $($attsToSave[loop.iteration()]);
+            var tag = $this.closest('li.accordion-item').attr('data-attachments');
+            tag = (tag == 'all' ? null : tag);
+            var attName = $this.attr('data-att-name');
+            var attAction = $this.attr('data-att-action');
 
-                    getFile($this.attr('data-att-url')).then(
-                        function (file) {
-                            var reader = new FileReader();
-                            reader.onloadend = function (e) {
-                                var blobData = new Blob([this.result], { type: file.type });
-                                var formData = new FormData();
-                                // todo: como subimos el Tag?
-                                formData.append('attachment', blobData, file.name);
-                                DoorsAPI.attachmentsSave(doc_id, formData).then(
-                                    function (res) {
-                                        endCall(attName, 'OK');
-                                    },
-                                    function (err) {
-                                        endCall(attName, 'attachmentsSave error: ' + errMsg(err));
-                                    }
-                                )
-                            };
-                            reader.readAsArrayBuffer(file);
-    
-                        },
-                        function (err) {
-                            endCall(attName, 'file error: ' + errMsg(err));
-                        }
-                    )
-                    
-                } else if (attAction == 'delete') {
-                    arrDel.push($this.attr('data-att-id'));
-                }
-            });
+            if (attAction == 'save') {
+                var file;
+                debugger;
+                if(_isCapacitor()){
+                    const fileFromCache = await getFileFromCache(attName);
+                    // const rawData = atob(fileFromCache.data);
+                    // const bytes = new Array(rawData.length);
+                    // for (var x = 0; x < rawData.length; x++) {
+                    //     bytes[x] = rawData.charCodeAt(x);
+                    // }
+                    // const arr = new Uint8Array(bytes);
 
-            if (arrDel.length > 0) {
-                var sDel = arrDel.join(',');
-                beginCall(sDel, 'delete')
-                DoorsAPI.attachmentsDelete(doc_id, arrDel).then(
-                    function (res) {
-                        endCall(sDel, 'OK');
-                    },
-                    function (err) {
-                        endCall(sDel, 'attachmentsDelete error: ' + errMsg(err));
+                    var binary_string = atob(fileFromCache.data);
+                    var len = binary_string.length;
+                    var bytes = new Uint8Array(len);
+                    for (var i = 0; i < len; i++) {
+                        bytes[i] = binary_string.charCodeAt(i);
                     }
-                );
-            }
-        }
-
-        function beginCall(pName, pAction) {
-            calls.push({ name: pName, action: pAction, result: 'pending' });
-        }
-        
-        function endCall(pName, pResult) {
-            calls.find(el => el.name == pName && el.result == 'pending').result = pResult;
-            if (!calls.find(el => el.result == 'pending')) {
-                if (calls.find(el => el.result != 'OK')) {
-                    reject(calls.filter(el => el.result != 'OK'));
-                } else {
-                    resolve('OK');
+                    const arr = bytes.buffer;
+                    
+                    file = new Blob([arr], { type: fileFromCache.type });
+                    try {
+                        var att = doc.attachmentsAdd(attName);
+                        att.fileStream = file;
+                        att.description = tag;
+                        att.group = tag;
+                        await att.save();
+                        await removeAttFromCache(attName);
+                        $this.removeAttr('data-att-url');
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'save',
+                            error: dSession.utils.errMsg(err),
+                        });
+                    }
+                    loop.next();
                 }
+                else{
+                    var attUrl = $this.attr('data-att-url');
+                    if (attUrl) {
+                        file = await getFile($this.attr('data-att-url'));
+                    } else {
+                        file = $this[0]._file;
+                    }
+                    var reader = new FileReader();
+                    reader.onloadend = async function (e) {
+                        try {
+                            var att = doc.attachmentsAdd(attName);
+                            att.fileStream = new Blob([this.result], { type: file.type });
+                            //att.fileStream = new Blob([this.result]);
+                            att.description = tag;
+                            att.group = tag;
+                            await att.save();
+    
+                        } catch (err) {
+                            errors.push({
+                                file: attName,
+                                action: 'save',
+                                error: dSession.utils.errMsg(err),
+                            });
+                        }
+                        loop.next();
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+
+            } else if (attAction == 'delete') {
+                var att = attMap.find(el => el.id == $this.attr('data-att-id'));
+                if (att) {
+                    try {
+                        await att.delete();
+                    } catch (err) {
+                        errors.push({
+                            file: attName,
+                            action: 'delete',
+                            error: err,
+                        });
+                    }
+                }
+                loop.next();
             }
-        }
+        }, () => {
+            if (errors.length == 0) {
+                resolve(true);
+            } else {
+                reject(errors);
+            }
+        });
+
     });
 }
 
@@ -1749,6 +1867,13 @@ function getEvent(pEvent) {
         var ev = controls.find(el => el['NAME'] && el['NAME'].toUpperCase() == pEvent.toUpperCase());
         if (ev) return ev['APP7_SCRIPT'];
     }
+}
+
+// evalCode con context root
+async function evalCode(code) {
+    var pipe = {};
+    eval(`pipe.fn = async () => {\n\n${code}\n};`);
+    await pipe.fn();
 }
 
 /*

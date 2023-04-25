@@ -1,62 +1,6 @@
-/*
-include permite cargar una biblioteca Javascript o CSS en forma dinamica.
-La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
-
-Ej:
-
-	include('emojis');
-	
-	include('emojis', function () {
-		// emojis loaded
-	});
-	
-Puedo verificar si la biblioteca se termino de cargar con el metodo scriptLoaded:
-
-	scriptLoaded('emojis', function () {
-		// emojis loaded
-	});
-
-Puedo especificar la version (tag del commit)
-
-	include('emojis', 15, function () {
-		// emojis v15 loaded
-	});
-
-U obtener el ultimo commit, sin caches, pidiendo la version 0
-
-	include('emojis', 0, function () {
-		// emojis last commit loaded
-	});
-
-O el ultimo commit de un branch, pasando el nombre del mismo (case sensitive)
-
-	include('emojis', 'MyBranch', function () {
-		// emojis last commit from MyBranch loaded
-	});
-
-Puedo usarlo para mis propios script especificando el src:
-
-	include('myScript', 'http://path/to/my/script.js', function () {
-		// myScript loaded
-	});
-
-Tambien puedo armar un array de includes y cargarlos todos juntos:
-
-	var scripts = [];
-	scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
-	scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
-	scripts.push({ id: 'doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
-	scripts.push({ id: 'web-javascript', version: 0 }); // Ult commit
-	scripts.push({ id: 'web-javascript', version: 'MyBranch' }); // Ult commit del branch MyBranch
-	
-	include(scripts, function () {
-		// all scripts loaded
-	});
-
-Si el src termina en '.css' se creara un <link>, sino un <script>
+/**
+Devuelve un array con los scripts registrados.
 */
-
-// Scripts registrados
 function registeredScripts() {
 	var scripts = [];
 
@@ -74,23 +18,26 @@ function registeredScripts() {
 
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
+    
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 259 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 259 });
 
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 220 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 219 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 219 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 218 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 217, hasdep: true });
-    scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 217 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 213 });
-    scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 206 });
-    scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 206 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 206 });
-    scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 204 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 203 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 256 });
+	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
+    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
+    scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 250 });
+    scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
+    scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 238 });
+    scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
 	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 195 });
-	scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 189 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
@@ -106,7 +53,6 @@ function registeredScripts() {
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
 	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
 	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
-	scripts.push({ id: 'emojis', path: '/emojis.js', version: 91 });
 	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
 	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
 	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
@@ -124,19 +70,59 @@ function registeredScripts() {
 	return scripts;
 }
 
-/*
-Argumentos:
-0:
-	- string -> Id del script
-	- array -> Inclusion multiple [{ id, version o src, depends[id] }] (version se considera antes que src)
-1: 
-	- string -> SRC del script custom
-	- number o string -> Tag si es numero (0 = lastCommit), Branch sino
-	- function -> Callback
-2:
-	- function -> Callback
-*/
+/**
+Carga una biblioteca Javascript o CSS en forma dinamica.
+La funcion verifica si la biblioteca ya esta cargada, en cuyo caso omite la repeticion.
 
+args[0]
+- string -> Id del script
+- array -> Inclusion multiple [{ id, version o src, depends[id] }] (version se considera antes que src)
+
+args[1]
+- string -> SRC del script custom
+- number o string -> Tag si es numero (0 = lastCommit), Branch sino
+- function -> Callback
+
+args[2]
+- function -> Callback
+
+@example
+
+await include('emojis');
+// emojis loaded
+
+include('emojis', function () {
+    // emojis loaded
+});
+	
+// Puedo especificar la version (tag del commit)
+
+await include('emojis', 15);
+
+// U obtener el ultimo commit, sin caches, pidiendo la version 0
+
+await include('emojis', 0);
+
+// O el ultimo commit de un branch, pasando el nombre del mismo (case sensitive)
+
+await include('emojis', 'MyBranch');
+
+// Puedo usarlo para mis propios script especificando el src. Si el src termina en '.css' se creara un <link>, sino un <script>.
+
+await include('myScript', 'http://path/to/my/script.js');
+
+// Tambien puedo armar un array de includes y cargarlos todos juntos:
+
+var scripts = [];
+scripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+scripts.push({ id: 'font-awesome', src: '/c/themes/default/css/font-awesome.min.css' });
+scripts.push({ id: 'doorsapi', depends: ['jquery'] }); // No se carga hasta que este cargado jquery
+scripts.push({ id: 'web-javascript', version: 0 }); // Ult commit
+scripts.push({ id: 'web-javascript', version: 'MyBranch' }); // Ult commit del branch MyBranch
+
+await include(scripts);
+// all scripts loaded
+*/
 function include() {
     return new Promise((resolve, reject) => {
         var src, pSrc, pVer, pCallback;
@@ -305,6 +291,10 @@ function scriptLoaded(scriptId, callback) {
     }
 };
 
+/**
+Retorna el src (url) del script registrado con scriptId.
+Si especifico version se devuelve el src de esa version.
+*/
 function scriptSrc(scriptId, version) {
 	var src;
 	var scripts = registeredScripts();
@@ -352,4 +342,60 @@ function scriptSrc(scriptId, version) {
 	}
 
 	return src;
+}
+
+function gitCdn(options) {
+    var url = 'http://10.21.21.223:8080/github?';
+    url += getOpt(options, 'owner');
+    url += getOpt(options, 'repo');
+    url += getOpt(options, 'path');
+    url += getOpt(options, 'ref');
+    url += getOpt(options, 'fresh');
+    url = url.slice(0, -1);
+
+    function getOpt(options, option) {
+        if (options[option] != undefined) {
+            return option + '=' + encodeURIComponent(options[option]) + '&';
+        } else {
+            return '';
+        }
+    }
+
+    if (options.url) {
+        return url;
+    } else {
+        return new Promise((resolve, reject) => {
+            fetch(url).then(
+                async res => {
+                    if (res.ok) {
+                        //todo: binario?
+                        resolve(await res.text());
+                    } else {
+                        res.text().then(
+                            async txt => {
+                                try {
+                                    var json = JSON.parse(txt);
+                                    // importa serialize si no esta
+                                    if (!window.serializeError) {
+                                        mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+                                        window.serializeError = mod.default;
+                                    }
+                                    var err = serializeError.deserializeError(json);
+                                    reject(err);
+
+                                } catch(err) {
+                                    reject(new Error(res.status + ' (' + res.statusText) + ')');
+                                }
+                            }
+                        );
+                    }
+
+                },
+                err => {
+                    debugger;
+                    reject(err);
+                }
+            )
+        });
+    }
 }

@@ -731,12 +731,14 @@ function getTextarea(pId, pLabel, pValue) {
         class: 'item-input-wrap',
     }).appendTo($itemInner);
     
-    $('<textarea/>', {
+    var $ta = $('<textarea/>', {
         class: 'resizable',
         id: pId,
         placeholder: pLabel,
-        value: pValue,
+        //value: pValue,
     }).appendTo($inputWrap);
+
+    if (pValue) $ta.append(pValue);
 
     $('<span/>', {
         class: 'input-clear-button',
@@ -1742,6 +1744,8 @@ Devuelve el markup de un attachment para agregar
 al ul del control anterior
 */
 function getAttachment(pAttach, pReadonly) {
+    var att = (pAttach instanceof doorsapi2.Attachment) ? pAttach.toJSON() : pAttach;
+
     var $li = $('<li/>', {
         class: 'swipeout',
     });
@@ -1753,8 +1757,8 @@ function getAttachment(pAttach, pReadonly) {
     var $itemCont = $('<a/>', {
         href: '#',
         class: 'item-link item-content',
-        'data-att-id': pAttach.AttId,
-        'data-att-name': pAttach.Name,
+        'data-att-id': att.AttId,
+        'data-att-name': att.Name,
     }).appendTo($swipeCont);
 
     var $itemInner = $('<div/>', {
@@ -1768,15 +1772,15 @@ function getAttachment(pAttach, pReadonly) {
     $('<div/>', {
         class: 'item-title',
         style: 'white-space: normal; font-weight: var(--f7-list-item-subtitle-font-weight);',
-    }).append(htmlEncode(pAttach.Name)).appendTo($itemTitleRow);
+    }).append(htmlEncode(att.Name)).appendTo($itemTitleRow);
 
     $('<div/>', {
         class: 'item-after',
-    }).append(fileSize(pAttach.Size)).appendTo($itemTitleRow);
+    }).append(fileSize(att.Size)).appendTo($itemTitleRow);
 
     $('<div/>', {
         class: 'item-text',
-    }).append(pAttach.AccName + ' ' + moment(pAttach.Created).fromNow()).appendTo($itemInner);
+    }).append(att.AccName + ' ' + moment(att.Created).fromNow()).appendTo($itemInner);
 
     if (!pReadonly) {
         var $swipeActions = $('<div/>', {
@@ -1929,6 +1933,27 @@ function addDefaultOptions(pContainer) {
             },
         }).appendTo(pContainer);
     }
+
+    /*
+    let config = {
+        hexRGBAColor: "#0000ffff",
+        showsTimer: true,
+        showsTouchRadius: true,
+        showsLog: true
+	}
+
+    TouchVisualizer.start(config, (success) => {
+        console.log("success visualizer", success)
+    }, (error) => {
+        console.log("error visualizer", error)
+    });
+
+    TouchVisualizer.stop((success) => {
+        console.log("success visualizer stop", success)
+    }, (error) => {
+        console.log("error visualizer stop", error)
+    });
+    */
 }
 
 /*
@@ -2393,6 +2418,7 @@ function renderMediaListItem(pItem) {
 Devuelve un li de tipo link para el ListView
 
 getListLink({
+    id: 'myLink',
     title: 'Productos',
     iosicon: 'cart',
     mdicon: 'shopping_cart', // Puede pasarse solo uno, en ese caso se usa el mismo en ambos temas
@@ -2406,15 +2432,12 @@ function getListLinkItem(pLink) {
     var $li = $('<li/>');
 
     var $itemCont = $('<a/>', {
+        id: pLink.id,
         href: '#',
         class: 'item-link item-content',
     }).appendTo($li);
 
     $itemCont.click(pLink.click);
-
-    if (pLink.id){
-        $itemCont.attr('id', pLink.id);
-    }
 
     if (pLink.iosicon || pLink.mdicon) {
         var $itemMedia = $('<div/>', {

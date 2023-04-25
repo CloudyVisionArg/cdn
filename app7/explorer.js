@@ -194,12 +194,13 @@ dSession.foldersGetFromId(fld_id).then(
             });
             
             // Evento taphold
-            if (device.platform == 'browser') {
+             if (device.platform == 'browser' || device.platform == 'Android') {
                 // El taphold no anda en el browser
+                // En Android tampoco funciona el taphold
                 $viewDiv.on('contextmenu', 'a', taphold);
-            } else {
-                $viewDiv.on('taphold', 'a', taphold);
-            };
+             } else {                 
+                 $viewDiv.on('taphold', 'a', taphold);
+             };
             
             // Fin Accordion Ajax
 
@@ -229,7 +230,7 @@ dSession.foldersGetFromId(fld_id).then(
             $title.css('cursor', 'pointer');
             $title.click(function () {
                 var fld = prompt('Ingrese el fldId'); // todo: mostrar popup con el treeview para elegir la carpeta
-                if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld);
+                if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld + '&fixed=0&back=1');
             });
         }
 
@@ -427,6 +428,7 @@ function taphold(e) {
         $li.find('input:checkbox').prop('checked', true);
     };
 };
+
 
 function toggleSelectionMode() {
     var $itemContent;
@@ -866,6 +868,7 @@ function getItemContent() {
         $cont = $('<a/>', {
             href: '#',
             class: 'item-link item-content',
+            draggable: 'false',
         });
     }
 
@@ -1057,20 +1060,20 @@ function deleteClick() {
         
             asyncLoop(selected.length,
                 function (loop) {
-                    $block.append('Borrando docId ' + selected[loop.iteration()] + ': ');
+                    $block.append('Borrando doc #' + selected[loop.iteration()] + ': ');
                     DoorsAPI.documentDelete(fld_id, selected[loop.iteration()]).then(
                         function (res) {
-                            $block.append('ok<br/>');
+                            $block.append('OK!<br/>');
                             loop.next();
                         },
                         function (err) {
-                            $block.append(errMsg(err) + '<br/>');
+                            $block.append('<span style="color: red;">ERROR: ' + errMsg(err) + '</span><br/>');
                             loop.next();
                         }
                     )
                 },
                 function() {
-                    $block.append('Proceso finalizado<br/>');
+                    $block.append('<br/><b>Proceso finalizado</b>');
                     $closeBtn.removeClass('disabled');
                 }
             );

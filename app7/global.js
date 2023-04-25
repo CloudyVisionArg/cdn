@@ -53,6 +53,7 @@ audioRecorder(pCallback)
 	});
 })();
 
+
 /*
 Utilizar esta funcion para resolver la Promise de una ruta
 Soporta las versiones 5 y 6 de F7
@@ -270,16 +271,37 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
-                cordova.plugins.email.open({
-                    to: 'soporte@cloudycrm.net',
-                    subject: 'Cloudy CRM - App issue',
-                    body: 'Por favor describanos su problema',
-                    attachments: [
-                        'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
-                        'base64:localStorage.txt//' + localStorageBase64(),
-                    ],
-                });
-    
+                if(_isCapacitor()){
+                    Capacitor.Plugins.EmailComposer.open({
+                        to: 'soporte@cloudycrm.net',
+                        subject: 'Cloudy CRM - App issue',
+                        body: 'Por favor describanos su problema',
+                        attachments: [
+                            {
+                                type: 'base64',
+                                path: window.btoa(window.localStorage.getItem('consoleLog')),
+                                name: "console.txt"
+                            },
+                            {
+                                type: 'base64',
+                                path: localStorageBase64(),
+                                name: "localStorage.txt"
+                            }
+                        ]
+                    });
+                }
+                else{
+                    cordova.plugins.email.open({
+                        to: 'soporte@cloudycrm.net',
+                        subject: 'Cloudy CRM - App issue',
+                        body: 'Por favor describanos su problema',
+                        attachments: [
+                            'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
+                            'base64:localStorage.txt//' + localStorageBase64(),
+                        ],
+                    });
+                } 
+                
                 function localStorageBase64() {
                     var arr = new Array();
                     for (var i = 0; i < localStorage.length; i++) {
@@ -873,9 +895,10 @@ function errPage(err) {
 
 // Borra los datos locales
 function cleanDb(pCallback) {
+    var arrExc = ['consoleLog', 'scripts', 'popoversLeidos'];
     for (var key in localStorage) {
         if (localStorage.hasOwnProperty(key)) {
-            if (key != 'consoleLog' && key != 'scripts') localStorage.removeItem(key);
+            if (arrExc.indexOf(key) < 0) localStorage.removeItem(key);
         }
     }
 
@@ -916,6 +939,167 @@ function cleanDb(pCallback) {
     });
 }
 
+function pushReg() {
+    (_isCapacitor()) //Si esta disponible Capacitor
+    ? pushRegistrationCapacitor()
+    : pushRegCordova(); //Legacy
+}
+
+function pushUnreg(pCallback) {
+    (_isCapacitor()) //Si esta disponible Capacitor
+    ? pushUnregCapacitor(pCallback)
+    : pushUnregCordova(pCallback);
+}
+
+/**
+    Capacitor
+ */
+// Registra el dispositivo para notificaciones Push
+async function pushRegistrationCapacitor(pCallback) {
+    console.log('pushRegistrationCapacitor begin');
+    await addListenersCapacitor(pCallback);
+    await registerNotificationsCapacitor();
+}
+
+async function addListenersCapacitor (pCallback) {
+    await Capacitor.Plugins.PushNotifications.addListener('registration', token => {
+        console.info('Registration token: ', token.value);
+        const data = { 
+            registrationId : token.value,
+            registrationType : "FCM" // Para APNS?
+        };
+        app.pushData = data;
+
+        console.log('push regId: ' + data.registrationId);
+        console.log('push regType: ' + data.registrationType);
+        
+        DoorsAPI.pushRegistration({
+            'AppVersion': app7.version,
+            'DeviceModel': device.model,
+            'DevicePlatform': device.platform,
+            'DeviceVersion': device.version,
+            'Login': dSession.loggedUser()['Login'],
+            'RegistrationId': data.registrationId,
+            'RegistrationType': data.registrationType,
+
+        }).then(function (res) {
+            console.log('pushRegistration end');
+            if (pCallback) pCallback();
+        });
+    });
+
+    await Capacitor.Plugins.PushNotifications.addListener('registrationError', err => {
+        console.error('Registration error: ', err.error);
+    });
+
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationReceived', async (notification) => {
+        let data = JSON.parse(JSON.stringify(notification.data));
+        //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
+        //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
+        const status = await Capacitor.Plugins.App.getState();
+        console.log("pushNotificationReceived -status: " + status);
+        console.log(notification);
+        /* Utilizo el formato legacy de mensajes para las app en cordova */
+        data.title = notification.data.title;
+        data.body = notification.data.body;
+        data.additionalData = notification.data;
+        data.additionalData.foreground = status.isActive;
+        //TODO: data.additionalData.coldstart = 
+        //TODO: data.additionalData.dismissed = 
+
+        if (window.refreshNotifications) window.refreshNotifications();
+        
+        var notifEv = new CustomEvent('pushNotification', { detail: { data } });
+        window.dispatchEvent(notifEv)
+
+        const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
+        //App in foreground    
+        if(status.isActive){
+            debugger;
+            app7.notification.create({
+                title: "CLOUDY CRM 7",
+                subtitle: data.title,
+                text: data.body,
+                closeOnClick : true,
+                on: {
+                    click: function (notif) {
+                        notif.close();
+                        window.dispatchEvent(clickEv);
+                    }
+                }
+            }).open();
+        }
+        else{
+            window.dispatchEvent(clickEv);
+            console.log("llego en background: " + new Date());
+        }
+    });
+    
+
+    await Capacitor.Plugins.PushNotifications.addListener('pushNotificationActionPerformed', ev => {
+        console.log('Push notification action performed', ev.actionId, ev.inputValue);
+        console.log('ev.actionId: '+ ev.actionId);
+        console.log('ev.inputValue: '+ ev.inputValue);
+        console.log('ev.notification: '+ JSON.stringify(ev.notification));
+        if(ev.actionId == "tap"){
+            const notification = ev.notification;
+            let data = JSON.parse(JSON.stringify(notification.data));
+            //NOTE: Normalizar a formato cordova.push.notifications por las implementaciones en el click.
+            //https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md#pushonnotification-callback
+            console.log("pushNotificationActionPerformed actionId: tap");
+            /* Utilizo el formato legacy de mensajes para las app en cordova */
+            data.title = notification.title;
+            data.body = notification.body;
+            data.additionalData = notification.data;
+            data.additionalData.foreground = true;
+            window.dispatchEvent(new CustomEvent('pushNotificationClick', { detail: { data } }));
+        }
+    });
+
+    let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
+
+    if (permStatus.receive === 'prompt') {
+        permStatus = await Capacitor.Plugins.PushNotifications.requestPermissions();
+    }
+
+    if (permStatus.receive !== 'granted') {
+        throw new Error('User denied permissions!');
+    }
+
+    await Capacitor.Plugins.PushNotifications.register();
+}
+
+
+async function registerNotificationsCapacitor() {
+
+}
+
+function pushUnregCapacitor(pCallback) {
+    if (app.pushData) {
+        Capacitor.Plugins.PushNotifications.removeAllListeners().then(
+            (e)=>{
+                console.log("Notifications listeners removed");
+                DoorsAPI.pushUnreg(app.pushData.registrationType, app.pushData.registrationId).then(
+                    function (res) {
+                        if (pCallback) pCallback();
+                    },
+                    function (err) {
+                        console.log(err);
+                        if (pCallback) pCallback();
+                    }
+                );
+            },
+            (err) => {
+                console.log('Error removing notifications listeners');
+                if (pCallback) pCallback();
+            }
+        );
+    }
+}
+
+/**
+    Cordova
+ */
 // Registra el dispositivo para notificaciones Push
 // https://github.com/havesource/cordova-plugin-push/blob/master/docs/API.md
 function pushRegistration(pPushSetings, pCallback) {
@@ -943,9 +1127,13 @@ function pushRegistration(pPushSetings, pCallback) {
             if (pCallback) pCallback(app.push);
         });
     });
+
+    app.push.on('error', (e) => {
+        console.log('push init error: ' + e.message);
+    });
 }
 
-function pushUnreg(pCallback) {
+function pushUnregCordova(pCallback){
     if (app.pushData) {
         app.push.unregister(
             function () {
@@ -1221,16 +1409,31 @@ function getCodelib(pCode) {
     });
 }
 
+function _isCapacitor(){
+    return (typeof(Capacitor) != 'undefined');
+}
+
 function statusBar(pShow) {
+    let refStatusBarPLugin; 
+    if(_isCapacitor()){
+        refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
+        refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
+        //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
+        refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
+        refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
+    }else{
+        refStatusBarPLugin = StatusBar; //Cordova
+    }
     if (pShow) {
-        StatusBar.show();
+
+        refStatusBarPLugin.show();
         if (device.platform == 'iOS') {
-            StatusBar.styleDefault();
-            //StatusBar.backgroundColorByHexString('12A0D8');
-            StatusBar.backgroundColorByHexString('2BA0DA');
-            StatusBar.overlaysWebView(false);
+            refStatusBarPLugin.styleDefault();
+            //refStatusBarPLugin.backgroundColorByHexString('12A0D8');
+            //refStatusBarPLugin.backgroundColorByHexString('2BA0DA');
+            //refStatusBarPLugin.overlaysWebView(false)
         } else {
-            StatusBar.styleLightContent();
+            //refStatusBarPLugin.styleLightContent();
         }
     } else {
         StatusBar.hide();
@@ -1602,11 +1805,30 @@ function cameraOptions(pSource) {
 	};
 };
 
+function cameraOptionsCapacitor(pSource){
+    return {
+		quality: 50,
+		saveToGallery: true,    
+		source: pSource,
+		//encodingType: Camera.EncodingType.JPEG,
+		//mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+        resultType: CameraResultType.DataUrl,
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+}
+
+//Get file solo para uso de Cordova
 function getFile(pFileURL) {
     return new Promise(function (resolve, reject) {
         if (device.platform == 'Android' && pFileURL.substring(0, 10) == 'content://') {
             window.FilePath.resolveNativePath(pFileURL, resLocalFile, errMgr);
-        } else {
+        }    
+        else {
             resLocalFile(pFileURL);
         }
 
@@ -1625,6 +1847,65 @@ function getFile(pFileURL) {
         }
     });
 };
+
+async function getFileStatFromCache(pFileURL) {
+    return new Promise(function (resolve, reject) {
+        Capacitor.Plugins.Filesystem.stat({
+            path :pFileURL,
+            directory : Directory.Cache
+        }).then(
+            (statResultSucc)=>{
+                resolve(statResultSucc);
+            },
+            (statResultErr)=>{
+                reject(fileReadErr);
+        });
+    });
+}
+
+//Get file solo para uso de Capacitor
+async function getFileFromCache(pFileName) {
+    return new Promise(function (resolve, reject) {
+        Capacitor.Plugins.Filesystem.readFile({
+            path : pFileName,
+            directory : Directory.Cache
+        }).then(
+            async (fileReadSucc)=>{
+                let file = await getFileStatFromCache(pFileName)
+                file.data = fileReadSucc.data;
+                file.name = pFileName;
+                resolve(file);
+            },
+            (fileReadErr)=>{
+                reject(fileReadErr);
+        });
+    });
+};
+
+async function writeFileInCache(pFileName, pFileData) {
+    return Capacitor.Plugins.Filesystem.writeFile({
+        path : pFileName,
+        data : pFileData,
+        directory: Directory.Cache
+    });
+}
+
+async function writeFileInCachePath(pFilePath, pFileName) {
+    var filename = pFilePath.replace(/^.*[\\\/]/, '');
+    if(pFileName){
+        filename = pFileName;
+    }
+    let readFileResult = await Capacitor.Plugins.Filesystem.readFile({
+        path : pFilePath,
+    });
+    
+    await Capacitor.Plugins.Filesystem.writeFile({
+        path : filename,
+        data : readFileResult.data,
+        directory: Directory.Cache
+    });
+    return getFileFromCache(filename);
+}
 
 function audioRecorder(pCallback) {
     var mediaRec, interv, timer, save;
@@ -1664,13 +1945,13 @@ function audioRecorder(pCallback) {
         class: 'col button button-large button-round button-outline',
     }).append('Cancelar').appendTo($saveBtnRow);
     
-    $btn.click(cancel);
+    $btn.click(cancelAudio);
     
     var $btn = $('<button/>', {
         class: 'col button button-large button-round button-fill',
     }).append('Guardar').appendTo($saveBtnRow);
     
-    $btn.click(save);
+    $btn.click(saveAudio);
     
     // Abre el sheet
     var sheet = app7.sheet.create({
@@ -1678,8 +1959,42 @@ function audioRecorder(pCallback) {
         content: $sheet[0],
     }).open();
     
+
+
     function record() {
-        debugger;
+        (_isCapacitor())
+        ? recordCapacitor() 
+        : recordCordova()
+    }
+
+    async function recordCapacitor(){
+        //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+        //Evaluar mejor los permisos 
+        const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+        if(result.value){
+            save = false;
+            
+            const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+            if(currentStatusResult.status != 'NONE'){
+                const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+            }
+            const startRecordingResult = await Capacitor.Plugins.VoiceRecorder.startRecording();
+            $recBtnRow.hide();
+            $saveBtnRow.show();
+            $timer.css('opacity', '100%');
+
+            timer = new Date();
+            interv = setInterval(function () {
+                var secs = Math.trunc((new Date() - timer) / 1000);
+                var mins = Math.trunc(secs / 60);
+                secs = secs - mins * 60;
+                $timer.html(mins + ':' + leadingZeros(secs, 2));
+            }, 200);
+        }
+    }
+
+    function recordCordova(){
+
         save = false;
         var now = new Date();
         var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
@@ -1693,7 +2008,6 @@ function audioRecorder(pCallback) {
             // success callback
             function() {
                 if (save) {
-                    debugger;
                     window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
                         function (fileSystem) {
                             fileSystem.root.getFile(src, { create: false, exclusive: false	},
@@ -1714,7 +2028,6 @@ function audioRecorder(pCallback) {
                     );
                 };
             },
-        
             // error callback
             function (err) {
                 logAndToast('Media error: ' + err.code);
@@ -1722,7 +2035,6 @@ function audioRecorder(pCallback) {
         );
         
         mediaRec.startRecord();
-        
         $recBtnRow.hide();
         $saveBtnRow.show();
         $timer.css('opacity', '100%');
@@ -1736,14 +2048,75 @@ function audioRecorder(pCallback) {
         }, 200);
     }
     
-    function save() {
+
+    function saveAudio(){
+        debugger;
+        if(_isCapacitor()){
+            saveAudioCapacitor();
+        }else{
+            saveAudioCordova();
+        }
+    }
+
+    function cancelAudio(){
+        if(_isCapacitor()){
+            cancelAudioCapacitor();
+        }else{
+            cancelAudioCordova();
+        }
+    }
+
+    async function saveAudioCapacitor() {
+        const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        var now = new Date();
+        let millis = recordingData.value.msDuration;
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        let durationString = (seconds == 60) ?
+            (minutes+1) + ":00" :
+            minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+        writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
+            (res)=>{
+                Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
+                    (file)=> {
+                        file.localURL = file.uri;
+                        file.name = fileName;
+                        pCallback(file);
+                    },(err)=>{
+                        console.log("Error obteniendo el audio.", err)
+                    }
+                );
+            },(err)=>{
+                console.log("Error escribiendo el audio.", err)
+            });
+        clearInterval(interv);
+        sheet.close();
+    }
+
+    function saveAudioCordova() {
         save = true;
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
     }
-    
-    function cancel() {
+
+    async function cancelAudioCapacitor() {
+        clearInterval(interv);
+        const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+        console.log("VoiceRecorder.getCurrentStatus : " + currentStatusResult.status);
+        if(currentStatusResult.status != 'NONE'){
+            const stopRecordingResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+            console.log("VoiceRecorder.stopRecording : " + stopRecordingResult.value);
+            //Evaluar el resultado para logearlo
+        }
+        $timer.html('0:00');
+        $timer.css('opacity', '20%');
+        $recBtnRow.show();
+        $saveBtnRow.hide();
+    }
+
+    function canceAudiolCordova() {
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
@@ -1803,3 +2176,31 @@ function audioRecorder(pCallback) {
     }
 }
 
+//Donde va esto
+//Plugin Camera
+const CameraResultType = {
+    Uri: 'uri',
+    Base64: 'base64',
+    DataUrl: 'dataUrl'
+};
+
+const CameraSource = {
+    Prompt: 'PROMPT', //Prompts the user to select either the photo album or take a photo.
+    Camera: 'CAMERA', //Take a new photo using the camera.
+    Photos: 'PHOTOS' //Pick an existing photo from the gallery or photo album.
+};
+
+const CameraDirection = {
+    Rear: 'REAR',
+    Front: 'FRONT'
+};
+
+//FileSystem
+const Directory ={
+    Documents:	'DOCUMENTS',    //The Documents directory On iOS it's the app's documents directory. Use this directory to store user-generated content. On Android it's the Public Documents folder, so it's accessible from other apps. It's not accesible on Android 10 unless the app enables legacy External Storage by adding android:requestLegacyExternalStorage="true" in the application tag in the AndroidManifest.xml. It's not accesible on Android 11 or newer.	1.0.0
+    Data:       'DATA',         //The Data directory On iOS it will use the Documents directory. On Android it's the directory holding application files. Files will be deleted when the application is uninstalled.	1.0.0
+    Library:    'LIBRARY',	    //The Library directory On iOS it will use the Library directory. On Android it's the directory holding application files. Files will be deleted when the application is uninstalled.	1.1.0
+    Cache:	    'CACHE',        //The Cache directory Can be deleted in cases of low memory, so use this directory to write app-specific files that your app can re-create easily.	1.0.0
+    External:	'EXTERNAL', 	//The external directory On iOS it will use the Documents directory On Android it's the directory on the primary shared/external storage device where the application can place persistent files it owns. These files are internal to the applications, and not typically visible to the user as media. Files will be deleted when the application is uninstalled.	1.0.0
+    ExternalStorage:  'EXTERNAL_STORAGE' //The external storage directory On iOS it will use the Documents directory On Android it's the primary shared/external storage directory. It's not accesible on Android 10 unless the app enables legacy External Storage by adding android:requestLegacyExternalStorage="true" in the application tag in the AndroidManifest.xml. It's not accesible on Android 11 or newer.
+}

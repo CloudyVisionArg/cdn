@@ -4,7 +4,9 @@
 var $$ = Dom7;
 var app7;
 var db;
-var doorsapi2, dSession;
+var doorsapi2;
+/** @type {import('../doorsapi2.mjs').Session} */
+var dSession;
 
 var initScripts = [];
 
@@ -27,7 +29,7 @@ initScripts.push({ id: 'app7-index.css' });
     
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     var sessionMod = await import(scriptSrc('app7-session'));
-    dSession = new sessionMod.Session();
+    dSession = new sessionMod.AppSession();
 
     app.initialize();    
 })();
@@ -59,18 +61,37 @@ var app = {
         numeral.locale('es'); // http://numeraljs.com/
         numeral.defaultFormat('0,0.[00]');
 
+
         // Verificacion de plugins
-        if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
-        if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
+        if(typeof(Capacitor) != 'undefined'){
+            console.log("Capacitor App");
+            if (!Capacitor.Plugins.Camera) console.log('Plugin error: @capacitor/camera');
+            if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
+            if (!Capacitor.Plugins.FileOpener) console.log('Plugin error: @capacitor-community/file-opener');
+            if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
+            if (!Capacitor.Plugins.PushNotification) console.log('Plugin error:  @capacitor/push-notifications');
+            if (!Capacitor.Plugins.EmailComposer) console.log('Plugin error:  https://github.com/EinfachHans/capacitor-email-composer');
+            
+        }    
+        else{
+            console.log("Cordova App");
+            if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
+            if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
+            if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+            if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
+            if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
+            if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+            if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
+            if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
+        }
+
+        //Comunes o compatibles entre Cordova y Capacitor
         if (!device) console.log('Plugin error: cordova-plugin-device');
-        if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
-        if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+        if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
-        if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
-        if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
-        if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
+        
         // Fin verificacion de plugins
 
         // Custom
@@ -90,6 +111,7 @@ var app = {
         include('app7-' + self.custom + '-index');
         include('app7-' + self.custom + '-index.css');
 
+
         // Initialize Framework7 app
         app7 = new Framework7({
             // App root element
@@ -101,6 +123,7 @@ var app = {
             id: BuildInfo.packageName,
             version: BuildInfo.version,
             theme: theme,
+            pushState: true,
             touch: {
                 tapHold: true, // enable tap hold events
             },
@@ -170,6 +193,29 @@ var app = {
             ]
         });
 
+        /* Para que funcione el boton back "fisico" de android */
+        var onBackKeyDown = function() {
+            var leftp = app7.panel.left && app7.panel.left.opened;
+            var rightp = app7.panel.right && app7.panel.right.opened;
+            
+            if ($$('.modal-in').length > 0) {
+                app7.dialog.close();
+                app7.popup.close();
+                app7.popover.close();
+                return false;    
+            }else if ( leftp || rightp ) {
+                app7.panel.close();
+                return false; 
+            } else if (app7.view.current.history.length == 1) {        
+                navigator.app.exitApp();
+            } else {
+                app7.view.current.router.back();
+            }
+
+        }
+
+        document.addEventListener("backbutton", onBackKeyDown, false);
+
         function getRouterContext(pArgs) {
             if (pArgs.length == 1) {
                 // F7 v7
@@ -235,58 +281,6 @@ var app = {
                 }
             );
         };
-    
-        /*
-        // Background fetch
-        if (device.platform == 'iOS') {
-            // https://github.com/transistorsoft/cordova-plugin-background-fetch
-
-            // Your background-fetch handler.
-            var fetchFunctionIos = function () {
-                console.log('bgFetch initiated');
-                executeCode('bgFetch');
-            }
-
-            var fetchFailureIos = function (error) {
-                console.log('bgFetch failed', error);
-            };
-
-            //stopOnTerminate: false  // <-- true is default no existe mas esta opcion revisar doc    
-            window.BackgroundFetch.configure( {
-                minimumFetchInterval: 15
-            },fetchFunctionIos, fetchFailureIos);
-
-        } else if (device.platform == 'Android') {
-            var androidServiceReference = AndroidSingleton.getInstance();
-            androidServiceReference.fetchSuccessFunction(fetchFunctionAndroid);
-            //androidServiceReference.fetchFailure(fetchFailure);
-
-            androidServiceReference.initialize();
-
-            function fetchFunctionAndroid(data) {
-                console.log('bgFetch initiated');
-                if (data.LatestResult != null) {
-                    console.log('bgFetch before exec');
-                    executeCode('bgFetch',
-                        function (){
-                            console.log('bgFetch exec success');
-                        },
-                        function (err){
-                            console.log('bgFetch exec failure');
-                        }
-                    );
-                }
-            }
-    
-            // todo: monky, esto no se usa?
-            //todo: todavia no pero tenemos que manejar el error al menos para saber, yo lo completo.
-            function fetchFailureAndroid(data) {
-                if (data.LatestResult != null) {
-                    console.log('bgFetch failure');
-                }
-            }
-        }
-        */
 
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
@@ -316,6 +310,7 @@ var app = {
 
         function execOnDeviceReady() {
             pushReg();
+            includeJs('app7-popovers');
 
             executeCode('onDeviceReady', 
                 function () {
@@ -367,6 +362,8 @@ var app = {
     },
 };
 
+
+
 function sessionMsg() {
     dSession.tags.then(
         res => {
@@ -383,7 +380,24 @@ function sessionMsg() {
     )
 }
 
-function pushReg() {
+function sessionMsg() {
+    dSession.tags.then(
+        res => {
+            if (res.message) {
+                app7.toast.create({
+                    text: res.message,
+                    closeTimeout: 15000,
+                    position: 'center',
+                    closeButton: false,
+                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+                }).open();
+            }
+        }
+    )
+}
+
+
+function pushRegCordova() {
     if (device.platform != 'browser') {
         var pushSettings = {
             android: {

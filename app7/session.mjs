@@ -1,4 +1,4 @@
-export class Session extends doorsapi2.Session {
+export class AppSession extends doorsapi2.Session {
     freeVersion;
     #tokenTimeout = 120;
 
@@ -93,15 +93,15 @@ export class Session extends doorsapi2.Session {
         super.logoff();
         Doors.RESTFULL.AuthToken = '';
         Doors.RESTFULL.ServerUrl = '';
-        window.localStorage.setItem('instance', '');
-        window.localStorage.setItem('instanceDesc', '');
-        window.localStorage.setItem('endPoint', '');
-        window.localStorage.setItem('appName', '');
-        window.localStorage.setItem('userName', '');
-        window.localStorage.setItem('userPassword', '');
-        window.localStorage.setItem('authToken', '');
-        window.localStorage.setItem('authTokenTime', '');
-        window.localStorage.setItem('sync_table', ''); 
+        localStorage.removeItem('instance');
+        localStorage.removeItem('instanceDesc');
+        localStorage.removeItem('endPoint');
+        localStorage.removeItem('appName');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userPassword');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('authTokenTime');
+        localStorage.removeItem('sync_table'); 
     }
 
     loggedUser() {

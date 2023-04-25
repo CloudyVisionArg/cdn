@@ -77,6 +77,30 @@ var $list = $('<div/>', {
 
 var $ulMap = $('<ul/>').appendTo($list);
 
+/* suspendido por ahora, la idea es poner un script q se ejecute antes del save
+// Opciones
+
+var $acc = $(`
+<div class="block block-strong">
+    <div class="accordion-item corp-item">
+        <a href="" class="item-link item-content">
+            <div class="item-inner">
+                <div class="item-title">Opciones</div>
+            </div>
+        </a>
+        <div class="accordion-item-content" style="padding-left: 8px;">
+            <div class="list no-hairlines-md">
+                <ul />
+            </div>
+        </div>
+    </div>
+</div>
+`).appendTo($pageCont);
+
+var $ul = $acc.find('ul');
+getTextarea('code', 'Pre-save script', ':)').appendTo($ul);
+*/
+
 // Boton importar
 var $block = $('<div/>', {
     class: 'block block-strong',
@@ -185,6 +209,8 @@ async function loadXls(file) {
 }
 
 async function doImport() {
+    const cronStart = new Date().getTime();
+
     $btnImport.addClass('disabled');
     $blockLog.empty();
     $blockLog.append('Importando ' + (sheet._rangeRows() - 1) + ' filas...' + '<br/>');
@@ -224,7 +250,9 @@ async function doImport() {
             $blockLog.append('Fila vacia<br/>');
         }
     }
-    $blockLog.append('<br/>Proceso terminado');
+
+    const cron = new Date().getTime();
+    $blockLog.append(`<br/><b>Proceso terminado en ${parseInt((cron - cronStart) / 1000)} segs</b>`);
     $btnCopy.removeClass('disabled')
 }
 
