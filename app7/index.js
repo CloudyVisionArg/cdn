@@ -92,6 +92,7 @@ var app = {
         include('app7-' + self.custom + '-index');
         include('app7-' + self.custom + '-index.css');
 
+
         // Initialize Framework7 app
         app7 = new Framework7({
             // App root element
@@ -172,6 +173,29 @@ var app = {
                 },
             ]
         });
+
+        /* Para que funcione el boton back "fisico" de android */
+        var onBackKeyDown = function() {
+            var leftp = app7.panel.left && app7.panel.left.opened;
+            var rightp = app7.panel.right && app7.panel.right.opened;
+            
+            if ($$('.modal-in').length > 0) {
+                app7.dialog.close();
+                app7.popup.close();
+                app7.popover.close();
+                return false;    
+            }else if ( leftp || rightp ) {
+                app7.panel.close();
+                return false; 
+            } else if (app7.view.current.history.length == 1) {        
+                navigator.app.exitApp();
+            } else {
+                app7.view.current.router.back();
+            }
+
+        }
+
+        document.addEventListener("backbutton", onBackKeyDown, false);
 
         function getRouterContext(pArgs) {
             if (pArgs.length == 1) {
