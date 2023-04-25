@@ -99,6 +99,10 @@ injectCSS(`
         --f7-list-item-text-max-lines: 1;
     }
 
+    .swipeout {
+        height: 103;
+    }
+
     .notifications .msgunread{
         background: rgba(var(--f7-theme-color-rgb), 0.3);
     }
