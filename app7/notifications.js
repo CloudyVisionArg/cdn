@@ -100,7 +100,7 @@ injectCSS(`
     }
 
     .swipeout {
-        height: 103;
+        height: 103px;
     }
 
     .notifications .msgunread{
