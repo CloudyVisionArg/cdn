@@ -2999,6 +2999,8 @@ export class Folder {
         }
         Object.assign(opt, options);
 
+        //todo: agregar valor por defecto de maxDocs
+
         var encUriC = this.session.utils.encUriC;
         var url = 'folders/' + this.id + '/documents/grouped';
         var params = 'groups=' + encUriC(opt.groups) + '&totals=' + encUriC(opt.totals) +

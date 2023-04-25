@@ -118,6 +118,7 @@ async function loadControls() {
         }
         controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
+        debugger;
         renderPage();
 
     } catch(err) {
@@ -134,7 +135,7 @@ function getControlsRights(pControls) {
 			console.log('Error parsing controlsRights: ' + errMsg(err));
 		}
 	}
-	
+
 	var ctl;
 	if (controlsRights) {
         // Mergea controlsRights en controls
