@@ -96,11 +96,7 @@ console.log("notifications")
 injectCSS(`
 
     .variable-height-list {
-        --f7-list-item-text-max-lines: 1;
-    }
-
-    .swipeout {
-        height: 103px;
+        --f7-list-item-text-max-lines: 10;
     }
 
     .notifications .msgunread{
