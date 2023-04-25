@@ -96,7 +96,7 @@ console.log("notifications")
 injectCSS(`
 
     .variable-height-list.media-list {
-        --f7-list-item-text-max-lines: 5;
+        --f7-list-item-text-max-lines: 1;
     }
 
     .notifications .msgunread{
