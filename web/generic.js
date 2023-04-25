@@ -118,7 +118,6 @@ async function loadControls() {
         }
         controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
-        debugger;
         renderPage();
 
     } catch(err) {
