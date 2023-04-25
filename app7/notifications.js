@@ -95,7 +95,7 @@ console.log("notifications")
 
 injectCSS(`
 
-    .variable-height-list.media-list {
+    .variable-height-list {
         --f7-list-item-text-max-lines: 1;
     }
 
