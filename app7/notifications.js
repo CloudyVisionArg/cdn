@@ -94,6 +94,11 @@ var selectionMode = false;
 console.log("notifications")
 
 injectCSS(`
+
+    .variable-height-list.media-list {
+        --f7-list-item-text-max-lines: 5;
+    }
+
     .notifications .msgunread{
         background: rgba(var(--f7-theme-color-rgb), 0.3);
     }
@@ -271,7 +276,7 @@ var $notificationsVirtualList
 var $pageCont = $page.find(".page-content");
 var $divActions = $("<div/>",{"class":"actions-container"}).appendTo($pageCont);
 $divActions.hide();
-var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
+var $listMembers = $("<div/>", {"class": "list virtual-list media-list  variable-height-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 $ulMembers.on("click",(ev)=>{
@@ -382,35 +387,13 @@ function renderMembers(notificationsArr){
     setNotificationUnReadCounter(notificationsArr.filter(n=>n.ReadDate == null).length);
 
     if(notificationsArr.length > 0){
-        
-        let contenedor = $("<div />",{"class":"item-cell"}).appendTo($divActions);
-            
-        let actionsRow = $("<div />", {"class":"item-row segmented"}).appendTo(contenedor);
-            
-        let bntSelectAll = $("<button />", {"class":"button"});
-        bntSelectAll.text("Seleccionar todas").appendTo(actionsRow);
-
-        let bntInvSelection = $("<button />", {"class":"button"});
-        bntInvSelection.text("Invertir seleccion").appendTo(actionsRow);
-
-        bntInvSelection.on("click", function(){
-            let notifSeleccionadas = $('input[type="checkbox"]:checked', $listMembers);
-            let notifNoSeleccionadas = $('input[type="checkbox"]:not(:checked)', $listMembers);
-            notifSeleccionadas.prop("checked", false);
-            notifNoSeleccionadas.prop("checked", true);
-        })
-
-        bntSelectAll.on("click", function(){
-            let allNotif = $('input[type="checkbox"]', $listMembers);
-            allNotif.prop("checked", true);
-        })
-
-
+        $divActions.hide();
     }else{
         let msjNoHayNotif = $("<div />", {"class":"list simple-list","style":"margin-top: 0;margin-bottom: 0;"}).appendTo($divActions);
         let ul = $("<ul />").appendTo(msjNoHayNotif);
         let li =  $("<li class='no-results' />")
         li.text("Sin notificaciones").appendTo(ul);
+        $divActions.show();
     }
     listItems.deleteAllItems();
     listItems.appendItems(notificationsArr); 
