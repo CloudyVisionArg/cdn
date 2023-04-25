@@ -55,27 +55,18 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     preloader.show();
     await include(arrScripts);
 
-    let tkn = await getToken();
-    if (!tkn) {
+    doorsapi2 = await import(scriptSrc('doorsapi2'));
+    dSession = new doorsapi2.Session();
+
+    if (!await dSession.webSession() || !await dSession.isLogged) {
         end('La sesion no ha sido iniciada');
         return;
     }
 
-    let srvUrl = window.location.origin + '/restful';
-
-    Doors.RESTFULL.ServerUrl = srvUrl;
-    Doors.RESTFULL.AuthToken = tkn;
-
-    doorsapi2 = await import(scriptSrc('doorsapi2'));
-    dSession = new doorsapi2.Session(srvUrl, tkn);
+    Doors.RESTFULL.ServerUrl = dSession.serverUrl;
+    Doors.RESTFULL.AuthToken = dSession.authToken;
 
     include(arrScriptsPos);
-
-    let isLogged = await dSession.isLogged;
-    if (!isLogged) {
-        end('La sesion no ha sido iniciada');
-        return;
-    }
 
     await dSession.runSyncEventsOnClient(false);
 
@@ -91,7 +82,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     if (fld_id) {
         folder = await dSession.foldersGetFromId(fld_id);
         folderJson = folder.toJSON();
-        folder.form; // Para q cargue el form
+        folder.form; // Para q vaya cargando el form
         if (folder.type == 1) {
             if (doc_id) {
                 doc = await folder.documents(doc_id);
@@ -114,23 +105,6 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 function end(pErr) {
     logAndToast(errMsg(pErr), { delay: 10000 });
     preloader.hide();
-}
-
-function getToken() {
-    return new Promise((resolve, reject) => {
-        let tkn = getCookie('AuthToken');
-        if (tkn) {
-            resolve(tkn);
-        } else {
-            $.get('/c/tkn.asp', function (data) {
-                if (data.length < 100) {
-                    resolve(data);
-                } else {
-                    resolve('');
-                }
-            })
-        }
-    });
 }
 
 async function loadControls() {
@@ -160,7 +134,7 @@ function getControlsRights(pControls) {
 			console.log('Error parsing controlsRights: ' + errMsg(err));
 		}
 	}
-	
+
 	var ctl;
 	if (controlsRights) {
         // Mergea controlsRights en controls
@@ -342,16 +316,15 @@ async function renderPage() {
 
         // CON CONTROLES
 
-        // Evento BeforeRender
-        var ev = getEvent('BeforeRender');
-        if (ev) {
-            try {
-                await evalCode(ev);
-            } catch(err) {
-                console.error(err);
-                toast('BeforeRender error: ' + dSession.utils.errMsg(err));
-            }
-        };
+        try {
+            // Control Event BeforeRender
+            var ev = getEvent('BeforeRender');
+            if (ev) await evalCode(ev);
+
+        } catch(err) {
+            console.error(err);
+            toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+        }
 
         // Membrete
 
@@ -1024,7 +997,7 @@ async function renderControls(pCont, pParent) {
         }
         /*
         Objetos disponibles en este script:
-            doc: El objeto que se esta abriendo
+            doc: El documento que se esta abriendo
             folder: La carpeta actual
             controlsFolder: La carpeta de controles
             controls: El search a la carpeta de controles completo
@@ -1248,23 +1221,18 @@ async function fillControls() {
         this._value(doc_id);
     });
 
-    // Evento AfterRender
-    let ev = getEvent('AfterRender');
-    if (ev) {
-        try {
-            await evalCode(ev);
-        } catch (err) {
-            console.error(err);
-            toast('AfterRender error: ' + dSession.utils.errMsg(err));
-        }
-    };
+    try {
+        // Evento afterFillControls
+        document.dispatchEvent(new CustomEvent('afterFillControls'));
 
-    // evalCode con context de fillControls
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }
+        // Control Event AfterRender
+        let ev = getEvent('AfterRender');
+        if (ev) await evalCode(ev);
+
+    } catch (err) {
+        console.error(err);
+        toast('AfterRender error: ' + dSession.utils.errMsg(err));
+    };
 }
 
 function getEvent(pEvent) {
@@ -1373,11 +1341,12 @@ async function saveDoc(pExit) {
     });
 
     try {
-        // Evento BeforeSave
+        // Evento beforeSave
+        document.dispatchEvent(new CustomEvent('beforeSave'));
+
+        // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
-        if (ev) {
-            await evalCode(ev);
-        };
+        if (ev) await evalCode(ev);
 
         await doc.save();
         docJson = doc.toJSON();
@@ -1388,15 +1357,17 @@ async function saveDoc(pExit) {
         } catch(err) {
             var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
             console.log(attErr);
-            console.log(err);
+            console.error(err);
         }
 
-        // Evento AfterSave
         try {
+            // Evento afterSave
+            document.dispatchEvent(new CustomEvent('afterSave'));
+
+            // Control Event AfterSave
             var ev = getEvent('AfterSave');
-            if (ev) {
-                await evalCode(ev);
-            };
+            if (ev) await evalCode(ev);
+
         } catch (err) {
             var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
             console.error(err);
@@ -1421,13 +1392,6 @@ async function saveDoc(pExit) {
 
     } catch(err) {
         errMgr(err);
-    }
-
-    // evalCode con context de saveDoc
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
     }
 
     function errMgr(pErr) {
@@ -1497,3 +1461,11 @@ function saveAtt() {
         });
     });
 }
+
+// evalCode con context de root
+async function evalCode(code) {
+    var pipe = {};
+    eval(`pipe.fn = async () => {\n\n${code}\n};`);
+    await pipe.fn();
+}
+

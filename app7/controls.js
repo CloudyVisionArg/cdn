@@ -1933,6 +1933,27 @@ function addDefaultOptions(pContainer) {
             },
         }).appendTo(pContainer);
     }
+
+    /*
+    let config = {
+        hexRGBAColor: "#0000ffff",
+        showsTimer: true,
+        showsTouchRadius: true,
+        showsLog: true
+	}
+
+    TouchVisualizer.start(config, (success) => {
+        console.log("success visualizer", success)
+    }, (error) => {
+        console.log("error visualizer", error)
+    });
+
+    TouchVisualizer.stop((success) => {
+        console.log("success visualizer stop", success)
+    }, (error) => {
+        console.log("error visualizer stop", error)
+    });
+    */
 }
 
 /*

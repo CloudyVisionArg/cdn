@@ -4,7 +4,9 @@
 var $$ = Dom7;
 var app7;
 var db;
-var doorsapi2, dSession;
+var doorsapi2;
+/** @type {import('../doorsapi2.mjs').Session} */
+var dSession;
 
 var initScripts = [];
 
@@ -26,7 +28,7 @@ initScripts.push({ id: 'app7-index.css' });
     await include(initScripts);
     
     doorsapi2 = await import(scriptSrc('doorsapi2'));
-    var sessionMod = await import(scriptSrc('app7-session', 'capacitor_merge_master'));
+    var sessionMod = await import(scriptSrc('app7-session'));
     dSession = new sessionMod.AppSession();
 
     app.initialize();    
