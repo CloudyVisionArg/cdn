@@ -134,7 +134,7 @@ function getControlsRights(pControls) {
 			console.log('Error parsing controlsRights: ' + errMsg(err));
 		}
 	}
-	
+
 	var ctl;
 	if (controlsRights) {
         // Mergea controlsRights en controls
@@ -317,9 +317,6 @@ async function renderPage() {
         // CON CONTROLES
 
         try {
-            // Evento beforeRender
-            document.dispatchEvent(new CustomEvent('beforeRender'));
-
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
@@ -463,6 +460,13 @@ async function renderPage() {
             preloader.hide();
         }
     }, 0);
+
+    // evalCode con context de renderPage
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 function getRow(pRow, pCont, pCol) {

@@ -60,14 +60,19 @@ function errMgr(pErr) {
 
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
-    window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
-        function (dir) {
-            cacheDir = dir;
-        },
-        function (err) {
-            console.log('resolveLocalFileSystemURL error: ' + err.code);
-        }
-    );
+    if(_isCapacitor()){
+        cacheDir = null; //Capacitor no tiene get para directorio
+    }
+    else{
+        window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
+            function (dir) {
+                cacheDir = dir;
+            },
+            function (err) {
+                console.log('resolveLocalFileSystemURL error: ' + err.code);
+            }
+        );
+    }
 }
 
 (async () => {
@@ -294,9 +299,6 @@ async function renderPage() {
         // CON CONTROLES
 
         try {
-            // Evento beforeRender
-            $page[0].dispatchEvent(new CustomEvent('beforeRender'));
-
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
@@ -1248,7 +1250,97 @@ async function fillAttachments(pEl) {
 }
 
 async function downloadAtt(e) {
-    var $att = $(this);
+    debugger;
+    if(_isCapacitor()){
+        await downloadAttCapacitor($(this));
+    }else{
+        await downloadAttCordova($(this));
+    }
+}
+function _arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+}
+
+function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+async function downloadAttCapacitor($att){
+    debugger;
+    var attId = $att.attr('data-att-id');
+    var attName = $att.attr('data-att-name');
+    var attURL = $att.attr('data-att-url');
+    if (attURL) {
+        // Ya se descargo antes o es nuevo
+        openAtt(attURL);
+
+    } else {
+        app7.preloader.show();
+
+        try {
+            var att = (await doc.attachments()).find(el => el.id == attId);
+            var fs = await att.fileStream;
+            
+            app7.preloader.hide();
+
+            if (device.platform == 'browser') {
+                var blob = new Blob([fs]);
+                saveAs(blob, attName);
+            } else {
+                /*
+                WARNING: 
+                    Cuando el adjunto se agrega y se guarda 
+                    att.fileStream es un Blob;
+                    si es un existente previo es un ArrayBuffer!
+                */
+
+                //Workaround para esta diferencia.
+                let arrayBuffer = fs;
+                if(fs instanceof Blob){
+                    arrayBuffer = await fs.arrayBuffer();
+                }
+                const data = _arrayBufferToBase64(arrayBuffer);
+                //Fin Workaround.
+
+                //WARNING: Si al archivo lo descarga, queda en el cache de la aplicacion. Cuando se limpia?
+                Capacitor.Plugins.Filesystem.writeFile(
+                    {
+                        path : attName,
+                        data: data,
+                        directory : Directory.Cache,
+                    }
+                ).then(
+                    (fileWriteResultSucc)=>{
+                        $att.attr('data-att-url', fileWriteResultSucc.uri);
+                        openAtt(fileWriteResultSucc.uri);
+                    },
+                    (fileWriteResultErr)=>{
+                        console.error('Capcitor writeFile error: ' + errMsg(fileWriteResultErr));
+                    }                    
+                );
+            }
+
+        } catch(err) {
+            app7.preloader.hide();
+            logAndToast('download att error: ' + errMsg(err))
+        }
+    }
+}
+
+async function downloadAttCordova($att){
+
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1306,29 +1398,45 @@ async function downloadAtt(e) {
 }
 
 function openAtt(pURL) {
-    if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
-        window.resolveLocalFileSystemURL(pURL,
-            function (fileEntry) {
-                openFile(fileEntry.nativeURL);
-            },
-            function (err) {
-                logAndToast('resolveLocalFileSystemURL error: ' + errMsg(err));
-            }
-        )
-    } else {
+    if(_isCapacitor()){
         openFile(pURL);
+    }
+    else{
+        if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
+            window.resolveLocalFileSystemURL(pURL,
+                function (fileEntry) {
+                    openFile(fileEntry.nativeURL);
+                },
+                function (err) {
+                    logAndToast('resolveLocalFileSystemURL error: ' + errMsg(err));
+                }
+            )
+        } else {
+            openFile(pURL);
+        }
     }
 
     function openFile(pFile) {
-        // Abre el archivo con fileOpener2
-        cordova.plugins.fileOpener2.open(pFile, undefined, {
-            success: function () {
-                console.log('File opened');
-            },
-            error: function (err) {
-                logAndToast('fileOpener2 error: ' + err.message);
-            },
-        });
+        if(_isCapacitor()){
+            Capacitor.Plugins.FileOpener.open({filePath : pFile}).then(
+                ()=> {
+                    console.log('File opened');
+                },
+                (err)=> {
+                    logAndToast('Capacitor.Plugins.FileOpener error: ' + err.message);
+                }, 
+            );
+        }else{
+            // Abre el archivo con fileOpener2
+            cordova.plugins.fileOpener2.open(pFile, undefined, {
+                success: function () {
+                    console.log('File opened');
+                },
+                error: function (err) {
+                    logAndToast('fileOpener2 error: ' + err.message);
+                },
+            });
+        }
     }
 }
 
@@ -1349,65 +1457,90 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
-
+    debugger;
     if (action == 'camera') {
-        navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    function (file) {
-                        att.URL = file.localURL;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    },
-                    errMgr
-                )
-            },
-            errMgr,
-            cameraOptions(Camera.PictureSourceType.CAMERA)
-        )
+        if (_isCapacitor()) {
+            const opts = cameraOptionsCapacitor(CameraSource.Camera);
+            opts.resultType = CameraResultType.Uri;
+            Capacitor.Plugins.Camera.getPhoto(opts).then(
+                (photoResultSucc)=>{
+                    writeFileInCachePath(photoResultSucc.path).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        (e)=>{
+                            errMgr
+                        });
+                }, errMgr
+            );
+        }
+        else {
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        function (file) {
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    )
+                },
+                errMgr,
+                cameraOptions(Camera.PictureSourceType.CAMERA)
+            )
+        }
 
     } else if (action == 'photo') {
-        navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    function (file) {
-                        att.URL = file.localURL;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    },
-                    errMgr
-                )
-            },
-            errMgr,
-            cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-        );
-        
+        if (_isCapacitor()) {
+            const opts = cameraOptionsCapacitor(CameraSource.Photos);
+            opts.resultType = CameraResultType.Uri;
+            Capacitor.Plugins.Camera.getPhoto(opts).then(
+                (photoResultSucc)=>{
+                    writeFileInCachePath(photoResultSucc.path).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name =file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        }, errMgr);
+                }, errMgr
+            );
+        }else{
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        (file)=> {
+                            att.URL = file.localURL;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        }, errMgr);
+                },
+                errMgr,
+                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            );
+        }
     } else if (action == 'doc') {
-        if (device.platform == 'browser') {
-
-            // El input para leer archivos
-            let $file = $('<input/>', {
-                type: 'file',
-                style: 'display: none;'
-            }).appendTo(document.body);
-
-            $file.change(function (e) {
-                let inp = e.target;
-                if (inp.files.length > 0) {
-                    var file = inp.files[0];
-                    att.File = file;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    renderNewAtt(att, $attachs);
-                }
-                $file.remove();
-            })
-
-            $file.click();
-    
-        } else {
+        if(_isCapacitor()){
+            Capacitor.Plugins.FilePicker.pickFiles().then(
+                (pickFilesResultSucc)=>{
+                    const files = pickFilesResultSucc.files;
+                    writeFileInCachePath(files[0].path, files[0].name).then(
+                        (file)=>{
+                            att.URL = file.uri;
+                            att.Name = file.name;
+                            att.Size = file.size;
+                            renderNewAtt(att, $attachs);
+                        },
+                        errMgr
+                    );
+                },errMgr);
+        }else{
             chooser.getFileMetadata().then(
                 function (res) {
                     if (res) {
@@ -1423,7 +1556,7 @@ function addAtt(e) {
                     }
                 },
                 errMgr
-            )
+            );
         }
         
     } else if (action == 'audio') {
@@ -1609,6 +1742,20 @@ async function saveDoc(exitOnSuccess) {
     }
 }
 
+async function removeAttFromCache(fileName){
+    if(_isCapacitor()){
+        try{
+            const result = await Capacitor.Plugins.Filesystem.deleteFile({
+                    path: fileName,
+                    directory: Directory.Cache,
+                });
+                console.log('Archivo ' +  fileName + ' eliminado del cache del app');
+        }catch(e){
+            console.log('Error intentando quitar el archivo ' +  fileName + ' del cache del app');
+        }
+    }
+}
+
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
@@ -1624,21 +1771,33 @@ function saveAtt() {
 
             if (attAction == 'save') {
                 var file;
-                var attUrl = $this.attr('data-att-url');
-                if (attUrl) {
-                    file = await getFile($this.attr('data-att-url'));
-                } else {
-                    file = $this[0]._file;
-                }
-                var reader = new FileReader();
-                reader.onloadend = async function (e) {
+                debugger;
+                if(_isCapacitor()){
+                    const fileFromCache = await getFileFromCache(attName);
+                    // const rawData = atob(fileFromCache.data);
+                    // const bytes = new Array(rawData.length);
+                    // for (var x = 0; x < rawData.length; x++) {
+                    //     bytes[x] = rawData.charCodeAt(x);
+                    // }
+                    // const arr = new Uint8Array(bytes);
+
+                    var binary_string = atob(fileFromCache.data);
+                    var len = binary_string.length;
+                    var bytes = new Uint8Array(len);
+                    for (var i = 0; i < len; i++) {
+                        bytes[i] = binary_string.charCodeAt(i);
+                    }
+                    const arr = bytes.buffer;
+                    
+                    file = new Blob([arr], { type: fileFromCache.type });
                     try {
-                        var att = doc.attachmentsAdd(file.name);
-                        att.fileStream = new Blob([this.result], { type: file.type });
+                        var att = doc.attachmentsAdd(attName);
+                        att.fileStream = file;
                         att.description = tag;
                         att.group = tag;
                         await att.save();
-
+                        await removeAttFromCache(attName);
+                        $this.removeAttr('data-att-url');
                     } catch (err) {
                         errors.push({
                             file: attName,
@@ -1647,8 +1806,35 @@ function saveAtt() {
                         });
                     }
                     loop.next();
-                };
-                reader.readAsArrayBuffer(file);
+                }
+                else{
+                    var attUrl = $this.attr('data-att-url');
+                    if (attUrl) {
+                        file = await getFile($this.attr('data-att-url'));
+                    } else {
+                        file = $this[0]._file;
+                    }
+                    var reader = new FileReader();
+                    reader.onloadend = async function (e) {
+                        try {
+                            var att = doc.attachmentsAdd(attName);
+                            att.fileStream = new Blob([this.result], { type: file.type });
+                            //att.fileStream = new Blob([this.result]);
+                            att.description = tag;
+                            att.group = tag;
+                            await att.save();
+    
+                        } catch (err) {
+                            errors.push({
+                                file: attName,
+                                action: 'save',
+                                error: dSession.utils.errMsg(err),
+                            });
+                        }
+                        loop.next();
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
 
             } else if (attAction == 'delete') {
                 var att = attMap.find(el => el.id == $this.attr('data-att-id'));

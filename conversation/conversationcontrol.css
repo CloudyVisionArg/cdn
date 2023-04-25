@@ -1,0 +1,197 @@
+/*https://coolors.co/d93025-00a884-f6ae2d-8a4f7d-0081af*/
+i.fa-envelope{
+    color:#d93025;
+}
+i.fa-whatsapp{
+    color:#00a884;
+}
+i.fa-commenting-o{
+    color:#0081AF
+}
+i.fa-pencil-square-o{
+    color:#F6AE2D;
+}
+.wapp-chat {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+.conv-message > div {
+    box-shadow: 0px 0px 4px #0000003f;
+}
+.wapp-messages {
+    max-height: unset !important;
+	height:100%;
+}
+.wapp-messages .wapp-message-time {
+    margin-left: 0px !important;
+    display: flex;
+    justify-content: space-between;
+}
+.chat-header{
+    display: flex;
+    justify-content: space-between;
+    width:100%;
+}
+.chat-header .right-container{
+    text-align: right;
+    display: flex;
+    align-items: center;
+}
+.chat-header .right-container i{
+    font-size: 20pt;
+    color:#0081AF;
+}
+.wapp-subheader {
+    background-color: white;
+    border-bottom: solid 1px #00a884;
+}
+
+.wapp-header {
+    box-shadow: 0px 0px 10px #00000057;
+    position: relative;
+}
+
+.chat-subheader {
+    padding: 10px;
+    /* padding-bottom: 0px; */
+    display: flex;
+    justify-content: space-between;
+}
+
+.right-container {
+    display: flex;
+    align-items: center;
+}
+div#swal2-html-container {
+    text-align: left;
+}
+.wapp-header, .wapp-footer {
+    align-items: center;
+}
+.msg-detail-container{
+    font-size: 10px;
+    margin-top: 10px;
+    font-style: italic;
+}
+span.msg-operator {
+    font-style: italic;
+    color: black;
+}
+.wapp-message-text .fa.fa-phone {
+    color: #0081AF;
+}
+.page-content > .list.no-hairlines-md {
+    /*display: none;*/
+}
+#view-leads .page-content > .toolbar.tabbar.toolbar-top {
+    margin-top: -50px;
+}
+.cust-chat {
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 6%), 0 2px 5px 0 rgb(0 0 0 / 20%);
+    background-color: #eee5db;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    margin-left: var(--wapp-chat-horizontal-margin);
+    margin-right: var(--wapp-chat-horizontal-margin);
+    margin-top: var(--wapp-chat-vertical-margin);
+    margin-bottom: var(--wapp-chat-vertical-margin);
+}
+.cust-chat {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    max-height: calc(100vh - 120px);
+    margin: 0px;
+}
+#tabChat > .list.no-hairlines-md {
+    margin: 0px;
+}
+.activity-actions {
+    display: flex;
+}
+.msngr-message {
+    width: 100%;
+    display: inline-block;
+    padding-bottom: 10px !important;
+}
+
+.msngr-message .msngr-outbound i.fa-wechat{
+    color:white;
+}
+.msngr-message i.fa-wechat{
+    color:#009aff;
+}
+
+.msngr-outbound {
+    float: right;
+    width: max-content;
+    max-width: 75%;
+    background: rgb(0, 132, 255);
+    color: white;
+    border-radius: 10px 0px 10px 10px;
+    padding: 4px 10px 7px 10px !important;
+    font-size: 12px;
+    font-weight: 530;
+    word-wrap: break-word;
+}
+.msngr-message-text {
+    padding: 3px 0px !important;
+    word-break: break-word;
+    font-weight: 400;
+    font-size: 15px;
+    color: white;
+    /* font-family: "Apple Color Emoji"; */
+}
+.msngr-messages .wapp-message-time {
+    margin-left: 0px !important;
+    display: flex;
+    justify-content: space-between;
+}
+.msngr-message-time {
+    margin-left: 50px !important;
+    font-size: 11px;
+    text-align: right;
+    color: white;
+    font-weight: 400;
+}
+.msngr-inbound {
+    width: max-content;
+    max-width: 75%;
+    padding: 4px 10px 7px 10px !important;
+    border-radius: 0px 10px 10px 10px;
+    background: #e4e6eb;
+    color: #050505;
+    font-size: 12px;
+    word-wrap: break-word;
+}
+.msngr-inbound .msngr-message-time ,
+.msngr-inbound .msngr-message-text {
+    color: #050505;
+}
+
+.chat-header {
+    width: 100%;
+    display: grid;
+    grid-template-areas: 'info status action';
+    grid-template-columns: 40% 10% 40%;
+}
+
+.chat-header div.info{
+    grid-area: info;
+}
+
+.chat-header div.whatsapp-status-container{
+    grid-area: status;
+    display: flex;
+    justify-content: center;
+}
+.chat-header .right-container {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    grid-area: action;
+    justify-content: flex-end;
+}

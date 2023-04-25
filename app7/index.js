@@ -61,18 +61,37 @@ var app = {
         numeral.locale('es'); // http://numeraljs.com/
         numeral.defaultFormat('0,0.[00]');
 
+
         // Verificacion de plugins
-        if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
-        if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
+        if(typeof(Capacitor) != 'undefined'){
+            console.log("Capacitor App");
+            if (!Capacitor.Plugins.Camera) console.log('Plugin error: @capacitor/camera');
+            if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
+            if (!Capacitor.Plugins.FileOpener) console.log('Plugin error: @capacitor-community/file-opener');
+            if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
+            if (!Capacitor.Plugins.PushNotification) console.log('Plugin error:  @capacitor/push-notifications');
+            if (!Capacitor.Plugins.EmailComposer) console.log('Plugin error:  https://github.com/EinfachHans/capacitor-email-composer');
+            
+        }    
+        else{
+            console.log("Cordova App");
+            if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
+            if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
+            if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+            if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
+            if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
+            if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+            if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
+            if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
+        }
+
+        //Comunes o compatibles entre Cordova y Capacitor
         if (!device) console.log('Plugin error: cordova-plugin-device');
-        if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
-        if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
+        if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
-        if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
-        if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
-        if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
+        
         // Fin verificacion de plugins
 
         // Custom
@@ -262,7 +281,7 @@ var app = {
                 }
             );
         };
-    
+
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
         statusBar(val != 'off');
@@ -361,7 +380,24 @@ function sessionMsg() {
     )
 }
 
-function pushReg() {
+function sessionMsg() {
+    dSession.tags.then(
+        res => {
+            if (res.message) {
+                app7.toast.create({
+                    text: res.message,
+                    closeTimeout: 15000,
+                    position: 'center',
+                    closeButton: false,
+                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+                }).open();
+            }
+        }
+    )
+}
+
+
+function pushRegCordova() {
     if (device.platform != 'browser') {
         var pushSettings = {
             android: {
