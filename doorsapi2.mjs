@@ -2976,10 +2976,10 @@ export class Folder {
     @example
     searchGroups({
         groups // Campos de grupo separados por coma.
-        totals // 
+        totals: 'count(*) as totals',
         formula // Filtro SQL.
-        order // 
-        maxDocs //
+        order: 'totals desc', // Por defecto se ordena con los mismos campos de group.
+        maxDocs // Cant max de documentos. Def 1000. 0 = sin limite.
         recursive //
         groupsOrder //
         totalsOrder //
@@ -2992,7 +2992,7 @@ export class Folder {
             totals: '',
             formula: '',
             order: '',
-            maxDocs: '',
+            maxDocs: 1000,
             recursive: false,
             groupsOrder: '',
             totalsOrder: '',
