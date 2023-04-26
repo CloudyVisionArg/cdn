@@ -1703,7 +1703,9 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            $page[0].dispatchEvent(new CustomEvent('afterSave'));
+            $page[0].dispatchEvent(new CustomEvent('afterSave', {
+                detail: { exitOnSuccess }
+            }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
@@ -1742,6 +1744,13 @@ async function saveDoc(exitOnSuccess) {
         $navbar.find('.right .button').removeClass('disabled');
         toast(dSession.utils.errMsg(pErr).replaceAll('\r\n', '<br>'), 0);
         console.error(pErr);
+    }
+
+    // evalCode con context saveDoc
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
     }
 }
 
