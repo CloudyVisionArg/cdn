@@ -987,15 +987,8 @@ function pageInit(e, page) {
     }, 0);
 
     pageEl.crm = {
-        fillControls,
-        saveDoc,
-        fld_id,
-        folder,
-        folderJson,
-        doc_id,
-        doc,
-        docJson,
-        $navbar,
+        fillControls, saveDoc, fld_id, folder, 
+        folderJson, doc_id, doc, docJson, $navbar,
     };
 }
 
@@ -1298,6 +1291,7 @@ async function downloadAttCapacitor($att){
             if (device.platform == 'browser') {
                 var blob = new Blob([fs]);
                 saveAs(blob, attName);
+
             } else {
                 /*
                 WARNING: 
@@ -1679,7 +1673,7 @@ async function saveDoc(exitOnSuccess) {
 
     try {
         //Parametros para disponibilizar en los eventos
-        var eventArgs = { "exitOnSuccess" : exitOnSuccess };
+        var eventArgs = { exitOnSuccess };
 
         // Evento beforeSave
         $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
@@ -1757,13 +1751,14 @@ async function saveDoc(exitOnSuccess) {
 
 async function removeAttFromCache(fileName){
     if (_isCapacitor()) {
-        try{
+        try {
             const result = await Capacitor.Plugins.Filesystem.deleteFile({
-                    path: fileName,
-                    directory: Directory.Cache,
-                });
-                console.log('Archivo ' +  fileName + ' eliminado del cache del app');
-        }catch(e){
+                path: fileName,
+                directory: Directory.Cache,
+            });
+            console.log('Archivo ' +  fileName + ' eliminado del cache del app');
+
+        } catch(e) {
             console.log('Error intentando quitar el archivo ' +  fileName + ' del cache del app');
         }
     }
@@ -1811,6 +1806,7 @@ function saveAtt() {
                         await att.save();
                         await removeAttFromCache(attName);
                         $this.removeAttr('data-att-url');
+
                     } catch (err) {
                         errors.push({
                             file: attName,
