@@ -1675,8 +1675,7 @@ async function saveDoc(exitOnSuccess) {
     });
 
     try {
-        var args = [];
-        args.push(exitOnSuccess);
+        var args = {"exitOnSuccess": exitOnSuccess};
         // Evento beforeSave
         $page[0].dispatchEvent(new CustomEvent('beforeSave'));
 
@@ -1875,7 +1874,7 @@ function getEvent(pEvent) {
 // evalCode con context root
 async function evalCode(code, args) {
     var pipe = {};
-    eval(`pipe.fn = async (args) => {\n\n${code}\n};`);
+    eval(`pipe.fn = async () => {\n\n${code}\n};`);
     await pipe.fn(args);
 }
 
