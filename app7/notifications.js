@@ -342,8 +342,7 @@ function pageInitMembers(e, page) {
         },
         height: (item)=>{
             //TODO obtener el item heigth dinamicamente
-            //103 alto item
-            debugger;            
+            //103 alto item           
             return  app7.theme === 'ios' ? 94.59 : (app7.theme === 'md' ? 103.00 : 103)            
         }
     });
