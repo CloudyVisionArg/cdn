@@ -1703,9 +1703,7 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            $page[0].dispatchEvent(new CustomEvent('afterSave', {
-                detail: { exitOnSuccess }
-            }));
+            $page[0].dispatchEvent(new CustomEvent('afterSave'));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
