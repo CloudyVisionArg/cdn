@@ -1679,10 +1679,10 @@ async function saveDoc(exitOnSuccess) {
 
     try {
         //Parametros para disponibilizar en los eventos
-        var args = { "exitOnSuccess" : exitOnSuccess };
+        var eventArgs = { "exitOnSuccess" : exitOnSuccess };
 
         // Evento beforeSave
-        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : args }));
+        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
@@ -1706,7 +1706,7 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : args }));
+            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
