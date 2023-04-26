@@ -1704,7 +1704,10 @@ async function saveDoc(exitOnSuccess) {
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
-            if (ev) await evalCode(ev);
+            // if (ev) await evalCode(ev);
+            if (ev) {
+                    eval(ev);
+            };
 
         } catch (err) {
             var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
