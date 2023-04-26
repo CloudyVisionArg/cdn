@@ -1250,7 +1250,7 @@ async function downloadAtt(e) {
         await downloadAttCordova($(this));
     }
 }
-function _arrayBufferToBase64( buffer ) {
+function _arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array( buffer );
     var len = bytes.byteLength;
@@ -1270,7 +1270,7 @@ function _base64ToArrayBuffer(base64) {
     return bytes.buffer;
 }
 
-async function downloadAttCapacitor($att){
+async function downloadAttCapacitor($att) {
     debugger;
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
@@ -1333,7 +1333,7 @@ async function downloadAttCapacitor($att){
     }
 }
 
-async function downloadAttCordova($att){
+async function downloadAttCordova($att) {
 
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
