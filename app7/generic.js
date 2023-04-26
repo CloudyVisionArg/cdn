@@ -1871,6 +1871,7 @@ function getEvent(pEvent) {
 
 // evalCode con context root
 async function evalCode(code) {
+    debugger;
     var pipe = {};
     eval(`pipe.fn = async () => {\n\n${code}\n};`);
     await pipe.fn();
