@@ -60,10 +60,10 @@ function errMgr(pErr) {
 
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
-    if(_isCapacitor()){
+    if (_isCapacitor()) {
         cacheDir = null; //Capacitor no tiene get para directorio
-    }
-    else{
+
+    } else {
         window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
             function (dir) {
                 cacheDir = dir;
@@ -1251,9 +1251,9 @@ async function fillAttachments(pEl) {
 
 async function downloadAtt(e) {
     debugger;
-    if(_isCapacitor()){
+    if (_isCapacitor()) {
         await downloadAttCapacitor($(this));
-    }else{
+    } else {
         await downloadAttCordova($(this));
     }
 }
@@ -1398,10 +1398,10 @@ async function downloadAttCordova($att){
 }
 
 function openAtt(pURL) {
-    if(_isCapacitor()){
+    if (_isCapacitor()) {
         openFile(pURL);
-    }
-    else{
+
+    } else {
         if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
             window.resolveLocalFileSystemURL(pURL,
                 function (fileEntry) {
@@ -1417,7 +1417,7 @@ function openAtt(pURL) {
     }
 
     function openFile(pFile) {
-        if(_isCapacitor()){
+        if (_isCapacitor()) {
             Capacitor.Plugins.FileOpener.open({filePath : pFile}).then(
                 ()=> {
                     console.log('File opened');
@@ -1426,7 +1426,7 @@ function openAtt(pURL) {
                     logAndToast('Capacitor.Plugins.FileOpener error: ' + err.message);
                 }, 
             );
-        }else{
+        } else {
             // Abre el archivo con fileOpener2
             cordova.plugins.fileOpener2.open(pFile, undefined, {
                 success: function () {
@@ -1476,8 +1476,8 @@ function addAtt(e) {
                         });
                 }, errMgr
             );
-        }
-        else {
+
+        } else {
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
@@ -1510,7 +1510,8 @@ function addAtt(e) {
                         }, errMgr);
                 }, errMgr
             );
-        }else{
+
+        } else {
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
@@ -1525,8 +1526,9 @@ function addAtt(e) {
                 cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
             );
         }
+
     } else if (action == 'doc') {
-        if(_isCapacitor()){
+        if (_isCapacitor()) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (pickFilesResultSucc)=>{
                     const files = pickFilesResultSucc.files;
@@ -1540,7 +1542,8 @@ function addAtt(e) {
                         errMgr
                     );
                 },errMgr);
-        }else{
+
+        } else {
             chooser.getFileMetadata().then(
                 function (res) {
                     if (res) {
@@ -1743,7 +1746,7 @@ async function saveDoc(exitOnSuccess) {
 }
 
 async function removeAttFromCache(fileName){
-    if(_isCapacitor()){
+    if (_isCapacitor()) {
         try{
             const result = await Capacitor.Plugins.Filesystem.deleteFile({
                     path: fileName,
@@ -1772,7 +1775,7 @@ function saveAtt() {
             if (attAction == 'save') {
                 var file;
                 debugger;
-                if(_isCapacitor()){
+                if (_isCapacitor()) {
                     const fileFromCache = await getFileFromCache(attName);
                     // const rawData = atob(fileFromCache.data);
                     // const bytes = new Array(rawData.length);
