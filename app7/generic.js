@@ -1680,7 +1680,7 @@ async function saveDoc(exitOnSuccess) {
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
-        if (ev) await evalCode(ev, args);
+        if (ev) await evalCode(ev);
 
         await doc.save();
         docJson = doc.toJSON();
@@ -1704,7 +1704,7 @@ async function saveDoc(exitOnSuccess) {
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
-            if (ev) await evalCode(ev, args);
+            if (ev) await evalCode(ev);
 
         } catch (err) {
             var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
