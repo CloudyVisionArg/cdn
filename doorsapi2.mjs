@@ -1756,7 +1756,6 @@ export class Document {
                         res => {
                             if (res.length > 0) {
                                 // Ordena descendente
-                                debugger;
                                 res.sort(function (a, b) {
                                     return a.AttId >= b.AttId ? -1 : 1;
                                 });
