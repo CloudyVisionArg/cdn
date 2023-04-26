@@ -2116,7 +2116,7 @@ function audioRecorder(pCallback) {
         $saveBtnRow.hide();
     }
 
-    function canceAudiolCordova() {
+    function cancelAudioCordova() {
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
