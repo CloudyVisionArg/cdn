@@ -1678,12 +1678,15 @@ async function saveDoc(exitOnSuccess) {
     });
 
     try {
+        //Parametros para disponibilizar en los eventos
+        var args = { "exitOnSuccess" : exitOnSuccess };
+
         // Evento beforeSave
-        $page[0].dispatchEvent(new CustomEvent('beforeSave'));
+        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : args }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
-        if (ev) await evalCode(ev);
+        if (ev) await evalCode(ev, args);
 
         await doc.save();
         docJson = doc.toJSON();
@@ -1703,11 +1706,11 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            $page[0].dispatchEvent(new CustomEvent('afterSave'));
+            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : args }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
-            if (ev) await evalCode(ev);
+            if (ev) await evalCode(ev, args);
 
         } catch (err) {
             var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
@@ -1880,10 +1883,10 @@ function getEvent(pEvent) {
 }
 
 // evalCode con context root
-async function evalCode(code) {
+async function evalCode(code, args) {
     var pipe = {};
     eval(`pipe.fn = async () => {\n\n${code}\n};`);
-    await pipe.fn();
+    await pipe.fn(args);
 }
 
 /*
