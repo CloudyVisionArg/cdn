@@ -1068,7 +1068,6 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        debugger;
         if (textField && el._text) {
             el._text(text);
             textField = undefined;
@@ -1101,7 +1100,7 @@ async function fillControls() {
 
                 if (type == 'text') {
                     var format = $el.attr('data-numeral');
-                    if (format) {
+                    if (f.type == 3 || format) {
                         // Input numeric
                         let n = numeral(v);
                         if (n.value() != null) {
@@ -1111,7 +1110,6 @@ async function fillControls() {
                         }
 
                     } else if (f.type == 2) {
-                        debugger;
                         var dt = dSession.utils.cDate(v);
                         if (dt) {
                             $el.val(new moment(dt).format('L LT'));
