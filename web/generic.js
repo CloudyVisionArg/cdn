@@ -1068,6 +1068,7 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
+        if (tf == 'kw') debugger;
         if (textField && el._text) {
             el._text(text);
             textField = undefined;
@@ -1081,7 +1082,6 @@ async function fillControls() {
             xmlField = undefined;
         }
         
-        if (tf == 'kw') debugger;
         if (textField || valueField || xmlField) {
             var f, v;
             if (textField) {
