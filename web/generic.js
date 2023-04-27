@@ -1081,18 +1081,14 @@ async function fillControls() {
             xmlField = undefined;
         }
         
-        debugger;
         if (textField || valueField || xmlField) {
             var f, v;
             if (textField) {
-                f = textField;
-                v = text;
+                f = textField; v = text;
             } else if (valueField) {
-                f = valueField;
-                v = value;
+                f = valueField; v = value;
             } else if (xmlField) {
-                f = xmlField;
-                v = xml;
+                f = xmlField; v = xml;
             }
 
             if (el.tagName == 'INPUT') {
@@ -1122,16 +1118,10 @@ async function fillControls() {
                     }
 
                 } else if (type == 'checkbox') {
-                    el.checked = (text == '1');
+                    el.checked = (v.toString() == '1');
 
                 } else if (type == 'hidden') {
-                    if (textField) {
-                        $el.val(text);
-                    } else if (valueField) {
-                        $el.val(value);
-                    } else if (xmlField) {
-                        $el.val(xml);
-                    }
+                    $el.val(v);
                 }
 
             } else if (el.tagName == 'TEXTAREA') {
