@@ -1071,7 +1071,7 @@ async function fillControls() {
         debugger;
         if (textField && el._text) {
             el._text(text);
-            textField == undefined;
+            textField = undefined;
         }
         if (valueField && el._value) {
             el._value(value);
