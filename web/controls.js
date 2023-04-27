@@ -101,14 +101,16 @@ function newDTPicker(pId, pLabel, pType) {
 
         } else {
             // set
+            var val = dSession.utils.cDate(pValue);
+
             var type = $self.attr('data-date-type');
-            if (pValue != null && pValue != '') {
+            if (val != null && val != '') {
                 if (type == 'date') {
-                    $self.val(moment(pValue).format('L'));
+                    $self.val(moment(val).format('L'));
                 } else if (type == 'time') {
-                    $self.val(moment(pValue).format('LT'));
+                    $self.val(moment(val).format('LT'));
                 } else {
-                    $self.val(moment(pValue).format('L LT'));
+                    $self.val(moment(val).format('L LT'));
                 }
             } else {
                 $self.val('');
