@@ -184,6 +184,7 @@ function newSelect(pId, pLabel, pOptions) {
             //set
             if (typeof $(this).selectpicker == 'function') {
             }
+            setSelectVal($self, undefined, pValue);
         }
     }
 
@@ -209,6 +210,7 @@ function newSelect(pId, pLabel, pOptions) {
 
         } else {
             //set
+            setSelectVal($self, pValue, undefined);
         }
     }
 
