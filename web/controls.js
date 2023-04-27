@@ -115,17 +115,15 @@ function newDTPicker(pId, pLabel, pType) {
             } else {
                 $self.val('');
             }
-            return $self.val();
+            return val;
         }
     }
 
     $inp[0]._text = function (pValue) {
-        if (pValue == undefined) {
-            //get
-            return this.value;
-        } else {
-            return this._value(pValue);
+        if (pValue != undefined) {
+            this._value(pValue);
         }
+        return this.value;
     }
 
     return $div;
