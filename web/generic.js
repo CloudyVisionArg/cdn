@@ -1081,6 +1081,7 @@ async function fillControls() {
             xmlField = undefined;
         }
         
+        if (tf == 'kw') debugger;
         if (textField || valueField || xmlField) {
             var f, v;
             if (textField) {
@@ -1126,9 +1127,9 @@ async function fillControls() {
 
             } else if (el.tagName == 'TEXTAREA') {
                 if (el.ckeditor) {
-                    el.ckeditor.setData(text);
+                    el.ckeditor.setData(v);
                 } else {
-                    $el.val(text);
+                    $el.val(v);
                 }
 
             } else if (el.tagName == 'SELECT') {
