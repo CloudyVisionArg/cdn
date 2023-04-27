@@ -666,6 +666,8 @@ async function renderControls(pCont, pParent) {
             $this = newDTPicker(ctl['NAME'], label, mode)
             $this.addClass('mt-3');
             $input = $this.find('input');
+            bsctl = $this.find('div.input-group');
+            debugger;
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $input.attr({ 'readonly': 'readonly' });
