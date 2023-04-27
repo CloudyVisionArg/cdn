@@ -1084,37 +1084,43 @@ async function fillControls() {
         
         debugger;
         if (textField || valueField || xmlField) {
+            var f, v;
+            if (textField) {
+                f = textField;
+                v = text;
+            } else if (valueField) {
+                f = valueField;
+                v = value;
+            } else if (xmlField) {
+                f = xmlField;
+                v = xml;
+            }
+
             if (el.tagName == 'INPUT') {
                 let type = $el.attr('type').toLowerCase();
+
                 if (type == 'text') {
                     var format = $el.attr('data-numeral');
                     if (format) {
                         // Input numeric
-                        let n = numeral(text);
+                        let n = numeral(v);
                         if (n.value() != null) {
                             $el.val(n.format(format));
                         } else {
                             $el.val('');
                         }
-                    } else if ($el.attr('data-date-type')) {
-                        // DTPicker
-                        el._text(text);
 
-                    } else if ($el.hasClass('maps-autocomplete')) {
-                        // Input maps
-                        el._text(text);
-                        el._value(value);
-            
-                    } else {
-                        if (textField && textField.type == 2) {
-                            if (text) {
-                                $el.val(formatDate(text));
-                            } else {
-                                $el.val('');
-                            }
+                    } else if (f.type == 2) {
+                        debugger;
+                        var dt = dSession.utils.cDate(v);
+                        if (dt) {
+                            $el.val(new moment(dt).format('L LT'));
                         } else {
-                            $el.val(text);
+                            $el.val('');
                         }
+
+                    } else {
+                        $el.val(v);
                     }
 
                 } else if (type == 'checkbox') {
