@@ -1068,8 +1068,8 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (tf = 'task_customer') debugger;
-        
+        if (tf == 'task_customer') debugger;
+
         if (textField && el._text) {
             el._text(text);
             textField = undefined;
