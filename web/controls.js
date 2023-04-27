@@ -210,7 +210,7 @@ function newSelect(pId, pLabel, pOptions) {
 
         } else {
             //set
-            setSelectVal($self, pValue, undefined);
+            setSelectVal($self, pText, undefined);
         }
     }
 
