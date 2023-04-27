@@ -667,7 +667,6 @@ async function renderControls(pCont, pParent) {
             $this.addClass('mt-3');
             $input = $this.find('input');
             bsctl = $this.find('div.input-group');
-            debugger;
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $input.attr({ 'readonly': 'readonly' });
@@ -1070,75 +1069,83 @@ async function fillControls() {
         };
 
         debugger;
-        if (text != undefined && el._text) el._text(text);
-        if (value != undefined && el._value) el._value(value);
-        if (xml != undefined && el._xml) el._xml(xml);
+        if (textField && el._text) {
+            el._text(text);
+            textField == undefined;
+        }
+        if (valueField && el._value) {
+            el._value(value);
+            valueField = undefined;
+        }
+        if (xmlField && el._xml) {
+            el._xml(xml);
+            xmlField = undefined;
+        }
         
-        if (el.tagName == 'INPUT') {
-            let type = $el.attr('type').toLowerCase();
-            if (type == 'text') {
-                var format = $el.attr('data-numeral');
-                if (format) {
-                    // Input numeric
-                    let n = numeral(text);
-                    if (n.value() != null) {
-                        $el.val(n.format(format));
-                    } else {
-                        $el.val('');
-                    }
-                } else if ($el.attr('data-date-type')) {
-                    // DTPicker
-                    el._text(text);
-
-                } else if ($el.hasClass('maps-autocomplete')) {
-                    // Input maps
-                    el._text(text);
-                    el._value(value);
-        
-                } else {
-                    if (textField && textField.type == 2) {
-                        if (text) {
-                            $el.val(formatDate(text));
+        debugger;
+        if (textField || valueField || xmlField) {
+            if (el.tagName == 'INPUT') {
+                let type = $el.attr('type').toLowerCase();
+                if (type == 'text') {
+                    var format = $el.attr('data-numeral');
+                    if (format) {
+                        // Input numeric
+                        let n = numeral(text);
+                        if (n.value() != null) {
+                            $el.val(n.format(format));
                         } else {
                             $el.val('');
                         }
+                    } else if ($el.attr('data-date-type')) {
+                        // DTPicker
+                        el._text(text);
+
+                    } else if ($el.hasClass('maps-autocomplete')) {
+                        // Input maps
+                        el._text(text);
+                        el._value(value);
+            
                     } else {
+                        if (textField && textField.type == 2) {
+                            if (text) {
+                                $el.val(formatDate(text));
+                            } else {
+                                $el.val('');
+                            }
+                        } else {
+                            $el.val(text);
+                        }
+                    }
+
+                } else if (type == 'checkbox') {
+                    el.checked = (text == '1');
+
+                } else if (type == 'hidden') {
+                    if (textField) {
                         $el.val(text);
+                    } else if (valueField) {
+                        $el.val(value);
+                    } else if (xmlField) {
+                        $el.val(xml);
                     }
                 }
 
-            } else if (type == 'checkbox') {
-                el.checked = (text == '1');
-
-            } else if (type == 'hidden') {
-                if (textField) {
+            } else if (el.tagName == 'TEXTAREA') {
+                if (el.ckeditor) {
+                    el.ckeditor.setData(text);
+                } else {
                     $el.val(text);
-                } else if (valueField) {
-                    $el.val(value);
-                } else if (xmlField) {
-                    $el.val(xml);
                 }
-            }
 
-        } else if (el.tagName == 'TEXTAREA') {
-            if (el.ckeditor) {
-                el.ckeditor.setData(text);
-            } else {
-                $el.val(text);
-            }
+            } else if (el.tagName == 'SELECT') {
+                if ($el.attr('multiple')) {
+                    let t = text ? text.split(';') : null;
+                    let v = value ? value.split(';') : null;
+                    setSelectVal($el, t, v);
+                } else {
+                    setSelectVal($el, text, value);
+                }
 
-        } else if (el.tagName == 'SELECT') {
-            if ($el.attr('multiple')) {
-                let t = text ? text.split(';') : null;
-                let v = value ? value.split(';') : null;
-                setSelectVal($el, t, v);
-            } else {
-                setSelectVal($el, text, value);
-            }
-
-        } else if (el.tagName == 'A') {
-            if ($el.attr('data-autocomplete')) {
-                $el.find('.item-after').html(text);
             }
         }
     });
