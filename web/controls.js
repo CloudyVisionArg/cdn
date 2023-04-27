@@ -97,7 +97,7 @@ function newDTPicker(pId, pLabel, pType) {
 
         if (pValue == undefined) {
             //get
-            return $self.val();
+            return dSession.utils.cDate($self.val());
 
         } else {
             // set
@@ -119,9 +119,13 @@ function newDTPicker(pId, pLabel, pType) {
         }
     }
 
-    // Sinonimo de _value
     $inp[0]._text = function (pValue) {
-        return this._value(pValue);
+        if (pValue == undefined) {
+            //get
+            return this.value;
+        } else {
+            return this._value(pValue);
+        }
     }
 
     return $div;
