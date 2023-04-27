@@ -182,9 +182,11 @@ function newSelect(pId, pLabel, pOptions) {
 
         } else {
             //set
-            if (typeof $(this).selectpicker == 'function') {
+            if ($self.attr('multiple')) {
+                setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
+            } else {
+                setSelectVal($self, undefined, pValue);
             }
-            setSelectVal($self, undefined, pValue);
         }
     }
 
@@ -210,7 +212,11 @@ function newSelect(pId, pLabel, pOptions) {
 
         } else {
             //set
-            setSelectVal($self, pText, undefined);
+            if ($self.attr('multiple')) {
+                setSelectVal($self, pText ? pText.split(';') : null);
+            } else {
+                setSelectVal($self, pText);
+            }
         }
     }
 
