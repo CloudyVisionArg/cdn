@@ -1067,6 +1067,11 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
+        debugger;
+        if (text != undefined && el._text) el._text(text);
+        if (value != undefined && el._value) el._value(value);
+        if (xml != undefined && el._xml) el._xml(xml);
+        
         if (el.tagName == 'INPUT') {
             let type = $el.attr('type').toLowerCase();
             if (type == 'text') {
@@ -1242,7 +1247,7 @@ function getEvent(pEvent) {
     }
 }
 
-async function saveDoc(pExit) {
+async function saveDoc(exitOnSuccess) {
     if (saving) return;
     saving = true;
     preloader.show();
@@ -1341,8 +1346,11 @@ async function saveDoc(pExit) {
     });
 
     try {
+        //Parametros para disponibilizar en los eventos
+        var eventArgs = { exitOnSuccess };
+
         // Evento beforeSave
-        document.dispatchEvent(new CustomEvent('beforeSave'));
+        document.dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
@@ -1362,7 +1370,7 @@ async function saveDoc(pExit) {
 
         try {
             // Evento afterSave
-            document.dispatchEvent(new CustomEvent('afterSave'));
+            document.dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
@@ -1382,7 +1390,7 @@ async function saveDoc(pExit) {
             toast(asErr);
         }
 
-        if (pExit) {
+        if (exitOnSuccess) {
             var timeOut = (attErr || asErr ? 5000 : 0);
             setTimeout(exitForm, timeOut);
         } else {
@@ -1399,6 +1407,13 @@ async function saveDoc(pExit) {
         preloader.hide();
         toast(dSession.utils.errMsg(pErr));
         console.error(pErr);
+    }
+
+    // evalCode con context de saveDoc
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
     }
 }
 

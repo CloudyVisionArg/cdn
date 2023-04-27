@@ -1815,8 +1815,8 @@ function saveAtt() {
                         });
                     }
                     loop.next();
-                }
-                else{
+
+                } else {
                     var attUrl = $this.attr('data-att-url');
                     if (attUrl) {
                         file = await getFile($this.attr('data-att-url'));
