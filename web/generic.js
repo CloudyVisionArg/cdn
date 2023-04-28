@@ -1262,44 +1262,24 @@ async function saveDoc(exitOnSuccess) {
         var field = doc.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
+            if (el._text) {
+                let aux = el._text();
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+            
+            } else if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
-                if (type == 'text') {
-                    if ($el.attr('data-numeral') || field.type == 3) {
-                        field.value = numeral($el.val()).value();
-                    } else if (field.type == 2) {
-                        let mom = moment($el.val(), 'L LT');
-                        if (mom.isValid()) {
-                            field.value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
-                        } else {
-                            field.value = null;
-                        }
-                    } else {
-                        field.value = $el.val();
-                    };
+                if (type == 'text' || type == 'hidden') {
+                    field.value = $el.val();
 
                 } else if (type == 'checkbox') {
-                    field.value = el.checked ? '1' : '0';
-
-                } else if (type == 'hidden') {
-                    field.value = $el.val();
+                    field.value = el.checked ? 1 : 0;
                 }
 
             } else if (el.tagName == 'SELECT') {
                 let aux = el._text();
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
-            } else if (el.tagName == 'DIV') {
-                if ($el.hasClass('text-editor')) {
-                    field.value = app7.textEditor.get($el).getValue();
-                }
-
-            } else if (el.tagName == 'A') {
-                if ($el.attr('data-autocomplete')) {
-                    field.value = $el.find('.item-after').html();
-                }
-
-            } else if(el.tagName == 'TEXTAREA') {
+            } else if (el.tagName == 'TEXTAREA') {
                 if (el.ckeditor) {
                     field.value = el.ckeditor.getData();
                 } else {
@@ -1311,27 +1291,19 @@ async function saveDoc(exitOnSuccess) {
 
     $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        try { var field = doc.fields($el.attr('data-valuefield')) } catch(err) { console.log(err) };
+        var field = doc.fields($el.attr('data-valuefield'));
 
         if (field && field.updatable) {
-            if (el.tagName == 'SELECT') {
+            if (el._value) {
+                let aux = el._value();
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+            } else if (el.tagName == 'SELECT') {
                 let aux = el._value();
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
-                if ($el.hasClass('maps-autocomplete')) {
-                    field.value = el._value();
-
-                } else {
-                    let type = $el.attr('type').toLowerCase();
-                    if (type == 'hidden') {
-                        if (field.type == 3) {
-                            field.value = numeral($el.val()).value();
-                        } else {
-                            field.value = $el.val();
-                        };
-                    }
-                }
+                field.value = $el.val();
             }
         }
     });
