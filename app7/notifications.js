@@ -324,10 +324,10 @@ function pageInitMembers(e, page) {
             
             let titleRow = $("<div />", {"class":"item-title-row"}).appendTo(contenedor);
             
-            let subtitle = $("<div />", {"class":"item-title","text":item.Title})
+            let subtitle = $("<div />", {"class":"item-title","style":"overflow: hidden;","text":item.Title})
             subtitle.appendTo(titleRow);
             
-            let title = $("<div />", {"class":"item-after","text":fechaNotif})
+            let title = $("<div />", {"class":"item-after","style":"overflow: hidden;","text":fechaNotif})
             title.appendTo(titleRow);
             
             let text = $("<div />", {"class":"item-subtitle","text":item.Body});
@@ -687,68 +687,6 @@ const notifOnDeleted = () => {
     console.log('notifOnDeleted Triggered');
 }
 
-
-injectCSS(`
-    .list.media-list .item-title, .list.media-list .item-subtitle {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: pre-wrap;
-    }
-    
-    .list .item-title{
-        -webkit-line-clamp: 2;
-    }
-
-    .list .item-subtitle {
-        -webkit-line-clamp: 3;
-    }
-
-    .notifications .msgunread{
-        background: rgba(var(--f7-theme-color-rgb), 0.3);
-    }
-
-    .notifications .msgread{
-        background-color: transparent;
-    }
-
-    .notifications .btnRead, .notifications .btnDelete{
-        margin-left: 1rem;
-        color: var(--f7-tabbar-link-inactive-color);
-    }
-
-    .animated-bell div.icon{
-        animation: ringing-bell 4s .7s ease-in-out infinite;
-    }
-
-    @keyframes ringing-bell {
-    0% { transform: rotate(0); }
-    1% { transform: rotate(30deg); }
-    3% { transform: rotate(-28deg); }
-    5% { transform: rotate(34deg); }
-    7% { transform: rotate(-32deg); }
-    9% { transform: rotate(30deg); }
-    11% { transform: rotate(-28deg); }
-    13% { transform: rotate(26deg); }
-    15% { transform: rotate(-24deg); }
-    17% { transform: rotate(22deg); }
-    19% { transform: rotate(-20deg); }
-    21% { transform: rotate(18deg); }
-    23% { transform: rotate(-16deg); }
-    25% { transform: rotate(14deg); }
-    27% { transform: rotate(-12deg); }
-    29% { transform: rotate(10deg); }
-    31% { transform: rotate(-8deg); }
-    33% { transform: rotate(6deg); }
-    35% { transform: rotate(-4deg); }
-    37% { transform: rotate(2deg); }
-    39% { transform: rotate(-1deg); }
-    41% { transform: rotate(1deg); }
-    43% { transform: rotate(0); }
-    100% { transform: rotate(0); }
-    }
-`);
 
 // function toggleSelectionMode() {
 //     var $itemContent;
