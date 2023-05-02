@@ -1,4 +1,4 @@
-//hola
+//hola chau
 (function () {
 	include('jslib');
 })();
