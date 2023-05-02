@@ -97,7 +97,7 @@ injectCSS(`
     .list.media-list .item-title, .list.media-list .item-subtitle {
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        overflow: hidden !important;
+        overflow: hidden;
         text-overflow: ellipsis;
         white-space: pre-wrap;
     }
@@ -324,13 +324,13 @@ function pageInitMembers(e, page) {
             
             let titleRow = $("<div />", {"class":"item-title-row"}).appendTo(contenedor);
             
-            let subtitle = $("<div />", {"class":"item-title","text":item.Title})
+            let subtitle = $("<div />", {"class":"item-title","style":"overflow: hidden !important;","text":item.Title})
             subtitle.appendTo(titleRow);
             
             let title = $("<div />", {"class":"item-after","text":fechaNotif})
             title.appendTo(titleRow);
             
-            let text = $("<div />", {"class":"item-subtitle","text":item.Body});
+            let text = $("<div />", {"class":"item-subtitle","style":"overflow: hidden !important;","text":item.Body});
             text.appendTo(contenedor);
             
             //let swipActionLeft = $("<div/>",{"class":"swipeout-actions-left"}).appendTo(li);
