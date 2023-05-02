@@ -94,9 +94,13 @@ var selectionMode = false;
 console.log("notifications")
 
 injectCSS(`
-
-    .variable-height-list {
-        --f7-list-item-text-max-lines: 10;
+    .notifications .list.media-list .item-title, .notifications .list.media-list .item-subtitle {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
+        -webkit-line-clamp: 2;
     }
 
     .notifications .msgunread{
@@ -276,7 +280,7 @@ var $notificationsVirtualList
 var $pageCont = $page.find(".page-content");
 var $divActions = $("<div/>",{"class":"actions-container"}).appendTo($pageCont);
 $divActions.hide();
-var $listMembers = $("<div/>", {"class": "list virtual-list media-list  variable-height-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
+var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 $ulMembers.on("click",(ev)=>{
@@ -342,7 +346,8 @@ function pageInitMembers(e, page) {
         },
         height: (item)=>{
             //TODO obtener el item heigth dinamicamente
-            //103 alto item           
+            //103 alto item
+
             return  app7.theme === 'ios' ? 94.59 : (app7.theme === 'md' ? 103.00 : 103)            
         }
     });
@@ -674,6 +679,7 @@ function getItemContent(obj) {
 const notifOnDeleted = () => {
     console.log('notifOnDeleted Triggered');
 }
+
 
 // function toggleSelectionMode() {
 //     var $itemContent;
