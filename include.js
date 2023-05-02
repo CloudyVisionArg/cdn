@@ -352,9 +352,15 @@ function scriptSrc(scriptId, version) {
 }
 
 /**
+owner
+repo
+path
+ref
+fresh
+server
 */
 function gitCdn(options) {
-    var url = 'https://eventsjs2.cloudycrm.net/github?';
+    var url = `https://eventsjs${options.server}.cloudycrm.net/github?`;
     url += getOpt(options, 'owner');
     url += getOpt(options, 'repo');
     url += getOpt(options, 'path');
@@ -401,7 +407,6 @@ function gitCdn(options) {
 
                 },
                 err => {
-                    debugger;
                     reject(err);
                 }
             )
