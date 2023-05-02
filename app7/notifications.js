@@ -94,9 +94,20 @@ var selectionMode = false;
 console.log("notifications")
 
 injectCSS(`
+    .list .item-title, .list .item-subtitle {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
+    }
+    
+    .list .item-title{
+        -webkit-line-clamp: 2;
+    }
 
-    .variable-height-list {
-        --f7-list-item-text-max-lines: 10;
+    .list .item-subtitle {
+        -webkit-line-clamp: 3;
     }
 
     .notifications .msgunread{
@@ -276,7 +287,7 @@ var $notificationsVirtualList
 var $pageCont = $page.find(".page-content");
 var $divActions = $("<div/>",{"class":"actions-container"}).appendTo($pageCont);
 $divActions.hide();
-var $listMembers = $("<div/>", {"class": "list virtual-list media-list  variable-height-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
+var $listMembers = $("<div/>", {"class": "list virtual-list media-list chevron-center text-select-none", "style" : "margin-top:0px"}).appendTo($pageCont);
 var $ulMembers = $("<ul/>").appendTo($listMembers);
 
 $ulMembers.on("click",(ev)=>{
