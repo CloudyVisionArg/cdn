@@ -354,7 +354,7 @@ function scriptSrc(scriptId, version) {
 /**
 */
 function gitCdn(options) {
-    var url = 'https://eventsjs.cloudycrm.net/github?';
+    var url = 'https://eventsjs2.cloudycrm.net/github?';
     url += getOpt(options, 'owner');
     url += getOpt(options, 'repo');
     url += getOpt(options, 'path');
