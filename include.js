@@ -352,7 +352,7 @@ function scriptSrc(scriptId, version) {
 }
 
 /**
-owner
+owner: def CloudyVisionArg
 repo
 path
 ref
