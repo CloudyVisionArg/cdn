@@ -60,10 +60,10 @@ function errMgr(pErr) {
 
 // Directorio para guardar adjuntos
 if (device.platform != 'browser') {
-    if(_isCapacitor()){
+    if (_isCapacitor()) {
         cacheDir = null; //Capacitor no tiene get para directorio
-    }
-    else{
+
+    } else {
         window.resolveLocalFileSystemURL(cordova.file.cacheDirectory,
             function (dir) {
                 cacheDir = dir;
@@ -987,15 +987,8 @@ function pageInit(e, page) {
     }, 0);
 
     pageEl.crm = {
-        fillControls,
-        saveDoc,
-        fld_id,
-        folder,
-        folderJson,
-        doc_id,
-        doc,
-        docJson,
-        $navbar,
+        fillControls, saveDoc, fld_id, folder, 
+        folderJson, doc_id, doc, docJson, $navbar,
     };
 }
 
@@ -1251,13 +1244,13 @@ async function fillAttachments(pEl) {
 
 async function downloadAtt(e) {
     debugger;
-    if(_isCapacitor()){
+    if (_isCapacitor()) {
         await downloadAttCapacitor($(this));
-    }else{
+    } else {
         await downloadAttCordova($(this));
     }
 }
-function _arrayBufferToBase64( buffer ) {
+function _arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array( buffer );
     var len = bytes.byteLength;
@@ -1277,7 +1270,7 @@ function _base64ToArrayBuffer(base64) {
     return bytes.buffer;
 }
 
-async function downloadAttCapacitor($att){
+async function downloadAttCapacitor($att) {
     debugger;
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
@@ -1298,6 +1291,7 @@ async function downloadAttCapacitor($att){
             if (device.platform == 'browser') {
                 var blob = new Blob([fs]);
                 saveAs(blob, attName);
+
             } else {
                 /*
                 WARNING: 
@@ -1339,7 +1333,7 @@ async function downloadAttCapacitor($att){
     }
 }
 
-async function downloadAttCordova($att){
+async function downloadAttCordova($att) {
 
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
@@ -1398,10 +1392,10 @@ async function downloadAttCordova($att){
 }
 
 function openAtt(pURL) {
-    if(_isCapacitor()){
+    if (_isCapacitor()) {
         openFile(pURL);
-    }
-    else{
+
+    } else {
         if (pURL.substring(0, 10) == 'cdvfile://' || pURL.includes("__cdvfile_")) {
             window.resolveLocalFileSystemURL(pURL,
                 function (fileEntry) {
@@ -1417,7 +1411,7 @@ function openAtt(pURL) {
     }
 
     function openFile(pFile) {
-        if(_isCapacitor()){
+        if (_isCapacitor()) {
             Capacitor.Plugins.FileOpener.open({filePath : pFile}).then(
                 ()=> {
                     console.log('File opened');
@@ -1426,7 +1420,7 @@ function openAtt(pURL) {
                     logAndToast('Capacitor.Plugins.FileOpener error: ' + err.message);
                 }, 
             );
-        }else{
+        } else {
             // Abre el archivo con fileOpener2
             cordova.plugins.fileOpener2.open(pFile, undefined, {
                 success: function () {
@@ -1476,8 +1470,8 @@ function addAtt(e) {
                         });
                 }, errMgr
             );
-        }
-        else {
+
+        } else {
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
@@ -1510,7 +1504,8 @@ function addAtt(e) {
                         }, errMgr);
                 }, errMgr
             );
-        }else{
+
+        } else {
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
@@ -1525,8 +1520,9 @@ function addAtt(e) {
                 cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
             );
         }
+
     } else if (action == 'doc') {
-        if(_isCapacitor()){
+        if (_isCapacitor()) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
                 (pickFilesResultSucc)=>{
                     const files = pickFilesResultSucc.files;
@@ -1540,7 +1536,8 @@ function addAtt(e) {
                         errMgr
                     );
                 },errMgr);
-        }else{
+
+        } else {
             chooser.getFileMetadata().then(
                 function (res) {
                     if (res) {
@@ -1675,8 +1672,11 @@ async function saveDoc(exitOnSuccess) {
     });
 
     try {
+        //Parametros para disponibilizar en los eventos
+        var eventArgs = { exitOnSuccess };
+
         // Evento beforeSave
-        $page[0].dispatchEvent(new CustomEvent('beforeSave'));
+        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
@@ -1700,7 +1700,7 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            $page[0].dispatchEvent(new CustomEvent('afterSave'));
+            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
@@ -1740,17 +1740,25 @@ async function saveDoc(exitOnSuccess) {
         toast(dSession.utils.errMsg(pErr).replaceAll('\r\n', '<br>'), 0);
         console.error(pErr);
     }
+
+    // evalCode con context saveDoc
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
+    }
 }
 
 async function removeAttFromCache(fileName){
-    if(_isCapacitor()){
-        try{
+    if (_isCapacitor()) {
+        try {
             const result = await Capacitor.Plugins.Filesystem.deleteFile({
-                    path: fileName,
-                    directory: Directory.Cache,
-                });
-                console.log('Archivo ' +  fileName + ' eliminado del cache del app');
-        }catch(e){
+                path: fileName,
+                directory: Directory.Cache,
+            });
+            console.log('Archivo ' +  fileName + ' eliminado del cache del app');
+
+        } catch(e) {
             console.log('Error intentando quitar el archivo ' +  fileName + ' del cache del app');
         }
     }
@@ -1772,7 +1780,7 @@ function saveAtt() {
             if (attAction == 'save') {
                 var file;
                 debugger;
-                if(_isCapacitor()){
+                if (_isCapacitor()) {
                     const fileFromCache = await getFileFromCache(attName);
                     // const rawData = atob(fileFromCache.data);
                     // const bytes = new Array(rawData.length);
@@ -1798,6 +1806,7 @@ function saveAtt() {
                         await att.save();
                         await removeAttFromCache(attName);
                         $this.removeAttr('data-att-url');
+
                     } catch (err) {
                         errors.push({
                             file: attName,
@@ -1806,8 +1815,8 @@ function saveAtt() {
                         });
                     }
                     loop.next();
-                }
-                else{
+
+                } else {
                     var attUrl = $this.attr('data-att-url');
                     if (attUrl) {
                         file = await getFile($this.attr('data-att-url'));
@@ -1870,10 +1879,10 @@ function getEvent(pEvent) {
 }
 
 // evalCode con context root
-async function evalCode(code) {
+async function evalCode(code, args) {
     var pipe = {};
     eval(`pipe.fn = async () => {\n\n${code}\n};`);
-    await pipe.fn();
+    await pipe.fn(args);
 }
 
 /*

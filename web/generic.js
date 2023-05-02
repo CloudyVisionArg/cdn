@@ -666,6 +666,7 @@ async function renderControls(pCont, pParent) {
             $this = newDTPicker(ctl['NAME'], label, mode)
             $this.addClass('mt-3');
             $input = $this.find('input');
+            bsctl = $this.find('div.input-group');
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $input.attr({ 'readonly': 'readonly' });
@@ -1067,71 +1068,80 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (el.tagName == 'INPUT') {
-            let type = $el.attr('type').toLowerCase();
-            if (type == 'text') {
-                var format = $el.attr('data-numeral');
-                if (format) {
-                    // Input numeric
-                    let n = numeral(text);
-                    if (n.value() != null) {
-                        $el.val(n.format(format));
-                    } else {
-                        $el.val('');
-                    }
-                } else if ($el.attr('data-date-type')) {
-                    // DTPicker
-                    el._text(text);
+        if (tf == 'task_customer') debugger;
 
-                } else if ($el.hasClass('maps-autocomplete')) {
-                    // Input maps
-                    el._text(text);
-                    el._value(value);
+        if (textField && el._text) {
+            el._text(text);
+            textField = undefined;
+        }
+        if (valueField && el._value) {
+            el._value(value);
+            valueField = undefined;
+        }
+        if (xmlField && el._xml) {
+            el._xml(xml);
+            xmlField = undefined;
+        }
         
-                } else {
-                    if (textField && textField.type == 2) {
-                        if (text) {
-                            $el.val(formatDate(text));
+        if (textField || valueField || xmlField) {
+            var f, v;
+            if (textField) {
+                f = textField; v = text;
+            } else if (valueField) {
+                f = valueField; v = value;
+            } else if (xmlField) {
+                f = xmlField; v = xml;
+            }
+
+            if (el.tagName == 'INPUT') {
+                let type = $el.attr('type').toLowerCase();
+
+                if (type == 'text') {
+                    var format = $el.attr('data-numeral');
+                    if (f.type == 3 || format) {
+                        // Input numeric
+                        let n = numeral(v);
+                        if (n.value() != null) {
+                            $el.val(n.format(format));
                         } else {
                             $el.val('');
                         }
+
+                    } else if (f.type == 2) {
+                        var dt = dSession.utils.cDate(v);
+                        if (dt) {
+                            $el.val(new moment(dt).format('L LT'));
+                        } else {
+                            $el.val('');
+                        }
+
                     } else {
-                        $el.val(text);
+                        $el.val(v);
                     }
+
+                } else if (type == 'checkbox') {
+                    el.checked = (v.toString() == '1');
+
+                } else if (type == 'hidden') {
+                    $el.val(v);
                 }
 
-            } else if (type == 'checkbox') {
-                el.checked = (text == '1');
-
-            } else if (type == 'hidden') {
-                if (textField) {
-                    $el.val(text);
-                } else if (valueField) {
-                    $el.val(value);
-                } else if (xmlField) {
-                    $el.val(xml);
+            } else if (el.tagName == 'TEXTAREA') {
+                if (el.ckeditor) {
+                    el.ckeditor.setData(v);
+                } else {
+                    $el.val(v);
                 }
-            }
 
-        } else if (el.tagName == 'TEXTAREA') {
-            if (el.ckeditor) {
-                el.ckeditor.setData(text);
-            } else {
-                $el.val(text);
-            }
+            } else if (el.tagName == 'SELECT') {
+                if ($el.attr('multiple')) {
+                    let t = text ? text.split(';') : null;
+                    let v = value ? value.split(';') : null;
+                    setSelectVal($el, t, v);
+                } else {
+                    setSelectVal($el, text, value);
+                }
 
-        } else if (el.tagName == 'SELECT') {
-            if ($el.attr('multiple')) {
-                let t = text ? text.split(';') : null;
-                let v = value ? value.split(';') : null;
-                setSelectVal($el, t, v);
-            } else {
-                setSelectVal($el, text, value);
-            }
-
-        } else if (el.tagName == 'A') {
-            if ($el.attr('data-autocomplete')) {
-                $el.find('.item-after').html(text);
             }
         }
     });
@@ -1242,7 +1252,7 @@ function getEvent(pEvent) {
     }
 }
 
-async function saveDoc(pExit) {
+async function saveDoc(exitOnSuccess) {
     if (saving) return;
     saving = true;
     preloader.show();
@@ -1252,44 +1262,24 @@ async function saveDoc(pExit) {
         var field = doc.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
+            if (el._text) {
+                let aux = el._text();
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+            
+            } else if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
-                if (type == 'text') {
-                    if ($el.attr('data-numeral') || field.type == 3) {
-                        field.value = numeral($el.val()).value();
-                    } else if (field.type == 2) {
-                        let mom = moment($el.val(), 'L LT');
-                        if (mom.isValid()) {
-                            field.value = mom.format('YYYY-MM-DDTHH:mm:ss') + timeZone();
-                        } else {
-                            field.value = null;
-                        }
-                    } else {
-                        field.value = $el.val();
-                    };
+                if (type == 'text' || type == 'hidden') {
+                    field.value = $el.val();
 
                 } else if (type == 'checkbox') {
-                    field.value = el.checked ? '1' : '0';
-
-                } else if (type == 'hidden') {
-                    field.value = $el.val();
+                    field.value = el.checked ? 1 : 0;
                 }
 
             } else if (el.tagName == 'SELECT') {
                 let aux = el._text();
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
-            } else if (el.tagName == 'DIV') {
-                if ($el.hasClass('text-editor')) {
-                    field.value = app7.textEditor.get($el).getValue();
-                }
-
-            } else if (el.tagName == 'A') {
-                if ($el.attr('data-autocomplete')) {
-                    field.value = $el.find('.item-after').html();
-                }
-
-            } else if(el.tagName == 'TEXTAREA') {
+            } else if (el.tagName == 'TEXTAREA') {
                 if (el.ckeditor) {
                     field.value = el.ckeditor.getData();
                 } else {
@@ -1301,27 +1291,19 @@ async function saveDoc(pExit) {
 
     $('[data-valuefield]').each(function (ix, el) {
         var $el = $(el);
-        try { var field = doc.fields($el.attr('data-valuefield')) } catch(err) { console.log(err) };
+        var field = doc.fields($el.attr('data-valuefield'));
 
         if (field && field.updatable) {
-            if (el.tagName == 'SELECT') {
+            if (el._value) {
+                let aux = el._value();
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+            } else if (el.tagName == 'SELECT') {
                 let aux = el._value();
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
-                if ($el.hasClass('maps-autocomplete')) {
-                    field.value = el._value();
-
-                } else {
-                    let type = $el.attr('type').toLowerCase();
-                    if (type == 'hidden') {
-                        if (field.type == 3) {
-                            field.value = numeral($el.val()).value();
-                        } else {
-                            field.value = $el.val();
-                        };
-                    }
-                }
+                field.value = $el.val();
             }
         }
     });
@@ -1341,8 +1323,11 @@ async function saveDoc(pExit) {
     });
 
     try {
+        //Parametros para disponibilizar en los eventos
+        var eventArgs = { exitOnSuccess };
+
         // Evento beforeSave
-        document.dispatchEvent(new CustomEvent('beforeSave'));
+        document.dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
@@ -1362,7 +1347,7 @@ async function saveDoc(pExit) {
 
         try {
             // Evento afterSave
-            document.dispatchEvent(new CustomEvent('afterSave'));
+            document.dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
@@ -1382,7 +1367,7 @@ async function saveDoc(pExit) {
             toast(asErr);
         }
 
-        if (pExit) {
+        if (exitOnSuccess) {
             var timeOut = (attErr || asErr ? 5000 : 0);
             setTimeout(exitForm, timeOut);
         } else {
@@ -1399,6 +1384,13 @@ async function saveDoc(pExit) {
         preloader.hide();
         toast(dSession.utils.errMsg(pErr));
         console.error(pErr);
+    }
+
+    // evalCode con context de saveDoc
+    async function evalCode(code) {
+        var pipe = {};
+        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        await pipe.fn();
     }
 }
 

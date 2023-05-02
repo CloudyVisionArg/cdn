@@ -19,21 +19,30 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 260 });
+	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 260 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 260 });
+    /*
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 259 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 259 });
-
+	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 146 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 256 });
+    */
+
+    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 250 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 259 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
+
+
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
     scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 238 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
@@ -42,12 +51,10 @@ function registeredScripts() {
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 149 });
     scripts.push({ id: 'app7-sade-index', path: '/app7/sade/index.js', version: 149 });
-	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 146 });
 	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
 	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
 	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
@@ -344,6 +351,8 @@ function scriptSrc(scriptId, version) {
 	return src;
 }
 
+/**
+*/
 function gitCdn(options) {
     var url = 'http://10.21.21.223:8080/github?';
     url += getOpt(options, 'owner');

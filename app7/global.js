@@ -271,7 +271,7 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
-                if(_isCapacitor()){
+                if (_isCapacitor()) {
                     Capacitor.Plugins.EmailComposer.open({
                         to: 'soporte@cloudycrm.net',
                         subject: 'Cloudy CRM - App issue',
@@ -289,8 +289,8 @@ async function showConsole(allowClose) {
                             }
                         ]
                     });
-                }
-                else{
+
+                } else {
                     cordova.plugins.email.open({
                         to: 'soporte@cloudycrm.net',
                         subject: 'Cloudy CRM - App issue',
@@ -1415,17 +1415,19 @@ function _isCapacitor(){
 
 function statusBar(pShow) {
     let refStatusBarPLugin; 
-    if(_isCapacitor()){
+
+    if (_isCapacitor()) {
         refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
         refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
         //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
         refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
         refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
-    }else{
+
+    } else {
         refStatusBarPLugin = StatusBar; //Cordova
     }
-    if (pShow) {
 
+    if (pShow) {
         refStatusBarPLugin.show();
         if (device.platform == 'iOS') {
             refStatusBarPLugin.styleDefault();
@@ -1435,6 +1437,7 @@ function statusBar(pShow) {
         } else {
             //refStatusBarPLugin.styleLightContent();
         }
+
     } else {
         StatusBar.hide();
     }
@@ -1958,8 +1961,6 @@ function audioRecorder(pCallback) {
         swipeToClose: true,
         content: $sheet[0],
     }).open();
-    
-
 
     function record() {
         (_isCapacitor())
@@ -1994,7 +1995,6 @@ function audioRecorder(pCallback) {
     }
 
     function recordCordova(){
-
         save = false;
         var now = new Date();
         var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
@@ -2051,17 +2051,17 @@ function audioRecorder(pCallback) {
 
     function saveAudio(){
         debugger;
-        if(_isCapacitor()){
+        if (_isCapacitor()) {
             saveAudioCapacitor();
-        }else{
+        } else {
             saveAudioCordova();
         }
     }
 
     function cancelAudio(){
-        if(_isCapacitor()){
+        if (_isCapacitor()) {
             cancelAudioCapacitor();
-        }else{
+        } else {
             cancelAudioCordova();
         }
     }
@@ -2116,7 +2116,7 @@ function audioRecorder(pCallback) {
         $saveBtnRow.hide();
     }
 
-    function canceAudiolCordova() {
+    function cancelAudioCordova() {
         clearInterval(interv);
         mediaRec.stopRecord();
         mediaRec.release();
