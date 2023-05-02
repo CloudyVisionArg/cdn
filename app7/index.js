@@ -206,7 +206,8 @@ var app = {
             }else if ( leftp || rightp ) {
                 app7.panel.close();
                 return false; 
-            } else if (app7.view.current.history.length == 1) {        
+            } else if (app7.view.current.history.length == 1) {  
+                debugger;      
                 navigator.app.exitApp();
             } else {
                 app7.view.current.router.back();
