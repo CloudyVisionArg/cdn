@@ -94,7 +94,7 @@ var selectionMode = false;
 console.log("notifications")
 
 injectCSS(`
-    .list .item-title, .list .item-subtitle {
+    .list.media-list .item-title, .list.media-list .item-subtitle {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
