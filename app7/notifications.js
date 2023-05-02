@@ -100,14 +100,7 @@ injectCSS(`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: pre-wrap;
-    }
-    
-    .list .item-title{
         -webkit-line-clamp: 2;
-    }
-
-    .list .item-subtitle {
-        -webkit-line-clamp: 3;
     }
 
     .notifications .msgunread{
