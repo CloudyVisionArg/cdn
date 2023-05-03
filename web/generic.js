@@ -1449,9 +1449,8 @@ async function evalCode(code, ctx) {
         await pipe.fn(ctx);
 
     } catch(err) {
-        debugger;
         console.error(err);
-        throw err
+        reject(err);
     }
 }
 
