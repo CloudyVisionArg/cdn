@@ -1450,7 +1450,7 @@ async function evalCode(code, ctx) {
 
     } catch(err) {
         console.error(err);
-        reject(err);
+        throw err;
     }
 }
 
