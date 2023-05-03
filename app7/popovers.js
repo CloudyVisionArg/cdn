@@ -134,8 +134,8 @@ function crearCarteles(pCartel,index,array){
     elButtonOk.innerText = "Ok"
     elButtonOk_container.append(elButtonOk);
     divInner.append(elButtonOk_container);
-
-
+    console.log(pCartel["context"]);
+    console.log(pCartel["selector"]);
     const text = div.outerHTML;
     const dynamicPopover = app7.popover.create({
         content: text,
@@ -161,7 +161,7 @@ function crearCarteles(pCartel,index,array){
     dynamicPopover["context"] = pCartel["context"]
 
     dynamicPopover["selector"] = pCartel["selector"]
-
+    console.log("pasó");
     return dynamicPopover;
     
 }
