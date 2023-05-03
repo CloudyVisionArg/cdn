@@ -991,12 +991,14 @@ async function renderControls(pCont, pParent) {
         if ($this) $this.appendTo($col);
 
         try {
-            // Evento controlRender
-            await document.dispatchEvent(new CustomEvent('controlRender', { detail : {
+            var context = {
                 ctl, $this, $input, bsctl, textField, valueField
-            }}));
+            };
 
-            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER']);
+            // Evento controlRender
+            document.dispatchEvent(new CustomEvent('controlRender', { detail : context}));
+
+            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
         } catch (err) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
@@ -1019,9 +1021,9 @@ async function renderControls(pCont, pParent) {
     }
 
     // evalCode con context de renderControls
-    async function evalCode(code) {
+    async function evalCode(code, ctx) {
         var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
         await pipe.fn();
     }    
 }
