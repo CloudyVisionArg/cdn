@@ -352,12 +352,17 @@ function scriptSrc(scriptId, version) {
 }
 
 /**
-owner: def CloudyVisionArg
-repo
-path
-ref
-fresh
-server
+@example
+gitCdn({
+    owner // def CloudyVisionArg
+    repo // Repositorio
+    path // Ruta al archivo, no poner el slash inicial
+    ref // Branch / tag
+    fresh // Actualiza el cache
+    url // Devuelve la url en vez del contenido. Def false
+    server // 2 para el server de desarrollo
+}
+@returns {string|Promise<string>}
 */
 function gitCdn(options) {
     var url = `https://eventsjs${options.server ? options.server : ''}.cloudycrm.net/github?`;

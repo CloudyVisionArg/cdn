@@ -991,6 +991,11 @@ async function renderControls(pCont, pParent) {
         if ($this) $this.appendTo($col);
 
         try {
+            // Evento controlRender
+            document.dispatchEvent(new CustomEvent('controlRender', { detail : {
+                ctl, $this, $input, bsctl, textField, valueField
+            }}));
+
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER']);
         } catch (err) {
             console.error(err);
