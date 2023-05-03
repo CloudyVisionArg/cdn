@@ -134,9 +134,12 @@ function crearCarteles(pCartel,index,array){
     elButtonOk.innerText = "Ok"
     elButtonOk_container.append(elButtonOk);
     divInner.append(elButtonOk_container);
-    console.log(pCartel["context"]);
-    console.log(pCartel["selector"]);
     const text = div.outerHTML;
+
+    let customBackDropEl = ".backdrop";
+    if($(pCartel["selector"]).length > 0){
+        customBackDropEl = getSurroundingBackdrop(pCartel["selector"])
+    }
     const dynamicPopover = app7.popover.create({
         content: text,
         on: {       
@@ -153,7 +156,7 @@ function crearCarteles(pCartel,index,array){
                 window.localStorage.setItem("popoversLeidos", read);
             },  
         },
-        backdropEl: getSurroundingBackdrop(pCartel["selector"])
+        backdropEl: customBackDropEl
 
     });
 
