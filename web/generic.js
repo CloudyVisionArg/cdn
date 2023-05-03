@@ -319,7 +319,9 @@ async function renderPage() {
         try {
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
-            if (ev) await evalCode(ev);
+            if (ev) await evalCode(ev, {
+                $body, $d, $cont
+            });
 
         } catch(err) {
             console.error(err);
@@ -460,13 +462,6 @@ async function renderPage() {
             preloader.hide();
         }
     }, 0);
-
-    // evalCode con context de renderPage
-    async function evalCode(code, ctx) {
-        var pipe = {};
-        eval(`//renderPage\npipe.fn = async (ctx) => {\n\n${code}\n};`);
-        await pipe.fn(ctx);
-    }
 }
 
 function getRow(pRow, pCont, pCol) {
@@ -1019,13 +1014,6 @@ async function renderControls(pCont, pParent) {
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
     }
-
-    // evalCode con context de renderControls
-    async function evalCode(code, ctx) {
-        var pipe = {};
-        eval(`//renderControls\npipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }    
 }
 
 async function fillControls() {
@@ -1331,14 +1319,14 @@ async function saveDoc(exitOnSuccess) {
 
     try {
         //Parametros para disponibilizar en los eventos
-        var eventArgs = { exitOnSuccess };
+        var context = { exitOnSuccess };
 
         // Evento beforeSave
-        document.dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
+        document.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
-        if (ev) await evalCode(ev);
+        if (ev) await evalCode(ev, context);
 
         await doc.save();
         docJson = doc.toJSON();
@@ -1354,11 +1342,11 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            document.dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
+            document.dispatchEvent(new CustomEvent('afterSave', { detail : context }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
-            if (ev) await evalCode(ev);
+            if (ev) await evalCode(ev, context);
 
         } catch (err) {
             var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
@@ -1391,13 +1379,6 @@ async function saveDoc(exitOnSuccess) {
         preloader.hide();
         toast(dSession.utils.errMsg(pErr));
         console.error(pErr);
-    }
-
-    // evalCode con context de saveDoc
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
     }
 }
 
@@ -1461,10 +1442,9 @@ function saveAtt() {
     });
 }
 
-// evalCode con context de root
-async function evalCode(code) {
+async function evalCode(code, ctx) {
     var pipe = {};
-    eval(`pipe.fn = async () => {\n\n${code}\n};`);
-    await pipe.fn();
+    eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+    await pipe.fn(ctx);
 }
 
