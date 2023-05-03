@@ -464,7 +464,7 @@ async function renderPage() {
     // evalCode con context de renderPage
     async function evalCode(code, ctx) {
         var pipe = {};
-        eval(`//renderPage\npipe.fn = async () => {\n\n${code}\n};`);
+        eval(`//renderPage\npipe.fn = async (ctx) => {\n\n${code}\n};`);
         await pipe.fn();
     }
 }
