@@ -992,7 +992,7 @@ async function renderControls(pCont, pParent) {
 
         try {
             // Evento controlRender
-            document.dispatchEvent(new CustomEvent('controlRender', { detail : {
+            await document.dispatchEvent(new CustomEvent('controlRender', { detail : {
                 ctl, $this, $input, bsctl, textField, valueField
             }}));
 
