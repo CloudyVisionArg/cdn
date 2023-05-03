@@ -319,6 +319,7 @@ async function renderPage() {
         try {
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
+            debugger;
             if (ev) await evalCode(ev, {
                 $body, $d, $cont
             });
