@@ -360,7 +360,7 @@ fresh
 server
 */
 function gitCdn(options) {
-    var url = `https://eventsjs${options.server}.cloudycrm.net/github?`;
+    var url = `https://eventsjs${options.server ? options.server : ''}.cloudycrm.net/github?`;
     url += getOpt(options, 'owner');
     url += getOpt(options, 'repo');
     url += getOpt(options, 'path');
