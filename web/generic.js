@@ -1445,6 +1445,7 @@ function saveAtt() {
 async function evalCode(code, ctx) {
     var pipe = {};
     eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+    debugger;
     await pipe.fn(ctx);
 }
 
