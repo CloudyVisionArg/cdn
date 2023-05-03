@@ -152,7 +152,9 @@ function crearCarteles(pCartel,index,array){
                 read += pCartel["popover_id"];
                 window.localStorage.setItem("popoversLeidos", read);
             },  
-        }
+        },
+        backdropEl: getSurroundingBackdrop(pCartel["selector"])
+
     });
 
         
@@ -179,9 +181,7 @@ function renderPopovers(pArrPopovers){
     for (let i = 0; i < arrCartelesVista.length; i++) {                
 
         arrCartelesVista[i].on('beforeOpen', function () {
-            if($(arrCartelesVista[i]["selector"]).length > 0){  
-                debugger;              
-                arrCartelesVista[i].backdropEl = getSurroundingBackdrop(arrCartelesVista[i]["selector"])
+            if($(arrCartelesVista[i]["selector"]).length > 0){                
                 arrCartelesVista[i].open(arrCartelesVista[i]["selector"]);
             }else{
                 arrCartelesVista[i].emit("closedWithoutDisplay");
