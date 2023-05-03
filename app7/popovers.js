@@ -136,10 +136,12 @@ function crearCarteles(pCartel,index,array){
     divInner.append(elButtonOk_container);
     const text = div.outerHTML;
 
-    let customBackDropEl = ".backdrop";
+    let customBackDropEl = ".popup-backdrop";
     if($(pCartel["selector"]).length > 0){
         customBackDropEl = getSurroundingBackdrop(pCartel["selector"])
     }
+    console.log("backdropel");
+    console.log(customBackDropEl);
     const dynamicPopover = app7.popover.create({
         content: text,
         on: {       
