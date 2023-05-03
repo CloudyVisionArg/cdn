@@ -1447,8 +1447,9 @@ async function evalCode(code, ctx) {
         var pipe = {};
         eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
         await pipe.fn(ctx);
-        
+
     } catch(err) {
+        debugger;
         console.error(err);
         throw err
     }
