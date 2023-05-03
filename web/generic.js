@@ -1023,7 +1023,7 @@ async function renderControls(pCont, pParent) {
     // evalCode con context de renderControls
     async function evalCode(code, ctx) {
         var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
+        eval(`//renderControls\npipe.fn = async () => {\n\n${code}\n};`);
         await pipe.fn();
     }    
 }
