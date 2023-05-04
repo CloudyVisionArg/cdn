@@ -448,6 +448,8 @@ async function renderPage() {
         }
     });
 
+    debugger;
+
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
     setTimeout(function waiting() {
