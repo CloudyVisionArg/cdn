@@ -436,18 +436,6 @@ async function renderPage() {
     // Tooltips
     $('[data-bs-toggle="tooltip"]').each(function (ix) {
         new bootstrap.Tooltip(this);
-        /*
-        let $this = $(this);
-        if ($this.tooltip) {
-            $this.tooltip({
-                delay: {
-                    show: 500,
-                    hide: 100,
-                },
-                placement: 'auto',
-            });
-        }
-        */
     });
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
@@ -988,7 +976,6 @@ async function renderControls(pCont, pParent) {
 
         if (ctl.attr('showtooltip') == '1' && ctl.attr('tooltip')) {
             $this.attr('data-bs-toggle', 'tooltip');
-            $this.attr('data-bs-placement', 'left');
             $this.attr('title', ctl.attr('tooltip'));
         }
 
