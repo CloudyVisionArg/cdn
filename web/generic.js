@@ -992,7 +992,6 @@ async function renderControls(pCont, pParent) {
 
             // Evento controlRender
             document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
-            debugger;
 
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
         } catch (err) {
