@@ -132,6 +132,7 @@ function newDTPicker(pId, pLabel, pType) {
 function inputDataList(pInput, pSource) {
     //todo: ver si puedo hacerlo sin permisos
     pInput.attr('autocomplete', 'off');
+    pInput.attr('data-filling', '1');
 
     getFolder(objPropCI(pSource, 'folder'), objPropCI(pSource, 'rootFolder')).then(
         function (fld) {
@@ -149,6 +150,7 @@ function inputDataList(pInput, pSource) {
                             value: el[f],
                         }).appendTo($list);
                     });
+                    pInput.removeAttr('data-filling');
                 },
                 function (err) {
                     console.log(err);
