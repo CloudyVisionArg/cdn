@@ -992,6 +992,7 @@ async function renderControls(pCont, pParent) {
 
             // Evento controlRender
             document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+            debugger;
 
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
         } catch (err) {
@@ -1443,15 +1444,14 @@ function saveAtt() {
 }
 
 async function evalCode(code, ctx) {
-    //try {
+    try {
         var pipe = {};
         eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
         await pipe.fn(ctx);
-/*
+
     } catch(err) {
         console.error(err);
         throw err;
     }
-    */
 }
 
