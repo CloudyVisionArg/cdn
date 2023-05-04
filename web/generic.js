@@ -319,9 +319,8 @@ async function renderPage() {
         try {
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
-            if (ev) await evalCode(ev, {
-                $body, $d, $cont
-            });
+            if (ev) await evalCode(ev);
+            debugger;
 
         } catch(err) {
             console.error(err);
@@ -375,7 +374,6 @@ async function renderPage() {
 
     // Footer
     $('<hr/>').appendTo($cont);
-    //todo: linkear a la web y agregar boton de borrado
     $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
 
     // Boton Borrar
@@ -458,6 +456,9 @@ async function renderPage() {
             if (wt == 3000) debugger; // Para poder ver q corno pasa
             setTimeout(waiting, 100);
         } else {
+            // Evento afterRender
+            document.dispatchEvent(new CustomEvent('afterRender'));
+
             fillControls();
             preloader.hide();
         }
@@ -991,7 +992,7 @@ async function renderControls(pCont, pParent) {
             };
 
             // Evento controlRender
-            document.dispatchEvent(new CustomEvent('controlRender', { detail : context}));
+            document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
 
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
         } catch (err) {
