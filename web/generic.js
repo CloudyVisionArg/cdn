@@ -320,7 +320,6 @@ async function renderPage() {
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
-            debugger;
 
         } catch(err) {
             console.error(err);
