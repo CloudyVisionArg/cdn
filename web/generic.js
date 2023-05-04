@@ -992,6 +992,7 @@ async function renderControls(pCont, pParent) {
             document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
 
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
+            
         } catch (err) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
