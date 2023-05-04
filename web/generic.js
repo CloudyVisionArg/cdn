@@ -435,6 +435,8 @@ async function renderPage() {
 
     // Tooltips
     $('[data-bs-toggle="tooltip"]').each(function (ix) {
+        new bootstrap.Tooltip(this);
+        /*
         let $this = $(this);
         if ($this.tooltip) {
             $this.tooltip({
@@ -445,6 +447,7 @@ async function renderPage() {
                 placement: 'auto',
             });
         }
+        */
     });
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
