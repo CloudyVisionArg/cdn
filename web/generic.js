@@ -434,7 +434,6 @@ async function renderPage() {
     });
 
     // Tooltips
-    debugger;
     $('[data-bs-toggle="tooltip"]').each(function (ix) {
         let $this = $(this);
         if ($this.tooltip) {
@@ -640,6 +639,11 @@ async function renderControls(pCont, pParent) {
                     folder: fld_id,
                     field: tf,
                 });
+            }
+
+            if (ctl.attr('showtooltip') == '1' && ctl.attr('tooltip')) {
+                $this.attr('data-bs-toggle', 'tooltip');
+                $this.attr('title', ctl.attr('tooltip'));
             }
 
             let buttons = ctl.attr('buttons');
