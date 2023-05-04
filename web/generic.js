@@ -641,11 +641,6 @@ async function renderControls(pCont, pParent) {
                 });
             }
 
-            if (ctl.attr('showtooltip') == '1' && ctl.attr('tooltip')) {
-                $this.attr('data-bs-toggle', 'tooltip');
-                $this.attr('title', ctl.attr('tooltip'));
-            }
-
             let buttons = ctl.attr('buttons');
             if (buttons) {
                 if (buttons.indexOf('email') >= 0) addEmailButton($this);
@@ -986,6 +981,11 @@ async function renderControls(pCont, pParent) {
             executeScriptBeforeRender oNode
             If oNode.getAttribute("w") & "" <> "1" Then this.Readonly = True
             */
+        }
+
+        if (ctl.attr('showtooltip') == '1' && ctl.attr('tooltip')) {
+            $this.attr('data-bs-toggle', 'tooltip');
+            $this.attr('title', ctl.attr('tooltip'));
         }
 
         if ($this) $this.appendTo($col);
