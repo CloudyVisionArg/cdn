@@ -976,6 +976,7 @@ async function renderControls(pCont, pParent) {
 
         if (ctl.attr('showtooltip') == '1' && ctl.attr('tooltip')) {
             $this.attr('data-bs-toggle', 'tooltip');
+            $this.attr('data-bs-placement', 'bottom');
             $this.attr('title', ctl.attr('tooltip'));
         }
 
