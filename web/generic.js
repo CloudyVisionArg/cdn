@@ -168,38 +168,11 @@ async function renderPage() {
     var $d = $(document);
 
     $d.ready(function () {
-        // Validacion de numero
-        $('[data-numeral]').change(function (e) {
-            var $this = $(this);
-            var n = numeral($this.val());
-            if (n.value()) {
-                $this.val(n.format($this.attr('data-numeral')));
-            } else {
-                $this.val('');
-                toast('Ingrese un numero valido');
-            }
-        });
-
         // Key shortcuts
         $d.keypress(function (e) {
             if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
                 e.preventDefault();
                 saveDoc();
-            }
-        });
-
-        // Tooltips
-        debugger;
-        $('[data-bs-toggle="tooltip"]').each(function (ix) {
-            let $this = $(this);
-            if ($this.tooltip) {
-                $this.tooltip({
-                    delay: {
-                        show: 500,
-                        hide: 100,
-                    },
-                    placement: 'auto',
-                });
             }
         });
     });
@@ -448,7 +421,32 @@ async function renderPage() {
         }
     });
 
+    // Validacion de numero
+    $('[data-numeral]').change(function (e) {
+        var $this = $(this);
+        var n = numeral($this.val());
+        if (n.value()) {
+            $this.val(n.format($this.attr('data-numeral')));
+        } else {
+            $this.val('');
+            toast('Ingrese un numero valido');
+        }
+    });
+
+    // Tooltips
     debugger;
+    $('[data-bs-toggle="tooltip"]').each(function (ix) {
+        let $this = $(this);
+        if ($this.tooltip) {
+            $this.tooltip({
+                delay: {
+                    show: 500,
+                    hide: 100,
+                },
+                placement: 'auto',
+            });
+        }
+    });
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
