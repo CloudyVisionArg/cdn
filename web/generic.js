@@ -189,6 +189,7 @@ async function renderPage() {
         });
 
         // Tooltips
+        debugger;
         $('[data-bs-toggle="tooltip"]').each(function (ix) {
             let $this = $(this);
             if ($this.tooltip) {
