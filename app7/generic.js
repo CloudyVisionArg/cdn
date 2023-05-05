@@ -1491,20 +1491,33 @@ function addAtt(e) {
 
     } else if (action == 'photo') {
         if (_isCapacitor()) {
-            const opts = cameraOptionsCapacitor(CameraSource.Photos);
-            opts.saveToGallery = false;
-            opts.resultType = CameraResultType.Uri;
-            Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (photoResultSucc)=>{
-                    writeFileInCachePath(photoResultSucc.path).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name =file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        }, errMgr);
-                }, errMgr
+            const opts = {};
+            Capacitor.Plugins.Camera.pickImages(opts).then(
+                (GalleryPhotos)=>{
+                    debugger;
+                },
+                (err) =>{
+                    debugger;
+                }
             );
+
+
+
+
+            // const opts = cameraOptionsCapacitor(CameraSource.Photos);
+            // opts.saveToGallery = false;
+            // opts.resultType = CameraResultType.Uri;
+            // Capacitor.Plugins.Camera.getPhoto(opts).then(
+            //     (photoResultSucc)=>{
+            //         writeFileInCachePath(photoResultSucc.path).then(
+            //             (file)=>{
+            //                 att.URL = file.uri;
+            //                 att.Name =file.name;
+            //                 att.Size = file.size;
+            //                 renderNewAtt(att, $attachs);
+            //             }, errMgr);
+            //     }, errMgr
+            // );
 
         } else {
             navigator.camera.getPicture(
