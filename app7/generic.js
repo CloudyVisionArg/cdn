@@ -1491,15 +1491,26 @@ function addAtt(e) {
 
     } else if (action == 'photo') {
         if (_isCapacitor()) {
-            const opts = {};
-            Capacitor.Plugins.Camera.pickImages(opts).then(
-                (GalleryPhotos)=>{
+            //requestPermissions(permissions?: CameraPluginPermissions | undefined) => Promise<PermissionStatus>
+            Capacitor.Plugins.Camera.requestPermissions({permissions : "'photos'"}).then(
+                (PermissionStatus)=>{
                     debugger;
+                    const opts = {};
+                    Capacitor.Plugins.Camera.pickImages(opts).then(
+                        (GalleryPhotos)=>{
+                            debugger;
+                        },
+                        (err) =>{
+                            debugger;
+                        }
+                    );
                 },
-                (err) =>{
+                (e)=>{
                     debugger;
                 }
+
             );
+           
 
 
 
