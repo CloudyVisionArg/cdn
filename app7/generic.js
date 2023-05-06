@@ -1454,23 +1454,17 @@ function addAtt(e) {
     debugger;
     if (action == 'camera') {
         if (_isCapacitor()) {
-            const opts = cameraOptionsCapacitor(CameraSource.Camera);
-            opts.resultType = CameraResultType.Uri;
-            Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (photoResultSucc)=>{
-                    writeFileInCachePath(photoResultSucc.path).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name =file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        (e)=>{
-                            errMgr
-                        });
-                }, errMgr
+            takePhoto().then(
+                (files)=>{
+                    files.forEach((file)=>{
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        renderNewAtt(att, $attachs);
+                    });
+                },
+                errMgr
             );
-
         } else {
             navigator.camera.getPicture(
                 function (fileURL) {

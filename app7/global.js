@@ -2176,15 +2176,14 @@ function audioRecorder(pCallback) {
     }
 }
 
-async function requestPermissionsImages(permissionRequired){
-    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : permissionRequired });
-    return (oPermissionStatus[permissionRequired] == 'granted');
+async function requestPermissionsImages(cameraPermissionType){
+    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
+    return (oPermissionStatus[cameraPermissionType] == 'granted');
 }
 
 async function pickImages(){
     var files = [];
-    debugger;
-    const hasPermission = await requestPermissionsImages("photos");
+    const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
     if(hasPermission){
         const selectedPhotos = await Capacitor.Plugins.Camera.pickImages({});
         for(let idx=0; idx < selectedPhotos.photos.length; idx++){
@@ -2194,17 +2193,34 @@ async function pickImages(){
         }
         return files;
     }
-    else{
-       //TODO: Request permissions
-    }
+    throw new Error('Se necesita permiso de acceso a imágenes');
+    
 }
 
-//Donde va esto
+async function takePhoto(){
+    var files = [];
+    const opts = cameraOptionsCapacitor(CameraSource.Camera);
+    opts.resultType = CameraResultType.Uri;
+    const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+    if(hasPermission){
+        const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
+        const file = await writeFileInCachePath(photo.path);
+        files.push({ uri : file.uri, name : file.name, size : file.size });
+        return files;
+    }
+    throw new Error('Se necesita permiso de acceso a la cámara');
+}
+
 //Plugin Camera
 const CameraResultType = {
     Uri: 'uri',
     Base64: 'base64',
     DataUrl: 'dataUrl'
+};
+
+const CameraPermissionType = {
+    Camera: 'camera', 
+    Photos: 'photos'
 };
 
 const CameraSource = {
