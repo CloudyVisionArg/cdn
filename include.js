@@ -365,6 +365,7 @@ gitCdn({
 @returns {string|Promise<string>}
 */
 function gitCdn(options) {
+    debugger;
     if (options.repo && options.path) {
         try {
             /*
