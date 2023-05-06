@@ -1491,42 +1491,19 @@ function addAtt(e) {
 
     } else if (action == 'photo') {
         if (_isCapacitor()) {
-            Capacitor.Plugins.Camera.requestPermissions({permissions : "'photos'"}).then(
-                (PermissionStatus)=>{
-                    if(PermissionStatus.photos == "granted"){
-                        Capacitor.Plugins.Camera.pickImages({}).then(
-                            (selectedGalleryPhotos)=>{
-                                selectedGalleryPhotos.photos.forEach((item)=>{
-                                    writeFileInCachePath(item.path).then(
-                                        (file)=>{
-                                            att.URL = file.uri;
-                                            att.Name = file.name;
-                                            att.Size = file.size;
-                                            renderNewAtt(att, $attachs);
-                                        }, errMgr);
-                                });
-                            }, errMgr);
-                        }
-                    },
+            pickImages().then(
+                (files)=>{
+                    files.forEach((file)=>{
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        renderNewAtt(att, $attachs);
+                    });
+                },
                 errMgr
             );
-
-            // const opts = cameraOptionsCapacitor(CameraSource.Photos);
-            // opts.saveToGallery = false;
-            // opts.resultType = CameraResultType.Uri;
-            // Capacitor.Plugins.Camera.getPhoto(opts).then(
-            //     (photoResultSucc)=>{
-            //         writeFileInCachePath(photoResultSucc.path).then(
-            //             (file)=>{
-            //                 att.URL = file.uri;
-            //                 att.Name =file.name;
-            //                 att.Size = file.size;
-            //                 renderNewAtt(att, $attachs);
-            //             }, errMgr);
-            //     }, errMgr
-            // );
-
-        } else {
+        }
+        else {
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
@@ -1541,7 +1518,6 @@ function addAtt(e) {
                 cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
             );
         }
-
     } else if (action == 'doc') {
         if (_isCapacitor()) {
             Capacitor.Plugins.FilePicker.pickFiles().then(
