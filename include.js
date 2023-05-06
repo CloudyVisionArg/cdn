@@ -365,14 +365,12 @@ gitCdn({
 @returns {string|Promise<string>}
 */
 function gitCdn(options) {
-    debugger;
     if (options.repo && options.path) {
         try {
             /*
             Puedo especificar el ref y fresh de los scripts en el localStorage, en un item asi:
                 scripts = [{ "repo": "myRepo", "path": "myScript.js", "ref": "myBranchOrTag", "fresh": "true" }, { "repo": ... }]
             */
-            debugger
             var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
             if (Array.isArray(lsScripts)) {
                 var scr = lsScripts.find(el => el.owner == options.owner && el.repo == options.repo && el.path == options.path);
