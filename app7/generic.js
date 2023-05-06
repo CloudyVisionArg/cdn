@@ -1496,7 +1496,7 @@ function addAtt(e) {
                     if(PermissionStatus.photos == "granted"){
                         Capacitor.Plugins.Camera.pickImages({}).then(
                             (selectedGalleryPhotos)=>{
-                                selectedGalleryPhotos.forEach((item)=>{
+                                selectedGalleryPhotos.photos.forEach((item)=>{
                                     writeFileInCachePath(item.path).then(
                                         (file)=>{
                                             att.URL = file.uri;
