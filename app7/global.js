@@ -2176,13 +2176,16 @@ function audioRecorder(pCallback) {
     }
 }
 
+async function requestPermissionsImages(permissionRequired){
+    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : permissionRequired });
+    return (oPermissionStatus[permissionRequired] == 'granted');
+}
+
 async function pickImages(){
     var files = [];
-    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : "'photos'" });
-    if(oPermissionStatus.photos != "granted"){
-        //TODO: Request permissions
-    }
-    else{
+    debugger;
+    const hasPermission = await requestPermissionsImages("photos");
+    if(hasPermission){
         const selectedPhotos = await Capacitor.Plugins.Camera.pickImages({});
         for(let idx=0; idx < selectedPhotos.photos.length; idx++){
             const item = selectedPhotos.photos[idx];
@@ -2190,6 +2193,9 @@ async function pickImages(){
             files.push({ uri : file.uri, name : file.name, size : file.size });
         }
         return files;
+    }
+    else{
+       //TODO: Request permissions
     }
 }
 

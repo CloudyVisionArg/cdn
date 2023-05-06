@@ -1776,16 +1776,8 @@ function saveAtt() {
 
             if (attAction == 'save') {
                 var file;
-                debugger;
                 if (_isCapacitor()) {
                     const fileFromCache = await getFileFromCache(attName);
-                    // const rawData = atob(fileFromCache.data);
-                    // const bytes = new Array(rawData.length);
-                    // for (var x = 0; x < rawData.length; x++) {
-                    //     bytes[x] = rawData.charCodeAt(x);
-                    // }
-                    // const arr = new Uint8Array(bytes);
-
                     var binary_string = atob(fileFromCache.data);
                     var len = binary_string.length;
                     var bytes = new Uint8Array(len);
@@ -1793,7 +1785,6 @@ function saveAtt() {
                         bytes[i] = binary_string.charCodeAt(i);
                     }
                     const arr = bytes.buffer;
-                    
                     file = new Blob([arr], { type: fileFromCache.type });
                     try {
                         var att = doc.attachmentsAdd(attName);
