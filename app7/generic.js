@@ -1491,29 +1491,25 @@ function addAtt(e) {
 
     } else if (action == 'photo') {
         if (_isCapacitor()) {
-            //requestPermissions(permissions?: CameraPluginPermissions | undefined) => Promise<PermissionStatus>
             Capacitor.Plugins.Camera.requestPermissions({permissions : "'photos'"}).then(
                 (PermissionStatus)=>{
-                    debugger;
-                    const opts = {};
-                    Capacitor.Plugins.Camera.pickImages(opts).then(
-                        (GalleryPhotos)=>{
-                            debugger;
-                        },
-                        (err) =>{
-                            debugger;
+                    if(PermissionStatus.photos == "granted"){
+                        Capacitor.Plugins.Camera.pickImages({}).then(
+                            (selectedGalleryPhotos)=>{
+                                selectedGalleryPhotos.forEach((item)=>{
+                                    writeFileInCachePath(item.path).then(
+                                        (file)=>{
+                                            att.URL = file.uri;
+                                            att.Name = file.name;
+                                            att.Size = file.size;
+                                            renderNewAtt(att, $attachs);
+                                        }, errMgr);
+                                });
+                            }, errMgr);
                         }
-                    );
-                },
-                (e)=>{
-                    debugger;
-                }
-
+                    },
+                errMgr
             );
-           
-
-
-
 
             // const opts = cameraOptionsCapacitor(CameraSource.Photos);
             // opts.saveToGallery = false;
