@@ -1492,6 +1492,7 @@ function addAtt(e) {
     } else if (action == 'photo') {
         if (_isCapacitor()) {
             const opts = cameraOptionsCapacitor(CameraSource.Photos);
+            opts.saveToGallery = false;
             opts.resultType = CameraResultType.Uri;
             Capacitor.Plugins.Camera.getPhoto(opts).then(
                 (photoResultSucc)=>{
