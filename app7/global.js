@@ -2183,32 +2183,78 @@ async function requestPermissionsImages(cameraPermissionType){
 
 async function pickImages(opts){
     var files = [];
-    let options = {};
-    if(opts) { options = opts; }
-    const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
-    if(hasPermission){
-        const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
-        for(let idx=0; idx < selectedPhotos.photos.length; idx++){
-            const item = selectedPhotos.photos[idx];
-            const fileInCache = await writeFileInCachePath(item.path);
-            files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+    if (_isCapacitor()) {
+        let options = {};
+        if(opts) { options = opts; }
+        const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
+        if(hasPermission){
+            const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
+            for(let idx=0; idx < selectedPhotos.photos.length; idx++){
+                const item = selectedPhotos.photos[idx];
+                const fileInCache = await writeFileInCachePath(item.path);
+                files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+            }
+            return files;
         }
-        return files;
+        throw new Error('Se necesita permiso de acceso a im&aacutegenes');
     }
-    throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+
+    else {
+        return new Promise((resolve, reject)=>{
+        navigator.camera.getPicture(
+            function (fileURL) {
+                getFile(fileURL).then(
+                    (file)=> {
+                        files.push({ uri : file.localURL, name : file.name, size : file.size });
+                        resolve(files)
+                    },
+                    (err)=>{
+                        reject(err);
+                    }
+                );
+            },
+            function (err){
+                reject(err);
+            },
+                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            );
+        });
+    }
 }
 
 async function pickFiles(opts){
     var files = [];
-    let options =  { multiple : true };
-    if(opts) { options = opts; }
-    const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
-    for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
-        const item = pickFilesResultSucc.files[idx];
-        const fileInCache = await writeFileInCachePath(item.path, item.name);
-        files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+    if (_isCapacitor()) {
+        let options =  { multiple : true };
+        if(opts) { options = opts; }
+        const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
+        for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
+            const item = pickFilesResultSucc.files[idx];
+            const fileInCache = await writeFileInCachePath(item.path, item.name);
+            files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+        }
+        return files;
     }
-    return files;
+    else {
+        return new Promise((resolve, reject)=>{
+            nchooser.getFileMetadata().then(
+                function (res) {
+                    getFile(res.uri).then(
+                        (file) => {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    )
+                },
+                function (err){
+                    reject(err);
+                }
+            )
+        });
+    }
 }
 
 async function takePhoto(){

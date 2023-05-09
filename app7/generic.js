@@ -1464,97 +1464,31 @@ function addAtt(e) {
             },
             errMgr
         );
-        // if (_isCapacitor()) {
-        //     takePhoto().then(
-        //         (files)=>{
-        //             files.forEach((file)=>{
-        //                 att.URL = file.uri;
-        //                 att.Name = file.name;
-        //                 att.Size = file.size;
-        //                 renderNewAtt(att, $attachs);
-        //             });
-        //         },
-        //         errMgr
-        //     );
-        // } else {
-        //     navigator.camera.getPicture(
-        //         function (fileURL) {
-        //             getFile(fileURL).then(
-        //                 function (file) {
-        //                     att.URL = file.localURL;
-        //                     att.Name = file.name;
-        //                     att.Size = file.size;
-        //                     renderNewAtt(att, $attachs);
-        //                 },
-        //                 errMgr
-        //             )
-        //         },
-        //         errMgr,
-        //         cameraOptions(Camera.PictureSourceType.CAMERA)
-        //     )
-        // }
-
     } else if (action == 'photo') {
-        if (_isCapacitor()) {
-            pickImages().then(
-                (files)=>{
-                    files.forEach((file)=>{
-                        att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    });
-                },
-                errMgr
-            );
-        }
-        else {
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        (file)=> {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        }, errMgr);
-                },
-                errMgr,
-                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-            );
-        }
-    } else if (action == 'doc') {
-        if (_isCapacitor()) {
-            pickFiles().then(
-                (files)=>{
-                    files.forEach((file)=>{
-                        att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    });
-                },
-                errMgr
-            );
-        } else {
-            chooser.getFileMetadata().then(
-                function (res) {
-                    if (res) {
-                        getFile(res.uri).then(
-                            function (file) {
-                                att.URL = file.localURL;
-                                att.Name = res.name;
-                                att.Size = file.size;
-                                renderNewAtt(att, $attachs);
-                            },
-                            errMgr
-                        )
-                    }
-                },
-                errMgr
-            );
-        }
+        pickImages().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
         
+    } else if (action == 'doc') {
+        pickFiles().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
     } else if (action == 'audio') {
         audioRecorder(function (file) {
             var att = {};
