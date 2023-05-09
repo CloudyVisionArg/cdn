@@ -1514,20 +1514,15 @@ function addAtt(e) {
         }
     } else if (action == 'doc') {
         if (_isCapacitor()) {
-            Capacitor.Plugins.FilePicker.pickFiles().then(
-                (pickFilesResultSucc)=>{
-                    const files = pickFilesResultSucc.files;
-                    writeFileInCachePath(files[0].path, files[0].name).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    );
-                },errMgr);
-
+            pickFiles().then(
+                (file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                },
+                errMgr
+            );
         } else {
             chooser.getFileMetadata().then(
                 function (res) {

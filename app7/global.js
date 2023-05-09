@@ -2188,13 +2188,23 @@ async function pickImages(){
         const selectedPhotos = await Capacitor.Plugins.Camera.pickImages({});
         for(let idx=0; idx < selectedPhotos.photos.length; idx++){
             const item = selectedPhotos.photos[idx];
-            const file = await writeFileInCachePath(item.path);
-            files.push({ uri : file.uri, name : file.name, size : file.size });
+            const fileInCache = await writeFileInCachePath(item.path);
+            files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
         }
         return files;
     }
-    throw new Error('Se necesita permiso de acceso a imágenes');
-    
+    throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+}
+
+async function pickFiles(){
+    var files = [];
+    const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles();
+    for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
+        const item = pickFilesResultSucc.files[idx];
+        const fileInCache = await writeFileInCachePath(item.path, item.name);
+        files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+    }
+    return files;
 }
 
 async function takePhoto(){
@@ -2208,7 +2218,7 @@ async function takePhoto(){
         files.push({ uri : file.uri, name : file.name, size : file.size });
         return files;
     }
-    throw new Error('Se necesita permiso de acceso a la cámara');
+    throw new Error('Se necesita permiso de acceso a la c&aacutemara');
 }
 
 //Plugin Camera
