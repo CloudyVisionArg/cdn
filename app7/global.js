@@ -2183,7 +2183,8 @@ async function requestPermissionsImages(cameraPermissionType){
 
 async function pickImages(opts){
     var files = [];
-    let options = (opts) ? opts : {};
+    let options = {};
+    if(opts) { options = opts; }
     const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
     if(hasPermission){
         const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
@@ -2199,7 +2200,8 @@ async function pickImages(opts){
 
 async function pickFiles(opts){
     var files = [];
-    let options = (opts) ? opts : { multiple : true };
+    let options =  { multiple : true };
+    if(opts) { options = opts; }
     const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
     for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
         const item = pickFilesResultSucc.files[idx];
@@ -2233,13 +2235,11 @@ async function takePhoto(){
                             resolve(files)
                         },
                         (err)=>{
-                            errMgr(err)
                             reject(err);
                         }
                     )
                 },
                 function (err){
-                    errMgr(err)
                     reject(err);
                 },
                 cameraOptions(Camera.PictureSourceType.CAMERA)
