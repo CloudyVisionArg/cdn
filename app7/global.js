@@ -2181,11 +2181,12 @@ async function requestPermissionsImages(cameraPermissionType){
     return (oPermissionStatus[cameraPermissionType] == 'granted');
 }
 
-async function pickImages(){
+async function pickImages(opts){
     var files = [];
+    let options = (opts) ? opts : {};
     const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
     if(hasPermission){
-        const selectedPhotos = await Capacitor.Plugins.Camera.pickImages({});
+        const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
         for(let idx=0; idx < selectedPhotos.photos.length; idx++){
             const item = selectedPhotos.photos[idx];
             const fileInCache = await writeFileInCachePath(item.path);
@@ -2196,9 +2197,10 @@ async function pickImages(){
     throw new Error('Se necesita permiso de acceso a im&aacutegenes');
 }
 
-async function pickFiles(){
+async function pickFiles(opts){
     var files = [];
-    const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles({multiple : true});
+    let options = (opts) ? opts : { multiple : true };
+    const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
     for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
         const item = pickFilesResultSucc.files[idx];
         const fileInCache = await writeFileInCachePath(item.path, item.name);
