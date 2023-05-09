@@ -2224,7 +2224,7 @@ async function takePhoto(){
         throw new Error('Se necesita permiso de acceso a la c&aacutemara');
     }
     else{
-        new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject)=>{
             navigator.camera.getPicture(
                 function (fileURL) {
                     getFile(fileURL).then(
