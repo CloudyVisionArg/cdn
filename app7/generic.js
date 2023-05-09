@@ -1515,11 +1515,13 @@ function addAtt(e) {
     } else if (action == 'doc') {
         if (_isCapacitor()) {
             pickFiles().then(
-                (file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    renderNewAtt(att, $attachs);
+                (files)=>{
+                    files.forEach((file)=>{
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        renderNewAtt(att, $attachs);
+                    });
                 },
                 errMgr
             );
