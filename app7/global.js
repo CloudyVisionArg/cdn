@@ -2198,7 +2198,7 @@ async function pickImages(){
 
 async function pickFiles(){
     var files = [];
-    const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles();
+    const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles({multiple : true});
     for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
         const item = pickFilesResultSucc.files[idx];
         const fileInCache = await writeFileInCachePath(item.path, item.name);
