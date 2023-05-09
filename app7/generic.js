@@ -1453,35 +1453,46 @@ function addAtt(e) {
     var att = {};
     debugger;
     if (action == 'camera') {
-        if (_isCapacitor()) {
-            takePhoto().then(
-                (files)=>{
-                    files.forEach((file)=>{
-                        att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        renderNewAtt(att, $attachs);
-                    });
-                },
-                errMgr
-            );
-        } else {
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        function (file) {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    )
-                },
-                errMgr,
-                cameraOptions(Camera.PictureSourceType.CAMERA)
-            )
-        }
+        takePhoto().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
+        // if (_isCapacitor()) {
+        //     takePhoto().then(
+        //         (files)=>{
+        //             files.forEach((file)=>{
+        //                 att.URL = file.uri;
+        //                 att.Name = file.name;
+        //                 att.Size = file.size;
+        //                 renderNewAtt(att, $attachs);
+        //             });
+        //         },
+        //         errMgr
+        //     );
+        // } else {
+        //     navigator.camera.getPicture(
+        //         function (fileURL) {
+        //             getFile(fileURL).then(
+        //                 function (file) {
+        //                     att.URL = file.localURL;
+        //                     att.Name = file.name;
+        //                     att.Size = file.size;
+        //                     renderNewAtt(att, $attachs);
+        //                 },
+        //                 errMgr
+        //             )
+        //         },
+        //         errMgr,
+        //         cameraOptions(Camera.PictureSourceType.CAMERA)
+        //     )
+        // }
 
     } else if (action == 'photo') {
         if (_isCapacitor()) {
