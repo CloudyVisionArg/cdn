@@ -2237,7 +2237,7 @@ async function pickFiles(opts){
     }
     else {
         return new Promise((resolve, reject)=>{
-            nchooser.getFileMetadata().then(
+            chooser.getFileMetadata().then(
                 function (res) {
                     getFile(res.uri).then(
                         (file) => {
