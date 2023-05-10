@@ -4042,7 +4042,7 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
-	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
+	    return _CryptoJS.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
 	}
 
     deserializeError(err) {
@@ -4050,7 +4050,7 @@ export class Utilities {
     }
 
     encrypt(pString, pPass) {
-        return _CryptoJS.AES.encrypt(pString, pPass).toString();
+        return _CryptoJS.encrypt(pString, pPass).toString();
     }
 
     /**
