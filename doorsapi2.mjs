@@ -4042,7 +4042,7 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
-	    return _CryptoJS.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
+	    return _CryptoJS.decrypt(pString, pPass).toString();
 	}
 
     deserializeError(err) {
