@@ -95,7 +95,7 @@ async function loadUtils() {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
-            res = await import('crypto-js/aes.js');
+            res = await import('crypto-js');
             _CryptoJS = res.default;
         } else {
             await include('lib-cryptojs-aes');
