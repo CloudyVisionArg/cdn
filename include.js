@@ -19,22 +19,17 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 265 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 263 });
+    //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 260 });
+    //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 260 });
+
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 262 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 262 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 262, hasdep: true });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 262 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
-    /*
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 250 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 259 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
-    */
-
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 260 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 260 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 260 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
@@ -365,6 +360,25 @@ gitCdn({
 @returns {string|Promise<string>}
 */
 function gitCdn(options) {
+    if (options.repo && options.path) {
+        try {
+            /*
+            Puedo especificar el ref y fresh de los scripts en el localStorage, en un item asi:
+                scripts = [{ "repo": "myRepo", "path": "myScript.js", "ref": "myBranchOrTag", "fresh": "true" }, { "repo": ... }]
+            */
+            var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
+            if (Array.isArray(lsScripts)) {
+                var scr = lsScripts.find(el => el.owner == options.owner && el.repo == options.repo && el.path == options.path);
+                if (scr) {
+                    options.ref = scr.ref;
+                    options.fresh = scr.fresh;
+                }
+            };
+        } catch (e) {
+            // Nothing to do
+        };
+    }
+
     var url = `https://eventsjs${options.server ? options.server : ''}.cloudycrm.net/github?`;
     url += getOpt(options, 'owner');
     url += getOpt(options, 'repo');

@@ -95,7 +95,7 @@ async function loadUtils() {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
-            res = await import('crypto-js/aes.js');
+            res = await import('crypto-js');
             _CryptoJS = res.default;
         } else {
             await include('lib-cryptojs-aes');
@@ -4042,7 +4042,7 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
-	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
+        return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8)
 	}
 
     deserializeError(err) {
