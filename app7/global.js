@@ -1015,7 +1015,6 @@ async function addListenersCapacitor (pCallback) {
         const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
         //App in foreground    
         if(status.isActive){
-            debugger;
             app7.notification.create({
                 title: "CLOUDY CRM 7",
                 subtitle: data.title,
@@ -2050,7 +2049,6 @@ function audioRecorder(pCallback) {
     
 
     function saveAudio(){
-        debugger;
         if (_isCapacitor()) {
             saveAudioCapacitor();
         } else {
@@ -2176,12 +2174,134 @@ function audioRecorder(pCallback) {
     }
 }
 
-//Donde va esto
+async function requestPermissionsImages(cameraPermissionType){
+    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
+    return (oPermissionStatus[cameraPermissionType] == 'granted');
+}
+
+async function pickImages(opts){
+    var files = [];
+    if (_isCapacitor()) {
+        let options = {};
+        if(opts) { options = opts; }
+        const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
+        if(hasPermission){
+            const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
+            for(let idx=0; idx < selectedPhotos.photos.length; idx++){
+                const item = selectedPhotos.photos[idx];
+                const fileInCache = await writeFileInCachePath(item.path);
+                files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+            }
+            return files;
+        }
+        throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+    }
+
+    else {
+        return new Promise((resolve, reject)=>{
+        navigator.camera.getPicture(
+            function (fileURL) {
+                getFile(fileURL).then(
+                    (file)=> {
+                        files.push({ uri : file.localURL, name : file.name, size : file.size });
+                        resolve(files)
+                    },
+                    (err)=>{
+                        reject(err);
+                    }
+                );
+            },
+            function (err){
+                reject(err);
+            },
+                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            );
+        });
+    }
+}
+
+async function pickFiles(opts){
+    var files = [];
+    if (_isCapacitor()) {
+        let options =  { multiple : true };
+        if(opts) { options = opts; }
+        const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
+        for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
+            const item = pickFilesResultSucc.files[idx];
+            const fileInCache = await writeFileInCachePath(item.path, item.name);
+            files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+        }
+        return files;
+    }
+    else {
+        return new Promise((resolve, reject)=>{
+            chooser.getFileMetadata().then(
+                function (res) {
+                    getFile(res.uri).then(
+                        (file) => {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    )
+                },
+                function (err){
+                    reject(err);
+                }
+            )
+        });
+    }
+}
+
+async function takePhoto(){
+    var files = [];
+    if (_isCapacitor()) {
+        const opts = cameraOptionsCapacitor(CameraSource.Camera);
+        opts.resultType = CameraResultType.Uri;
+        const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+        if(hasPermission){
+            const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
+            const file = await writeFileInCachePath(photo.path);
+            files.push({ uri : file.uri, name : file.name, size : file.size });
+            return files;
+        }
+        throw new Error('Se necesita permiso de acceso a la c&aacutemara');
+    }
+    else{
+        return new Promise((resolve, reject)=>{
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        (file) => {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    )
+                },
+                function (err){
+                    reject(err);
+                },
+                cameraOptions(Camera.PictureSourceType.CAMERA)
+            )
+        });
+    }
+}
+
 //Plugin Camera
 const CameraResultType = {
     Uri: 'uri',
     Base64: 'base64',
     DataUrl: 'dataUrl'
+};
+
+const CameraPermissionType = {
+    Camera: 'camera', 
+    Photos: 'photos'
 };
 
 const CameraSource = {

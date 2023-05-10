@@ -1243,7 +1243,6 @@ async function fillAttachments(pEl) {
 }
 
 async function downloadAtt(e) {
-    debugger;
     if (_isCapacitor()) {
         await downloadAttCapacitor($(this));
     } else {
@@ -1271,7 +1270,6 @@ function _base64ToArrayBuffer(base64) {
 }
 
 async function downloadAttCapacitor($att) {
-    debugger;
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1451,112 +1449,43 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
-    debugger;
     if (action == 'camera') {
-        if (_isCapacitor()) {
-            const opts = cameraOptionsCapacitor(CameraSource.Camera);
-            opts.resultType = CameraResultType.Uri;
-            Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (photoResultSucc)=>{
-                    writeFileInCachePath(photoResultSucc.path).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name =file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        (e)=>{
-                            errMgr
-                        });
-                }, errMgr
-            );
-
-        } else {
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        function (file) {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    )
-                },
-                errMgr,
-                cameraOptions(Camera.PictureSourceType.CAMERA)
-            )
-        }
-
+        takePhoto().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
     } else if (action == 'photo') {
-        if (_isCapacitor()) {
-            const opts = cameraOptionsCapacitor(CameraSource.Photos);
-            opts.saveToGallery = false;
-            opts.resultType = CameraResultType.Uri;
-            Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (photoResultSucc)=>{
-                    writeFileInCachePath(photoResultSucc.path).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name =file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        }, errMgr);
-                }, errMgr
-            );
-
-        } else {
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        (file)=> {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        }, errMgr);
-                },
-                errMgr,
-                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-            );
-        }
-
-    } else if (action == 'doc') {
-        if (_isCapacitor()) {
-            Capacitor.Plugins.FilePicker.pickFiles().then(
-                (pickFilesResultSucc)=>{
-                    const files = pickFilesResultSucc.files;
-                    writeFileInCachePath(files[0].path, files[0].name).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    );
-                },errMgr);
-
-        } else {
-            chooser.getFileMetadata().then(
-                function (res) {
-                    if (res) {
-                        getFile(res.uri).then(
-                            function (file) {
-                                att.URL = file.localURL;
-                                att.Name = res.name;
-                                att.Size = file.size;
-                                renderNewAtt(att, $attachs);
-                            },
-                            errMgr
-                        )
-                    }
-                },
-                errMgr
-            );
-        }
+        pickImages().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
         
+    } else if (action == 'doc') {
+        pickFiles().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
     } else if (action == 'audio') {
         audioRecorder(function (file) {
             var att = {};
@@ -1780,16 +1709,8 @@ function saveAtt() {
 
             if (attAction == 'save') {
                 var file;
-                debugger;
                 if (_isCapacitor()) {
                     const fileFromCache = await getFileFromCache(attName);
-                    // const rawData = atob(fileFromCache.data);
-                    // const bytes = new Array(rawData.length);
-                    // for (var x = 0; x < rawData.length; x++) {
-                    //     bytes[x] = rawData.charCodeAt(x);
-                    // }
-                    // const arr = new Uint8Array(bytes);
-
                     var binary_string = atob(fileFromCache.data);
                     var len = binary_string.length;
                     var bytes = new Uint8Array(len);
@@ -1797,7 +1718,6 @@ function saveAtt() {
                         bytes[i] = binary_string.charCodeAt(i);
                     }
                     const arr = bytes.buffer;
-                    
                     file = new Blob([arr], { type: fileFromCache.type });
                     try {
                         var att = doc.attachmentsAdd(attName);
