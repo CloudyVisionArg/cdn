@@ -4042,11 +4042,7 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
-        if (this.inNode) {
-	        return _CryptoJS.decrypt(pString, pPass).toString();
-        } else {
-            return CryptoJS.AES.decrypt(pString, pPass).toString(CryptoJS.enc.Utf8)
-        }
+        return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8)
 	}
 
     deserializeError(err) {
@@ -4054,11 +4050,7 @@ export class Utilities {
     }
 
     encrypt(pString, pPass) {
-        if (this.inNode) {
-            return _CryptoJS.encrypt(pString, pPass).toString();
-        } else {
-            return CryptoJS.AES.encrypt(pString, pPass).toString();
-        }
+        return _CryptoJS.AES.encrypt(pString, pPass).toString();
     }
 
     /**
