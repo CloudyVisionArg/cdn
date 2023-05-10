@@ -1015,7 +1015,6 @@ async function addListenersCapacitor (pCallback) {
         const clickEv = new CustomEvent('pushNotificationClick', { detail: { data } });
         //App in foreground    
         if(status.isActive){
-            debugger;
             app7.notification.create({
                 title: "CLOUDY CRM 7",
                 subtitle: data.title,
@@ -2050,7 +2049,6 @@ function audioRecorder(pCallback) {
     
 
     function saveAudio(){
-        debugger;
         if (_isCapacitor()) {
             saveAudioCapacitor();
         } else {

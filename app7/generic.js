@@ -1243,7 +1243,6 @@ async function fillAttachments(pEl) {
 }
 
 async function downloadAtt(e) {
-    debugger;
     if (_isCapacitor()) {
         await downloadAttCapacitor($(this));
     } else {
@@ -1271,7 +1270,6 @@ function _base64ToArrayBuffer(base64) {
 }
 
 async function downloadAttCapacitor($att) {
-    debugger;
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1451,7 +1449,6 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
-    debugger;
     if (action == 'camera') {
         takePhoto().then(
             (files)=>{
