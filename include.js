@@ -19,7 +19,7 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 263 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 264 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 263 });
     //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 260 });
     //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 260 });
