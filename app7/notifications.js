@@ -367,13 +367,17 @@ function searchNotifications(){
     if (!selectionMode){
         DoorsAPI.notifications(getDevice()).then((res)=>{
             clearMembers();
+            let nonStandardNotifications = res.filter(n=>!n.message.data.doc_id>0 && n.EraseDate == null)
             let setDocIds = new Set(res.map(n=>JSON.parse(n.Message).message.data.doc_id))
             let arrDocIdUnico = []
             setDocIds.forEach((itemDocId)=>{
                 arrDocIdUnico.push(res.find(n=>JSON.parse(n.Message).message.data.doc_id==itemDocId))
             })
+            let arrDocIdUnicoFiltrado = arrDocIdUnico.filter(n=>n.EraseDate == null)    
+            let notificationsArr = arrDocIdUnicoFiltrado.concat(nonStandardNotifications)
 
-            let notificationsArr = arrDocIdUnico.filter(n=>n.EraseDate == null)
+            notificationsArr.sort((n1,n2)=>{Date.parse(n1.DeliveryDate) - Date.parse(n2.DeliveryDate)})
+
             var arrCustomNot = []
 
             for(var idx=0; idx < notificationsArr.length; idx++){
