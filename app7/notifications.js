@@ -1,5 +1,5 @@
 /*
-Panel de notificaciones del APP
+Panel de notificaciones del APP Para MDAY brancheada de la version 262 de appfree
 Para incluirlo, agregar la opcion de menu de la sig forma:
 
     tabs.push({
@@ -367,7 +367,13 @@ function searchNotifications(){
     if (!selectionMode){
         DoorsAPI.notifications(getDevice()).then((res)=>{
             clearMembers();
-            let notificationsArr = res.filter(n=>n.EraseDate == null)
+            let setDocIds = new Set(res.map(n=>JSON.parse(n.Message).message.data.doc_id))
+            let arrDocIdUnico = []
+            setDocIds.forEach((itemDocId)=>{
+                arrDocIdUnico.push(res.find(n=>JSON.parse(n.Message).message.data.doc_id==itemDocId))
+            })
+
+            let notificationsArr = arrDocIdUnico.filter(n=>n.EraseDate == null)
             var arrCustomNot = []
 
             for(var idx=0; idx < notificationsArr.length; idx++){
@@ -377,7 +383,7 @@ function searchNotifications(){
             }      
 
             renderMembers(arrCustomNot)
-        })
+    })
     }
 }
 
