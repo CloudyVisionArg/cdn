@@ -258,6 +258,7 @@ export class Session {
     #utils;
     #currentUser;
     #push;
+    #instance;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -269,6 +270,7 @@ export class Session {
     _reset() {
         this.#tags = undefined;
         this.#currentUser = undefined;
+        this.#instance = undefined;
     }
 
     /**
@@ -478,16 +480,26 @@ export class Session {
     }
     */
 
-    /*
-    get instanceDescription() {
-        //todo
-    }
+    /**
+    Retorna la instancia actual.
+    @returns {Promise<Object>}
     */
-
-    get instanceName() {
-        var url = 'instance';
-        return this.restClient.fetch(url, 'GET', '', '');
-        
+    get instance() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#instance) {
+                var url = 'instance';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        me.#instance = res;
+                        resolve(me.#instance);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#instance);
+            }
+        });
     }
 
     /**
