@@ -484,11 +484,11 @@ export class Session {
     }
     */
 
-    /*
     get instanceName() {
-        //todo
+        var url = 'instance';
+        return this.restClient.fetch(url, 'GET', '', '');
+        
     }
-    */
 
     /**
     Devuelve true si estoy logueado.
