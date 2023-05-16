@@ -129,6 +129,13 @@ function newDTPicker(pId, pLabel, pType) {
     return $div;
 }
 
+/*
+pSource = {
+    folder,
+    rootFolder,
+    field,
+}
+*/
 function inputDataList(pInput, pSource) {
     //todo: ver si puedo hacerlo sin permisos
     pInput.attr('autocomplete', 'off');

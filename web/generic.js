@@ -440,7 +440,7 @@ async function renderPage() {
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
-    setTimeout(function waiting() {
+    setTimeout(async function waiting() {
         if ($('[data-filling]').length > 0) {
             wt += 100;
             if (wt == 3000) debugger; // Para poder ver q corno pasa
@@ -448,6 +448,10 @@ async function renderPage() {
         } else {
             // Evento afterRender
             document.dispatchEvent(new CustomEvent('afterRender'));
+
+            // Control Event AfterRender
+            let ev = getEvent('AfterRender');
+            if (ev) await evalCode(ev);
 
             fillControls();
             preloader.hide();
@@ -1062,8 +1066,6 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (tf == 'task_customer') debugger;
-
         if (textField && el._text) {
             el._text(text);
             textField = undefined;
@@ -1230,7 +1232,7 @@ async function fillControls() {
         document.dispatchEvent(new CustomEvent('afterFillControls'));
 
         // Control Event AfterRender
-        let ev = getEvent('AfterRender');
+        let ev = getEvent('afterFillControls');
         if (ev) await evalCode(ev);
 
     } catch (err) {
