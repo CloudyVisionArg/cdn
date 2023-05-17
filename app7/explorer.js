@@ -616,7 +616,7 @@ function loadViewSection(pContainer, pCallback) {
                         }).appendTo($ul);
 
                         // Ejecuta el styleScript
-                        debugger;
+                
                         style = '';
                         if (styleScript) {
                             try {
