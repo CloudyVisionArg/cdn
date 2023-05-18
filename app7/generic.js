@@ -8,7 +8,7 @@ Cordova: https://cordova.apache.org/docs/en/latest/
 Framework7: https://framework7.io/docs/
 */
 
-var fld_id, doc_id, cacheDir;
+var fld_id, doc_id, cacheDir, paramControlsFolder;
 var doc, docJson, folder, folderJson;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
@@ -47,6 +47,7 @@ pageEl.crm tendra precargadas algunas variables y funciones de la pagina como el
 // Parametros del query string
 fld_id = routeTo.query.fld_id;
 doc_id = routeTo.query.doc_id;
+paramControlsFolder = routeTo.query.controlsfolder;
 
 app7.preloader.show();
 
@@ -87,16 +88,21 @@ if (device.platform != 'browser') {
         }
         docJson = doc.toJSON();
 
-        loadControls();
+        loadControls(paramControlsFolder);
 
     } catch (err) {
         errMgr(err)
     }
 })();
 
-async function loadControls() {
-    var cf = objPropCI(doc.tags, 'controlsFolder');
+async function loadControls(pFolder) {
+    var cf;
 
+    if(pFolder){
+        cf = pFolder;
+    }else{
+        cf = objPropCI(doc.tags, 'controlsFolder');
+    }
     try {
         if (cf) {
             controlsFolder = await folder.app.folders(cf);
