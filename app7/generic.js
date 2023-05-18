@@ -47,7 +47,7 @@ pageEl.crm tendra precargadas algunas variables y funciones de la pagina como el
 // Parametros del query string
 fld_id = routeTo.query.fld_id;
 doc_id = routeTo.query.doc_id;
-paramControlsFolder = routeTo.query.controlsfolder;
+paramControlsFolder = routeTo.query.controlsFolder;
 
 app7.preloader.show();
 
