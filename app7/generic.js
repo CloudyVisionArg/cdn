@@ -832,8 +832,18 @@ async function renderControls(pCont, pParent) {
             */
         }
 
+        if ($this) $this.appendTo(pCont);
+
         try {
-            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
+            var context = {
+                ctl, $this, $input, f7ctl, textField, valueField
+            };
+
+            // Evento renderControl
+            $page[0].dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+
+            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT'], context);
+
         } catch (err) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
@@ -853,16 +863,21 @@ async function renderControls(pCont, pParent) {
             textField: El objeto Field bindeado con textField (depende del control)
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
-
-        if ($this) $this.appendTo(pCont);
     }
 
     // evalCode con context de renderControls
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }
+    // todo: cdo se pase todo el codigo a ctx.etc sacarlo
+    async function evalCode(code, ctx) {
+        try {
+            var pipe = {};
+            eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+            await pipe.fn(ctx);
+    
+        } catch(err) {
+            console.error(err);
+            throw err;
+        }
+    }    
 }
 
 function getDefaultControl(pField) {
@@ -973,15 +988,28 @@ function pageInit(e, page) {
     }
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
+    var wt = 0;
     setTimeout(async function waiting() {
         if ($page.find('[data-filling]').length > 0) {
+            wt += 100;
+            if (wt == 3000) {
+                console.log('data-filling esta demorando demasiado');
+                debugger; // Para poder ver q corno pasa
+            }
             setTimeout(waiting, 100);
-        } else {
-            await fillControls();
 
-            // Evento afterPageInit
+        } else {
+            // Evento afterRender
+            $page[0].dispatchEvent(new CustomEvent('afterRender'));
+
+            // Deprecado, usar el anterior
             $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
-            
+
+            // Control Event AfterRender, ver si se lo puede traer desde afterFillControls
+            //var ev = getEvent('AfterRender');
+            //if (ev) await evalCode(ev);
+
+            await fillControls();
             app7.preloader.hide();
         }
     }, 0);
@@ -1041,71 +1069,86 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (el.tagName == 'INPUT') {
-            var type = $el.attr('type').toLowerCase();
-            if (type == 'text') {
-                var format = $el.attr('data-numeral');
-                if (format) {
-                    var n = numeral(text);
-                    if (n.value() != null) {
-                        setInputVal($el, n.format(format));
-                    } else {
-                        setInputVal($el, '');
-                    }
-                } else {
-                    if ($el.hasClass('maps-autocomplete')) {
-                        el._text(text);
-                        el._value(value);
+        if (textField && el._text) {
+            el._text(text);
+            textField = undefined;
+        }
+        if (valueField && el._value) {
+            el._value(value);
+            valueField = undefined;
+        }
+        if (xmlField && el._xml) {
+            el._xml(xml);
+            xmlField = undefined;
+        }
         
-                    } else {
-                        if (textField && textField.type == 2) {
-                            if (text) {
-                                setInputVal($el, formatDate(text));
-                            } else {
-                                setInputVal($el, '');
-                            }
+        if (textField || valueField || xmlField) {
+            var f, v;
+            if (textField) {
+                f = textField; v = text;
+            } else if (valueField) {
+                f = valueField; v = value;
+            } else if (xmlField) {
+                f = xmlField; v = xml;
+            }
+
+            if (el.tagName == 'INPUT') {
+                var type = $el.attr('type').toLowerCase();
+
+                if (type == 'text') {
+                    var format = $el.attr('data-numeral');
+                    if (f.type == 3 || format) {
+                        // Input numeric
+                        var n = numeral(v);
+                        if (n.value() != null) {
+                            setInputVal($el, n.format(format));
                         } else {
-                            setInputVal($el, text);
+                            setInputVal($el, '');
                         }
+
+                    } else if (f.type == 2) {
+                        var dt = dSession.utils.cDate(v);
+                        if (dt) {
+                            setInputVal($el, new moment(dt).format('L LT'));
+                        } else {
+                            setInputVal($el, '');
+                        }
+                    
+                    } else {
+                        setInputVal($el, v);
                     }
+
+                } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                    setDTPickerVal($el, v);
+
+                } else if (type == 'checkbox') {
+                    el.checked = (v.toString() == '1');
+
+                } else if (type == 'hidden') {
+                    $el.val(v);
                 }
 
-            } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                setDTPickerVal($el, text);
+            } else if (el.tagName == 'TEXTAREA') {
+                setInputVal($el, v);
 
-            } else if (type == 'checkbox') {
-                el.checked = (text == '1');
-
-            } else if (type == 'hidden') {
-                if (textField) {
-                    $el.val(text);
-                } else if (valueField) {
-                    $el.val(value);
-                } else if (xmlField) {
-                    $el.val(xml);
+            } else if (el.tagName == 'SELECT') {
+                if ($el.attr('multiple')) {
+                    let t = text ? text.split(';') : null;
+                    let v = value ? value.split(';') : null;
+                    setSelectVal($el, t, v);
+                } else {
+                    setSelectVal($el, text, value);
                 }
-            }
 
-        } else if (el.tagName == 'TEXTAREA') {
-            setInputVal($el, text);
+            } else if (el.tagName == 'DIV') {
+                if ($el.hasClass('text-editor')) {
+                    app7.textEditor.get($el[0]).setValue(v);
+                }
 
-        } else if (el.tagName == 'SELECT') {
-            if ($el.attr('multiple')) {
-                var t = text ? text.split(';') : null;
-                var v = value ? value.split(';') : null;
-                setSelectVal($el, t, v);
-            } else {
-                setSelectVal($el, text, value);
-            }
-
-        } else if (el.tagName == 'DIV') {
-            if ($el.hasClass('text-editor')) {
-                app7.textEditor.get($el[0]).setValue(text);
-            }
-
-        } else if (el.tagName == 'A') {
-            if ($el.attr('data-autocomplete')) {
-                $el.find('.item-after').html(text);
+            } else if (el.tagName == 'A') {
+                if ($el.attr('data-autocomplete')) {
+                    $el.find('.item-after').html(v);
+                }
             }
         }
     });
@@ -1192,13 +1235,18 @@ async function fillControls() {
         // Evento afterFillControls
         $page[0].dispatchEvent(new CustomEvent('afterFillControls'));
 
+        // Control Event AfterFillControls
+        let ev = getEvent('AfterFillControls');
+        if (ev) await evalCode(ev);
+
         // Control Event AfterRender
+        // todo: este habria que sacarlo cdo se pase todo el cod al anterior
         var ev = getEvent('AfterRender');
         if (ev) await evalCode(ev);
 
     } catch (err) {
         console.error(err);
-        toast('AfterRender error: ' + dSession.utils.errMsg(err));
+        toast('afterFillControls error: ' + dSession.utils.errMsg(err));
     }
 }
 
@@ -1526,7 +1574,11 @@ async function saveDoc(exitOnSuccess) {
         var field = doc.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
+            if (el._text) {
+                let aux = el._text();
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+            } else if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text') {
                     if ($el.attr('data-numeral')) {
@@ -1672,11 +1724,18 @@ async function saveDoc(exitOnSuccess) {
     }
 
     // evalCode con context saveDoc
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }
+    // todo: cdo se pase todo el codigo a ctx.exitOnSuccess sacarlo
+    async function evalCode(code, ctx) {
+        try {
+            var pipe = {};
+            eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+            await pipe.fn(ctx);
+    
+        } catch(err) {
+            console.error(err);
+            throw err;
+        }
+    }    
 }
 
 async function removeAttFromCache(fileName){
@@ -1800,10 +1859,16 @@ function getEvent(pEvent) {
 }
 
 // evalCode con context root
-async function evalCode(code, args) {
-    var pipe = {};
-    eval(`pipe.fn = async () => {\n\n${code}\n};`);
-    await pipe.fn(args);
+async function evalCode(code, ctx) {
+    try {
+        var pipe = {};
+        eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+        await pipe.fn(ctx);
+
+    } catch(err) {
+        console.error(err);
+        throw err;
+    }
 }
 
 /*
