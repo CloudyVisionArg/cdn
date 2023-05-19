@@ -1580,7 +1580,7 @@ async function saveDoc(exitOnSuccess) {
 
             } else if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
-                if (type == 'text') {
+                if (type == 'text' || type == 'hidden') {
                     if ($el.attr('data-numeral')) {
                         field.value = numeral($el.val()).value();
                     } else {
@@ -1591,10 +1591,7 @@ async function saveDoc(exitOnSuccess) {
                     field.value = getDTPickerVal($el);
 
                 } else if (type == 'checkbox') {
-                    field.value = el.checked ? '1' : '0';
-
-                } else if (type == 'hidden') {
-                    field.value = $el.val();
+                    field.value = el.checked ? 1 : 0;
                 }
 
             } else if (el.tagName == 'SELECT') {
@@ -1610,6 +1607,7 @@ async function saveDoc(exitOnSuccess) {
                 if ($el.attr('data-autocomplete')) {
                     field.value = $el.find('.item-after').html();
                 }
+
             } else if(el.tagName == 'TEXTAREA') {
                 field.value = $el.val();
             }
@@ -1621,20 +1619,16 @@ async function saveDoc(exitOnSuccess) {
         var field = doc.fields($el.attr('data-valuefield'));
 
         if (field && field.updatable) {
-            if (el.tagName == 'SELECT') {
+            if (el._value) {
+                let aux = el._value();
+                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+            } else if (el.tagName == 'SELECT') {
                 var aux = getSelectVal($el);
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
-                if ($el.hasClass('maps-autocomplete')) {
-                    field.value = el._value();
-
-                } else {
-                    var type = $el.attr('type').toLowerCase();
-                    if (type == 'hidden') {
-                        field.value = $el.val();
-                    }
-                }
+                    field.value = $el.val();
             }
         }
     });

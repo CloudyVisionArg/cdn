@@ -1262,7 +1262,6 @@ async function saveDoc(exitOnSuccess) {
         var field = doc.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
-            debugger;
             if (el._text) {
                 let aux = el._text();
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
@@ -1270,7 +1269,11 @@ async function saveDoc(exitOnSuccess) {
             } else if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
                 if (type == 'text' || type == 'hidden') {
-                    field.value = $el.val();
+                    if ($el.attr('data-numeral')) {
+                        field.value = numeral($el.val()).value();
+                    } else {
+                        field.value = $el.val();
+                    };
 
                 } else if (type == 'checkbox') {
                     field.value = el.checked ? 1 : 0;
