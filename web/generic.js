@@ -443,8 +443,12 @@ async function renderPage() {
     setTimeout(async function waiting() {
         if ($('[data-filling]').length > 0) {
             wt += 100;
-            if (wt == 3000) debugger; // Para poder ver q corno pasa
+            if (wt == 3000) {
+                console.log('data-filling esta demorando demasiado');
+                debugger; // Para poder ver q corno pasa
+            }
             setTimeout(waiting, 100);
+
         } else {
             // Evento afterRender
             document.dispatchEvent(new CustomEvent('afterRender'));
@@ -453,7 +457,7 @@ async function renderPage() {
             let ev = getEvent('AfterRender');
             if (ev) await evalCode(ev);
 
-            fillControls();
+            await fillControls();
             preloader.hide();
         }
     }, 0);
@@ -992,7 +996,7 @@ async function renderControls(pCont, pParent) {
                 ctl, $this, $input, bsctl, textField, valueField
             };
 
-            // Evento controlRender
+            // Evento renderControl
             document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
 
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
@@ -1231,13 +1235,13 @@ async function fillControls() {
         // Evento afterFillControls
         document.dispatchEvent(new CustomEvent('afterFillControls'));
 
-        // Control Event AfterRender
-        let ev = getEvent('afterFillControls');
+        // Control Event AfterFillControls
+        let ev = getEvent('AfterFillControls');
         if (ev) await evalCode(ev);
 
     } catch (err) {
         console.error(err);
-        toast('AfterRender error: ' + dSession.utils.errMsg(err));
+        toast('afterFillControls error: ' + dSession.utils.errMsg(err));
     };
 }
 
@@ -1258,6 +1262,7 @@ async function saveDoc(exitOnSuccess) {
         var field = doc.fields($el.attr('data-textfield'));
 
         if (field && field.updatable) {
+            debugger;
             if (el._text) {
                 let aux = el._text();
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
