@@ -747,7 +747,6 @@ async function renderControls(pCont, pParent) {
         // -- DocumentLog --
 
         } else if (type == 'DOCUMENTLOG') {
-            debugger;
             $this = newDocLog(ctl['NAME'], label);
             $this.addClass('mt-3');
 

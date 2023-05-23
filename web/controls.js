@@ -495,7 +495,6 @@ function newMapsAutocomplete(pId, pLabel) {
 function newDocLog(pId, pLabel) {
 	var $ctl, $table, $thead, $tbody;
 	
-    debugger;
 	var $ctl = newFieldset(pId, pLabel ? pLabel : 'Cambios de datos');
 
 	$table = $('<table/>', {
@@ -541,7 +540,6 @@ function newDocLog(pId, pLabel) {
     $(cll).attr('data-doc-log', 1);
 
     cll.addEventListener('show.bs.collapse', function () {
-        debugger;
         this.fill();
     });
 
@@ -581,7 +579,7 @@ function newDocLog(pId, pLabel) {
                 })
                 
             }, function (err) {
-                console.log(err);
+                console.error(err);
         
                 $tr = $('<tr/>').appendTo($tbody);
                 $('<td/>', {
