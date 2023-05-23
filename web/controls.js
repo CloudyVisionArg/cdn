@@ -540,11 +540,11 @@ function newDocLog(pId, pLabel) {
     $(cll).attr('data-doc-log', 1);
 
     cll.addEventListener('show.bs.collapse', function () {
+        debugger;
         this.fill();
     });
 
     cll.fill = function () {
-        debugger;
         var $self = $(this);
         var docId = $self.attr('data-doc-id');
         if ($self.attr('data-filled') != 1 && docId) {
