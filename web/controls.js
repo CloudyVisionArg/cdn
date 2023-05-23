@@ -544,6 +544,7 @@ function newDocLog(pId, pLabel) {
     });
 
     cll.fill = function () {
+        debugger;
         var $self = $(this);
         var docId = $self.attr('data-doc-id');
         if ($self.attr('data-filled') != 1 && docId) {
