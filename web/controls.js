@@ -495,6 +495,7 @@ function newMapsAutocomplete(pId, pLabel) {
 function newDocLog(pId, pLabel) {
 	var $ctl, $table, $thead, $tbody;
 	
+    debugger;
 	var $ctl = newFieldset(pId, pLabel ? pLabel : 'Cambios de datos');
 
 	$table = $('<table/>', {
