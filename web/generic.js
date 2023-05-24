@@ -944,10 +944,10 @@ async function renderControls(pCont, pParent) {
 
             /*
             El TAG se setea en el SBR asi:
-                $input.attr('data-attachments', 'miTag');
+                ctx.$input.attr('data-attachments', 'miTag');
 
             El addonly:
-                $input[0]._addonly(true);
+                ctx.$input[0]._addonly(true);
             */
 
         } else if (type == 'TIMEINTERVAL') {
