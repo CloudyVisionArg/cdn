@@ -1791,6 +1791,46 @@ function clearTextSelection() {
     }
 }
 
+function openWindow(opts){
+    /*opts : {
+        url : string
+        browserFinished : function
+        browserPageLoaded : function
+    }*/
+    //https://capacitorjs.com/docs/v4/apis/browser#openoptions
+    return new Promise(function (resolve, reject) {
+        if (_isCapacitor()) {
+            //https://capacitorjs.com/docs/v4/apis/browser#addlistenerbrowserfinished-
+            Capacitor.Plugins.Browser.addEventListener('browserFinished', (r) => {
+                (opts.browserFinished) ? opts.browserFinished(r) : null;
+            });
+
+            //https://capacitorjs.com/docs/v4/apis/browser#addlistenerbrowserpageloaded-
+            Capacitor.Plugins.Browser.addEventListener('browserPageLoaded', (r) => {
+                (opts.browserPageLoaded) ? opts.browserPageLoaded(r) : null;
+            })
+            Capacitor.Plugins.Browser.open(opts).then(
+                (result)=>{
+                    resolve(result);
+                },
+                (err)=>{
+                    reject(err);
+                }
+            )
+        }
+        else{
+            const ref = (opts.url) ? cordova.InAppBrowser.open(opts.url, '_blank', 'location=no') : null;
+            ref.addEventListener("loadstart",(ev)=>{})
+            ref.addEventListener("loadstop",(ev)=>{})
+            ref.addEventListener("exit",(ev)=>{});
+            
+
+            resolve(ref);
+        }
+    });
+
+}
+
 function cameraOptions(pSource) {
 	return {
 		quality: 50,
