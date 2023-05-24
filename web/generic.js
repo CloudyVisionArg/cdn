@@ -767,11 +767,11 @@ async function renderControls(pCont, pParent) {
 
             /*
             Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
-            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckinit:
+            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckReady:
 
-            $input.on('ckinit', function (e) {
-                this.ckeditor.setReadOnly(true);
-            })
+            ctx.$input.on('ckReady', (ev) => {
+                ev.target.ckeditor.setReadOnly(true);
+            });
             */
 
 

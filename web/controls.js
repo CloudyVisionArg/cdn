@@ -404,8 +404,8 @@ function newCKEditor(pId, pLabel, pOptions) {
     scriptLoaded('ckeditor', function () {
         var txt = $txt[0];
         txt.ckeditor = CKEDITOR.replace(txt, opt);
-        txt.ckeditor.on('instanceReady', function(ev) {
-            txt.dispatchEvent(new CustomEvent('ckready'));
+        txt.ckeditor.on('instanceReady', (ev) => {
+            txt.dispatchEvent(new CustomEvent('ckReady'));
         });
     });
 
