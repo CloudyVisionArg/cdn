@@ -204,7 +204,7 @@ function newSelect(pId, pLabel, pOptions) {
 
         if (pText == undefined) {
             return getSelectText($self);
-            
+
         } else {
             //set
             if ($self.attr('multiple')) {
@@ -316,9 +316,12 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
     });
 }
 
+/* todo: esto se podria hacer agregando un metodo al prototype:
+HTMLSelectElement.prototype._text = function(text) {}
+*/
 /**
-Retorna el text del option seleccionado de un select
-Si es select multiple retorna un array
+Retorna el text del option seleccionado de un select.
+Si es select multiple retorna un array.
 */
 function getSelectText(pSelect) {
     var $sel = $(pSelect);

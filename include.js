@@ -380,10 +380,10 @@ function gitCdn(options) {
     }
 
     var url = `https://eventsjs${options.server ? options.server : ''}.cloudycrm.net/gitcdn?`;
+    url += getOpt(options, 'fresh');
     url += getOpt(options, 'owner');
     url += getOpt(options, 'repo');
     url += getOpt(options, 'ref');
-    url += getOpt(options, 'fresh');
     url += getOpt(options, 'path');
     url = url.slice(0, -1);
 
