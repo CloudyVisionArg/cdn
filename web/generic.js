@@ -915,7 +915,6 @@ async function renderControls(pCont, pParent) {
             $input.attr('data-valuefield', vf);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                //todo: falta el pick
                 $input.attr({ 'readonly': 'readonly' });
             }
 
@@ -1280,7 +1279,7 @@ async function saveDoc(exitOnSuccess) {
                 }
 
             } else if (el.tagName == 'SELECT') {
-                let aux = el._text();
+                let aux = getSelectText($el);
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'TEXTAREA') {
@@ -1303,7 +1302,7 @@ async function saveDoc(exitOnSuccess) {
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'SELECT') {
-                let aux = el._value();
+                let aux = $el.val();
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
@@ -1319,7 +1318,7 @@ async function saveDoc(exitOnSuccess) {
         if (field && field.updatable) {
             if (el.tagName == 'INPUT') {
                 let type = $el.attr('type').toLowerCase();
-                if (type == 'hidden') {
+                if (type == 'text' || type == 'hidden') {
                     field.value = $el.val();
                 }
             }

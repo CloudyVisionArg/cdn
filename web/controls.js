@@ -203,22 +203,8 @@ function newSelect(pId, pLabel, pOptions) {
         var $self = $(this);
 
         if (pText == undefined) {
-            // get
-            var val = $self.val();
-            if (val && val != '[NULL]') {
-                if (Array.isArray(val)) {
-                    var arr = [];
-                    $self.find('option:selected').each(function (ix, el) {
-                        arr.push($(el).text());
-                    });
-                    return arr;
-                } else {
-                    return $self.find('option:selected').text();
-                };
-            } else {
-                return null;
-            }
-
+            return getSelectText($self);
+            
         } else {
             //set
             if ($self.attr('multiple')) {
@@ -328,6 +314,28 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
             resolve(true);
         }
     });
+}
+
+/**
+Retorna el text del option seleccionado de un select
+Si es select multiple retorna un array
+*/
+function getSelectText(pSelect) {
+    var $sel = $(pSelect);
+    var val = $sel.val();
+    if (val && val != '[NULL]') {
+        if (Array.isArray(val)) {
+            var arr = [];
+            $sel.find('option:selected').each(function (ix, el) {
+                arr.push($(el).text());
+            });
+            return arr;
+        } else {
+            return $sel.find('option:selected').text();
+        };
+    } else {
+        return null;
+    }
 }
 
 /*
