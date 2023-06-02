@@ -75,6 +75,7 @@ var app = {
             if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
             if (!Capacitor.Plugins.PushNotification) console.log('Plugin error:  @capacitor/push-notifications');
             if (!Capacitor.Plugins.EmailComposer) console.log('Plugin error:  https://github.com/EinfachHans/capacitor-email-composer');
+            if (!Capacitor.Plugins.Device) console.log('Plugin error: https://capacitorjs.com/docs/apis/device');
             
         }    
         else{
@@ -87,10 +88,11 @@ var app = {
             if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
             if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
             if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
+            if (!device) console.log('Plugin error: cordova-plugin-device');
         }
 
         //Comunes o compatibles entre Cordova y Capacitor
-        if (!device) console.log('Plugin error: cordova-plugin-device');
+        
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
         if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
