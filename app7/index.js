@@ -88,12 +88,12 @@ var app = {
             if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
             if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
             if (!device) console.log('Plugin error: cordova-plugin-device');
+            if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
         }
 
         //Comunes o compatibles entre Cordova y Capacitor
         
         if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
-        if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
         if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
         if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
         
