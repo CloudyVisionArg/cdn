@@ -46,6 +46,7 @@ var app = {
     initialize: function() {
         console.log('app.init');
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        this.onDeviceReady();
     },
 
     onDeviceReady: function() {
