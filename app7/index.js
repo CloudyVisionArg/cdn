@@ -24,7 +24,6 @@ document.addEventListener('deviceready', ()=>{
     console.log('Device is ready');
 }, false);
 (async () => {
-    debugger;
     // https://docs.sheetjs.com/docs/
     include('xlsx', 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
     
