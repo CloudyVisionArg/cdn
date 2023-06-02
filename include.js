@@ -328,8 +328,7 @@ function scriptSrc(scriptId, version) {
             if (!isNaN(parseInt(v))) {
                 // Master
                 if (v == 0) {
-                    debugger;
-                    src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+                    //src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
                     src = gitCdn({ path: script.path, fresh: true, url: true });
                 } else {
                     src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
@@ -337,8 +336,7 @@ function scriptSrc(scriptId, version) {
 
             } else {
                 // Branch
-                debugger;
-                src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
+                //src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
                 src = gitCdn({ path: script.path, ref: v, fresh: true, url: true });
             }
         }
