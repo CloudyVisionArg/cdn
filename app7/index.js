@@ -20,7 +20,9 @@ initScripts.push({ id: 'lib-moment' });
 initScripts.push({ id: 'lib-cryptojs-aes' });
 initScripts.push({ id: 'lib-filesaver' });
 initScripts.push({ id: 'app7-index.css' });
-
+document.addEventListener('deviceready', ()=>{
+    console.log('Device is ready');
+}, false);
 (async () => {
     debugger;
     // https://docs.sheetjs.com/docs/
