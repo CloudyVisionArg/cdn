@@ -20,7 +20,7 @@ $page.find('.navbar-inner .right .link').on('click', function (e) {
             var json = JSON.parse(value);
             if (Array.isArray(json)) {
                 localStorage.setItem('scripts', JSON.stringify(json));
-                $get('#scripts').val(localStorage.getItem('scripts'));
+                fillControls();
                 toast('Cambios guardados');
             } else {
                 toast('Error: El valor debe ser un array de objetos');
@@ -53,7 +53,10 @@ $btn.click(function () {
 
 function pageInit(e, page) {
     f7Page = page;
+    fillControls();
+}
 
+function fillControls() {
     var scr = localStorage.getItem('scripts');
     try { var obj = JSON.parse(scr); } catch(er) {};
     setInputVal($get('#scripts'), (obj ? JSON.stringify(obj, null, 2) : scr));
