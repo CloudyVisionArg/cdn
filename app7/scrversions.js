@@ -54,7 +54,9 @@ $btn.click(function () {
 function pageInit(e, page) {
     f7Page = page;
 
-    setInputVal($get('#scripts'), localStorage.getItem('scripts'));
+    var scr = localStorage.getItem('scripts');
+    try { var obj = JSON.parse(scr); } catch(er) {};
+    setInputVal($get('#scripts'), (obj ? JSON.stringify(obj, null, 2) : scr));
 }
 
 // Usar solo despues del pageInit
