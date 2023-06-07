@@ -1236,12 +1236,12 @@ async function fillControls() {
         $page[0].dispatchEvent(new CustomEvent('afterFillControls'));
 
         // Control Event AfterFillControls
-        let ev = getEvent('AfterFillControls');
+        var ev = getEvent('AfterFillControls');
         if (ev) await evalCode(ev);
 
         // Control Event AfterRender
         // todo: este habria que sacarlo cdo se pase todo el cod al anterior
-        var ev = getEvent('AfterRender');
+        ev = getEvent('AfterRender');
         if (ev) await evalCode(ev);
 
     } catch (err) {
