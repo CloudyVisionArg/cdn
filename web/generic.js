@@ -1119,7 +1119,7 @@ async function fillControls() {
                     }
 
                 } else if (type == 'checkbox') {
-                    el.checked = (v.toString() == '1');
+                    el.checked = (v && v.toString() == '1');
 
                 } else if (type == 'hidden') {
                     $el.val(v);
