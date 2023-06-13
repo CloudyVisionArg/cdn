@@ -1256,6 +1256,7 @@ async function saveDoc(exitOnSuccess) {
     saving = true;
     preloader.show();
 
+    try {
     $('[data-textfield]').each(function (ix, el) {
         var $el = $(el);
         var field = doc.fields($el.attr('data-textfield'));
@@ -1310,6 +1311,7 @@ async function saveDoc(exitOnSuccess) {
             }
         }
     });
+    } catch(er) {debugger;}
 
     $('[data-xmlfield]').each(function (ix, el) {
         var $el = $(el);
