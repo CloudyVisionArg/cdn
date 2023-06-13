@@ -1921,7 +1921,7 @@ function addDefaultOptions(pContainer) {
         getListLinkItem({
             title: 'Framework7 Icons',
             click: () => {
-                cordova.InAppBrowser.open('/lib/framework7/css/cheatsheet.htm', '_system');
+                cordova.InAppBrowser.open('lib/framework7/css/cheatsheet.htm', '_system');
             },
         }).appendTo(pContainer);
 
