@@ -1628,7 +1628,7 @@ async function saveDoc(exitOnSuccess) {
                 field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
             } else if (el.tagName == 'INPUT') {
-                    field.value = $el.val();
+                field.value = $el.val();
             }
         }
     });
