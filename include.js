@@ -22,7 +22,7 @@ function registeredScripts() {
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 270 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 270 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
     //scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
     //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 269 });
     //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 267 });
