@@ -1257,77 +1257,75 @@ async function saveDoc(exitOnSuccess) {
     preloader.show();
 
     try {
-    $('[data-textfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-textfield'));
+        $('[data-textfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-textfield'));
 
-        if (field && field.updatable) {
-            if (el._text) {
-                let aux = el._text();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-            
-            } else if (el.tagName == 'INPUT') {
-                var type = $el.attr('type').toLowerCase();
-                if (type == 'text' || type == 'hidden') {
-                    if ($el.attr('data-numeral')) {
-                        field.value = numeral($el.val()).value();
+            if (field && field.updatable) {
+                if (el._text) {
+                    let aux = el._text();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                
+                } else if (el.tagName == 'INPUT') {
+                    var type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden') {
+                        if ($el.attr('data-numeral')) {
+                            field.value = numeral($el.val()).value();
+                        } else {
+                            field.value = $el.val();
+                        };
+
+                    } else if (type == 'checkbox') {
+                        field.value = el.checked ? 1 : 0;
+                    }
+
+                } else if (el.tagName == 'SELECT') {
+                    let aux = getSelectText($el);
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'TEXTAREA') {
+                    if (el.ckeditor) {
+                        field.value = el.ckeditor.getData();
                     } else {
                         field.value = $el.val();
-                    };
-
-                } else if (type == 'checkbox') {
-                    field.value = el.checked ? 1 : 0;
+                    }
                 }
+            }
+        });
 
-            } else if (el.tagName == 'SELECT') {
-                let aux = getSelectText($el);
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+        $('[data-valuefield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-valuefield'));
 
-            } else if (el.tagName == 'TEXTAREA') {
-                if (el.ckeditor) {
-                    field.value = el.ckeditor.getData();
-                } else {
+            if (field && field.updatable) {
+                if (el._value) {
+                    let aux = el._value();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'SELECT') {
+                    let aux = $el.val();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'INPUT') {
                     field.value = $el.val();
                 }
             }
-        }
-    });
+        });
 
-    $('[data-valuefield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-valuefield'));
+        $('[data-xmlfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-xmlfield'));
 
-        if (field && field.updatable) {
-            if (el._value) {
-                let aux = el._value();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'SELECT') {
-                let aux = $el.val();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'INPUT') {
-                field.value = $el.val();
-            }
-        }
-    });
-    } catch(er) {debugger;}
-
-    $('[data-xmlfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-xmlfield'));
-
-        if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
-                let type = $el.attr('type').toLowerCase();
-                if (type == 'text' || type == 'hidden') {
-                    field.value = $el.val();
+            if (field && field.updatable) {
+                if (el.tagName == 'INPUT') {
+                    let type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden') {
+                        field.value = $el.val();
+                    }
                 }
             }
-        }
-    });
+        });
 
-    try {
         //Parametros para disponibilizar en los eventos
         var context = { exitOnSuccess };
 
