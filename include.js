@@ -19,18 +19,16 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 270 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 270 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
+    //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 269 });
+    //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 267 });
+    //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 266 });
+
     scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 267 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 267 });
 	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 267 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 269 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 268, hasdep: true });
-    //scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 262, hasdep: true });
-    //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 262 });
-	//scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 260 });
-    //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 263 });
-    //scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 195 });
-    
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 266 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 262 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 262 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
