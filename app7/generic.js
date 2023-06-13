@@ -1569,85 +1569,85 @@ async function saveDoc(exitOnSuccess) {
     $navbar.find('.right .button').addClass('disabled');
     app7.preloader.show();
 
-    $get('[data-textfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-textfield'));
+    try {
+        $get('[data-textfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-textfield'));
 
-        if (field && field.updatable) {
-            if (el._text) {
-                let aux = el._text();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+            if (field && field.updatable) {
+                if (el._text) {
+                    let aux = el._text();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
-            } else if (el.tagName == 'INPUT') {
-                var type = $el.attr('type').toLowerCase();
-                if (type == 'text' || type == 'hidden') {
-                    if ($el.attr('data-numeral')) {
-                        field.value = numeral($el.val()).value();
-                    } else {
-                        field.value = $el.val();
-                    };
+                } else if (el.tagName == 'INPUT') {
+                    var type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden') {
+                        if ($el.attr('data-numeral')) {
+                            field.value = numeral($el.val()).value();
+                        } else {
+                            field.value = $el.val();
+                        };
 
-                } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                    field.value = getDTPickerVal($el);
+                    } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                        field.value = getDTPickerVal($el);
 
-                } else if (type == 'checkbox') {
-                    field.value = el.checked ? 1 : 0;
-                }
+                    } else if (type == 'checkbox') {
+                        field.value = el.checked ? 1 : 0;
+                    }
 
-            } else if (el.tagName == 'SELECT') {
-                var aux = getSelectText($el);
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                } else if (el.tagName == 'SELECT') {
+                    var aux = getSelectText($el);
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
-            } else if (el.tagName == 'DIV') {
-                if ($el.hasClass('text-editor')) {
-                    field.value = app7.textEditor.get($el[0]).getValue();
-                }
+                } else if (el.tagName == 'DIV') {
+                    if ($el.hasClass('text-editor')) {
+                        field.value = app7.textEditor.get($el[0]).getValue();
+                    }
 
-            } else if (el.tagName == 'A') {
-                if ($el.attr('data-autocomplete')) {
-                    field.value = $el.find('.item-after').html();
-                }
+                } else if (el.tagName == 'A') {
+                    if ($el.attr('data-autocomplete')) {
+                        field.value = $el.find('.item-after').html();
+                    }
 
-            } else if(el.tagName == 'TEXTAREA') {
-                field.value = $el.val();
-            }
-        }
-    });
-
-    $get('[data-valuefield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-valuefield'));
-
-        if (field && field.updatable) {
-            if (el._value) {
-                let aux = el._value();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'SELECT') {
-                var aux = getSelectVal($el);
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'INPUT') {
-                field.value = $el.val();
-            }
-        }
-    });
-
-    $get('[data-xmlfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-xmlfield'));
-
-        if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
-                var type = $el.attr('type').toLowerCase();
-                if (type == 'hidden') {
+                } else if(el.tagName == 'TEXTAREA') {
                     field.value = $el.val();
                 }
             }
-        }
-    });
+        });
 
-    try {
+        $get('[data-valuefield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-valuefield'));
+
+            if (field && field.updatable) {
+                if (el._value) {
+                    let aux = el._value();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'SELECT') {
+                    var aux = getSelectVal($el);
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'INPUT') {
+                    field.value = $el.val();
+                }
+            }
+        });
+
+        $get('[data-xmlfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-xmlfield'));
+
+            if (field && field.updatable) {
+                if (el.tagName == 'INPUT') {
+                    var type = $el.attr('type').toLowerCase();
+                    if (type == 'hidden') {
+                        field.value = $el.val();
+                    }
+                }
+            }
+        });
+
         //Parametros para disponibilizar en los eventos
         var eventArgs = { exitOnSuccess };
 
