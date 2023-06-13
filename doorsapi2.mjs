@@ -2332,7 +2332,8 @@ export class Field {
     */
 
     get updatable() {
-        return this.#json.Updatable;
+        //return this.#json.Updatable; // Dejar esta cdo este el issue #287
+        return this.#json.Updatable && !this.computed;
     }
 
     /**
