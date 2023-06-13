@@ -1383,7 +1383,6 @@ async function saveDoc(exitOnSuccess) {
     }
 
     function errMgr(pErr) {
-        debugger;
         saving = false;
         preloader.hide();
         toast(dSession.utils.errMsg(pErr));
