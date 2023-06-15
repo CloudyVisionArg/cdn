@@ -23,6 +23,8 @@ function registeredScripts() {
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 270 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
+    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 272 });
+    //scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     //scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
     //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 269 });
     //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 267 });
@@ -35,7 +37,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 262 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
-    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
