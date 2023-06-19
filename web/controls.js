@@ -828,3 +828,25 @@ function newAttachments(pId, pLabel) {
 
     return $ctl;
 }
+
+function newButton(pId, pText, pOptions){
+    let defaultOptions = {
+        class: "btn-default",
+        type: "button", /* button or submit */
+        icon: null
+    };
+
+    Object.assign(defaultOptions, pOptions);
+    let iconStr = "";
+    if(defaultOptions.icon != null){
+        iconStr = '<i class="' + defaultOptions.icon + '"></i>';
+    }
+
+    let sanitizedText = $("<p/>").text(pText).text();
+
+    var $btnObj = $(`<button type="${defaultOptions.type}" id="${pId}" class="btn ${defaultOptions.class}">
+                ${iconStr}
+                <span class="d-none d-md-inline-block"> ${sanitizedText}</span>
+            </button>`);
+    return $btnObj;
+}

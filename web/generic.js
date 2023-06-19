@@ -986,6 +986,15 @@ async function renderControls(pCont, pParent) {
             executeScriptBeforeRender oNode
             If oNode.getAttribute("w") & "" <> "1" Then this.Readonly = True
             */
+            let opts = {
+                type: ctl.attr("issubmit") == "1" ? "submit" : "button"
+            }
+            $this = newButton(ctl['NAME'], label, opts);
+            //$this.addClass('mt-3');
+            $input = $this;
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $input.attr('disabled', 'disabled');
+            }
         }
 
         if ($this) $this.appendTo($col);
