@@ -168,37 +168,11 @@ async function renderPage() {
     var $d = $(document);
 
     $d.ready(function () {
-        // Validacion de numero
-        $('[data-numeral]').change(function (e) {
-            var $this = $(this);
-            var n = numeral($this.val());
-            if (n.value()) {
-                $this.val(n.format($this.attr('data-numeral')));
-            } else {
-                $this.val('');
-                toast('Ingrese un numero valido');
-            }
-        });
-
         // Key shortcuts
         $d.keypress(function (e) {
             if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
                 e.preventDefault();
                 saveDoc();
-            }
-        });
-
-        // Tooltips
-        $('[data-bs-toggle="tooltip"]').each(function (ix) {
-            let $this = $(this);
-            if ($this.tooltip) {
-                $this.tooltip({
-                    delay: {
-                        show: 500,
-                        hide: 100,
-                    },
-                    placement: 'auto',
-                });
             }
         });
     });
@@ -373,7 +347,6 @@ async function renderPage() {
 
     // Footer
     $('<hr/>').appendTo($cont);
-    //todo: linkear a la web y agregar boton de borrado
     $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
 
     // Boton Borrar
@@ -448,25 +421,46 @@ async function renderPage() {
         }
     });
 
+    // Validacion de numero
+    $('[data-numeral]').change(function (e) {
+        var $this = $(this);
+        var n = numeral($this.val());
+        if (n.value()) {
+            $this.val(n.format($this.attr('data-numeral')));
+        } else {
+            $this.val('');
+            toast('Ingrese un numero valido');
+        }
+    });
+
+    // Tooltips
+    $('[data-bs-toggle="tooltip"]').each(function (ix) {
+        new bootstrap.Tooltip(this);
+    });
+
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
-    setTimeout(function waiting() {
+    setTimeout(async function waiting() {
         if ($('[data-filling]').length > 0) {
             wt += 100;
-            if (wt == 3000) debugger; // Para poder ver q corno pasa
+            if (wt == 3000) {
+                console.log('data-filling esta demorando demasiado');
+                debugger; // Para poder ver q corno pasa
+            }
             setTimeout(waiting, 100);
+
         } else {
-            fillControls();
+            // Evento afterRender
+            document.dispatchEvent(new CustomEvent('afterRender'));
+
+            // Control Event AfterRender
+            let ev = getEvent('AfterRender');
+            if (ev) await evalCode(ev);
+
+            await fillControls();
             preloader.hide();
         }
     }, 0);
-
-    // evalCode con context de renderPage
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }
 }
 
 function getRow(pRow, pCont, pCol) {
@@ -773,11 +767,11 @@ async function renderControls(pCont, pParent) {
 
             /*
             Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
-            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckinit:
+            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckReady:
 
-            $input.on('ckinit', function (e) {
-                this.ckeditor.setReadOnly(true);
-            })
+            ctx.$input.on('ckReady', (ev) => {
+                ev.target.ckeditor.setReadOnly(true);
+            });
             */
 
 
@@ -921,7 +915,6 @@ async function renderControls(pCont, pParent) {
             $input.attr('data-valuefield', vf);
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                //todo: falta el pick
                 $input.attr({ 'readonly': 'readonly' });
             }
 
@@ -950,10 +943,10 @@ async function renderControls(pCont, pParent) {
 
             /*
             El TAG se setea en el SBR asi:
-                $input.attr('data-attachments', 'miTag');
+                ctx.$input.attr('data-attachments', 'miTag');
 
             El addonly:
-                $input[0]._addonly(true);
+                ctx.$input[0]._addonly(true);
             */
 
         } else if (type == 'TIMEINTERVAL') {
@@ -997,10 +990,25 @@ async function renderControls(pCont, pParent) {
             }
         }
 
+        // Tooltips
+        if ($this && ctl.attr('showtooltip') == '1' && ctl.attr('tooltip')) {
+            $this.attr('data-bs-toggle', 'tooltip');
+            $this.attr('data-bs-placement', 'bottom');
+            $this.attr('title', ctl.attr('tooltip'));
+        }
+
         if ($this) $this.appendTo($col);
 
         try {
-            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER']);
+            var context = {
+                ctl, $this, $input, bsctl, textField, valueField
+            };
+
+            // Evento renderControl
+            document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+
+            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
+            
         } catch (err) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
@@ -1021,13 +1029,6 @@ async function renderControls(pCont, pParent) {
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
     }
-
-    // evalCode con context de renderControls
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }    
 }
 
 async function fillControls() {
@@ -1076,8 +1077,6 @@ async function fillControls() {
             xmlField = doc.fields(xf);
             xml = xmlField ? xmlField.value : null;
         };
-
-        if (tf == 'task_customer') debugger;
 
         if (textField && el._text) {
             el._text(text);
@@ -1129,7 +1128,7 @@ async function fillControls() {
                     }
 
                 } else if (type == 'checkbox') {
-                    el.checked = (v.toString() == '1');
+                    el.checked = (v && v.toString() == '1');
 
                 } else if (type == 'hidden') {
                     $el.val(v);
@@ -1244,13 +1243,13 @@ async function fillControls() {
         // Evento afterFillControls
         document.dispatchEvent(new CustomEvent('afterFillControls'));
 
-        // Control Event AfterRender
-        let ev = getEvent('AfterRender');
+        // Control Event AfterFillControls
+        let ev = getEvent('AfterFillControls');
         if (ev) await evalCode(ev);
 
     } catch (err) {
         console.error(err);
-        toast('AfterRender error: ' + dSession.utils.errMsg(err));
+        toast('afterFillControls error: ' + dSession.utils.errMsg(err));
     };
 }
 
@@ -1266,81 +1265,85 @@ async function saveDoc(exitOnSuccess) {
     saving = true;
     preloader.show();
 
-    $('[data-textfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-textfield'));
-
-        if (field && field.updatable) {
-            if (el._text) {
-                let aux = el._text();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-            
-            } else if (el.tagName == 'INPUT') {
-                var type = $el.attr('type').toLowerCase();
-                if (type == 'text' || type == 'hidden') {
-                    field.value = $el.val();
-
-                } else if (type == 'checkbox') {
-                    field.value = el.checked ? 1 : 0;
-                }
-
-            } else if (el.tagName == 'SELECT') {
-                let aux = el._text();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'TEXTAREA') {
-                if (el.ckeditor) {
-                    field.value = el.ckeditor.getData();
-                } else {
-                    field.value = $el.val();
-                }
-            }
-        }
-    });
-
-    $('[data-valuefield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-valuefield'));
-
-        if (field && field.updatable) {
-            if (el._value) {
-                let aux = el._value();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'SELECT') {
-                let aux = el._value();
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'INPUT') {
-                field.value = $el.val();
-            }
-        }
-    });
-
-    $('[data-xmlfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-xmlfield'));
-
-        if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
-                let type = $el.attr('type').toLowerCase();
-                if (type == 'hidden') {
-                    field.value = $el.val();
-                }
-            }
-        }
-    });
-
     try {
+        $('[data-textfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-textfield'));
+
+            if (field && field.updatable) {
+                if (el._text) {
+                    let aux = el._text();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                
+                } else if (el.tagName == 'INPUT') {
+                    var type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden') {
+                        if ($el.attr('data-numeral')) {
+                            field.value = numeral($el.val()).value();
+                        } else {
+                            field.value = $el.val();
+                        };
+
+                    } else if (type == 'checkbox') {
+                        field.value = el.checked ? 1 : 0;
+                    }
+
+                } else if (el.tagName == 'SELECT') {
+                    let aux = getSelectText($el);
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'TEXTAREA') {
+                    if (el.ckeditor) {
+                        field.value = el.ckeditor.getData();
+                    } else {
+                        field.value = $el.val();
+                    }
+                }
+            }
+        });
+
+        $('[data-valuefield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-valuefield'));
+
+            if (field && field.updatable) {
+                if (el._value) {
+                    let aux = el._value();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'SELECT') {
+                    let aux = $el.val();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'INPUT') {
+                    field.value = $el.val();
+                }
+            }
+        });
+
+        $('[data-xmlfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-xmlfield'));
+
+            if (field && field.updatable) {
+                if (el.tagName == 'INPUT') {
+                    let type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden') {
+                        field.value = $el.val();
+                    }
+                }
+            }
+        });
+
         //Parametros para disponibilizar en los eventos
-        var eventArgs = { exitOnSuccess };
+        var context = { exitOnSuccess };
 
         // Evento beforeSave
-        document.dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
+        document.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
-        if (ev) await evalCode(ev);
+        if (ev) await evalCode(ev, context);
 
         await doc.save();
         docJson = doc.toJSON();
@@ -1356,11 +1359,11 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            document.dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
+            document.dispatchEvent(new CustomEvent('afterSave', { detail : context }));
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
-            if (ev) await evalCode(ev);
+            if (ev) await evalCode(ev, context);
 
         } catch (err) {
             var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
@@ -1393,13 +1396,6 @@ async function saveDoc(exitOnSuccess) {
         preloader.hide();
         toast(dSession.utils.errMsg(pErr));
         console.error(pErr);
-    }
-
-    // evalCode con context de saveDoc
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
     }
 }
 
@@ -1463,10 +1459,15 @@ function saveAtt() {
     });
 }
 
-// evalCode con context de root
-async function evalCode(code) {
-    var pipe = {};
-    eval(`pipe.fn = async () => {\n\n${code}\n};`);
-    await pipe.fn();
+async function evalCode(code, ctx) {
+    try {
+        var pipe = {};
+        eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+        await pipe.fn(ctx);
+
+    } catch(err) {
+        console.error(err);
+        throw err;
+    }
 }
 

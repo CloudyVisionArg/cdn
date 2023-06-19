@@ -19,25 +19,24 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 270 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 270 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
+    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 272 });
+    //scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
+    //scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
+    //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 269 });
+    //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 267 });
+    //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 266 });
+
+    scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 267 });
+	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 267 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 268, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 262 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 262 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 262, hasdep: true });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 262 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
-    /*
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 171 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 250 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 232, hasdep: true });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 259 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 245 });
-    */
-
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 260 });
-	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 260 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 260 });
 	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
-    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
@@ -46,7 +45,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
 	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
-	scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 195 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
@@ -333,14 +331,16 @@ function scriptSrc(scriptId, version) {
             if (!isNaN(parseInt(v))) {
                 // Master
                 if (v == 0) {
-                    src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+                    //src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+                    src = gitCdn({ path: script.path, fresh: true, url: true });
                 } else {
                     src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
                 }
 
             } else {
                 // Branch
-                src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
+                //src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
+                src = gitCdn({ path: script.path, ref: v, fresh: true, url: true });
             }
         }
 
@@ -352,14 +352,44 @@ function scriptSrc(scriptId, version) {
 }
 
 /**
+@example
+gitCdn({
+    owner // def CloudyVisionArg
+    repo // Repositorio
+    path // Ruta al archivo, no poner el slash inicial
+    ref // Branch / tag
+    fresh // Actualiza el cache
+    url // Devuelve la url en vez del contenido. Def false
+    server // 2 para el server de desarrollo
+}
+@returns {string|Promise<string>}
 */
 function gitCdn(options) {
-    var url = 'https://eventsjs.cloudycrm.net/github?';
+    if (options.repo && options.path) {
+        try {
+            /*
+            Puedo especificar el ref y fresh de los scripts en el localStorage, en un item asi:
+                scripts = [{ "repo": "myRepo", "path": "myScript.js", "ref": "myBranchOrTag", "fresh": "true" }, { "repo": ... }]
+            */
+            var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
+            if (Array.isArray(lsScripts)) {
+                var scr = lsScripts.find(el => el.owner == options.owner && el.repo == options.repo && el.path == options.path);
+                if (scr) {
+                    options.ref = scr.ref;
+                    options.fresh = scr.fresh;
+                }
+            };
+        } catch (e) {
+            // Nothing to do
+        };
+    }
+
+    var url = `https://eventsjs${options.server ? options.server : ''}.cloudycrm.net/gitcdn?`;
+    url += getOpt(options, 'fresh');
     url += getOpt(options, 'owner');
     url += getOpt(options, 'repo');
-    url += getOpt(options, 'path');
     url += getOpt(options, 'ref');
-    url += getOpt(options, 'fresh');
+    url += getOpt(options, 'path');
     url = url.slice(0, -1);
 
     function getOpt(options, option) {
@@ -401,7 +431,6 @@ function gitCdn(options) {
 
                 },
                 err => {
-                    debugger;
                     reject(err);
                 }
             )

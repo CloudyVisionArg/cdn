@@ -129,9 +129,17 @@ function newDTPicker(pId, pLabel, pType) {
     return $div;
 }
 
+/*
+pSource = {
+    folder,
+    rootFolder,
+    field,
+}
+*/
 function inputDataList(pInput, pSource) {
     //todo: ver si puedo hacerlo sin permisos
     pInput.attr('autocomplete', 'off');
+    pInput.attr('data-filling', '1');
 
     getFolder(objPropCI(pSource, 'folder'), objPropCI(pSource, 'rootFolder')).then(
         function (fld) {
@@ -149,6 +157,7 @@ function inputDataList(pInput, pSource) {
                             value: el[f],
                         }).appendTo($list);
                     });
+                    pInput.removeAttr('data-filling');
                 },
                 function (err) {
                     console.log(err);
@@ -194,21 +203,7 @@ function newSelect(pId, pLabel, pOptions) {
         var $self = $(this);
 
         if (pText == undefined) {
-            // get
-            var val = $self.val();
-            if (val && val != '[NULL]') {
-                if (Array.isArray(val)) {
-                    var arr = [];
-                    $self.find('option:selected').each(function (ix, el) {
-                        arr.push($(el).text());
-                    });
-                    return arr;
-                } else {
-                    return $self.find('option:selected').text();
-                };
-            } else {
-                return null;
-            }
+            return getSelectText($self);
 
         } else {
             //set
@@ -321,6 +316,31 @@ function fillSelect(pSelect, pSource, pWithoutNothing, textField, valueFields, d
     });
 }
 
+/* todo: esto se podria hacer agregando un metodo al prototype:
+HTMLSelectElement.prototype._text = function(text) {}
+*/
+/**
+Retorna el text del option seleccionado de un select.
+Si es select multiple retorna un array.
+*/
+function getSelectText(pSelect) {
+    var $sel = $(pSelect);
+    var val = $sel.val();
+    if (val && val != '[NULL]') {
+        if (Array.isArray(val)) {
+            var arr = [];
+            $sel.find('option:selected').each(function (ix, el) {
+                arr.push($(el).text());
+            });
+            return arr;
+        } else {
+            return $sel.find('option:selected').text();
+        };
+    } else {
+        return null;
+    }
+}
+
 /*
 Asigna el value a un select
 pNotFoundAction:
@@ -395,7 +415,9 @@ function newCKEditor(pId, pLabel, pOptions) {
     scriptLoaded('ckeditor', function () {
         var txt = $txt[0];
         txt.ckeditor = CKEDITOR.replace(txt, opt);
-        txt.dispatchEvent(new CustomEvent('ckinit'));
+        txt.ckeditor.on('instanceReady', (ev) => {
+            txt.dispatchEvent(new CustomEvent('ckReady'));
+        });
     });
 
     return $div;
@@ -570,7 +592,7 @@ function newDocLog(pId, pLabel) {
                 })
                 
             }, function (err) {
-                console.log(err);
+                console.error(err);
         
                 $tr = $('<tr/>').appendTo($tbody);
                 $('<td/>', {

@@ -95,7 +95,7 @@ async function loadUtils() {
 
     if (typeof(CryptoJS) == 'undefined') {
         if (inNode()) {
-            res = await import('crypto-js/aes.js');
+            res = await import('crypto-js');
             _CryptoJS = res.default;
         } else {
             await include('lib-cryptojs-aes');
@@ -258,6 +258,7 @@ export class Session {
     #utils;
     #currentUser;
     #push;
+    #instance;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -269,6 +270,7 @@ export class Session {
     _reset() {
         this.#tags = undefined;
         this.#currentUser = undefined;
+        this.#instance = undefined;
     }
 
     /**
@@ -478,17 +480,27 @@ export class Session {
     }
     */
 
-    /*
-    get instanceDescription() {
-        //todo
-    }
+    /**
+    Retorna la instancia actual.
+    @returns {Promise<Object>}
     */
-
-    /*
-    get instanceName() {
-        //todo
+    get instance() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            if (!me.#instance) {
+                var url = 'instance';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        me.#instance = res;
+                        resolve(me.#instance);
+                    },
+                    reject
+                )
+            } else {
+                resolve(me.#instance);
+            }
+        });
     }
-    */
 
     /**
     Devuelve true si estoy logueado.
@@ -711,7 +723,7 @@ export class Account {
                         if (!isNaN(parseInt(account)) && (acc = res.find(el => el.id == account))) {
                             resolve(acc);
                         } else {
-                            console.log('Account not found: ' + account);
+                            //console.log('Account not found: ' + account);
                             resolve(undefined);
                         }
                     }
@@ -2320,7 +2332,8 @@ export class Field {
     */
 
     get updatable() {
-        return this.#json.Updatable;
+        //return this.#json.Updatable; // Dejar esta cdo este el issue #287
+        return this.#json.Updatable && !this.computed;
     }
 
     /**
@@ -4042,7 +4055,7 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
-	    return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8);
+        return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8)
 	}
 
     deserializeError(err) {

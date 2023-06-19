@@ -832,8 +832,18 @@ async function renderControls(pCont, pParent) {
             */
         }
 
+        if ($this) $this.appendTo(pCont);
+
         try {
-            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT']);
+            var context = {
+                ctl, $this, $input, f7ctl, textField, valueField
+            };
+
+            // Evento renderControl
+            $page[0].dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+
+            if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT'], context);
+
         } catch (err) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + dSession.utils.errMsg(err));
@@ -853,16 +863,21 @@ async function renderControls(pCont, pParent) {
             textField: El objeto Field bindeado con textField (depende del control)
             valueField: El objeto Field bindeado con valueField (depende del control)
         */
-
-        if ($this) $this.appendTo(pCont);
     }
 
     // evalCode con context de renderControls
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }
+    // todo: cdo se pase todo el codigo a ctx.etc sacarlo
+    async function evalCode(code, ctx) {
+        try {
+            var pipe = {};
+            eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+            await pipe.fn(ctx);
+    
+        } catch(err) {
+            console.error(err);
+            throw err;
+        }
+    }    
 }
 
 function getDefaultControl(pField) {
@@ -973,15 +988,28 @@ function pageInit(e, page) {
     }
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
+    var wt = 0;
     setTimeout(async function waiting() {
         if ($page.find('[data-filling]').length > 0) {
+            wt += 100;
+            if (wt == 3000) {
+                console.log('data-filling esta demorando demasiado');
+                debugger; // Para poder ver q corno pasa
+            }
             setTimeout(waiting, 100);
-        } else {
-            await fillControls();
 
-            // Evento afterPageInit
+        } else {
+            // Evento afterRender
+            $page[0].dispatchEvent(new CustomEvent('afterRender'));
+
+            // Deprecado, usar el anterior
             $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
-            
+
+            // Control Event AfterRender, ver si se lo puede traer desde afterFillControls
+            //var ev = getEvent('AfterRender');
+            //if (ev) await evalCode(ev);
+
+            await fillControls();
             app7.preloader.hide();
         }
     }, 0);
@@ -1041,71 +1069,86 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (el.tagName == 'INPUT') {
-            var type = $el.attr('type').toLowerCase();
-            if (type == 'text') {
-                var format = $el.attr('data-numeral');
-                if (format) {
-                    var n = numeral(text);
-                    if (n.value() != null) {
-                        setInputVal($el, n.format(format));
-                    } else {
-                        setInputVal($el, '');
-                    }
-                } else {
-                    if ($el.hasClass('maps-autocomplete')) {
-                        el._text(text);
-                        el._value(value);
+        if (textField && el._text) {
+            el._text(text);
+            textField = undefined;
+        }
+        if (valueField && el._value) {
+            el._value(value);
+            valueField = undefined;
+        }
+        if (xmlField && el._xml) {
+            el._xml(xml);
+            xmlField = undefined;
+        }
         
-                    } else {
-                        if (textField && textField.type == 2) {
-                            if (text) {
-                                setInputVal($el, formatDate(text));
-                            } else {
-                                setInputVal($el, '');
-                            }
+        if (textField || valueField || xmlField) {
+            var f, v;
+            if (textField) {
+                f = textField; v = text;
+            } else if (valueField) {
+                f = valueField; v = value;
+            } else if (xmlField) {
+                f = xmlField; v = xml;
+            }
+
+            if (el.tagName == 'INPUT') {
+                var type = $el.attr('type').toLowerCase();
+
+                if (type == 'text') {
+                    var format = $el.attr('data-numeral');
+                    if (f.type == 3 || format) {
+                        // Input numeric
+                        var n = numeral(v);
+                        if (n.value() != null) {
+                            setInputVal($el, n.format(format));
                         } else {
-                            setInputVal($el, text);
+                            setInputVal($el, '');
                         }
+
+                    } else if (f.type == 2) {
+                        var dt = dSession.utils.cDate(v);
+                        if (dt) {
+                            setInputVal($el, new moment(dt).format('L LT'));
+                        } else {
+                            setInputVal($el, '');
+                        }
+                    
+                    } else {
+                        setInputVal($el, v);
                     }
+
+                } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                    setDTPickerVal($el, v);
+
+                } else if (type == 'checkbox') {
+                    el.checked = (v && v.toString() == '1');
+
+                } else if (type == 'hidden') {
+                    $el.val(v);
                 }
 
-            } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                setDTPickerVal($el, text);
+            } else if (el.tagName == 'TEXTAREA') {
+                setInputVal($el, v);
 
-            } else if (type == 'checkbox') {
-                el.checked = (text == '1');
-
-            } else if (type == 'hidden') {
-                if (textField) {
-                    $el.val(text);
-                } else if (valueField) {
-                    $el.val(value);
-                } else if (xmlField) {
-                    $el.val(xml);
+            } else if (el.tagName == 'SELECT') {
+                if ($el.attr('multiple')) {
+                    let t = text ? text.split(';') : null;
+                    let v = value ? value.split(';') : null;
+                    setSelectVal($el, t, v);
+                } else {
+                    setSelectVal($el, text, value);
                 }
-            }
 
-        } else if (el.tagName == 'TEXTAREA') {
-            setInputVal($el, text);
+            } else if (el.tagName == 'DIV') {
+                if ($el.hasClass('text-editor')) {
+                    app7.textEditor.get($el[0]).setValue(v);
+                }
 
-        } else if (el.tagName == 'SELECT') {
-            if ($el.attr('multiple')) {
-                var t = text ? text.split(';') : null;
-                var v = value ? value.split(';') : null;
-                setSelectVal($el, t, v);
-            } else {
-                setSelectVal($el, text, value);
-            }
-
-        } else if (el.tagName == 'DIV') {
-            if ($el.hasClass('text-editor')) {
-                app7.textEditor.get($el[0]).setValue(text);
-            }
-
-        } else if (el.tagName == 'A') {
-            if ($el.attr('data-autocomplete')) {
-                $el.find('.item-after').html(text);
+            } else if (el.tagName == 'A') {
+                if ($el.attr('data-autocomplete')) {
+                    $el.find('.item-after').html(v);
+                }
             }
         }
     });
@@ -1192,13 +1235,18 @@ async function fillControls() {
         // Evento afterFillControls
         $page[0].dispatchEvent(new CustomEvent('afterFillControls'));
 
+        // Control Event AfterFillControls
+        var ev = getEvent('AfterFillControls');
+        if (ev) await evalCode(ev);
+
         // Control Event AfterRender
-        var ev = getEvent('AfterRender');
+        // todo: este habria que sacarlo cdo se pase todo el cod al anterior
+        ev = getEvent('AfterRender');
         if (ev) await evalCode(ev);
 
     } catch (err) {
         console.error(err);
-        toast('AfterRender error: ' + dSession.utils.errMsg(err));
+        toast('afterFillControls error: ' + dSession.utils.errMsg(err));
     }
 }
 
@@ -1243,7 +1291,6 @@ async function fillAttachments(pEl) {
 }
 
 async function downloadAtt(e) {
-    debugger;
     if (_isCapacitor()) {
         await downloadAttCapacitor($(this));
     } else {
@@ -1271,7 +1318,6 @@ function _base64ToArrayBuffer(base64) {
 }
 
 async function downloadAttCapacitor($att) {
-    debugger;
     var attId = $att.attr('data-att-id');
     var attName = $att.attr('data-att-name');
     var attURL = $att.attr('data-att-url');
@@ -1451,111 +1497,43 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var att = {};
-    debugger;
     if (action == 'camera') {
-        if (_isCapacitor()) {
-            const opts = cameraOptionsCapacitor(CameraSource.Camera);
-            opts.resultType = CameraResultType.Uri;
-            Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (photoResultSucc)=>{
-                    writeFileInCachePath(photoResultSucc.path).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name =file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        (e)=>{
-                            errMgr
-                        });
-                }, errMgr
-            );
-
-        } else {
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        function (file) {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    )
-                },
-                errMgr,
-                cameraOptions(Camera.PictureSourceType.CAMERA)
-            )
-        }
-
+        takePhoto().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
     } else if (action == 'photo') {
-        if (_isCapacitor()) {
-            const opts = cameraOptionsCapacitor(CameraSource.Photos);
-            opts.resultType = CameraResultType.Uri;
-            Capacitor.Plugins.Camera.getPhoto(opts).then(
-                (photoResultSucc)=>{
-                    writeFileInCachePath(photoResultSucc.path).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name =file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        }, errMgr);
-                }, errMgr
-            );
-
-        } else {
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        (file)=> {
-                            att.URL = file.localURL;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        }, errMgr);
-                },
-                errMgr,
-                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-            );
-        }
-
-    } else if (action == 'doc') {
-        if (_isCapacitor()) {
-            Capacitor.Plugins.FilePicker.pickFiles().then(
-                (pickFilesResultSucc)=>{
-                    const files = pickFilesResultSucc.files;
-                    writeFileInCachePath(files[0].path, files[0].name).then(
-                        (file)=>{
-                            att.URL = file.uri;
-                            att.Name = file.name;
-                            att.Size = file.size;
-                            renderNewAtt(att, $attachs);
-                        },
-                        errMgr
-                    );
-                },errMgr);
-
-        } else {
-            chooser.getFileMetadata().then(
-                function (res) {
-                    if (res) {
-                        getFile(res.uri).then(
-                            function (file) {
-                                att.URL = file.localURL;
-                                att.Name = res.name;
-                                att.Size = file.size;
-                                renderNewAtt(att, $attachs);
-                            },
-                            errMgr
-                        )
-                    }
-                },
-                errMgr
-            );
-        }
+        pickImages().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
         
+    } else if (action == 'doc') {
+        pickFiles().then(
+            (files)=>{
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    renderNewAtt(att, $attachs);
+                });
+            },
+            errMgr
+        );
     } else if (action == 'audio') {
         audioRecorder(function (file) {
             var att = {};
@@ -1591,87 +1569,85 @@ async function saveDoc(exitOnSuccess) {
     $navbar.find('.right .button').addClass('disabled');
     app7.preloader.show();
 
-    $get('[data-textfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-textfield'));
+    try {
+        $get('[data-textfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-textfield'));
 
-        if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
-                var type = $el.attr('type').toLowerCase();
-                if (type == 'text') {
-                    if ($el.attr('data-numeral')) {
-                        field.value = numeral($el.val()).value();
-                    } else {
-                        field.value = $el.val();
-                    };
+            if (field && field.updatable) {
+                if (el._text) {
+                    let aux = el._text();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
-                } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
-                    field.value = getDTPickerVal($el);
+                } else if (el.tagName == 'INPUT') {
+                    var type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden') {
+                        if ($el.attr('data-numeral')) {
+                            field.value = numeral($el.val()).value();
+                        } else {
+                            field.value = $el.val();
+                        };
 
-                } else if (type == 'checkbox') {
-                    field.value = el.checked ? '1' : '0';
+                    } else if (type == 'date' || type == 'time' || type == 'datetime-local') {
+                        field.value = getDTPickerVal($el);
 
-                } else if (type == 'hidden') {
+                    } else if (type == 'checkbox') {
+                        field.value = el.checked ? 1 : 0;
+                    }
+
+                } else if (el.tagName == 'SELECT') {
+                    var aux = getSelectText($el);
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'DIV') {
+                    if ($el.hasClass('text-editor')) {
+                        field.value = app7.textEditor.get($el[0]).getValue();
+                    }
+
+                } else if (el.tagName == 'A') {
+                    if ($el.attr('data-autocomplete')) {
+                        field.value = $el.find('.item-after').html();
+                    }
+
+                } else if(el.tagName == 'TEXTAREA') {
                     field.value = $el.val();
                 }
-
-            } else if (el.tagName == 'SELECT') {
-                var aux = getSelectText($el);
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
-
-            } else if (el.tagName == 'DIV') {
-                if ($el.hasClass('text-editor')) {
-                    field.value = app7.textEditor.get($el[0]).getValue();
-                }
-
-            } else if (el.tagName == 'A') {
-                if ($el.attr('data-autocomplete')) {
-                    field.value = $el.find('.item-after').html();
-                }
-            } else if(el.tagName == 'TEXTAREA') {
-                field.value = $el.val();
             }
-        }
-    });
+        });
 
-    $get('[data-valuefield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-valuefield'));
+        $get('[data-valuefield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-valuefield'));
 
-        if (field && field.updatable) {
-            if (el.tagName == 'SELECT') {
-                var aux = getSelectVal($el);
-                field.value = Array.isArray(aux) ? aux.join(';') : aux;
+            if (field && field.updatable) {
+                if (el._value) {
+                    let aux = el._value();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
-            } else if (el.tagName == 'INPUT') {
-                if ($el.hasClass('maps-autocomplete')) {
-                    field.value = el._value();
+                } else if (el.tagName == 'SELECT') {
+                    var aux = getSelectVal($el);
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
 
-                } else {
+                } else if (el.tagName == 'INPUT') {
+                    field.value = $el.val();
+                }
+            }
+        });
+
+        $get('[data-xmlfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-xmlfield'));
+
+            if (field && field.updatable) {
+                if (el.tagName == 'INPUT') {
                     var type = $el.attr('type').toLowerCase();
                     if (type == 'hidden') {
                         field.value = $el.val();
                     }
                 }
             }
-        }
-    });
+        });
 
-    $get('[data-xmlfield]').each(function (ix, el) {
-        var $el = $(el);
-        var field = doc.fields($el.attr('data-xmlfield'));
-
-        if (field && field.updatable) {
-            if (el.tagName == 'INPUT') {
-                var type = $el.attr('type').toLowerCase();
-                if (type == 'hidden') {
-                    field.value = $el.val();
-                }
-            }
-        }
-    });
-
-    try {
         //Parametros para disponibilizar en los eventos
         var eventArgs = { exitOnSuccess };
 
@@ -1742,11 +1718,18 @@ async function saveDoc(exitOnSuccess) {
     }
 
     // evalCode con context saveDoc
-    async function evalCode(code) {
-        var pipe = {};
-        eval(`pipe.fn = async () => {\n\n${code}\n};`);
-        await pipe.fn();
-    }
+    // todo: cdo se pase todo el codigo a ctx.exitOnSuccess sacarlo
+    async function evalCode(code, ctx) {
+        try {
+            var pipe = {};
+            eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+            await pipe.fn(ctx);
+    
+        } catch(err) {
+            console.error(err);
+            throw err;
+        }
+    }    
 }
 
 async function removeAttFromCache(fileName){
@@ -1779,16 +1762,8 @@ function saveAtt() {
 
             if (attAction == 'save') {
                 var file;
-                debugger;
                 if (_isCapacitor()) {
                     const fileFromCache = await getFileFromCache(attName);
-                    // const rawData = atob(fileFromCache.data);
-                    // const bytes = new Array(rawData.length);
-                    // for (var x = 0; x < rawData.length; x++) {
-                    //     bytes[x] = rawData.charCodeAt(x);
-                    // }
-                    // const arr = new Uint8Array(bytes);
-
                     var binary_string = atob(fileFromCache.data);
                     var len = binary_string.length;
                     var bytes = new Uint8Array(len);
@@ -1796,7 +1771,6 @@ function saveAtt() {
                         bytes[i] = binary_string.charCodeAt(i);
                     }
                     const arr = bytes.buffer;
-                    
                     file = new Blob([arr], { type: fileFromCache.type });
                     try {
                         var att = doc.attachmentsAdd(attName);
@@ -1879,10 +1853,16 @@ function getEvent(pEvent) {
 }
 
 // evalCode con context root
-async function evalCode(code, args) {
-    var pipe = {};
-    eval(`pipe.fn = async () => {\n\n${code}\n};`);
-    await pipe.fn(args);
+async function evalCode(code, ctx) {
+    try {
+        var pipe = {};
+        eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+        await pipe.fn(ctx);
+
+    } catch(err) {
+        console.error(err);
+        throw err;
+    }
 }
 
 /*
