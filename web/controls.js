@@ -853,7 +853,7 @@ function newAttachments(pId, pLabel) {
 
 function newButton(pId, pText, pOptions){
     let defaultOptions = {
-        class: "btn-default",
+        class: "btn-primary",
         type: "button", /* button or submit */
         icon: null
     };
