@@ -331,8 +331,8 @@ function scriptSrc(scriptId, version) {
             if (!isNaN(parseInt(v))) {
                 // Master
                 if (v == 0) {
-                    //src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
-                    src = gitCdn({ path: script.path, fresh: true, url: true });
+                    src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
+                    //src = gitCdn({ path: script.path, fresh: true, url: true });
                 } else {
                     src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
                 }
