@@ -23,6 +23,7 @@ i.fa-pencil-square-o{
 .wapp-messages {
     max-height: unset !important;
 	height:100%;
+	min-height: 40px !important;
 }
 .wapp-messages .wapp-message-time {
     margin-left: 0px !important;
@@ -194,4 +195,19 @@ span.msg-operator {
     align-items: center;
     grid-area: action;
     justify-content: flex-end;
+}
+.conv-message.history-msg .wapp-outbound .msg-operator {
+    font-size: 15px;
+    font-weight: bold;
+}
+.conv-message.history-msg .wapp-outbound {
+    float: none;
+    max-width: 100%;
+    width: 95%;
+	margin: 0 auto;
+    background: #4cd0ff69;
+    border-radius:10px;
+}
+.conv-message.history-msg .wapp-outbound .wapp-message-text {
+    font-size: 12px;
 }
