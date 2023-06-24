@@ -1,6 +1,6 @@
-window._isCapacitor = function(){
-    try{    return (Capacitor != undefined);}
-    catch(e){return false;}
+window._isCapacitor = function () {
+	try { return (Capacitor != undefined); }
+	catch (e) { return false; }
 };
 
 /***********************************************************
@@ -9,6 +9,7 @@ window._isCapacitor = function(){
  * Necesita: Proveedor de datos y tipos de mensajes
  * Opcionales: HTML Encabezado y HTML de opciones extra
  ***********************************************************/
+
 
 
 
@@ -25,7 +26,7 @@ window._isCapacitor = function(){
  *	this.type = "Llamada";
  * }
  */
-function msg(){
+function msg() {
 	this.sid = null;
 	this.direction = "outbound";
 	this.operator = null;
@@ -33,91 +34,91 @@ function msg(){
 	this.body = null;
 	this.date = null;
 	this.type = "Msg";
-    this.icon = "fa-pencil-square-o";
+	this.icon = "fa-pencil-square-o";
 	this.classes = "";
 	this.customProps = {};
-    this.getMessageHtml = function(message){
-        let me = this;
-        return new Promise((resolve, reject) => {
-            resolve(getHtml(message));
-            function getHtml(msj){
-                var appendBody = true;
+	this.getMessageHtml = function (message) {
+		let me = this;
+		return new Promise((resolve, reject) => {
+			resolve(getHtml(message));
+			function getHtml(msj) {
+				var appendBody = true;
 				let dateString = msj.date instanceof Date ? msj.date.toISOString() : msj.date;
-                var $row = $('<div/>', {
-                    class: 'conv-message wapp-message ' + msj.classes,
-                    'data-sid': msj.sid,
-                    'data-date': dateString,
-                    'data-type': msj.type,
-                });
-                
-                var $msg = $('<div/>', {
-                    class: 'wapp-' + msj.direction,
-                }).appendTo($row);
-            
-                if (msj.operator) $msg.append("<span class='msg-operator'>" + msj.operator + "</span>");
-                
-                var $msgText = $('<div/>', {
-                    class: 'wapp-message-text',
-                }).appendTo($msg);
-                let body = msj.body;
-                if (appendBody) {
-                    
-                    if (body) {
-                        body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
-                        
-                        //todo: estos deberian trabajar con word boundary, mejorar
-                        // https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
-                        body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
-                        body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
-                        body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los _ con <i>
-                    };
-                    
-                }
-                
-                //body += "<h4><i class='fa " + self.icon + "'></i> " + self.type + "</h4>";
+				var $row = $('<div/>', {
+					class: 'conv-message wapp-message ' + msj.classes,
+					'data-sid': msj.sid,
+					'data-date': dateString,
+					'data-type': msj.type,
+				});
 
-                /*if (msj.status) {
-                    let icon = msj.status == "Mensaje Enviado" ? "fa-thumbs-up text-success" : "fa-thumbs-down text-danger";
-                    body += "<div class='msg-detail-container'><i class='fa " + icon + "'></i> " + msj.status + "</div>";
-                }
-                else{
-                    body += "<div class='activity-actions'>" +
-                    "<button class='btn btn-success' onclick='smsMessageTools.markAsDone(" + msj.sid + ",true);this.disabled = true;'><i class='fa fa-thumbs-up'></i> La hice</button>" + 
-                    "<button class='btn btn-danger' onclick='smsMessageTools.markAsDone(" + msj.sid + ",false);this.disabled = true;'><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
-                    "</div>";
-                }*/
-                $msgText.append(body);
+				var $msg = $('<div/>', {
+					class: 'wapp-' + msj.direction,
+				}).appendTo($row);
 
-                var $msgTime = $('<div/>', {
-                    class: 'wapp-message-time',
-                }).appendTo($msg);
-                
-                dt = new Date(msj.date);
-                
-                $msgTime.append("<span class='pull-left'><i class='fa " + me.icon + "'></i></span>");
-                $msgTime.append("<span>" + me.formatDate(dt) + "</span>");                
-                return $row;
-            }
-        })
+				if (msj.operator) $msg.append("<span class='msg-operator'>" + msj.operator + "</span>");
+
+				var $msgText = $('<div/>', {
+					class: 'wapp-message-text',
+				}).appendTo($msg);
+				let body = msj.body;
+				if (appendBody) {
+
+					if (body) {
+						body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
+
+						//todo: estos deberian trabajar con word boundary, mejorar
+						// https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
+						body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
+						body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
+						body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los _ con <i>
+					};
+
+				}
+
+				//body += "<h4><i class='fa " + self.icon + "'></i> " + self.type + "</h4>";
+
+				/*if (msj.status) {
+					let icon = msj.status == "Mensaje Enviado" ? "fa-thumbs-up text-success" : "fa-thumbs-down text-danger";
+					body += "<div class='msg-detail-container'><i class='fa " + icon + "'></i> " + msj.status + "</div>";
+				}
+				else{
+					body += "<div class='activity-actions'>" +
+					"<button class='btn btn-success' onclick='smsMessageTools.markAsDone(" + msj.sid + ",true);this.disabled = true;'><i class='fa fa-thumbs-up'></i> La hice</button>" + 
+					"<button class='btn btn-danger' onclick='smsMessageTools.markAsDone(" + msj.sid + ",false);this.disabled = true;'><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
+					"</div>";
+				}*/
+				$msgText.append(body);
+
+				var $msgTime = $('<div/>', {
+					class: 'wapp-message-time',
+				}).appendTo($msg);
+
+				dt = new Date(msj.date);
+
+				$msgTime.append("<span class='pull-left'><i class='fa " + me.icon + "'></i></span>");
+				$msgTime.append("<span>" + me.formatDate(dt) + "</span>");
+				return $row;
+			}
+		})
 	};
 
 	// La fecha corta de los msjs
-	this.formatDate = function(pDate){
+	this.formatDate = function (pDate) {
 		var pDate2, date;
-	    var today = onlyDate(new Date());
-	    pDate2 = new Date(pDate);
-	    pDate2 = onlyDate(pDate2);
-	    var diff = today.getTime() - pDate2.getTime();
-	    if (pDate2.getTime() == today.getTime()) {
-	        date = '';
-	    } else if (diff <= (24 * 60 * 60 * 1000)) {
-	        date = 'Ayer ';
-	    } else {
-	    	//todo: ir hasta una semana p atras c el dia (Lun, Mar, etc)
-	        date = pDate.getDate() + '/' + (pDate.getMonth() + 1) + ' ';
-	    }
-	    return date + ISOTime(pDate);
-		
+		var today = onlyDate(new Date());
+		pDate2 = new Date(pDate);
+		pDate2 = onlyDate(pDate2);
+		var diff = today.getTime() - pDate2.getTime();
+		if (pDate2.getTime() == today.getTime()) {
+			date = '';
+		} else if (diff <= (24 * 60 * 60 * 1000)) {
+			date = 'Ayer ';
+		} else {
+			//todo: ir hasta una semana p atras c el dia (Lun, Mar, etc)
+			date = pDate.getDate() + '/' + (pDate.getMonth() + 1) + ' ';
+		}
+		return date + ISOTime(pDate);
+
 		function onlyDate(dt) {
 			dt.setHours(0);
 			dt.setMinutes(0);
@@ -140,16 +141,16 @@ function msg(){
  */
 function conversationBaseDataProvider() {
 	this.supportedTypes = ["msg"];
-	this.getMessages = function(msgLimit, maxDate){
-		return new Promise(function(resolve, reject){ resolve([]) });
+	this.getMessages = function (msgLimit, maxDate) {
+		return new Promise(function (resolve, reject) { resolve([]) });
 	};
-	this.sendMessage = function(msg){
-		return new Promise(function(resolve, reject){ resolve(null) });
+	this.sendMessage = function (msg) {
+		return new Promise(function (resolve, reject) { resolve(null) });
 	};
-	this.updateMessage = function(id, docFieldValues){
-		return new Promise(function(resolve, reject){ resolve(null)});
+	this.updateMessage = function (id, docFieldValues) {
+		return new Promise(function (resolve, reject) { resolve(null) });
 	};
-	this.destroy = function(){};
+	this.destroy = function () { };
 }
 /**
  * Proveedor de datos de chat. Utilizar este objeto para proveer de datos al chat de la siguiente forma
@@ -158,19 +159,19 @@ function conversationBaseDataProvider() {
  * @class
  * @public
  */
-function conversationDataProvider(){
+function conversationDataProvider() {
 	this.msgproviders = [];
 	this.allMessages = [];
 	var me = this;
-	this.getMessages = function(msgLimit, maxDate){
-		return new Promise((resolve,reject)=>{
+	this.getMessages = function (msgLimit, maxDate) {
+		return new Promise((resolve, reject) => {
 			let promises = [];
-			for(let i=0;i<this.msgproviders.length;i++){
+			for (let i = 0; i < this.msgproviders.length; i++) {
 				promises.push(this.msgproviders[i].getMessages(msgLimit, maxDate));
 			}
-			Promise.all(promises).then(function(results){
+			Promise.all(promises).then(function (results) {
 				let messages = [];
-				for(let i=0;i<results.length;i++){
+				for (let i = 0; i < results.length; i++) {
 					messages = messages.concat(results[i]);
 					me.allMessages = me.allMessages.concat(results[i]);
 				}
@@ -179,37 +180,37 @@ function conversationDataProvider(){
 		});
 	};
 	//TODO
-	this.getMessage  = function(id,callback){
+	this.getMessage = function (id, callback) {
 	};
-	this.sendMessage = function(msg){
-		return new Promise((resolve,reject) => {
+	this.sendMessage = function (msg) {
+		return new Promise((resolve, reject) => {
 			let msgType = msg.constructor.name;
-			for(let i=0; i < this.msgproviders.length; i++){
+			for (let i = 0; i < this.msgproviders.length; i++) {
 				let provider = this.msgproviders[i];
-				if(provider.supportedTypes.indexOf(msgType) > -1) {
-					provider.sendMessage(msg).then(resolve,reject);
+				if (provider.supportedTypes.indexOf(msgType) > -1) {
+					provider.sendMessage(msg).then(resolve, reject);
 					return;
 				}
 			}
 			reject(null);
 		});
 	};
-	this.updateMessage = function(id, docFieldValues){
-		return new Promise((resolve,reject) => {
-			
-			let found = me.allMessages.find(m=>m.sid = id);
+	this.updateMessage = function (id, docFieldValues) {
+		return new Promise((resolve, reject) => {
 
-			if(found){
+			let found = me.allMessages.find(m => m.sid = id);
+
+			if (found) {
 				let msgType = found.constructor.name;
-				for(let i=0; i < this.msgproviders.length; i++){
+				for (let i = 0; i < this.msgproviders.length; i++) {
 					let provider = this.msgproviders[i];
-					if(provider.supportedTypes.indexOf(msgType) > -1) {
-						provider.updateMessage(id,docFieldValues).then(resolve,reject);
+					if (provider.supportedTypes.indexOf(msgType) > -1) {
+						provider.updateMessage(id, docFieldValues).then(resolve, reject);
 						return;
 					}
 				}
 			}
-			
+
 			reject(null);
 		});
 	};
@@ -250,22 +251,22 @@ function conversationControl(opt) {
 		quickMessageTypes: null,
 		defaultQuickMessageType: null,
 		checkMessagesInterval: 50,
-		onReady:null,
+		onReady: null,
 		messageInserted: null,
 		messageRendered: null,
 		messageSent: null,
 		quickMessageChanged: null
 	};
 	this.options = $.extend(defaults, opt);
-	if(this.options.selector == null){
+	if (this.options.selector == null) {
 		throw "Se necesita al menos el selector de contenedor para renderizar el chat. Revise las opciones enviadas por parametro";
 	}
 	var $mainContainer = $(this.options.selector);
 	this.dataProvider = this.options.dataProvider;
 	var me = this;
 	var intervalId;
-	this.cursorLoading = function(pLoading) {
-		if (typeof(cordova) == 'object') {
+	this.cursorLoading = function (pLoading) {
+		if (typeof (cordova) == 'object') {
 			if (pLoading) {
 				app7.preloader.show();
 			} else {
@@ -279,24 +280,24 @@ function conversationControl(opt) {
 
 	this.insertMsg = function (pMsg) {
 		return new Promise(function (resolve, reject) {
-			if(!pMsg) {
+			if (!pMsg) {
 				resolve(null);
 				return;
 			}
-			let found = me.dataProvider.allMessages.find(m=>m.sid == pMsg.sid);
-			if(!found){
+			let found = me.dataProvider.allMessages.find(m => m.sid == pMsg.sid);
+			if (!found) {
 				me.dataProvider.allMessages.push(pMsg);
 			}
 			var pChat = $(me.options.selector);
 			var $cont = pChat.find('div.wapp-messages');
 			var $msgs = pChat.find('div.conv-message');
 			var shouldUpdate = false;
-			if(found){
+			if (found) {
 				let foundClone = Gestar.Tools.cloneObject(found);
 				let msgClone = Gestar.Tools.cloneObject(found);
 				foundClone.provider = null;
 				msgClone.provider = null;
-				if(JSON.stringify(foundClone) != JSON.stringify(msgClone)){
+				if (JSON.stringify(foundClone) != JSON.stringify(msgClone)) {
 					shouldUpdate = true;
 				}
 			}
@@ -316,7 +317,7 @@ function conversationControl(opt) {
 						//TODO Solo reemplazar si cambió el html
 						//if(existingMessage.html() != $(msgRow).html()){
 						//Se cambia la validacion por la comparacion de los datos, no la visualizacion
-						if(shouldUpdate){
+						if (shouldUpdate) {
 							console.log("actualizando interfaz de mensaje " + pMsg.sid);
 							existingMessage.replaceWith(msgRow);
 						}
@@ -355,35 +356,35 @@ function conversationControl(opt) {
 					$cont.scrollTop($cont[0].scrollHeight);
 				}
 			}
-			else{
+			else {
 				$cont.scrollTop($cont[0].scrollHeight);
 			}
 		} catch (error) {
 			console.log("Error al hacer scroll al final del chat: " + error);
 		}
 	};
-	
-	
-	this.destroy = function(){
-		if(intervalId){
+
+
+	this.destroy = function () {
+		if (intervalId) {
 			clearInterval(intervalId);
 			intervalId = null;
 		}
-		for(let i=0; i < this.dataProvider.msgproviders.length; i++){
+		for (let i = 0; i < this.dataProvider.msgproviders.length; i++) {
 			let provider = this.dataProvider.msgproviders[i];
-			if (typeof(provider.destroy) == 'function'){
+			if (typeof (provider.destroy) == 'function') {
 				provider.destroy();
 			}
 		}
 	}
-	
+
 	var ready = function () {
 		if (me.options.onReady) {
 			me.options.onReady(me);
 		}
 	};
 
-	var renderChat = function(pCont) {
+	var renderChat = function (pCont) {
 		var $cont = $(pCont);
 
 		if ($cont.attr('data-rendered') == '1') {
@@ -419,35 +420,35 @@ function conversationControl(opt) {
 			
 			if(me.options.subheaderHtml != null){
 				let $subheader = $('<div class="wapp-subheader"></div>').appendTo($cont);
-				if(typeof(me.options.subheaderHtml) == 'function'){
+				if (typeof (me.options.subheaderHtml) == 'function') {
 					let subheaderCall = me.options.subheaderHtml()
-					if(subheaderCall instanceof Promise){
-						subheaderCall.then(function(result){
+					if (subheaderCall instanceof Promise) {
+						subheaderCall.then(function (result) {
 							$(result).appendTo($subheader);
-						},function(err){
+						}, function (err) {
 							//TODO Nada?
 						});
 					}
-					else{
+					else {
 						$(subheaderCall).appendTo($subheader);
 					}
 				}
-				else{
+				else {
 					$(me.options.subheaderHtml).appendTo($subheader);
 				}
-				
+
 			}
 
 			var $messages = $('<div/>', {
 				class: 'wapp-messages',
 			}).appendTo($cont);
-			
+
 			$messages.append(`      
 				<div class="wapp-" style="text-align: center; margin-bottom: 15px;">
 					<a onclick="wapp.(this)">Mensajes anteriores</a>
 				</div>
 			`);
-				
+
 			var $reply = $('<div/>', {
 				class: 'wapp-footer',
 			}).appendTo($cont);
@@ -460,7 +461,7 @@ function conversationControl(opt) {
 
 			var $media;
 			var $menuContainer = $div;
-			if (typeof(cordova) != 'object') {
+			if (typeof (cordova) != 'object') {
 				// Web
 
 				var $dropup = $('<div/>', {
@@ -478,13 +479,13 @@ function conversationControl(opt) {
 
 				$menuContainer = $menu;
 			}
-			if(me.options.moreOptions != null){
-				if(typeof(me.options.moreOptions) == "function"){
-					me.options.moreOptions().then(function(html){
+			if (me.options.moreOptions != null) {
+				if (typeof (me.options.moreOptions) == "function") {
+					me.options.moreOptions().then(function (html) {
 						$menuContainer.html(html);
 					});
 				}
-				else if(typeof(me.options.moreOptions) == "string"){
+				else if (typeof (me.options.moreOptions) == "string") {
 					$menuContainer.html(html);
 				}
 			}
@@ -496,16 +497,16 @@ function conversationControl(opt) {
 			}).appendTo($reply);
 
 			var $media;
-			
+
 			let defaultMsgClass = "";
 			let defaultMsgType = "";
 			let defaultIcon = "fa-pencil-square-o";
-			if(me.options.defaultQuickMessageType != null){
+			if (me.options.defaultQuickMessageType != null) {
 				defaultMsgClass = me.options.defaultQuickMessageType;
-			}else{
+			} else {
 				defaultMsgClass = me.dataProvider.msgproviders[0].supportedTypes[0];
 			}
-			if(defaultMsgClass != ""){
+			if (defaultMsgClass != "") {
 				let msgDefault = null;
 				try {
 					eval("msgDefault = new " + defaultMsgClass + "()");
@@ -516,7 +517,7 @@ function conversationControl(opt) {
 				}
 			}
 
-			if (typeof(cordova) != 'object') {
+			if (typeof (cordova) != 'object') {
 				// Web
 				var $dropup = $('<div/>', {
 					class: 'dropup message-type-button',
@@ -548,12 +549,12 @@ function conversationControl(opt) {
 			}
 
 			// Boton Emoji
-			if (typeof(cordova) != 'object') {
+			if (typeof (cordova) != 'object') {
 				var $div = $('<div/>', {
 					class: 'wapp-button',
 					style: 'width: 10%',
 				}).appendTo($reply);
-			
+
 				var $emoji = $('<i/>', {
 					class: 'fa fa-smile-o',
 				}).appendTo($div);
@@ -565,13 +566,13 @@ function conversationControl(opt) {
 					});
 				})
 			}
-			
+
 			// Input
 			var $div = $('<div/>', {
-				style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%') + 
+				style: 'width: ' + (typeof (cordova) == 'object' ? '80%' : '70%') +
 					'; padding-left: 5px; padding-right: 5px;',
 			}).appendTo($reply);
-			
+
 			var $input = $('<textarea/>', {
 				class: 'wapp-reply',
 				style: 'height: 37px;',
@@ -582,7 +583,7 @@ function conversationControl(opt) {
 			$input.keydown(function (e) { inputKeyDown(this, e); });
 
 			// Emoji picker
-			if (typeof(cordova) != 'object') {
+			if (typeof (cordova) != 'object') {
 				$('#script_emojis')[0].loaded(function () {
 					emojis.createPicker({
 						el: $emoji,
@@ -596,9 +597,9 @@ function conversationControl(opt) {
 				class: 'wapp-button',
 				style: 'width: 10%',
 			}).appendTo($reply);
-			
+
 			var $send;
-			if (typeof(cordova) != 'object') {
+			if (typeof (cordova) != 'object') {
 				$send = $('<i/>', {
 					class: 'fa fa-send',
 				}).appendTo($div);
@@ -607,7 +608,7 @@ function conversationControl(opt) {
 					class: 'f7-icons',
 				}).append('paperplane_fill').appendTo($div);
 			}
-			
+
 			$send.click(function () {
 				send(this);
 			});
@@ -617,9 +618,9 @@ function conversationControl(opt) {
 		}
 	};
 
-	var startCheckingForMessages = function(){
-		 // Carga mensajes nuevos cada 5 segs
-		if (!intervalId){
+	var startCheckingForMessages = function () {
+		// Carga mensajes nuevos cada 5 segs
+		if (!intervalId) {
 			intervalId = setInterval(function () {
 				loadMessages($mainContainer);
 			}, me.options.checkMessagesInterval * 1000);
@@ -634,7 +635,7 @@ function conversationControl(opt) {
 		//wapp.refreshSession($cont);
 		startCheckingForMessages();
 	};
-	
+
 	// Deja crecer hasta 4 lineas, muestra los scrolls para mas
 	var inputResize = function (el) {
 		el.style.height = '1px';
@@ -664,7 +665,7 @@ function conversationControl(opt) {
 		var msgLimit = 50;
 		var maxDate = null;
 		serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
-		
+
 		me.dataProvider.getMessages(msgLimit, maxDate).then(
 			function (res) {
 				var $chat = pChat.find('div.wapp-chat');
@@ -673,39 +674,39 @@ function conversationControl(opt) {
 				} else {
 					$chat.show();
 				}
-				
-				if (res.length > 0) {
-                    var $cont = pChat.find('div.wapp-messages');
-                    var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
-                    var sessionUpdated = false;
-                    res.sort(function(a,b){
-                        return a.date - b.date;
-                    })
-                    let promises = [];				
-                    res.forEach(message => {
-                        promises.push(me.insertMsg(message));
-                    });
-                    
-                    Promise.all(promises).then(function(){
-                        if (pOlders && $older.length > 0) {
-                            $cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
-                        } else {
-                            if (atBottom) {
-                                if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
-                                    $cont.scrollTop($cont[0].scrollHeight);
-                                }
-                            }
-                            else{
-                                setTimeout(function () {
-                                    $cont.scrollTop($cont[0].scrollHeight);
-                                }, 1500);
-                            }
-                        };
 
-                        me.cursorLoading(false);
-                    });
-	        	}
-			},function(err){
+				if (res.length > 0) {
+					var $cont = pChat.find('div.wapp-messages');
+					var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
+					var sessionUpdated = false;
+					res.sort(function (a, b) {
+						return a.date - b.date;
+					})
+					let promises = [];
+					res.forEach(message => {
+						promises.push(me.insertMsg(message));
+					});
+
+					Promise.all(promises).then(function () {
+						if (pOlders && $older.length > 0) {
+							$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
+						} else {
+							if (atBottom) {
+								if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
+									$cont.scrollTop($cont[0].scrollHeight);
+								}
+							}
+							else {
+								setTimeout(function () {
+									$cont.scrollTop($cont[0].scrollHeight);
+								}, 1500);
+							}
+						};
+
+						me.cursorLoading(false);
+					});
+				}
+			}, function (err) {
 				//TODO: error
 			});
 	};
@@ -717,7 +718,7 @@ function conversationControl(opt) {
 	// Enter manda, shift enter nueva linea
 	var inputKeyDown = function (el, ev) {
 		var keyCode = ev.which || ev.keyCode;
-		if (keyCode == 13 && !ev.shiftKey && typeof(cordova) != 'object') {
+		if (keyCode == 13 && !ev.shiftKey && typeof (cordova) != 'object') {
 			// send
 			ev.preventDefault();
 			send(el);
@@ -740,22 +741,22 @@ function conversationControl(opt) {
 				return;
 			}
 			message.body = body;
-			message.date = new Date();			
-			me.dataProvider.sendMessage(message).then(function(obj){
-				me.insertMsg(obj).then(function(){
+			message.date = new Date();
+			me.dataProvider.sendMessage(message).then(function (obj) {
+				me.insertMsg(obj).then(function () {
 					$inp.val('');
 					inputResize($inp[0]);
 					me.cursorLoading(false);
 				});
-			},function(err){
+			}, function (err) {
 				console.error("err " + JSON.stringify(err), err);
 				me.cursorLoading(false);
-			});			
+			});
 		}
 	};
 
 	var serverDate = function () {
-	    return new Promise(function (resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			resolve(new Date());
 		});
 	};
@@ -845,7 +846,7 @@ function conversationControl(opt) {
 		/*var $liTmp = $('<li/>', {
 			class: 'dropdown-submenu',
 		}).appendTo($menu);*/
-		
+
 		for (let index = 0; index < me.dataProvider.msgproviders.length; index++) {
 			const prov = me.dataProvider.msgproviders[index];
 			for (let p = 0; p < prov.supportedTypes.length; p++) {
@@ -879,16 +880,16 @@ function conversationControl(opt) {
 				let msgInst = null;
 				try {
 					eval("msgInst = new " + typeName + "();");
-					if(msgInst != null)	{
+					if (msgInst != null) {
 						var $li = $('<li/>').appendTo($menu);
 						let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
 						var thisInstance = me;
 						$actionLink.click(function (e) {
 							var $this = $(this);
-							$(thisInstance.options.selector + " .message-type-button > i").attr('class',"").attr("class",$this.children('i').attr('class'));
+							$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.children('i').attr('class'));
 							$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
 							$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
-							if(thisInstance.options.quickMessageChanged){
+							if (thisInstance.options.quickMessageChanged) {
 								thisInstance.options.quickMessageChanged(msgInst.constructor.name);
 							}
 					if(typeof(menuOption) == "object"){
@@ -907,14 +908,14 @@ function conversationControl(opt) {
 						// });
 					}
 				}
-				
+
 			}
 		} catch (error) {
 			//TODO
 		}
 	};
 
-	var insertMobileMessageTypeOptionsMenu = function($div){
+	var insertMobileMessageTypeOptionsMenu = function ($div) {
 		$media = $('<i/>', {
 			id: "",
 			class: 'fa fa fa-pencil-square-o',
@@ -925,20 +926,20 @@ function conversationControl(opt) {
 			const prov = me.dataProvider.msgproviders[index];
 			for (let p = 0; p < prov.supportedTypes.length; p++) {
 				const typeName = prov.supportedTypes[p];
-				if(me.options.quickMessageTypes.indexOf(typeName) == -1) continue;
+				if (me.options.quickMessageTypes.indexOf(typeName) == -1) continue;
 				let msgInst = null;
 				try {
 					eval("msgInst = new " + typeName + "();");
-					if(msgInst != null)	{
+					if (msgInst != null) {
 						var thisInstance = me;
 						btns.push({
 							text: '<i class="fa ' + msgInst.icon + '"></i> <span>' + msgInst.type + '</span>',
 							onClick: function () {
 								debugger;
-								$(thisInstance.options.selector + " .message-type-button > i").attr('class',"").attr("class",$(this.text).attr("class"));
+								$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $(this.text).attr("class"));
 								$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
 								$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
-								if(thisInstance.options.quickMessageChanged){
+								if (thisInstance.options.quickMessageChanged) {
 									thisInstance.options.quickMessageChanged(msgInst.constructor.name);
 								}
 							}
@@ -948,7 +949,7 @@ function conversationControl(opt) {
 				}
 			}
 		}
-	
+
 		$media.click(function (e) {
 			//  Media options
 			var mediaActions = app7.actions.create({
