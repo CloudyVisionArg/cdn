@@ -3,6 +3,14 @@ window._isCapacitor = function () {
 	catch (e) { return false; }
 };
 
+window.cloudy = window.cloudy || {};
+window.cloudy.conversation = window.cloudy.conversation || {
+	instances: [],
+	getInstance: function(selector){
+		return window.cloudy.conversation.instances.find(i => i.options.selector == selector);
+	}
+};
+
 /***********************************************************
  * Control para conversaciones y datos base
  * Requiere: JQuery, Fontawesome, moment, emojis, jslib
@@ -261,6 +269,16 @@ function conversationControl(opt) {
 	if (this.options.selector == null) {
 		throw "Se necesita al menos el selector de contenedor para renderizar el chat. Revise las opciones enviadas por parametro";
 	}
+
+	if(window.cloudy && window.cloudy.conversation){
+		let found = window.cloudy.conversation.getInstance(this.options.selector);
+		if(found){
+			throw "Ya existe un control de conversacion registrado para este selector: " + this.options.selector;
+		}
+		window.cloudy.conversation.instances.push(this);
+	}
+
+
 	var $mainContainer = $(this.options.selector);
 	this.dataProvider = this.options.dataProvider;
 	var me = this;
@@ -376,6 +394,8 @@ function conversationControl(opt) {
 				provider.destroy();
 			}
 		}
+		let indx = window.cloudy.conversation.instances.indexOf(this);
+		window.cloudy.conversation.instances.splice(indx, 1);
 	}
 
 	var ready = function () {
