@@ -637,7 +637,7 @@ function whatsAppDataProvider(opts){
 									function (res) {
 										debugger;
 										var $dom = $($.parseXML(res.jqXHR.responseText));
-										let sentMsg = {};
+										let sentMsg = new wappMsg();
 										sentMsg.sid = $dom.find('Message Sid').html();
 										sentMsg.direction = 'outbound';
 										sentMsg.operator = me.options.loggedUser.Name;
@@ -655,7 +655,9 @@ function whatsAppDataProvider(opts){
 										sentMsg.latitude = row['LATITUDE'];
 										sentMsg.longitude = row['LONGITUDE'];
 										*/
-
+										if(me.options.onMessageSent){
+											me.options.onMessageSent(sentMsg);
+										}
 										//TODO
                                         /*wapp.renderMsg(sentMsg, function (msgRow) {
 											var $cont = $chat.find('div.wapp-messages');
@@ -823,14 +825,14 @@ function whatsAppDataProvider(opts){
 				class: 'dropdown-menu',
 			}).appendTo(container);
 
-			var $liAudio = $('<li/>').appendTo($menu);
+			/*var $liAudio = $('<li/>').appendTo($menu);
 			var $audioLink = $('<a/>').append('Audio');
 			$audioLink.appendTo($liAudio);
 			$audioLink.click(function (e) {
 				//me.sendFileWeb($cont[0]);
 				//TODO
 				me.sendAudio(container);
-			});
+			});*/
 
 			var $li = $('<li/>').appendTo($menu);
 			

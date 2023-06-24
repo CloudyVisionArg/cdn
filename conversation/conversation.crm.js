@@ -1,43 +1,3 @@
-var leadData = {
-	docId:"303507",
-	frmId: "500",
-	frmName: "Lead",
-	subject: "Dalla Valentina, Santi"
-};
-
-var customerData = {
-	mobilePhone: "+5493876112574",
-	email: "miguel@cloudycrm.net",
-	telephone: "",
-	name: "Santi",
-	lastName: "Dalla Valentina",
-	fullName: "Dalla Valentina, Santi",
-	docId: null
-};
-var userData = {
-	name: "Administrador",
-	accId: 0,
-	email: ""
-}
-var notasOpts = {
-    fldId: 5321,
-    formula: "DOC_ID_PADRE = 1000"
-}
-
-var crmConversationConfig = {
-	leadData: leadData,
-	customerData: customerData,
-	userData: userData
-};
-
-var actsProvOpts = {
-	chatContainer: $("div.cust-chat"),
-    fldId: 5211,
-    formula:"REFIERE_ID = 303507 AND TIPO NOT IN ('Enviar WhatsApp')",
-    supportedTypes: ["llamadaMsg","visitaMsg","emailMsg","smsMsg"],
-	crmData: crmConversationConfig
-};
-
 var actsProvider = null; //new activitiesDataProvider(actsProvOpts);
 var notasProvider = null; //new notasDataProvider(notasOpts);
 //var whatsAppProvider = null; //new whatsAppDataProvider(wappOpts);
@@ -447,8 +407,8 @@ function visitaMsg(){
                 }
                 dt = new Date(msj.date);
                 
-                
-                body += "<h4><i class='fa " + me.icon + "'></i> " + me.type + " el " + moment(dt).format("L") + " a las " + moment(dt).format("LT") + "</h4>";
+                let  visitaText = me.actType ? me.actType : me.type;
+                body += "<h4><i class='fa " + me.icon + "'></i> " + visitaText + " el " + moment(dt).format("L") + " a las " + moment(dt).format("LT") + "</h4>";
 
                 if (msj.status) {
                     let icon = msj.status == "Vino a la reunión" ? "fa-thumbs-up text-success" : "fa-thumbs-down text-danger";
@@ -766,7 +726,8 @@ function activitiesDataProvider(opts){
             {   docField: "NOTAS", msgField: "body"},
             {   docField: "INICIO",    msgField: "date" },
             /*{   docField: "TYPE_UBICACION",    msgField: "where" },*/
-            {   docField: "INICIO",    msgField: "when" }
+            {   docField: "INICIO",    msgField: "when" },
+            {   docField: "TIPO",    msgField: "actType" }
             ],
         "Visita producto":[
             {   docField: "DOC_ID", msgField: "sid" },
@@ -775,7 +736,8 @@ function activitiesDataProvider(opts){
             {   docField: "NOTAS", msgField: "body"},
             {   docField: "INICIO",    msgField: "date" },
             /*{   docField: "TYPE_UBICACION",    msgField: "where" },*/
-            {   docField: "INICIO",    msgField: "when" }
+            {   docField: "INICIO",    msgField: "when" },
+			{   docField: "TIPO",    msgField: "actType" }
             ],
         "Msg":[
             {   docField: "DOC_ID", msgField: "sid" },
