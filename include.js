@@ -224,8 +224,15 @@ function include() {
                     if (!scriptNode) {
                         //console.log(pId + ' loading');
                         var D = document;
+
+                        // Saca la extension del archivo
+                        let p = src.indexOf('?');
+                        let f = p >= 0 ? src.substring(0, p) : src;
+                        p = f.lastIndexOf('.');
+                        let ext = p >= 0 ? f.substring(p).toLowerCase() : '';
+                        debugger;
                         
-                        if (src.substring(src.length - 4).toLowerCase() == '.css') {
+                        if (ext == '.css') {
                             scriptNode = D.createElement('link');
                             scriptNode.rel = 'stylesheet';
                             scriptNode.href = src;
@@ -384,7 +391,6 @@ function gitCdn(options) {
         };
     }
 
-    debugger;
     var url;
     if (options.server != undefined) {
         url = `https://eventsjs${options.server}.cloudycrm.net`;
