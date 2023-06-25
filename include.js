@@ -230,7 +230,6 @@ function include() {
                         let f = p >= 0 ? src.substring(0, p) : src;
                         p = f.lastIndexOf('.');
                         let ext = p >= 0 ? f.substring(p).toLowerCase() : '';
-                        debugger;
                         
                         if (ext == '.css') {
                             scriptNode = D.createElement('link');
