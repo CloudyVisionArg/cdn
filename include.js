@@ -410,17 +410,9 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        //todo: binario?
-                        await include('buffer', 'https://bundle.run/buffer@6.0.3');
+                        await include('buffer', 'https://bundle.run/buffer@6.0.3'); // https://github.com/feross/buffer
                         resolve(buffer.Buffer.from(await res.arrayBuffer()));
 
-
-                        /*
-                        resolve(await res.text());
-                        for (let val of res.headers.keys()) {
-                            debugger;
-                        }
-                        */
                     } else {
                         res.text().then(
                             async txt => {
