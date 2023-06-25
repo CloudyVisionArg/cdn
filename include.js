@@ -412,7 +412,9 @@ function gitCdn(options) {
                     if (res.ok) {
                         //await include('buffer', 'https://bundle.run/buffer@6.0.3'); // https://github.com/feross/buffer
                         //resolve(buffer.Buffer.from(await res.arrayBuffer()));
-                        resolve(new Buffer(await res.arrayBuffer()));
+
+                        resolve(new Uint8Array(await res.arrayBuffer()));
+                        //resolve(new Buffer(await res.arrayBuffer()));
 
                     } else {
                         res.text().then(
@@ -445,7 +447,6 @@ function gitCdn(options) {
 
 class Buffer extends Uint8Array {
     toString() {
-        debugger;
         var td = new TextDecoder();
         return td.decode(this);
     }   
