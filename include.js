@@ -355,7 +355,7 @@ function scriptSrc(scriptId, version) {
 @example
 gitCdn({
     owner // def CloudyVisionArg
-    repo // Repositorio
+    repo // def cdn
     path // Ruta al archivo, no poner el slash inicial
     ref // Branch / tag
     fresh // Actualiza el cache
@@ -384,21 +384,19 @@ function gitCdn(options) {
         };
     }
 
-    var url = `https://eventsjs${options.server ? options.server : ''}.cloudycrm.net/gitcdn?`;
-    url += getOpt(options, 'fresh');
-    url += getOpt(options, 'owner');
-    url += getOpt(options, 'repo');
-    url += getOpt(options, 'ref');
-    url += getOpt(options, 'path');
-    url = url.slice(0, -1);
-
-    function getOpt(options, option) {
-        if (options[option] != undefined) {
-            return option + '=' + encodeURIComponent(options[option]) + '&';
-        } else {
-            return '';
-        }
+    debugger;
+    var url;
+    if (options.server != undefined) {
+        url = `https://eventsjs${options.server}.cloudycrm.net`;
+    } else {
+        url = 'https://cdn.cloudycrm.net';
     }
+    url += '/' + (options.owner != undefined ? 'gh/' + options.owner : 'ghcv');
+    url += '/' + (options.repo != undefined ? options.repo : 'cdn');
+    url += options.ref != undefined ? '@' + options.ref : '';
+    while(options.path.substring(0, 1) == '/') options.path = options.path.slice(1);
+    url += '/' + options.path;
+    if (options.fresh == true || options.fresh == 1) url += '?_fresh=1';
 
     if (options.url) {
         return url;
