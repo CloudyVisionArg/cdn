@@ -412,6 +412,9 @@ function gitCdn(options) {
                     if (res.ok) {
                         //todo: binario?
                         resolve(await res.text());
+                        for (let val of res.headers.keys() {
+                            debugger;
+                        }
                     } else {
                         res.text().then(
                             async txt => {
