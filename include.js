@@ -412,13 +412,15 @@ function gitCdn(options) {
                     if (res.ok) {
                         //todo: binario?
                         await include('buffer', 'https://bundle.run/buffer@6.0.3');
-                        
+                        resolve(buffer.Buffer.from(await res.arrayBuffer()));
 
 
+                        /*
                         resolve(await res.text());
                         for (let val of res.headers.keys()) {
                             debugger;
                         }
+                        */
                     } else {
                         res.text().then(
                             async txt => {
