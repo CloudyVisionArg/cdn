@@ -410,10 +410,15 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        //await include('buffer', 'https://bundle.run/buffer@6.0.3'); // https://github.com/feross/buffer
-                        //resolve(buffer.Buffer.from(await res.arrayBuffer()));
-
                         resolve(new Buffer(await res.arrayBuffer()));
+                        /*
+                        Esta es una implementacion simplificada de la clase Buffer de node
+                        Si hace falta algo mas completo usar https://github.com/feross/buffer
+                        cambiando la linea anterior por:
+
+                            await include('buffer', 'https://bundle.run/buffer@6.0.3');
+                            resolve(buffer.Buffer.from(await res.arrayBuffer()));
+                        */
 
                     } else {
                         res.text().then(
