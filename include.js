@@ -413,15 +413,7 @@ function gitCdn(options) {
                         //await include('buffer', 'https://bundle.run/buffer@6.0.3'); // https://github.com/feross/buffer
                         //resolve(buffer.Buffer.from(await res.arrayBuffer()));
 
-                        var ret = new Uint8Array(await res.arrayBuffer());
-                        ret.toString = () => {
-                            debugger;
-                            var td = new TextDecoder();
-                            return td.decode(this);
-                        }
-                        resolve(ret);
-
-                        //resolve(new Buffer(await res.arrayBuffer()));
+                        resolve(new Buffer(await res.arrayBuffer()));
 
                     } else {
                         res.text().then(
