@@ -415,11 +415,12 @@ function gitCdn(options) {
 
                         var ret = new Uint8Array(await res.arrayBuffer());
                         ret.toString = () => {
+                            debugger;
                             var td = new TextDecoder();
                             return td.decode(this);
                         }
                         resolve(ret);
-                        
+
                         //resolve(new Buffer(await res.arrayBuffer()));
 
                     } else {
