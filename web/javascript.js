@@ -52,7 +52,7 @@ if (typeof jQuery != 'undefined') {
 // Requiere bootstrap 5 y jQuery
 function toast(pText, pOptions) {
 	//todo: chequear xq $.fn.tooltip a veces es undefined
-	var bsver = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
+	var bsver = $.fn.button.Constructor.VERSION.split('.').map(el => parseInt(el));
 
 	if (bsver[0] < 5) {
 		console.log('Bootstrap 5 es requerido para toast');
@@ -135,7 +135,7 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	}
 	
 	var spanClass;
-	var bsver = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
+	var bsver = $.fn.button.Constructor.VERSION.split('.').map(el => parseInt(el));
 	if (bsver[0] == 3) {
 		spanClass = 'input-group-addon add-on';
 	} else if (bsver[0] >= '5') {
