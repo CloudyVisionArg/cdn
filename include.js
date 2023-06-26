@@ -358,6 +358,8 @@ function scriptSrc(scriptId, version) {
 }
 
 /**
+Devuelve un buffer con un elemento de GitHub o su url
+
 @example
 gitCdn({
     owner // def CloudyVisionArg
@@ -365,10 +367,10 @@ gitCdn({
     path // Ruta al archivo, no poner el slash inicial
     ref // Branch / tag
     fresh // Actualiza el cache
-    url // Devuelve la url en vez del contenido. Def false
+    url // Devuelve la url en vez del buffer. Def false
     server // 2 para el server de desarrollo
 }
-@returns {string|Promise<string>}
+@returns {string|Promise<Buffer>}
 */
 function gitCdn(options) {
     if (options.repo && options.path) {

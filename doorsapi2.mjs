@@ -42,7 +42,7 @@ async function loadUtils() {
     if (!inNode()) {
         if (window.include == undefined) {
             // include
-            var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
+            var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
             var code = await res.text();
             eval(`
                 ${code}
