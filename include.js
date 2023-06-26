@@ -433,7 +433,7 @@ function gitCdn(options) {
                             reject(err);
 
                         } catch(err) {
-                            reject(new Error(res.status + ' (' + res.statusText) + ')');
+                            reject(new Error(res.status + ' (' + res.statusText + ')'));
                         }
                     }
 
