@@ -19,7 +19,7 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
-    // Dps de comittear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
+    // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
 	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 273, hasdep: true });
 	//scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
@@ -421,23 +421,20 @@ function gitCdn(options) {
                         */
 
                     } else {
-                        res.text().then(
-                            async txt => {
-                                try {
-                                    var json = JSON.parse(txt);
-                                    // importa serialize si no esta
-                                    if (!window.serializeError) {
-                                        mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
-                                        window.serializeError = mod.default;
-                                    }
-                                    var err = serializeError.deserializeError(json);
-                                    reject(err);
-
-                                } catch(err) {
-                                    reject(new Error(res.status + ' (' + res.statusText) + ')');
-                                }
+                        try {
+                            var txt = await res.text();
+                            var json = JSON.parse(txt);
+                            // importa serialize si no esta
+                            if (!window.serializeError) {
+                                mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+                                window.serializeError = mod.default;
                             }
-                        );
+                            var err = serializeError.deserializeError(json);
+                            reject(err);
+
+                        } catch(err) {
+                            reject(new Error(res.status + ' (' + res.statusText) + ')');
+                        }
                     }
 
                 },
