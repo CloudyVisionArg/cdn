@@ -24,6 +24,8 @@ function registeredScripts() {
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 272 });
+	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 273, hasdep: true });
+	//scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
     //scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
     //scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
     //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 269 });
@@ -47,7 +49,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
 	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
 	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
