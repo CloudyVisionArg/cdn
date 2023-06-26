@@ -138,7 +138,7 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	var bsver = $.fn.button.Constructor.VERSION.split('.').map(el => parseInt(el));
 	if (bsver[0] == 3) {
 		spanClass = 'input-group-addon add-on';
-	} else if (bsver[0] >= '5') {
+	} else if (bsver[0] >= 5) {
 		spanClass = 'input-group-text';
 	};
 
