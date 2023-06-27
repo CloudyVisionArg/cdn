@@ -51,7 +51,6 @@ if (typeof jQuery != 'undefined') {
 
 // Requiere bootstrap 5 y jQuery
 function toast(pText, pOptions) {
-	//todo: chequear xq $.fn.tooltip a veces es undefined
 	var bsver = $.fn.button.Constructor.VERSION.split('.').map(el => parseInt(el));
 
 	if (bsver[0] < 5) {
