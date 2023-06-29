@@ -268,9 +268,11 @@ export class Session {
     
     /** Metodo interno, no usar */
     _reset() {
-        this.#tags = undefined;
+        this.#apiKey = undefined;
+        this.#authToken = undefined;
         this.#currentUser = undefined;
         this.#instance = undefined;
+        this.#tags = undefined;
     }
 
     /**
@@ -280,8 +282,8 @@ export class Session {
         return this.#apiKey;
     }
     set apiKey(value) {
-        this.#apiKey = value;
         this._reset();
+        this.#apiKey = value;
     }
 
     /**
@@ -291,8 +293,8 @@ export class Session {
         return this.#authToken;
     }
     set authToken(value) {
-        this.#authToken = value;
         this._reset();
+        this.#authToken = value;
     }
 
     /**
@@ -483,6 +485,7 @@ export class Session {
     /**
     Retorna la instancia actual.
     @returns {Promise<Object>}
+    todo: especificar type: AdfsLogon, Description, Disabled, InsId, MaxConnections, Name, SupportedDomanis, Theme, WinLogon
     */
     get instance() {
         var me = this;
@@ -526,7 +529,10 @@ export class Session {
         return new Promise((resolve, reject) => {
             var url = 'session/logoff';
             me.restClient.fetch(url, 'POST', {}, '').then(
-                res => { me.authToken = undefined },
+                res => {
+                    me._reset();
+                    resolve(res);
+                },
                 reject
             )
         })
@@ -4615,19 +4621,17 @@ class RestClient {
                         //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
                         textBody = textBody.substring(1);
                     }
+                    //todo: hay errores dnd este parse falla
                     let parsedJson = JSON.parse(textBody);
                     if (response.ok) {
                         if (parsedJson.InternalObject !== null) {
                             resolve(parsedJson.InternalObject);
+                        } else {
+                            resolve(parsedJson);
                         }
+                    } else {
+                        reject(me.session.utils.newErr(parsedJson));
                     }
-                    else {
-                        if (response.status !== 200 || parsedJson.ExceptionMessage) {
-                            debugger;
-                            reject(me.session.utils.newErr(parsedJson));
-                        }
-                    }
-                    resolve(parsedJson);
                 });
             }).catch((error) => {
                 debugger;
