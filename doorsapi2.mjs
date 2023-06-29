@@ -666,7 +666,7 @@ export class Session {
             me.restClient.fetch(url, 'POST', { key, value }, '').then(
                 res => {
                     me.#tags = undefined;
-                    resolve(res.ResponseResult);
+                    resolve(res);
                 },
                 reject
             )
