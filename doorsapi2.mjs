@@ -659,6 +659,20 @@ export class Session {
         })
     }
 
+    tagsAdd(key, value) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url = 'session/tags';
+            me.restClient.fetch(url, 'POST', { key, value }, '').then(
+                res => {
+                    me.#tags = undefined;
+                    resolve(me.#tags);
+                },
+                reject
+            )
+        })
+    }
+
     /**
     Metodos varios.
     @returns {Utilities}
