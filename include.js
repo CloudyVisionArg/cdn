@@ -21,11 +21,11 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 273, hasdep: true });
-	//scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 274 });
+    //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 270 });
 
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 273, hasdep: true });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 270 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 270 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 272 });
