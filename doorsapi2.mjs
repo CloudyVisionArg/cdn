@@ -674,6 +674,32 @@ export class Session {
     }
 
     /**
+    Devuelve o setea un setting de usuario.
+    @returns {Promise}
+    */
+    userSettings(setting, value) {
+        var url = 'user/settings';
+        var method, param, paramName;
+
+        if (value == undefined) {
+            url += '/' + this.utils.encUriC(setting);
+            method = 'GET';
+            param = '';
+            paramName = ''
+        } else {
+            method = 'POST';
+            param = { 
+                Setting: setting,
+                Value: value
+            };
+            paramName = 'setting';
+        }
+
+        return this.restClient.fetch(url, method, param, paramName);
+    }
+
+
+    /**
     Metodos varios.
     @returns {Utilities}
     */
