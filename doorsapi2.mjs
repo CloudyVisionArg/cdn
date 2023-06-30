@@ -678,11 +678,10 @@ export class Session {
     @returns {Promise}
     */
     userSettings(setting, value) {
-        var url = 'user/settings';
+        var url = 'user/settings/' + this.utils.encUriC(setting);
         var method, param, paramName;
 
         if (value == undefined) {
-            url += '/' + this.utils.encUriC(setting);
             method = 'GET';
             param = '';
             paramName = ''
