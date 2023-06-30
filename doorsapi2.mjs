@@ -4660,8 +4660,11 @@ class RestClient {
                         //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
                         textBody = textBody.substring(1);
                     }
-                    //todo: hay errores dnd este parse falla
-                    let parsedJson = JSON.parse(textBody);
+                    try {
+                        let parsedJson = JSON.parse(textBody);
+                    } catch(err) {
+                        console.warn('Cannot parse server response', textBody);
+                    }
                     if (response.ok) {
                         if (parsedJson.InternalObject !== null) {
                             resolve(parsedJson.InternalObject);
@@ -4669,7 +4672,11 @@ class RestClient {
                             resolve(parsedJson);
                         }
                     } else {
-                        reject(me.session.utils.newErr(parsedJson));
+                        if (parsedJson) {
+                            reject(me.session.utils.newErr(parsedJson));
+                        } else {
+                            reject(new Error(response.status + ' (' + response.statusText + ')'))
+                        }
                     }
                 });
             }).catch((error) => {
