@@ -4660,8 +4660,9 @@ class RestClient {
                         //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
                         textBody = textBody.substring(1);
                     }
+                    let parsedJson;
                     try {
-                        let parsedJson = JSON.parse(textBody);
+                        parsedJson = JSON.parse(textBody);
                     } catch(err) {
                         console.warn('Cannot parse server response', textBody);
                     }
