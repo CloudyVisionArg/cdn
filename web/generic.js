@@ -293,7 +293,10 @@ async function renderPage() {
         try {
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
-            if (ev) {const ret = await evalCode(ev)};
+            if (ev) {
+                let ret = await evalCode(ev);
+                debugger;
+            };
 
         } catch(err) {
             console.error(err);
