@@ -154,6 +154,15 @@ var app = {
                     }
                 },
                 {
+                    path: '/gh/',
+                    async: function () {
+                        //todo: terminar
+                        var context = getRouterContext(arguments);
+                        //repo, ref, path var script = context.to.query.script;
+                        //loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
+                    }
+                },
+                {
                     path: '/codelib/',
                     async: function () {
                         var context = getRouterContext(arguments);

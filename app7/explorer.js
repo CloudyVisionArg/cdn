@@ -330,6 +330,8 @@ function pageInit(e, page) {
             }
         }
 
+        if (!fldActions) fldActions = app7.actions.create({ buttons: stdFldActions });
+
         var prop = findProp(folder.Properties, propFldActions);
         if (!prop) prop = findProp(folder.Form.Properties, propFldActions);
         if (prop) {
@@ -342,8 +344,6 @@ function pageInit(e, page) {
                 function (err) { console.error(err) }
             )
         }
-
-        if (!fldActions) fldActions = app7.actions.create({ buttons: stdFldActions });
 
 
         // Acciones de documento
@@ -359,6 +359,8 @@ function pageInit(e, page) {
             },
         ];
 
+        if (!docActions) docActions = app7.actions.create({ buttons: stdDocActions });
+
         var prop = findProp(folder.Properties, propDocActions);
         if (!prop) prop = findProp(folder.Form.Properties, propDocActions);
         if (prop) {
@@ -371,8 +373,6 @@ function pageInit(e, page) {
                 function (err) { console.error(err) }
             )
         }
-
-        if (!docActions) docActions = app7.actions.create({ buttons: stdDocActions });
 
 
         // Evento Init
@@ -400,6 +400,7 @@ function pageInit(e, page) {
         })
     }
 
+    //todo: agregar el f7Page
     pageEl.crm = {
         reloadView,
         toggleSelectionMode,
