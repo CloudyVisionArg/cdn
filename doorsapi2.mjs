@@ -2173,6 +2173,9 @@ export class Document {
     get session() {
         return this.#session;
     }
+    set session(value) {
+        this.#session = value;
+    }
 
     /**
     @returns {string}
@@ -3077,7 +3080,6 @@ export class Folder {
     }
     set session(value) {
         this.#session = value;
-        //todo: agregar a Document
     }
 
     /*
