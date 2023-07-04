@@ -301,7 +301,7 @@ async function renderPage() {
         try {
             // Control Event BeforeRender
             var ev = getEvent('BeforeRender');
-            if (ev) await evalCode(ev);
+            if (ev) {let ret = await evalCode(ev);}
 
         } catch(err) {
             console.error(err);
@@ -871,7 +871,7 @@ async function renderControls(pCont, pParent) {
         try {
             var pipe = {};
             eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-            await pipe.fn(ctx);
+            return await pipe.fn(ctx);
     
         } catch(err) {
             console.error(err);
@@ -1723,7 +1723,7 @@ async function saveDoc(exitOnSuccess) {
         try {
             var pipe = {};
             eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-            await pipe.fn(ctx);
+            return await pipe.fn(ctx);
     
         } catch(err) {
             console.error(err);
@@ -1857,7 +1857,7 @@ async function evalCode(code, ctx) {
     try {
         var pipe = {};
         eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-        await pipe.fn(ctx);
+        return await pipe.fn(ctx);
 
     } catch(err) {
         console.error(err);

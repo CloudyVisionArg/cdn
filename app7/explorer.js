@@ -337,19 +337,14 @@ function pageInit(e, page) {
                 function (res) {
                     if (Array.isArray(res)) {
                         fldActions = app7.actions.create({ buttons: [res, stdFldActions] });
-                    } else {
-                        fldActions = app7.actions.create({ buttons: stdFldActions });
                     }
                 },
-                function (err) {
-                    console.log(err)
-                    fldActions = app7.actions.create({ buttons: stdFldActions });
-                }
+                function (err) { console.error(err) }
             )
-
-        } else {
-            fldActions = app7.actions.create({ buttons: stdFldActions });
         }
+
+        if (!fldActions) fldActions = app7.actions.create({ buttons: stdFldActions });
+
 
         // Acciones de documento
         var stdDocActions = [
@@ -371,19 +366,14 @@ function pageInit(e, page) {
                 function (res) {
                     if (Array.isArray(res)) {
                         docActions = app7.actions.create({ buttons: [res, stdDocActions] });
-                    } else {
-                        docActions = app7.actions.create({ buttons: stdDocActions });
                     }
                 },
-                function (err) {
-                    console.log(err)
-                    docActions = app7.actions.create({ buttons: stdDocActions });
-                }
+                function (err) { console.error(err) }
             )
-
-        } else {
-            docActions = app7.actions.create({ buttons: stdDocActions });
         }
+
+        if (!docActions) docActions = app7.actions.create({ buttons: stdDocActions });
+
 
         // Evento Init
         var prop = findProp(folder.Properties, propInit);
