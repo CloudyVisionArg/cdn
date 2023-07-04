@@ -3075,6 +3075,10 @@ export class Folder {
     get session() {
         return this.#session;
     }
+    set session(value) {
+        this.#session = value;
+        //todo: agregar a Document
+    }
 
     /*
     get sourceFolder() {

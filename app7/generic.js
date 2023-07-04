@@ -1014,6 +1014,7 @@ function pageInit(e, page) {
         }
     }, 0);
 
+    //todo: agregar f7Page
     pageEl.crm = {
         fillControls, saveDoc, fld_id, folder, 
         folderJson, doc_id, doc, docJson, $navbar,
