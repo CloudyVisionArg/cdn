@@ -328,7 +328,7 @@ function scriptSrc(scriptId, version) {
                         if (scr) v = scr.version;
                     };
                 } catch (e) {
-                    // Nothing to do
+                    console.log(e);
                 };
             };
 
