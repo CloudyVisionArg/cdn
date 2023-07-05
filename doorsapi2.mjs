@@ -2158,7 +2158,7 @@ export class Document {
     todo: Esto deberia ser parte del save (issue #261)
     */
     async saveAttachments() {
-        for ([key, value] of await this.attachments()) {
+        for (var [key, value] of await this.attachments()) {
             if (value.toRemove) {
                 await value.remove();
             } else if (value.isNew) {

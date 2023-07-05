@@ -400,7 +400,7 @@ function pageInit(e, page) {
         })
     }
 
-    //todo: agregar el f7Page
+    //todo: agregar el f7Page y poner dps del evento init o no pisar
     pageEl.crm = {
         reloadView,
         toggleSelectionMode,
