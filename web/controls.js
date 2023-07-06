@@ -681,7 +681,7 @@ function newAttachments(pId, pLabel) {
         inp.value = '';
     })
 
-    $div[0]._value = async (pDoc) => {
+    $div[0]._value =  (pDoc) => {
         debugger;
         var $self = $(this);
         $self.empty();
