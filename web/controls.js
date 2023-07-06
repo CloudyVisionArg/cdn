@@ -691,7 +691,7 @@ function newAttachments(pId, pLabel) {
             for (let [key, value] of await pDoc.attachments()) {
                 debugger;
                 if (tag == 'all' || (value.description && value.description.toLowerCase() == tag)) {
-                    renderAtt(value, readonly);
+                    renderAtt(value, readonly).appendTo($self);
                 }
             }
         };
@@ -713,7 +713,7 @@ function newAttachments(pId, pLabel) {
             });
             $div.css('cursor', 'pointer');
             $div.click(downloadAtt);
-            $div.attr('title', 'Agregado por ' + pAtt.ownerName + ', el ' + formatDate(pAtt.created) + ' (Id ' + pAtt.id + ')');
+            $div.attr('title', 'Agregado por ' + pAtt.ownerName + ', el ' + formatDate(pAtt.created) + ' (#' + pAtt.id + ')');
 
         } else {
             var $div = $('<div/>', {
