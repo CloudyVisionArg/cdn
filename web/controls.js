@@ -686,6 +686,7 @@ function newAttachments(pId, pLabel) {
         $self.empty();
         var tag = $self.attr('data-attachments').toLowerCase();
 
+        debugger;
         if (pDoc) {
             let attMap = await pDoc.attachments();
             debugger;
