@@ -681,13 +681,15 @@ function newAttachments(pId, pLabel) {
         inp.value = '';
     })
 
-    $div[0]._value = function (pDoc) {
+    $div[0]._value = async (pDoc) => {
         var $self = $(this);
         $self.empty();
         var tag = $self.attr('data-attachments').toLowerCase();
 
-        debugger;
         if (pDoc) {
+            let attMap = await pDoc.attachments();
+            debugger;
+
             DoorsAPI.attachments(pDoc).then(
                 function (res) {
                     // Filtra por el tag
