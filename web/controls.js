@@ -681,8 +681,7 @@ function newAttachments(pId, pLabel) {
         inp.value = '';
     })
 
-    $div[0]._value =  (pDoc) => {
-        debugger;
+    $div[0]._value = async function (pDoc) {
         var $self = $(this);
         $self.empty();
         var tag = $self.attr('data-attachments').toLowerCase();
