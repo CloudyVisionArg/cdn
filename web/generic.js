@@ -1403,6 +1403,19 @@ function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
         var $attsToSave = $('div[data-attachments] [data-att-action]');
+
+        // Guarda los adjuntos que se puedan haber agregado por codigo
+        try {
+            await doc.saveAttachments();
+            
+        } catch (err) {
+            errors.push({
+                action: 'saveAttachments',
+                error: dSession.utils.errMsg(err),
+            });
+        }
+
+        // Guarda los adjuntos de los controles attachments
         var attMap = await doc.attachments();
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
