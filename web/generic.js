@@ -84,13 +84,18 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
         folderJson = folder.toJSON();
         folder.form; // Para q vaya cargando el form
         if (folder.type == 1) {
-            if (doc_id) {
-                doc = await folder.documents(doc_id);
-            } else {
-                doc = await folder.documentsNew();
-            }
-            docJson = doc.toJSON();
+            try {
+                if (doc_id) {
+                    doc = await folder.documents(doc_id);
+                } else {
+                    doc = await folder.documentsNew();
+                }
 
+             } catch(err) {
+                end(dSession.utils.errMsg(err));
+             }
+
+            docJson = doc.toJSON();
             loadControls();
 
         } else {
@@ -1407,7 +1412,7 @@ function saveAtt() {
         // Guarda los adjuntos que se puedan haber agregado por codigo
         try {
             await doc.saveAttachments();
-            
+
         } catch (err) {
             errors.push({
                 action: 'saveAttachments',
