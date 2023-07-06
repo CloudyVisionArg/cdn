@@ -80,26 +80,26 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     doc_id = urlParams.get('doc_id');
     
     if (fld_id) {
-        folder = await dSession.foldersGetFromId(fld_id);
-        folderJson = folder.toJSON();
-        folder.form; // Para q vaya cargando el form
-        if (folder.type == 1) {
-            try {
+        try {
+            folder = await dSession.foldersGetFromId(fld_id);
+            folderJson = folder.toJSON();
+            folder.form; // Para q vaya cargando el form
+            
+            if (folder.type == 1) {
                 if (doc_id) {
                     doc = await folder.documents(doc_id);
                 } else {
                     doc = await folder.documentsNew();
                 }
+                docJson = doc.toJSON();
+                loadControls();
 
-             } catch(err) {
-                end(dSession.utils.errMsg(err));
-             }
+            } else {
+                end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
+            }
 
-            docJson = doc.toJSON();
-            loadControls();
-
-        } else {
-            end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
+        } catch(err) {
+            end(dSession.utils.errMsg(err));
         }
     
     } else {
