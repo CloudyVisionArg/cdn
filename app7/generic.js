@@ -1751,6 +1751,19 @@ async function removeAttFromCache(fileName){
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
+
+        // Guarda los adjuntos que se puedan haber agregado por codigo
+        try {
+            await doc.saveAttachments();
+
+        } catch (err) {
+            errors.push({
+                action: 'saveAttachments',
+                error: dSession.utils.errMsg(err),
+            });
+        }
+
+        // Guarda los adjuntos de los controles attachments
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
         var attMap = await doc.attachments();
 

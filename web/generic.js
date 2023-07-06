@@ -84,7 +84,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
             folder = await dSession.foldersGetFromId(fld_id);
             folderJson = folder.toJSON();
             folder.form; // Para q vaya cargando el form
-            
+
             if (folder.type == 1) {
                 if (doc_id) {
                     doc = await folder.documents(doc_id);
@@ -1407,7 +1407,6 @@ async function saveDoc(exitOnSuccess) {
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
-        var $attsToSave = $('div[data-attachments] [data-att-action]');
 
         // Guarda los adjuntos que se puedan haber agregado por codigo
         try {
@@ -1421,6 +1420,7 @@ function saveAtt() {
         }
 
         // Guarda los adjuntos de los controles attachments
+        var $attsToSave = $('div[data-attachments] [data-att-action]');
         var attMap = await doc.attachments();
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
