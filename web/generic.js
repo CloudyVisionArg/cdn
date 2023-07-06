@@ -1237,11 +1237,11 @@ async function fillControls() {
     }
 
     $('[data-attachments]').each(function (ix, el) {
-        this._value(doc_id);
+        this._value(doc);
     });
 
     $('[data-doc-log]').each(function (ix) {
-        this._value(doc_id);
+        this._value(doc);
     });
 
     try {

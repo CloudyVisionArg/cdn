@@ -604,11 +604,11 @@ function newDocLog(pId, pLabel) {
         }
     }
     
-    cll._value = function (pValue) {
+    cll._value = function (pDoc) {
         var $self = $(this);
         var $tbody = $self.find('tbody');
         $tbody.empty();
-        $self.attr('data-doc-id', pValue);
+        $self.attr('data-doc-id', pDoc.id);
         $self.removeAttr('data-filled');
         if ($self.hasClass('show')) this.fill();
     }
@@ -681,13 +681,14 @@ function newAttachments(pId, pLabel) {
         inp.value = '';
     })
 
-    $div[0]._value = function (pValue) {
+    $div[0]._value = function (pDoc) {
         var $self = $(this);
         $self.empty();
         var tag = $self.attr('data-attachments').toLowerCase();
 
-        if (pValue) {
-            DoorsAPI.attachments(pValue).then(
+        debugger;
+        if (pDoc) {
+            DoorsAPI.attachments(pDoc).then(
                 function (res) {
                     // Filtra por el tag
                     var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
