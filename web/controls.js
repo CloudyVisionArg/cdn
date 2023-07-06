@@ -687,8 +687,11 @@ function newAttachments(pId, pLabel) {
         var tag = $self.attr('data-attachments').toLowerCase();
 
         if (pDoc) {
-            let attMap = await pDoc.attachments();
-            debugger;
+            for (let [key, value] of await pDoc.attachments()) {
+                debugger;
+                //tag == 'all' || (att.Description && att.Description.toLowerCase() == tag))
+            }
+
 
             DoorsAPI.attachments(pDoc).then(
                 function (res) {
