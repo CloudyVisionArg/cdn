@@ -689,6 +689,7 @@ function newAttachments(pId, pLabel) {
 
         if (pDoc) {
             for (let [key, value] of await pDoc.attachments()) {
+                debugger;
                 if (tag == 'all' || (value.description && value.description.toLowerCase() == tag)) {
                     renderAtt(value, readonly);
                 }
@@ -697,8 +698,6 @@ function newAttachments(pId, pLabel) {
     }
 
     function renderAtt(pAtt, pReadonly) {
-        // pAtt = { AttId, Name, AccName, Size, Created, Readonly }
-
         var $grp = $('<div/>', {
             class: 'input-group float-start me-2 mb-1',
             style: 'width: auto;',
