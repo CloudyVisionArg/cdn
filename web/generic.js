@@ -1344,12 +1344,14 @@ async function saveDoc(exitOnSuccess) {
         var context = { exitOnSuccess };
 
         // Evento beforeSave
+        console.log('evento');
         document.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
         if (ev) await evalCode(ev, context);
 
+        console.log('save');
         await doc.save();
         docJson = doc.toJSON();
         doc_id = doc.id;
