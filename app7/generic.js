@@ -1017,7 +1017,6 @@ function pageInit(e, page) {
         }
     }, 0);
 
-    //todo: agregar f7Page
     if (!pageEl.crm) pageEl.crm = {};
     Object.assign(pageEl.crm, {
         fillControls, saveDoc, fld_id, folder, 
