@@ -841,6 +841,7 @@ async function renderControls(pCont, pParent) {
 
             // Evento renderControl
             $page[0].dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT'], context);
 
@@ -1000,7 +1001,9 @@ function pageInit(e, page) {
 
         } else {
             // Evento afterRender
-            $page[0].dispatchEvent(new CustomEvent('afterRender'));
+            let context = {};
+            $page[0].dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Deprecado, usar el anterior
             $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
@@ -1234,14 +1237,16 @@ async function fillControls() {
 
     try {
         // Evento afterFillControls
-        $page[0].dispatchEvent(new CustomEvent('afterFillControls'));
+        let context = {};
+        $page[0].dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
+        if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event AfterFillControls
         var ev = getEvent('AfterFillControls');
         if (ev) await evalCode(ev);
 
         // Control Event AfterRender
-        // todo: este habria que sacarlo cdo se pase todo el cod al anterior
+        // todo: Deprecado, hay que sacarlo cdo se pase todo al anterior
         ev = getEvent('AfterRender');
         if (ev) await evalCode(ev);
 
@@ -1650,10 +1655,11 @@ async function saveDoc(exitOnSuccess) {
         });
 
         //Parametros para disponibilizar en los eventos
-        var eventArgs = { exitOnSuccess };
+        var context = { exitOnSuccess };
 
         // Evento beforeSave
-        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
+        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
@@ -1677,7 +1683,8 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
+            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : context }));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');

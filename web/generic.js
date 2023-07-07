@@ -456,7 +456,9 @@ async function renderPage() {
 
         } else {
             // Evento afterRender
-            document.dispatchEvent(new CustomEvent('afterRender'));
+            let context = {};
+            document.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Control Event AfterRender
             let ev = getEvent('AfterRender');
@@ -1011,6 +1013,7 @@ async function renderControls(pCont, pParent) {
 
             // Evento renderControl
             document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
             
@@ -1246,7 +1249,9 @@ async function fillControls() {
 
     try {
         // Evento afterFillControls
-        document.dispatchEvent(new CustomEvent('afterFillControls'));
+        let context = {};
+        document.dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
+        if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event AfterFillControls
         let ev = getEvent('AfterFillControls');
@@ -1344,16 +1349,13 @@ async function saveDoc(exitOnSuccess) {
         var context = { exitOnSuccess };
 
         // Evento beforeSave
-        console.log('evento');
         document.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
-        debugger;
         if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
         if (ev) await evalCode(ev, context);
 
-        console.log('save');
         await doc.save();
         docJson = doc.toJSON();
         doc_id = doc.id;
@@ -1369,6 +1371,7 @@ async function saveDoc(exitOnSuccess) {
         try {
             // Evento afterSave
             document.dispatchEvent(new CustomEvent('afterSave', { detail : context }));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
