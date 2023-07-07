@@ -1018,12 +1018,12 @@ function pageInit(e, page) {
     }, 0);
 
     //todo: agregar f7Page
+    debugger;
     if (!pageEl.crm) pageEl.crm = {};
     Object.assign(pageEl.crm, {
         fillControls, saveDoc, fld_id, folder, 
         folderJson, doc_id, doc, docJson, $navbar, f7Page
     });
-    debugger;
 }
 
 // Usar solo despues del pageInit
