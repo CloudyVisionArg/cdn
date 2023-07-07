@@ -1346,6 +1346,7 @@ async function saveDoc(exitOnSuccess) {
         // Evento beforeSave
         console.log('evento');
         document.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        debugger;
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
