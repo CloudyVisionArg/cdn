@@ -1008,7 +1008,7 @@ async function renderControls(pCont, pParent) {
 
         try {
             var context = {
-                ctl, $this, $input, bsctl, textField, valueField
+                ctl, $this, $input, bsctl, textField, valueField, label
             };
 
             // Evento renderControl

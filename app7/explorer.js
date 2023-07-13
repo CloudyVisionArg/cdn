@@ -27,7 +27,7 @@ actionsPopup = getActionsPopup();
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
-        folder = fld.toJSON(); // TODO: cambiar el codigo para q use el objeto
+        folder = fld.toJSON(); // TODO: cambiar a doorsapi2
         getFolderElements(folder);
 
         // -- Documents Folder --
