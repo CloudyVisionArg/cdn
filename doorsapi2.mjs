@@ -253,7 +253,6 @@ export class Session {
     #serverUrl;
     #authToken;
     #apiKey;
-    #tags;
     #db;
     #utils;
     #currentUser;
@@ -272,7 +271,6 @@ export class Session {
         this.#authToken = undefined;
         this.#currentUser = undefined;
         this.#instance = undefined;
-        this.#tags = undefined;
     }
 
     /**
@@ -644,18 +642,11 @@ export class Session {
     get tags() {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (me.#tags == undefined) {
-                var url = 'session/tags';
-                me.restClient.fetch(url, 'GET', '', '').then(
-                    res => {
-                        me.#tags = res;
-                        resolve(me.#tags);
-                    },
-                    reject
-                )
-            } else {
-                resolve(me.#tags);
-            }
+            var url = 'session/tags';
+            me.restClient.fetch(url, 'GET', '', '').then(
+                res => { resolve(res) },
+                reject
+            )
         })
     }
 
@@ -664,10 +655,7 @@ export class Session {
         return new Promise((resolve, reject) => {
             var url = 'session/tags';
             me.restClient.fetch(url, 'POST', { key, value }, '').then(
-                res => {
-                    me.#tags = undefined;
-                    resolve(res);
-                },
+                res => { resolve(res) },
                 reject
             )
         })
