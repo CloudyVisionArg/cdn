@@ -6,6 +6,7 @@ Inventario de metodos:
 
 logAndToast(pMsg, pToastOptions)
 preloader
+bootstrapVersion()
 toast(pText, pOptions)
 addInputButton(pControl, pIcon, pAction, pPrepend)
 addPhoneButton(pControl)
@@ -49,9 +50,25 @@ if (typeof jQuery != 'undefined') {
 	})
 }
 
+function bootstrapVersion() {
+	var ver, ret;
+	try {
+		if (typeof bootstrap == 'object') {
+			ver = bootstrap.Button.VERSION;
+		} else {
+			ver = $.fn.button.Constructor.VERSION;
+		}
+		ret = ver.split('.').map(el => parseInt(el));
+		return ret;
+
+	} catch (er) {
+		console.error('Bootstrap not found');
+	};
+}
+
 // Requiere bootstrap 5 y jQuery
 function toast(pText, pOptions) {
-	var bsver = $.fn.button.Constructor.VERSION.split('.').map(el => parseInt(el));
+	var bsver = bootstrapVersion();
 
 	if (bsver[0] < 5) {
 		console.log('Bootstrap 5 es requerido para toast');
@@ -134,7 +151,7 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	}
 	
 	var spanClass;
-	var bsver = $.fn.button.Constructor.VERSION.split('.').map(el => parseInt(el));
+	var bsver = bootstrapVersion();
 	if (bsver[0] == 3) {
 		spanClass = 'input-group-addon add-on';
 	} else if (bsver[0] >= 5) {
