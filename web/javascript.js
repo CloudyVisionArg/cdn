@@ -72,7 +72,7 @@ function toast(pText, pOptions) {
 	var bsver = bootstrapVersion();
 
 	if (bsver[0] < 5) {
-		console.log('Bootstrap 5 es requerido para toast');
+		alert('Bootstrap 5 es requerido para toast');
 		return;
 	};
 
