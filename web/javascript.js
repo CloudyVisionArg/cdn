@@ -51,6 +51,7 @@ if (typeof jQuery != 'undefined') {
 }
 
 function bootstrapVersion() {
+	debugger;
 	var ver, ret;
 	try {
 		if (typeof bootstrap == 'object') {
