@@ -51,7 +51,6 @@ if (typeof jQuery != 'undefined') {
 }
 
 function bootstrapVersion() {
-	debugger;
 	var ver, ret;
 	try {
 		if (typeof bootstrap == 'object') {
@@ -63,7 +62,7 @@ function bootstrapVersion() {
 		return ret;
 
 	} catch (er) {
-		console.error('Bootstrap not found');
+		console.warn('Bootstrap not found');
 	};
 }
 
