@@ -38,9 +38,12 @@ preloader.show();
 preloader.hide();
 */
 if (typeof jQuery != 'undefined') {
+	//rgb = rgb.replace(/[^\d,.]/g, '')
 	var preloader = $('<div/>', {
-		style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
+		style: 'position:absolute; top:0; left:0; z-index:9999; display:none;',
 	}).appendTo($('body'));
+	preloader.css('background-color', $('body').css('background-color'));
+	preloader.css('opacity', '0.5');
 	preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
 	preloader.on('show', function () {
 		$(this).css({
