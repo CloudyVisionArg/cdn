@@ -48,6 +48,19 @@ if (typeof jQuery != 'undefined') {
 			'width': $(document).width(),
 		});
 	})
+
+	const observer = new MutationObserver((mutationList, observer) => {
+		for (const mutation of mutationList) {
+			if (mutation.type === "childList") {
+			  console.log("A child node has been added or removed.");
+			} else if (mutation.type === "attributes") {
+			  console.log(`The ${mutation.attributeName} attribute was modified.`);
+			}
+		  }
+	
+	});
+	observer.observe(document.body, { attributes: true });
+
 	$(document).ready(() => {
 		//rgb = rgb.replace(/[^\d,.]/g, '')
 		preloader.css('background-color', $('body').css('background-color'));
