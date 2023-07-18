@@ -41,6 +41,8 @@ if (typeof jQuery != 'undefined') {
 	var preloader = $('<div/>', {
 		style: 'position:absolute; top:0; left:0; z-index:9999; display:none;',
 	}).appendTo($('body'));
+	preloader.css('background-color', $('body').css('background-color'));
+	preloader.css('opacity', '0.5');
 	preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
 	preloader.on('show', function () {
 		$(this).css({
@@ -48,24 +50,6 @@ if (typeof jQuery != 'undefined') {
 			'width': $(document).width(),
 		});
 	})
-
-	const observer = new MutationObserver((mutationList, observer) => {
-		for (const mutation of mutationList) {
-			if (mutation.type === "childList") {
-			  console.log("A child node has been added or removed.");
-			} else if (mutation.type === "attributes") {
-			  console.log(`The ${mutation.attributeName} attribute was modified.`);
-			}
-		  }
-	
-	});
-	observer.observe(document.body, { attributes: true });
-
-	$(document).ready(() => {
-		//rgb = rgb.replace(/[^\d,.]/g, '')
-		preloader.css('background-color', $('body').css('background-color'));
-		preloader.css('opacity', '0.5');
-	});
 }
 
 function bootstrapVersion() {
