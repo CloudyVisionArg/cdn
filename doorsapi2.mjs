@@ -1103,7 +1103,7 @@ export class Application {
     @returns {Promise<Folder>}
     */
     async folder(folderPath) {
-        return this.folders(folderPath);
+        return await this.folders(folderPath);
     }
 
     /**
@@ -1111,7 +1111,7 @@ export class Application {
     @returns {Promise<Folder>}
     */
     async folders(folderPath) {
-        return this.session.folder(folderPath, this.rootFolderId);
+        return await this.session.folder(folderPath, this.rootFolderId);
     }
 
     /**
