@@ -387,14 +387,14 @@ export class Session {
     Almacena en cache por 60 segs.
     @returns {Promise<Folder>}
     */
-    async folder(folder, curFolderId) {
+    folder(folder, curFolderId) {
         var key = 'folder|' + folder + '|' + curFolderId;
         var cache = this.utils.cache(key);
         if (cache == undefined) {
             if (!isNaN(parseInt(folder))) {
-                cache = await this.foldersGetFromId(folder);
+                cache = this.foldersGetFromId(folder);
             } else {
-                cache = await this.foldersGetFromPath(folder, curFolderId);
+                cache = this.foldersGetFromPath(folder, curFolderId);
             }
             this.utils.cache(key, cache, 60); // Cachea por 60 segundos
         };
@@ -1102,16 +1102,16 @@ export class Application {
     Alias de folders.
     @returns {Promise<Folder>}
     */
-    async folder(folderPath) {
-        return await this.folders(folderPath);
+    folder(folderPath) {
+        return this.folders(folderPath);
     }
 
     /**
     Retorna un folder por su path.
     @returns {Promise<Folder>}
     */
-    async folders(folderPath) {
-        return await this.session.folder(folderPath, this.rootFolderId);
+    folders(folderPath) {
+        return this.session.folder(folderPath, this.rootFolderId);
     }
 
     /**
