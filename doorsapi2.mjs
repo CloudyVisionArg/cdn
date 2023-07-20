@@ -1102,7 +1102,7 @@ export class Application {
     Alias de folders.
     @returns {Promise<Folder>}
     */
-    folder(folderPath) {
+    async folder(folderPath) {
         return this.folders(folderPath);
     }
 
