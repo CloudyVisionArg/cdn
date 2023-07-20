@@ -4165,7 +4165,7 @@ export class Utilities {
         let data = {
             serverUrl: this.session.serverUrl,
             events: opt.code,
-            args: opt.args,
+            payload: opt.payload,
         }
         if (this.session.authToken) data.authToken = this.session.authToken;
         if (this.session.apiKey) data.apiKey = this.session.apiKey;
