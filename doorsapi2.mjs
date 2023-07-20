@@ -387,14 +387,14 @@ export class Session {
     Almacena en cache por 60 segs.
     @returns {Promise<Folder>}
     */
-    folder(folder, curFolderId) {
+    async folder(folder, curFolderId) {
         var key = 'folder|' + folder + '|' + curFolderId;
         var cache = this.utils.cache(key);
         if (cache == undefined) {
             if (!isNaN(parseInt(folder))) {
-                cache = this.foldersGetFromId(folder);
+                cache = await this.foldersGetFromId(folder);
             } else {
-                cache = this.foldersGetFromPath(folder, curFolderId);
+                cache = await this.foldersGetFromPath(folder, curFolderId);
             }
             this.utils.cache(key, cache, 60); // Cachea por 60 segundos
         };
