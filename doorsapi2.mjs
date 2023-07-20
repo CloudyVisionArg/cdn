@@ -623,6 +623,7 @@ export class Session {
             method = 'GET';
             param = '';
             paramName = ''
+            
         } else {
             method = 'POST';
             param = { 
@@ -4138,6 +4139,67 @@ export class Utilities {
             }
         }
         return JSON.stringify(err);
+    }
+
+    
+    /**
+    Ejecuta un codigo node en el servidor de eventos
+
+    @example
+    execNode({
+        code: {
+            owner // Opcional, def CloudyVisionArg
+            repo // Opcional, def cdn
+            path // Requerido
+            fresh // Opcional, def false
+        }
+        args // Argumentos
+        eventsServer // Opcional, def https://eventsjs.cloudycrm.net
+    */
+    async execNode(options) {
+        let opt = {
+            eventsServer: 'https://eventsjs.cloudycrm.net',
+        }
+        Object.assign(opt, options);
+
+        let data = {
+            serverUrl: this.session.serverUrl,
+            events: opt.code,
+            args: opt.args,
+        }
+        if (this.session.authToken) data.authToken = this.session.authToken;
+        if (this.session.apiKey) data.apiKey = this.session.apiKey;
+
+        let res = await fetch(opt.eventsServer, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (res.ok) {
+            let json = await res.json();
+            // En el json viene el type tb
+            return json.value;
+
+        } else {
+            let err;
+            try {
+                let txt = await res.text();
+                let json = JSON.parse(txt);
+                // importa serialize si no esta
+                if (!window.serializeError) {
+                    mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+                    window.serializeError = mod.default;
+                }
+                err = serializeError.deserializeError(json);
+        
+            } catch(e) {
+                err = new Error(res.status + ' (' + res.statusText + ')');
+            }
+            throw err;
+        }
     }
 
     async execVbs(code) {
