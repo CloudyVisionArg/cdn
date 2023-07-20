@@ -1368,6 +1368,7 @@ export class Attachment {
             var fs = await me.fileStream;
             var blob = (fs instanceof Blob ? fs : new Blob([fs]));
             formData.append('attachment', blob, me.name);
+            formData.append(me.name, me.description);
             formData.append('description', me.description);
             formData.append('group', me.group);
             // todo: probar si graba description y group
