@@ -1099,19 +1099,19 @@ export class Application {
     }
 
     /**
-    Alias de folders.
-    @returns {Promise<Folder>}
-    */
-    folder(folderPath) {
-        return this.folders(folderPath);
-    }
-
-    /**
     Retorna un folder por su path.
     @returns {Promise<Folder>}
     */
-    folders(folderPath) {
+    folder(folderPath) {
         return this.session.folder(folderPath, this.rootFolderId);
+    }
+
+    /**
+    Alias de folder.
+    @returns {Promise<Folder>}
+    */
+    folders(folderPath) {
+        return this.folder(folderPath);
     }
 
     /**
@@ -2728,11 +2728,11 @@ export class Folder {
 
     /**
     @example
-    folders() // Devuelve la lista de carpetas hijas.
-    folders(name) // Devuelve la carpeta hija con nombre name.
+    folder() // Devuelve la lista de carpetas hijas.
+    folder(name) // Devuelve la carpeta hija con nombre name.
     @returns {Promise<Folder>}
     */
-    folders(name) {
+    folder(name) {
         //todo: si no viene name devolver la lista
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2746,6 +2746,11 @@ export class Folder {
         });
     }
 
+    /** Alias de folder */
+    folders(name) {
+        return this.folder(name);
+    }
+    
     /*
     foldersNew() {
         //todo
