@@ -1110,7 +1110,7 @@ export class Application {
     Retorna un folder por su path.
     @returns {Promise<Folder>}
     */
-    folders(folderPath) {
+    async folders(folderPath) {
         return this.session.folder(folderPath, this.rootFolderId);
     }
 
