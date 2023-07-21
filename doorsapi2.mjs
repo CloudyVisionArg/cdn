@@ -4158,7 +4158,7 @@ export class Utilities {
             path // Requerido
             fresh // Opcional, def false
         }
-        args // Argumentos
+        payload // Informacion para el codigo que se va a ejecutar
         eventsServer // Opcional, def https://eventsjs.cloudycrm.net
     */
     async execNode(options) {
