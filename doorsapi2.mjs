@@ -4162,6 +4162,8 @@ export class Utilities {
         eventsServer // Opcional, def https://eventsjs.cloudycrm.net
     */
     async execNode(options) {
+        var me = this;
+
         let opt = {
             eventsServer: 'https://eventsjs.cloudycrm.net',
         }
@@ -4193,12 +4195,7 @@ export class Utilities {
             try {
                 let txt = await res.text();
                 let json = JSON.parse(txt);
-                // importa serialize si no esta
-                if (!window.serializeError) {
-                    mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
-                    window.serializeError = mod.default;
-                }
-                err = serializeError.deserializeError(json);
+                err = me.deserializeError(json);
         
             } catch(e) {
                 err = new Error(res.status + ' (' + res.statusText + ')');
