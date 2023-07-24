@@ -4191,7 +4191,6 @@ export class Utilities {
             return json.value;
 
         } else {
-            debugger;
             let err;
             try {
                 let txt = await res.text();
