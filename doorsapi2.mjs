@@ -2397,7 +2397,7 @@ export class Field {
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         
         if (this.type == 1) {
-            this.#json.Value = (value == undefined || value == null) ? null : value.toString();
+            this.#json.Value = (value == undefined || value == null || value == '') ? null : value.toString();
         } else if (this.type == 2) {
             var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
