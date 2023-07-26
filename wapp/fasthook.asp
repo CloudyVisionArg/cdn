@@ -5,7 +5,7 @@ twSid = Request.Form("AccountSid")
 msgSid = Request.Form("MessageSid")
 msgStat = Request.Form("MessageStatus")
 
-' Datos de prueba
+' Datos de prueba, comentar en produccion
 twSid = "ACc6d716adbda50f1c23dcb6612d1e8b96" ' GNI
 msgSid = "MM65d6e6253390baff1aad7b58972a56df"
 msgStat = "read"
