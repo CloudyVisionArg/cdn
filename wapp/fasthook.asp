@@ -58,7 +58,7 @@ Sub tryCatch()
 	End If
 	rcs.Close
 
-	' Conexion al Server
+	' Conexion a la master
 	Set masterCnn = CreateObject("ADODB.Connection")
 	masterCnn.Open masterCnnString
 
