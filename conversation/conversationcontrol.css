@@ -1,3 +1,108 @@
+.wapp-chat {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
+    background-color: #eee5db;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    margin-left: var(--wapp-chat-horizontal-margin);
+    margin-right: var(--wapp-chat-horizontal-margin);
+    margin-top: var(--wapp-chat-vertical-margin);
+    margin-bottom: var(--wapp-chat-vertical-margin);
+}
+
+.wapp-header, .wapp-footer {
+    background-color: #ECECEC;
+	padding: 10px;
+    display: flex;
+}
+
+.wapp-messages {
+	min-height: 200px;
+    max-height: 380px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.wapp-button {
+    font-size: var(--wapp-button-size);
+    cursor: pointer;
+    color: #5B6165;
+    text-align: center;
+}
+
+.wapp-reply {
+    width: 100% !important;
+    background-color: white !important;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 8px !important;
+    height: 37px;
+    font-size: 15px;
+    resize: none;
+    border-width: 0;
+}
+
+.wapp-reply:focus {
+    outline: none;
+}
+
+.wapp-message {
+    width: 100%;
+    display: inline-block;
+    padding-bottom: 10px !important;
+}
+
+.wapp-inbound {
+    width: max-content;
+    max-width: 75%;
+    padding: 4px 10px 7px 10px !important;
+    border-radius: 0px 10px 10px 10px;
+    background: #ffffff;
+    font-size: 12px;
+    word-wrap: break-word;
+}
+
+.wapp-outbound {
+    float: right;
+    width: max-content;
+    max-width: 75%;
+    background: #dcf8c6;
+    border-radius: 10px 0px 10px 10px;
+    padding: 4px 10px 7px 10px !important;
+    font-size: 12px;
+    font-weight: 530;
+    word-wrap: break-word;
+}
+
+.wapp-message-text {
+    padding: 3px 0px !important;
+    word-break: break-word;
+    font-weight: 400;
+    font-size: 15px;
+    color: #343631;
+    /* font-family: "Apple Color Emoji"; */
+}
+
+.wapp-message-time {
+    margin-left: 50px !important;
+    font-size: 11px;
+    text-align: right;
+    color: #607a4d;
+    font-weight: 400;
+}
+
+.wapp-message-status {
+    letter-spacing: -4px;
+    font-weight: 100;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+  
+.dropdown-submenu .dropdown-menu {
+    left: 100%;
+}
 /*https://coolors.co/d93025-00a884-f6ae2d-8a4f7d-0081af*/
 i.fa-envelope{
     color:#d93025;
