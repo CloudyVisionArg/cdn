@@ -99,7 +99,7 @@ Sub tryCatch()
 	' Busca el message
 	sql = "select f.DOC_ID from SYS_FIELDS_" & msgFrm & " f inner join SYS_DOCUMENTS d " & _
 		"on f.DOC_ID = d.DOC_ID where d.FLD_ID = " & msgFld & " and MESSAGESID = " & sqlEnc(msgSid)
-	' Agregar este filtro si llegan a venir los status delivered despues read
+	' Agregar este filtro si llegan a venir los status delivered despues de read
 	' sql = sql & " and STATUS not in ('read', 'undelivered')"
 	Set rcs = openRec(sql, instCnn)
 
