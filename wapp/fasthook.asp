@@ -1,5 +1,5 @@
 <%
-Dim cvCnn, serverCnn, instCnn
+Dim cvCnn, masterCnn, instCnn
 
 twSid = Request.Form("AccountSid")
 msgSid = Request.Form("MessageSid")
@@ -17,7 +17,7 @@ tryCatch()
 vErr = Array(Err.Number, Err.Source, Err.Description)
 ' Cierro todas las conexiones
 instCnn.Close
-serverCnn.Close
+masterCnn.Close
 cvCnn.Close
 On Error Goto 0
 
@@ -47,22 +47,22 @@ Sub tryCatch()
 
 	' Servers
 	sql = "select DBCONNECTION from SYS_FIELDS_477 f inner join SYS_DOCUMENTS d " & _
-		"on f.DOC_ID = d.DOC_ID where NAME = " & sqlEnc(serverName)
+		"on f.DOC_ID = d.DOC_ID where d.FLD_ID = 5235 and NAME = " & sqlEnc(serverName)
 	Set rcs = openRec(sql, cvCnn)
 	If rcs.RecordCount > 0 Then
-		serverCnnString = rcs("DBCONNECTION").Value
+		masterCnnString = rcs("DBCONNECTION").Value
 	Else
 		Err.Raise 1, errSource, "Server not found"
 	End If
 	rcs.Close
 
 	' Conexion al Server
-	Set serverCnn = CreateObject("ADODB.Connection")
-	serverCnn.Open serverCnnString
+	Set masterCnn = CreateObject("ADODB.Connection")
+	masterCnn.Open masterCnnString
 
 	' Busca la instancia
 	sql = "select CONNECTIONSTRING from SYS_INSTANCES where NAME = " & sqlEnc(instance)
-	Set rcs = openRec(sql, serverCnn)
+	Set rcs = openRec(sql, masterCnn)
 	If rcs.RecordCount > 0 Then
 		instCnnString = rcs("CONNECTIONSTRING").Value
 	Else
@@ -96,7 +96,7 @@ Sub tryCatch()
 
 	' Busca el message
 	sql = "select f.DOC_ID from SYS_FIELDS_" & msgFrm & " f inner join SYS_DOCUMENTS d " & _
-		"on f.DOC_ID = d.DOC_ID where MESSAGESID = " & sqlEnc(msgSid)
+		"on f.DOC_ID = d.DOC_ID where d.FLD_ID = " & msgFld & " and MESSAGESID = " & sqlEnc(msgSid)
 	' Agregar este filtro si llegan a venir los status delivered despues read
 	' sql = sql & " and STATUS not in ('read', 'undelivered')"
 	Set rcs = openRec(sql, instCnn)
