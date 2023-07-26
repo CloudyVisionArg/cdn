@@ -549,6 +549,7 @@ function conversationControl(opt) {
 				$media = $('<i/>', {
 					class: 'fa ' + defaultIcon,
 					'data-toggle': 'dropdown',
+					'data-bs-toggle': 'dropdown',
 				}).appendTo($dropup);
 
 				var $menu = $('<ul/>', {
