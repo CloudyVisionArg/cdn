@@ -15,10 +15,12 @@ errSource = "twilio_webhook"
 On Error Resume Next
 tryCatch()
 vErr = Array(Err.Number, Err.Source, Err.Description)
+
 ' Cierro todas las conexiones
 instCnn.Close
 masterCnn.Close
 cvCnn.Close
+
 On Error Goto 0
 
 If vErr(0) <> 0 Then
