@@ -226,6 +226,29 @@ async function showConsole(allowClose) {
             ]
         });
 
+        //  Support actions
+        var supportActions = app7.actions.create({
+            buttons: [
+                {
+                    text: 'Enviar reporte de problema',
+                    onClick: function () {
+                        sync.sync();
+                    }
+                },
+                {
+                    text: 'Habilitar consola del servidor',
+                    onClick: function () {
+                        sync.sync(true);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    color: 'red',
+                    close: true,
+                },
+            ]
+        });
+
         var data = await $.get(scriptSrc('app7-console'));
         popup = app7.popup.create({
             content: data,
