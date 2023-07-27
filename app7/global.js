@@ -236,9 +236,9 @@ async function showConsole(allowClose) {
                     }
                 },
                 {
-                    text: 'Habilitar consola del servidor',
+                    text: 'serverConsole',
                     onClick: function () {
-                        sync.sync(true);
+                        debugger;
                     }
                 },
                 {
@@ -248,21 +248,6 @@ async function showConsole(allowClose) {
                 },
             ]
         });
-
-        var data = await $.get(scriptSrc('app7-console'));
-        popup = app7.popup.create({
-            content: data,
-            closeByBackdropClick: false,
-            on: {
-                open: onPopupOpen,
-
-                close: function (popup) {
-                    clearInterval(this.intervalId);
-                },
-            }
-        });
-        popup.open();
-        return popup;
 
         function supportMail() {
             debugger;
@@ -311,6 +296,22 @@ async function showConsole(allowClose) {
                 return window.btoa(ret);
             }
         }
+
+        var data = await $.get(scriptSrc('app7-console'));
+        popup = app7.popup.create({
+            content: data,
+            closeByBackdropClick: false,
+            on: {
+                open: onPopupOpen,
+
+                close: function (popup) {
+                    clearInterval(this.intervalId);
+                },
+            }
+        });
+        popup.open();
+        return popup;
+
 
         function onPopupOpen(popup) {
             $get('#close').click(function () {
