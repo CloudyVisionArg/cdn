@@ -1359,7 +1359,6 @@ y enviarlo al server
         var body = {};
         body.method = method;
         body.args = arrArgs;
-        debugger;
 
         fetch('https://eventsjs2.cloudycrm.net/console', {
             method: 'POST',
@@ -1373,11 +1372,11 @@ y enviarlo al server
     }
 })();
 
-console.warn('a1', {hola: 'chau', chau: 'hola'});
-
-// CryptoJS
-// https://code.google.com/archive/p/crypto-js/
-// https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
+/*
+CryptoJS
+https://code.google.com/archive/p/crypto-js/
+https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
+*/
 function encrypt(pString, pPass) {
     return CryptoJS.AES.encrypt(pString, pPass).toString();
 }
