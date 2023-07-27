@@ -238,10 +238,7 @@ async function showConsole(allowClose) {
                 {
                     text: 'serverConsole',
                     onClick: function () {
-                        debugger;
-                        var srvCons = window.localStorage.getItem('serverConsole');
-                        var dt = dSession.utils.cDate(srvCons);
-        
+                        var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
                         if (dt && new Date() < dt) {
                             window.localStorage.setItem('serverConsole', '');
                         } else {
@@ -354,9 +351,7 @@ async function showConsole(allowClose) {
                 var $act = $(supportActions.actionsHtml);
                 var $butt = $($act.find('div.actions-button-text')[1]);
 
-                var srvCons = window.localStorage.getItem('serverConsole');
-                var dt = dSession.utils.cDate(srvCons);
-
+                var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
                 if (dt && new Date() < dt) {
                     $butt.html('No enviar logs al server');
                 } else {
@@ -1397,7 +1392,8 @@ y enviarlo al server
         });
 
         // Consola del server
-        if (window.localStorage.getItem('serverConsole') == 'on') {
+        var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
+        if (dt && new Date() < dt) {
             var arrArgs = [];
             for (var i = 0; i < args.length; i++) {
                 arrArgs.push(args[i]);
