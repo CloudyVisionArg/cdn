@@ -1336,6 +1336,7 @@ y enviarlo al server
     }
 
     function appConsole(method, args) {
+        // Consola en localSettings
         scriptLoaded('jslib', function () {
             var log = window.localStorage.getItem('consoleLog');
             if (!log) log = '';
@@ -1347,28 +1348,30 @@ y enviarlo al server
             window.localStorage.setItem('consoleLog', newLog);
         });
 
-        var arrArgs = [];
-        for (var i = 0; i < args.length; i++) {
-            arrArgs.push(args[i]);
+        // Consola del server
+        if (window.localStorage.getItem('serverConsole') == 'on') {
+            var arrArgs = [];
+            for (var i = 0; i < args.length; i++) {
+                arrArgs.push(args[i]);
+            }
+            arrArgs.push({
+                consoleTag1: 'App',
+                consoleTag2: window.localStorage.getItem('instance'),
+                consoleTag3: window.localStorage.getItem('userName'),
+            });
+            var body = {};
+            body.method = method;
+            body.args = arrArgs;
+
+            fetch('https://eventsjs2.cloudycrm.net/console', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    //'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify(body),
+            });
         }
-        arrArgs.push({
-            consoleTag1: 'App',
-            consoleTag2: window.localStorage.getItem('instance'),
-            consoleTag3: window.localStorage.getItem('userName'),
-        });
-        var body = {};
-        body.method = method;
-        body.args = arrArgs;
-
-        fetch('https://eventsjs2.cloudycrm.net/console', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                //'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify(body),
-        });
-
     }
 })();
 
