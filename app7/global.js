@@ -1351,6 +1351,9 @@ y enviarlo al server
         var body = {};
         body.method = method;
         body.args = args;
+        body.args.push({
+            consoleTag1: 'App',
+        })
 
         fetch('https://eventsjs2.cloudycrm.net/console', {
             method: 'POST',
