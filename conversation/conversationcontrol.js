@@ -901,11 +901,11 @@ function conversationControl(opt) {
 		let msgInst = null;
 		try {
 			eval("msgInst = new " + typeName + "();");
+			var thisInstance = me;
 			if (msgInst != null) {
 				if(quickTypes > 1){
 					var $li = $('<li/>').appendTo($menu);
 					let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
-					var thisInstance = me;
 					$actionLink.click(function (e) {
 						var $this = $(this);
 						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.children('i').attr('class'));
@@ -923,9 +923,11 @@ function conversationControl(opt) {
 					});
 				}
 				else{
-					if (thisInstance.options.quickMessageChanged) {
-						thisInstance.options.quickMessageChanged(msgInst.constructor.name);
-					}
+					$menu.parent().children("i").click(function(e){
+						if (thisInstance.options.quickMessageChanged) {
+							thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+						}
+					});
 				}
 				if(typeof(menuOption) == "object"){
 				 	if(menuOption.children && menuOption.children.length > 0){
