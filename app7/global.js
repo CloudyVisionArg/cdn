@@ -1359,7 +1359,7 @@ y enviarlo al server
                 //'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify(body),
-        }
+        });
 
     }
 })();
