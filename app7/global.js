@@ -1394,8 +1394,8 @@ y enviarlo al server
         });
 
         // Consola del server
-        var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
-        if (dt && new Date() < dt) {
+        var dt = new Date(localStorage.getItem('serverConsole'));
+        if (dt && dt.getTime() && new Date() < dt) {
             var arrArgs = [];
             for (var i = 0; i < args.length; i++) {
                 arrArgs.push(args[i]);
