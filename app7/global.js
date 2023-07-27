@@ -245,10 +245,8 @@ async function showConsole(allowClose) {
                         if (dt && new Date() < dt) {
                             window.localStorage.setItem('serverConsole', '');
                         } else {
-                            var dt = new Date() + 1000*60*60; // 1 hr
-                            window.localStorage.setItem('serverConsole', dt.toJSON());
+                            window.localStorage.setItem('serverConsole', moment().add(1, 'h').toJSON());
                         }
-        
                     }
                 },
                 {
