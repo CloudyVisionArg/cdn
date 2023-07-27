@@ -241,8 +241,10 @@ async function showConsole(allowClose) {
                         var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
                         if (dt && new Date() < dt) {
                             localStorage.setItem('serverConsole', '');
+                            toast('serverConsole desactivado');
                         } else {
                             localStorage.setItem('serverConsole', moment().add(1, 'h').toJSON());
+                            toast('serverConsole activado por 1 hr');
                         }
                     }
                 },
@@ -353,9 +355,9 @@ async function showConsole(allowClose) {
 
                 var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
                 if (dt && new Date() < dt) {
-                    $butt.html('No enviar logs al server');
+                    $butt.html('Desactivar serverConsole');
                 } else {
-                    $butt.html('Enviar logs al server (1 hr)');
+                    $butt.html('Activar serverConsole por 1 hr');
                 }
 
                 supportActions.actionsHtml = $act[0].outerHTML;
