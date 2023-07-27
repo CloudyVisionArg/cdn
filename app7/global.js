@@ -342,7 +342,10 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
+                var srvCons = window.localStorage.getItem('serverConsole');
+                var dt = dSession.utils.cDate(srvCons);
                 debugger;
+                
                 supportActions.open();
             });
 
