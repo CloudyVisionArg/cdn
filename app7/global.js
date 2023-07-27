@@ -1347,13 +1347,17 @@ y enviarlo al server
             window.localStorage.setItem('consoleLog', newLog);
         });
 
-        debugger;
+        var arrArgs = [];
+        for (var i = 0; i < args.length; i++) {
+            arrArgs.push(args[i]);
+        }
+        arrArgs.push({
+            consoleTag1: 'App',
+        });
         var body = {};
         body.method = method;
-        body.args = args;
-        body.args.push({
-            consoleTag1: 'App',
-        })
+        body.args = arrArgs;
+        debugger;
 
         fetch('https://eventsjs2.cloudycrm.net/console', {
             method: 'POST',
