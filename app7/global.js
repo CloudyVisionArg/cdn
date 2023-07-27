@@ -1367,6 +1367,8 @@ y enviarlo al server
     }
 })();
 
+console.warn('a1', 'a2');
+
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
 // https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
