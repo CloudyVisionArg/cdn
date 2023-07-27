@@ -1353,6 +1353,8 @@ y enviarlo al server
         }
         arrArgs.push({
             consoleTag1: 'App',
+            consoleTag2: window.localStorage.getItem('instance'),
+            consoleTag3: window.localStorage.getItem('userName'),
         });
         var body = {};
         body.method = method;
