@@ -232,7 +232,7 @@ async function showConsole(allowClose) {
                 {
                     text: 'Enviar reporte de problema',
                     onClick: function () {
-                        sync.sync();
+                        supportMail();
                     }
                 },
                 {
@@ -263,6 +263,54 @@ async function showConsole(allowClose) {
         });
         popup.open();
         return popup;
+
+        function supportMail() {
+            debugger;
+            var mail = {
+                to: 'soporte@cloudycrm.net',
+                subject: 'Cloudy CRM - App issue',
+                body: 'Por favor describanos su problema',
+            }
+
+            if (_isCapacitor()) {
+                mail.attachments = [
+                    {
+                        type: 'base64',
+                        path: window.btoa(window.localStorage.getItem('consoleLog')),
+                        name: "console.txt"
+                    },
+                    {
+                        type: 'base64',
+                        path: localStorageBase64(),
+                        name: "localStorage.txt"
+                    }
+                ]
+                Capacitor.Plugins.EmailComposer.open(mail);
+
+            } else {
+                mail.attachments = [
+                    'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
+                    'base64:localStorage.txt//' + localStorageBase64(),
+                ];
+                cordova.plugins.email.open(mail);
+            }
+                
+            function localStorageBase64() {
+                var arr = new Array();
+                for (var i = 0; i < localStorage.length; i++) {
+                    if (localStorage.key(i) != 'consoleLog') {
+                        arr.push(localStorage.key(i));
+                    }
+                }
+                var arrOrd = arr.sort();
+        
+                var ret = '';
+                for (var i = 0; i < arrOrd.length; i++) {
+                    ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                }
+                return window.btoa(ret);
+            }
+        }
 
         function onPopupOpen(popup) {
             $get('#close').click(function () {
@@ -296,54 +344,6 @@ async function showConsole(allowClose) {
             $get('#support').click(function (e) {
                 debugger;
                 supportActions.open();
-                /*
-                if (_isCapacitor()) {
-                    Capacitor.Plugins.EmailComposer.open({
-                        to: 'soporte@cloudycrm.net',
-                        subject: 'Cloudy CRM - App issue',
-                        body: 'Por favor describanos su problema',
-                        attachments: [
-                            {
-                                type: 'base64',
-                                path: window.btoa(window.localStorage.getItem('consoleLog')),
-                                name: "console.txt"
-                            },
-                            {
-                                type: 'base64',
-                                path: localStorageBase64(),
-                                name: "localStorage.txt"
-                            }
-                        ]
-                    });
-
-                } else {
-                    cordova.plugins.email.open({
-                        to: 'soporte@cloudycrm.net',
-                        subject: 'Cloudy CRM - App issue',
-                        body: 'Por favor describanos su problema',
-                        attachments: [
-                            'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
-                            'base64:localStorage.txt//' + localStorageBase64(),
-                        ],
-                    });
-                }
-                */
-                
-                function localStorageBase64() {
-                    var arr = new Array();
-                    for (var i = 0; i < localStorage.length; i++) {
-                        if (localStorage.key(i) != 'consoleLog') {
-                            arr.push(localStorage.key(i));
-                        }
-                    }
-                    var arrOrd = arr.sort();
-            
-                    var ret = '';
-                    for (var i = 0; i < arrOrd.length; i++) {
-                        ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
-                    }
-                    return window.btoa(ret);
-                }
             });
 
             $get('#restart').click(function (e) {
