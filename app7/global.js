@@ -239,6 +239,16 @@ async function showConsole(allowClose) {
                     text: 'serverConsole',
                     onClick: function () {
                         debugger;
+                        var srvCons = window.localStorage.getItem('serverConsole');
+                        var dt = dSession.utils.cDate(srvCons);
+        
+                        if (dt && new Date() < dt) {
+                            window.localStorage.setItem('serverConsole', '');
+                        } else {
+                            var dt = new Date() + 1000*60*60; // 1 hr
+                            window.localStorage.setItem('serverConsole', dt.toJSON());
+                        }
+        
                     }
                 },
                 {
