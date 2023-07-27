@@ -342,10 +342,19 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
+                var $act = $(supportActions.actionsHtml);
+                var $butt = $($act.find('div.actions-button-text')[1]);
+
                 var srvCons = window.localStorage.getItem('serverConsole');
                 var dt = dSession.utils.cDate(srvCons);
-                debugger;
-                
+
+                if (dt && new Date() < dt) {
+                    $butt.html('No enviar logs al server');
+                } else {
+                    $butt.html('Enviar logs al server (1 hr)');
+                }
+
+                supportActions.actionsHtml = $act[0].outerHTML;
                 supportActions.open();
             });
 
