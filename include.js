@@ -23,7 +23,7 @@ function registeredScripts() {
 
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 283, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 285 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 287, hasdep: true });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 288, hasdep: true });
     /*
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 268, hasdep: true });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 282, hasdep: true });
