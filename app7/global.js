@@ -240,9 +240,9 @@ async function showConsole(allowClose) {
                     onClick: function () {
                         var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
                         if (dt && new Date() < dt) {
-                            window.localStorage.setItem('serverConsole', '');
+                            localStorage.setItem('serverConsole', '');
                         } else {
-                            window.localStorage.setItem('serverConsole', moment().add(1, 'h').toJSON());
+                            localStorage.setItem('serverConsole', moment().add(1, 'h').toJSON());
                         }
                     }
                 },
@@ -266,7 +266,7 @@ async function showConsole(allowClose) {
                 mail.attachments = [
                     {
                         type: 'base64',
-                        path: window.btoa(window.localStorage.getItem('consoleLog')),
+                        path: window.btoa(localStorage.getItem('consoleLog')),
                         name: "console.txt"
                     },
                     {
@@ -279,7 +279,7 @@ async function showConsole(allowClose) {
 
             } else {
                 mail.attachments = [
-                    'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
+                    'base64:console.txt//' + window.btoa(localStorage.getItem('consoleLog')),
                     'base64:localStorage.txt//' + localStorageBase64(),
                 ];
                 cordova.plugins.email.open(mail);
@@ -331,7 +331,7 @@ async function showConsole(allowClose) {
 
             this.intervalId = setInterval(function () {
                 if (popup.opened) {
-                    var log = window.localStorage.getItem('consoleLog');
+                    var log = localStorage.getItem('consoleLog');
                     if ($get('#log').html() != log) {
                         $get('#log').html(log);
                     }
@@ -501,10 +501,10 @@ async function showLogin() {
             function fillControls() {
                 $get('#message').hide()
 
-                var userName = window.localStorage.getItem('userName');
-                var instance = window.localStorage.getItem('instance');
-                var endPoint = window.localStorage.getItem('endPoint');
-                var appName = window.localStorage.getItem('appName');
+                var userName = localStorage.getItem('userName');
+                var instance = localStorage.getItem('instance');
+                var endPoint = localStorage.getItem('endPoint');
+                var appName = localStorage.getItem('appName');
         
                 $get('#logon').closest('li').hide();
                 $get('#logoff').closest('li').hide();
@@ -547,11 +547,11 @@ async function showLogin() {
                 $get('#chpass').closest('li').hide();
                 $get('#resetpass').closest('li').addClass('disabled');
 
-                window.localStorage.setItem('instance', $get('#instance').val());
-                window.localStorage.setItem('endPoint', $get('#endpoint').val());
-                window.localStorage.setItem('appName', $get('#appname').val());
-                window.localStorage.setItem('userName', $get('#username').val());
-                window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
+                localStorage.setItem('instance', $get('#instance').val());
+                localStorage.setItem('endPoint', $get('#endpoint').val());
+                localStorage.setItem('appName', $get('#appname').val());
+                localStorage.setItem('userName', $get('#username').val());
+                localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                 
                 dSession.appLogon(function () {
                     setMessage('Sincronizando datos... aguarde por favor', 'white');
@@ -665,12 +665,12 @@ async function showLogin() {
             
                 $get('#chpass').addClass('disabled');
             
-                var userName = window.localStorage.getItem('userName');
-                var instance = window.localStorage.getItem('instance');
+                var userName = localStorage.getItem('userName');
+                var instance = localStorage.getItem('instance');
             
                 dSession.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(
                     function () {
-                        window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
+                        localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
                         app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
                             page.router.back();
                         });
@@ -1381,14 +1381,14 @@ y enviarlo al server
     function appConsole(method, args) {
         // Consola en localSettings
         scriptLoaded('jslib', function () {
-            var log = window.localStorage.getItem('consoleLog');
+            var log = localStorage.getItem('consoleLog');
             if (!log) log = '';
             newLog = logDateTime(new Date()) + ' -' + (method == 'log' ? '' : ' ' + method.toUpperCase() + ':');
             for (var i = 0; i < args.length; i++) {
                 newLog += ' ' + errMsg(args[i]);
             };
             newLog += '\n' + log.substring(0, 1024*64);
-            window.localStorage.setItem('consoleLog', newLog);
+            localStorage.setItem('consoleLog', newLog);
         });
 
         // Consola del server
@@ -1400,8 +1400,8 @@ y enviarlo al server
             }
             arrArgs.push({
                 consoleTag1: 'App',
-                consoleTag2: window.localStorage.getItem('instance'),
-                consoleTag3: window.localStorage.getItem('userName'),
+                consoleTag2: localStorage.getItem('instance'),
+                consoleTag3: localStorage.getItem('userName'),
             });
             var body = {};
             body.method = method;
