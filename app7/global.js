@@ -294,6 +294,8 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
+                supportActions.open();
+                /*
                 if (_isCapacitor()) {
                     Capacitor.Plugins.EmailComposer.open({
                         to: 'soporte@cloudycrm.net',
@@ -323,7 +325,8 @@ async function showConsole(allowClose) {
                             'base64:localStorage.txt//' + localStorageBase64(),
                         ],
                     });
-                } 
+                }
+                */
                 
                 function localStorageBase64() {
                     var arr = new Array();
