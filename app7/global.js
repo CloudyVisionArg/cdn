@@ -1373,7 +1373,7 @@ y enviarlo al server
     }
 })();
 
-console.warn('a1', 'a2');
+console.warn('a1', {hola: 'chau', chau: 'hola'});
 
 // CryptoJS
 // https://code.google.com/archive/p/crypto-js/
