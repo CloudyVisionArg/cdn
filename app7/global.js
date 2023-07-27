@@ -294,6 +294,7 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
+                debugger;
                 supportActions.open();
                 /*
                 if (_isCapacitor()) {
