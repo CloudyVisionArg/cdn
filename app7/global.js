@@ -1312,29 +1312,55 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
     }
 }
 
-// Sobrecarga console.log y console.error para dejarlo guardado en el localStorage
+/*
+Sobrecarga console.log y console.error para dejarlo guardado en el localStorage
+y enviarlo al server
+*/
 (function() {
-    var exLog = console.log;
-    console.log = function (msg) {
-        // Llamada al log estandar
-        exLog.apply(this, arguments);
-        appendLog(msg);
+    console._origLog = console.log;
+    console.log = function () {
+        console._origLog.apply(this, arguments);
+        appConsole('log', arguments);
+    }
+    
+    console._origWarn = console.warn;
+    console.warn = function () {
+        console._origWarn.apply(this, arguments);
+        appConsole('warn', arguments);
+    }
+    
+    console._origError = console.error;
+    console.error = function () {
+        console._origError.apply(this, arguments);
+        appConsole('error', arguments);
     }
 
-    var exErr = console.error;
-    console.error = function (msg) {
-        // Llamada al metodo estandar
-        exErr.apply(this, arguments);
-        appendLog(msg, true);
-    }
-
-    function appendLog(msg, isErr) {
+    function appConsole(method, args) {
         scriptLoaded('jslib', function () {
             var log = window.localStorage.getItem('consoleLog');
             if (!log) log = '';
-            log = logDateTime(new Date()) + ' - ' + (isErr ? 'ERR: ' : '') + errMsg(msg) + '\n' + log.substring(0, 1024*64);
-            window.localStorage.setItem('consoleLog', log);
+            newLog = logDateTime(new Date()) + ' -' + (method == 'log' ? '' : ' ' + method.toUpperCase() + ':');
+            for (var i = 0; i < args.length; i++) {
+                newLog += ' ' + errMsg(args[i]);
+            };
+            newLog += '\n' + log.substring(0, 1024*64);
+            window.localStorage.setItem('consoleLog', newLog);
         });
+
+        debugger;
+        var body = {};
+        body.method = method;
+        body.args = args;
+
+        fetch('https://eventsjs2.cloudycrm.net/console', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                //'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify(body),
+        }
+
     }
 })();
 
