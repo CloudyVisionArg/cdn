@@ -867,7 +867,7 @@ function conversationControl(opt) {
 		/*var $liTmp = $('<li/>', {
 			class: 'dropdown-submenu',
 		}).appendTo($menu);*/
-		let quickTypesCount = me.dataProvider.msgproviders
+
 		for (let index = 0; index < me.dataProvider.msgproviders.length; index++) {
 			const prov = me.dataProvider.msgproviders[index];
 			for (let p = 0; p < prov.supportedTypes.length; p++) {
@@ -892,43 +892,34 @@ function conversationControl(opt) {
 
 				if(foundType == null) continue;
 				
-				appendWebMessageTypeOption($menu, foundType, typeName,me.options.quickMessageTypes.length);
+				appendWebMessageTypeOption($menu, foundType, typeName);
 			}
 		}
 	};
 
-	var appendWebMessageTypeOption = function($menu, menuOption, typeName, quickTypes){
-		let msgInst = null;
-		try {
-			eval("msgInst = new " + typeName + "();");
-			var thisInstance = me;
-			if (msgInst != null) {
-				if(quickTypes > 1){
-					var $li = $('<li/>').appendTo($menu);
-					let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
-					$actionLink.click(function (e) {
-						var $this = $(this);
-						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.children('i').attr('class'));
-						$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
-						$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
-						if (thisInstance.options.quickMessageChanged) {
-							thisInstance.options.quickMessageChanged(msgInst.constructor.name);
-						}
-						if(typeof(menuOption) == "object"){
-							if(menuOption.children && menuOption.children.length > 0){
-								//$this.parents(".dropup").addClass('open');
-								e.stopPropagation();
+	var appendWebMessageTypeOption = function($menu, menuOption, typeName){
+				let msgInst = null;
+				try {
+					eval("msgInst = new " + typeName + "();");
+					if (msgInst != null) {
+						var $li = $('<li/>').appendTo($menu);
+						let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
+						var thisInstance = me;
+						$actionLink.click(function (e) {
+							var $this = $(this);
+							$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.children('i').attr('class'));
+							$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
+							$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
+							if (thisInstance.options.quickMessageChanged) {
+								thisInstance.options.quickMessageChanged(msgInst.constructor.name);
 							}
+					if(typeof(menuOption) == "object"){
+						if(menuOption.children && menuOption.children.length > 0){
+							//$this.parents(".dropup").addClass('open');
+							e.stopPropagation();
 						}
-					});
-				}
-				else{
-					$menu.parent().children("i").click(function(e){
-						if (thisInstance.options.quickMessageChanged) {
-							thisInstance.options.quickMessageChanged(msgInst.constructor.name);
-						}
-					});
-				}
+					}
+						});
 				if(typeof(menuOption) == "object"){
 				 	if(menuOption.children && menuOption.children.length > 0){
 						$(this).parent().toggleClass('open');
@@ -938,6 +929,7 @@ function conversationControl(opt) {
 						// });
 					}
 				}
+
 			}
 		} catch (error) {
 			//TODO
