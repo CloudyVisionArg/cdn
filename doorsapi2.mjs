@@ -4159,6 +4159,7 @@ export class Utilities {
             fresh // Opcional, def false
         }
         payload // Informacion para el codigo que se va a ejecutar
+        returnType // Retorna { type, value } . Def false.
         eventsServer // Opcional, def https://eventsjs.cloudycrm.net
     */
     async execNode(options) {
@@ -4187,8 +4188,7 @@ export class Utilities {
 
         if (res.ok) {
             let json = await res.json();
-            // En el json viene el type tb
-            return json.value;
+            return opt.returnType ? json : json.value;
 
         } else {
             let err;
