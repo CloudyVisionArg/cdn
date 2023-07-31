@@ -980,7 +980,7 @@ function whatsAppDataProvider(opts){
 	this.audioRecorder = function(pCallback) {
 		var mediaRec, interv, timer, save;
 		save = false;
-	
+		
 		var $sheet = $('<div/>', {
 			class: 'sheet-modal',
 		});
@@ -1022,9 +1022,39 @@ function whatsAppDataProvider(opts){
 			class: 'col button button-large button-round button-fill',
 		}).append('Guardar').appendTo($saveBtnRow);
 		
-		$btn.click(saveAction);
+		$btn.click(saveAction); // revisar este saveaction para que no envie directamente
+		//asumo stop recording y que el callback no haga el sendmedia
 		
-
+		var $previewBtnRow = $('<div/>', {
+			class: 'row',
+		}).hide().appendTo($block);
+		
+		
+		var $divPreviewAudio = $('<div/>').appendTo($previewBtnRow);
+		
+		var $audioControl = $('<audio/>',{
+			controls: 'controls',
+			//style: "width: 230px;",
+		}).appendTo($divPreviewAudio)
+		
+		var $srcAudioControl = $('source',{
+			src: '',
+			type: '',	
+		}).appendTo($audioControl)	
+			//<source src=""" type="audio/ogg">
+					
+		var $btn = $('<button/>', {
+			class: 'col button button-large button-round button-outline',
+		}).append('Cancelar').appendTo($previewBtnRow);
+		
+		$btn.click(cancel);
+		
+		var $btnEnviar = $('<button/>', {
+			class: 'col button button-large button-round button-fill',
+		}).append('Enviar').appendTo($previewBtnRow);
+		
+		
+		
 		var sheet = null, $modal = null;
 		if(typeof(cordova) == "object"){
 			// Abre el sheet
@@ -1042,24 +1072,30 @@ function whatsAppDataProvider(opts){
 			$modal.modal('show');
 		}
 		
-
+		
 		//throw "Not implemented";
 		function record(){
 			mediaRec = new recorder(null);
 			mediaRec.record().then(function(file){
 				debugger;
-				if (save) {
-					pCallback(file);
+				if(save){
+					$saveBtnRow.hide();
+					$btnEnviar.click(pCallback(file));
+					$srcAudioControl.attr({
+						src: file.url,
+						type: file.type,
+					});
+					$previewBtnRow.show();
+				}else{
+					if(sheet){
+						sheet.close();
+					}
+					if($modal){
+						$modal.modal("hide");
+					}
 				}
-				if(sheet){
-					sheet.close();
-				}
-				if($modal){
-					$modal.modal("hide");
-				}
-				
 			},function(error){
-
+				
 			});
 			$recBtnRow.hide();
 			$saveBtnRow.show();
@@ -1088,6 +1124,7 @@ function whatsAppDataProvider(opts){
 			$recBtnRow.show();
 			$saveBtnRow.hide();
 		}
+		
 	}
 }
 
