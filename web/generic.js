@@ -615,10 +615,8 @@ async function renderControls(pCont, pParent) {
                 $this = newTextarea(ctl['NAME'], label);
                 $this.addClass('mt-3');
                 $input = $this.find('textarea');
-
                 if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
                 debugger;
-        
 
             } else {
                 $this = newInputText(ctl['NAME'], label);
