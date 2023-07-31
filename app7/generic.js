@@ -1099,7 +1099,7 @@ async function fillControls() {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
 
-                if (type == 'text') {
+                if (type == 'text' || type == 'email' || type == 'password') {
                     var format = $el.attr('data-numeral');
                     if (f.type == 3 || format) {
                         // Input numeric
