@@ -1287,7 +1287,7 @@ async function saveDoc(exitOnSuccess) {
                 
                 } else if (el.tagName == 'INPUT') {
                     var type = $el.attr('type').toLowerCase();
-                    if (type == 'text' || type == 'hidden') {
+                    if (type == 'text' || type == 'hidden' || type == 'email' || type == 'password') {
                         if ($el.attr('data-numeral')) {
                             field.value = numeral($el.val()).value();
                         } else {
