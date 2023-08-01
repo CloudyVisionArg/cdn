@@ -512,7 +512,7 @@ function whatsAppDataProvider(opts){
 		this.audioRecorder(function (file) {
 			debugger;
 			//acá generar la previsualizacion antes del sendmedia
-			
+
 			me.sendMedia(file, pChat);
         });
 	};
@@ -521,7 +521,38 @@ function whatsAppDataProvider(opts){
 		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
 		me.getPicture(source,
 			function (file) {
-				me.sendMedia(file, pChat);
+				var $block = $(".modal-in").find(".block")
+
+				var $previewBtnRow = $('<div/>', {
+					class: 'row',
+				})
+				
+				var $divPreviewAudio = $('<div/>').appendTo($previewBtnRow);
+				
+				var $audioControl = $('<audio/>',{
+					controls: 'controls',
+					//style: "width: 230px;",
+				}).appendTo($divPreviewAudio)
+				
+				var $srcAudioControl = $('<source/>',{
+					src: file.localURL,
+					type: file.type,	
+				}).appendTo($audioControl)	
+					//<source src=""" type="audio/ogg">
+							
+				var $btn = $('<button/>', {
+					class: 'col button button-large button-round button-outline',
+				}).append('Cancelar').appendTo($previewBtnRow);
+				
+				$btn.click(cancel);
+				
+				var $btnEnviar = $('<button/>', {
+					class: 'col button button-large button-round button-fill',
+				}).append('Enviar').appendTo($previewBtnRow);
+				
+				previewBtnRow.appendTo($block);				
+						
+				//me.sendMedia(file, pChat);
 			}
 		)
 	};
