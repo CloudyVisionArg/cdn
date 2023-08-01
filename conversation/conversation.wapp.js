@@ -1037,7 +1037,7 @@ function whatsAppDataProvider(opts){
 			//style: "width: 230px;",
 		}).appendTo($divPreviewAudio)
 		
-		var $srcAudioControl = $('source',{
+		var $srcAudioControl = $('<source/>',{
 			src: '',
 			type: '',	
 		}).appendTo($audioControl)	
@@ -1082,7 +1082,7 @@ function whatsAppDataProvider(opts){
 					$saveBtnRow.hide();
 					$btnEnviar.click(pCallback(file));
 					$srcAudioControl.attr({
-						src: file.url,
+						src: file.localURL,
 						type: file.type,
 					});
 					$previewBtnRow.show();
