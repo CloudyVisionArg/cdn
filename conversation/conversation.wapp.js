@@ -541,7 +541,7 @@ function whatsAppDataProvider(opts){
 				class: 'col button button-large button-round button-fill',
 			}).append('Enviar').appendTo($previewBtnRow);
 			
-			previewBtnRow.appendTo($block);				
+			$previewBtnRow.appendTo($block);				
 				
 			$btnEnviar.click(me.sendMedia(file, pChat));
         });
