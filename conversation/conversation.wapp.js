@@ -543,7 +543,7 @@ function whatsAppDataProvider(opts){
 			
 			$previewBtnRow.appendTo($block);				
 			debugger;
-			$btnEnviar.on("click",console.log("seclickeo"))
+			$btnEnviar.on("click",()=>console.log("seclickeo"))
 			//$btnEnviar.click(me.sendMedia(file, pChat));
         });
 	};
