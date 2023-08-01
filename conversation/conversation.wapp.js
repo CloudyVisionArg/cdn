@@ -510,7 +510,7 @@ function whatsAppDataProvider(opts){
 
 	this.sendAudio = function (pChat) {
 		this.audioRecorder(function (file) {
-			debugger;
+			
 			//acá generar la previsualizacion antes del sendmedia
 			var $block = $(".modal-in").find(".block")
 
@@ -542,7 +542,7 @@ function whatsAppDataProvider(opts){
 			}).append('Enviar').appendTo($previewBtnRow);
 			
 			$previewBtnRow.appendTo($block);				
-				
+			debugger;
 			$btnEnviar.click(me.sendMedia(file, pChat));
         });
 	};
