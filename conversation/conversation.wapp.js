@@ -511,6 +511,8 @@ function whatsAppDataProvider(opts){
 	this.sendAudio = function (pChat) {
 		this.audioRecorder(function (file) {
 			debugger;
+			//acá generar la previsualizacion antes del sendmedia
+			
 			me.sendMedia(file, pChat);
         });
 	};
@@ -1025,35 +1027,7 @@ function whatsAppDataProvider(opts){
 		$btn.click(saveAction); // revisar este saveaction para que no envie directamente
 		//asumo stop recording y que el callback no haga el sendmedia
 		
-		var $previewBtnRow = $('<div/>', {
-			class: 'row',
-		}).hide().appendTo($block);
-		
-		
-		var $divPreviewAudio = $('<div/>').appendTo($previewBtnRow);
-		
-		var $audioControl = $('<audio/>',{
-			controls: 'controls',
-			//style: "width: 230px;",
-		}).appendTo($divPreviewAudio)
-		
-		var $srcAudioControl = $('<source/>',{
-			src: '',
-			type: '',	
-		}).appendTo($audioControl)	
-			//<source src=""" type="audio/ogg">
-					
-		var $btn = $('<button/>', {
-			class: 'col button button-large button-round button-outline',
-		}).append('Cancelar').appendTo($previewBtnRow);
-		
-		$btn.click(cancel);
-		
-		var $btnEnviar = $('<button/>', {
-			class: 'col button button-large button-round button-fill',
-		}).append('Enviar').appendTo($previewBtnRow);
-		
-		
+	
 		
 		var sheet = null, $modal = null;
 		if(typeof(cordova) == "object"){
@@ -1079,21 +1053,16 @@ function whatsAppDataProvider(opts){
 			mediaRec.record().then(function(file){
 				debugger;
 				if(save){
-					$saveBtnRow.hide();
-					$btnEnviar.click(pCallback(file));
-					$srcAudioControl.attr({
-						src: file.localURL,
-						type: file.type,
-					});
-					$previewBtnRow.show();
-				}else{
-					if(sheet){
-						sheet.close();
-					}
-					if($modal){
-						$modal.modal("hide");
-					}
+					pCallback(file);
 				}
+
+				if(sheet){
+					sheet.close();
+				}
+				if($modal){
+					$modal.modal("hide");
+				}
+				
 			},function(error){
 				
 			});
