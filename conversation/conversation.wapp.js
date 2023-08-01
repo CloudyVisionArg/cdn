@@ -535,7 +535,7 @@ function whatsAppDataProvider(opts){
 				class: 'col button button-large button-round button-outline',
 			}).append('Cancelar').appendTo($previewBtnRow);
 			
-			$btn.click(cancel);
+			//$btn.click(cancel);
 			
 			var $btnEnviar = $('<button/>', {
 				class: 'col button button-large button-round button-fill',
@@ -543,7 +543,7 @@ function whatsAppDataProvider(opts){
 			
 			previewBtnRow.appendTo($block);				
 				
-			me.sendMedia(file, pChat);
+			$btnEnviar.click(me.sendMedia(file, pChat));
         });
 	};
 
