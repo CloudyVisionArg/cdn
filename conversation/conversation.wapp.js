@@ -550,7 +550,7 @@ function whatsAppDataProvider(opts){
 			$previewBtnRow.appendTo($block);				
 			debugger;
 			$btnEnviar.on("click",()=>{
-				whatsAppProvider.sendMedia(file, pChat);
+				whatsAppProvider.sendMediaFromFile(file, pChat);
 				app7.sheet.close(".modal-in");
 				let $modal = $('#wappModal');
 				if($modal.length > 0){
