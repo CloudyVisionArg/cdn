@@ -535,7 +535,13 @@ function whatsAppDataProvider(opts){
 				class: 'col button button-large button-round button-outline',
 			}).append('Cancelar').appendTo($previewBtnRow);
 			
-			//$btn.click(cancel);
+			$btn.click(()=>{
+				app7.sheet.close(".modal-in");
+				let $modal = $('#wappModal');
+				if($modal.length > 0){
+					$modal.modal("hide");
+				}
+			});
 			
 			var $btnEnviar = $('<button/>', {
 				class: 'col button button-large button-round button-fill',
@@ -543,7 +549,14 @@ function whatsAppDataProvider(opts){
 			
 			$previewBtnRow.appendTo($block);				
 			debugger;
-			$btnEnviar.on("click",()=>console.log("seclickeo"))
+			$btnEnviar.on("click",()=>{
+				whatsAppProvider.sendMedia(file, pChat);
+				app7.sheet.close(".modal-in");
+				let $modal = $('#wappModal');
+				if($modal.length > 0){
+					$modal.modal("hide");
+				}
+			});
 			//$btnEnviar.click(me.sendMedia(file, pChat));
         });
 	};
@@ -1085,16 +1098,16 @@ function whatsAppDataProvider(opts){
 			mediaRec.record().then(function(file){
 				debugger;
 				if(save){
+					$saveBtnRow.hide();
 					pCallback(file);
+				}else{
+					if(sheet){
+						sheet.close();
+					}
+					if($modal){
+						$modal.modal("hide");
+					}
 				}
-
-				if(sheet){
-					sheet.close();
-				}
-				if($modal){
-					$modal.modal("hide");
-				}
-				
 			},function(error){
 				
 			});
