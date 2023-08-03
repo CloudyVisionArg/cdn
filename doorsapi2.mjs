@@ -22,7 +22,8 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
-var utilsPromise = loadUtils();
+//var utilsPromise = loadUtils();
+await loadUtils();
 /*
 todo: Safari soporta await at module top level recien en la v15
 https://caniuse.com/?search=top%20level%20await
