@@ -3600,8 +3600,10 @@ export class Node {
                 });
 
                 if (res.ok) {
-                    let json = await res.json();
-                    resolve(options.returnType ? json : json.value); // todo: mmmm
+                    //debugger;
+                    let buf = await res.arrayBuffer();
+                    resolve(buff);
+                    //resolve(options.returnType ? json : json.value); // todo: mmmm
 
                 } else {
                     let err;
