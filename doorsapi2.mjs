@@ -3600,7 +3600,6 @@ export class Node {
                 });
 
                 if (res.ok) {
-                    debugger;
                     resolve(await res.arrayBuffer());
                     //resolve(options.returnType ? json : json.value); // todo: mmmm
 
