@@ -3617,6 +3617,10 @@ export class Node {
         }
     }
 
+    inNode() {
+        return inNode();
+    }
+
     /**
     @returns {Session}
     */
@@ -4292,8 +4296,12 @@ export class Utilities {
         return uuid;
     }
 
+    /**
+    Alias de dSession.node.inNode()
+    Usar ese, este sera deprecado.
+    */
     inNode() {
-        return inNode();
+        return this.session.node.inNode();
     }
 
     /** Retorna true si value es un objeto puro {} */
