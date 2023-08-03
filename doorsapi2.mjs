@@ -22,7 +22,7 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
-var utilsPromise = loadUtils();
+await loadUtils();
 
 async function loadUtils() {
 
@@ -3537,9 +3537,20 @@ export class Form {
 
 export class Node {
     #session;
+    #server;
+    #prodServer = 'https://eventsjs.cloudycrm.net';
+    #debugServer = 'https://eventsjs2.cloudycrm.net';
     
     constructor(session) {
         this.#session = session;
+        this.#server = this.#prodServer;
+    }
+
+    get debug() {
+        return this.#server == this.#debugServer;
+    }
+    set debug(value) {
+        this.#server = value ? this.#debugServer : this.#prodServer;
     }
 
     /**
@@ -3619,6 +3630,13 @@ export class Node {
 
     inNode() {
         return inNode();
+    }
+
+    get server() {
+        return this.#server;
+    }
+    set server(value) {
+        this.#server = value;
     }
 
     /**
