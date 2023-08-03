@@ -3601,8 +3601,7 @@ export class Node {
 
                 if (res.ok) {
                     debugger;
-                    let buf = await res.arrayBuffer();
-                    resolve(buff);
+                    resolve(await res.arrayBuffer());
                     //resolve(options.returnType ? json : json.value); // todo: mmmm
 
                 } else {
