@@ -258,6 +258,7 @@ export class Session {
     #currentUser;
     #push;
     #instance;
+    #node;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -559,6 +560,17 @@ export class Session {
             );
         });
     };
+
+    /**
+    Ejecucion de codigo en el servidor.
+    @returns {Node}
+    */
+    get node() {
+        if (!this.#node) {
+            this.#node = new Node(this);
+        };
+        return this.#node;
+    }
 
     /**
     Metodos para manejo de notificaciones push.
@@ -3534,6 +3546,90 @@ export class Form {
     }
 };
 
+export class Node {
+    #session;
+    
+    constructor(session) {
+        this.#session = session;
+    }
+
+    /**
+    Ejecuta un codigo node en el servidor de eventos
+
+    @example
+    exec({
+        code: {
+            owner // Opcional, def CloudyVisionArg
+            repo // Opcional, def cdn
+            path // Requerido
+            fresh // Opcional, def false
+        }
+        payload // Informacion para el codigo que se va a ejecutar
+        returnType // Retorna { type, value } . Def false.
+        eventsServer // Opcional, def https://eventsjs.cloudycrm.net
+        debug // Opcional, def false. Setea eventsServer en https://eventsjs2.cloudycrm.net
+        apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
+        url // Pasar true para obtener la url para ejecutar el job con GET
+    */
+    exec(options) {
+        var me = this;
+
+        let opt = {
+            eventsServer: 'https://eventsjs.cloudycrm.net',
+        }
+        Object.assign(opt, options);
+
+        if (opt.debug) opt.eventsServer = 'https://eventsjs2.cloudycrm.net';
+
+        let data = {
+            serverUrl: this.session.serverUrl,
+            events: opt.code,
+            payload: opt.payload,
+        }
+
+        if (this.session.apiKey || opt.apiKey) {
+            data.apiKey = opt.apiKey ? opt.apiKey : this.session.apiKey;
+        } else if (this.session.authToken) {
+            data.authToken = this.session.authToken;
+        }
+
+        if (opt.url) {
+            var url = opt.eventsServer + '/exec';
+            url += '?msg=' + encodeURIComponent(JSON.stringify(data));
+            return url;
+
+        } else {
+            return new Promise(async (resolve, reject) => {
+                let res = await fetch(opt.eventsServer + '/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (res.ok) {
+                    let json = await res.json();
+                    resolve(opt.returnType ? json : json.value); // todo: mmmm
+
+                } else {
+                    let err;
+                    try {
+                        let txt = await res.text();
+                        let json = JSON.parse(txt);
+                        err = me.deserializeError(json);
+                
+                    } catch(e) {
+                        err = new Error(res.status + ' (' + res.statusText + ')');
+                    }
+                    reject(err);
+                }
+            });
+        }
+    }
+    
+}
+
 
 export class Properties extends DoorsMap {
     #parent;
@@ -4148,60 +4244,11 @@ export class Utilities {
 
     
     /**
-    Ejecuta un codigo node en el servidor de eventos
-
-    @example
-    execNode({
-        code: {
-            owner // Opcional, def CloudyVisionArg
-            repo // Opcional, def cdn
-            path // Requerido
-            fresh // Opcional, def false
-        }
-        payload // Informacion para el codigo que se va a ejecutar
-        returnType // Retorna { type, value } . Def false.
-        eventsServer // Opcional, def https://eventsjs.cloudycrm.net
+    Alias de dSession.node.exec
+    Usar ese, este sera deprecado.
     */
     async execNode(options) {
-        var me = this;
-
-        let opt = {
-            eventsServer: 'https://eventsjs.cloudycrm.net',
-        }
-        Object.assign(opt, options);
-
-        let data = {
-            serverUrl: this.session.serverUrl,
-            events: opt.code,
-            payload: opt.payload,
-        }
-        if (this.session.authToken) data.authToken = this.session.authToken;
-        if (this.session.apiKey) data.apiKey = this.session.apiKey;
-
-        let res = await fetch(opt.eventsServer + '/job', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (res.ok) {
-            let json = await res.json();
-            return opt.returnType ? json : json.value;
-
-        } else {
-            let err;
-            try {
-                let txt = await res.text();
-                let json = JSON.parse(txt);
-                err = me.deserializeError(json);
-        
-            } catch(e) {
-                err = new Error(res.status + ' (' + res.statusText + ')');
-            }
-            throw err;
-        }
+        return this.session.node.exec(options);
     }
 
     async execVbs(code) {
