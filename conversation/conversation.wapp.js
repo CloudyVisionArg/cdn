@@ -518,11 +518,13 @@ function whatsAppDataProvider(opts){
 				class: 'row',
 			})
 			
-			var $divPreviewAudio = $('<div/>').appendTo($previewBtnRow);
+			var $divPreviewAudio = $('<div/>',{
+				style: "width: 100%;",
+			}).appendTo($previewBtnRow);
 			
 			var $audioControl = $('<audio/>',{
 				controls: 'controls',
-				//style: "width: 230px;",
+				style: "width:90%; margin:0 5% 5px;",
 			}).appendTo($divPreviewAudio)
 			
 			var $srcAudioControl = $('<source/>',{
@@ -1069,8 +1071,7 @@ function whatsAppDataProvider(opts){
 			class: 'col button button-large button-round button-fill',
 		}).append('Guardar').appendTo($saveBtnRow);
 		
-		$btn.click(saveAction); // revisar este saveaction para que no envie directamente
-		//asumo stop recording y que el callback no haga el sendmedia
+		$btn.click(saveAction); 
 		
 	
 		
@@ -1096,8 +1097,8 @@ function whatsAppDataProvider(opts){
 		function record(){
 			mediaRec = new recorder(null);
 			mediaRec.record().then(function(file){
-				debugger;
 				if(save){
+					$timer.hide()
 					$saveBtnRow.hide();
 					pCallback(file);
 				}else{
