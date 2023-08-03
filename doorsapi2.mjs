@@ -22,20 +22,7 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
-//var utilsPromise = loadUtils();
-debugger;
 await loadUtils();
-/*
-todo: Safari soporta await at module top level recien en la v15
-https://caniuse.com/?search=top%20level%20await
-Cuando esta sea estandar reemplazar la linea anterior por:
-
-await loadUtils();
-
-Mientras tanto, si en algun metodo da error xq no esta el modulo esperar la promise asi:
-
-await utilsPromise;
-*/
 
 async function loadUtils() {
 
@@ -3629,7 +3616,13 @@ export class Node {
             });
         }
     }
-    
+
+    /**
+    @returns {Session}
+    */
+    get session() {
+        return this.#session;
+    }    
 }
 
 
