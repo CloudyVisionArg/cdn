@@ -23,6 +23,7 @@ export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
 //var utilsPromise = loadUtils();
+debugger;
 await loadUtils();
 /*
 todo: Safari soporta await at module top level recien en la v15
