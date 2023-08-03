@@ -4178,7 +4178,7 @@ export class Utilities {
         if (this.session.authToken) data.authToken = this.session.authToken;
         if (this.session.apiKey) data.apiKey = this.session.apiKey;
 
-        let res = await fetch(opt.eventsServer, {
+        let res = await fetch(opt.eventsServer + '/job', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
