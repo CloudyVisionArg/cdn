@@ -3566,41 +3566,32 @@ export class Node {
         }
         payload // Informacion para el codigo que se va a ejecutar
         returnType // Retorna { type, value } . Def false.
-        eventsServer // Opcional, def https://eventsjs.cloudycrm.net
-        debug // Opcional, def false. Setea eventsServer en https://eventsjs2.cloudycrm.net
         apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
         url // Pasar true para obtener la url para ejecutar el job con GET
     */
     exec(options) {
         var me = this;
 
-        let opt = {
-            eventsServer: 'https://eventsjs.cloudycrm.net',
-        }
-        Object.assign(opt, options);
-
-        if (opt.debug) opt.eventsServer = 'https://eventsjs2.cloudycrm.net';
-
         let data = {
             serverUrl: this.session.serverUrl,
-            events: opt.code,
-            payload: opt.payload,
+            events: options.code,
+            payload: options.payload,
         }
 
-        if (this.session.apiKey || opt.apiKey) {
-            data.apiKey = opt.apiKey ? opt.apiKey : this.session.apiKey;
+        if (this.session.apiKey || options.apiKey) {
+            data.apiKey = options.apiKey ? options.apiKey : this.session.apiKey;
         } else if (this.session.authToken) {
             data.authToken = this.session.authToken;
         }
 
-        if (opt.url) {
-            var url = opt.eventsServer + '/exec';
+        if (options.url) {
+            var url = me.server + '/exec';
             url += '?msg=' + encodeURIComponent(JSON.stringify(data));
             return url;
 
         } else {
             return new Promise(async (resolve, reject) => {
-                let res = await fetch(opt.eventsServer + '/exec', {
+                let res = await fetch(me.server + '/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -3610,7 +3601,7 @@ export class Node {
 
                 if (res.ok) {
                     let json = await res.json();
-                    resolve(opt.returnType ? json : json.value); // todo: mmmm
+                    resolve(options.returnType ? json : json.value); // todo: mmmm
 
                 } else {
                     let err;
@@ -3628,7 +3619,7 @@ export class Node {
         }
     }
 
-    inNode() {
+    get inNode() {
         return inNode();
     }
 
