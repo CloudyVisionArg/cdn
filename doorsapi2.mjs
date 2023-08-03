@@ -22,7 +22,7 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 
-await loadUtils();
+var utilsPromise = loadUtils();
 
 async function loadUtils() {
 
