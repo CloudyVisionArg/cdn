@@ -373,7 +373,7 @@ gitCdn({
     url // Devuelve la url en vez del buffer. Def false
     server // 2 para el server de desarrollo
 }
-@returns {string|Promise<Buffer>}
+@returns {string|Promise<TinyBuffer>}
 */
 function gitCdn(options) {
     if (options.repo && options.path) {
@@ -415,7 +415,7 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        resolve(new Buffer(await res.arrayBuffer()));
+                        resolve(new TinyBuffer(await res.arrayBuffer()));
                         /*
                         Esta es una implementacion simplificada de la clase Buffer de node
                         Si hace falta algo mas completo usar https://github.com/feross/buffer
@@ -451,7 +451,7 @@ function gitCdn(options) {
     }
 }
 
-class Buffer extends Uint8Array {
+class TinyBuffer extends Uint8Array {
     toString() {
         var td = new TextDecoder();
         return td.decode(this);
