@@ -3621,11 +3621,9 @@ export class Node {
                     try {
                         let txt = await res.text();
                         let json = JSON.parse(txt);
-                        debugger;
                         err = me.session.utils.deserializeError(json);
                 
                     } catch(e) {
-                        debugger;
                         err = new Error(res.status + ' (' + res.statusText + ')');
                     }
                     reject(err);
