@@ -68,13 +68,13 @@ function registeredScripts() {
     scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
     scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 
-	// Aliases (for backward compatibility)
-	scripts.push({ id: 'app7-dsession', aliasOf: 'app7-session' });
-	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
-	scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
-	scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
+    // Aliases (for backward compatibility)
+    scripts.push({ id: 'app7-dsession', aliasOf: 'app7-session' });
+    scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
+    scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
+    scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
 
-	return scripts;
+    return scripts;
 }
 
 /**
