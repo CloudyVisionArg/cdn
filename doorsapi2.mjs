@@ -3622,7 +3622,7 @@ export class Node {
                     try {
                         let txt = await res.text();
                         let json = JSON.parse(txt);
-                        err = me.deserializeError(json);
+                        err = me.session.util.deserializeError(json);
                 
                     } catch(e) {
                         err = new Error(res.status + ' (' + res.statusText + ')');
