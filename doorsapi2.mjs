@@ -3640,7 +3640,7 @@ export class Node {
     Permite llamar un metodo de un modulo mjs del servidor
 
     @example
-    mod({
+    modCall({
         module: {
             owner // Opcional, def CloudyVisionArg
             repo // Opcional, def cdn
@@ -3648,10 +3648,10 @@ export class Node {
             fresh // Opcional, def false
         }
         method // Nombre del metodo
-        arguments // Argumentos para el metodo. Si el metodo tiene multiples argumentos enviarlos como un array.
+        args // Argumentos para el metodo. Si el metodo tiene multiples argumentos enviarlos como un array.
     });
     */
-    async mod(options) {
+    async modCall(options) {
         return await this.exec({
             code: { repo: 'Global', path: 'server/modproxy.js' },
             payload: options,
