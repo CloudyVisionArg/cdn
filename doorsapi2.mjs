@@ -3622,7 +3622,7 @@ export class Node {
                         let txt = await res.text();
                         let json = JSON.parse(txt);
                         debugger;
-                        err = me.session.util.deserializeError(json);
+                        err = me.session.utils.deserializeError(json);
                 
                     } catch(e) {
                         debugger;
