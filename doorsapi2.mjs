@@ -1,15 +1,3 @@
-/*
-Para conectarse por ssh a windows:
-https://learn.microsoft.com/es-mx/windows-server/administration/openssh/openssh_install_firstuse
-https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication
-https://superuser.com/questions/1635361/starting-openssh-server-in-windows-with-debug-messages-enabled-d
-*/
-/*
-todo: Safari soporta metodos privados recien en la v15.
-Cdo esta sea estandar reemplazar los _metodo con #metodo
-https://caniuse.com/?search=private%20methods
-*/
-
 // swagger: http://w3.cloudycrm.net/apidocs
 // https://github.com/DefinitelyTyped/DefinitelyTyped (types para intelliSense)
 
