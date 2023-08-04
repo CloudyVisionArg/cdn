@@ -236,6 +236,21 @@ export class DoorsMap extends Map {
 };
 
 
+/*
+Esta es una implementacion simplificada de la clase Buffer de node
+Si hace falta algo mas completo usar https://github.com/feross/buffer
+
+    await include('buffer', 'https://bundle.run/buffer@6.0.3');
+    resolve(buffer.Buffer.from(await res.arrayBuffer()));
+*/
+export class TinyBuffer extends Uint8Array {
+    toString() {
+        var td = new TextDecoder();
+        return td.decode(this);
+    }   
+}
+
+
 export class Session {
     #restClient;
     #directory;
@@ -3565,9 +3580,8 @@ export class Node {
             fresh // Opcional, def false
         }
         payload // Informacion para el codigo que se va a ejecutar
-        returnType // Retorna { type, value } . Def false.
         apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
-        url // Pasar true para obtener la url para ejecutar el job con GET
+        url // Pasar true para obtener la url, que ejecuta el job con GET
     */
     exec(options) {
         var me = this;
@@ -3600,8 +3614,7 @@ export class Node {
                 });
 
                 if (res.ok) {
-                    resolve(await res.arrayBuffer());
-                    //resolve(options.returnType ? json : json.value); // todo: mmmm
+                    resolve(new TinyBuffer(await res.arrayBuffer()));
 
                 } else {
                     let err;
