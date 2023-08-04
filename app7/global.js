@@ -341,7 +341,6 @@ async function showConsole(allowClose) {
             }, 250);
 
             $get('#credentials').click(function (e) {
-                popup.close();
                 showLogin(true);
             });
 
