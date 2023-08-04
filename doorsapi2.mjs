@@ -3605,10 +3605,10 @@ export class Node {
                 if (res.ok) {
                     let buf = new SimpleBuffer(await res.arrayBuffer());
                     try {
-                        debugger;
                         let json = JSON.parse(buf.toString());
+                        console.log(json);
                         resolve(json.type ? json.value : json);
-
+                        
                     } catch(err) {
                         resolve(buf);
                     }
