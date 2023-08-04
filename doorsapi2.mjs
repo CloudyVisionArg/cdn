@@ -3603,7 +3603,13 @@ export class Node {
                 });
 
                 if (res.ok) {
-                    resolve(new SimpleBuffer(await res.arrayBuffer()));
+                    let buf = new SimpleBuffer(await res.arrayBuffer());
+                    try {
+                        debugger;
+                        let json = JSON.parse(buf.toString());
+                    } catch(err) {
+                        resolve(buf);
+                    }
 
                 } else {
                     let err;
