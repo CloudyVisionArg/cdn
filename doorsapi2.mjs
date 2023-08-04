@@ -3605,8 +3605,8 @@ export class Node {
                 if (res.ok) {
                     let buf = new SimpleBuffer(await res.arrayBuffer());
                     try {
-                        debugger;
                         let json = JSON.parse(buf.toString());
+                        debugger;
                     } catch(err) {
                         resolve(buf);
                     }
