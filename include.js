@@ -343,7 +343,7 @@ function scriptSrc(scriptId, version) {
             } else {
                 // Branch
                 //src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
-                src = gitCdn({ path: script.path, ref: v, fresh: true, url: true });
+                src = gitCdn({ path: script.path, ref: v, url: true });
             }
         }
 
@@ -365,7 +365,7 @@ gitCdn({
     ref // Branch / tag
     fresh // Actualiza el cache
     url // Devuelve la url en vez del buffer. Def false
-    server // 2 para el server de desarrollo
+    server // Opcional, def https://cdn.cloudycrm.net
 }
 @returns {string|Promise<SimpleBuffer>}
 */
@@ -389,12 +389,7 @@ function gitCdn(options) {
         };
     }
 
-    var url;
-    if (options.server != undefined) {
-        url = `https://eventsjs${options.server}.cloudycrm.net`;
-    } else {
-        url = 'https://cdn.cloudycrm.net';
-    }
+    var url = options.server ? options.server : 'https://cdn.cloudycrm.net';
     url += '/' + (options.owner != undefined ? 'gh/' + options.owner : 'ghcv');
     url += '/' + (options.repo != undefined ? options.repo : 'cdn');
     url += options.ref != undefined ? '@' + options.ref : '';
