@@ -2049,7 +2049,8 @@ export class Document {
     */
 
     /**
-    Ejecuta un evento node que actualiza el documento.
+    Ejecuta un evento node de documento.
+    Es la alternativa JavaScript a los eventos sincronos VbScript.
     @example
     await doc.nodeEvent({ owner, repo, path, ref, fresh });
     */
