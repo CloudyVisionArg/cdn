@@ -2049,7 +2049,7 @@ export class Document {
     */
 
     /**
-    Ejecuta un evento node que actualiza el  documento.
+    Ejecuta un evento node que actualiza el documento.
     @example
     await doc.nodeEvent({ owner, repo, path, ref, fresh });
     */
