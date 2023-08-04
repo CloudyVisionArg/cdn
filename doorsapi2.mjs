@@ -3570,6 +3570,7 @@ export class Node {
         payload // Informacion para el codigo que se va a ejecutar
         apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
         url // Pasar true para obtener la url, que ejecuta el job con GET
+    });
     */
     exec(options) {
         var me = this;
@@ -3622,6 +3623,28 @@ export class Node {
 
     get inNode() {
         return inNode();
+    }
+
+    /**
+    Permite llamar un metodo de un modulo mjs del servidor
+
+    @example
+    mod({
+        module: {
+            owner // Opcional, def CloudyVisionArg
+            repo // Opcional, def cdn
+            path // Requerido
+            fresh // Opcional, def false
+        }
+        method // Nombre del metodo
+        arguments // Argumentos para el metodo. Si el metodo tiene multiples argumentos enviarlos como un array.
+    });
+    */
+    async mod(options) {
+        return await this.exec({
+            code: { repo: 'Global', path: 'server/modproxy.js' },
+            payload: options,
+        });
     }
 
     get server() {
