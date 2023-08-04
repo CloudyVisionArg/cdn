@@ -3555,7 +3555,7 @@ export class Node {
     #session;
     #server;
     #prodServer = 'https://eventsjs.cloudycrm.net';
-    #debugServer = 'https://eventsjs2.cloudycrm.net';
+    #debugServer = 'https://nodedev.cloudycrm.net';
     
     constructor(session) {
         this.#session = session;
