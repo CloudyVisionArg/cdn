@@ -3557,7 +3557,9 @@ export class Node {
     }
 
     /**
-    Ejecuta un codigo node en el servidor de eventos
+    Ejecuta un codigo node en el servidor de eventos.
+    Si se pasa doc, se simulara la ejecucion de un evento sincrono js,
+    devolviendo el json del doc con los cambios que haya realizado el codigo.
 
     @example
     exec({
@@ -3570,6 +3572,7 @@ export class Node {
         payload // Informacion para el codigo que se va a ejecutar
         apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
         url // Pasar true para obtener la url, que ejecuta el job con GET
+        doc // Opcional, el json de un documento
     });
     */
     exec(options) {
@@ -3578,6 +3581,7 @@ export class Node {
         let data = {
             serverUrl: this.session.serverUrl,
             events: options.code,
+            doc: options.doc,
             payload: options.payload,
         }
 
