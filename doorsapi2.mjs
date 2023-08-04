@@ -166,7 +166,7 @@ export function inNode() {
 
 export class DoorsMap extends Map {
     /** Metodo interno, no usar */
-    _parseKey(key) {
+    #parseKey(key) {
         var k;
         if (typeof key === 'string') {
             k = key.toUpperCase();
@@ -182,7 +182,7 @@ export class DoorsMap extends Map {
     }
 
     delete(key) {
-        return super.delete(this._parseKey(key));
+        return super.delete(this.#parseKey(key));
     }
 
     /** Alias de has */
@@ -208,11 +208,11 @@ export class DoorsMap extends Map {
     }
 
     get(key) {
-        return super.get(this._parseKey(key));
+        return super.get(this.#parseKey(key));
     }
 
     has(key) {
-        return super.has(this._parseKey(key));
+        return super.has(this.#parseKey(key));
     }
 
     /** Alias de get */
@@ -231,7 +231,7 @@ export class DoorsMap extends Map {
     }
 
     set(key, value) {
-        return super.set(this._parseKey(key), value);
+        return super.set(this.#parseKey(key), value);
     }
 };
 
@@ -271,7 +271,7 @@ export class Session {
     }
     
     /** Metodo interno, no usar */
-    _reset() {
+    #reset() {
         this.#apiKey = undefined;
         this.#authToken = undefined;
         this.#currentUser = undefined;
@@ -285,7 +285,7 @@ export class Session {
         return this.#apiKey;
     }
     set apiKey(value) {
-        this._reset();
+        this.#reset();
         this.#apiKey = value;
     }
 
@@ -296,7 +296,7 @@ export class Session {
         return this.#authToken;
     }
     set authToken(value) {
-        this._reset();
+        this.#reset();
         this.#authToken = value;
     }
 
@@ -533,7 +533,7 @@ export class Session {
             var url = 'session/logoff';
             me.restClient.fetch(url, 'POST', {}, '').then(
                 res => {
-                    me._reset();
+                    me.#reset();
                     resolve(res);
                 },
                 reject
@@ -623,7 +623,7 @@ export class Session {
     }
     set serverUrl(value) {
         this.#serverUrl = value;
-        this._reset();
+        this.#reset();
     }
 
     /**
@@ -759,7 +759,7 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    _accountsGet(listFunction, account) {
+    #accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -784,18 +784,18 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    _accountsList(property, endPoint) {
+    #accountsList(property, endPoint) {
         var me = this;
         return new Promise((resolve, reject) => {
             if (me.#json[property]) {
-                resolve(me._accountsMap(me.#json[property]));
+                resolve(me.#accountsMap(me.#json[property]));
 
             } else {
                 var url = 'accounts/' + me.id + '/' + endPoint;
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json[property] = res;
-                        resolve(me._accountsMap(me.#json[property]));
+                        resolve(me.#accountsMap(me.#json[property]));
                     },
                     reject
                 )
@@ -804,7 +804,7 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    _accountsMap(accounts) {
+    #accountsMap(accounts) {
         var me = this;
         var map = new DoorsMap();
         accounts.forEach(el => {
@@ -838,9 +838,9 @@ export class Account {
     */
     childAccounts(account) {
         if (account == undefined) {
-            return this._accountsList('ChildAccountsList', 'childAccounts');
+            return this.#accountsList('ChildAccountsList', 'childAccounts');
         } else {
-            return this._accountsGet('childAccounts', account);
+            return this.#accountsGet('childAccounts', account);
         }
     }
 
@@ -864,9 +864,9 @@ export class Account {
     */
     childAccountsRecursive(account) {
         if (account == undefined) {
-            return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
+            return this.#accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
         } else {
-            return this._accountsGet('childAccountsRecursive', account);
+            return this.#accountsGet('childAccountsRecursive', account);
         }
     }
 
@@ -976,9 +976,9 @@ export class Account {
     */
     parentAccounts(account) {
         if (account == undefined) {
-            return this._accountsList('ParentAccountsList', 'parentAccounts');
+            return this.#accountsList('ParentAccountsList', 'parentAccounts');
         } else {
-            return this._accountsGet('parentAccounts', account);
+            return this.#accountsGet('parentAccounts', account);
         }
     }
 
@@ -1002,9 +1002,9 @@ export class Account {
     */
     parentAccountsRecursive(account) {
         if (account == undefined) {
-            return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+            return this.#accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
         } else {
-            return this._accountsGet('parentAccountsRecursive', account);
+            return this.#accountsGet('parentAccountsRecursive', account);
         }
     }
 
@@ -4494,12 +4494,12 @@ export class View {
         this.#loaded = view.Definition ? true : false;
     }
 
-    async _asyncGet(property) {
-        await this._load();
+    async #asyncGet(property) {
+        await this.#load();
         return this.#json[property];
     }
 
-    async _load() {
+    async #load() {
         if (!this.#loaded) {
             var url = 'folders/' + this.parentId + '/views/' + this.id;
             var res = await this.session.restClient.fetch(url, 'GET', '', '');
@@ -4576,7 +4576,7 @@ export class View {
     }
 
     get definition() {
-        return this._asyncGet('Definition');
+        return this.#asyncGet('Definition');
     }
     set definition(value) {
         this.#json.Definition = value;
@@ -4590,7 +4590,7 @@ export class View {
     }
 
     get descriptionRaw() {
-        return this._asyncGet('DescriptionRaw');
+        return this.#asyncGet('DescriptionRaw');
     }
     set descriptionRaw(value) {
         this.#json.DescriptionRaw = value;
@@ -4705,14 +4705,14 @@ export class View {
     }
 
     get styleScript() {
-        return this._asyncGet('StyleScriptDefinition');
+        return this.#asyncGet('StyleScriptDefinition');
     }
     set styleScript(value) {
         this.#json.StyleScriptDefinition = value;
     }
 
     get tags() {
-        return this._asyncGet('Tags');
+        return this.#asyncGet('Tags');
     }
 
     get type() {
