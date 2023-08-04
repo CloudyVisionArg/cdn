@@ -1408,7 +1408,7 @@ y enviarlo al server
             body.method = method;
             body.args = arrArgs;
 
-            fetch('https://eventsjs.cloudycrm.net/console', {
+            fetch('https://node.cloudycrm.net/console', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
