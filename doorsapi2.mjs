@@ -3606,12 +3606,13 @@ export class Node {
                     let buf = new SimpleBuffer(await res.arrayBuffer());
                     try {
                         let json = JSON.parse(buf.toString());
+                        debugger;
                         if (json.type) {
                             resolve(json.type == 'Date' ? new Date(json.value) : json.value);
                         } else {
                             resolve(json);
                         }
-                          
+
                     } catch(err) {
                         resolve(buf);
                     }
