@@ -2049,6 +2049,18 @@ export class Document {
     */
 
     /**
+    Ejecuta un evento node que actualiza el  documento.
+    @example
+    await doc.nodeEvent({ owner, repo, path, ref, fresh });
+    */
+    async nodeEvent(code) {
+        this.#json = await this.session.node.exec({
+            code: code,
+            doc: this.toJSON(),
+        });
+    }
+
+    /**
     Creador del documento.
     @returns {Promise<User>}
     */
