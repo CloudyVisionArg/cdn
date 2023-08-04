@@ -308,8 +308,8 @@ var app = {
                         sessionMsg();
                     },
                     function (err) {
-                        console.log(err);
-                        showLogin();
+                        console.error(errMsg(err));
+                        showConsole();
                     }
                 );
             } else {
@@ -327,14 +327,15 @@ var app = {
                 },
                 function (err) {
                     // Sincroniza full y despues inicia
-                    console.log('onDeviceReady error, full syncing...');
+                    console.error('onDeviceReady error, full syncing...');
                     sync.sync(true, function () {
                         // todo: aca seria mejor recargar el app con un parametro para que si vuelve a fallar haga un stop
                         executeCode('onDeviceReady',
                             function () {
                             },
                             function (err) {
-                                console.log('onDeviceReady error, app stopped');
+                                showConsole();
+                                console.error('onDeviceReady error, app stopped');
                             }
                         );
                     });
