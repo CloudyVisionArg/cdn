@@ -367,7 +367,7 @@ gitCdn({
     url // Devuelve la url en vez del buffer. Def false
     server // 2 para el server de desarrollo
 }
-@returns {string|Promise<TinyBuffer>}
+@returns {string|Promise<SimpleBuffer>}
 */
 function gitCdn(options) {
     if (options.repo && options.path) {
@@ -409,7 +409,7 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        resolve(new TinyBuffer(await res.arrayBuffer()));
+                        resolve(new SimpleBuffer(await res.arrayBuffer()));
 
                     } else {
                         try {
@@ -444,7 +444,7 @@ Si hace falta algo mas completo usar https://github.com/feross/buffer
     await include('buffer', 'https://bundle.run/buffer@6.0.3');
     resolve(buffer.Buffer.from(await res.arrayBuffer()));
 */
-class TinyBuffer extends Uint8Array {
+class SimpleBuffer extends Uint8Array {
     toString() {
         var td = new TextDecoder();
         return td.decode(this);

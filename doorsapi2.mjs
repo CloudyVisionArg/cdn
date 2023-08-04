@@ -231,7 +231,7 @@ Si hace falta algo mas completo usar https://github.com/feross/buffer
     await include('buffer', 'https://bundle.run/buffer@6.0.3');
     resolve(buffer.Buffer.from(await res.arrayBuffer()));
 */
-export class TinyBuffer extends Uint8Array {
+export class SimpleBuffer extends Uint8Array {
     toString() {
         var td = new TextDecoder();
         return td.decode(this);
@@ -3603,7 +3603,7 @@ export class Node {
                 });
 
                 if (res.ok) {
-                    resolve(new TinyBuffer(await res.arrayBuffer()));
+                    resolve(new SimpleBuffer(await res.arrayBuffer()));
 
                 } else {
                     let err;
