@@ -128,13 +128,13 @@ function dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback) {
                 function (tx, err) {
                     err.sqlStatement = pSql;
                     err.arguments = pArgs;
-                    console.log(err);
+                    console.error(errMsg(err));
                     if (pErrorCallback) pErrorCallback(err, tx);
                 }
             )
         },
         function (err) {
-            console.log(err);
+            console.error(errMsg(err));
             if (pErrorCallback) pErrorCallback(err);
         }
     );
@@ -150,13 +150,13 @@ function dbRead(pSql, pArgs, pSuccessCallback, pErrorCallback) {
                 function (tx, err) {
                     err.sqlStatement = pSql;
                     err.arguments = pArgs;
-                    console.log(err);
+                    console.error(errMsg(err));
                     if (pErrorCallback) pErrorCallback(err, tx);
                 }
             )
         },
         function (err) {
-            console.log(err);
+            console.error(errMsg(err));
             if (pErrorCallback) pErrorCallback(err);
         }
     );
@@ -564,11 +564,11 @@ async function showLogin() {
                         })
                     } catch(err) {
                         setMessage(errMsg(err));
-                        console.log(err);
+                        console.error(errMsg(err));
                         fillControls();
                     }
                 }, function (err) {
-                    console.log(err);
+                    console.error(errMsg(err));
                     setMessage(errMsg(err));
                     if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
                         $get('#chpass').closest('li').show();
@@ -678,7 +678,7 @@ async function showLogin() {
                         });
             
                     }, function (err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         app7.dialog.alert(errMsg(err));
                         $get('#chpass').removeClass('disabled');
                     }
@@ -852,7 +852,7 @@ async function showLogin() {
             };
 
             function onError(pErr) {
-                console.log(pErr);
+                console.error(errMsg(pErr));
                 setMessage('message', errMsg(pErr));
                 disableInputs(false);
                 dSession.logoff();
@@ -964,7 +964,7 @@ function cleanDb(pCallback) {
                             if (pCallback) pCallback();
                         }
                     },
-                    function (tx, err) { console.log(err); }
+                    function (tx, err) { console.error(errMsg(err)); }
                 );
             };
             calls++;
@@ -976,10 +976,10 @@ function cleanDb(pCallback) {
                         if (pCallback) pCallback();
                     }
                 },
-                function (tx, err) { console.log(err); }
+                function (tx, err) { console.error(errMsg(err)); }
             );
         },
-        function (tx, err) { console.log(err); }
+        function (tx, err) { console.error(errMsg(err)); }
         );
     });
 }
@@ -1128,13 +1128,13 @@ function pushUnregCapacitor(pCallback) {
                         if (pCallback) pCallback();
                     },
                     function (err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         if (pCallback) pCallback();
                     }
                 );
             },
             (err) => {
-                console.log('Error removing notifications listeners');
+                console.error('Error removing notifications listeners: ' + errMsg(err));
                 if (pCallback) pCallback();
             }
         );
@@ -1173,7 +1173,7 @@ function pushRegistration(pPushSetings, pCallback) {
     });
 
     app.push.on('error', (e) => {
-        console.log('push init error: ' + e.message);
+        console.error('pushRegistration error: ' + errMsg(e));
     });
 }
 
@@ -1187,13 +1187,13 @@ function pushUnregCordova(pCallback){
                         if (pCallback) pCallback();
                     },
                     function (err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         if (pCallback) pCallback();
                     }
                 );
             },
             function () {
-                console.log('pushUnreg error');
+                console.error('pushUnreg error');
                 if (pCallback) pCallback();
             }
         );
@@ -1278,7 +1278,7 @@ function saveDoc(pTable, pFields, pCallback, pSkipServer) {
                             }
                         },
                         function (tx, err) {
-                            console.log(err);
+                            console.error(errMsg(err));
                             if (pCallback) pCallback(2, err);
                         }
                     );
@@ -1311,14 +1311,14 @@ function saveDoc(pTable, pFields, pCallback, pSkipServer) {
                             }
                         },
                         function (tx, err) {
-                            console.log(err);
+                            console.error(errMsg(err));
                             if (pCallback) pCallback(2, err);
                         }
                     );
                 }
             },
             function (err) {
-                console.log(err);
+                console.error(errMsg(err));
                 if (pCallback) pCallback(2, err);
             }
         )
@@ -1340,14 +1340,14 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
                             if (pCallback) pCallback(0, 'Ok', doc);
                         },
                         function (err) {
-                            console.log(err);
+                            console.error(errMsg(err));
                             if (pCallback) pCallback(1, err);
                         }
                     )
                 }
             },
             function (err) {
-                console.log(err);
+                console.error(errMsg(err));
                 if (pCallback) pCallback(2, err);
             }
         );
@@ -1446,13 +1446,13 @@ function executeCode(pCode, pSuccess, pFailure) {
                     console.log('exec ' + pCode + ' ok');
                     if (pSuccess) pSuccess();
                 } catch(err) {
-                    console.log(call + ' error: ' + errMsg(err));
+                    console.error(call + ' error: ' + errMsg(err));
                     if (pFailure) pFailure(err);
                 }
             }
         },
         function (err) {
-            console.log(call + ' error: ' + errMsg(err));
+            console.error(call + ' error: ' + errMsg(err));
             if (pFailure) pFailure(err);
         }
     )
@@ -1464,7 +1464,7 @@ function getCodelib(pCode) {
         try {
             var codeTable = sync.tableName('codelib7');
         } catch (err) {
-            console.log(call + ' error: ' + errMsg(err));
+            console.error(call + ' error: ' + errMsg(err));
             reject(err);
             return;
         }
@@ -1479,12 +1479,12 @@ function getCodelib(pCode) {
                         resolve(row['code']);
                     } else {
                         var err = call + ': not found';
-                        console.log(err);
+                        console.error(err);
                         reject(err);
                     }
                 },
                 function (err) {
-                    console.log(call + ' error: ' + err);
+                    console.error(call + ' error: ' + errMsg(err));
                     reject(err);
                 }
             );
@@ -1735,7 +1735,7 @@ function getFolderElements(pFolder) {
     }
 
     function errFunction(err) {
-        console.log(err);
+        console.error(errMsg(err));
         throw err;
     };
 }
@@ -1928,7 +1928,7 @@ function getFile(pFileURL) {
         }
 
         function errMgr(pErr) {
-            console.log(pErr);
+            console.error(errMsg(pErr));
             reject(pErr);
         }
     });
@@ -2166,11 +2166,11 @@ function audioRecorder(pCallback) {
                         file.name = fileName;
                         pCallback(file);
                     },(err)=>{
-                        console.log("Error obteniendo el audio.", err)
+                        console.error("Error obteniendo el audio.", errMsg(err))
                     }
                 );
             },(err)=>{
-                console.log("Error escribiendo el audio.", err)
+                console.error("Error escribiendo el audio.", errMsg(err))
             });
         clearInterval(interv);
         sheet.close();
@@ -2247,7 +2247,7 @@ function audioRecorder(pCallback) {
                         fileEntry.file(pCallback);
                     },
                     function (err) {
-                        console.log('moveTo error: ' + err.code);
+                        console.error('moveTo error: ' + err.code);
                         pFileEntry.file(pCallback); // Pasa el que venia nomas
                     }
                 )
