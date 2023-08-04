@@ -336,7 +336,7 @@ var app = {
                             function (err) {
                                 showConsole();
                                 console.error('onDeviceReady error: ' + errMsg(err));
-                                toast('Error al iniciar la aplicacion, comuniquese con soporte', 5000);
+                                toast('Error al iniciar la aplicacion, contacte a soporte', 5000);
                             }
                         );
                     });
