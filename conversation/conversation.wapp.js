@@ -510,56 +510,62 @@ function whatsAppDataProvider(opts){
 
 	this.sendAudio = function (pChat) {
 		this.audioRecorder(function (file) {
-			
-			//acá generar la previsualizacion antes del sendmedia
-			var $block = $(".modal-in").find(".block")
+			const previewReader = new FileReader()
+			previewReader.onloadend = function(e){
+				var previewBlob = new Blob([new Uint8Array(e.target.result)],{type: file.type});
+				var previewURL = URL.createObjectURL(previewBlob)
 
-			var $previewBtnRow = $('<div/>', {
-				class: 'row',
-			})
-			
-			var $divPreviewAudio = $('<div/>',{
-				style: "width: 100%;",
-			}).appendTo($previewBtnRow);
-			
-			var $audioControl = $('<audio/>',{
-				controls: 'controls',
-				style: "width:90%; margin:0 5% 5px;",
-			}).appendTo($divPreviewAudio)
-			
-			var $srcAudioControl = $('<source/>',{
-				src: file.localURL,
-				type: file.type,	
-			}).appendTo($audioControl)	
-				//<source src=""" type="audio/ogg">
-						
-			var $btn = $('<button/>', {
-				class: 'col button button-large button-round button-outline',
-			}).append('Cancelar').appendTo($previewBtnRow);
-			
-			$btn.click(()=>{
-				app7.sheet.close(".modal-in");
-				let $modal = $('#wappModal');
-				if($modal.length > 0){
-					$modal.modal("hide");
-				}
-			});
-			
-			var $btnEnviar = $('<button/>', {
-				class: 'col button button-large button-round button-fill',
-			}).append('Enviar').appendTo($previewBtnRow);
-			
-			$previewBtnRow.appendTo($block);				
-			debugger;
-			$btnEnviar.on("click",()=>{
-				whatsAppProvider.sendMediaFromFile(file, pChat);
-				app7.sheet.close(".modal-in");
-				let $modal = $('#wappModal');
-				if($modal.length > 0){
-					$modal.modal("hide");
-				}
-			});
-			//$btnEnviar.click(me.sendMedia(file, pChat));
+				var $block = $(".modal-in").find(".block")
+
+				var $previewBtnRow = $('<div/>', {
+					class: 'row',
+				})
+				
+				var $divPreviewAudio = $('<div/>',{
+					style: "width: 100%;",
+				}).appendTo($previewBtnRow);
+				
+				var $audioControl = $('<audio/>',{
+					controls: 'controls',
+					style: "width:90%; margin:0 5% 5px;",
+				}).appendTo($divPreviewAudio)
+				
+				var $srcAudioControl = $('<source/>',{
+					src: previewURL,
+					type: file.type,	
+				}).appendTo($audioControl)	
+					//<source src=""" type="audio/ogg">
+							
+				var $btn = $('<button/>', {
+					class: 'col button button-large button-round button-outline',
+				}).append('Cancelar').appendTo($previewBtnRow);
+				
+				$btn.click(()=>{
+					URL.revokeObjectURL(previewURL);
+					app7.sheet.close(".modal-in");
+					let $modal = $('#wappModal');
+					if($modal.length > 0){
+						$modal.modal("hide");
+					}
+				});
+				
+				var $btnEnviar = $('<button/>', {
+					class: 'col button button-large button-round button-fill',
+				}).append('Enviar').appendTo($previewBtnRow);
+				
+				$previewBtnRow.appendTo($block);				
+				debugger;
+				$btnEnviar.on("click",()=>{
+					URL.revokeObjectURL(previewURL);
+					whatsAppProvider.sendMediaFromFile(file, pChat);
+					app7.sheet.close(".modal-in");
+					let $modal = $('#wappModal');
+					if($modal.length > 0){
+						$modal.modal("hide");
+					}
+				});
+			};
+			previewReader.readAsArrayBuffer(file)
         });
 	};
 
