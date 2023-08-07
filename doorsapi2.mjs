@@ -2675,7 +2675,7 @@ export class Folder {
         var me = this;
         return new Promise(async (resolve, reject) => {
             //todo: Para evitar esta llamada seria necesario un endpoint con docId y fldId
-            var formula = isNaN(parseInt(document)) ? document : 'doc_id = ' & document;
+            var formula = isNaN(parseInt(document)) ? document : 'doc_id = ' + document;
             var res = await me.search({ fields: 'doc_id', formula });
 
             if (res.length == 0) {
