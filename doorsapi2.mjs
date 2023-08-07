@@ -1695,7 +1695,7 @@ export class Document {
 
     // Este metodo no lo hago privado xq se llama desde Folder
     async _dispatchEvent(event) {
-        await doc.nodeEvent({ repo: 'Global', path: 'test/testevent.js', fresh: true });
+        //await doc.nodeEvent({ repo: 'Global', path: 'test/testevent.js', fresh: true });
     }
 
     /**
