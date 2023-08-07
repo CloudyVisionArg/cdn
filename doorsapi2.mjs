@@ -3587,8 +3587,8 @@ export class Node {
     get config() {
         var me = this;
 
-        if (this.#config) {
-            return this.#config;
+        if (me.#config) {
+            return me.#config;
 
         } else {
             return new Promise(async (resolve, reject) => {
@@ -3606,7 +3606,10 @@ export class Node {
                     if (jsn.repo != undefined) cfg.repo = jsn.repo;
                     if (jsn.ref != undefined) cfg.ref = jsn.ref;
 
-                } catch(err) { }
+                } catch(err) { };
+
+                me.#config = cfg;
+                resolve(me.#config);
             });
         }
 
