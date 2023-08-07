@@ -3585,6 +3585,8 @@ export class Node {
     }
 
     get config() {
+        var me = this;
+
         if (this.#config) {
             return this.#config;
 
@@ -3594,12 +3596,23 @@ export class Node {
                     server: 'https://node.cloudycrm.net',
                     debugServer: 'https://nodedev.cloudycrm.net',
                 };
+
                 let set = me.session.settings('NODE_CONFIG');
+                debugger;
                 try {
                     let jsn = JSON.parse(set);
-                    let val = jsn.server;
+                    try { cfg.server = origin(jsn.server) } catch(err) {};
+                    try { cfg.debugServer = origin(jsn.debugServer) } catch(err) {};
+                    if (jsn.repo != undefined) cfg.repo = jsn.repo;
+                    if (jsn.ref != undefined) cfg.ref = jsn.ref;
+
                 } catch(err) { }
             });
+        }
+
+        function origin(value) {
+            var url = new me.session.utils.URL(value);
+            return url.origin;
         }
     }
 
@@ -4508,7 +4521,7 @@ export class Utilities {
     get URL() {
         return _URL;
     }
-    
+
     /** Alias de xmlDecode */
     xmlDec(value, type) {
         return this.xmlDecode(value, type);
