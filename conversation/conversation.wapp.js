@@ -519,6 +519,7 @@ function whatsAppDataProvider(opts){
 
 				var $previewBtnRow = $('<div/>', {
 					class: 'row',
+					style: 'padding-top: 10%'
 				})
 				
 				var $divPreviewAudio = $('<div/>',{
