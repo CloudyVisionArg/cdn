@@ -2066,6 +2066,7 @@ export class Document {
             code: code,
             doc: this.toJSON(),
         });
+        //todo: deberia limpiar las properties?
     }
 
     /**
@@ -3563,20 +3564,20 @@ export class Form {
 
 export class Node {
     #session;
-    #server;
-    #prodServer = 'https://node.cloudycrm.net';
-    #debugServer = 'https://nodedev.cloudycrm.net';
+    #serverProd = 'https://node.cloudycrm.net';
+    #serverDebug = 'https://nodedev.cloudycrm.net';
+    #debug;
     
     constructor(session) {
         this.#session = session;
-        this.#server = this.#prodServer;
+        this.#debug = false;
     }
 
     get debug() {
-        return this.#server == this.#debugServer;
+        return this.#debug;
     }
     set debug(value) {
-        this.#server = value ? this.#debugServer : this.#prodServer;
+        this.#debug = value ? true : false;
     }
 
     /**
@@ -3686,10 +3687,21 @@ export class Node {
     }
 
     get server() {
-        return this.#server;
+        return this.debug ? this.serverDebug : this.serverProd;
     }
-    set server(value) {
-        this.#server = value;
+
+    get serverDebug() {
+        return this.#serverDebug;
+    }
+    set serverDebug(value) {
+        this.#serverDebug = value;
+    }
+
+    get serverProd() {
+        return this.#serverProd;
+    }
+    set serverProd(value) {
+        this.#serverProd = value;
     }
 
     /**
