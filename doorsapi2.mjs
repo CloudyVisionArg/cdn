@@ -364,11 +364,13 @@ export class Session {
     */
     documentsGetFromId(docId) {
         var me = this;
-        return new Promise((resolve, reject) => {
-            var url = 'documents/' + docId;
+        return new Promise(async (resolve, reject) => {
+            let url = 'documents/' + docId;
             me.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Document(res, me));
+                async res => {
+                    let doc = new Document(res, me);
+                    await doc._dispatchEvent('open');
+                    resolve(doc);
                 },
                 reject
             )
@@ -1691,6 +1693,11 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
+    // Este metodo no lo hago privado xq se llama desde Folder
+    async _dispatchEvent(event) {
+        await doc.nodeEvent({ repo: 'Global', path: 'test/testevent.js', fresh: true });
+    }
+
     /**
     Access Control List propio y heredado.
     @returns {Promise<Object[]>}
@@ -2138,7 +2145,13 @@ export class Document {
     */
     save() {
         var me = this;
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await me._dispatchEvent('beforeSave');
+            } catch(err) {
+                reject(err);
+            }
+
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
@@ -2147,8 +2160,15 @@ export class Document {
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
-                        res => {
+                        async res => {
                             me.#json = res;
+
+                            try {
+                                await me._dispatchEvent('afterSave');
+                            } catch(err) {
+                                reject(err);
+                            }
+
                             resolve(me);
                         },
                         reject
@@ -2654,30 +2674,18 @@ export class Folder {
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            var res, docId;
+            //todo: Para evitar esta llamada seria necesario un endpoint con docId y fldId
+            var formula = isNaN(parseInt(document)) ? document : 'doc_id = ' & document;
+            var res = await me.search({ fields: 'doc_id', formula });
 
-            if (isNaN(parseInt(document))) {
-                res = await me.search({ fields: 'doc_id', formula: document });
-
-                if (res.length == 0) {
-                    reject(new Error('Document not found'));
-                } else if (res.length > 1) {
-                    reject(new Error('Vague expression'));
-                } else {
-                    docId = res[0]['DOC_ID'];
-                }
-
+            if (res.length == 0) {
+                reject(new Error('Document not found'));
+            } else if (res.length > 1) {
+                reject(new Error('Vague expression'));
             } else {
-                docId = document;
+                let docId = res[0]['DOC_ID'];
+                resolve(await me.session.doc(docId));
             }
-
-            let url = 'documents/' + docId;
-            me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Document(res, me.session, me));
-                },
-                reject
-            )
         });
     }
 
@@ -2714,8 +2722,10 @@ export class Folder {
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/documents/new';
             me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Document(res, me.session, me));
+                async res => {
+                    let doc = new Document(res, me.session, me);
+                    await doc._dispatchEvent('open');
+                    resolve(doc);
                 },
                 reject
             );
