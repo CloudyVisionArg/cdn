@@ -3597,7 +3597,7 @@ export class Node {
                     debugServer: 'https://nodedev.cloudycrm.net',
                 };
 
-                let set = me.session.settings('NODE_CONFIG');
+                let set = await me.session.settings('NODE_CONFIG');
                 debugger;
                 try {
                     let jsn = JSON.parse(set);
