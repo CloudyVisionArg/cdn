@@ -2,7 +2,7 @@
 // https://github.com/DefinitelyTyped/DefinitelyTyped (types para intelliSense)
 
 var incjs = {};
-var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser;
+var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser, _URL;
 
 export { _moment as moment };
 export { _numeral as numeral };
@@ -141,6 +141,16 @@ async function loadUtils() {
             for (var i = 0; i < count; i++) ret += me;
             return ret;
         };
+    }
+
+    // URL
+    if (typeof(_URL) == 'undefined') {
+        if (inNode()) {
+            var res = (await import('url'));
+            _URL = res.default.URL;
+        } else {
+            _URL = window.URL;
+        }
     }
 
     return true;
@@ -1693,7 +1703,7 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
-    // Este metodo no lo hago privado xq se llama desde Folder
+    // Este metodo no lo hago privado xq se llama desde Session
     async _dispatchEvent(event) {
         //await this.nodeEvent({ repo: 'Global', path: 'test/testevent.js', fresh: true });
     }
@@ -3567,10 +3577,30 @@ export class Node {
     #serverProd = 'https://node.cloudycrm.net';
     #serverDebug = 'https://nodedev.cloudycrm.net';
     #debug;
+    #config;
     
     constructor(session) {
         this.#session = session;
         this.#debug = false;
+    }
+
+    get config() {
+        if (this.#config) {
+            return this.#config;
+
+        } else {
+            return new Promise(async (resolve, reject) => {
+                let cfg = {
+                    server: 'https://node.cloudycrm.net',
+                    debugServer: 'https://nodedev.cloudycrm.net',
+                };
+                let set = me.session.settings('NODE_CONFIG');
+                try {
+                    let jsn = JSON.parse(set);
+                    let val = jsn.server;
+                } catch(err) { }
+            });
+        }
     }
 
     get debug() {
@@ -3590,6 +3620,7 @@ export class Node {
         code: {
             owner // Opcional, def CloudyVisionArg
             repo // Opcional, def cdn
+            ref // Opcional, branch o tag. def el main del repo.
             path // Requerido
             fresh // Opcional, def false
         }
@@ -4326,8 +4357,7 @@ export class Utilities {
 
     
     /**
-    Alias de dSession.node.exec
-    Usar ese, este sera deprecado.
+    Metodo deprecado, usar dSession.node.exec
     */
     async execNode(options) {
         return this.session.node.exec(options);
@@ -4380,8 +4410,7 @@ export class Utilities {
     }
 
     /**
-    Alias de dSession.node.inNode()
-    Usar ese, este sera deprecado.
+    Metodo deprecado, usar dSession.node.inNode
     */
     inNode() {
         return this.session.node.inNode();
@@ -4476,6 +4505,10 @@ export class Utilities {
         return ret;	
     }
 
+    get URL() {
+        return _URL;
+    }
+    
     /** Alias de xmlDecode */
     xmlDec(value, type) {
         return this.xmlDecode(value, type);
