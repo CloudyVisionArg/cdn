@@ -3603,7 +3603,7 @@ export class Node {
                     if (jsn.repo != undefined) cfg.repo = jsn.repo;
                     if (jsn.ref != undefined) cfg.ref = jsn.ref;
 
-                } catch(err) { };
+                } catch(err) {};
 
                 me.#config = cfg;
                 resolve(me.#config);
@@ -3666,7 +3666,6 @@ export class Node {
                 resolve(url);
 
             } else {
-                debugger;
                 let res = await fetch(await me.server + '/exec', {
                     method: 'POST',
                     headers: {
