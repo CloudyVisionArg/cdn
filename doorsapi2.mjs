@@ -3582,6 +3582,10 @@ export class Node {
         this.#debug = false;
     }
 
+    /**
+    Levanta la configuracion de node del setting NODE_CONFIG
+    Si no esta devuelve con los valores por defecto
+    */
     get config() {
         var me = this;
 
