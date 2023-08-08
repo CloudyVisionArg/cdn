@@ -4898,11 +4898,7 @@ class RestClient {
                         debugger;
                     }
                     if (response.ok) {
-                        if (parsedJson.InternalObject !== null) {
-                            resolve(parsedJson.InternalObject);
-                        } else {
-                            resolve(parsedJson);
-                        }
+                        resolve(parsedJson.InternalObject);
                     } else {
                         if (parsedJson) {
                             reject(me.session.utils.newErr(parsedJson));
