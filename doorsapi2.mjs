@@ -3574,8 +3574,6 @@ export class Form {
 
 export class Node {
     #session;
-    #serverProd = 'https://node.cloudycrm.net';
-    #serverDebug = 'https://nodedev.cloudycrm.net';
     #debug;
     #config;
     
@@ -3598,7 +3596,6 @@ export class Node {
                 };
 
                 let set = await me.session.settings('NODE_CONFIG');
-                debugger;
                 try {
                     let jsn = JSON.parse(set);
                     try { cfg.server = origin(jsn.server) } catch(err) {};
@@ -3649,27 +3646,29 @@ export class Node {
     exec(options) {
         var me = this;
 
-        let data = {
-            serverUrl: this.session.serverUrl,
-            events: options.code,
-            doc: options.doc,
-            payload: options.payload,
-        }
+        return new Promise(async (resolve, reject) => {
+            let data = {
+                serverUrl: this.session.serverUrl,
+                events: options.code,
+                doc: options.doc,
+                payload: options.payload,
+            }
 
-        if (this.session.apiKey || options.apiKey) {
-            data.apiKey = options.apiKey ? options.apiKey : this.session.apiKey;
-        } else if (this.session.authToken) {
-            data.authToken = this.session.authToken;
-        }
+            if (this.session.apiKey || options.apiKey) {
+                data.apiKey = options.apiKey ? options.apiKey : this.session.apiKey;
+            } else if (this.session.authToken) {
+                data.authToken = this.session.authToken;
+            }
 
-        if (options.url) {
-            var url = me.server + '/exec';
-            url += '?msg=' + encodeURIComponent(JSON.stringify(data));
-            return url;
+            if (options.url) {
+                debugger;
+                var url = await me.server + '/exec';
+                url += '?msg=' + encodeURIComponent(JSON.stringify(data));
+                return url;
 
-        } else {
-            return new Promise(async (resolve, reject) => {
-                let res = await fetch(me.server + '/exec', {
+            } else {
+                debugger;
+                let res = await fetch(await me.server + '/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -3703,8 +3702,8 @@ export class Node {
                     }
                     reject(err);
                 }
-            });
-        }
+            }
+        });
     }
 
     get inNode() {
@@ -3734,21 +3733,12 @@ export class Node {
     }
 
     get server() {
-        return this.debug ? this.serverDebug : this.serverProd;
-    }
-
-    get serverDebug() {
-        return this.#serverDebug;
-    }
-    set serverDebug(value) {
-        this.#serverDebug = value;
-    }
-
-    get serverProd() {
-        return this.#serverProd;
-    }
-    set serverProd(value) {
-        this.#serverProd = value;
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            debugger;
+            var cfg = await me.config;
+            resolve(this.debug ? cfg.debugServer : cfg.server);
+        })
     }
 
     /**
