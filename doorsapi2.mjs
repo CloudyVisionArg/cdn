@@ -3734,7 +3734,6 @@ export class Node {
     get server() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            debugger;
             var cfg = await me.config;
             resolve(this.debug ? cfg.debugServer : cfg.server);
         })
