@@ -3663,7 +3663,7 @@ export class Node {
             if (options.url) {
                 var url = await me.server + '/exec';
                 url += '?msg=' + encodeURIComponent(JSON.stringify(data));
-                return url;
+                resolve(url);
 
             } else {
                 debugger;
