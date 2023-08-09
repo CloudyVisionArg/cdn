@@ -3583,6 +3583,20 @@ export class Node {
     }
 
     /**
+    Completa las opciones de code con config (owner, repo, ref y fresh).
+    Las opciones no se pisan, solo se completan las que no estan.
+    */
+    async codeOptions(code) {
+        var cfg = await this.config;
+        assDef = this.session.utils.assignDefined;
+        debugger;
+        assDef(code, cfg, 'owner', true);
+        assDef(code, cfg, 'repo', true);
+        assDef(code, cfg, 'ref', true);
+        assDef(code, cfg, 'fresh', true);
+    }
+
+    /**
     Levanta la configuracion de node del setting NODE_CONFIG
     Si no esta devuelve con los valores por defecto
     */
@@ -3658,7 +3672,7 @@ export class Node {
         return new Promise(async (resolve, reject) => {
             let data = {
                 serverUrl: this.session.serverUrl,
-                events: options.code,
+                events: await me.codeOptions(options.code),
                 doc: options.doc,
                 payload: options.payload,
             }
@@ -4184,6 +4198,17 @@ export class Utilities {
     constructor(session) {
         this.#session = session;
         this.#cache = new DoorsMap();
+    }
+
+    /**
+    Asigna la property del objeto source al objeto target, solo si tiene valor.
+    Override indica si se sobreescribe la prop en target, o si se asigna
+    solo si no esta definida.
+    */
+    assignDefined(target, source, property, override) {
+        if (source[property] != undefined && (target[property] == undefined || override)) {
+            target[property] = source[property];
+        }
     }
 
     /**
