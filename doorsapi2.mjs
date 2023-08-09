@@ -1726,6 +1726,7 @@ export class Document {
                 assDef(code, jsn, 'fresh');
             } catch(err) {}
 
+            debugger;
             await me.nodeEvent(code, event);
         }
     }
