@@ -3899,11 +3899,19 @@ export class Properties extends DoorsMap {
     set(key, value) {
         if (key == undefined) {
             return this; // La coleccion
+
         } else if (value == undefined) {
             // El value
-            return new Promise(async (resolve, reject) => {
-                resolve((await this.get(key)).value());
+            return new Promise((resolve, reject) => {
+                this.get(key).then(
+                    prop => {
+                        debugger;
+                        resolve(prop ? prop.value() : undefined);
+                    },
+                    reject
+                );
             });
+
         } else {
             // Setea
             var me = this;
