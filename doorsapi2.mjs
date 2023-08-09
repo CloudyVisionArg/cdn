@@ -2153,7 +2153,6 @@ export class Document {
     get parent() {
         var me = this;
         return new Promise((resolve, reject) => {
-            debugger;
             if (!me.#parent) {
                 me.session.folder(me.parentId).then(
                     res => {
