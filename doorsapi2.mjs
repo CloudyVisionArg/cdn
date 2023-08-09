@@ -2201,15 +2201,17 @@ export class Document {
                 reject(err);
             }
 
+            var tags = me.tags;
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
-                    me.#log = undefined;
+                    me.#log = undefined; //todo: hacer un metodo q limpie lo q haya q limpiar, llamarlo desde nodeEvent tb
 
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         async res => {
+                            debugger;
                             me.#json = res;
 
                             try {
