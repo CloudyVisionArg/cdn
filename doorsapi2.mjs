@@ -3902,7 +3902,7 @@ export class Properties extends DoorsMap {
         } else if (value == undefined) {
             // El value
             return new Promise(async (resolve, reject) => {
-                resolve((await this.get(key)).value);
+                resolve((await this.get(key)).value());
             });
         } else {
             // Setea
@@ -3962,10 +3962,6 @@ export class Property {
 
     toJSON() {
         return this.#json;
-    }
-
-    get value() {
-        
     }
 
     value(value) {
