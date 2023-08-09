@@ -3905,7 +3905,6 @@ export class Properties extends DoorsMap {
             return new Promise((resolve, reject) => {
                 this.get(key).then(
                     prop => {
-                        debugger;
                         resolve(prop ? prop.value() : undefined);
                     },
                     reject
