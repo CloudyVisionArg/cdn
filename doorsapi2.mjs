@@ -1708,7 +1708,6 @@ export class Document {
     Dispara el evento si esta configurado en el folder.
     */
     async _dispatchEvent(event) {
-        debugger;
         var me = this;
         var fld = await me.parent;
         var code = {};
@@ -1727,7 +1726,7 @@ export class Document {
                 assDef(code, jsn, 'fresh');
             } catch(err) {}
 
-            await me.nodeEvent(code);
+            await me.nodeEvent(code, event);
         }
     }
 
@@ -2094,9 +2093,10 @@ export class Document {
     @example
     await doc.nodeEvent({ owner, repo, path, ref, fresh });
     */
-    async nodeEvent(code) {
+    async nodeEvent(code, name) {
         this.#json = await this.session.node.exec({
             code: code,
+            eventName: name,
             doc: this.toJSON(),
         });
         /*
@@ -3897,13 +3897,15 @@ export class Properties extends DoorsMap {
     }
 
     set(key, value) {
+        var me = this;
+
         if (key == undefined) {
             return this; // La coleccion
 
         } else if (value == undefined) {
             // El value
             return new Promise((resolve, reject) => {
-                this.get(key).then(
+                me.get(key).then(
                     prop => {
                         resolve(prop ? prop.value() : undefined);
                     },
@@ -3913,7 +3915,6 @@ export class Properties extends DoorsMap {
 
         } else {
             // Setea
-            var me = this;
             return new Promise((resolve, reject) => {
                 me.#loadProm.then(
                     () => {
