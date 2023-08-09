@@ -3599,6 +3599,7 @@ export class Node {
                     debugServer: 'https://nodedev.cloudycrm.net',
                 };
 
+                // Setting
                 let set = await me.session.settings('NODE_CONFIG');
                 try {
                     let jsn = JSON.parse(set);
@@ -3609,6 +3610,18 @@ export class Node {
 
                 } catch(err) {};
 
+                debugger;
+                // UserSetting
+                set = await me.session.userSettings('NODE_CONFIG');
+                try {
+                    let jsn = JSON.parse(set);
+                    try { cfg.server = origin(jsn.server) } catch(err) {};
+                    try { cfg.debugServer = origin(jsn.debugServer) } catch(err) {};
+                    if (jsn.repo != undefined) cfg.repo = jsn.repo;
+                    if (jsn.ref != undefined) cfg.ref = jsn.ref;
+
+                } catch(err) {};
+                
                 me.#config = cfg;
                 resolve(me.#config);
             });
