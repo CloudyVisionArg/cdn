@@ -1722,8 +1722,8 @@ export class Document {
             try {
                 let jsn = JSON.parse(prop);
                 let assDef = me.session.utils.assignDefined;
-                assDef(code, jsn, 'ref');
-                assDef(code, jsn, 'fresh');
+                assDef(code, jsn[event], 'ref');
+                assDef(code, jsn[event], 'fresh');
             } catch(err) {}
 
             debugger;
@@ -4253,7 +4253,7 @@ export class Utilities {
     solo si no esta definida.
     */
     assignDefined(target, source, property, override) {
-        if (source[property] != undefined && (target[property] == undefined || override)) {
+        if (source && source[property] != undefined && (target[property] == undefined || override)) {
             target[property] = source[property];
         }
     }
