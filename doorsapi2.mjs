@@ -3600,31 +3600,25 @@ export class Node {
                 };
 
                 // Setting
-                let set = await me.session.settings('NODE_CONFIG');
-                try {
-                    let jsn = JSON.parse(set);
-                    try { cfg.server = origin(jsn.server) } catch(err) {};
-                    try { cfg.debugServer = origin(jsn.debugServer) } catch(err) {};
-                    if (jsn.repo != undefined) cfg.repo = jsn.repo;
-                    if (jsn.ref != undefined) cfg.ref = jsn.ref;
-
-                } catch(err) {};
-
-                debugger;
+                parseSetting(cfg, await me.session.settings('NODE_CONFIG'))
                 // UserSetting
-                set = await me.session.userSettings('NODE_CONFIG');
-                try {
-                    let jsn = JSON.parse(set);
-                    try { cfg.server = origin(jsn.server) } catch(err) {};
-                    try { cfg.debugServer = origin(jsn.debugServer) } catch(err) {};
-                    if (jsn.repo != undefined) cfg.repo = jsn.repo;
-                    if (jsn.ref != undefined) cfg.ref = jsn.ref;
-
-                } catch(err) {};
+                parseSetting(cfg, await me.session.userSettings('NODE_CONFIG'))
                 
                 me.#config = cfg;
                 resolve(me.#config);
             });
+        }
+
+        function parseSetting(target, setting) {
+            debugger;
+            try {
+                let jsn = JSON.parse(setting);
+                try { target.server = origin(jsn.server) } catch(err) {};
+                try { target.debugServer = origin(jsn.debugServer) } catch(err) {};
+                if (jsn.repo != undefined) target.repo = jsn.repo;
+                if (jsn.ref != undefined) target.ref = jsn.ref;
+
+            } catch(err) {};
         }
 
         function origin(value) {
