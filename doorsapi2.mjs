@@ -2200,8 +2200,8 @@ export class Document {
             } catch(err) {
                 reject(err);
             }
-
             var tags = me.tags;
+
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
@@ -2211,8 +2211,8 @@ export class Document {
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         async res => {
-                            debugger;
                             me.#json = res;
+                            me.tags = tags; // Restauro los tags para el afterSave
 
                             try {
                                 await me._dispatchEvent('Document_AfterSave');
