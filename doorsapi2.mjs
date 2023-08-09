@@ -3588,7 +3588,7 @@ export class Node {
     */
     async codeOptions(code) {
         var cfg = await this.config;
-        assDef = this.session.utils.assignDefined;
+        var assDef = this.session.utils.assignDefined;
         debugger;
         assDef(code, cfg, 'owner', true);
         assDef(code, cfg, 'repo', true);
