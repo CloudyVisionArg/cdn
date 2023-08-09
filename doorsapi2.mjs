@@ -3594,6 +3594,7 @@ export class Node {
         assDef(code, cfg, 'repo', true);
         assDef(code, cfg, 'ref', true);
         assDef(code, cfg, 'fresh', true);
+        return code;
     }
 
     /**
