@@ -379,7 +379,7 @@ export class Session {
             me.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
                     let doc = new Document(res, me);
-                    await doc._dispatchEvent('open');
+                    await doc._dispatchEvent('Document_Open');
                     resolve(doc);
                 },
                 reject
@@ -1703,9 +1703,32 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
-    // Este metodo no lo hago privado xq se llama desde Session
+    /**
+    Este metodo no lo hago privado xq se llama desde Session.
+    Dispara el evento si esta configurado en el folder.
+    */
     async _dispatchEvent(event) {
-        //await this.nodeEvent({ repo: 'Global', path: 'test/testevent.js', fresh: true });
+        debugger;
+        var me = this;
+        var fld = await me.parent;
+        var code = {};
+        var prop = await fld.properties('NODE_CONFIG');
+        try {
+            let jsn = JSON.parse(prop);
+            code.path = jsn[event];
+        } catch(err) {}
+
+        if (code.path) {
+            prop = await fld.userProperties('NODE_CONFIG');
+            try {
+                let jsn = JSON.parse(prop);
+                let assDef = me.session.utils.assignDefined;
+                assDef(code, jsn, 'ref');
+                assDef(code, jsn, 'fresh');
+            } catch(err) {}
+
+            await me.nodeEvent(code);
+        }
     }
 
     /**
@@ -2076,7 +2099,20 @@ export class Document {
             code: code,
             doc: this.toJSON(),
         });
-        //todo: deberia limpiar las properties?
+        /*
+        todo: deberia limpiar las properties?
+        #parent;
+        #session;
+        #json;
+        #fieldsMap;
+        #attachmentsMap;
+        #properties;
+        #userProperties;
+        #owner;
+        #form;
+        #log;
+        */
+
     }
 
     /**
@@ -2158,7 +2194,7 @@ export class Document {
         var me = this;
         return new Promise(async (resolve, reject) => {
             try {
-                await me._dispatchEvent('beforeSave');
+                await me._dispatchEvent('Document_BeforeSave');
             } catch(err) {
                 reject(err);
             }
@@ -2175,7 +2211,7 @@ export class Document {
                             me.#json = res;
 
                             try {
-                                await me._dispatchEvent('afterSave');
+                                await me._dispatchEvent('Document_AfterSave');
                             } catch(err) {
                                 reject(err);
                             }
@@ -2735,7 +2771,7 @@ export class Folder {
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
                     let doc = new Document(res, me.session, me);
-                    await doc._dispatchEvent('open');
+                    await doc._dispatchEvent('Document_Open');
                     resolve(doc);
                 },
                 reject
