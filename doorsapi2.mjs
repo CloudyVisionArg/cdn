@@ -2096,7 +2096,9 @@ export class Document {
     async nodeEvent(code, name) {
         this.#json = await this.session.node.exec({
             code: code,
-            eventName: name,
+            payload: {
+                eventName: name,
+            },
             doc: this.toJSON(),
         });
         /*
