@@ -3599,9 +3599,8 @@ export class Node {
                     debugServer: 'https://nodedev.cloudycrm.net',
                 };
 
-                // Setting
+                // setting y userSetting
                 parseSetting(cfg, await me.session.settings('NODE_CONFIG'))
-                // UserSetting
                 parseSetting(cfg, await me.session.userSettings('NODE_CONFIG'))
                 
                 me.#config = cfg;
@@ -3610,7 +3609,6 @@ export class Node {
         }
 
         function parseSetting(target, setting) {
-            debugger;
             try {
                 let jsn = JSON.parse(setting);
                 try { target.server = origin(jsn.server) } catch(err) {};
