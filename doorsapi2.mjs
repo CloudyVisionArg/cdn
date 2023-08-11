@@ -3128,8 +3128,6 @@ export class Folder {
         }
         Object.assign(opt, options);
 
-        //todo: agregar valor por defecto de maxDocs
-
         var encUriC = this.session.utils.encUriC;
         var url = 'folders/' + this.id + '/documents/grouped';
         var params = 'groups=' + encUriC(opt.groups) + '&totals=' + encUriC(opt.totals) +
@@ -3838,7 +3836,6 @@ export class Properties extends DoorsMap {
             '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
             '&objectName=' + this.session.utils.encUriC(restArgs.objName);
 
-        // todo: si da error armar la coleccion vacia
         this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
             res => {
