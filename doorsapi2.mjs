@@ -163,7 +163,6 @@ export function inNode() {
 
 
 export class DoorsMap extends Map {
-    /** Metodo interno, no usar */
     #parseKey(key) {
         var k;
         if (typeof key === 'string') {
@@ -268,7 +267,6 @@ export class Session {
         this.#authToken = authToken;
     }
     
-    /** Metodo interno, no usar */
     #reset() {
         this.#apiKey = undefined;
         this.#authToken = undefined;
@@ -1703,6 +1701,18 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
+    #reset() {
+        this.#parent = undefined;
+        this.#fieldsMap = undefined;
+        this.#attachmentsMap = new DoorsMap();
+        this.#attachmentsMap._loaded = false;
+        this.#properties = undefined;
+        this.#userProperties = undefined;
+        this.#owner = undefined;
+        this.#form = undefined;
+        this.#log = undefined;
+    }
+
     /**
     Este metodo no lo hago privado xq se llama desde Session.
     Dispara el evento si esta configurado en el folder.
@@ -2101,20 +2111,7 @@ export class Document {
             },
             doc: this.toJSON(),
         });
-        /*
-        todo: deberia limpiar las properties?
-        #parent;
-        #session;
-        #json;
-        #fieldsMap;
-        #attachmentsMap;
-        #properties;
-        #userProperties;
-        #owner;
-        #form;
-        #log;
-        */
-
+        this.#reset();
     }
 
     /**
@@ -2205,8 +2202,6 @@ export class Document {
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
-                    me.#log = undefined; //todo: hacer un metodo q limpie lo q haya q limpiar, llamarlo desde nodeEvent tb
-
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
@@ -2220,6 +2215,7 @@ export class Document {
                                 reject(err);
                             }
 
+                            me.#reset();
                             resolve(me);
                         },
                         reject
