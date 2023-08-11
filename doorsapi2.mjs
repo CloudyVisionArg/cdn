@@ -1955,13 +1955,11 @@ export class Document {
 
         if (name) {
             // Devuelve un field
-            var field;
-            field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-            if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            debugger;
+            var field = me.fields().get(name);
             if (field) {
-                var ret = new Field(field, me);
-                if (value != undefined) ret.value = value;
-                return ret;
+                if (value != undefined) field.value = value;
+                return field;
             } else {
                 if (name != '[NULL]') console.log('Field not found: ' + name);
                 return undefined;
