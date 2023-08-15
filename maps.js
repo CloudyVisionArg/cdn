@@ -177,7 +177,6 @@ var maps = {
                 }
             };
 
-            debugger;
             // Evento como attr del INPUT
             onch = el.getAttribute('onplacechange');
             if (onch) eval(onch + '(place, addressComponents)');
