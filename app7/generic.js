@@ -1658,14 +1658,13 @@ async function saveDoc(exitOnSuccess) {
         var context = { exitOnSuccess };
 
         // Evento beforeSave
-        await $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
         if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
         if (ev) await evalCode(ev);
 
-        debugger;
         await doc.save();
         docJson = doc.toJSON();
         doc_id = doc.id;
