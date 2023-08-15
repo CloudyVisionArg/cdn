@@ -1658,7 +1658,7 @@ async function saveDoc(exitOnSuccess) {
         var context = { exitOnSuccess };
 
         // Evento beforeSave
-        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        await $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
         if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event BeforeSave
