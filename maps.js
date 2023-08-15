@@ -154,7 +154,6 @@ var maps = {
             $(el).next('span').css('display', place ? 'block' : 'none');
         };
 
-        debugger;
         if (!el.initializing) {
             var componentName = {
                 street_number: 'short_name',
