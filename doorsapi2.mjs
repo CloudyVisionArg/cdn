@@ -403,7 +403,7 @@ export class Session {
                     let ver = await res.text();
                     ver = ver.split('.');
                     ver.forEach((el, ix) => {
-                        ver[ix] = me.session.utils.lZeros(el, 3);
+                        ver[ix] = me.utils.lZeros(el, 3);
                     });
                     me.#doorsVersion = vrer.join('.');
                     resolve(me.#doorsVersion);
