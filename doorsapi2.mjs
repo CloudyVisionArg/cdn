@@ -4499,7 +4499,7 @@ export class Utilities {
                 body: data,
             })
 
-            if (!res.ok) {
+            if (res.ok) {
                 var txt = await res.text();
                 debugger;
 
