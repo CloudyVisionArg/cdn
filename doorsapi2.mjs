@@ -4259,7 +4259,7 @@ export class User extends Account {
 export class Utilities {
     #session;
     #cache;
-    #execApiAddAcao;
+    #execapiAcao;
     
     constructor(session) {
         this.#session = session;
@@ -4459,16 +4459,16 @@ export class Utilities {
     }
 
     /**
-    Hace una peticion de prueba a execApi.asp para determinar si hay agregar
+    Hace una peticion de prueba a execapi.asp para determinar si hay agregar
     el header Access-Control-Allow-Origin. Esto es porque si el server lo esta
     haciendo y la execApi lo agrega de nuevo da el error
     Access-Control-Allow-Origin cannot contain more than one origin.
     */
-    get execApiAddAcao() {
+    get execapiAcao() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            if (me.#execApiAddAcao != undefined) {
-                resolve(me.#execApiAddAcao);
+            if (me.#execapiAcao != undefined) {
+                resolve(me.#execapiAcao);
 
             } else {
                 // Peticion de prueba sin ACAO
@@ -4481,12 +4481,12 @@ export class Utilities {
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
                         body: data,
                     });
-                    me.#execApiAddAcao = 0;
+                    me.#execapiAcao = 0;
 
                 } catch(err) {
-                    me.#execApiAddAcao = 1;
+                    me.#execapiAcao = 1;
                 }
-                resolve(me.#execApiAddAcao);
+                resolve(me.#execapiAcao);
             }
         });
     }
@@ -4502,7 +4502,7 @@ export class Utilities {
         //todo: soporte para apiKey
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
             '&code=' + encodeURIComponent(code) +
-            '&addACAO=' + encodeURIComponent(await this.execApiAddAcao);
+            '&addACAO=' + encodeURIComponent(await this.execapiAcao);
     
         var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
             method: 'POST',
