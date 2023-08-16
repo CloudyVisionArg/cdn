@@ -263,6 +263,7 @@ export class Session {
     #push;
     #instance;
     #node;
+    #doorsVersion;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -276,6 +277,7 @@ export class Session {
         this.#currentUser = undefined;
         this.#instance = undefined;
         this.#utils = undefined;
+        this.#doorsVersion = undefined;
     }
 
     /**
@@ -386,6 +388,25 @@ export class Session {
                 },
                 reject
             )
+        });
+    }
+
+    get doorsVersion() {
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            if (me.#doorsVersion != undefined) {
+                resolve(me.#doorsVersion);
+
+            } else {
+                try {
+                    var res = await dSession.utils.execVbs('Response.Write dSession.Version');
+                    me.#doorsVersion = await res.text();
+                    resolve(me.#doorsVersion);
+
+                } catch(err) {
+                    reject(err);
+                }
+            }        
         });
     }
 
@@ -1720,6 +1741,7 @@ export class Document {
     /**
     Este metodo no lo hago privado xq se llama desde Session.
     Dispara el evento si esta configurado en el folder.
+    todo: no disparar si la version es 7.4.38.1 o superior
     */
     async _dispatchEvent(event) {
         var me = this;
@@ -4444,22 +4466,19 @@ export class Utilities {
     */
     get execApiAddAcao() {
         var me = this;
+        return new Promise(async (resolve, reject) => {
+            if (me.#execApiAddAcao != undefined) {
+                resolve(me.#execApiAddAcao);
 
-        if (me.#execApiAddAcao != undefined) {
-            return me.#execApiAddAcao;
-
-        } else {
-            return new Promise(async (resolve, reject) => {
+            } else {
                 // Peticion de prueba sin ACAO
                 var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
                 '&code=' + encodeURIComponent('Response.Write "OK"');
-
+                
                 try {
                     var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                        },
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
                         body: data,
                     });
                     me.#execApiAddAcao = 0;
@@ -4467,10 +4486,9 @@ export class Utilities {
                 } catch(err) {
                     me.#execApiAddAcao = 1;
                 }
-
                 resolve(me.#execApiAddAcao);
-            });
-        }
+            }
+        });
     }
 
     /**
