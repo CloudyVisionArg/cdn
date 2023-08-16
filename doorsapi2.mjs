@@ -1746,14 +1746,11 @@ export class Document {
     /**
     Este metodo no lo hago privado xq se llama desde Session.
     Dispara el evento si esta configurado en el folder.
-    todo: no disparar si la version es 7.4.38.1 o superior
     */
     async _dispatchEvent(event) {
+        // A partir de la version 7.4.38.1 los dispara el server
         var ver = await this.session.doorsVersion;
-        if (ver >= '007.004.038.001') {
-            debugger;
-            return;
-        }
+        if (ver >= '007.004.038.001') return;
 
         var me = this;
         var fld = await me.parent;
