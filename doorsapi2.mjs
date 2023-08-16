@@ -4486,6 +4486,7 @@ export class Utilities {
     Access-Control-Allow-Origin cannot contain more than one origin.
     */
     get execApiAcao() {
+        debugger;
         var me = this;
 
         if (me.#execApiAcao != undefined) {
