@@ -4436,7 +4436,43 @@ export class Utilities {
         return JSON.stringify(err);
     }
 
-    
+    /**
+    Hace una peticion de prueba a execApi.asp para determinar si hay agregar
+    el header Access-Control-Allow-Origin. Esto es porque si el server lo esta
+    haciendo y la execApi lo agrega de nuevo da el error
+    Access-Control-Allow-Origin cannot contain more than one origin.
+    */
+    get execApiAddAcao() {
+        var me = this;
+
+        if (me.#execApiAddAcao != undefined) {
+            return me.#execApiAddAcao;
+
+        } else {
+            return new Promise(async (resolve, reject) => {
+                // Peticion de prueba sin ACAO
+                var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
+                '&code=' + encodeURIComponent('Response.Write "OK"');
+
+                try {
+                    var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                        },
+                        body: data,
+                    });
+                    me.#execApiAddAcao = 0;
+
+                } catch(err) {
+                    me.#execApiAddAcao = 1;
+                }
+
+                resolve(me.#execApiAddAcao);
+            });
+        }
+    }
+
     /**
     Metodo deprecado, usar dSession.node.exec
     */
@@ -4476,43 +4512,6 @@ export class Utilities {
     
         } else {
             return res;
-        }
-    }
-
-    /**
-    Hace una peticion de prueba a execApi.asp para determinar si hay agregar
-    el header Access-Control-Allow-Origin. Esto es porque si el server lo esta
-    haciendo y la execApi lo agrega de nuevo da el error
-    Access-Control-Allow-Origin cannot contain more than one origin.
-    */
-    get execApiAddAcao() {
-        debugger;
-        var me = this;
-
-        if (me.#execApiAddAcao != undefined) {
-            return me.#execApiAddAcao;
-
-        } else {
-            return new Promise(async (resolve, reject) => {
-                var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
-                '&code=' + encodeURIComponent('Response.Write "OK"');
-
-                try {
-                    var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                        },
-                        body: data,
-                    });
-                    me.#execApiAddAcao = 0;
-
-                } catch(err) {
-                    me.#execApiAddAcao = 1;
-                }
-
-                resolve(me.#execApiAddAcao);
-            });
         }
     }
 
