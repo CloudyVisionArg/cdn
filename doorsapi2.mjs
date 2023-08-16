@@ -275,6 +275,7 @@ export class Session {
         this.#authToken = undefined;
         this.#currentUser = undefined;
         this.#instance = undefined;
+        this.#utils = undefined;
     }
 
     /**
@@ -4236,7 +4237,7 @@ export class User extends Account {
 export class Utilities {
     #session;
     #cache;
-    #execVbsACAO;
+    #execApiAcao;
     
     constructor(session) {
         this.#session = session;
@@ -4447,7 +4448,7 @@ export class Utilities {
         //todo: soporte para apiKey
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
             '&code=' + encodeURIComponent(code) +
-            '&addACAO=' + encodeURIComponent(await this.execVbsACAO);
+            '&addACAO=' + encodeURIComponent(await this.execApiAcao);
     
         var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
             method: 'POST',
@@ -4477,6 +4478,53 @@ export class Utilities {
             return res;
         }
     }
+
+    /**
+    Hace una peticion de prueba a execApi.asp para determinar si hay agregar
+    el header Access-Control-Allow-Origin. Esto es porque si el server lo esta
+    haciendo y la execApi lo agrega de nuevo da el error
+    Access-Control-Allow-Origin cannot contain more than one origin.
+    */
+
+    get execApiAcao() {
+        return new Promise(async (resolve, reject) => {
+            var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
+            '&code=' + encodeURIComponent('Response.Write "OK"');
+
+            var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                },
+                body: data,
+            })
+
+            if (!res.ok) {
+                var txt = await res.text();
+                debugger;
+
+                var err;
+                try {
+                    var js = JSON.parse(txt);
+                    err = new Error();
+                    err.name = js.source;
+                    err.message = js.description + ' at line ' + js.line + '\n' + js.code;
+                    err.lineNumber = js.line;
+                } catch (e) {
+                    console.error(e);
+                    err = new Error(txt);
+                }
+                throw err;
+
+            } else {
+                debugger;
+                return res;
+            }
+
+        });
+    }
+
+
 
     getGuid() {
         var uuid = '', i, random;
