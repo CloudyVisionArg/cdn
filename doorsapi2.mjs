@@ -4443,6 +4443,7 @@ export class Utilities {
     }
 
     async execVbs(code) {
+        //todo: soporte para apiKey
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
             '&code=' + encodeURIComponent(code);
     
