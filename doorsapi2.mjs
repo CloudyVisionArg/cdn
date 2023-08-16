@@ -1989,7 +1989,6 @@ export class Document {
 
         if (name) {
             // Devuelve un field
-            debugger;
             var field = me.fields().get(name);
             if (field) {
                 if (value != undefined) field.value = value;
