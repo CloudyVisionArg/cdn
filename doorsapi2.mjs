@@ -400,7 +400,12 @@ export class Session {
             } else {
                 try {
                     var res = await dSession.utils.execVbs('Response.Write dSession.Version');
-                    me.#doorsVersion = await res.text();
+                    let ver = await res.text();
+                    ver = ver.split('.');
+                    ver.forEach((el, ix) => {
+                        ver[ix] = me.session.utils.lZeros(el, 3);
+                    });
+                    me.#doorsVersion = vrer.join('.');
                     resolve(me.#doorsVersion);
 
                 } catch(err) {
@@ -1744,6 +1749,12 @@ export class Document {
     todo: no disparar si la version es 7.4.38.1 o superior
     */
     async _dispatchEvent(event) {
+        var ver = await this.session.doorsVersion;
+        if (ver >= '007.004.038.001') {
+            debugger;
+            return;
+        }
+
         var me = this;
         var fld = await me.parent;
         var code = {};
@@ -4491,10 +4502,8 @@ export class Utilities {
         });
     }
 
-    /**
-    Metodo deprecado, usar dSession.node.exec
-    */
     async execNode(options) {
+        console.log('Metodo deprecado, usar dSession.node.exec');
         return this.session.node.exec(options);
     }
 
@@ -4546,10 +4555,8 @@ export class Utilities {
         return uuid;
     }
 
-    /**
-    Metodo deprecado, usar dSession.node.inNode
-    */
     inNode() {
+        console.log('Metodo deprecado, usar dSession.node.inNode');
         return this.session.node.inNode();
     }
 
