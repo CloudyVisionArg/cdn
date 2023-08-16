@@ -4236,6 +4236,7 @@ export class User extends Account {
 export class Utilities {
     #session;
     #cache;
+    #execVbsACAO;
     
     constructor(session) {
         this.#session = session;
@@ -4445,7 +4446,8 @@ export class Utilities {
     async execVbs(code) {
         //todo: soporte para apiKey
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
-            '&code=' + encodeURIComponent(code);
+            '&code=' + encodeURIComponent(code) +
+            '&addACAO=' + encodeURIComponent(await this.execVbsACAO);
     
         var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
             method: 'POST',
