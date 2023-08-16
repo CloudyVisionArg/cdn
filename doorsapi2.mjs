@@ -405,7 +405,7 @@ export class Session {
                     ver.forEach((el, ix) => {
                         ver[ix] = me.utils.lZeros(el, 3);
                     });
-                    me.#doorsVersion = vrer.join('.');
+                    me.#doorsVersion = ver.join('.');
                     resolve(me.#doorsVersion);
 
                 } catch(err) {
