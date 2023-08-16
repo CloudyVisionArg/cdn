@@ -4494,19 +4494,23 @@ export class Utilities {
 
         } else {
             return new Promise(async (resolve, reject) => {
-                    
                 var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
                 '&code=' + encodeURIComponent('Response.Write "OK"');
 
-                var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                    },
-                    body: data,
-                })
+                try {
+                    var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                        },
+                        body: data,
+                    });
+                    me.#execApiAcao = 0;
+                    
+                } catch(err) {
+                    me.#execApiAcao = 1;
+                }
 
-                me.#execApiAcao = res.ok ? 0 : 1;
                 resolve(me.#execApiAcao);
             });
         }
