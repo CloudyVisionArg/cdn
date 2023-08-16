@@ -4461,7 +4461,7 @@ export class Utilities {
     /**
     Hace una peticion de prueba a execapi.asp para determinar si hay agregar
     el header Access-Control-Allow-Origin. Esto es porque si el server lo esta
-    haciendo y la execApi lo agrega de nuevo da el error
+    haciendo y la execapi lo agrega de nuevo da el error
     Access-Control-Allow-Origin cannot contain more than one origin.
     */
     get execapiAcao() {
