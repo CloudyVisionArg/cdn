@@ -4485,46 +4485,31 @@ export class Utilities {
     haciendo y la execApi lo agrega de nuevo da el error
     Access-Control-Allow-Origin cannot contain more than one origin.
     */
-
     get execApiAcao() {
-        return new Promise(async (resolve, reject) => {
-            var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
-            '&code=' + encodeURIComponent('Response.Write "OK"');
+        var me = this;
 
-            var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: data,
-            })
+        if (me.#execApiAcao != undefined) {
+            return me.#execApiAcao;
 
-            if (res.ok) {
-                var txt = await res.text();
-                debugger;
+        } else {
+            return new Promise(async (resolve, reject) => {
+                    
+                var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
+                '&code=' + encodeURIComponent('Response.Write "OK"');
 
-                var err;
-                try {
-                    var js = JSON.parse(txt);
-                    err = new Error();
-                    err.name = js.source;
-                    err.message = js.description + ' at line ' + js.line + '\n' + js.code;
-                    err.lineNumber = js.line;
-                } catch (e) {
-                    console.error(e);
-                    err = new Error(txt);
-                }
-                throw err;
+                var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    },
+                    body: data,
+                })
 
-            } else {
-                debugger;
-                return res;
-            }
-
-        });
+                me.#execApiAcao = res.ok ? 0 : 1;
+                resolve(me.#execApiAcao);
+            });
+        }
     }
-
-
 
     getGuid() {
         var uuid = '', i, random;
