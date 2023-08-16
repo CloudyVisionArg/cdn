@@ -4237,7 +4237,7 @@ export class User extends Account {
 export class Utilities {
     #session;
     #cache;
-    #execApiAcao;
+    #execApiAddAcao;
     
     constructor(session) {
         this.#session = session;
@@ -4448,7 +4448,7 @@ export class Utilities {
         //todo: soporte para apiKey
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
             '&code=' + encodeURIComponent(code) +
-            '&addACAO=' + encodeURIComponent(await this.execApiAcao);
+            '&addACAO=' + encodeURIComponent(await this.execApiAddAcao);
     
         var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
             method: 'POST',
@@ -4485,12 +4485,12 @@ export class Utilities {
     haciendo y la execApi lo agrega de nuevo da el error
     Access-Control-Allow-Origin cannot contain more than one origin.
     */
-    get execApiAcao() {
+    get execApiAddAcao() {
         debugger;
         var me = this;
 
-        if (me.#execApiAcao != undefined) {
-            return me.#execApiAcao;
+        if (me.#execApiAddAcao != undefined) {
+            return me.#execApiAddAcao;
 
         } else {
             return new Promise(async (resolve, reject) => {
@@ -4505,13 +4505,13 @@ export class Utilities {
                         },
                         body: data,
                     });
-                    me.#execApiAcao = 0;
-                    
+                    me.#execApiAddAcao = 0;
+
                 } catch(err) {
-                    me.#execApiAcao = 1;
+                    me.#execApiAddAcao = 1;
                 }
 
-                resolve(me.#execApiAcao);
+                resolve(me.#execApiAddAcao);
             });
         }
     }
