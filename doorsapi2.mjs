@@ -2003,10 +2003,10 @@ export class Document {
             if (!me.#fieldsMap) {
                 var map = new DoorsMap();
                 me.#json.HeadFields.forEach(el => {
-                    map.set(el.Name, new Field(el, me.session));
+                    map.set(el.Name, new Field(el, me));
                 });
                 me.#json.CustomFields.forEach(el => {
-                    map.set(el.Name, new Field(el, me.session));
+                    map.set(el.Name, new Field(el, me));
                 });
                 me.#fieldsMap = map;
             }
