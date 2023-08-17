@@ -399,7 +399,7 @@ export class Session {
 
             } else {
                 try {
-                    var res = await dSession.utils.execVbs('Response.Write dSession.Version');
+                    var res = await me.utils.execVbs('Response.Write dSession.Version');
                     let ver = await res.text();
                     ver = ver.split('.');
                     ver.forEach((el, ix) => {
