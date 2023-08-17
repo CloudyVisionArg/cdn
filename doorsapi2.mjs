@@ -1749,7 +1749,6 @@ export class Document {
     */
     async _dispatchEvent(event) {
         // A partir de la version 7.4.38.1 los dispara el server
-        debugger;
         try { var ver = await this.session.doorsVersion } catch(err) {};
         if (ver == undefined || ver >= '007.004.038.001') return;
 
