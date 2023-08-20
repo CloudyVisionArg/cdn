@@ -312,7 +312,7 @@ function conversationControl(opt) {
 			var shouldUpdate = false;
 			if (found) {
 				let foundClone = Gestar.Tools.cloneObject(found);
-				let msgClone = Gestar.Tools.cloneObject(found);
+				let msgClone = Gestar.Tools.cloneObject(pMsg);
 				foundClone.provider = null;
 				msgClone.provider = null;
 				if (JSON.stringify(foundClone) != JSON.stringify(msgClone)) {
@@ -763,9 +763,9 @@ function conversationControl(opt) {
 			}
 			message.body = body;
 			message.date = new Date();
+			$inp.val('');
 			me.dataProvider.sendMessage(message).then(function (obj) {
 				me.insertMsg(obj).then(function () {
-					$inp.val('');
 					inputResize($inp[0]);
 					me.cursorLoading(false);
 				});
