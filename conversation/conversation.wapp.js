@@ -510,8 +510,63 @@ function whatsAppDataProvider(opts){
 
 	this.sendAudio = function (pChat) {
 		this.audioRecorder(function (file) {
-			debugger;
-			me.sendMedia(file, pChat);
+			const previewReader = new FileReader()
+			previewReader.onloadend = function(e){
+				var previewBlob = new Blob([new Uint8Array(e.target.result)],{type: file.type});
+				var previewURL = URL.createObjectURL(previewBlob)
+
+				var $block = $(".modal-in").find(".block")
+
+				var $previewBtnRow = $('<div/>', {
+					class: 'row',
+					style: 'padding-top: 10%'
+				})
+				
+				var $divPreviewAudio = $('<div/>',{
+					style: "width: 100%;",
+				}).appendTo($previewBtnRow);
+				
+				var $audioControl = $('<audio/>',{
+					controls: 'controls',
+					style: "width:90%; margin:0 5% 5px;",
+				}).appendTo($divPreviewAudio)
+				
+				var $srcAudioControl = $('<source/>',{
+					src: previewURL,
+					type: file.type,	
+				}).appendTo($audioControl)	
+					//<source src=""" type="audio/ogg">
+							
+				var $btn = $('<button/>', {
+					class: 'col button button-large button-round button-outline',
+				}).append('Cancelar').appendTo($previewBtnRow);
+				
+				$btn.click(()=>{
+					URL.revokeObjectURL(previewURL);
+					app7.sheet.close(".modal-in");
+					let $modal = $('#wappModal');
+					if($modal.length > 0){
+						$modal.modal("hide");
+					}
+				});
+				
+				var $btnEnviar = $('<button/>', {
+					class: 'col button button-large button-round button-fill',
+				}).append('Enviar').appendTo($previewBtnRow);
+				
+				$previewBtnRow.appendTo($block);				
+				debugger;
+				$btnEnviar.on("click",()=>{
+					URL.revokeObjectURL(previewURL);
+					whatsAppProvider.sendMediaFromFile(file, pChat);
+					app7.sheet.close(".modal-in");
+					let $modal = $('#wappModal');
+					if($modal.length > 0){
+						$modal.modal("hide");
+					}
+				});
+			};
+			previewReader.readAsArrayBuffer(file)
         });
 	};
 
@@ -519,6 +574,7 @@ function whatsAppDataProvider(opts){
 		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
 		me.getPicture(source,
 			function (file) {
+						
 				me.sendMedia(file, pChat);
 			}
 		)
@@ -980,7 +1036,7 @@ function whatsAppDataProvider(opts){
 	this.audioRecorder = function(pCallback) {
 		var mediaRec, interv, timer, save;
 		save = false;
-	
+		
 		var $sheet = $('<div/>', {
 			class: 'sheet-modal',
 		});
@@ -1022,9 +1078,10 @@ function whatsAppDataProvider(opts){
 			class: 'col button button-large button-round button-fill',
 		}).append('Guardar').appendTo($saveBtnRow);
 		
-		$btn.click(saveAction);
+		$btn.click(saveAction); 
 		
-
+	
+		
 		var sheet = null, $modal = null;
 		if(typeof(cordova) == "object"){
 			// Abre el sheet
@@ -1042,24 +1099,25 @@ function whatsAppDataProvider(opts){
 			$modal.modal('show');
 		}
 		
-
+		
 		//throw "Not implemented";
 		function record(){
 			mediaRec = new recorder(null);
 			mediaRec.record().then(function(file){
-				debugger;
-				if (save) {
+				if(save){
+					$timer.hide()
+					$saveBtnRow.hide();
 					pCallback(file);
+				}else{
+					if(sheet){
+						sheet.close();
+					}
+					if($modal){
+						$modal.modal("hide");
+					}
 				}
-				if(sheet){
-					sheet.close();
-				}
-				if($modal){
-					$modal.modal("hide");
-				}
-				
 			},function(error){
-
+				
 			});
 			$recBtnRow.hide();
 			$saveBtnRow.show();
@@ -1088,6 +1146,7 @@ function whatsAppDataProvider(opts){
 			$recBtnRow.show();
 			$saveBtnRow.hide();
 		}
+		
 	}
 }
 
