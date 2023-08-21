@@ -509,6 +509,7 @@ function whatsAppDataProvider(opts){
 	};
 
 	this.sendAudio = function (pChat) {
+		var me = this;
 		this.audioRecorder(function (file) {
 			const previewReader = new FileReader()
 			previewReader.onloadend = function(e){
@@ -558,7 +559,7 @@ function whatsAppDataProvider(opts){
 				debugger;
 				$btnEnviar.on("click",()=>{
 					URL.revokeObjectURL(previewURL);
-					whatsAppProvider.sendMediaFromFile(file, pChat);
+					me.sendMediaFromFile(file, pChat);
 					app7.sheet.close(".modal-in");
 					let $modal = $('#wappModal');
 					if($modal.length > 0){
@@ -574,7 +575,6 @@ function whatsAppDataProvider(opts){
 		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
 		me.getPicture(source,
 			function (file) {
-						
 				me.sendMedia(file, pChat);
 			}
 		)
@@ -632,19 +632,26 @@ function whatsAppDataProvider(opts){
         let me = this;
 		if (typeof(cordova) == 'object') {
 			getFile(pFile.localURL).then(
-				me.sendMediaFromFile,
+				function(){
+					me.sendMediaFromFile.call(me, ...arguments);
+				},
 				function (err) {
 					//wapp.cursorLoading(false);
 					debugger;
 				}
 			);
 		} else {
-			me.sendMediaFromFile(pFile,pChat);
+			//me.sendMediaFromFile(pFile,pChat);
+			me.sendMediaFromFile.call(me, pFile, pChat);
 		};
 	};
 	
 	this.sendMediaFromFile = function(file2, pChat) {
+		//var me = this; se pierde la referencia y en este caso this queda apuntando a window en vez del dataprovider 
+		//var me = whatsAppProvider;
+		//se vuelve a cambiar porque se puede obtener la referencia con el this, si se llama con el ".call"
 		var me = this;
+		debugger;
 		var reader = new FileReader();
 		reader.onloadend = function (e) {
 			var blobData = new Blob([this.result], { type: file2.type });
@@ -951,7 +958,7 @@ function whatsAppDataProvider(opts){
 						{
 							text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
 							onClick: function () {
-								me.sendAudio(mediaActions.params.chatEl);
+								me.sendAudio.call(me, mediaActions.params.chatEl);
 							}
 						},
 						{
@@ -1036,7 +1043,7 @@ function whatsAppDataProvider(opts){
 	this.audioRecorder = function(pCallback) {
 		var mediaRec, interv, timer, save;
 		save = false;
-		
+	
 		var $sheet = $('<div/>', {
 			class: 'sheet-modal',
 		});
@@ -1078,10 +1085,9 @@ function whatsAppDataProvider(opts){
 			class: 'col button button-large button-round button-fill',
 		}).append('Guardar').appendTo($saveBtnRow);
 		
-		$btn.click(saveAction); 
+		$btn.click(saveAction);
 		
-	
-		
+
 		var sheet = null, $modal = null;
 		if(typeof(cordova) == "object"){
 			// Abre el sheet
@@ -1099,7 +1105,7 @@ function whatsAppDataProvider(opts){
 			$modal.modal('show');
 		}
 		
-		
+
 		//throw "Not implemented";
 		function record(){
 			mediaRec = new recorder(null);
@@ -1117,7 +1123,7 @@ function whatsAppDataProvider(opts){
 					}
 				}
 			},function(error){
-				
+
 			});
 			$recBtnRow.hide();
 			$saveBtnRow.show();
@@ -1146,7 +1152,6 @@ function whatsAppDataProvider(opts){
 			$recBtnRow.show();
 			$saveBtnRow.hide();
 		}
-		
 	}
 }
 
