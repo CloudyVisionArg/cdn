@@ -469,6 +469,15 @@ function conversationControl(opt) {
 				</div>
 			`);
 
+			//Definicion y creado del footer del control 
+			//Se dibujan por defecto:
+			// --- Boton de tipo de mensaje (y su arbol de acciones rapidas)
+			// --- Emojis
+			// --- Caja de texto
+			// --- Boton enviar
+			//En caso de haber enviado "moreOptions" en las opciones, se renderizará primero esto en un boton al principio de todo
+
+			//Contenedor completo del footer
 			var $reply = $('<div/>', {
 				class: 'wapp-footer',
 			}).appendTo($cont);
@@ -509,65 +518,7 @@ function conversationControl(opt) {
 					$menuContainer.html(html);
 				}
 			}
-
-			// Boton MessageType (media)
-			var $div = $('<div/>', {
-				class: 'wapp-button',
-				style: 'width: 10%'
-			}).appendTo($reply);
-
-			var $media;
-
-			let defaultMsgClass = "";
-			let defaultMsgType = "";
-			let defaultIcon = "fa-pencil-square-o";
-			if (me.options.defaultQuickMessageType != null) {
-				defaultMsgClass = me.options.defaultQuickMessageType;
-			} else {
-				defaultMsgClass = me.dataProvider.msgproviders[0].supportedTypes[0];
-			}
-			if (defaultMsgClass != "") {
-				let msgDefault = null;
-				try {
-					eval("msgDefault = new " + defaultMsgClass + "()");
-					defaultMsgType = msgDefault.type;
-					defaultIcon = msgDefault.icon;
-				} catch (error) {
-					//Do nothing
-				}
-			}
-
-			if (typeof (cordova) != 'object') {
-				// Web
-				var $dropup = $('<div/>', {
-					class: 'dropup message-type-button',
-					id: "messageTypeButton",
-					"data-message-type": defaultMsgType,
-					"data-message-class": defaultMsgClass,
-				}).appendTo($div);
-
-				$media = $('<i/>', {
-					class: 'fa ' + defaultIcon,
-					'data-toggle': 'dropdown',
-					'data-bs-toggle': 'dropdown',
-				}).appendTo($dropup);
-
-				var $menu = $('<ul/>', {
-					class: 'dropdown-menu',
-				}).appendTo($dropup);
-
-				insertWebMessageTypesOptionsMenu($menu);
-
-			} else {
-				// Cordova
-				var $dropup = $('<div/>', {
-					class: 'dropup message-type-button',
-					id: "messageTypeButton",
-					"data-message-type": defaultMsgType,
-					"data-message-class": defaultMsgClass,
-				}).appendTo($div);
-				insertMobileMessageTypeOptionsMenu($dropup);
-			}
+			renderQuickActionsMenu(me, reply);
 
 			// Boton Emoji
 			if (typeof (cordova) != 'object') {
@@ -638,6 +589,67 @@ function conversationControl(opt) {
 			ready(me);
 		}
 	};
+
+	var renderQuickActionsMenu = function(me, $footerContainer){
+		// Boton MessageType (media)
+		var $div = $('<div/>', {
+			class: 'wapp-button',
+			style: 'width: 10%'
+		}).appendTo($footerContainer);
+
+		var $media;
+
+		let defaultMsgClass = "";
+		let defaultMsgType = "";
+		let defaultIcon = "fa-pencil-square-o";
+		if (me.options.defaultQuickMessageType != null) {
+			defaultMsgClass = me.options.defaultQuickMessageType;
+		} else {
+			defaultMsgClass = me.dataProvider.msgproviders[0].supportedTypes[0];
+		}
+		if (defaultMsgClass != "") {
+			let msgDefault = null;
+			try {
+				eval("msgDefault = new " + defaultMsgClass + "()");
+				defaultMsgType = msgDefault.type;
+				defaultIcon = msgDefault.icon;
+			} catch (error) {
+				//Do nothing
+			}
+		}
+
+		if (typeof (cordova) != 'object') {
+			// Web
+			var $dropup = $('<div/>', {
+				class: 'dropup message-type-button',
+				id: "messageTypeButton",
+				"data-message-type": defaultMsgType,
+				"data-message-class": defaultMsgClass,
+			}).appendTo($divContainer);
+
+			$media = $('<i/>', {
+				class: 'fa ' + defaultIcon,
+				'data-toggle': 'dropdown',
+				'data-bs-toggle': 'dropdown',
+			}).appendTo($dropup);
+
+			var $menu = $('<ul/>', {
+				class: 'dropdown-menu',
+			}).appendTo($dropup);
+
+			insertWebMessageTypesOptionsMenu($menu);
+
+		} else {
+			// Cordova
+			var $dropup = $('<div/>', {
+				class: 'dropup message-type-button',
+				id: "messageTypeButton",
+				"data-message-type": defaultMsgType,
+				"data-message-class": defaultMsgClass,
+			}).appendTo($div);
+			insertMobileMessageTypeOptionsMenu($dropup);
+		}
+	}
 
 	var startCheckingForMessages = function () {
 		// Carga mensajes nuevos cada 5 segs
