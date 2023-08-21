@@ -1,22 +1,21 @@
 /**
- * Libreria de mensajería a través de conector de Whatsapp para conversationcontrol.v2.js 
+ * Libreria de mensajería a través de conector de Whatsapp utilizando como base conversationcontrol.js 
  * Requiere bootstrap.js, Doorsapi.js
  * Bootstrap.js: Ventanas modales
  * Doorsapi.js: Busqueda de datos
  */
-var wappOpts = {
-    rootFldId: 5318,
-    formula: "FROM = '+5493876112574' OR TO = '+5493876112574'",
-    sessionStatusContainer: "",
-    modalContainer: "",
-	from: "+539123456789",
-	to: "+5493876112574",
-    loggedUser:null,
-    googleMapsKey: null,
-	codelibUrl: null,
-    s3Key: 'U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==',
-	putTemplateRequested: null
-};
+
+var wappRequiredScripts = [];
+wappRequiredScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+wappRequiredScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
+wappRequiredScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+wappRequiredScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
+wappRequiredScripts.push({ id: 'lib-moment' });
+wappRequiredScripts.push({ id: 'emojis'});
+wappRequiredScripts.push({ id: 'doorsapi'});
+wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.js' });
+wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.css' });
+wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversation.media.js' });
 
 var whatsAppProvider = null; //new whatsAppDataProvider(wappOpts);
 
@@ -1342,8 +1341,111 @@ function wappMsg(){
 	};
 }
 
+async function newWhatsAppChatControl(opts){
+	let phoneField = opts.phoneField;
+	let refDocId = opts.docId;
+	let refFldId = opts.fldId;
+	let s3Key = opts.s3Key;
+	let container = opts.container;
 
+	await include(wappRequiredScripts);
 
+	let wappFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
+    if (!wappFolderId) alert('WHATSAPP_CONNECTOR_FOLDER setting missing');
+
+    let wappFolder = await dSession.folders(wappFolderId);
+    let fldMsg = await wappFolder.folder('messages');
+    let fldNumbers = await wappFolder.folder('numbers');
+    let fld = await dSession.folders(parseInt(refFldId));
+
+    let allProms = [];
+    allProms.push(fldNumbers.search({
+        fields:"*",
+        formula:"default = 1"
+    }));
+    allProms.push(fld.search({
+        fields:"*",
+        formula:"doc_id = " + refDocId
+    }));
+
+    Promise.allSettled(allProms).then(async proms=>{
+        let numbers = proms[0].value;
+        let docs = proms[1].value;
+        let mobilePhone = null;
+        let from = null;
+        if(docs.length > 0){
+            mobilePhone = docs[0][phoneField.toUpperCase()];
+        }
+        if(numbers.length > 0){
+            from = numbers[0]["NUMBER"];
+        }
+
+		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${refDocId}" style="max-height: 100vh;"></div>`);
+
+		mobilePhone = mobilePhone != null && mobilePhone.length == 10 ? "+549" + mobilePhone : mobilePhone + "";
+        let opts = {
+            rootFldId: wappFolderId,
+            msgsFldId: fldMsg.id,
+            from: from,
+            selector: 'div.chat-container[data-chat-id=' + refDocId + ']',
+            sessionStatusContainer: 'div.chat-container[data-chat-id=' + refDocId + '] .chat-header .whatsapp-status-container',
+            mobilePhone: mobilePhone,
+            s3Key: s3Key,
+            onPutTemplateRequested: function(txt){
+				onWhatsappPutTemplate(refDocId,txt);
+			}
+        };
+		let loggedUser = await dSession.currentUser;
+		let userData = {
+			Name: loggedUser.name,
+			AccId: loggedUser.id
+		};
+    
+		
+		let reversedNum = mobilePhone.slice(-8).split("").reverse().join("");
+		var wappOpts = {
+			rootFldId: wappFolderId,
+			messagesFolder: fldMsg.id,
+			formula: "FROM_NUMREV LIKE '" + reversedNum + "%' OR TO_NUMREV LIKE '" + reversedNum + "%'",
+			sessionStatusContainer: 'div.chat-container[data-chat-id=' + refDocId + '] .chat-header .whatsapp-status-container',
+			from: from,
+			to: mobilePhone,
+			loggedUser: userData,
+			googleMapsKey: null, //TODO
+			s3Key: s3Key,
+			putTemplateRequested: function(txt){
+				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt);
+			}
+		};
+		let providers = [];
+		var wappProvider = getWhatsAppDataProvider(wappOpts);
+		providers.push(wappProvider);
+		var dataProvider = new conversationDataProvider();
+		dataProvider.msgproviders = providers;
+		let conversationOptions = {};
+		conversationOptions.dataProvider = dataProvider;
+		let quickMessageTypes = ["wappMsg"];
+		conversationOptions.headerHtml = getHeaderHtml(mobilePhone);
+		conversationOptions.subheaderHtml = "";
+		conversationOptions.selector = 'div.chat-container[data-chat-id=' + refDocId + ']';
+		conversationOptions.quickMessageTypes = quickMessageTypes;
+		conversationOptions.defaultQuickMessageType = "wappMsg";
+		conversationOptions.quickMessageChanged = function(newMessageType){
+			if(newMessageType == "wappMsg"){
+				//TODO: What??
+				$("div.cust-chat .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
+				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu li'));
+			}
+		};
+		let control = new conversationControl(conversationOptions);
+		return control;
+    });
+}
+
+function onWhatsappPutTemplate(chatInputSelector, text){
+    let input =  $(chatInputSelector);
+    insertAtCaret(input[0], text);
+}
 
 /*
 todo:
@@ -1424,3 +1526,17 @@ $(document).ready(function () {
 
 	}
 });
+
+
+
+/*
+function newProxAccionControl(pId,pLabel,pOptions){
+	var arrScripts = [];
+	//Requiere JQuery, moment, Bootrap y bootstrap-datetimepicker
+	arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+	arrScripts.push({ id: 'lib-moment' });
+	arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
+	arrScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+	arrScripts.push({ id: 'tempus-dominus', depends: ['jquery', 'bootstrap-css', 'lib-moment'], src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js' });
+	arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
+}*/
