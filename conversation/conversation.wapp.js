@@ -1424,7 +1424,29 @@ async function newWhatsAppChatControl(opts){
 		dataProvider.msgproviders = providers;
 		let conversationOptions = {};
 		conversationOptions.dataProvider = dataProvider;
-		let quickMessageTypes = ["wappMsg"];
+		let quickMessageTypes = [  
+			{
+				name: 'Whatsapp',
+				type: "wappMsg",
+				children: [
+					{
+						name: 'Audio',
+						type: "wappMsg",
+						children: null
+					},
+					{
+						name: 'Archivo',
+						type: "wappMsg",
+						children: null
+					},
+					{
+						name: "Plantilla",
+						type: "wappMsg",
+						children: null
+					}
+				]
+			}
+		];
 		conversationOptions.headerHtml = getHeaderHtml(mobilePhone);
 		conversationOptions.subheaderHtml = "";
 		conversationOptions.selector = 'div.chat-container[data-chat-id=' + refDocId + ']';
