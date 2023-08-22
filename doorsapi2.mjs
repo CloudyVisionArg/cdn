@@ -3814,7 +3814,7 @@ export class Node {
     */
     async modCall(options) {
         return await this.exec({
-            code: { repo: 'Global', path: 'server/modproxy.js' },
+            code: { repo: 'Global', path: 'server/modproxy.js', ref: 'main' },
             payload: options,
         });
     }
