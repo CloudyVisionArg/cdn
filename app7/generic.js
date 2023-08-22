@@ -1666,6 +1666,7 @@ async function saveDoc(exitOnSuccess) {
         if (ev) await evalCode(ev);
 
         await doc.save();
+
         docJson = doc.toJSON();
         doc_id = doc.id;
 
