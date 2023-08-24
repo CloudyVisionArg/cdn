@@ -575,7 +575,7 @@ function loadViewSection(pContainer, pCallback) {
         if (order) order = order.substring(2);
 
         folderSearch(fld_id, arrFields.join(', '), formula, order, searchLimit(), maxLen, forceOnline).then(
-            function (res) {
+            async function (res) {
                 if (res.length == 0) {
                     noResults().appendTo(pContainer);
 
