@@ -621,8 +621,8 @@ function loadViewSection(pContainer, pCallback) {
                                 //eval(view.ItemRenderer);
                                 let pipe = {};
                                 eval(`pipe.fn = async () => {\n\n${view.ItemRenderer}\n};`);
-                                await pipe.fn(ctx);
-                                
+                                await pipe.fn();
+
                             } catch (err) {
                                 renderItem({ text: errMsg(err) }, $itemContent);
                             }
