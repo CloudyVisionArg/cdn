@@ -616,6 +616,7 @@ function loadViewSection(pContainer, pCallback) {
                         var $itemContent = getItemContent();
                         $itemContent.appendTo($li);
 
+                        debugger;
                         if (view.ItemRenderer) {
                             try {
                                 eval(view.ItemRenderer);
