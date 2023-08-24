@@ -616,10 +616,13 @@ function loadViewSection(pContainer, pCallback) {
                         var $itemContent = getItemContent();
                         $itemContent.appendTo($li);
 
-                        debugger;
                         if (view.ItemRenderer) {
                             try {
-                                eval(view.ItemRenderer);
+                                //eval(view.ItemRenderer);
+                                let pipe = {};
+                                eval(`pipe.fn = async () => {\n\n${view.ItemRenderer}\n};`);
+                                await pipe.fn(ctx);
+                                
                             } catch (err) {
                                 renderItem({ text: errMsg(err) }, $itemContent);
                             }
