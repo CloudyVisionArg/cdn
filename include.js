@@ -21,7 +21,9 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 305 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 305 });
+    //scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 304 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 296 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 296, hasdep: true });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 296 });
@@ -35,7 +37,6 @@ function registeredScripts() {
     scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
     scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 238 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
