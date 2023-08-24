@@ -618,7 +618,6 @@ function loadViewSection(pContainer, pCallback) {
 
                         if (view.ItemRenderer) {
                             try {
-                                //eval(view.ItemRenderer);
                                 let pipe = {};
                                 eval(`pipe.fn = async () => {\n\n${view.ItemRenderer}\n};`);
                                 await pipe.fn();
