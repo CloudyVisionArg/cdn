@@ -265,6 +265,7 @@ function newDoc(e) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
+    pageEl.crm = {};
 
 	// En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'));
@@ -400,15 +401,11 @@ function pageInit(e, page) {
         })
     }
 
-    //todo: agregar el f7Page y poner dps del evento init o no pisar
-    pageEl.crm = {
-        reloadView,
-        toggleSelectionMode,
-        refreshOnFocus,
-        folder,
-        $navbar,
-        import: importProp,
-    };
+    if (!pageEl.crm) pageEl.crm = {};
+    Object.assign(pageEl.crm, {
+        reloadView, toggleSelectionMode, refreshOnFocus,
+        folder, $navbar, import: importProp, f7Page,
+    });
 }
 
 function taphold(e) {

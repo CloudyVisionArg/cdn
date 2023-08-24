@@ -912,6 +912,7 @@ function getDefaultControl(pField) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
+    pageEl.crm = {};
 
     // En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
