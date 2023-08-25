@@ -1734,7 +1734,7 @@ export class Document {
     #reset() {
         this.#parent = undefined;
         this.#fieldsMap = undefined;
-        /*
+        /* Por si cargue adjuntos para guardar dps de Save
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
         */
