@@ -1734,8 +1734,10 @@ export class Document {
     #reset() {
         this.#parent = undefined;
         this.#fieldsMap = undefined;
+        /*
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
+        */
         this.#properties = undefined;
         this.#userProperties = undefined;
         this.#owner = undefined;
