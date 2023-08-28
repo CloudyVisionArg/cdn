@@ -912,6 +912,7 @@ function getDefaultControl(pField) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
+    pageEl.crm = {};
 
     // En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
@@ -1099,7 +1100,7 @@ async function fillControls() {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
 
-                if (type == 'text') {
+                if (type == 'text' || type == 'email' || type == 'password') {
                     var format = $el.attr('data-numeral');
                     if (f.type == 3 || format) {
                         // Input numeric
@@ -1587,7 +1588,7 @@ async function saveDoc(exitOnSuccess) {
 
                 } else if (el.tagName == 'INPUT') {
                     var type = $el.attr('type').toLowerCase();
-                    if (type == 'text' || type == 'hidden') {
+                    if (type == 'text' || type == 'hidden' || type == 'email' || type == 'password') {
                         if ($el.attr('data-numeral')) {
                             field.value = numeral($el.val()).value();
                         } else {
@@ -1666,6 +1667,7 @@ async function saveDoc(exitOnSuccess) {
         if (ev) await evalCode(ev);
 
         await doc.save();
+
         docJson = doc.toJSON();
         doc_id = doc.id;
 

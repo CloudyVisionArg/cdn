@@ -615,6 +615,7 @@ async function renderControls(pCont, pParent) {
                 $this = newTextarea(ctl['NAME'], label);
                 $this.addClass('mt-3');
                 $input = $this.find('textarea');
+                if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
 
             } else {
                 $this = newInputText(ctl['NAME'], label);
@@ -1112,7 +1113,7 @@ async function fillControls() {
             if (el.tagName == 'INPUT') {
                 let type = $el.attr('type').toLowerCase();
 
-                if (type == 'text') {
+                if (type == 'text' || type == 'email' || type == 'password') {
                     var format = $el.attr('data-numeral');
                     if (f.type == 3 || format) {
                         // Input numeric
@@ -1287,7 +1288,7 @@ async function saveDoc(exitOnSuccess) {
                 
                 } else if (el.tagName == 'INPUT') {
                     var type = $el.attr('type').toLowerCase();
-                    if (type == 'text' || type == 'hidden') {
+                    if (type == 'text' || type == 'hidden' || type == 'email' || type == 'password') {
                         if ($el.attr('data-numeral')) {
                             field.value = numeral($el.val()).value();
                         } else {

@@ -671,8 +671,8 @@ function newAttachments(pId, pLabel) {
             file = inp.files[i];
 
             var $att = renderAtt({
-                Name: file.name,
-                Size: file.size,
+                name: file.name,
+                size: file.size,
             });
             $att.attr('data-att-action', 'save');
             $att[0]._file = file;

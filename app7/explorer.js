@@ -265,6 +265,7 @@ function newDoc(e) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
+    pageEl.crm = {};
 
 	// En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'));
@@ -400,15 +401,11 @@ function pageInit(e, page) {
         })
     }
 
-    //todo: agregar el f7Page y poner dps del evento init o no pisar
-    pageEl.crm = {
-        reloadView,
-        toggleSelectionMode,
-        refreshOnFocus,
-        folder,
-        $navbar,
-        import: importProp,
-    };
+    if (!pageEl.crm) pageEl.crm = {};
+    Object.assign(pageEl.crm, {
+        reloadView, toggleSelectionMode, refreshOnFocus,
+        folder, $navbar, import: importProp, f7Page,
+    });
 }
 
 function taphold(e) {
@@ -578,7 +575,7 @@ function loadViewSection(pContainer, pCallback) {
         if (order) order = order.substring(2);
 
         folderSearch(fld_id, arrFields.join(', '), formula, order, searchLimit(), maxLen, forceOnline).then(
-            function (res) {
+            async function (res) {
                 if (res.length == 0) {
                     noResults().appendTo(pContainer);
 
@@ -621,7 +618,10 @@ function loadViewSection(pContainer, pCallback) {
 
                         if (view.ItemRenderer) {
                             try {
-                                eval(view.ItemRenderer);
+                                let pipe = {};
+                                eval(`pipe.fn = async () => {\n\n${view.ItemRenderer}\n};`);
+                                await pipe.fn();
+
                             } catch (err) {
                                 renderItem({ text: errMsg(err) }, $itemContent);
                             }

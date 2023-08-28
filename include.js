@@ -20,63 +20,56 @@ function registeredScripts() {
     */
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
-    //hola
 
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 282, hasdep: true });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 281 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 280 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 280 });
-	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 280 });
-    /*
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 273, hasdep: true });
-	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 267 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 270 });
-    */
-
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 306 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 305 });
+    //scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
+    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 296 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 296, hasdep: true });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 296 });
+    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 297 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 291 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 290 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 283, hasdep: true });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
-    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 272 });
     scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 267 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 268, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 262 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 262 });
-	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
+    scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
     scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 238 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
-	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
+    scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
-	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
-	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
+    scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 149 });
     scripts.push({ id: 'app7-sade-index', path: '/app7/sade/index.js', version: 149 });
-	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
-	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
-	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
-	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
-	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
-	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
-	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
-	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
-	scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
-	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
-	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
-	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
+    scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
+    scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
+    scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
+    scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
+    scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
+    scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
+    scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
+    scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
+    scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
+    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
+    scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
+    scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 
-	// Aliases (for backward compatibility)
-	scripts.push({ id: 'app7-dsession', aliasOf: 'app7-session' });
-	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
-	scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
-	scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
+    // Aliases (for backward compatibility)
+    scripts.push({ id: 'app7-dsession', aliasOf: 'app7-session' });
+    scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
+    scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
+    scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
 
-	return scripts;
+    return scripts;
 }
 
 /**
@@ -350,7 +343,7 @@ function scriptSrc(scriptId, version) {
             } else {
                 // Branch
                 //src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
-                src = gitCdn({ path: script.path, ref: v, fresh: true, url: true });
+                src = gitCdn({ path: script.path, ref: v, url: true });
             }
         }
 
@@ -372,9 +365,9 @@ gitCdn({
     ref // Branch / tag
     fresh // Actualiza el cache
     url // Devuelve la url en vez del buffer. Def false
-    server // 2 para el server de desarrollo
+    server // Opcional, def https://cdn.cloudycrm.net
 }
-@returns {string|Promise<Buffer>}
+@returns {string|Promise<SimpleBuffer>}
 */
 function gitCdn(options) {
     if (options.repo && options.path) {
@@ -396,12 +389,7 @@ function gitCdn(options) {
         };
     }
 
-    var url;
-    if (options.server != undefined) {
-        url = `https://eventsjs${options.server}.cloudycrm.net`;
-    } else {
-        url = 'https://cdn.cloudycrm.net';
-    }
+    var url = options.server ? options.server : 'https://cdn.cloudycrm.net';
     url += '/' + (options.owner != undefined ? 'gh/' + options.owner : 'ghcv');
     url += '/' + (options.repo != undefined ? options.repo : 'cdn');
     url += options.ref != undefined ? '@' + options.ref : '';
@@ -416,15 +404,7 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        resolve(new Buffer(await res.arrayBuffer()));
-                        /*
-                        Esta es una implementacion simplificada de la clase Buffer de node
-                        Si hace falta algo mas completo usar https://github.com/feross/buffer
-                        cambiando la linea anterior por:
-
-                            await include('buffer', 'https://bundle.run/buffer@6.0.3');
-                            resolve(buffer.Buffer.from(await res.arrayBuffer()));
-                        */
+                        resolve(new SimpleBuffer(await res.arrayBuffer()));
 
                     } else {
                         try {
@@ -452,7 +432,14 @@ function gitCdn(options) {
     }
 }
 
-class Buffer extends Uint8Array {
+/*
+Esta es una implementacion simplificada de la clase Buffer de node
+Si hace falta algo mas completo usar https://github.com/feross/buffer
+
+    await include('buffer', 'https://bundle.run/buffer@6.0.3');
+    resolve(buffer.Buffer.from(await res.arrayBuffer()));
+*/
+class SimpleBuffer extends Uint8Array {
     toString() {
         var td = new TextDecoder();
         return td.decode(this);

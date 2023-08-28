@@ -68,7 +68,7 @@ function Sync() {
     this.sync = function (full, callback) {
         syncFolder = window.localStorage.getItem('appsFolder');
         if (!syncFolder) {
-            console.log('APPS_FOLDER setting is required');
+            console.error('APPS_FOLDER setting is required');
             if (callback) callback();
             return;
         }
@@ -76,7 +76,7 @@ function Sync() {
         appName = val ? val : 'default';
         
         if (self.syncing()) {
-            console.log('Sync skipped');
+            console.warn('Sync skipped');
             if (callback) callback();
             return;
         } else {
@@ -84,7 +84,7 @@ function Sync() {
         }
 
         if (!app7.online) {
-            console.log('Offline, sync skipped');
+            console.warn('Offline, sync skipped');
             if (callback) callback();
             return;
         }
@@ -93,7 +93,7 @@ function Sync() {
             syncPriv(full, callback);
         }, function (err) {
             self.syncing(false);
-            console.log(err);
+            console.error(errMsg(err));
             if (callback) callback();
         });
     }
@@ -112,6 +112,13 @@ function Sync() {
                     var calls = 0;
                     var arrFolders = [];
                     var syncObj;
+
+                    if (!rs.rows.length) {
+                        console.error('No records in sync table');
+                        self.syncing(false);
+                        if (callback) callback();
+                    }
+
                     for (var i = 0; i < rs.rows.length; i++) {
                         var row = rs.rows.item(i);
                         arrRows.push(row);
@@ -175,7 +182,7 @@ function Sync() {
                 },
                 function (err, tx) {
                     if (!self.syncing()) {
-                        console.log('Sync end with error');
+                        console.error('Sync end with error');
                         if (callback) callback();
                     }
                 }
@@ -208,7 +215,7 @@ function Sync() {
                 });
             },
             function (err) {
-                console.log(err);
+                console.error(errMsg(err));
                 pCallback();
             }
         );
@@ -377,7 +384,7 @@ function Sync() {
                     }
                 },
                 function (err) {
-                    console.log(err);
+                    console.error(errMsg(err));
                     pCallback();
                 }
             );
@@ -453,7 +460,7 @@ function Sync() {
                                 pCallback(true);
                             },
                             function (tx, err) {
-                                console.log(err);
+                                console.error(errMsg(err));
                                 pCallback(false);
                             }
                         );
@@ -556,7 +563,7 @@ function Sync() {
                         }
                     },
                     function(err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         pCallback(pSyncObj);}
                     )
             } else {
@@ -654,7 +661,7 @@ function Sync() {
                 );
             },
             function(err) {
-                console.log(err);
+                console.error(errMsg(err));
                 if (pCallback) pCallback();
             }
         );
@@ -677,7 +684,7 @@ function Sync() {
                 } else if (fields[i]['Type'] == 3 && fields[i]['Scale'] > 0) {
                     return 'REAL';
                 } else {
-                    console.log('Unknown type: ' + fields[i]);
+                    console.warn('Unknown type: ' + fields[i]);
                 }
             }
         }
@@ -791,8 +798,7 @@ function Sync() {
                             },
                             function (err) {
                                 // err del Save
-                                var sErr = 'docSave error: ' + errMsg(err);
-                                console.log(err);
+                                console.error('docSave error: ' + errMsg(err));
                                 self.logSyncStatus(pSyncTable, 'doc_id', pRow['doc_id'], sErr);
                                 if (pErrCallback) pErrCallback(err);
                             }
@@ -803,8 +809,7 @@ function Sync() {
                 },
                 function (err) {
                     // err del getById
-                    var sErr = 'docGetById error: ' + errMsg(err);
-                    console.log(err);
+                    console.error('docGetById error: ' + errMsg(err));
                     self.logSyncStatus(pSyncTable, 'doc_id', pRow['doc_id'], sErr);
                     if (pErrCallback) pErrCallback(err);
                 
@@ -868,7 +873,7 @@ function Sync() {
                                         if (pCallback) pCallback(doc2);
                                     },
                                     function (err, tx) {
-                                        console.log(err);
+                                        console.error(errMsg(err));
                                         if (pErrCallback) pErrCallback(err);
                                     }
                                 );
@@ -876,8 +881,7 @@ function Sync() {
                             },
                             function (err) {
                                 // err del Save
-                                var sErr = 'docSave error: ' + errMsg(err);
-                                console.log(err);
+                                console.error('docSave error: ' + errMsg(err));
                                 self.logSyncStatus(pSyncTable, 'guid', pRow['guid'], sErr);
                                 if (pErrCallback) pErrCallback(err);
                             }
@@ -885,8 +889,7 @@ function Sync() {
                     },
                     function (err) {
                         // err del New
-                        var sErr = 'docNew error: ' + errMsg(err);
-                        console.log(sErr);
+                        console.error('docNew error: ' + errMsg(err));
                         self.logSyncStatus(pSyncTable, 'guid', pRow['guid'], sErr);
                         if (pErrCallback) pErrCallback(err);
                     }
