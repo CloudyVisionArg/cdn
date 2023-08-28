@@ -69,7 +69,7 @@ var app = {
             if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
             if (!Capacitor.Plugins.FileOpener) console.log('Plugin error: @capacitor-community/file-opener');
             if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
-            if (!Capacitor.Plugins.PushNotification) console.log('Plugin error:  @capacitor/push-notifications');
+            if (!Capacitor.Plugins.PushNotifications) console.log('Plugin error:  @capacitor/push-notifications');
             if (!Capacitor.Plugins.EmailComposer) console.log('Plugin error:  https://github.com/EinfachHans/capacitor-email-composer');
             
         }    
