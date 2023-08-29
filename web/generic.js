@@ -1445,8 +1445,8 @@ function saveAtt() {
                     try {
                         var att = doc.attachmentsAdd(file.name);
                         att.fileStream = new Blob([this.result], { type: file.type });
-                        att.description = tag;
-                        att.group = tag;
+                        (tag) ? att.description = tag : null;
+                        (tag) ? att.group = tag : null;
                         await att.save();
 
                     } catch (err) {

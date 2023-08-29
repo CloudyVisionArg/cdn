@@ -1798,8 +1798,8 @@ function saveAtt() {
                     try {
                         var att = doc.attachmentsAdd(attName);
                         att.fileStream = file;
-                        att.description = tag;
-                        att.group = tag;
+                        (tag) ? att.description = tag : null;
+                        (tag) ? att.group = tag : null;
                         await att.save();
                         await removeAttFromCache(attName);
                         $this.removeAttr('data-att-url');
