@@ -1798,8 +1798,10 @@ function saveAtt() {
                     try {
                         var att = doc.attachmentsAdd(attName);
                         att.fileStream = file;
-                        (tag) ? att.description = tag : null;
-                        (tag) ? att.group = tag : null;
+                        if (tag) {
+                            att.description = tag;
+                            att.group = tag;
+                        }
                         await att.save();
                         await removeAttFromCache(attName);
                         $this.removeAttr('data-att-url');
@@ -1825,9 +1827,10 @@ function saveAtt() {
                         try {
                             var att = doc.attachmentsAdd(attName);
                             att.fileStream = new Blob([this.result], { type: file.type });
-                            //att.fileStream = new Blob([this.result]);
-                            att.description = tag;
-                            att.group = tag;
+                            if (tag) {
+                                att.description = tag;
+                                att.group = tag;
+                            }
                             await att.save();
     
                         } catch (err) {

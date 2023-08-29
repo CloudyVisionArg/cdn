@@ -1413,8 +1413,8 @@ export class Attachment {
             var fs = await me.fileStream;
             var blob = (fs instanceof Blob ? fs : new Blob([fs]));
             formData.append('attachment', blob, me.name);
-            formData.append('description', me.description);
-            formData.append('group', me.group);
+            if (me.description || me.description == 0) formData.append('description', me.description);
+            if (me.group || me.group == 0) formData.append('group', me.group);
             // todo: probar si graba description y group
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
@@ -2767,7 +2767,7 @@ export class Folder {
                     let docId = res[0]['DOC_ID'];
                     resolve(await me.session.doc(docId));
                 }
-                
+
             } catch(err) {
                 reject(err);
             }
