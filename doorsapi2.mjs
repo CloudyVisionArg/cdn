@@ -2754,17 +2754,22 @@ export class Folder {
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            //todo: Para evitar esta llamada seria necesario un endpoint con docId y fldId
-            var formula = isNaN(parseInt(document)) ? document : 'doc_id = ' + document;
-            var res = await me.search({ fields: 'doc_id', formula });
+            try {
+                //todo: Para evitar esta llamada seria necesario un endpoint con docId y fldId
+                var formula = isNaN(parseInt(document)) ? document : 'doc_id = ' + document;
+                var res = await me.search({ fields: 'doc_id', formula });
 
-            if (res.length == 0) {
-                reject(new Error('Document not found'));
-            } else if (res.length > 1) {
-                reject(new Error('Vague expression'));
-            } else {
-                let docId = res[0]['DOC_ID'];
-                resolve(await me.session.doc(docId));
+                if (res.length == 0) {
+                    reject(new Error('Document not found'));
+                } else if (res.length > 1) {
+                    reject(new Error('Vague expression'));
+                } else {
+                    let docId = res[0]['DOC_ID'];
+                    resolve(await me.session.doc(docId));
+                }
+                
+            } catch(err) {
+                reject(err);
             }
         });
     }
