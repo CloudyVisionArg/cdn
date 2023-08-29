@@ -1798,7 +1798,7 @@ function saveAtt() {
                     try {
                         var att = doc.attachmentsAdd(attName);
                         att.fileStream = file;
-                        if (tag) {
+                        if (tag || tag == 0) {
                             att.description = tag;
                             att.group = tag;
                         }
@@ -1827,7 +1827,7 @@ function saveAtt() {
                         try {
                             var att = doc.attachmentsAdd(attName);
                             att.fileStream = new Blob([this.result], { type: file.type });
-                            if (tag) {
+                            if (tag || tag == 0) {
                                 att.description = tag;
                                 att.group = tag;
                             }
