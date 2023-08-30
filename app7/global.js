@@ -529,7 +529,7 @@ async function showLogin() {
                         
                     }, function (err) {
                         setMessage(errMsg(err));
-                        if (err.doorsException && err.doorsException.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
+                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
                             $get('#chpass').closest('li').show();
                         }
                         disableInputs(false);
@@ -569,7 +569,7 @@ async function showLogin() {
                 }, function (err) {
                     console.error(errMsg(err));
                     setMessage(errMsg(err));
-                    if (err.doorsException && err.doorsException.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
+                    if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
                         $get('#chpass').closest('li').show();
                     }
                     disableInputs(false);

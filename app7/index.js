@@ -7,6 +7,7 @@ var db;
 var doorsapi2;
 /** @type {import('../doorsapi2.mjs').Session} */
 var dSession;
+const changePasswordException = 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException';
 
 var initScripts = [];
 
@@ -308,9 +309,12 @@ var app = {
                         sessionMsg();
                     },
                     function (err) {
-                        debugger;
                         console.error(errMsg(err));
-                        showConsole();
+                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                            showLogin();
+                        } else {
+                            showConsole();
+                        }
                     }
                 );
             } else {
@@ -335,7 +339,6 @@ var app = {
                             function () {
                             },
                             function (err) {
-                                debugger;
                                 showConsole();
                                 console.error('onDeviceReady error: ' + errMsg(err));
                                 toast('Error al iniciar la aplicacion, contacte a soporte', 5000);
