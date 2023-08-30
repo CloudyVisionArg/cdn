@@ -149,6 +149,16 @@ function getControlsRights(pControls) {
     })
 }
 
+function goBack() {
+    if (!pageEl.crm.saved) {
+        // Si nunca guarde evito el refresh del explorer
+        $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
+            $(el).removeClass('refresh-on-focus');
+        })
+    }
+    f7Page.view.router.back();
+}
+
 async function renderPage() {
     var $tabbar, $tabbarInner, $tabs;
 
@@ -167,13 +177,7 @@ async function renderPage() {
             f7Page.view.router.back();
         }
         */
-        if (!pageEl.crm.saved) {
-            // Si nunca guarde evito el refresh del explorer
-            $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
-                $(el).removeClass('refresh-on-focus');
-            })
-        }
-        f7Page.view.router.back();
+        goBack();
     });
 
     $page.find('.navbar-inner .right .link').on('click', function (e) {
@@ -914,8 +918,8 @@ function pageInit(e, page) {
     pageEl = page.pageEl;
     pageEl.crm = {};
 
-    page.view.on('swipebackMove', (a,b,c) => {
-        debugger;
+    f7Page.view.on('swipebackMove', (ev) => {
+        goBack();
     })
 
     // En ios el navbar esta fuera del page
@@ -1025,7 +1029,7 @@ function pageInit(e, page) {
     if (!pageEl.crm) pageEl.crm = {};
     Object.assign(pageEl.crm, {
         fillControls, saveDoc, fld_id, folder, folderJson, 
-        doc_id, doc, docJson, $navbar, f7Page
+        doc_id, doc, docJson, $navbar, f7Page, goBack,
     });
 }
 
