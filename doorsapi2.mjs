@@ -5045,7 +5045,6 @@ class RestClient {
                         if (parsedJson) {
                             let err = me.session.utils.newErr(parsedJson);
                             err.doorsException = parsedJson;
-                            debugger;
                             reject(err);
                         } else {
                             reject(new Error(response.status + ' (' + response.statusText + ')'))
