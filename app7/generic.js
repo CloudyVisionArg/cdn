@@ -914,6 +914,10 @@ function pageInit(e, page) {
     pageEl = page.pageEl;
     pageEl.crm = {};
 
+    page.view.on('swipebackMove', () => {
+        debugger;
+    })
+
     // En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
 
