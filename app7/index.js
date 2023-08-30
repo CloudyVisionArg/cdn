@@ -334,6 +334,7 @@ var app = {
                             function () {
                             },
                             function (err) {
+                                debugger;
                                 showConsole();
                                 console.error('onDeviceReady error: ' + errMsg(err));
                                 toast('Error al iniciar la aplicacion, contacte a soporte', 5000);
