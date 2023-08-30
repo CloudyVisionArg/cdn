@@ -570,7 +570,7 @@ async function showLogin() {
                     debugger;
                     console.error(errMsg(err));
                     setMessage(errMsg(err));
-                    if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
+                    if (err.doorsException && err.doorsException.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
                         $get('#chpass').closest('li').show();
                     }
                     disableInputs(false);
