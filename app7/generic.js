@@ -914,7 +914,7 @@ function pageInit(e, page) {
     pageEl = page.pageEl;
     pageEl.crm = {};
 
-    page.view.on('swipebackMove', () => {
+    page.view.on('swipebackMove', (a,b,c) => {
         debugger;
     })
 
