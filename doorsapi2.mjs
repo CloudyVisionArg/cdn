@@ -5043,7 +5043,10 @@ class RestClient {
                         resolve(parsedJson.InternalObject);
                     } else {
                         if (parsedJson) {
-                            reject(me.session.utils.newErr(parsedJson));
+                            let err = me.session.utils.newErr(parsedJson);
+                            err.doorsException = parsedJson;
+                            debugger;
+                            reject(err);
                         } else {
                             reject(new Error(response.status + ' (' + response.statusText + ')'))
                         }
