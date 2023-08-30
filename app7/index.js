@@ -308,6 +308,7 @@ var app = {
                         sessionMsg();
                     },
                     function (err) {
+                        debugger;
                         console.error(errMsg(err));
                         showConsole();
                     }
