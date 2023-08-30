@@ -567,6 +567,7 @@ async function showLogin() {
                         fillControls();
                     }
                 }, function (err) {
+                    debugger;
                     console.error(errMsg(err));
                     setMessage(errMsg(err));
                     if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
