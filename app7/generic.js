@@ -149,14 +149,13 @@ function getControlsRights(pControls) {
     })
 }
 
-function goBack() {
+function explorerRefresh() {
     if (!pageEl.crm.saved) {
         // Si nunca guarde evito el refresh del explorer
         $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
             $(el).removeClass('refresh-on-focus');
         })
     }
-    f7Page.view.router.back();
 }
 
 async function renderPage() {
@@ -177,7 +176,8 @@ async function renderPage() {
             f7Page.view.router.back();
         }
         */
-        goBack();
+        explorerRefresh();
+        f7Page.view.router.back();
     });
 
     $page.find('.navbar-inner .right .link').on('click', function (e) {
@@ -919,7 +919,7 @@ function pageInit(e, page) {
     pageEl.crm = {};
 
     f7Page.view.on('swipebackMove', (ev) => {
-        goBack();
+        explorerRefresh();
     })
 
     // En ios el navbar esta fuera del page
