@@ -366,9 +366,13 @@ var app = {
                         sessionMsg();
                     },
                     function (err) {
-                        showConsole();
                         console.error(errMsg(err));
                         toast(errMsg(err), 5000);
+                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                            showLogin();
+                        } else {
+                            showConsole();
+                        }
                     }
                 )
             }
