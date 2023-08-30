@@ -919,7 +919,7 @@ function pageInit(e, page) {
     pageEl.crm = {};
 
     f7Page.view.on('swipebackMove', (ev) => {
-        explorerRefresh();
+        //explorerRefresh();
     })
 
     // En ios el navbar esta fuera del page
