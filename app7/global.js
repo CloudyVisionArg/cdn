@@ -673,8 +673,8 @@ async function showLogin() {
                     function () {
                         localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
                         app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
-                            page.router.back();
-                            toast('hola');
+                            //page.router.back();
+                            location.href = 'index.html';
                         });
             
                     }, function (err) {
