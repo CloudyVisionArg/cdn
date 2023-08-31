@@ -70,7 +70,7 @@
     color: rgba(255, 255, 255, 0.8);
 }
 .login-screen #message {
-    color: #cb265e !important;
+    color: crimson !important;
     font-size: medium;
 }
 .login-screen #showpwd {
