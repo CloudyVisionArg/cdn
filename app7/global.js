@@ -430,9 +430,9 @@ async function showLogin() {
                 ],
             });
                 
-            popup.pStuff = {};
-            popup.pStuff.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
-            popup.pStuff.corpToggle.on('change', function () {
+            popup.el.crm = {};
+            popup.el.crm.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
+            popup.el.crm.corpToggle.on('change', function () {
                 setCorpVersion(this.checked);
             });
 
@@ -518,8 +518,8 @@ async function showLogin() {
                 setInputVal($get('#endpoint'), endPoint);
                 setInputVal($get('#appname'), appName ? appName : 'default');
 
-                popup.pStuff.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
-                setCorpVersion(popup.pStuff.corpToggle.checked);
+                popup.el.crm.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
+                setCorpVersion(popup.el.crm.corpToggle.checked);
             
                 if (userName && instance && endPoint) {
                     dSession.checkToken(function () {
@@ -674,6 +674,7 @@ async function showLogin() {
                         localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
                         app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
                             page.router.back();
+                            toast('hola');
                         });
             
                     }, function (err) {
