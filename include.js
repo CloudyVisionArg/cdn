@@ -21,11 +21,13 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 310, hasdep: true });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 311, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 310 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 310 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 310 });
+    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 311 });
     /*
+    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 307 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 308 });
@@ -52,7 +54,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
     scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
-    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 149 });
     scripts.push({ id: 'app7-sade-index', path: '/app7/sade/index.js', version: 149 });
