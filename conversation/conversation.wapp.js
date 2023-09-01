@@ -1379,7 +1379,7 @@ async function newWhatsAppChatControl(opts){
         fields:"*",
         formula:"doc_id = " + refDocId
     }));
-	let variablesProp = fld.properties("WAPP_VARIABLES");
+	let variablesProp = await fld.properties("WAPP_VARIABLES");
 	//debugger;
 	/*
 	[
