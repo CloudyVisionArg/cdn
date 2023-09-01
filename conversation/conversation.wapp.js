@@ -919,7 +919,7 @@ function whatsAppDataProvider(opts){
 			$aTmp.appendTo($liTmp);
 
 			$liTmp.click(function (e) {
-				var $this = $(this);
+				var $this = $(this).children("a");
 				if (me.templates && me.templates.length > 0) {
 					if ($this.next('ul').length == 0) {
 						var $ul = $('<ul/>', {
