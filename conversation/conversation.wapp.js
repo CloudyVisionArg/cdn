@@ -1456,7 +1456,8 @@ async function newWhatsAppChatControl(opts){
 			if(newMessageType == "wappMsg"){
 				//TODO: What??
 				$("div.chat-container[data-chat-id='" + refDocId + "'] .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
-				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu'));
+				$('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu').html("li");
+				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu li'));
 			}
 		};
 		let control = new conversationControl(conversationOptions);
