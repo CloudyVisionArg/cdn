@@ -1464,7 +1464,7 @@ async function newWhatsAppChatControl(opts){
 					}
 
 					if(val == null) return;
-					txt.replaceAll(varObj.variable, val);
+					txt = txt.replaceAll(varObj.variable, val);
 				})
 				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt);
 			}
