@@ -1354,6 +1354,7 @@ function wappMsg(){
 
 async function newWhatsAppChatControl(opts){
 	let phoneField = opts.phoneField;
+	let nameField = opts.nameField;
 	let refDocId = opts.docId;
 	let refFldId = opts.fldId;
 	let s3Key = opts.s3Key;
@@ -1384,8 +1385,12 @@ async function newWhatsAppChatControl(opts){
         let docs = proms[1].value;
         let mobilePhone = null;
         let from = null;
+		let name = null;
         if(docs.length > 0){
             mobilePhone = docs[0][phoneField.toUpperCase()];
+			if(nameField){
+				name = docs[0][nameField.toUpperCase()]
+			}
         }
         if(numbers.length > 0){
             from = numbers[0]["NUMBER"];
@@ -1458,7 +1463,7 @@ async function newWhatsAppChatControl(opts){
 				]
 			}
 		];
-		conversationOptions.headerHtml = getHeaderHtml(mobilePhone);
+		conversationOptions.headerHtml = getHeaderHtml(mobilePhone, name);
 		conversationOptions.subheaderHtml = "";
 		conversationOptions.selector = 'div.chat-container[data-chat-id=' + refDocId + ']';
 		conversationOptions.quickMessageTypes = quickMessageTypes;
