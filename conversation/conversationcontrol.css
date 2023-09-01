@@ -102,6 +102,9 @@
   
 .dropdown-submenu .dropdown-menu {
     left: 100%;
+    bottom: 0px;
+    max-height: 500px;
+    overflow: auto;
 }
 /*https://coolors.co/d93025-00a884-f6ae2d-8a4f7d-0081af*/
 i.fa-envelope{

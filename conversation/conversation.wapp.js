@@ -918,7 +918,7 @@ function whatsAppDataProvider(opts){
 			var $aTmp = $('<a/>').append('Plantilla <span class="caret">');
 			$aTmp.appendTo($liTmp);
 
-			$aTmp.click(function (e) {
+			$liTmp.click(function (e) {
 				var $this = $(this);
 				if (me.templates && me.templates.length > 0) {
 					if ($this.next('ul').length == 0) {
@@ -932,8 +932,8 @@ function whatsAppDataProvider(opts){
 							}).appendTo($ul);
 							var $a = $('<a/>').appendTo($li);
 							$a.append(it.NAME);
-							$a.click(function (e) {
-								me.putTemplate(this.text);
+							$li.click(function (e) {
+								me.putTemplate($(this).children("a").text());
 							});
 						});
 
