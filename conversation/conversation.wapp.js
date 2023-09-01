@@ -1459,7 +1459,7 @@ async function newWhatsAppChatControl(opts){
 					if(varObj.type == "text"){
 						val = varObj.value;
 					}
-					if(varObj.loggedusername == "loggedusername"){
+					if(varObj.type == "loggedusername"){
 						val = loggedUser.name;
 					}
 
