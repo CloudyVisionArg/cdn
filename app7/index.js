@@ -363,7 +363,7 @@ var app = {
                         sync.sync(false);
                         if (window.refreshNotifications) window.refreshNotifications();
                         executeCode('onResume');
-                        sessionMsg();
+                        //sessionMsg();
                     },
                     function (err) {
                         console.error(errMsg(err));
