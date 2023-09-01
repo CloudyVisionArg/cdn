@@ -882,10 +882,15 @@ function whatsAppDataProvider(opts){
 				}).appendTo($dropup);
 				container = $dropup;
 			}			
-
-			var $menu = $('<ul/>', {
-				class: 'dropdown-menu',
-			}).appendTo(container);
+			if(!$(container).is("ul")){
+				var $menu = $('<ul/>', {
+					class: 'dropdown-menu',
+				}).appendTo(container);
+			}
+			else{
+				$menu = container;
+			}
+			
 
 			/*var $liAudio = $('<li/>').appendTo($menu);
 			var $audioLink = $('<a/>').append('Audio');
@@ -1462,8 +1467,8 @@ async function newWhatsAppChatControl(opts){
 			if(newMessageType == "wappMsg"){
 				//TODO: What??
 				//$("div.chat-container[data-chat-id='" + refDocId + "'] .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
-				$('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu').html("<li class='dropdown-submenu'></li>");
-				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu li'));
+				//$('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu').html("<li></li>");
+				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu'));
 			}
 		};
 		let control = new conversationControl(conversationOptions);
