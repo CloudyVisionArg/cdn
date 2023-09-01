@@ -15,7 +15,7 @@
         "selector": ".navbar .right",
         "title": "Acciones de carpeta",
         "icon_md": "menu",
-        "icon_ios": "square_arrow_up",
+        "icon_ios": "menu",
         "text": "Importar desde excel, ayuda, y otras opciones",
         "order": "4"
     },
