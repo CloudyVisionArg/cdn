@@ -1380,6 +1380,9 @@ async function newWhatsAppChatControl(opts){
         formula:"doc_id = " + refDocId
     }));
 	let variablesProp = await fld.properties("WAPP_VARIABLES");
+	if(variablesProp){
+		variablesProp = JSON.parse(variablesProp);
+	}
 	//debugger;
 	/*
 	[
@@ -1443,6 +1446,26 @@ async function newWhatsAppChatControl(opts){
 			putTemplateRequested: function(txt){
 				debugger;
 				let vars = variablesProp;
+				/*[
+					{variable:"{{1}}","type":"field",value: "NAME"},
+					{variable:"{{2}}","type":"text",value: "Casa"},
+					{variable:"{{3}}","type":"loggedusername", value: "NAME"}
+				]*/
+				vars.map((varObj) => {
+					var val = null;
+					if(varObj.type == "field"){
+						val = docs[0][varObj.value.toUpperCase()];
+					}
+					if(varObj.type == "text"){
+						val = varObj.value;
+					}
+					if(varObj.loggedusername == "loggedusername"){
+						val = loggedUser.name;
+					}
+
+					if(val == null) return;
+					txt.replaceAll(varObj.variable, val);
+				})
 				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt);
 			}
 		};
