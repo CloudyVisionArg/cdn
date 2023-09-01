@@ -896,7 +896,9 @@ function whatsAppDataProvider(opts){
 				me.sendAudio(container);
 			});*/
 
-			var $li = $('<li/>').appendTo($menu);
+			var $li = $('<li/>',{
+				class:"dropdown-item"
+			}).appendTo($menu);
 			
 			var $file = $('<a/>').append('Archivo');
 			$file.appendTo($li);
@@ -905,7 +907,7 @@ function whatsAppDataProvider(opts){
 			});
 
 			var $liTmp = $('<li/>', {
-				class: 'dropdown-submenu',
+				class: 'dropdown-item dropdown-submenu',
 			}).appendTo($menu);
 
 			var $aTmp = $('<a/>').append('Plantilla <span class="caret">');
@@ -920,7 +922,9 @@ function whatsAppDataProvider(opts){
 						}).appendTo($this.parent());
 						//debugger;
 						me.templates.forEach(it => {
-							var $li = $('<li/>').appendTo($ul);
+							var $li = $('<li/>',{
+								class:"dropdown-item"
+							}).appendTo($ul);
 							var $a = $('<a/>').appendTo($li);
 							$a.append(it.NAME);
 							$a.click(function (e) {
@@ -941,10 +945,12 @@ function whatsAppDataProvider(opts){
 
 			$('<li/>', {
 				role: 'separator',
-				class: 'divider',
+				class: 'divider dropdown-divider',
 			}).appendTo($menu);
 
-			var $li = $('<li/>').appendTo($menu);
+			var $li = $('<li/>', {
+				class: "dropdown-item"
+			}).appendTo($menu);
 			$('<a/>').append('Cancelar').appendTo($li);
 			$menu.css("display","block")
 
@@ -1455,8 +1461,8 @@ async function newWhatsAppChatControl(opts){
 		conversationOptions.quickMessageChanged = function(newMessageType){
 			if(newMessageType == "wappMsg"){
 				//TODO: What??
-				$("div.chat-container[data-chat-id='" + refDocId + "'] .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
-				$('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu').html("<li></li>");
+				//$("div.chat-container[data-chat-id='" + refDocId + "'] .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
+				$('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu').html("<li class='dropdown-submenu'></li>");
 				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu li'));
 			}
 		};
