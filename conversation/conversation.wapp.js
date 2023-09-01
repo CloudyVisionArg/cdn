@@ -1455,7 +1455,7 @@ async function newWhatsAppChatControl(opts){
 		conversationOptions.quickMessageChanged = function(newMessageType){
 			if(newMessageType == "wappMsg"){
 				//TODO: What??
-				$("div.cust-chat .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
+				$("div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
 				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu li'));
 			}
 		};
