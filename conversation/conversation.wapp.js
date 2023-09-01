@@ -1443,6 +1443,9 @@ async function newWhatsAppChatControl(opts){
 			loggedUser: userData,
 			googleMapsKey: null, //TODO
 			s3Key: s3Key,
+			onMessageSent:function (msg){
+
+			},
 			putTemplateRequested: function(txt){
 				debugger;
 				let vars = variablesProp;

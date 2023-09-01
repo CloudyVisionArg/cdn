@@ -4,21 +4,17 @@
  * Bootstrap.js: Ventanas modales
  * Doorsapi.js: Busqueda de datos
  */
-var messengerOpts = {
-    rootFldId: 5593,
-    formula: "FROM = '982374598723498' OR TO = '982374598723498'",
-	pageId: "",
-    sessionStatusContainer: "", /*Esto no haría falta? */
-    modalContainer: "",
-	from: "982374598723498",
-	to: "398457983748578",
-	toFriendlyName: "",
-    loggedUser:null,
-    googleMapsKey: null,
-	codelibUrl: null,
-    s3Key: 'U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==',
-	putTemplateRequested: null
-};
+var msngrRequiredScripts = [];
+msngrRequiredScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+msngrRequiredScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
+msngrRequiredScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+msngrRequiredScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
+msngrRequiredScripts.push({ id: 'lib-moment' });
+msngrRequiredScripts.push({ id: 'emojis'});
+msngrRequiredScripts.push({ id: 'doorsapi'});
+msngrRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.js' });
+msngrRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.css' });
+msngrRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversation.media.js' });
 
 var messengerProvider = null;
 
@@ -1257,6 +1253,120 @@ function messengerMsg(){
 			return '??';
 		}
 	};
+}
+
+
+async function newMessengerChatControl(opts){
+	let accountField = opts.accountField;
+	let nameField = opts.nameField;
+	let pageIdField = opts.pageIdField;
+	let refDocId = opts.docId;
+	let refFldId = opts.fldId;
+	let s3Key = opts.s3Key;
+	let container = opts.container;
+
+	await include(msngrRequiredScripts);
+
+	let fbFolderId = await dSession.settings('FACEBOOK_CONNECTOR_FOLDER');
+    if (!fbFolderId) alert('FACEBOOK_CONNECTOR_FOLDER setting missing');
+
+    let fbFolder = await dSession.folders(fbFolderId);
+    let fldMsg = await fbFolder.folder('/messenger/messages');
+    let fldPages = await fbFolder.folder('/config/registered_connections');
+    let fld = await dSession.folders(parseInt(refFldId));
+
+    let allProms = [];
+    allProms.push(fldPages.search({
+        fields:"*",
+        formula:""
+    }));
+    allProms.push(fld.search({
+        fields:"*",
+        formula:"doc_id = " + refDocId
+    }));
+	let variablesProp = await fld.properties("WAPP_VARIABLES");
+	if(variablesProp){
+		variablesProp = JSON.parse(variablesProp);
+	}
+	//debugger;
+	/*
+	[
+		{variable:"{{1}}","type":"field",value: "NAME"},
+		{variable:"{{2}}","type":"text",value: "Casa"},
+		{variable:"{{3}}","type":"loggedusername", value: "NAME"}
+	]
+	*/
+
+    Promise.allSettled(allProms).then(async proms=>{
+        let pages = proms[0].value;
+        let docs = proms[1].value;
+        let accountId = null;
+        let from = null;
+		let name = null;
+        if(docs.length > 0){
+            accountId = docs[0][accountField.toUpperCase()];
+			if(nameField){
+				name = docs[0][nameField.toUpperCase()]
+			}
+        }
+        if(pages.length > 0){
+            from = pages[0][pageIdField];
+        }
+
+		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${refDocId}" style="max-height: 100vh;"></div>`);
+		let loggedUser = await dSession.currentUser;
+		let userData = {
+			Name: loggedUser.name,
+			AccId: loggedUser.id
+		};
+		var messengerOpts = {
+			rootFldId: fbFolderId,
+			messagesFolder: fldMsg.id,
+			formula: "SENDER_ID = '" + accountId + "' OR RECIPIENT_ID = '" + accountId + "'",
+			sessionStatusContainer: "div#messengerChat .messenger-status-container",
+			modalContainer: "",
+			from: from,
+			to: accountId,
+			toFriendlyName: name,
+			pageId: from,
+			loggedUser: null,
+			googleMapsKey: null,
+			codelibUrl: null,
+			s3Key: s3Key,
+			putTemplateRequested: null
+		};
+		
+		let conversationOptions = {};
+		conversationOptions.headerHtml = getHeaderHtml(accountId, name);
+		conversationOptions.subheaderHtml = ""; //getSubheaderHtml();
+		conversationOptions.selector =  'div.chat-container[data-chat-id=' + refDocId + ']';;
+		conversationOptions.quickMessageTypes = ["messengerMsg"];
+		conversationOptions.defaultQuickMessageType = "messengerMsg";
+		
+		let messengerProvider = getMessengerDataProvider(messengerOpts);
+		let providers = [messengerProvider];
+		
+		var dataProvider = new conversationDataProvider();
+		dataProvider.msgproviders = providers;
+		conversationOptions.dataProvider = dataProvider;
+		
+		conversationOptions.quickMessageChanged = function(newMessageType){
+			if(newMessageType == "messengerMsg"){
+				messengerProvider.displayMessengerOptions($("div#messengerChat .message-type-button"));
+			}
+		};
+		
+		let control = new conversationControl(conversationOptions);
+		$('div#messengerChat #type-selector .dropdown-menu li').on('click', function () {
+			$("div#messengerChat #type-selector .dropdown-toggle > span:first-of-type").html($(this).find("a").html());
+		});
+		return control;
+    });
+}
+
+function onMessengerPutTemplate(chatInputSelector, text){
+    let input =  $(chatInputSelector);
+    insertAtCaret(input[0], text);
 }
 
 
