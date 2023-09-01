@@ -1379,6 +1379,15 @@ async function newWhatsAppChatControl(opts){
         fields:"*",
         formula:"doc_id = " + refDocId
     }));
+	let variablesProp = fld.properties("WAPP_VARIABLES");
+	//debugger;
+	/*
+	[
+		{variable:"{{1}}","type":"field",value: "NAME"},
+		{variable:"{{2}}","type":"text",value: "Casa"},
+		{variable:"{{3}}","type":"loggedusername", value: "NAME"}
+	]
+	*/
 
     Promise.allSettled(allProms).then(async proms=>{
         let numbers = proms[0].value;
@@ -1408,6 +1417,8 @@ async function newWhatsAppChatControl(opts){
             mobilePhone: mobilePhone,
             s3Key: s3Key,
             onPutTemplateRequested: function(txt){
+				debugger;
+				let vars = variablesProp;
 				onWhatsappPutTemplate(refDocId,txt);
 			}
         };
