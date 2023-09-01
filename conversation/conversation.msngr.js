@@ -1271,8 +1271,8 @@ async function newMessengerChatControl(opts){
     if (!fbFolderId) alert('FACEBOOK_CONNECTOR_FOLDER setting missing');
 
     let fbFolder = await dSession.folders(fbFolderId);
-    let fldMsg = await fbFolder.folder('/messenger/messages');
-    let fldPages = await fbFolder.folder('/config/registered_connections');
+    let fldMsg = await dSession.folder('/messenger/messages',fbFolderId);
+    let fldPages = await dSession.folder('/config/registered_connections',fbFolderId);
     let fld = await dSession.folders(parseInt(refFldId));
 
     let allProms = [];
