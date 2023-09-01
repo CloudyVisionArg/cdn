@@ -890,7 +890,7 @@ function whatsAppDataProvider(opts){
 			else{
 				$menu = container;
 			}
-			
+			if($menu.children().length > 0) return;
 
 			/*var $liAudio = $('<li/>').appendTo($menu);
 			var $audioLink = $('<a/>').append('Audio');
@@ -957,7 +957,7 @@ function whatsAppDataProvider(opts){
 				class: "dropdown-item"
 			}).appendTo($menu);
 			$('<a/>').append('Cancelar').appendTo($li);
-			$menu.css("display","block")
+			//$menu.css("display","block")
 
 		} else {
 			// Cordova
