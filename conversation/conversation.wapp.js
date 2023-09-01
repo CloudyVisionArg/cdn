@@ -1408,7 +1408,7 @@ async function newWhatsAppChatControl(opts){
 		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${refDocId}" style="max-height: 100vh;"></div>`);
 
 		mobilePhone = mobilePhone != null && mobilePhone.length == 10 ? "+549" + mobilePhone : mobilePhone + "";
-        let opts = {
+        /*let opts = {
             rootFldId: wappFolderId,
             msgsFldId: fldMsg.id,
             from: from,
@@ -1421,7 +1421,7 @@ async function newWhatsAppChatControl(opts){
 				let vars = variablesProp;
 				onWhatsappPutTemplate(refDocId,txt);
 			}
-        };
+        };*/
 		let loggedUser = await dSession.currentUser;
 		let userData = {
 			Name: loggedUser.name,
@@ -1441,6 +1441,8 @@ async function newWhatsAppChatControl(opts){
 			googleMapsKey: null, //TODO
 			s3Key: s3Key,
 			putTemplateRequested: function(txt){
+				debugger;
+				let vars = variablesProp;
 				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt);
 			}
 		};
