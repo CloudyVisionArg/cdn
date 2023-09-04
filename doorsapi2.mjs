@@ -681,7 +681,7 @@ export class Session {
     }
 
     /**
-    Devuelve los tags de session.
+    Devuelve o setea tags de session.
     @returns {Promise<Object>}
     */
     tags(key, value) {
@@ -715,6 +715,24 @@ export class Session {
         console.warn('Metodo deprecado, usar dSession.tags');
         return this.tags(key, value);
     }
+
+
+    async tokensAdd(token, value) {
+
+        await this.utils.execVbs('dSession.TokensAdd "", ""');
+        //dSession.TokensAdd "APPVIRTUALROOT", "/c"
+    }
+
+    tokenDelete() {
+    }
+
+    tokensReplace(text) {
+        Doors.API.prototype.tokensReplace = function (inputString) {
+            var str = inputString ? inputString : "";
+            var url = "session/tokens/replaced?text=" + encodeURIComponent(str);
+            return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
+        };
+    }        
 
     /**
     Devuelve o setea un setting de usuario.
@@ -4672,6 +4690,23 @@ export class Utilities {
 
     get URL() {
         return _URL;
+    }
+
+    /**
+    Encodea un string de vbs agregando las comillas dobles al comienzo y final
+    y escapando comillas dobles, \r y \n
+    @returns {string}
+    */
+    vbsEncodeString(text) {
+        let ret = text;
+        ret = ret.replaceAll('"', '""');
+        ret = ret.replaceAll('\r\n', '"" & vbCrLf & ""');
+        ret = ret.replaceAll('\r', '"" & vbCr & ""');
+        ret = ret.replaceAll('\n', '"" & vbLf & ""');
+        ret = '"' + ret + '"';
+        if (ret.substring(0, 5) == '"" & ') ret = ret.substring(5);
+        if (ret.substring(ret.length - 5) == ' & ""') ret = ret.substring(0, ret.length - 5);
+        return ret;
     }
 
     /** Alias de xmlDecode */
