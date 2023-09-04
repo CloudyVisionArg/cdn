@@ -716,22 +716,33 @@ export class Session {
         return this.tags(key, value);
     }
 
-
+    /**
+    Agrega un token de sesion
+    */
     async tokensAdd(token, value) {
-
-        await this.utils.execVbs('dSession.TokensAdd "", ""');
-        //dSession.TokensAdd "APPVIRTUALROOT", "/c"
+        return this.utils.execVbs(`dSession.TokensAdd ${ this.session.utils.vbsEncodeString(token) }, ${ this.session.utils.vbsEncodeString(value) }`);
     }
 
-    tokenDelete() {
+    /**
+    Borra un token de sesion
+    */
+    tokenDelete(token) {
+        return this.utils.execVbs(`dSession.TokensDelete ${ this.session.utils.vbsEncodeString(token) }`);
     }
 
+    /**
+    Reemplaza los tokens de text
+    @returns {Promise<string>}
+    */
     tokensReplace(text) {
-        Doors.API.prototype.tokensReplace = function (inputString) {
-            var str = inputString ? inputString : "";
-            var url = "session/tokens/replaced?text=" + encodeURIComponent(str);
-            return Doors.RESTFULL.asyncCall(url, "POST", {}, "");
-        };
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url = 'session/tokens/replaced?text=' + encodeURIComponent(text ? text : '');
+            me.restClient.fetch(url, 'POST', {}, '').then(
+                res => { resolve(res) },
+                reject
+            )
+        })
     }        
 
     /**
@@ -1539,7 +1550,7 @@ export class Database {
     */
     async nextVal(sequence) {
         var res = await this.session.utils.execVbs(`
-            Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
+            Response.Write dSession.Db.NextVal(${ this.session.utils.vbsEncodeString(sequence) })
         `);
 
         return parseInt(await res.text());
@@ -1554,7 +1565,7 @@ export class Database {
         sql = sql.replaceAll('\n', ' ');
 
         var res = await this.session.utils.execVbs(`
-            Set rcs = dSession.Db.OpenRecordset("${sql}")
+            Set rcs = dSession.Db.OpenRecordset(${ this.session.utils.vbsEncodeString(sql) })
             rcs.Save Response, 1
             rcs.Close
         `);
