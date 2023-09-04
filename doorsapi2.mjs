@@ -4708,9 +4708,9 @@ export class Utilities {
     vbsEncodeString(text) {
         let ret = text;
         ret = ret.replaceAll('"', '""');
-        ret = ret.replaceAll('\r\n', '"" & vbCrLf & ""');
-        ret = ret.replaceAll('\r', '"" & vbCr & ""');
-        ret = ret.replaceAll('\n', '"" & vbLf & ""');
+        ret = ret.replaceAll('\r\n', '" & vbCrLf & "');
+        ret = ret.replaceAll('\r', '" & vbCr & "');
+        ret = ret.replaceAll('\n', '" & vbLf & "');
         ret = '"' + ret + '"';
         if (ret.substring(0, 5) == '"" & ') ret = ret.substring(5);
         if (ret.substring(ret.length - 5) == ' & ""') ret = ret.substring(0, ret.length - 5);
