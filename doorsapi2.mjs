@@ -726,7 +726,7 @@ export class Session {
     /**
     Borra un token de sesion
     */
-    tokenDelete(token) {
+    tokensDelete(token) {
         return this.utils.execVbs(`dSession.TokensDelete ${ this.utils.vbsEncodeString(token) }`);
     }
 
