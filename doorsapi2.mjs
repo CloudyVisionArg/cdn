@@ -712,7 +712,7 @@ export class Session {
     }
 
     tagsAdd(key, value) {
-        console.log('Deprecado, usar tags');
+        console.warn('Metodo deprecado, usar dSession.tags');
         return this.tags(key, value);
     }
 
