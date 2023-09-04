@@ -720,7 +720,7 @@ export class Session {
     Agrega un token de sesion
     */
     async tokensAdd(token, value) {
-        return this.utils.execVbs(`dSession.TokensAdd ${ this.utils.vbsEncodeString(token) }, ${ this.session.utils.vbsEncodeString(value) }`);
+        return this.utils.execVbs(`dSession.TokensAdd ${ this.utils.vbsEncodeString(token) }, ${ this.utils.vbsEncodeString(value) }`);
     }
 
     /**
