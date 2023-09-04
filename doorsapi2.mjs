@@ -3664,8 +3664,16 @@ export class Node {
         var assDef = this.session.utils.assignDefined;
         assDef(code, cfg, 'owner');
         assDef(code, cfg, 'repo');
-        assDef(code, cfg, 'ref');
-        assDef(code, cfg, 'fresh');
+        // ref y fresh solo se asigna si es el mismo owner y repo de la config
+        let codeOwner = code.owner ? code.owner.toLowerCase() : code.owner;
+        let codeRepo = code.repo ? code.repo.toLowerCase() : code.repo;
+        let cfgOwner = cfg.owner ? cfg.owner.toLowerCase() : cfg.owner;
+        let cfgRepo = cfg.repo ? cfg.repo.toLowerCase() : cfg.repo;
+        debugger;
+        if (codeOwner == cfgOwner && codeRepo == cfgRepo) {
+            assDef(code, cfg, 'ref');
+            assDef(code, cfg, 'fresh');
+        }
         return code;
     }
 
@@ -3821,7 +3829,7 @@ export class Node {
     */
     async modCall(options) {
         return await this.exec({
-            code: { repo: 'Global', path: 'server/modproxy.js', ref: 'main' },
+            code: { repo: 'Global', path: 'server/modproxy.js' },
             payload: options,
         });
     }
