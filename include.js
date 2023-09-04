@@ -25,7 +25,9 @@ function registeredScripts() {
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 313 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 314 });
     /*
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 310 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 262 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 305 });
@@ -33,18 +35,9 @@ function registeredScripts() {
     */
 
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 311, hasdep: true });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 310 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 310 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 312 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 311 });
-    /*
-    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 307 });
-    scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 308 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 296, hasdep: true });
-    */
-
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 309 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 308 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 296 });
