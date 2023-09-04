@@ -1561,9 +1561,6 @@ export class Database {
     @returns {Promise<Object[]>}
     */
     async openRecordset(sql) {
-        sql = sql.replaceAll('"', '""');
-        sql = sql.replaceAll('\n', ' ');
-
         var res = await this.session.utils.execVbs(`
             Set rcs = dSession.Db.OpenRecordset(${ this.session.utils.vbsEncodeString(sql) })
             rcs.Save Response, 1
