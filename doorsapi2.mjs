@@ -684,26 +684,36 @@ export class Session {
     Devuelve los tags de session.
     @returns {Promise<Object>}
     */
-    get tags() {
+    tags(key, value) {
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'session/tags';
-            me.restClient.fetch(url, 'GET', '', '').then(
-                res => { resolve(res) },
-                reject
-            )
+            if (value == undefined) {
+                // Devuelve
+                var url = 'session/tags';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        if (key == undefined) {
+                            resolve(res);
+                        } else {
+                            resolve(res[key]);
+                        }
+                    },
+                    reject
+                )
+            } else {
+                // Setea
+                var url = 'session/tags';
+                me.restClient.fetch(url, 'POST', { key, value }, '').then(
+                    res => { resolve(res) },
+                    reject
+                )
+            } 
         })
     }
 
     tagsAdd(key, value) {
-        var me = this;
-        return new Promise((resolve, reject) => {
-            var url = 'session/tags';
-            me.restClient.fetch(url, 'POST', { key, value }, '').then(
-                res => { resolve(res) },
-                reject
-            )
-        })
+        console.log('Deprecado, usar tags');
+        return this.tags(key, value);
     }
 
     /**
