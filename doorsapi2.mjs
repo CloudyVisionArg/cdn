@@ -4620,15 +4620,7 @@ export class Utilities {
 
     /** Alias de htmlEncode */
     htmlEnc(text, options) {
-        if (this.session.node.inNode) {
-            return _htmlEntities.encode(text, options);
-
-        } else {
-            // todo: conviene hacerlo con htmlEntities?
-            var sp = document.createElement('span');
-            sp.textContent = text;
-            return sp.innerHTML;
-        }
+        return this.htmlEncode(text, options);
     }
 
     /**
