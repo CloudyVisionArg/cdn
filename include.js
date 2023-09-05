@@ -26,8 +26,10 @@ function registeredScripts() {
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 317 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 316, hasdep: true });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 318, hasdep: true });
+    scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 318 });
     /*
+    scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 310 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 311, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 310 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
@@ -36,7 +38,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
     */
 
-    scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 310 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 312 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 311 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 309 });
