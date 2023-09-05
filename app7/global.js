@@ -1389,7 +1389,7 @@ y enviarlo al server
             for (var i = 0; i < args.length; i++) {
                 newLog += ' ' + errMsg(args[i]);
             };
-            newLog += '\n' + log.substring(0, 1024*64);
+            newLog += '\n' + log.substring(0, 1024*128);
             localStorage.setItem('consoleLog', newLog);
         });
 

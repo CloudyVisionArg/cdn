@@ -4,7 +4,6 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
-var incjs = {};
 var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser, _URL;
 
 export { _moment as moment };
