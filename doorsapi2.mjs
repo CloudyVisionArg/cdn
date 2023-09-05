@@ -4,7 +4,7 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
-var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser, _URL;
+var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser, _URL, _htmlEntities;
 
 export { _moment as moment };
 export { _numeral as numeral };
@@ -119,6 +119,18 @@ async function loadUtils() {
             }
         }
     }
+
+
+    // html-entities - https://github.com/mdevils/html-entities
+
+    if (typeof(_htmlEntities) == 'undefined') {
+        debugger;
+        if (inNode()) {
+            var res = await import('html-entities');
+            _htmlEntities = res.default;
+        }
+    }
+
 
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
@@ -4599,6 +4611,20 @@ export class Utilities {
             uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
         }
         return uuid;
+    }
+
+    /**
+    options se usa solo en node. Ver detalle: https://github.com/mdevils/html-entities
+    */
+    htmlEncode(text, options) {
+        if (this.session.node.inNode) {
+            return _htmlEntities.encode(text, options);
+
+        } else {
+            var sp = document.createElement('span');
+            sp.textContent = text;
+            return sp.innerHTML;
+        }
     }
 
     inNode() {
