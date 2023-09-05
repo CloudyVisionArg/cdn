@@ -4621,6 +4621,7 @@ export class Utilities {
             return _htmlEntities.encode(text, options);
 
         } else {
+            // todo: conviene hacerlo con htmlEntities?
             var sp = document.createElement('span');
             sp.textContent = text;
             return sp.innerHTML;
