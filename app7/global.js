@@ -529,12 +529,13 @@ async function showLogin() {
                         
                     }, function (err) {
                         setMessage(errMsg(err));
+                        disableInputs(false);
+                        setIsLogged(false);
                         if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
                             $get('#chpass').closest('li').show();
                         }
-                        disableInputs(false);
-                        setIsLogged(false);
                     })
+
                 } else {
                     disableInputs(false);
                     setIsLogged(false);
