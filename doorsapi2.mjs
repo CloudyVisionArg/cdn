@@ -11,6 +11,7 @@ export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
+export { _htmlEntities as htmlEntities }
 
 await loadUtils();
 
@@ -124,7 +125,6 @@ async function loadUtils() {
     // html-entities - https://github.com/mdevils/html-entities
 
     if (typeof(_htmlEntities) == 'undefined') {
-        debugger;
         if (inNode()) {
             var res = await import('html-entities');
             _htmlEntities = res.default;
