@@ -4600,6 +4600,11 @@ export class Utilities {
         }
     }
 
+    /** https://github.com/NaturalIntelligence/fast-xml-parser */
+    get fastXmlParser() {
+        return _fastXmlParser;
+    }
+
     getGuid() {
         var uuid = '', i, random;
         for (i = 0; i < 32; i++) {
@@ -4611,6 +4616,19 @@ export class Utilities {
             uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
         }
         return uuid;
+    }
+
+    /** Alias de htmlEncode */
+    htmlEnc(text, options) {
+        if (this.session.node.inNode) {
+            return _htmlEntities.encode(text, options);
+
+        } else {
+            // todo: conviene hacerlo con htmlEntities?
+            var sp = document.createElement('span');
+            sp.textContent = text;
+            return sp.innerHTML;
+        }
     }
 
     /**
@@ -4626,6 +4644,11 @@ export class Utilities {
             sp.textContent = text;
             return sp.innerHTML;
         }
+    }
+
+    /** https://github.com/mdevils/html-entities */
+    get htmlEntities() {
+        return _htmlEntities;
     }
 
     inNode() {
