@@ -412,8 +412,12 @@ export class Session {
                 let url = 'doorsversion';
                 me.restClient.fetch(url, 'GET', '', '').then(
                     async res => {
-                        debugger;
-                        //resolve(doc);
+                        let ver = res.split('.');
+                        ver.forEach((el, ix) => {
+                            ver[ix] = me.utils.lZeros(el, 3);
+                        });
+                        me.#doorsVersion = ver.join('.');
+                        resolve(me.#doorsVersion);
                     },
                     reject
                 );
