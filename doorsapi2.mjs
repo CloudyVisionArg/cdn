@@ -409,6 +409,15 @@ export class Session {
                 resolve(me.#doorsVersion);
 
             } else {
+                let url = 'doorsversion';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    async res => {
+                        debugger;
+                        //resolve(doc);
+                    },
+                    reject
+                );
+
                 try {
                     var res = await me.utils.execVbs('Response.Write dSession.Version');
                     let ver = await res.text();
