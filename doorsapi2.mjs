@@ -421,20 +421,6 @@ export class Session {
                     },
                     reject
                 );
-
-                try {
-                    var res = await me.utils.execVbs('Response.Write dSession.Version');
-                    let ver = await res.text();
-                    ver = ver.split('.');
-                    ver.forEach((el, ix) => {
-                        ver[ix] = me.utils.lZeros(el, 3);
-                    });
-                    me.#doorsVersion = ver.join('.');
-                    resolve(me.#doorsVersion);
-
-                } catch(err) {
-                    reject(err);
-                }
             }        
         });
     }
