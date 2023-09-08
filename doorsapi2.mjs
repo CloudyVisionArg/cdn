@@ -1557,6 +1557,8 @@ export class Database {
             dSession.Db.Execute ${ this.session.utils.vbsEncodeString(sql) }, aff
             Response.Write aff
         `);
+
+        return parseInt(await res.text());
     }
 
     /**
