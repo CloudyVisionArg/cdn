@@ -660,8 +660,8 @@ export class Session {
         return this.#serverUrl;
     }
     set serverUrl(value) {
-        this.#serverUrl = value;
         this.#reset();
+        this.#serverUrl = value;
     }
 
     /**
@@ -3973,6 +3973,16 @@ export class Properties extends DoorsMap {
         });
     }
 
+    has(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.has(key)) },
+                reject
+            )
+        });
+    }
+
     get parent() {
         return this.#parent;
     }
@@ -4020,6 +4030,16 @@ export class Properties extends DoorsMap {
                 )
             });
         }
+    }
+
+    get size() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.size) },
+                reject
+            )
+        });
     }
 
     get user() {
