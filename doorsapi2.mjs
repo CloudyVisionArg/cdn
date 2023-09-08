@@ -1547,12 +1547,17 @@ export class Database {
         this.#session = session;
     }
 
-    /** No implementado aun */
-    /*
-    async execute(sql) {
-        // todo
-    }
+    /**
+    Ejecuta un sql y devuelve los registros afectados.
+    @returns {Promise<number>}
     */
+    async execute(sql) {
+        var res = await this.session.utils.execVbs(`
+            Dim aff
+            dSession.Db.Execute(${ this.session.utils.vbsEncodeString(sql) }, aff)
+            Response.Write aff
+        `);
+    }
 
     /**
     Obtiene el siguiente valor de la secuencia.
