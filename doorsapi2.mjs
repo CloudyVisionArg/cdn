@@ -1554,7 +1554,7 @@ export class Database {
     async execute(sql) {
         var res = await this.session.utils.execVbs(`
             Dim aff
-            dSession.Db.Execute(${ this.session.utils.vbsEncodeString(sql) }, aff)
+            dSession.Db.Execute ${ this.session.utils.vbsEncodeString(sql) }, aff
             Response.Write aff
         `);
     }
