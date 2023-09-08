@@ -233,7 +233,7 @@ export class DoorsMap extends Map {
 
     /** Alias de size */
     get length() {
-        return super.size;
+        return this.size;
     }
 
     /** Alias de delete */
