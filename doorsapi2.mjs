@@ -1102,7 +1102,7 @@ export class Account {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -1174,7 +1174,7 @@ export class Account {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -1437,7 +1437,7 @@ export class Attachment {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -1532,7 +1532,7 @@ export class Attachment {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -2256,7 +2256,7 @@ export class Document {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -2374,7 +2374,7 @@ export class Document {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -2492,7 +2492,7 @@ export class Field {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -2541,7 +2541,7 @@ export class Field {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -3130,7 +3130,7 @@ export class Folder {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -3292,7 +3292,7 @@ export class Folder {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -3603,7 +3603,7 @@ export class Form {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -3682,7 +3682,7 @@ export class Form {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -5043,7 +5043,7 @@ export class View {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -5089,7 +5089,7 @@ export class View {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
