@@ -12,6 +12,7 @@ const changePasswordException = 'Gestar.Doors.API.ObjectModelW.UserMustChangePas
 var initScripts = [];
 
 initScripts.push({ id: 'doorsapi' });
+debugger;
 initScripts.push({ id: 'app7-global' });
 initScripts.push({ id: 'app7-controls' });
 initScripts.push({ id: 'app7-sync', depends: ['jslib', 'app7-global', 'app7-doorsapi'] });
