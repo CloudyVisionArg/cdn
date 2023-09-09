@@ -265,7 +265,7 @@ var app = {
 
         var path = location.pathname;
         self.rootPath = path.substring(0, path.lastIndexOf('/'));
-
+        debugger;
         console.log(
             'device.cordova: ' + device.cordova + ' / ' +
             'device.platform: ' + device.platform + ' / ' +
