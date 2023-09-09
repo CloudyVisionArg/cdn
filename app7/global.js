@@ -2269,6 +2269,7 @@ async function pickImages(opts){
     if (_isCapacitor()) {
         let options = {};
         if(opts) { options = opts; }
+        debugger;
         const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
         if(hasPermission){
             const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
