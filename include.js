@@ -25,7 +25,7 @@ function registeredScripts() {
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 313 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 319 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 320 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 318, hasdep: true });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 318 });
     /*
