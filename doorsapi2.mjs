@@ -1655,7 +1655,7 @@ export class Database {
                 };
     
             } else {
-                throw 'Unknown type: ' + type;
+                throw new Error('sqlEncode error - Unknown type: ' + type);
             }
         };
     }
