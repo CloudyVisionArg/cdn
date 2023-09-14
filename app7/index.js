@@ -383,7 +383,7 @@ var app = {
 };
 
 function sessionMsg() {
-    dSession.tags.then(
+    dSession.tags().then(
         res => {
             if (res.message) {
                 app7.toast.create({
@@ -399,7 +399,7 @@ function sessionMsg() {
 }
 
 function sessionMsg() {
-    dSession.tags.then(
+    dSession.tags().then(
         res => {
             if (res.message) {
                 app7.toast.create({
