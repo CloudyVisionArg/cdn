@@ -398,22 +398,6 @@ function sessionMsg() {
     )
 }
 
-function sessionMsg() {
-    dSession.tags().then(
-        res => {
-            if (res.message) {
-                app7.toast.create({
-                    text: res.message,
-                    closeTimeout: 15000,
-                    position: 'center',
-                    closeButton: false,
-                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
-                }).open();
-            }
-        }
-    )
-}
-
 function pushRegCordova() {
     if (device.platform != 'browser') {
         var pushSettings = {
