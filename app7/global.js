@@ -1112,20 +1112,21 @@ async function addListenersCapacitor (pCallback) {
     }
 
     //await Capacitor.Plugins.PushNotifications.register();
+    let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
+
+    if (permStatus.receive === 'prompt') {
+        permStatus = await Capacitor.Plugins.PushNotifications.requestPermissions();
+    }
+
+    if (permStatus.receive !== 'granted') {
+        throw new Error('User denied permissions!');
+    }
+    await Capacitor.Plugins.PushNotifications.register();
 }
 
 
 async function registerNotificationsCapacitor() {
-    let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
-
-    if (permStatus.receive === 'prompt') {
-      permStatus = await Capacitor.Plugins.PushNotifications.requestPermissions();
-    }
-  
-    if (permStatus.receive !== 'granted') {
-      throw new Error('User denied permissions!');
-    }
-    await Capacitor.Plugins.PushNotifications.register();
+ 
 }
 
 
