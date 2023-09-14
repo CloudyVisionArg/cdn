@@ -1003,6 +1003,7 @@ function pushUnreg(pCallback) {
 // Registra el dispositivo para notificaciones Push
 async function pushRegistrationCapacitor(pCallback) {
     console.log('pushRegistrationCapacitor begin');
+    debugger;
     await addListenersCapacitor(pCallback);
     await registerNotificationsCapacitor();
 }
