@@ -1111,13 +1111,23 @@ async function addListenersCapacitor (pCallback) {
         throw new Error('User denied permissions!');
     }
 
-    await Capacitor.Plugins.PushNotifications.register();
+    //await Capacitor.Plugins.PushNotifications.register();
 }
 
 
 async function registerNotificationsCapacitor() {
+    let permStatus = await Capacitor.Plugins.PushNotifications.checkPermissions();
 
+    if (permStatus.receive === 'prompt') {
+      permStatus = await Capacitor.Plugins.PushNotifications.requestPermissions();
+    }
+  
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!');
+    }
+    await Capacitor.Plugins.PushNotifications.register();
 }
+
 
 function pushUnregCapacitor(pCallback) {
     if (app.pushData) {
