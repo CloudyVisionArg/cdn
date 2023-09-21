@@ -192,7 +192,7 @@ $btn.click(function (e) {
 // $btn.hide();
 
 // Boton Acciones
-$btn = getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
+$btn = getLink({ iosicon: 'menu', mdicon: 'menu' });
 $btn.attr('id', 'buttonActions');
 $btn.appendTo($page.find('.navbar-inner .left'));
 $btn.on('click', function (e) {

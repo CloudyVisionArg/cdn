@@ -128,13 +128,13 @@ function dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback) {
                 function (tx, err) {
                     err.sqlStatement = pSql;
                     err.arguments = pArgs;
-                    console.log(err);
+                    console.error(errMsg(err));
                     if (pErrorCallback) pErrorCallback(err, tx);
                 }
             )
         },
         function (err) {
-            console.log(err);
+            console.error(errMsg(err));
             if (pErrorCallback) pErrorCallback(err);
         }
     );
@@ -150,13 +150,13 @@ function dbRead(pSql, pArgs, pSuccessCallback, pErrorCallback) {
                 function (tx, err) {
                     err.sqlStatement = pSql;
                     err.arguments = pArgs;
-                    console.log(err);
+                    console.error(errMsg(err));
                     if (pErrorCallback) pErrorCallback(err, tx);
                 }
             )
         },
         function (err) {
-            console.log(err);
+            console.error(errMsg(err));
             if (pErrorCallback) pErrorCallback(err);
         }
     );
@@ -226,6 +226,84 @@ async function showConsole(allowClose) {
             ]
         });
 
+        //  Support actions
+        var supportActions = app7.actions.create({
+            buttons: [
+                {
+                    text: 'Enviar reporte de problema',
+                    onClick: function () {
+                        supportMail();
+                    }
+                },
+                {
+                    text: 'serverConsole',
+                    onClick: function () {
+                        var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
+                        if (dt && new Date() < dt) {
+                            localStorage.setItem('serverConsole', '');
+                            toast('serverConsole desactivado');
+                        } else {
+                            localStorage.setItem('serverConsole', moment().add(1, 'h').toJSON());
+                            toast('serverConsole activado por 1 hr');
+                        }
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    color: 'red',
+                    close: true,
+                },
+            ]
+        });
+
+        function supportMail() {
+            debugger;
+            var mail = {
+                to: 'soporte@cloudycrm.net',
+                subject: 'Cloudy CRM - App issue',
+                body: 'Por favor describanos su problema',
+            }
+
+            if (_isCapacitor()) {
+                mail.attachments = [
+                    {
+                        type: 'base64',
+                        path: window.btoa(localStorage.getItem('consoleLog')),
+                        name: "console.txt"
+                    },
+                    {
+                        type: 'base64',
+                        path: localStorageBase64(),
+                        name: "localStorage.txt"
+                    }
+                ]
+                Capacitor.Plugins.EmailComposer.open(mail);
+
+            } else {
+                mail.attachments = [
+                    'base64:console.txt//' + window.btoa(localStorage.getItem('consoleLog')),
+                    'base64:localStorage.txt//' + localStorageBase64(),
+                ];
+                cordova.plugins.email.open(mail);
+            }
+                
+            function localStorageBase64() {
+                var arr = new Array();
+                for (var i = 0; i < localStorage.length; i++) {
+                    if (localStorage.key(i) != 'consoleLog') {
+                        arr.push(localStorage.key(i));
+                    }
+                }
+                var arrOrd = arr.sort();
+        
+                var ret = '';
+                for (var i = 0; i < arrOrd.length; i++) {
+                    ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
+                }
+                return window.btoa(ret);
+            }
+        }
+
         var data = await $.get(scriptSrc('app7-console'));
         popup = app7.popup.create({
             content: data,
@@ -241,6 +319,7 @@ async function showConsole(allowClose) {
         popup.open();
         return popup;
 
+
         function onPopupOpen(popup) {
             $get('#close').click(function () {
                 popup.close();
@@ -254,7 +333,7 @@ async function showConsole(allowClose) {
 
             this.intervalId = setInterval(function () {
                 if (popup.opened) {
-                    var log = window.localStorage.getItem('consoleLog');
+                    var log = localStorage.getItem('consoleLog');
                     if ($get('#log').html() != log) {
                         $get('#log').html(log);
                     }
@@ -262,7 +341,6 @@ async function showConsole(allowClose) {
             }, 250);
 
             $get('#credentials').click(function (e) {
-                popup.close();
                 showLogin(true);
             });
 
@@ -271,52 +349,18 @@ async function showConsole(allowClose) {
             });
 
             $get('#support').click(function (e) {
-                if (_isCapacitor()) {
-                    Capacitor.Plugins.EmailComposer.open({
-                        to: 'soporte@cloudycrm.net',
-                        subject: 'Cloudy CRM - App issue',
-                        body: 'Por favor describanos su problema',
-                        attachments: [
-                            {
-                                type: 'base64',
-                                path: window.btoa(window.localStorage.getItem('consoleLog')),
-                                name: "console.txt"
-                            },
-                            {
-                                type: 'base64',
-                                path: localStorageBase64(),
-                                name: "localStorage.txt"
-                            }
-                        ]
-                    });
+                var $act = $(supportActions.actionsHtml);
+                var $butt = $($act.find('div.actions-button-text')[1]);
 
+                var dt = dSession.utils.cDate(localStorage.getItem('serverConsole'));
+                if (dt && new Date() < dt) {
+                    $butt.html('Desactivar serverConsole');
                 } else {
-                    cordova.plugins.email.open({
-                        to: 'soporte@cloudycrm.net',
-                        subject: 'Cloudy CRM - App issue',
-                        body: 'Por favor describanos su problema',
-                        attachments: [
-                            'base64:console.txt//' + window.btoa(window.localStorage.getItem('consoleLog')),
-                            'base64:localStorage.txt//' + localStorageBase64(),
-                        ],
-                    });
-                } 
-                
-                function localStorageBase64() {
-                    var arr = new Array();
-                    for (var i = 0; i < localStorage.length; i++) {
-                        if (localStorage.key(i) != 'consoleLog') {
-                            arr.push(localStorage.key(i));
-                        }
-                    }
-                    var arrOrd = arr.sort();
-            
-                    var ret = '';
-                    for (var i = 0; i < arrOrd.length; i++) {
-                        ret += arrOrd[i] + ': ' + localStorage.getItem(arrOrd[i]) + '\n';
-                    }
-                    return window.btoa(ret);
+                    $butt.html('Activar serverConsole por 1 hr');
                 }
+
+                supportActions.actionsHtml = $act[0].outerHTML;
+                supportActions.open();
             });
 
             $get('#restart').click(function (e) {
@@ -386,9 +430,9 @@ async function showLogin() {
                 ],
             });
                 
-            popup.pStuff = {};
-            popup.pStuff.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
-            popup.pStuff.corpToggle.on('change', function () {
+            popup.el.crm = {};
+            popup.el.crm.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
+            popup.el.crm.corpToggle.on('change', function () {
                 setCorpVersion(this.checked);
             });
 
@@ -458,10 +502,10 @@ async function showLogin() {
             function fillControls() {
                 $get('#message').hide()
 
-                var userName = window.localStorage.getItem('userName');
-                var instance = window.localStorage.getItem('instance');
-                var endPoint = window.localStorage.getItem('endPoint');
-                var appName = window.localStorage.getItem('appName');
+                var userName = localStorage.getItem('userName');
+                var instance = localStorage.getItem('instance');
+                var endPoint = localStorage.getItem('endPoint');
+                var appName = localStorage.getItem('appName');
         
                 $get('#logon').closest('li').hide();
                 $get('#logoff').closest('li').hide();
@@ -474,8 +518,8 @@ async function showLogin() {
                 setInputVal($get('#endpoint'), endPoint);
                 setInputVal($get('#appname'), appName ? appName : 'default');
 
-                popup.pStuff.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
-                setCorpVersion(popup.pStuff.corpToggle.checked);
+                popup.el.crm.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
+                setCorpVersion(popup.el.crm.corpToggle.checked);
             
                 if (userName && instance && endPoint) {
                     dSession.checkToken(function () {
@@ -485,12 +529,13 @@ async function showLogin() {
                         
                     }, function (err) {
                         setMessage(errMsg(err));
-                        if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
-                            $get('#chpass').closest('li').show();
-                        }
                         disableInputs(false);
                         setIsLogged(false);
+                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                            $get('#chpass').closest('li').show();
+                        }
                     })
+
                 } else {
                     disableInputs(false);
                     setIsLogged(false);
@@ -504,11 +549,11 @@ async function showLogin() {
                 $get('#chpass').closest('li').hide();
                 $get('#resetpass').closest('li').addClass('disabled');
 
-                window.localStorage.setItem('instance', $get('#instance').val());
-                window.localStorage.setItem('endPoint', $get('#endpoint').val());
-                window.localStorage.setItem('appName', $get('#appname').val());
-                window.localStorage.setItem('userName', $get('#username').val());
-                window.localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
+                localStorage.setItem('instance', $get('#instance').val());
+                localStorage.setItem('endPoint', $get('#endpoint').val());
+                localStorage.setItem('appName', $get('#appname').val());
+                localStorage.setItem('userName', $get('#username').val());
+                localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                 
                 dSession.appLogon(function () {
                     setMessage('Sincronizando datos... aguarde por favor', 'white');
@@ -519,13 +564,13 @@ async function showLogin() {
                         })
                     } catch(err) {
                         setMessage(errMsg(err));
-                        console.log(err);
+                        console.error(errMsg(err));
                         fillControls();
                     }
                 }, function (err) {
-                    console.log(err);
+                    console.error(errMsg(err));
                     setMessage(errMsg(err));
-                    if (err.ExceptionType == 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException') {
+                    if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
                         $get('#chpass').closest('li').show();
                     }
                     disableInputs(false);
@@ -622,18 +667,19 @@ async function showLogin() {
             
                 $get('#chpass').addClass('disabled');
             
-                var userName = window.localStorage.getItem('userName');
-                var instance = window.localStorage.getItem('instance');
+                var userName = localStorage.getItem('userName');
+                var instance = localStorage.getItem('instance');
             
                 dSession.changePassword(userName, $get('#oldpass').val(), $new.val(), instance).then(
                     function () {
-                        window.localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
+                        localStorage.setItem('userPassword', dSession.encryptPass($new.val()));
                         app7.dialog.alert('Se ha cambiado su contrase&ntilde;a', function (dialog, e) {
-                            page.router.back();
+                            //page.router.back();
+                            location.href = 'index.html';
                         });
             
                     }, function (err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         app7.dialog.alert(errMsg(err));
                         $get('#chpass').removeClass('disabled');
                     }
@@ -807,7 +853,7 @@ async function showLogin() {
             };
 
             function onError(pErr) {
-                console.log(pErr);
+                console.error(errMsg(pErr));
                 setMessage('message', errMsg(pErr));
                 disableInputs(false);
                 dSession.logoff();
@@ -919,7 +965,7 @@ function cleanDb(pCallback) {
                             if (pCallback) pCallback();
                         }
                     },
-                    function (tx, err) { console.log(err); }
+                    function (tx, err) { console.error(errMsg(err)); }
                 );
             };
             calls++;
@@ -931,10 +977,10 @@ function cleanDb(pCallback) {
                         if (pCallback) pCallback();
                     }
                 },
-                function (tx, err) { console.log(err); }
+                function (tx, err) { console.error(errMsg(err)); }
             );
         },
-        function (tx, err) { console.log(err); }
+        function (tx, err) { console.error(errMsg(err)); }
         );
     });
 }
@@ -1083,13 +1129,13 @@ function pushUnregCapacitor(pCallback) {
                         if (pCallback) pCallback();
                     },
                     function (err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         if (pCallback) pCallback();
                     }
                 );
             },
             (err) => {
-                console.log('Error removing notifications listeners');
+                console.error('Error removing notifications listeners: ' + errMsg(err));
                 if (pCallback) pCallback();
             }
         );
@@ -1128,7 +1174,7 @@ function pushRegistration(pPushSetings, pCallback) {
     });
 
     app.push.on('error', (e) => {
-        console.log('push init error: ' + e.message);
+        console.error('pushRegistration error: ' + errMsg(e));
     });
 }
 
@@ -1142,13 +1188,13 @@ function pushUnregCordova(pCallback){
                         if (pCallback) pCallback();
                     },
                     function (err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         if (pCallback) pCallback();
                     }
                 );
             },
             function () {
-                console.log('pushUnreg error');
+                console.error('pushUnreg error');
                 if (pCallback) pCallback();
             }
         );
@@ -1233,7 +1279,7 @@ function saveDoc(pTable, pFields, pCallback, pSkipServer) {
                             }
                         },
                         function (tx, err) {
-                            console.log(err);
+                            console.error(errMsg(err));
                             if (pCallback) pCallback(2, err);
                         }
                     );
@@ -1266,14 +1312,14 @@ function saveDoc(pTable, pFields, pCallback, pSkipServer) {
                             }
                         },
                         function (tx, err) {
-                            console.log(err);
+                            console.error(errMsg(err));
                             if (pCallback) pCallback(2, err);
                         }
                     );
                 }
             },
             function (err) {
-                console.log(err);
+                console.error(errMsg(err));
                 if (pCallback) pCallback(2, err);
             }
         )
@@ -1295,14 +1341,14 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
                             if (pCallback) pCallback(0, 'Ok', doc);
                         },
                         function (err) {
-                            console.log(err);
+                            console.error(errMsg(err));
                             if (pCallback) pCallback(1, err);
                         }
                     )
                 }
             },
             function (err) {
-                console.log(err);
+                console.error(errMsg(err));
                 if (pCallback) pCallback(2, err);
             }
         );
@@ -1312,35 +1358,74 @@ function saveDoc2(pTable, pKeyName, pKeyVal, pCallback) {
     }
 }
 
-// Sobrecarga console.log y console.error para dejarlo guardado en el localStorage
+/*
+Sobrecarga console.log y console.error para dejarlo guardado en el localStorage
+y enviarlo al server
+*/
 (function() {
-    var exLog = console.log;
-    console.log = function (msg) {
-        // Llamada al log estandar
-        exLog.apply(this, arguments);
-        appendLog(msg);
+    console._origLog = console.log;
+    console.log = function () {
+        console._origLog.apply(this, arguments);
+        appConsole('log', arguments);
+    }
+    
+    console._origWarn = console.warn;
+    console.warn = function () {
+        console._origWarn.apply(this, arguments);
+        appConsole('warn', arguments);
+    }
+    
+    console._origError = console.error;
+    console.error = function () {
+        console._origError.apply(this, arguments);
+        appConsole('error', arguments);
     }
 
-    var exErr = console.error;
-    console.error = function (msg) {
-        // Llamada al metodo estandar
-        exErr.apply(this, arguments);
-        appendLog(msg, true);
-    }
-
-    function appendLog(msg, isErr) {
+    function appConsole(method, args) {
+        // Consola en localSettings
         scriptLoaded('jslib', function () {
-            var log = window.localStorage.getItem('consoleLog');
+            var log = localStorage.getItem('consoleLog');
             if (!log) log = '';
-            log = logDateTime(new Date()) + ' - ' + (isErr ? 'ERR: ' : '') + errMsg(msg) + '\n' + log.substring(0, 1024*64);
-            window.localStorage.setItem('consoleLog', log);
+            newLog = logDateTime(new Date()) + ' -' + (method == 'log' ? '' : ' ' + method.toUpperCase() + ':');
+            for (var i = 0; i < args.length; i++) {
+                newLog += ' ' + errMsg(args[i]);
+            };
+            newLog += '\n' + log.substring(0, 1024*128);
+            localStorage.setItem('consoleLog', newLog);
         });
+
+        // Consola del server
+        var dt = new Date(localStorage.getItem('serverConsole'));
+        if (dt && dt.getTime() && new Date() < dt) {
+            var arrArgs = [];
+            for (var i = 0; i < args.length; i++) {
+                arrArgs.push(args[i]);
+            }
+            arrArgs.push({
+                consoleTag1: 'App',
+                consoleTag2: localStorage.getItem('instance'),
+                consoleTag3: localStorage.getItem('userName'),
+            });
+            var body = {};
+            body.method = method;
+            body.args = arrArgs;
+
+            fetch('https://node.cloudycrm.net/console', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            });
+        }
     }
 })();
 
-// CryptoJS
-// https://code.google.com/archive/p/crypto-js/
-// https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
+/*
+CryptoJS
+https://code.google.com/archive/p/crypto-js/
+https://stackoverflow.com/questions/18279141/javascript-string-encryption-and-decryption
+*/
 function encrypt(pString, pPass) {
     return CryptoJS.AES.encrypt(pString, pPass).toString();
 }
@@ -1362,13 +1447,13 @@ function executeCode(pCode, pSuccess, pFailure) {
                     console.log('exec ' + pCode + ' ok');
                     if (pSuccess) pSuccess();
                 } catch(err) {
-                    console.log(call + ' error: ' + errMsg(err));
+                    console.error(call + ' error: ' + errMsg(err));
                     if (pFailure) pFailure(err);
                 }
             }
         },
         function (err) {
-            console.log(call + ' error: ' + errMsg(err));
+            console.error(call + ' error: ' + errMsg(err));
             if (pFailure) pFailure(err);
         }
     )
@@ -1380,7 +1465,7 @@ function getCodelib(pCode) {
         try {
             var codeTable = sync.tableName('codelib7');
         } catch (err) {
-            console.log(call + ' error: ' + errMsg(err));
+            console.error(call + ' error: ' + errMsg(err));
             reject(err);
             return;
         }
@@ -1395,12 +1480,12 @@ function getCodelib(pCode) {
                         resolve(row['code']);
                     } else {
                         var err = call + ': not found';
-                        console.log(err);
+                        console.error(err);
                         reject(err);
                     }
                 },
                 function (err) {
-                    console.log(call + ' error: ' + err);
+                    console.error(call + ' error: ' + errMsg(err));
                     reject(err);
                 }
             );
@@ -1651,7 +1736,7 @@ function getFolderElements(pFolder) {
     }
 
     function errFunction(err) {
-        console.log(err);
+        console.error(errMsg(err));
         throw err;
     };
 }
@@ -1844,7 +1929,7 @@ function getFile(pFileURL) {
         }
 
         function errMgr(pErr) {
-            console.log(pErr);
+            console.error(errMsg(pErr));
             reject(pErr);
         }
     });
@@ -2082,11 +2167,11 @@ function audioRecorder(pCallback) {
                         file.name = fileName;
                         pCallback(file);
                     },(err)=>{
-                        console.log("Error obteniendo el audio.", err)
+                        console.error("Error obteniendo el audio.", errMsg(err))
                     }
                 );
             },(err)=>{
-                console.log("Error escribiendo el audio.", err)
+                console.error("Error escribiendo el audio.", errMsg(err))
             });
         clearInterval(interv);
         sheet.close();
@@ -2163,7 +2248,7 @@ function audioRecorder(pCallback) {
                         fileEntry.file(pCallback);
                     },
                     function (err) {
-                        console.log('moveTo error: ' + err.code);
+                        console.error('moveTo error: ' + err.code);
                         pFileEntry.file(pCallback); // Pasa el que venia nomas
                     }
                 )
@@ -2176,7 +2261,7 @@ function audioRecorder(pCallback) {
 
 async function requestPermissionsImages(cameraPermissionType){
     const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
-    return (oPermissionStatus[cameraPermissionType] == 'granted');
+    return (oPermissionStatus[cameraPermissionType] == 'granted' || oPermissionStatus[cameraPermissionType] == 'limited');
 }
 
 async function pickImages(opts){

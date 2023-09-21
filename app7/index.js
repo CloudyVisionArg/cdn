@@ -7,6 +7,7 @@ var db;
 var doorsapi2;
 /** @type {import('../doorsapi2.mjs').Session} */
 var dSession;
+const changePasswordException = 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException';
 
 var initScripts = [];
 
@@ -65,32 +66,32 @@ var app = {
         // Verificacion de plugins
         if(typeof(Capacitor) != 'undefined'){
             console.log("Capacitor App");
-            if (!Capacitor.Plugins.Camera) console.log('Plugin error: @capacitor/camera');
-            if (!Capacitor.Plugins.StatusBar) console.log('Plugin error: @capacitor/status-bar');
-            if (!Capacitor.Plugins.FileOpener) console.log('Plugin error: @capacitor-community/file-opener');
-            if (!Capacitor.Plugins.Contacts) console.log('Plugin error: @capacitor/contacts');
-            if (!Capacitor.Plugins.PushNotification) console.log('Plugin error:  @capacitor/push-notifications');
-            if (!Capacitor.Plugins.EmailComposer) console.log('Plugin error:  https://github.com/EinfachHans/capacitor-email-composer');
+            if (!Capacitor.Plugins.Camera) console.error('Plugin error: @capacitor/camera');
+            if (!Capacitor.Plugins.StatusBar) console.error('Plugin error: @capacitor/status-bar');
+            if (!Capacitor.Plugins.FileOpener) console.error('Plugin error: @capacitor-community/file-opener');
+            if (!Capacitor.Plugins.Contacts) console.error('Plugin error: @capacitor/contacts');
+            if (!Capacitor.Plugins.PushNotifications) console.error('Plugin error:  @capacitor/push-notifications');
+            if (!Capacitor.Plugins.EmailComposer) console.error('Plugin error:  https://github.com/EinfachHans/capacitor-email-composer');
             
         }    
         else{
             console.log("Cordova App");
-            if (typeof PushNotification == 'undefined') console.log('Plugin error: cordova-plugin-push');
-            if (!window.ContactsX) console.log('Plugin error: cordova-plugin-contacts-x');
-            if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
-            if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
-            if (!navigator.camera) console.log('Plugin error: cordova-plugin-camera');
-            if (!cordova.file) console.log('Plugin error: cordova-plugin-file');
-            if (typeof StatusBar == 'undefined') console.log('Plugin error: cordova-plugin-statusbar');
-            if (!cordova.plugins.email) console.log('Plugin error: cordova-plugin-email-composer');
+            if (typeof PushNotification == 'undefined') console.error('Plugin error: cordova-plugin-push');
+            if (!window.ContactsX) console.error('Plugin error: cordova-plugin-contacts-x');
+            if (!cordova.file) console.error('Plugin error: cordova-plugin-file');
+            if (!window.BackgroundFetch) console.error('Plugin error: cordova-plugin-background-fetch');
+            if (!navigator.camera) console.error('Plugin error: cordova-plugin-camera');
+            if (!cordova.file) console.error('Plugin error: cordova-plugin-file');
+            if (typeof StatusBar == 'undefined') console.error('Plugin error: cordova-plugin-statusbar');
+            if (!cordova.plugins.email) console.error('Plugin error: cordova-plugin-email-composer');
         }
 
         //Comunes o compatibles entre Cordova y Capacitor
-        if (!device) console.log('Plugin error: cordova-plugin-device');
-        if (!window.BackgroundFetch) console.log('Plugin error: cordova-plugin-background-fetch');
-        if (!cordova.InAppBrowser) console.log('Plugin error: cordova-plugin-inappbrowser');
-        if (!window.sqlitePlugin) console.log('Plugin error: cordova-sqlite-storage');
-        if (typeof BuildInfo == 'undefined') console.log('Plugin error: cordova-plugin-buildinfo');
+        if (!device) console.error('Plugin error: cordova-plugin-device');
+        if (!window.BackgroundFetch) console.error('Plugin error: cordova-plugin-background-fetch');
+        if (!cordova.InAppBrowser) console.error('Plugin error: cordova-plugin-inappbrowser');
+        if (!window.sqlitePlugin) console.error('Plugin error: cordova-sqlite-storage');
+        if (typeof BuildInfo == 'undefined') console.error('Plugin error: cordova-plugin-buildinfo');
         
         // Fin verificacion de plugins
 
@@ -154,6 +155,15 @@ var app = {
                     }
                 },
                 {
+                    path: '/gh/',
+                    async: function () {
+                        //todo: terminar
+                        var context = getRouterContext(arguments);
+                        //repo, ref, path var script = context.to.query.script;
+                        //loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
+                    }
+                },
+                {
                     path: '/codelib/',
                     async: function () {
                         var context = getRouterContext(arguments);
@@ -176,7 +186,7 @@ var app = {
                                         try {
                                             eval(row['code']);
                                         } catch(err) {
-                                            console.log(err);
+                                            console.error(errMsg(err));
                                             resolve({ content: errPage(err) });
                                         }
                                     }
@@ -242,7 +252,7 @@ var app = {
                     try {
                         eval(data);
                     } catch(err) {
-                        console.log(err);
+                        console.error(errMsg(err));
                         resolve({ content: errPage(err) });
                     }
                 }
@@ -266,7 +276,7 @@ var app = {
         if (device.platform == 'browser'){
             db = window.openDatabase(
                 'DbName', '', 'Db Display Name', 5*1024*1024,
-                function (db) { console.log('invoked on creation'); }
+                function (db) { console.log('db created'); }
             );
         } else {
             db = window.sqlitePlugin.openDatabase({
@@ -277,7 +287,7 @@ var app = {
                     console.log('openDatabase OK');
                 },
                 function(err) {
-                    console.log('openDatabase Err: ' + JSON.stringify(err));        
+                    console.error('openDatabase Err: ' + errMsg(err));        
                 }
             );
         };
@@ -299,8 +309,12 @@ var app = {
                         sessionMsg();
                     },
                     function (err) {
-                        console.log(err);
-                        showLogin();
+                        console.error(errMsg(err));
+                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                            showLogin();
+                        } else {
+                            showConsole();
+                        }
                     }
                 );
             } else {
@@ -318,14 +332,16 @@ var app = {
                 },
                 function (err) {
                     // Sincroniza full y despues inicia
-                    console.log('onDeviceReady error, full syncing...');
+                    console.error('onDeviceReady error, full syncing...');
                     sync.sync(true, function () {
                         // todo: aca seria mejor recargar el app con un parametro para que si vuelve a fallar haga un stop
                         executeCode('onDeviceReady',
                             function () {
                             },
                             function (err) {
-                                console.log('onDeviceReady error, app stopped');
+                                showConsole();
+                                console.error('onDeviceReady error: ' + errMsg(err));
+                                toast('Error al iniciar la aplicacion, contacte a soporte', 5000);
                             }
                         );
                     });
@@ -347,12 +363,16 @@ var app = {
                         sync.sync(false);
                         if (window.refreshNotifications) window.refreshNotifications();
                         executeCode('onResume');
-                        sessionMsg();
+                        //sessionMsg();
                     },
                     function (err) {
-                        console.log(err);
-                        toast(errMsg(err));
-                        showLogin();
+                        console.error(errMsg(err));
+                        toast(errMsg(err), 5000);
+                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                            showLogin();
+                        } else {
+                            showConsole();
+                        }
                     }
                 )
             }
@@ -362,10 +382,8 @@ var app = {
     },
 };
 
-
-
 function sessionMsg() {
-    dSession.tags.then(
+    dSession.tags().then(
         res => {
             if (res.message) {
                 app7.toast.create({
@@ -379,23 +397,6 @@ function sessionMsg() {
         }
     )
 }
-
-function sessionMsg() {
-    dSession.tags.then(
-        res => {
-            if (res.message) {
-                app7.toast.create({
-                    text: res.message,
-                    closeTimeout: 15000,
-                    position: 'center',
-                    closeButton: false,
-                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
-                }).open();
-            }
-        }
-    )
-}
-
 
 function pushRegCordova() {
     if (device.platform != 'browser') {

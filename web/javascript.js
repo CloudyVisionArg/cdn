@@ -6,6 +6,7 @@ Inventario de metodos:
 
 logAndToast(pMsg, pToastOptions)
 preloader
+bootstrapVersion()
 toast(pText, pOptions)
 addInputButton(pControl, pIcon, pAction, pPrepend)
 addPhoneButton(pControl)
@@ -38,8 +39,10 @@ preloader.hide();
 */
 if (typeof jQuery != 'undefined') {
 	var preloader = $('<div/>', {
-		style: 'position:absolute; top:0; left:0; z-index:9999; background-color:rgb(255,255,255,0.5); display:none;',
+		style: 'position:absolute; top:0; left:0; z-index:9999; display:none;',
 	}).appendTo($('body'));
+	preloader.css('background-color', $('body').css('background-color'));
+	preloader.css('opacity', '0.5');
 	preloader.append('<div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);"><div class="spinner-border"></div></div>');
 	preloader.on('show', function () {
 		$(this).css({
@@ -49,13 +52,29 @@ if (typeof jQuery != 'undefined') {
 	})
 }
 
+function bootstrapVersion() {
+	var ver, ret;
+	try {
+		if (typeof bootstrap == 'object') {
+			ver = bootstrap.Button.VERSION;
+		} else {
+			ver = $.fn.button.Constructor.VERSION;
+		}
+		ret = ver.split('.').map(el => parseInt(el));
+		return ret;
+
+	} catch (er) {
+		console.warn('Bootstrap not found');
+	};
+}
+
 // Requiere bootstrap 5 y jQuery
 function toast(pText, pOptions) {
-	//todo: chequear xq $.fn.tooltip a veces es undefined
-	var bsver = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
+	var bsver = bootstrapVersion();
 
 	if (bsver[0] < 5) {
-		console.log('Bootstrap 5 es requerido para toast');
+		console.warn('Bootstrap 5 es requerido para toast');
+		alert(pText);
 		return;
 	};
 
@@ -135,10 +154,10 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	}
 	
 	var spanClass;
-	var bsver = $.fn.tooltip.Constructor.VERSION.split('.').map(el => parseInt(el));
+	var bsver = bootstrapVersion();
 	if (bsver[0] == 3) {
 		spanClass = 'input-group-addon add-on';
-	} else if (bsver[0] >= '5') {
+	} else if (bsver[0] >= 5) {
 		spanClass = 'input-group-text';
 	};
 

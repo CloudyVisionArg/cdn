@@ -604,11 +604,11 @@ function newDocLog(pId, pLabel) {
         }
     }
     
-    cll._value = function (pValue) {
+    cll._value = function (pDoc) {
         var $self = $(this);
         var $tbody = $self.find('tbody');
         $tbody.empty();
-        $self.attr('data-doc-id', pValue);
+        $self.attr('data-doc-id', pDoc.id);
         $self.removeAttr('data-filled');
         if ($self.hasClass('show')) this.fill();
     }
@@ -671,8 +671,8 @@ function newAttachments(pId, pLabel) {
             file = inp.files[i];
 
             var $att = renderAtt({
-                Name: file.name,
-                Size: file.size,
+                name: file.name,
+                size: file.size,
             });
             $att.attr('data-att-action', 'save');
             $att[0]._file = file;
@@ -681,66 +681,38 @@ function newAttachments(pId, pLabel) {
         inp.value = '';
     })
 
-    $div[0]._value = function (pValue) {
+    $div[0]._value = async function (pDoc) {
         var $self = $(this);
         $self.empty();
+        var readonly = $self.attr('readonly') || $self.attr('addonly');
         var tag = $self.attr('data-attachments').toLowerCase();
 
-        if (pValue) {
-            DoorsAPI.attachments(pValue).then(
-                function (res) {
-                    // Filtra por el tag
-                    var atts = res.filter(att => tag == 'all' || (att.Description && att.Description.toLowerCase() == tag));
-
-                    if (atts.length > 0) {
-                        // Ordena por attId
-                        atts.sort(function (a, b) {
-                            return a.AttId >= b.AttId ? 1 : -1;
-                        });
-
-                        // Arma un array de AccId
-                        var ids = atts.map(att => att.AccId);
-                        // Saca los repetidos
-                        ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                        // Levanta los accounts, completa el nombre y renderiza
-                        accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                            function (accs) {
-                                atts.forEach(att => {
-                                    att.AccName = accs.find(acc => acc['AccId'] == att.AccId)['Name'];
-                                    att.Readonly = $self.attr('readonly') || $self.attr('addonly');
-                                    renderAtt(att).appendTo($self);
-                                });
-                            }
-                        )
-                    }
-                },
-
-                function (err) {
-                    logAndToast('Attachments._value error: ' + errMsg(err));
+        if (pDoc) {
+            for (let [key, value] of await pDoc.attachments()) {
+                if (tag == 'all' || (value.description && value.description.toLowerCase() == tag)) {
+                    renderAtt(value, readonly).appendTo($self);
                 }
-            );
+            }
         };
     }
 
-    function renderAtt(pAtt) {
-        // pAtt = { AttId, Name, AccName, Size, Created, Readonly }
-
+    function renderAtt(pAtt, pReadonly) {
         var $grp = $('<div/>', {
             class: 'input-group float-start me-2 mb-1',
             style: 'width: auto;',
-            'data-att-id': pAtt.AttId,
-            'data-att-name': pAtt.Name,
+            'data-att-id': pAtt.id,
+            'data-att-name': pAtt.name,
         });
 
         var $div;
 
-        if (pAtt.AttId) {
+        if (pAtt.id) {
             var $div = $('<a/>', {
                 class: 'link-primary form-control',
             });
             $div.css('cursor', 'pointer');
             $div.click(downloadAtt);
-            $div.attr('title', 'Agregado por ' + pAtt.AccName + ', el ' + formatDate(pAtt.Created) + ' (Id ' + pAtt.AttId + ')');
+            $div.attr('title', 'Agregado por ' + pAtt.ownerName + ', el ' + formatDate(pAtt.created) + ' (#' + pAtt.id + ')');
 
         } else {
             var $div = $('<div/>', {
@@ -749,7 +721,7 @@ function newAttachments(pId, pLabel) {
             $div.attr('title', 'Agregado ahora, pendiente de guardar');
         };
 
-        $div.append(pAtt.Name + ' (' + fileSize(pAtt.Size) + ')').appendTo($grp);
+        $div.append(pAtt.name + ' (' + fileSize(pAtt.size) + ')').appendTo($grp);
 
         $div.attr('data-bs-toggle', 'tooltip');
         if ($div.tooltip) {
@@ -767,7 +739,7 @@ function newAttachments(pId, pLabel) {
             style: 'cursor: pointer;'
         }).appendTo($grp);
 
-        if(pAtt.Readonly) $btn.css({ 'opacity': 0.4, 'pointer-events': 'none' });
+        if(pReadonly) $btn.css({ 'opacity': 0.4, 'pointer-events': 'none' });
 
         $btn.append('<i class="bi bi-x"></i>');
 

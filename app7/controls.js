@@ -1520,7 +1520,7 @@ function getPage(params) {
         else if (pButton == 'search')
             return getLink({ iosicon: 'search', mdicon: 'search' });
         else if (pButton == 'menu')
-            return getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
+            return getLink({ iosicon: 'menu', mdicon: 'menu' });
         else
             return getLink(pButton);
     }

@@ -19,60 +19,60 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 270 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 270 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 270 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 271 });
-    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 272 });
-    //scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 254 });
-    //scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 262 });
-    //scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 269 });
-    //scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 267 });
-    //scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 266 });
+    // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 322 });
+    /*
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 312 });
+    */
+
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 313 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 313 });
+    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
+    scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 321 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 318, hasdep: true });
+    scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 318 });
+    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 311 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 309 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 308 });
+    scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 296 });
+    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 297 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 283, hasdep: true });
     scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 267 });
-	scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 267 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 268, hasdep: true });
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 262 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 262 });
-	scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
+    scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
     scripts.push({ id: 'app7-popovers', path: '/app7/popovers.js', version: 252 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 250 });
     scripts.push({ id: 'app7-session', path: '/app7/session.mjs', version: 250 });
     scripts.push({ id: 'app7-import', path: '/app7/import.js', version: 238 });
-    scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 229 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
-	scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
+    scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
-	scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
-	scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
-	scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 179, hasdep: true });
-    scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 177 });
-    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 168 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
+    scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 149 });
     scripts.push({ id: 'app7-sade-index', path: '/app7/sade/index.js', version: 149 });
-	scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
-	scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
-	scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
-	scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
-	scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
-	scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
-	scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
-	scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
-	scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
-	scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
-	scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
-	scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
+    scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
+    scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
+    scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
+    scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
+    scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
+    scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
+    scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
+    scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
+    scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
+    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
+    scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
+    scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 
-	// Aliases (for backward compatibility)
-	scripts.push({ id: 'app7-dsession', aliasOf: 'app7-session' });
-	scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
-	scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
-	scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
+    // Aliases (for backward compatibility)
+    scripts.push({ id: 'app7-dsession', aliasOf: 'app7-session' });
+    scripts.push({ id: 'app7-doorsapi', aliasOf: 'doorsapi' });
+    scripts.push({ id: 'javascript', aliasOf: 'web-javascript' });
+    scripts.push({ id: 'qrcode', aliasOf: 'lib-qrcode' });
 
-	return scripts;
+    return scripts;
 }
 
 /**
@@ -224,8 +224,14 @@ function include() {
                     if (!scriptNode) {
                         //console.log(pId + ' loading');
                         var D = document;
+
+                        // Saca la extension del archivo
+                        let p = src.indexOf('?');
+                        let f = p >= 0 ? src.substring(0, p) : src;
+                        p = f.lastIndexOf('.');
+                        let ext = p >= 0 ? f.substring(p).toLowerCase() : '';
                         
-                        if (src.substring(src.length - 4).toLowerCase() == '.css') {
+                        if (ext == '.css') {
                             scriptNode = D.createElement('link');
                             scriptNode.rel = 'stylesheet';
                             scriptNode.href = src;
@@ -324,7 +330,7 @@ function scriptSrc(scriptId, version) {
                         if (scr) v = scr.version;
                     };
                 } catch (e) {
-                    // Nothing to do
+                    console.log(e);
                 };
             };
 
@@ -340,7 +346,7 @@ function scriptSrc(scriptId, version) {
             } else {
                 // Branch
                 //src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
-                src = gitCdn({ path: script.path, ref: v, fresh: true, url: true });
+                src = gitCdn({ path: script.path, ref: v, url: true });
             }
         }
 
@@ -352,17 +358,19 @@ function scriptSrc(scriptId, version) {
 }
 
 /**
+Devuelve un buffer con un elemento de GitHub o su url
+
 @example
 gitCdn({
     owner // def CloudyVisionArg
-    repo // Repositorio
+    repo // def cdn
     path // Ruta al archivo, no poner el slash inicial
     ref // Branch / tag
     fresh // Actualiza el cache
-    url // Devuelve la url en vez del contenido. Def false
-    server // 2 para el server de desarrollo
+    url // Devuelve la url en vez del buffer. Def false
+    server // Opcional, def https://cdn.cloudycrm.net
 }
-@returns {string|Promise<string>}
+@returns {string|Promise<SimpleBuffer>}
 */
 function gitCdn(options) {
     if (options.repo && options.path) {
@@ -384,21 +392,13 @@ function gitCdn(options) {
         };
     }
 
-    var url = `https://eventsjs${options.server ? options.server : ''}.cloudycrm.net/gitcdn?`;
-    url += getOpt(options, 'fresh');
-    url += getOpt(options, 'owner');
-    url += getOpt(options, 'repo');
-    url += getOpt(options, 'ref');
-    url += getOpt(options, 'path');
-    url = url.slice(0, -1);
-
-    function getOpt(options, option) {
-        if (options[option] != undefined) {
-            return option + '=' + encodeURIComponent(options[option]) + '&';
-        } else {
-            return '';
-        }
-    }
+    var url = options.server ? options.server : 'https://cdn.cloudycrm.net';
+    url += '/' + (options.owner != undefined ? 'gh/' + options.owner : 'ghcv');
+    url += '/' + (options.repo != undefined ? options.repo : 'cdn');
+    url += options.ref != undefined ? '@' + options.ref : '';
+    while(options.path.substring(0, 1) == '/') options.path = options.path.slice(1);
+    url += '/' + options.path;
+    if (options.fresh == true || options.fresh == 1) url += '?_fresh=1';
 
     if (options.url) {
         return url;
@@ -407,26 +407,23 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        //todo: binario?
-                        resolve(await res.text());
-                    } else {
-                        res.text().then(
-                            async txt => {
-                                try {
-                                    var json = JSON.parse(txt);
-                                    // importa serialize si no esta
-                                    if (!window.serializeError) {
-                                        mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
-                                        window.serializeError = mod.default;
-                                    }
-                                    var err = serializeError.deserializeError(json);
-                                    reject(err);
+                        resolve(new SimpleBuffer(await res.arrayBuffer()));
 
-                                } catch(err) {
-                                    reject(new Error(res.status + ' (' + res.statusText) + ')');
-                                }
+                    } else {
+                        try {
+                            var txt = await res.text();
+                            var json = JSON.parse(txt);
+                            // importa serialize si no esta
+                            if (!window.serializeError) {
+                                mod = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+                                window.serializeError = mod.default;
                             }
-                        );
+                            var err = serializeError.deserializeError(json);
+                            reject(err);
+
+                        } catch(err) {
+                            reject(new Error(res.status + ' (' + res.statusText + ')'));
+                        }
                     }
 
                 },
@@ -436,4 +433,18 @@ function gitCdn(options) {
             )
         });
     }
+}
+
+/*
+Esta es una implementacion simplificada de la clase Buffer de node
+Si hace falta algo mas completo usar https://github.com/feross/buffer
+
+    await include('buffer', 'https://bundle.run/buffer@6.0.3');
+    resolve(buffer.Buffer.from(await res.arrayBuffer()));
+*/
+class SimpleBuffer extends Uint8Array {
+    toString() {
+        var td = new TextDecoder();
+        return td.decode(this);
+    }   
 }

@@ -248,7 +248,6 @@ async function getFolder(pFolder, pCurrentFolderId) {
     return (await dSession.folder(pFolder, pCurrentFolderId)).toJSON();
 }
 
-
 function htmlEncode(pText) {
     var sp = document.createElement('span');
     sp.textContent = pText;

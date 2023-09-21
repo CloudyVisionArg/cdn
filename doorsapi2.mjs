@@ -1,39 +1,19 @@
 /*
-Para conectarse por ssh a windows:
-https://learn.microsoft.com/es-mx/windows-server/administration/openssh/openssh_install_firstuse
-https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication
-https://superuser.com/questions/1635361/starting-openssh-server-in-windows-with-debug-messages-enabled-d
-*/
-/*
-todo: Safari soporta metodos privados recien en la v15.
-Cdo esta sea estandar reemplazar los _metodo con #metodo
-https://caniuse.com/?search=private%20methods
+swagger: http://w3.cloudycrm.net/apidocs
+types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
+async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
-// swagger: http://w3.cloudycrm.net/apidocs
-// https://github.com/DefinitelyTyped/DefinitelyTyped (types para intelliSense)
-
-var incjs = {};
-var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser;
+var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser, _URL, _htmlEntities;
 
 export { _moment as moment };
 export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
-
-var utilsPromise = loadUtils();
-/*
-todo: Safari soporta await at module top level recien en la v15
-https://caniuse.com/?search=top%20level%20await
-Cuando esta sea estandar reemplazar la linea anterior por:
+export { _htmlEntities as htmlEntities }
 
 await loadUtils();
-
-Mientras tanto, si en algun metodo da error xq no esta el modulo esperar la promise asi:
-
-await utilsPromise;
-*/
 
 async function loadUtils() {
 
@@ -42,7 +22,7 @@ async function loadUtils() {
     if (!inNode()) {
         if (window.include == undefined) {
             // include
-            var res = await fetch('https://w1.cloudycrm.net/c/gitcdn.asp?path=/include.js');
+            var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
             var code = await res.text();
             eval(`
                 ${code}
@@ -141,6 +121,17 @@ async function loadUtils() {
         }
     }
 
+
+    // html-entities - https://github.com/mdevils/html-entities
+
+    if (typeof(_htmlEntities) == 'undefined') {
+        if (inNode()) {
+            var res = await import('html-entities');
+            _htmlEntities = res.default;
+        }
+    }
+
+
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
         String.prototype.reverse = function () {
@@ -166,6 +157,16 @@ async function loadUtils() {
         };
     }
 
+    // URL
+    if (typeof(_URL) == 'undefined') {
+        if (inNode()) {
+            var res = (await import('url'));
+            _URL = res.default.URL;
+        } else {
+            _URL = window.URL;
+        }
+    }
+
     return true;
 };
 
@@ -176,8 +177,7 @@ export function inNode() {
 
 
 export class DoorsMap extends Map {
-    /** Metodo interno, no usar */
-    _parseKey(key) {
+    #parseKey(key) {
         var k;
         if (typeof key === 'string') {
             k = key.toUpperCase();
@@ -193,7 +193,7 @@ export class DoorsMap extends Map {
     }
 
     delete(key) {
-        return super.delete(this._parseKey(key));
+        return super.delete(this.#parseKey(key));
     }
 
     /** Alias de has */
@@ -219,11 +219,11 @@ export class DoorsMap extends Map {
     }
 
     get(key) {
-        return super.get(this._parseKey(key));
+        return super.get(this.#parseKey(key));
     }
 
     has(key) {
-        return super.has(this._parseKey(key));
+        return super.has(this.#parseKey(key));
     }
 
     /** Alias de get */
@@ -233,7 +233,7 @@ export class DoorsMap extends Map {
 
     /** Alias de size */
     get length() {
-        return super.size;
+        return this.size;
     }
 
     /** Alias de delete */
@@ -242,9 +242,24 @@ export class DoorsMap extends Map {
     }
 
     set(key, value) {
-        return super.set(this._parseKey(key), value);
+        return super.set(this.#parseKey(key), value);
     }
 };
+
+
+/*
+Esta es una implementacion simplificada de la clase Buffer de node
+Si hace falta algo mas completo usar https://github.com/feross/buffer
+
+    await include('buffer', 'https://bundle.run/buffer@6.0.3');
+    resolve(buffer.Buffer.from(await res.arrayBuffer()));
+*/
+export class SimpleBuffer extends Uint8Array {
+    toString() {
+        var td = new TextDecoder();
+        return td.decode(this);
+    }   
+}
 
 
 export class Session {
@@ -253,12 +268,13 @@ export class Session {
     #serverUrl;
     #authToken;
     #apiKey;
-    #tags;
     #db;
     #utils;
     #currentUser;
     #push;
     #instance;
+    #node;
+    #doorsVersion;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -266,11 +282,13 @@ export class Session {
         this.#authToken = authToken;
     }
     
-    /** Metodo interno, no usar */
-    _reset() {
-        this.#tags = undefined;
+    #reset() {
+        this.#apiKey = undefined;
+        this.#authToken = undefined;
         this.#currentUser = undefined;
         this.#instance = undefined;
+        this.#utils = undefined;
+        this.#doorsVersion = undefined;
     }
 
     /**
@@ -280,8 +298,8 @@ export class Session {
         return this.#apiKey;
     }
     set apiKey(value) {
+        this.#reset();
         this.#apiKey = value;
-        this._reset();
     }
 
     /**
@@ -291,8 +309,8 @@ export class Session {
         return this.#authToken;
     }
     set authToken(value) {
+        this.#reset();
         this.#authToken = value;
-        this._reset();
     }
 
     /**
@@ -371,14 +389,39 @@ export class Session {
     */
     documentsGetFromId(docId) {
         var me = this;
-        return new Promise((resolve, reject) => {
-            var url = 'documents/' + docId;
+        return new Promise(async (resolve, reject) => {
+            let url = 'documents/' + docId;
             me.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Document(res, me));
+                async res => {
+                    let doc = new Document(res, me);
+                    await doc._dispatchEvent('Document_Open');
+                    resolve(doc);
                 },
                 reject
             )
+        });
+    }
+
+    get doorsVersion() {
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            if (me.#doorsVersion != undefined) {
+                resolve(me.#doorsVersion);
+
+            } else {
+                let url = 'doorsversion';
+                me.restClient.fetch(url, 'GET', '', '').then(
+                    async res => {
+                        let ver = res.split('.');
+                        ver.forEach((el, ix) => {
+                            ver[ix] = me.utils.lZeros(el, 3);
+                        });
+                        me.#doorsVersion = ver.join('.');
+                        resolve(me.#doorsVersion);
+                    },
+                    reject
+                );
+            }        
         });
     }
 
@@ -483,6 +526,7 @@ export class Session {
     /**
     Retorna la instancia actual.
     @returns {Promise<Object>}
+    todo: especificar type: AdfsLogon, Description, Disabled, InsId, MaxConnections, Name, SupportedDomanis, Theme, WinLogon
     */
     get instance() {
         var me = this;
@@ -526,7 +570,10 @@ export class Session {
         return new Promise((resolve, reject) => {
             var url = 'session/logoff';
             me.restClient.fetch(url, 'POST', {}, '').then(
-                res => { me.authToken = undefined },
+                res => {
+                    me.#reset();
+                    resolve(res);
+                },
                 reject
             )
         })
@@ -555,6 +602,17 @@ export class Session {
             );
         });
     };
+
+    /**
+    Ejecucion de codigo en el servidor.
+    @returns {Node}
+    */
+    get node() {
+        if (!this.#node) {
+            this.#node = new Node(this);
+        };
+        return this.#node;
+    }
 
     /**
     Metodos para manejo de notificaciones push.
@@ -602,8 +660,8 @@ export class Session {
         return this.#serverUrl;
     }
     set serverUrl(value) {
+        this.#reset();
         this.#serverUrl = value;
-        this._reset();
     }
 
     /**
@@ -619,6 +677,7 @@ export class Session {
             method = 'GET';
             param = '';
             paramName = ''
+            
         } else {
             method = 'POST';
             param = { 
@@ -632,26 +691,94 @@ export class Session {
     }
 
     /**
-    Devuelve los tags de session.
+    Devuelve o setea tags de session.
     @returns {Promise<Object>}
     */
-    get tags() {
+    tags(key, value) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (me.#tags == undefined) {
+            if (value == undefined) {
+                // Devuelve
                 var url = 'session/tags';
                 me.restClient.fetch(url, 'GET', '', '').then(
                     res => {
-                        me.#tags = res;
-                        resolve(me.#tags);
+                        if (key == undefined) {
+                            resolve(res);
+                        } else {
+                            resolve(res[key]);
+                        }
                     },
                     reject
                 )
             } else {
-                resolve(me.#tags);
-            }
+                // Setea
+                var url = 'session/tags';
+                me.restClient.fetch(url, 'POST', { key, value }, '').then(
+                    res => { resolve(res) },
+                    reject
+                )
+            } 
         })
     }
+
+    tagsAdd(key, value) {
+        console.warn('Metodo deprecado, usar dSession.tags');
+        return this.tags(key, value);
+    }
+
+    /**
+    Agrega un token de sesion
+    */
+    async tokensAdd(token, value) {
+        return this.utils.execVbs(`dSession.TokensAdd ${ this.utils.vbsEncodeString(token) }, ${ this.utils.vbsEncodeString(value) }`);
+    }
+
+    /**
+    Borra un token de sesion
+    */
+    tokensDelete(token) {
+        return this.utils.execVbs(`dSession.TokensDelete ${ this.utils.vbsEncodeString(token) }`);
+    }
+
+    /**
+    Reemplaza los tokens de text
+    @returns {Promise<string>}
+    */
+    tokensReplace(text) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            var url = 'session/tokens/replaced?text=' + encodeURIComponent(text ? text : '');
+            me.restClient.fetch(url, 'POST', {}, '').then(
+                res => { resolve(res) },
+                reject
+            )
+        })
+    }        
+
+    /**
+    Devuelve o setea un setting de usuario.
+    @returns {Promise}
+    */
+    userSettings(setting, value) {
+        var url = 'user/settings/' + this.utils.encUriC(setting);
+        var method, param, paramName;
+
+        if (value == undefined) {
+            method = 'GET';
+            param = '';
+            paramName = ''
+        } else {
+            method = 'POST';
+            param = { 
+                Setting: setting,
+                Value: value
+            };
+            paramName = 'setting';
+        }
+
+        return this.restClient.fetch(url, method, param, paramName);
+    }
+
 
     /**
     Metodos varios.
@@ -709,7 +836,7 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    _accountsGet(listFunction, account) {
+    #accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -734,18 +861,18 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    _accountsList(property, endPoint) {
+    #accountsList(property, endPoint) {
         var me = this;
         return new Promise((resolve, reject) => {
             if (me.#json[property]) {
-                resolve(me._accountsMap(me.#json[property]));
+                resolve(me.#accountsMap(me.#json[property]));
 
             } else {
                 var url = 'accounts/' + me.id + '/' + endPoint;
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json[property] = res;
-                        resolve(me._accountsMap(me.#json[property]));
+                        resolve(me.#accountsMap(me.#json[property]));
                     },
                     reject
                 )
@@ -754,7 +881,7 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    _accountsMap(accounts) {
+    #accountsMap(accounts) {
         var me = this;
         var map = new DoorsMap();
         accounts.forEach(el => {
@@ -788,9 +915,9 @@ export class Account {
     */
     childAccounts(account) {
         if (account == undefined) {
-            return this._accountsList('ChildAccountsList', 'childAccounts');
+            return this.#accountsList('ChildAccountsList', 'childAccounts');
         } else {
-            return this._accountsGet('childAccounts', account);
+            return this.#accountsGet('childAccounts', account);
         }
     }
 
@@ -814,9 +941,9 @@ export class Account {
     */
     childAccountsRecursive(account) {
         if (account == undefined) {
-            return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
+            return this.#accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
         } else {
-            return this._accountsGet('childAccountsRecursive', account);
+            return this.#accountsGet('childAccountsRecursive', account);
         }
     }
 
@@ -926,9 +1053,9 @@ export class Account {
     */
     parentAccounts(account) {
         if (account == undefined) {
-            return this._accountsList('ParentAccountsList', 'parentAccounts');
+            return this.#accountsList('ParentAccountsList', 'parentAccounts');
         } else {
-            return this._accountsGet('parentAccounts', account);
+            return this.#accountsGet('parentAccounts', account);
         }
     }
 
@@ -952,9 +1079,9 @@ export class Account {
     */
     parentAccountsRecursive(account) {
         if (account == undefined) {
-            return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+            return this.#accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
         } else {
-            return this._accountsGet('parentAccountsRecursive', account);
+            return this.#accountsGet('parentAccountsRecursive', account);
         }
     }
 
@@ -975,7 +1102,7 @@ export class Account {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -1047,7 +1174,7 @@ export class Account {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -1065,19 +1192,19 @@ export class Application {
     }
 
     /**
-    Alias de folders.
-    @returns {Promise<Folder>}
-    */
-    folder(folderPath) {
-        return this.folders(folderPath);
-    }
-
-    /**
     Retorna un folder por su path.
     @returns {Promise<Folder>}
     */
-    folders(folderPath) {
+    folder(folderPath) {
         return this.session.folder(folderPath, this.rootFolderId);
+    }
+
+    /**
+    Alias de folder.
+    @returns {Promise<Folder>}
+    */
+    folders(folderPath) {
+        return this.folder(folderPath);
     }
 
     /**
@@ -1310,7 +1437,7 @@ export class Attachment {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -1335,8 +1462,8 @@ export class Attachment {
             var fs = await me.fileStream;
             var blob = (fs instanceof Blob ? fs : new Blob([fs]));
             formData.append('attachment', blob, me.name);
-            formData.append('description', me.description);
-            formData.append('group', me.group);
+            if (me.description || me.description == 0) formData.append('description', me.description);
+            if (me.group || me.group == 0) formData.append('group', me.group);
             // todo: probar si graba description y group
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
@@ -1405,7 +1532,7 @@ export class Attachment {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -1420,12 +1547,19 @@ export class Database {
         this.#session = session;
     }
 
-    /** No implementado aun */
-    /*
-    async execute(sql) {
-        // todo
-    }
+    /**
+    Ejecuta un sql y devuelve los registros afectados.
+    @returns {Promise<number>}
     */
+    async execute(sql) {
+        var res = await this.session.utils.execVbs(`
+            Dim aff
+            dSession.Db.Execute ${ this.session.utils.vbsEncodeString(sql) }, aff
+            Response.Write aff
+        `);
+
+        return parseInt(await res.text());
+    }
 
     /**
     Obtiene el siguiente valor de la secuencia.
@@ -1433,7 +1567,7 @@ export class Database {
     */
     async nextVal(sequence) {
         var res = await this.session.utils.execVbs(`
-            Response.Write dSession.Db.NextVal("${ sequence.replaceAll('"', '""') }")
+            Response.Write dSession.Db.NextVal(${ this.session.utils.vbsEncodeString(sequence) })
         `);
 
         return parseInt(await res.text());
@@ -1444,11 +1578,8 @@ export class Database {
     @returns {Promise<Object[]>}
     */
     async openRecordset(sql) {
-        sql = sql.replaceAll('"', '""');
-        sql = sql.replaceAll('\n', ' ');
-
         var res = await this.session.utils.execVbs(`
-            Set rcs = dSession.Db.OpenRecordset("${sql}")
+            Set rcs = dSession.Db.OpenRecordset(${ this.session.utils.vbsEncodeString(sql) })
             rcs.Save Response, 1
             rcs.Close
         `);
@@ -1524,7 +1655,7 @@ export class Database {
                 };
     
             } else {
-                throw 'Unknown type: ' + type;
+                throw new Error('sqlEncode error - Unknown type: ' + type);
             }
         };
     }
@@ -1651,6 +1782,51 @@ export class Document {
         if (folder) this.#parent = folder;
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
+    }
+
+    #reset() {
+        this.#parent = undefined;
+        this.#fieldsMap = undefined;
+        /* Por si cargue adjuntos para guardar dps de Save
+        this.#attachmentsMap = new DoorsMap();
+        this.#attachmentsMap._loaded = false;
+        */
+        this.#properties = undefined;
+        this.#userProperties = undefined;
+        this.#owner = undefined;
+        this.#form = undefined;
+        this.#log = undefined;
+    }
+
+    /**
+    Este metodo no lo hago privado xq se llama desde Session.
+    Dispara el evento si esta configurado en el folder.
+    */
+    async _dispatchEvent(event) {
+        // A partir de la version 7.4.38.1 los dispara el server
+        try { var ver = await this.session.doorsVersion } catch(err) {};
+        if (ver == undefined || ver >= '007.004.038.001') return;
+
+        var me = this;
+        var fld = await me.parent;
+        var code = {};
+        var prop = await fld.properties('NODE_CONFIG');
+        try {
+            let jsn = JSON.parse(prop);
+            code.path = jsn[event];
+        } catch(err) {}
+
+        if (code.path) {
+            prop = await fld.userProperties('NODE_CONFIG');
+            try {
+                let jsn = JSON.parse(prop);
+                let assDef = me.session.utils.assignDefined;
+                assDef(code, jsn[event], 'ref');
+                assDef(code, jsn[event], 'fresh');
+            } catch(err) {}
+
+            await me.nodeEvent(code, event);
+        }
     }
 
     /**
@@ -1868,13 +2044,10 @@ export class Document {
 
         if (name) {
             // Devuelve un field
-            var field;
-            field = me.#json.CustomFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
-            if (!field) field = me.#json.HeadFields.find(it => it['Name'].toLowerCase() == name.toLowerCase());
+            var field = me.fields().get(name);
             if (field) {
-                var ret = new Field(field, me);
-                if (value != undefined) ret.value = value;
-                return ret;
+                if (value != undefined) field.value = value;
+                return field;
             } else {
                 if (name != '[NULL]') console.log('Field not found: ' + name);
                 return undefined;
@@ -1885,10 +2058,10 @@ export class Document {
             if (!me.#fieldsMap) {
                 var map = new DoorsMap();
                 me.#json.HeadFields.forEach(el => {
-                    map.set(el.Name, new Field(el, me.session));
+                    map.set(el.Name, new Field(el, me));
                 });
                 me.#json.CustomFields.forEach(el => {
-                    map.set(el.Name, new Field(el, me.session));
+                    map.set(el.Name, new Field(el, me));
                 });
                 me.#fieldsMap = map;
             }
@@ -2011,6 +2184,23 @@ export class Document {
     */
 
     /**
+    Ejecuta un evento node de documento.
+    Es la alternativa JavaScript a los eventos sincronos VbScript.
+    @example
+    await doc.nodeEvent({ owner, repo, path, ref, fresh });
+    */
+    async nodeEvent(code, name) {
+        this.#json = await this.session.node.exec({
+            code: code,
+            payload: {
+                eventName: name,
+            },
+            doc: this.toJSON(),
+        });
+        this.#reset();
+    }
+
+    /**
     Creador del documento.
     @returns {Promise<User>}
     */
@@ -2073,7 +2263,7 @@ export class Document {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -2087,17 +2277,31 @@ export class Document {
     */
     save() {
         var me = this;
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await me._dispatchEvent('Document_BeforeSave');
+            } catch(err) {
+                reject(err);
+            }
+            var tags = me.#json.Tags;
+
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
-                    me.#log = undefined;
-
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
-                        res => {
+                        async res => {
                             me.#json = res;
+                            me.#json.Tags = tags; // Restauro los tags para el afterSave
+
+                            try {
+                                await me._dispatchEvent('Document_AfterSave');
+                            } catch(err) {
+                                reject(err);
+                            }
+
+                            me.#reset();
                             resolve(me);
                         },
                         reject
@@ -2113,7 +2317,7 @@ export class Document {
     todo: Esto deberia ser parte del save (issue #261)
     */
     async saveAttachments() {
-        for ([key, value] of await this.attachments()) {
+        for (var [key, value] of await this.attachments()) {
             if (value.toRemove) {
                 await value.remove();
             } else if (value.isNew) {
@@ -2127,6 +2331,9 @@ export class Document {
     */
     get session() {
         return this.#session;
+    }
+    set session(value) {
+        this.#session = value;
     }
 
     /**
@@ -2174,7 +2381,7 @@ export class Document {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -2292,7 +2499,7 @@ export class Field {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -2341,7 +2548,7 @@ export class Field {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -2360,7 +2567,7 @@ export class Field {
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         
         if (this.type == 1) {
-            this.#json.Value = (value == undefined || value == null) ? null : value.toString();
+            this.#json.Value = (value == undefined || value == null || value == '') ? null : value.toString();
         } else if (this.type == 2) {
             var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
@@ -2600,30 +2807,23 @@ export class Folder {
     documents(document) {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            var res, docId;
-
-            if (isNaN(parseInt(document))) {
-                res = await me.search({ fields: 'doc_id', formula: document });
+            try {
+                //todo: Para evitar esta llamada seria necesario un endpoint con docId y fldId
+                var formula = isNaN(parseInt(document)) ? document : 'doc_id = ' + document;
+                var res = await me.search({ fields: 'doc_id', formula });
 
                 if (res.length == 0) {
                     reject(new Error('Document not found'));
                 } else if (res.length > 1) {
                     reject(new Error('Vague expression'));
                 } else {
-                    docId = res[0]['DOC_ID'];
+                    let docId = res[0]['DOC_ID'];
+                    resolve(await me.session.doc(docId));
                 }
 
-            } else {
-                docId = document;
+            } catch(err) {
+                reject(err);
             }
-
-            let url = 'documents/' + docId;
-            me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Document(res, me.session, me));
-                },
-                reject
-            )
         });
     }
 
@@ -2660,8 +2860,10 @@ export class Folder {
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id + '/documents/new';
             me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Document(res, me.session, me));
+                async res => {
+                    let doc = new Document(res, me.session, me);
+                    await doc._dispatchEvent('Document_Open');
+                    resolve(doc);
                 },
                 reject
             );
@@ -2691,11 +2893,11 @@ export class Folder {
 
     /**
     @example
-    folders() // Devuelve la lista de carpetas hijas.
-    folders(name) // Devuelve la carpeta hija con nombre name.
+    folder() // Devuelve la lista de carpetas hijas.
+    folder(name) // Devuelve la carpeta hija con nombre name.
     @returns {Promise<Folder>}
     */
-    folders(name) {
+    folder(name) {
         //todo: si no viene name devolver la lista
         var me = this;
         return new Promise((resolve, reject) => {
@@ -2709,6 +2911,11 @@ export class Folder {
         });
     }
 
+    /** Alias de folder */
+    folders(name) {
+        return this.folder(name);
+    }
+    
     /*
     foldersNew() {
         //todo
@@ -2930,7 +3137,7 @@ export class Folder {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -3012,8 +3219,6 @@ export class Folder {
         }
         Object.assign(opt, options);
 
-        //todo: agregar valor por defecto de maxDocs
-
         var encUriC = this.session.utils.encUriC;
         var url = 'folders/' + this.id + '/documents/grouped';
         var params = 'groups=' + encUriC(opt.groups) + '&totals=' + encUriC(opt.totals) +
@@ -3029,6 +3234,9 @@ export class Folder {
     */
     get session() {
         return this.#session;
+    }
+    set session(value) {
+        this.#session = value;
     }
 
     /*
@@ -3091,7 +3299,7 @@ export class Folder {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -3402,7 +3610,7 @@ export class Form {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -3481,13 +3689,218 @@ export class Form {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
         return this.#userProperties.set(property, value);
     }
 };
+
+
+export class Node {
+    #session;
+    #debug;
+    #config;
+    
+    constructor(session) {
+        this.#session = session;
+        this.#debug = false;
+    }
+
+    /**
+    Completa las opciones de code con config (owner, repo, ref y fresh).
+    Las opciones no se pisan, solo se completan las que no estan.
+    */
+    async codeOptions(code) {
+        var cfg = await this.config;
+        var assDef = this.session.utils.assignDefined;
+        assDef(code, cfg, 'owner');
+        assDef(code, cfg, 'repo');
+        // ref y fresh solo se asigna si es el mismo owner y repo de la config
+        let codeOwner = code.owner ? code.owner.toLowerCase() : code.owner;
+        let cfgOwner = cfg.owner ? cfg.owner.toLowerCase() : cfg.owner;
+        let codeRepo = code.repo ? code.repo.toLowerCase() : code.repo;
+        let cfgRepo = cfg.repo ? cfg.repo.toLowerCase() : cfg.repo;
+        if (codeOwner == cfgOwner && codeRepo == cfgRepo) {
+            assDef(code, cfg, 'ref');
+            assDef(code, cfg, 'fresh');
+        }
+        return code;
+    }
+
+    /**
+    Levanta la configuracion de node del setting NODE_CONFIG
+    Si no esta devuelve con los valores por defecto
+    */
+    get config() {
+        var me = this;
+
+        if (me.#config) {
+            return me.#config;
+
+        } else {
+            return new Promise(async (resolve, reject) => {
+                let cfg = {
+                    server: 'https://node.cloudycrm.net',
+                    debugServer: 'https://nodedev.cloudycrm.net',
+                };
+
+                // setting y userSetting
+                parseSetting(cfg, await me.session.settings('NODE_CONFIG'))
+                parseSetting(cfg, await me.session.userSettings('NODE_CONFIG'))
+                
+                me.#config = cfg;
+                resolve(me.#config);
+            });
+        }
+
+        function parseSetting(target, setting) {
+            try {
+                let jsn = JSON.parse(setting);
+                try { target.server = origin(jsn.server) } catch(err) {};
+                try { target.debugServer = origin(jsn.debugServer) } catch(err) {};
+                if (jsn.repo != undefined) target.repo = jsn.repo;
+                if (jsn.ref != undefined) target.ref = jsn.ref;
+
+            } catch(err) {};
+        }
+
+        function origin(value) {
+            var url = new me.session.utils.URL(value);
+            return url.origin;
+        }
+    }
+
+    get debug() {
+        return this.#debug;
+    }
+    set debug(value) {
+        this.#debug = value ? true : false;
+    }
+
+    /**
+    Ejecuta un codigo node en el servidor de eventos.
+    Si se pasa doc, se simulara la ejecucion de un evento sincrono js,
+    devolviendo el json del doc con los cambios que haya realizado el codigo.
+
+    @example
+    exec({
+        code: {
+            owner // Opcional, def CloudyVisionArg
+            repo // Opcional, def cdn
+            ref // Opcional, branch o tag. def el main del repo.
+            path // Requerido
+            fresh // Opcional, def false
+        }
+        payload // Informacion para el codigo que se va a ejecutar
+        apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
+        url // Pasar true para obtener la url, que ejecuta el job con GET
+        doc // Opcional, el json de un documento
+    });
+    */
+    exec(options) {
+        var me = this;
+
+        return new Promise(async (resolve, reject) => {
+            let data = {
+                serverUrl: this.session.serverUrl,
+                events: await me.codeOptions(options.code),
+                doc: options.doc,
+                payload: options.payload,
+            }
+
+            if (this.session.apiKey || options.apiKey) {
+                data.apiKey = options.apiKey ? options.apiKey : this.session.apiKey;
+            } else if (this.session.authToken) {
+                data.authToken = this.session.authToken;
+            }
+
+            if (options.url) {
+                var url = await me.server + '/exec';
+                url += '?msg=' + encodeURIComponent(JSON.stringify(data));
+                resolve(url);
+
+            } else {
+                let res = await fetch(await me.server + '/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (res.ok) {
+                    let buf = new SimpleBuffer(await res.arrayBuffer());
+                    try {
+                        let json = JSON.parse(buf.toString());
+                        if (json.__type__) {
+                            resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
+                        } else {
+                            resolve(json);
+                        }
+
+                    } catch(err) {
+                        resolve(buf);
+                    }
+
+                } else {
+                    let err;
+                    try {
+                        let txt = await res.text();
+                        let json = JSON.parse(txt);
+                        err = me.session.utils.deserializeError(json);
+                
+                    } catch(e) {
+                        err = new Error(res.status + ' (' + res.statusText + ')');
+                    }
+                    reject(err);
+                }
+            }
+        });
+    }
+
+    get inNode() {
+        return inNode();
+    }
+
+    /**
+    Permite llamar un metodo de un modulo mjs del servidor
+
+    @example
+    modCall({
+        module: {
+            owner // Opcional, def CloudyVisionArg
+            repo // Opcional, def cdn
+            path // Requerido
+            fresh // Opcional, def false
+        }
+        method // Nombre del metodo
+        args // Argumentos para el metodo. Si el metodo tiene multiples argumentos enviarlos como un array.
+    });
+    */
+    async modCall(options) {
+        return await this.exec({
+            code: { repo: 'Global', path: 'server/modproxy.js' },
+            payload: options,
+        });
+    }
+
+    get server() {
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            var cfg = await me.config;
+            resolve(this.debug ? cfg.debugServer : cfg.server);
+        })
+    }
+
+    /**
+    @returns {Session}
+    */
+    get session() {
+        return this.#session;
+    }    
+}
 
 
 export class Properties extends DoorsMap {
@@ -3522,7 +3935,6 @@ export class Properties extends DoorsMap {
             '&objectType=' + restArgs.objType + '&objectParentId=' + restArgs.objParentId + 
             '&objectName=' + this.session.utils.encUriC(restArgs.objName);
 
-        // todo: si da error armar la coleccion vacia
         this.#loadProm = this.session.restClient.fetch(this.#restUrl, 'GET', '', '');
         this.#loadProm.then(
             res => {
@@ -3568,6 +3980,16 @@ export class Properties extends DoorsMap {
         });
     }
 
+    has(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.has(key)) },
+                reject
+            )
+        });
+    }
+
     get parent() {
         return this.#parent;
     }
@@ -3581,12 +4003,24 @@ export class Properties extends DoorsMap {
     }
 
     set(key, value) {
+        var me = this;
+
         if (key == undefined) {
             return this; // La coleccion
+
         } else if (value == undefined) {
-            return this.get(key).value; // El value
+            // El value
+            return new Promise((resolve, reject) => {
+                me.get(key).then(
+                    prop => {
+                        resolve(prop ? prop.value() : undefined);
+                    },
+                    reject
+                );
+            });
+
         } else {
-            var me = this;
+            // Setea
             return new Promise((resolve, reject) => {
                 me.#loadProm.then(
                     () => {
@@ -3603,6 +4037,16 @@ export class Properties extends DoorsMap {
                 )
             });
         }
+    }
+
+    get size() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.size) },
+                reject
+            )
+        });
     }
 
     get user() {
@@ -3642,10 +4086,6 @@ export class Property {
 
     toJSON() {
         return this.#json;
-    }
-
-    get value() {
-        
     }
 
     value(value) {
@@ -3914,10 +4354,22 @@ export class User extends Account {
 export class Utilities {
     #session;
     #cache;
+    #execapiAcao;
     
     constructor(session) {
         this.#session = session;
         this.#cache = new DoorsMap();
+    }
+
+    /**
+    Asigna la property del objeto source al objeto target, solo si tiene valor.
+    Override indica si se sobreescribe la prop en target, o si se asigna
+    solo si no esta definida.
+    */
+    assignDefined(target, source, property, override) {
+        if (source && source[property] != undefined && (target[property] == undefined || override)) {
+            target[property] = source[property];
+        }
     }
 
     /**
@@ -4101,9 +4553,49 @@ export class Utilities {
         return JSON.stringify(err);
     }
 
+    /**
+    Hace una peticion de prueba a execapi.asp para determinar si hay agregar
+    el header Access-Control-Allow-Origin. Esto es porque si el server lo esta
+    haciendo y la execapi lo agrega de nuevo da el error
+    Access-Control-Allow-Origin cannot contain more than one origin.
+    */
+    get execapiAcao() {
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            if (me.#execapiAcao != undefined) {
+                resolve(me.#execapiAcao);
+
+            } else {
+                // Peticion de prueba sin ACAO
+                var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
+                '&code=' + encodeURIComponent('Response.Write "OK"');
+                
+                try {
+                    var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                        body: data,
+                    });
+                    me.#execapiAcao = 0;
+
+                } catch(err) {
+                    me.#execapiAcao = 1;
+                }
+                resolve(me.#execapiAcao);
+            }
+        });
+    }
+
+    async execNode(options) {
+        console.log('Metodo deprecado, usar dSession.node.exec');
+        return this.session.node.exec(options);
+    }
+
     async execVbs(code) {
+        //todo: soporte para apiKey
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
-            '&code=' + encodeURIComponent(code);
+            '&code=' + encodeURIComponent(code) +
+            '&addACAO=' + encodeURIComponent(await this.execapiAcao);
     
         var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
             method: 'POST',
@@ -4134,6 +4626,11 @@ export class Utilities {
         }
     }
 
+    /** https://github.com/NaturalIntelligence/fast-xml-parser */
+    get fastXmlParser() {
+        return _fastXmlParser;
+    }
+
     getGuid() {
         var uuid = '', i, random;
         for (i = 0; i < 32; i++) {
@@ -4147,8 +4644,34 @@ export class Utilities {
         return uuid;
     }
 
+    /** Alias de htmlEncode */
+    htmlEnc(text, options) {
+        return this.htmlEncode(text, options);
+    }
+
+    /**
+    options se usa solo en node. Ver detalle: https://github.com/mdevils/html-entities
+    */
+    htmlEncode(text, options) {
+        if (this.session.node.inNode) {
+            return _htmlEntities.encode(text, options);
+
+        } else {
+            // todo: conviene hacerlo con htmlEntities?
+            var sp = document.createElement('span');
+            sp.textContent = text;
+            return sp.innerHTML;
+        }
+    }
+
+    /** https://github.com/mdevils/html-entities */
+    get htmlEntities() {
+        return _htmlEntities;
+    }
+
     inNode() {
-        return inNode();
+        console.log('Metodo deprecado, usar dSession.node.inNode');
+        return this.session.node.inNode();
     }
 
     /** Retorna true si value es un objeto puro {} */
@@ -4240,6 +4763,27 @@ export class Utilities {
         return ret;	
     }
 
+    get URL() {
+        return _URL;
+    }
+
+    /**
+    Encodea un string de vbs agregando las comillas dobles al comienzo y final
+    y escapando comillas dobles, \r y \n
+    @returns {string}
+    */
+    vbsEncodeString(text) {
+        let ret = text;
+        ret = ret.replaceAll('"', '""');
+        ret = ret.replaceAll('\r\n', '" & vbCrLf & "');
+        ret = ret.replaceAll('\r', '" & vbCr & "');
+        ret = ret.replaceAll('\n', '" & vbLf & "');
+        ret = '"' + ret + '"';
+        if (ret.substring(0, 5) == '"" & ') ret = ret.substring(5);
+        if (ret.substring(ret.length - 5) == ' & ""') ret = ret.substring(0, ret.length - 5);
+        return ret;
+    }
+
     /** Alias de xmlDecode */
     xmlDec(value, type) {
         return this.xmlDecode(value, type);
@@ -4319,12 +4863,12 @@ export class View {
         this.#loaded = view.Definition ? true : false;
     }
 
-    async _asyncGet(property) {
-        await this._load();
+    async #asyncGet(property) {
+        await this.#load();
         return this.#json[property];
     }
 
-    async _load() {
+    async #load() {
         if (!this.#loaded) {
             var url = 'folders/' + this.parentId + '/views/' + this.id;
             var res = await this.session.restClient.fetch(url, 'GET', '', '');
@@ -4401,7 +4945,7 @@ export class View {
     }
 
     get definition() {
-        return this._asyncGet('Definition');
+        return this.#asyncGet('Definition');
     }
     set definition(value) {
         this.#json.Definition = value;
@@ -4415,7 +4959,7 @@ export class View {
     }
 
     get descriptionRaw() {
-        return this._asyncGet('DescriptionRaw');
+        return this.#asyncGet('DescriptionRaw');
     }
     set descriptionRaw(value) {
         this.#json.DescriptionRaw = value;
@@ -4506,7 +5050,7 @@ export class View {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -4530,14 +5074,14 @@ export class View {
     }
 
     get styleScript() {
-        return this._asyncGet('StyleScriptDefinition');
+        return this.#asyncGet('StyleScriptDefinition');
     }
     set styleScript(value) {
         this.#json.StyleScriptDefinition = value;
     }
 
     get tags() {
-        return this._asyncGet('Tags');
+        return this.#asyncGet('Tags');
     }
 
     get type() {
@@ -4552,7 +5096,7 @@ export class View {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -4615,19 +5159,24 @@ class RestClient {
                         //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
                         textBody = textBody.substring(1);
                     }
-                    let parsedJson = JSON.parse(textBody);
+                    let parsedJson;
+                    try {
+                        parsedJson = JSON.parse(textBody);
+                    } catch(err) {
+                        console.warn('Cannot parse server response', textBody);
+                        debugger;
+                    }
                     if (response.ok) {
-                        if (parsedJson.InternalObject !== null) {
-                            resolve(parsedJson.InternalObject);
+                        resolve(parsedJson.InternalObject);
+                    } else {
+                        if (parsedJson) {
+                            let err = me.session.utils.newErr(parsedJson);
+                            err.doorsException = parsedJson;
+                            reject(err);
+                        } else {
+                            reject(new Error(response.status + ' (' + response.statusText + ')'))
                         }
                     }
-                    else {
-                        if (response.status !== 200 || parsedJson.ExceptionMessage) {
-                            debugger;
-                            reject(me.session.utils.newErr(parsedJson));
-                        }
-                    }
-                    resolve(parsedJson);
                 });
             }).catch((error) => {
                 debugger;
