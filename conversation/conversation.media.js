@@ -56,7 +56,6 @@ function recorder(opts){
             capacitorCallbackError = reject;
             //TODO: https://github.com/tchvu3/capacitor-voice-recorder
             //Evaluar mejor los permisos 
-            debugger;
             const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
             if(result.value){
                 const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
@@ -121,7 +120,6 @@ function recorder(opts){
     }
 
     this.stopRecording = function(){
-        debugger;
         if(_isCapacitor()){
             saveCapacitor();
         }
@@ -162,23 +160,16 @@ function recorder(opts){
                     (file)=> {
                         file.localURL = file.uri;
                         file.name = completeName;
-                        debugger;
                         Capacitor.Plugins.Filesystem.readFile({
                             path : file.localURL,
                         }).then(
                             (fileReadSucc)=>{
-                                // const base64String = fileReadSucc;
-                                // const binaryString = atob(base64String.split(',')[1]); // Binary data string
                                 const blob = new Blob([fileReadSucc], { type: 'audio/ogg' });
                                 capacitorCallback(blob);
                             },(err)=>{
                                 capacitorCallbackError(err);
                         });
-                        // getFileFromCache(file.name).then(
-                        //     function (file) {
-                        //         capacitorCallback(file);
-                        //     }
-                        // )
+
                     },(err)=>{
                         console.error("Error obteniendo el audio.", errMsg(err));
                         capacitorCallbackError(err);
