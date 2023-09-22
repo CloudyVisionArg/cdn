@@ -167,7 +167,10 @@ function recorder(opts){
                             path : file.localURL,
                         }).then(
                             (fileReadSucc)=>{
-                                capacitorCallback(fileReadSucc);
+                                const base64String = fiel.data;
+                                const binaryString = atob(base64String.split(',')[1]); // Binary data string
+                                const blob = new Blob([binaryString], { type: 'audio/ogg' });
+                                capacitorCallback(blob);
                             },(err)=>{
                                 capacitorCallbackError(err);
                         });
