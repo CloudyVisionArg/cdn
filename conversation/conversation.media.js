@@ -56,6 +56,7 @@ function recorder(opts){
             capacitorCallbackError = reject;
             //TODO: https://github.com/tchvu3/capacitor-voice-recorder
             //Evaluar mejor los permisos 
+            debugger;
             const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
             if(result.value){
                 const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
