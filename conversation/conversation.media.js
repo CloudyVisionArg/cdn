@@ -162,6 +162,7 @@ function recorder(opts){
                     (file)=> {
                         file.localURL = file.uri;
                         file.name = completeName;
+                        debugger;
                         capacitorCallback(file);
                     },(err)=>{
                         console.error("Error obteniendo el audio.", errMsg(err));
