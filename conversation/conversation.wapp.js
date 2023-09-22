@@ -331,6 +331,7 @@ function whatsAppDataProvider(opts){
             {   docField: "LONGITUDE",    msgField: "longitude" },
             {   docField: "NUMMEDIA",    msgField: "nummedia" },
             {   docField: "MEDIA",    msgField: "media" },
+            {   docField: "REFERRALSOURCEURL",    msgField: "referralSourceUrl" },
             ]
     };
 
@@ -1176,6 +1177,7 @@ function wappMsg(){
     this.longitude = null;
 	this.mapsUrl = null;
 	this.placesUrl = null;
+	this.referralSourceUrl = null;
 	this.getMessageHtml = function(message){
 		var me = this;
 		return new Promise((resolve, reject) => {
@@ -1249,6 +1251,16 @@ function wappMsg(){
 								appendBody = false;
 							}
 						});
+					}
+
+					if(pMsg.referralSourceUrl){
+						var $div = $('<div/>').appendTo($msgText);
+						$('<a/>', {
+							target: '_blank',
+							href: pMsg.referralSourceUrl,
+							style: 'font-weight: 500;',
+					   }).append(pMsg.body).appendTo($div);
+					   appendBody = false;
 					}
 				}
 				
