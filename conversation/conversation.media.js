@@ -165,9 +165,8 @@ function recorder(opts){
                         debugger;
                         Capacitor.Plugins.Filesystem.readFile({
                             path : file.localURL,
-                            directory : Directory.Cache
                         }).then(
-                            async (fileReadSucc)=>{
+                            (fileReadSucc)=>{
                                 capacitorCallback(fileReadSucc);
                             },(err)=>{
                                 capacitorCallbackError(err);
