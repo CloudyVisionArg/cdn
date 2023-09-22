@@ -262,6 +262,7 @@ function recorder(opts){
                 pFileEntry.file(pCallback); // Pasa el que venia nomas
             }
         }
+    }
     var capacitorCallback = null;
     var capacitorCallbackError = null;
     var capacitorFilename = null;
