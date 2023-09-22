@@ -163,11 +163,15 @@ function recorder(opts){
                         file.localURL = file.uri;
                         file.name = completeName;
                         debugger;
-                        Capacitor.Plugins.Filesystem.downloadFile({path: file.uri}).then(
-                            (res)=>{
-                                capacitorCallback(res.blob);
-                            }
-                        )
+                        Capacitor.Plugins.Filesystem.readFile({
+                            path : file.localURL,
+                            directory : Directory.Cache
+                        }).then(
+                            async (fileReadSucc)=>{
+                                capacitorCallback(fileReadSucc);
+                            },(err)=>{
+                                capacitorCallbackError(err);
+                        });
                         // getFileFromCache(file.name).then(
                         //     function (file) {
                         //         capacitorCallback(file);
