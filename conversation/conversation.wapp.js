@@ -1252,16 +1252,16 @@ function wappMsg(){
 							}
 						});
 					}
+				}
 
-					if(pMsg.referralSourceUrl){
-						var $div = $('<div/>').appendTo($msgText);
-						$('<a/>', {
-							target: '_blank',
-							href: pMsg.referralSourceUrl,
-							style: 'font-weight: 500;',
-					   }).append(pMsg.body).appendTo($div);
-					   appendBody = false;
-					}
+				if(pMsg.referralSourceUrl){
+					var $div = $('<div/>').appendTo($msgText);
+					$('<a/>', {
+						target: '_blank',
+						href: pMsg.referralSourceUrl,
+						style: 'font-weight: 500;',
+				   }).append(pMsg.body).appendTo($div);
+				   appendBody = false;
 				}
 				
 				if (pMsg.latitude || pMsg.longitude) {
