@@ -161,7 +161,7 @@ function recorder(opts){
                 Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
                     (file)=> {
                         file.localURL = file.uri;
-                        file.name = fileName;
+                        file.name = completeName;
                         capacitorCallback(file);
                     },(err)=>{
                         console.error("Error obteniendo el audio.", errMsg(err));
