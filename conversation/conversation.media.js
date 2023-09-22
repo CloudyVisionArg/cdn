@@ -163,11 +163,16 @@ function recorder(opts){
                         file.localURL = file.uri;
                         file.name = completeName;
                         debugger;
-                        getFileFromCache(file.name).then(
-                            function (file) {
-                                capacitorCallback(file);
+                        Capacitor.Plugins.Filesystem.downloadFile({path: file.uri}).then(
+                            (res)=>{
+                                capacitorCallback(res.blob);
                             }
                         )
+                        // getFileFromCache(file.name).then(
+                        //     function (file) {
+                        //         capacitorCallback(file);
+                        //     }
+                        // )
                     },(err)=>{
                         console.error("Error obteniendo el audio.", errMsg(err));
                         capacitorCallbackError(err);
