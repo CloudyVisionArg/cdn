@@ -512,7 +512,7 @@ function whatsAppDataProvider(opts){
 		this.audioRecorder(function (file) {
 			const previewReader = new FileReader()
 			previewReader.onloadend = function(e){
-				debugger;
+				debugger
 				var previewBlob = new Blob([new Uint8Array(e.target.result)],{type: file.type});
 				var previewURL = URL.createObjectURL(previewBlob)
 

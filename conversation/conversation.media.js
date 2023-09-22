@@ -163,7 +163,7 @@ function recorder(opts){
                         file.localURL = file.uri;
                         file.name = completeName;
                         debugger;
-                        getFileFromCache(file.uri).then(
+                        getFileFromCache(file.name).then(
                             function (file) {
                                 capacitorCallback(file);
                             }
