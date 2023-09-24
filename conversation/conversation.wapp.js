@@ -1,4 +1,7 @@
 /**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversation.wapp.js?_fresh=true
+ */
+/**
  * Libreria de mensajería a través de conector de Whatsapp utilizando como base conversationcontrol.js 
  * Requiere bootstrap.js, Doorsapi.js
  * Bootstrap.js: Ventanas modales
@@ -445,9 +448,9 @@ function whatsAppDataProvider(opts){
 			$modal.modal('show');
 			var $img = $('<img/>');
 			$img.css({maxHeight: $(window).height() - 30, maxWidth: '100%'});
+			$modalBody.html($img);
 			$img.attr('src', $(this).attr('src'));
 			$img.load(function () {
-				$modalBody.html($img);
 				$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
 			});
 		}
