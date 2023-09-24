@@ -1256,6 +1256,9 @@ function wappMsg(){
 
 				if(pMsg.referralSourceUrl){
 					var $div = $('<div/>').appendTo($msgText);
+					if(!pMsg.body){
+						pMsg.body = "sin texto";
+					}
 					$('<a/>', {
 						target: '_blank',
 						href: pMsg.referralSourceUrl,
