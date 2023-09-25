@@ -165,7 +165,7 @@ function recorder(opts){
                         }).then(
                             (fileReadSucc)=>{
                                 var arr = atob(recordingData.value.recordDataBase64);
-                                capacitorCallback(new Blob([arr], { type: 'audio/ogg' }));
+                                capacitorCallback(new Blob([arr], { type: 'audio/aac' }));
                             },(err)=>{
                                 capacitorCallbackError(err);
                         });
