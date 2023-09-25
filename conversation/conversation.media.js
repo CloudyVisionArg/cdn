@@ -164,8 +164,7 @@ function recorder(opts){
                             path : file.localURL,
                         }).then(
                             (fileReadSucc)=>{
-                                const blob = new Blob([fileReadSucc], { type: 'audio/aac' });
-                                capacitorCallback(blob);
+                                capacitorCallback(new Blob(fileReadSucc, { type: 'audio/ogg' }));
                             },(err)=>{
                                 capacitorCallbackError(err);
                         });
