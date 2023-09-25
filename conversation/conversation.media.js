@@ -169,7 +169,7 @@ function recorder(opts){
                                 //var arr = atob(recordingData.value.recordDataBase64);
                                 const audioRef = new Audio(`data:${recordingData.value.mimeType};base64,${recordingData.value.recordDataBase64}`)
                                 //var arr = atob(recordingData.value.recordDataBase64);
-                                var arr = recordingData.value.recordDataBase64;
+                                var arr = atob(recordingData.value.recordDataBase64);
                                 var xFile = new File([arr], capacitorFilename, {type: recordingData.value.mimeType});
                                 capacitorCallback(xFile);
                                 //capacitorCallback(new Blob([arr], { type: 'audio/aac' }));
