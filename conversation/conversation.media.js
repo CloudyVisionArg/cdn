@@ -166,7 +166,7 @@ function recorder(opts){
                             (fileReadSucc)=>{
                                 //file.data = fileReadSucc.data;
                                 var arr = atob(recordingData.value.recordDataBase64);
-                                var xFile = new File([new Blob([arr], { type: 'audio/aac' })], capacitorFilename);
+                                var xFile = new File([new Blob([arr])], capacitorFilename, {type: 'audio/aac'});
                                 capacitorCallback(xFile);
                                 //capacitorCallback(new Blob([arr], { type: 'audio/aac' }));
                                 //capacitorCallback(file);
