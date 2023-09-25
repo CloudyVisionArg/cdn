@@ -163,9 +163,14 @@ function recorder(opts){
                         Capacitor.Plugins.Filesystem.readFile({
                             path : file.localURL,
                         }).then(
-                            (fileReadSucc)=>{
-                                var arr = atob(recordingData.value.recordDataBase64);
-                                capacitorCallback(new Blob([arr], { type: 'audio/aac' }));
+                            async(fileReadSucc)=>{
+                                //var arr = atob(recordingData.value.recordDataBase64);
+
+                                //capacitorCallback(new Blob([arr], { type: 'audio/aac' }));
+                                   let file = await getFileStatFromCache(pFileName)
+                                    file.data = fileReadSucc.data;
+                                    file.name = pFileName;
+                                    capacitorCallback(file);
                             },(err)=>{
                                 capacitorCallbackError(err);
                         });
