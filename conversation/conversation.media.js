@@ -165,9 +165,12 @@ function recorder(opts){
                         }).then(
                             (fileReadSucc)=>{
                                 //file.data = fileReadSucc.data;
-                                var arr = atob(recordingData.value.recordDataBase64);
-                                const blob = new Blob([new Uint8Array(arr)], { type: 'audio/aac' });
-                                var xFile = new File([blob], capacitorFilename, {type: 'audio/aac'});
+                                //var blob = new Blob([file.localURL], { type: recordingData.value.type });
+                                //var arr = atob(recordingData.value.recordDataBase64);
+                                const audioRef = new Audio(`data:${recordingData.value.type};base64,${recordingData.value.recordDataBase64}`)
+                                //var arr = atob(recordingData.value.recordDataBase64);
+                                var arr = recordingData.value.recordDataBase64;
+                                var xFile = new File([arr], capacitorFilename, {type: recordingData.value.type});
                                 capacitorCallback(xFile);
                                 //capacitorCallback(new Blob([arr], { type: 'audio/aac' }));
                                 //capacitorCallback(file);
