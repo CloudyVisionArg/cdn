@@ -164,7 +164,7 @@ function recorder(opts){
                             path : file.localURL,
                         }).then(
                             (fileReadSucc)=>{
-                                var arr = atob(fileReadSucc.data);
+                                var arr = atob(recordingData.value.recordDataBase64);
                                 capacitorCallback(new Blob([arr], { type: 'audio/ogg' }));
                             },(err)=>{
                                 capacitorCallbackError(err);
