@@ -164,16 +164,8 @@ function recorder(opts){
                             path : file.localURL,
                         }).then(
                             (fileReadSucc)=>{
-                                //file.data = fileReadSucc.data;
-                                //var blob = new Blob([file.localURL], { type: recordingData.value.type });
-                                //var arr = atob(recordingData.value.recordDataBase64);
-                                const audioRef = new Audio(`data:${recordingData.value.mimeType};base64,${recordingData.value.recordDataBase64}`)
-                                //var arr = atob(recordingData.value.recordDataBase64);
-                                //var arr = atob(recordingData.value.recordDataBase64);
-                                //var xFile = new File([arr], capacitorFilename, {type: recordingData.value.mimeType});
-                                //capacitorCallback(xFile);
-                                //capacitorCallback(new Blob([arr], { type: 'audio/aac' }));
-                                //capacitorCallback(file);
+
+                                //const audioRef = new Audio(`data:${recordingData.value.mimeType};base64,${recordingData.value.recordDataBase64}`)
                                 const byteCharacters = atob(recordingData.value.recordDataBase64);
                                 const byteNumbers = new Array(byteCharacters.length);
 
@@ -184,20 +176,11 @@ function recorder(opts){
                                 const byteArray = new Uint8Array(byteNumbers);
                                 const blob = new Blob([byteArray], { type: recordingData.value.mimeType });
 
-                                // 3. Crea un objeto File a partir del Blob
-                                const fileName = "documento.aac"; // Nombre del archivo
+                                const fileName = capacitorFilename; // Nombre del archivo
                                 const file = new File([blob], fileName, { type: recordingData.value.mimeType });
 
 
                                 capacitorCallback(file);
-                                // 4. Crea un FileReader para leer el contenido del archivo
-                                const fileReader = new FileReader();
-
-                                fileReader.onload = function(event) {
-                                    debugger;
-                                    const fileContent = event.target.result;
-                                    console.log('Contenido del archivo:', fileContent);
-                                };
                             },(err)=>{
                                 capacitorCallbackError(err);
                         });
