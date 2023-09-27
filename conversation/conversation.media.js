@@ -145,14 +145,11 @@ function recorder(opts){
         let durationString = (seconds == 60) ?
             (minutes+1) + ":00" :
             minutes + ":" + (seconds < 10 ? "0" : "") + seconds
-        //let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
         
         var dur = millis / 1000;
         var min = Math.trunc(dur / 60);
         
         var completeName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + capacitorFilename;
-        //let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
-
         //Guarda en cache.
         //Habria que borrarlo posteriormente al guardado
         Capacitor.Plugins.Filesystem.writeFile({
