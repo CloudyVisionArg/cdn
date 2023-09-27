@@ -1,4 +1,7 @@
 /**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversation.wapp.js?_fresh=true
+ */
+/**
  * Libreria de mensajería a través de conector de Whatsapp utilizando como base conversationcontrol.js 
  * Requiere bootstrap.js, Doorsapi.js
  * Bootstrap.js: Ventanas modales
@@ -331,6 +334,7 @@ function whatsAppDataProvider(opts){
             {   docField: "LONGITUDE",    msgField: "longitude" },
             {   docField: "NUMMEDIA",    msgField: "nummedia" },
             {   docField: "MEDIA",    msgField: "media" },
+            {   docField: "REFERRALSOURCEURL",    msgField: "referralSourceUrl" },
             ]
     };
 
@@ -444,9 +448,9 @@ function whatsAppDataProvider(opts){
 			$modal.modal('show');
 			var $img = $('<img/>');
 			$img.css({maxHeight: $(window).height() - 30, maxWidth: '100%'});
+			$modalBody.html($img);
 			$img.attr('src', $(this).attr('src'));
 			$img.load(function () {
-				$modalBody.html($img);
 				$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
 			});
 		}
@@ -1176,6 +1180,7 @@ function wappMsg(){
     this.longitude = null;
 	this.mapsUrl = null;
 	this.placesUrl = null;
+	this.referralSourceUrl = null;
 	this.getMessageHtml = function(message){
 		var me = this;
 		return new Promise((resolve, reject) => {
@@ -1250,6 +1255,19 @@ function wappMsg(){
 							}
 						});
 					}
+				}
+
+				if(pMsg.referralSourceUrl){
+					var $div = $('<div/>').appendTo($msgText);
+					if(!pMsg.body){
+						pMsg.body = "sin texto";
+					}
+					$('<a/>', {
+						target: '_blank',
+						href: pMsg.referralSourceUrl,
+						style: 'font-weight: 500;',
+				   }).append(pMsg.body).appendTo($div);
+				   appendBody = false;
 				}
 				
 				if (pMsg.latitude || pMsg.longitude) {
@@ -1354,6 +1372,7 @@ function wappMsg(){
 
 async function newWhatsAppChatControl(opts){
 	let phoneField = opts.phoneField;
+	let fromField = opts.fromField;
 	let nameField = opts.nameField;
 	let refDocId = opts.docId;
 	let refFldId = opts.fldId;
@@ -1398,15 +1417,19 @@ async function newWhatsAppChatControl(opts){
         let mobilePhone = null;
         let from = null;
 		let name = null;
+		if(numbers.length > 0){
+			from = numbers[0]["NUMBER"];
+		}
         if(docs.length > 0){
             mobilePhone = docs[0][phoneField.toUpperCase()];
 			if(nameField){
 				name = docs[0][nameField.toUpperCase()]
 			}
+			if(fromField){
+				from = docs[0][fromField.toUpperCase()]
+			}
         }
-        if(numbers.length > 0){
-            from = numbers[0]["NUMBER"];
-        }
+
 
 		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${refDocId}" style="max-height: 100vh;"></div>`);
 
