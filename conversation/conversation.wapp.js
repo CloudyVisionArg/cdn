@@ -586,6 +586,7 @@ function whatsAppDataProvider(opts){
 		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
 		me.getMedia(source, permission,
 			function (file) {
+				debugger;
 				//me.sendMedia(file, pChat);
 			}
 		);
@@ -641,9 +642,8 @@ function whatsAppDataProvider(opts){
 				cameraOptions(pSource)
 			);
 		}
-	};
 
-	function onFileSelected(pFile){
+		function onFileSelected(pFile){
 			debugger;
 			if(_isCapacitor()){
 				let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
@@ -660,14 +660,16 @@ function whatsAppDataProvider(opts){
 					errMgr
 				)
 			}
-	}
+		}
 
-	function errMgr(pMsg) {
-		debugger;
-		console.log(pMsg);
-		toast(pMsg);
-	}
-	
+		function errMgr(pMsg) {
+			debugger;
+			console.log(pMsg);
+			toast(pMsg);
+		}
+
+	};
+
 
 	this.getBlobFromFile = function(pFileName, pFileData, pFileType){
 		let byteCharacters = atob(pFileData);
