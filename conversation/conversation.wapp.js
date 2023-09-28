@@ -605,37 +605,46 @@ function whatsAppDataProvider(opts){
 			let files = res.files;
 			for(let idx=0; idx < files.length; idx++){
 				files[idx].type = files[idx].mimeType;
+				let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
+				debugger;
+				if (pCallback) pCallback(file);
 			}
-			onFileSelected(files[0]);
+			//onFileSelected(files[0]);
+		
 
 		}else{
 			navigator.camera.getPicture(
 				function (fileURL) {
-					onFileSelected(fileURL);
+					getFile(fileURL).then(
+						function (file) {
+							if (pCallback) pCallback(file);
+						},
+						errMgr
+					)
 				},
 				errMgr,
 				cameraOptions(pSource)
 			);
 		}
 
-		function onFileSelected(pFile){
-			debugger;
-			if(_isCapacitor()){
-				let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
-				debugger;
-				if (pCallback) pCallback(file);
+		// function onFileSelected(pFile){
+		// 	debugger;
+		// 	if(_isCapacitor()){
+		// 		let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
+		// 		debugger;
+		// 		if (pCallback) pCallback(file);
 				
-			}
-			else{
-				let fileUrl = pFile;
-				getFile(fileUrl).then(
-					function (file) {
-						if (pCallback) pCallback(file);
-					},
-					errMgr
-				)
-			}
-		}
+		// 	}
+		// 	else{
+		// 		let fileUrl = pFile;
+		// 		getFile(fileUrl).then(
+		// 			function (file) {
+		// 				if (pCallback) pCallback(file);
+		// 			},
+		// 			errMgr
+		// 		)
+		// 	}
+		// }
 
 		function errMgr(pMsg) {
 			debugger;
@@ -654,38 +663,48 @@ function whatsAppDataProvider(opts){
 				const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
 				const file = await writeFileInCachePath(photo.path);
 				file.type = `image/${photo.format}`;
-				onFileSelected(file);
+				//onFileSelected(file);
+				let fileRes = me.getBlobFromFile(file.name, file.data, file.type);
+				debugger;
+				if (pCallback) pCallback(fileRes);
 			}catch(err){
 				errMgr(err);
 			}
 		} else {
 			navigator.camera.getPicture(
 				function (fileURL) {
-					onFileSelected(fileURL);
+					//onFileSelected(fileURL);
+					let fileUrl = pFile;
+					getFile(fileUrl).then(
+						function (file) {
+							if (pCallback) pCallback(file);
+						},
+						errMgr
+					)
 				},
 				errMgr,
 				cameraOptions(pSource)
 			);
 		}
 
-		function onFileSelected(pFile){
-			debugger;
-			if(_isCapacitor()){
-				let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
-				debugger;
-				if (pCallback) pCallback(file);
+		// function onFileSelected(pFile){
+		// 	debugger;
+		// 	if(_isCapacitor()){
+		// 		let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
+		// 		debugger;
+		// 		if (pCallback) pCallback(file);
 				
-			}
-			else{
-				let fileUrl = pFile;
-				getFile(fileUrl).then(
-					function (file) {
-						if (pCallback) pCallback(file);
-					},
-					errMgr
-				)
-			}
-		}
+		// 	}
+		// 	else{
+		// 		let fileUrl = pFile;
+		// 		getFile(fileUrl).then(
+		// 			function (file) {
+		// 				if (pCallback) pCallback(file);
+		// 			},
+		// 			errMgr
+		// 		)
+		// 	}
+		// }
 
 		function errMgr(pMsg) {
 			debugger;
