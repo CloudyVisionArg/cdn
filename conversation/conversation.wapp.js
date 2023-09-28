@@ -869,9 +869,9 @@ function whatsAppDataProvider(opts){
 				(res)=>{
 					const files = res.files;
 					for (let idx=0; idx < files.length; idx++){
-						const file = files[idx];
-						me.getBlobFromFile(file.name, file.data, file.mimeType);
-						me.sendMedia(file);
+						let file = files[idx];
+						let blobFile = me.getBlobFromFile(file.name, file.data, file.mimeType);
+						me.sendMedia(blobFile);
 					}
 				},(er)=>{
 					alert(errMsg(er));
