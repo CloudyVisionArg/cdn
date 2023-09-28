@@ -573,7 +573,8 @@ function whatsAppDataProvider(opts){
 
 	this.sendCamera = function (pChat) {
 		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
-		me.getPicture(source,
+		let permisssion = _isCapacitor() ? CameraPermissionType.Camera : null;
+		me.getPicture(source, permisssion,
 			function (file) {
 				me.sendMedia(file, pChat);
 			}
@@ -582,14 +583,15 @@ function whatsAppDataProvider(opts){
 
 	this.sendPhoto = function (pChat) {
 		let source = _isCapacitor() ? CameraSource.Photos : Camera.PictureSourceType.PHOTOLIBRARY;
-		me.getPicture(source, 
+		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
+		me.getPicture(source, permission,
 			function (file) {
 				me.sendMedia(file, pChat);
 			}
 		)
 	};
 
-	this.getPicture = async function (pSource, pCallback) {
+	this.getPicture = async function (pSource, permission, pCallback) {
 		if (_isCapacitor()) {
 			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
 			// quizas estaria bueno 
@@ -598,9 +600,9 @@ function whatsAppDataProvider(opts){
 			// 	if(files.length > 0)
 			// 		onFileSelected(files[0].name);
 			// },errMgr)
-			const opts = cameraOptionsCapacitor(CameraSource.Camera);
+			const opts = cameraOptionsCapacitor(source);
 			opts.resultType = CameraResultType.Uri;
-			const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+			const hasPermission = await requestPermissionsImages(permission);
 			if(hasPermission){
 				debugger;
 				try{
