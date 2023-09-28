@@ -615,7 +615,7 @@ function whatsAppDataProvider(opts){
 				cameraOptions(pSource)
 			);
 		}
-	}
+	};
 
 	this.getPicture = async function (pSource, pPermission, pCallback) {
 		if (_isCapacitor()) {
@@ -640,8 +640,7 @@ function whatsAppDataProvider(opts){
 				cameraOptions(pSource)
 			);
 		}
-	}
-
+	};
 
 	function onFileSelected(pFile){
 			debugger;
@@ -928,7 +927,7 @@ function whatsAppDataProvider(opts){
 				this.sendFileWeb("");
 			}
 		}
-	}
+	};
 
 	this.displayWhatsAppOptions = function(container){
 		var $media;
@@ -1226,7 +1225,7 @@ function whatsAppDataProvider(opts){
 			$recBtnRow.show();
 			$saveBtnRow.hide();
 		}
-	}
+	};
 }
 
 function wappMsg(){
