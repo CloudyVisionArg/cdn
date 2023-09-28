@@ -601,7 +601,9 @@ function whatsAppDataProvider(opts){
 	this.getMedia = async function (pSource, pPermission, pCallback) {
 		if (_isCapacitor()) {
 			let files = await Capacitor.Plugins.FilePicker.pickMedia({multiple : true, readData : true});
-			debugger;
+			for(let idx=0; idx < files.length; idx++){
+				files[idx].type = files[idx].mimetype;
+			}
 			onFileSelected(files[0]);
 
 		}else{
@@ -638,8 +640,9 @@ function whatsAppDataProvider(opts){
 				cameraOptions(pSource)
 			);
 		}
+	}
 
-		function onFileSelected(pFile){
+	function onFileSelected(pFile){
 			debugger;
 			if(_isCapacitor()){
 				let file = getBlobFromFile(pFile.name, pFile.data, pFile.type);
