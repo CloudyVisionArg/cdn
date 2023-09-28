@@ -590,7 +590,6 @@ function whatsAppDataProvider(opts){
 	};
 
 	this.getPicture = function (pSource, pCallback) {
-
 		if (_isCapacitor()) {
 			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
 			// quizas estaria bueno 
@@ -608,6 +607,7 @@ function whatsAppDataProvider(opts){
 				cameraOptions(pSource)
 			);
 		}
+
 		function onFileSelected(fileUrl){
 			debugger;
 			if(_isCapacitor()){
