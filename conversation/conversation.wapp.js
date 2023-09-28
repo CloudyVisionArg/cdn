@@ -865,35 +865,16 @@ function whatsAppDataProvider(opts){
 		if(_isCapacitor()){
             //Obtengo el archivo seleccionado, lo copio al cache del app y desde ahi dejo asociado.
             //Esto deberia tener un momento en el cual se borra del cache estos files despues de subirlos.
-            Capacitor.Plugins.FilePicker.pickFiles().then((res)=>{
-			const files = res.files;
-
-			//lee el archivo
-			Capacitor.Plugins.Filesystem.readFile({
-				path: files[0].path,
-			}).then((contents) => {
-				//Escribe en cache
-				debugger;
-				Capacitor.Plugins.Filesystem.writeFile({
-					path : files[0].name,
-					data : contents.data,
-					directory: Directory.Cache,
-				}).then(
-					(res)=>{
-						getFile(res.uri).then(
-							function (file) {
-								me.sendMedia(file);
-							},function(erro){
-								alert(errMsg(erro));
-							});
-						},function(er){
-							alert(errMsg(er));
-						});
-					},function(er){
-						alert(errMsg(er));
-					});
-			},function(er){
-				alert(errMsg(er));
+            Capacitor.Plugins.FilePicker.pickFiles({multiple:true, readData:true}).then(
+				(res)=>{
+					const files = res.files;
+					for (let idx=0; idx < files.length; idx++){
+						const file = files[idx];
+						me.getBlobFromFile(file.name, file.data, file.mimeType);
+						me.sendMedia(file);
+					}
+				},(er)=>{
+					alert(errMsg(er));
 			});			
         }else{
 			if (typeof(cordova) == 'object') {
