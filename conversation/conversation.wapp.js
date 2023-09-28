@@ -611,12 +611,22 @@ function whatsAppDataProvider(opts){
 			);
 		}
 		function onFileSelected(fileUrl){
-			getFile(fileUrl).then(
-				function (file) {
-					if (pCallback) pCallback(file);
-				},
-				errMgr
-			)
+			if(_isCapacitor()){
+				getFileFromCache(fileUrl).then(
+					function (file) {
+						if (pCallback) pCallback(file);
+					},
+					errMgr
+				)
+			}
+			else{
+				getFile(fileUrl).then(
+					function (file) {
+						if (pCallback) pCallback(file);
+					},
+					errMgr
+				)
+			}
 		}
 
 		function errMgr(pMsg) {
