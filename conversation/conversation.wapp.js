@@ -589,15 +589,27 @@ function whatsAppDataProvider(opts){
 		)
 	};
 
-	this.getPicture = function (pSource, pCallback) {
+	this.getPicture = async function (pSource, pCallback) {
 		if (_isCapacitor()) {
 			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
 			// quizas estaria bueno 
-			takePhoto().then((files)=>{
+			// takePhoto().then((files)=>{
+			// 	debugger;
+			// 	if(files.length > 0)
+			// 		onFileSelected(files[0].name);
+			// },errMgr)
+			const opts = cameraOptionsCapacitor(CameraSource.Camera);
+			opts.resultType = CameraResultType.Uri;
+			const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+			if(hasPermission){
 				debugger;
-				if(files.length > 0)
-					onFileSelected(files[0].name);
-			},errMgr)
+				const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
+				const file = await writeFileInCachePath(photo.path);
+				files.push({ uri : file.uri, name : file.name, size : file.size });
+				return files;
+			}
+			throw new Error('Se necesita permiso de acceso a la c&aacutemara');
+
 		} else {
 			navigator.camera.getPicture(
 				function (fileURL) {
