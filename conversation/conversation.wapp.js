@@ -584,38 +584,47 @@ function whatsAppDataProvider(opts){
 	this.sendPhoto = function (pChat) {
 		let source = _isCapacitor() ? CameraSource.Photos : Camera.PictureSourceType.PHOTOLIBRARY;
 		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
-		me.getPicture(source, permission,
-			function (file) {
-				me.sendMedia(file, pChat);
-			}
-		)
+
+
+
+		// me.getPicture(source, permission,
+		// 	function (file) {
+		// 		me.sendMedia(file, pChat);
+		// 	}
+		// )
 	};
+
+	this.getMedia = async function (pSource, pPermission, pCallback) {
+		if (_isCapacitor()) {
+			let files = await Capacitor.Plugins.FilePicker.pickMedia({multiple : true, readData : true});
+			debugger;
+			onFileSelected(files[0]);
+
+		}else{
+			navigator.camera.getPicture(
+				function (fileURL) {
+					onFileSelected(fileURL);
+				},
+				errMgr,
+				cameraOptions(pSource)
+			);
+		}
+	}
 
 	this.getPicture = async function (pSource, pPermission, pCallback) {
 		if (_isCapacitor()) {
-			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
-			// quizas estaria bueno 
-			// takePhoto().then((files)=>{
-			// 	debugger;
-			// 	if(files.length > 0)
-			// 		onFileSelected(files[0].name);
-			// },errMgr)
 			const opts = cameraOptionsCapacitor(pSource);
 			opts.resultType = CameraResultType.Uri;
 			const hasPermission = await requestPermissionsImages(pPermission);
-			if(hasPermission){
-				debugger;
-				try{
-					const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
-					const file = await writeFileInCachePath(photo.path);
-					file.type = `image/${photo.format}`;
-					onFileSelected(file);
-				}catch(err){
-					errMgr(err);
-				}
+			if(!hasPermission){ throw new Error('Se necesita permiso de acceso a la c&aacutemara'); }
+			try{
+				const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
+				const file = await writeFileInCachePath(photo.path);
+				file.type = `image/${photo.format}`;
+				onFileSelected(file);
+			}catch(err){
+				errMgr(err);
 			}
-			throw new Error('Se necesita permiso de acceso a la c&aacutemara');
-
 		} else {
 			navigator.camera.getPicture(
 				function (fileURL) {
@@ -629,17 +638,7 @@ function whatsAppDataProvider(opts){
 		function onFileSelected(pFile){
 			debugger;
 			if(_isCapacitor()){
-				let byteCharacters = atob(pFile.data);
-				let byteNumbers = new Array(byteCharacters.length);
-
-				for (let i = 0; i < byteCharacters.length; i++) {
-					byteNumbers[i] = byteCharacters.charCodeAt(i);
-				}
-
-				let byteArray = new Uint8Array(byteNumbers);
-				let blob = new Blob([byteArray], { type:pFile.type });
-
-				let file = new File([blob], pFile.name, { type: pFile.type });
+				let file = getBlobFromFile(pFile.name, pFile.data, pFile.type);
 				if (pCallback) pCallback(file);
 				
 			}
@@ -660,6 +659,20 @@ function whatsAppDataProvider(opts){
 			toast(pMsg);
 		}
 	};
+
+	this.getBlobFromFile = function(pFileName, pFileData, pFileType){
+		let byteCharacters = atob(pFileData);
+		let byteNumbers = new Array(byteCharacters.length);
+
+		for (let i = 0; i < byteCharacters.length; i++) {
+			byteNumbers[i] = byteCharacters.charCodeAt(i);
+		}
+
+		let byteArray = new Uint8Array(byteNumbers);
+		let blob = new Blob([byteArray], { pFileType });
+
+		return new File([blob], pFileName, { type: pFileType });
+	}
 
 	this.sendMedia = function (pFile, pChat) {
 		//todo
