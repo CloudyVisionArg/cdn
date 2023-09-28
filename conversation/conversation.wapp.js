@@ -705,7 +705,7 @@ function whatsAppDataProvider(opts){
 		}
 
 		let byteArray = new Uint8Array(byteNumbers);
-		let blob = new Blob([byteArray], { pFileType });
+		let blob = new Blob([byteArray], { type: pFileType });
 
 		return new File([blob], pFileName, { type: pFileType });
 	}
