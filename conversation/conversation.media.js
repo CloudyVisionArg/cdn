@@ -156,32 +156,42 @@ function recorder(opts){
         //Habria que borrarlo posteriormente al guardado
         writeFileInCache(completeName, recordingData.value.recordDataBase64).then(
             (res)=>{
-                Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
-                    (file)=> {
-                        file.localURL = file.uri;
-                        file.name = completeName;
-                        const byteCharacters = atob(recordingData.value.recordDataBase64);
-                        const byteNumbers = new Array(byteCharacters.length);
+                    let byteCharacters = atob(recordingData.value.recordDataBase64);
+                    let byteNumbers = new Array(byteCharacters.length);
 
-                        for (let i = 0; i < byteCharacters.length; i++) {
-                            byteNumbers[i] = byteCharacters.charCodeAt(i);
-                        }
-
-                        const byteArray = new Uint8Array(byteNumbers);
-                        const blob = new Blob([byteArray], { type: recordingData.value.mimeType });
-
-                        const file = new File([blob], capacitorFilename, { type: recordingData.value.mimeType });
-
-
-                        capacitorCallback(file);
-                    },(err)=>{
-                        capacitorCallbackError(err);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
                     }
-                );
-            },(err)=>{
-                console.error("Error escribiendo el audio.", errMsg(err));
-                capacitorCallbackError(err);
+
+                    let byteArray = new Uint8Array(byteNumbers);
+                    let blob = new Blob([byteArray], { type: recordingData.value.mimeType });
+
+                    let file = new File([blob], capacitorFilename, { type: recordingData.value.mimeType });
+                    capacitorCallback(file);
+                },(err)=>{
+                    capacitorCallbackError(err);
             });
+
+
+            // Capacitor.Plugins.Filesystem.writeFile({
+            //     path : completeName,
+            //     data : recordingData.value.recordDataBase64,
+            //     directory: Directory.Cache,
+            // }).then(
+            //     (res)=>{
+            //         getFile(res.uri).then(
+            //             function (file) {
+            //                 if(capacitorCallback !=null){
+            //                     capacitorCallback(file);
+            //                 }
+            //             },(err)=>{
+            //                 console.log("Error obteniendo el audio.");
+            //                 capacitorCallbackError(err);
+            //             });
+            //     },(err)=>{
+            //         console.log("Error escribiendo el audio.");
+            //         capacitorCallbackError(err);
+            //     });
     }
 
     this.recordFromCordova = function(){

@@ -613,18 +613,17 @@ function whatsAppDataProvider(opts){
 			if(_isCapacitor()){
 				getFileFromCache(fileUrl).then(
 					function (rFile) {
-						
-						const byteCharacters = atob(rFile.data);
-                        const byteNumbers = new Array(byteCharacters.length);
-
-                        for (let i = 0; i < byteCharacters.length; i++) {
-                            byteNumbers[i] = byteCharacters.charCodeAt(i);
-                        }
-
-                        const byteArray = new Uint8Array(byteNumbers);
-                        const blob = new Blob([byteArray], { type: recordingData.value.mimeType });
-
-                        const file = new File([blob], rFile.name, { type: rFile.type });
+						let byteCharacters = atob(rFile.data);
+						let byteNumbers = new Array(byteCharacters.length);
+	
+						for (let i = 0; i < byteCharacters.length; i++) {
+							byteNumbers[i] = byteCharacters.charCodeAt(i);
+						}
+	
+						let byteArray = new Uint8Array(byteNumbers);
+						let blob = new Blob([byteArray], { type:rFile.type });
+	
+						let file = new File([blob], rFile.name, { type: rFile.type });
 						if (pCallback) pCallback(file);
 					},
 					errMgr
