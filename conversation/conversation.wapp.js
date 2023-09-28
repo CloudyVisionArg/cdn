@@ -607,7 +607,7 @@ function whatsAppDataProvider(opts){
 					const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
 					const file = await writeFileInCachePath(photo.path);
 					file.type = `image/${photo.format}`;
-					onFileSelected(file.uri);
+					onFileSelected(file);
 				}catch(err){
 					errMgr(err);
 				}
