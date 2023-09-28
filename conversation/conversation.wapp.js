@@ -588,7 +588,7 @@ function whatsAppDataProvider(opts){
 			function (file) {
 				//me.sendMedia(file, pChat);
 			}
-		)
+		);
 
 
 		// me.getPicture(source, permission,
@@ -642,6 +642,7 @@ function whatsAppDataProvider(opts){
 		}
 	}
 
+
 	function onFileSelected(pFile){
 			debugger;
 			if(_isCapacitor()){
@@ -658,14 +659,14 @@ function whatsAppDataProvider(opts){
 					errMgr
 				)
 			}
-		}
+	}
 
-		function errMgr(pMsg) {
-			debugger;
-			console.log(pMsg);
-			toast(pMsg);
-		}
-	};
+	function errMgr(pMsg) {
+		debugger;
+		console.log(pMsg);
+		toast(pMsg);
+	}
+	
 
 	this.getBlobFromFile = function(pFileName, pFileData, pFileType){
 		let byteCharacters = atob(pFileData);
