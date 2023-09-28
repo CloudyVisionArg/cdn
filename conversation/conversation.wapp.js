@@ -645,7 +645,8 @@ function whatsAppDataProvider(opts){
 	function onFileSelected(pFile){
 			debugger;
 			if(_isCapacitor()){
-				let file = getBlobFromFile(pFile.name, pFile.data, pFile.type);
+				let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
+				debugger;
 				if (pCallback) pCallback(file);
 				
 			}
