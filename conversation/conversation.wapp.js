@@ -604,7 +604,7 @@ function whatsAppDataProvider(opts){
 			let res = await Capacitor.Plugins.FilePicker.pickMedia({multiple : true, readData : true});
 			let files = res.files;
 			for(let idx=0; idx < files.length; idx++){
-				files[idx].type = files[idx].mimetype;
+				files[idx].type = files[idx].mimeType;
 			}
 			onFileSelected(files[0]);
 
