@@ -594,16 +594,11 @@ function whatsAppDataProvider(opts){
 		if (_isCapacitor()) {
 			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
 			// quizas estaria bueno 
-
 			takePhoto().then((files)=>{
 				debugger;
 				if(files.length > 0)
-					onFileSelected(files[0].uri);
+					onFileSelected(files[0].name);
 			},errMgr)
-			// const opts = cameraOptionsCapacitor(pSource);
-			// Capacitor.Plugins.Camera.getPhoto(opts).then((res)=>{
-			// 	onFileSelected(res.path);
-			// }, errMgr);
 		} else {
 			navigator.camera.getPicture(
 				function (fileURL) {

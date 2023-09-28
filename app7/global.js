@@ -1969,6 +1969,23 @@ async function getFileFromCache(pFileName) {
     });
 };
 
+async function getFileFromUrl(pFileURL) {
+    return new Promise(function (resolve, reject) {
+        Capacitor.Plugins.Filesystem.readFile({
+            path : pFileURL,
+        }).then(
+            async (fileReadSucc)=>{
+                let file = await getFileStatFromCache(pFileName)
+                file.data = fileReadSucc.data;
+                file.name = pFileName;
+                resolve(file);
+            },
+            (fileReadErr)=>{
+                reject(fileReadErr);
+        });
+    });
+}
+
 async function writeFileInCache(pFileName, pFileData) {
     return Capacitor.Plugins.Filesystem.writeFile({
         path : pFileName,
