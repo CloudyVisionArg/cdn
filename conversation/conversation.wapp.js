@@ -638,21 +638,26 @@ function whatsAppDataProvider(opts){
 	this.sendMedia = function (pFile, pChat) {
 		//todo
         //wapp.cursorLoading(true);
-        let me = this;
-		if (typeof(cordova) == 'object') {
-			getFile(pFile.localURL).then(
-				function(){
-					me.sendMediaFromFile.call(me, ...arguments);
-				},
-				function (err) {
-					//wapp.cursorLoading(false);
-					debugger;
-				}
-			);
-		} else {
-			//me.sendMediaFromFile(pFile,pChat);
+		if(_isCapacitor()){
 			me.sendMediaFromFile.call(me, pFile, pChat);
-		};
+			
+		}else{
+			let me = this;
+			if (typeof(cordova) == 'object') {
+				getFile(pFile.localURL).then(
+					function(){
+						me.sendMediaFromFile.call(me, ...arguments);
+					},
+					function (err) {
+						//wapp.cursorLoading(false);
+						debugger;
+					}
+				);
+			} else {
+				//me.sendMediaFromFile(pFile,pChat);
+				me.sendMediaFromFile.call(me, pFile, pChat);
+			};
+		}
 	};
 	
 	this.sendMediaFromFile = function(file2, pChat) {
