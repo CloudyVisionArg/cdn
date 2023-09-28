@@ -597,7 +597,8 @@ function whatsAppDataProvider(opts){
 
 			takePhoto().then((files)=>{
 				debugger;
-				onFileSelected(files);
+				if(files.length > 0)
+					onFileSelected(files[0].uri);
 			},errMgr)
 			// const opts = cameraOptionsCapacitor(pSource);
 			// Capacitor.Plugins.Camera.getPhoto(opts).then((res)=>{
@@ -613,6 +614,7 @@ function whatsAppDataProvider(opts){
 			);
 		}
 		function onFileSelected(fileUrl){
+			debugger;
 			if(_isCapacitor()){
 				getFileFromCache(fileUrl).then(
 					function (file) {
