@@ -584,7 +584,11 @@ function whatsAppDataProvider(opts){
 	this.sendPhoto = function (pChat) {
 		let source = _isCapacitor() ? CameraSource.Photos : Camera.PictureSourceType.PHOTOLIBRARY;
 		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
-
+		me.getMedia(source, permission,
+			function (file) {
+				//me.sendMedia(file, pChat);
+			}
+		)
 
 
 		// me.getPicture(source, permission,
