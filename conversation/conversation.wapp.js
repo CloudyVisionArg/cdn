@@ -512,7 +512,7 @@ function whatsAppDataProvider(opts){
 		this.audioRecorder(function (file) {
 			const previewReader = new FileReader()
 			previewReader.onloadend = function(e){
-				debugger
+				debugger;
 				var previewBlob = new Blob([new Uint8Array(e.target.result)],{type: file.type});
 				var previewURL = URL.createObjectURL(previewBlob)
 
@@ -586,17 +586,9 @@ function whatsAppDataProvider(opts){
 		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
 		me.getMedia(source, permission,
 			function (file) {
-				debugger;
 				me.sendMedia(file, pChat);
 			}
 		);
-
-
-		// me.getPicture(source, permission,
-		// 	function (file) {
-		// 		me.sendMedia(file, pChat);
-		// 	}
-		// )
 	};
 
 	this.getMedia = async function (pSource, pPermission, pCallback) {
@@ -604,14 +596,9 @@ function whatsAppDataProvider(opts){
 			let res = await Capacitor.Plugins.FilePicker.pickMedia({multiple : true, readData : true});
 			let files = res.files;
 			for(let idx=0; idx < files.length; idx++){
-				// files[idx].type = files[idx].mimeType;
 				let file = me.getBlobFromFile(files[idx].name, files[idx].data, files[idx].mimeType);
-				debugger;
 				if (pCallback) pCallback(file);
 			}
-			//onFileSelected(files[0]);
-		
-
 		}else{
 			navigator.camera.getPicture(
 				function (fileURL) {
@@ -626,25 +613,6 @@ function whatsAppDataProvider(opts){
 				cameraOptions(pSource)
 			);
 		}
-
-		// function onFileSelected(pFile){
-		// 	debugger;
-		// 	if(_isCapacitor()){
-		// 		let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
-		// 		debugger;
-		// 		if (pCallback) pCallback(file);
-				
-		// 	}
-		// 	else{
-		// 		let fileUrl = pFile;
-		// 		getFile(fileUrl).then(
-		// 			function (file) {
-		// 				if (pCallback) pCallback(file);
-		// 			},
-		// 			errMgr
-		// 		)
-		// 	}
-		// }
 
 		function errMgr(pMsg) {
 			debugger;
@@ -663,7 +631,6 @@ function whatsAppDataProvider(opts){
 				const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
 				const file = await writeFileInCachePath(photo.path);
 				file.type = `image/${photo.format}`;
-				//onFileSelected(file);
 				let fileRes = me.getBlobFromFile(file.name, file.data, file.type);
 				debugger;
 				if (pCallback) pCallback(fileRes);
@@ -673,7 +640,6 @@ function whatsAppDataProvider(opts){
 		} else {
 			navigator.camera.getPicture(
 				function (fileURL) {
-					//onFileSelected(fileURL);
 					let fileUrl = pFile;
 					getFile(fileUrl).then(
 						function (file) {
@@ -686,25 +652,6 @@ function whatsAppDataProvider(opts){
 				cameraOptions(pSource)
 			);
 		}
-
-		// function onFileSelected(pFile){
-		// 	debugger;
-		// 	if(_isCapacitor()){
-		// 		let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
-		// 		debugger;
-		// 		if (pCallback) pCallback(file);
-				
-		// 	}
-		// 	else{
-		// 		let fileUrl = pFile;
-		// 		getFile(fileUrl).then(
-		// 			function (file) {
-		// 				if (pCallback) pCallback(file);
-		// 			},
-		// 			errMgr
-		// 		)
-		// 	}
-		// }
 
 		function errMgr(pMsg) {
 			debugger;
@@ -926,6 +873,7 @@ function whatsAppDataProvider(opts){
 				path: files[0].path,
 			}).then((contents) => {
 				//Escribe en cache
+				debugger;
 				Capacitor.Plugins.Filesystem.writeFile({
 					path : files[0].name,
 					data : contents.data,
