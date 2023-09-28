@@ -603,11 +603,14 @@ function whatsAppDataProvider(opts){
 			const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
 			if(hasPermission){
 				debugger;
-				const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
-				const file = await writeFileInCachePath(photo.path);
-				onFileSelected(file.uri);
-				//files.push({ uri : file.uri, name : file.name, size : file.size });
-				//return files;
+				try{
+					const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
+					const file = await writeFileInCachePath(photo.path);
+					file.type = `image/${photo.format}`;
+					onFileSelected(file.uri);
+				}catch(err){
+					errMgr(err);
+				}
 			}
 			throw new Error('Se necesita permiso de acceso a la c&aacutemara');
 
@@ -621,28 +624,25 @@ function whatsAppDataProvider(opts){
 			);
 		}
 
-		function onFileSelected(fileUrl){
+		function onFileSelected(pFile){
 			debugger;
 			if(_isCapacitor()){
-				getFileFromCache(fileUrl).then(
-					function (rFile) {
-						let byteCharacters = atob(rFile.data);
-						let byteNumbers = new Array(byteCharacters.length);
-	
-						for (let i = 0; i < byteCharacters.length; i++) {
-							byteNumbers[i] = byteCharacters.charCodeAt(i);
-						}
-	
-						let byteArray = new Uint8Array(byteNumbers);
-						let blob = new Blob([byteArray], { type:rFile.type });
-	
-						let file = new File([blob], rFile.name, { type: rFile.type });
-						if (pCallback) pCallback(file);
-					},
-					errMgr
-				)
+				let byteCharacters = atob(pFile.data);
+				let byteNumbers = new Array(byteCharacters.length);
+
+				for (let i = 0; i < byteCharacters.length; i++) {
+					byteNumbers[i] = byteCharacters.charCodeAt(i);
+				}
+
+				let byteArray = new Uint8Array(byteNumbers);
+				let blob = new Blob([byteArray], { type:pFile.type });
+
+				let file = new File([blob], pFile.name, { type: pFile.type });
+				if (pCallback) pCallback(file);
+				
 			}
 			else{
+				let fileUrl = pFile;
 				getFile(fileUrl).then(
 					function (file) {
 						if (pCallback) pCallback(file);
