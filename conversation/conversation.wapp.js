@@ -587,7 +587,7 @@ function whatsAppDataProvider(opts){
 		me.getMedia(source, permission,
 			function (file) {
 				debugger;
-				//me.sendMedia(file, pChat);
+				me.sendMedia(file, pChat);
 			}
 		);
 
@@ -616,6 +616,31 @@ function whatsAppDataProvider(opts){
 				errMgr,
 				cameraOptions(pSource)
 			);
+		}
+
+		function onFileSelected(pFile){
+			debugger;
+			if(_isCapacitor()){
+				let file = me.getBlobFromFile(pFile.name, pFile.data, pFile.type);
+				debugger;
+				if (pCallback) pCallback(file);
+				
+			}
+			else{
+				let fileUrl = pFile;
+				getFile(fileUrl).then(
+					function (file) {
+						if (pCallback) pCallback(file);
+					},
+					errMgr
+				)
+			}
+		}
+
+		function errMgr(pMsg) {
+			debugger;
+			console.log(pMsg);
+			toast(pMsg);
 		}
 	};
 
