@@ -591,7 +591,7 @@ function whatsAppDataProvider(opts){
 		)
 	};
 
-	this.getPicture = async function (pSource, permission, pCallback) {
+	this.getPicture = async function (pSource, pPermission, pCallback) {
 		if (_isCapacitor()) {
 			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
 			// quizas estaria bueno 
@@ -600,9 +600,9 @@ function whatsAppDataProvider(opts){
 			// 	if(files.length > 0)
 			// 		onFileSelected(files[0].name);
 			// },errMgr)
-			const opts = cameraOptionsCapacitor(source);
+			const opts = cameraOptionsCapacitor(pSource);
 			opts.resultType = CameraResultType.Uri;
-			const hasPermission = await requestPermissionsImages(permission);
+			const hasPermission = await requestPermissionsImages(pPermission);
 			if(hasPermission){
 				debugger;
 				try{
