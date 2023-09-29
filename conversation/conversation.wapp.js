@@ -640,7 +640,6 @@ function whatsAppDataProvider(opts){
 		} else {
 			navigator.camera.getPicture(
 				function (fileURL) {
-					let fileUrl = pFile;
 					getFile(fileUrl).then(
 						function (file) {
 							if (pCallback) pCallback(file);
