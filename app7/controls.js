@@ -1168,6 +1168,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
         };
 
         if (objPropCI(pSource, 'preload')) {
+            debugger;
             ac.params.filling = true;
             getControlFolder(objPropCI(pSource, 'folder'), objPropCI(pSource, 'rootFolder')).then(
                 function (fld) {
@@ -1218,6 +1219,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
     };
 
     function acSource(query, render) {
+        debugger;
         var self = this;
         var par = self.params;
         var results = [];
