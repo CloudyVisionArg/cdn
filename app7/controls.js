@@ -1134,14 +1134,19 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
     if (!Array.isArray(pSource)) {
         var all;
         debugger;
+        pSource.searchFieldsArray = objPropCI(pSource, 'searchFields').split(',').map(el => el.trim());
         if(objPropCI(pSource, 'showFields')){
             pSource.showFieldsArray = objPropCI(pSource, 'showFields').split(',').map(el => el.trim());
+            ac.params.textProperty = pSource.showFieldsArray[0].toUpperCase();
+            ac.params.valueProperty = pSource.showFieldsArray[0].toUpperCase();
+        }else{
+            if (pSource.searchFieldsArray.length > 0) {
+                ac.params.textProperty = pSource.searchFieldsArray[0].toUpperCase();
+                ac.params.valueProperty = pSource.searchFieldsArray[0].toUpperCase();
+            };
         }
-        pSource.searchFieldsArray = objPropCI(pSource, 'searchFields').split(',').map(el => el.trim());
-        if (pSource.searchFieldsArray.length > 0) {
-            ac.params.textProperty = pSource.searchFieldsArray[0].toUpperCase();
-            ac.params.valueProperty = pSource.searchFieldsArray[0].toUpperCase();
-        }; // Si se busca en mas de un campo hay que especificar estas props en mayusculas
+        
+       // Si se busca en mas de un campo hay que especificar estas props en mayusculas
 
         if (objPropCI(pSource, 'extraFields')) {
             pSource.extraFieldsArray = objPropCI(pSource, 'extraFields').split(',').map(el => el.trim());
