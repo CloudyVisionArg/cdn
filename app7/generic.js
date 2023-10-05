@@ -713,6 +713,7 @@ async function renderControls(pCont, pParent) {
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
                 rootFolder: folder.rootFolderId,
+                searchFields: ctl.attr('showfields'),
                 searchFields: ctl.attr('searchfields'),
                 extraFields: ctl.attr('returnfields'),
                 formula: ctl.attr('searchfilter'),

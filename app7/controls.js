@@ -1134,6 +1134,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
     if (!Array.isArray(pSource)) {
         var all;
 
+        pSource.showFieldsArray = objPropCI(pSource, 'showFields').split(',').map(el => el.trim());
         pSource.searchFieldsArray = objPropCI(pSource, 'searchFields').split(',').map(el => el.trim());
         if (pSource.searchFieldsArray.length > 0) {
             ac.params.textProperty = pSource.searchFieldsArray[0].toUpperCase();
