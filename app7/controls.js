@@ -1133,7 +1133,7 @@ function getAutocomplete(pId, pLabel, pSource, pMultiple) {
     // Inicializa segun pSource
     if (!Array.isArray(pSource)) {
         var all;
-
+        debugger;
         pSource.showFieldsArray = objPropCI(pSource, 'showFields').split(',').map(el => el.trim());
         pSource.searchFieldsArray = objPropCI(pSource, 'searchFields').split(',').map(el => el.trim());
         if (pSource.searchFieldsArray.length > 0) {
