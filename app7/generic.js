@@ -709,7 +709,7 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'AUTOCOMPLETE') {
             // todo: faltan editurl y addurl
-
+            debugger;
             $this = getAutocomplete(ctl['NAME'], label, {
                 folder: ctl.attr('searchfolder'),
                 rootFolder: folder.rootFolderId,
