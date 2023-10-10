@@ -62,7 +62,7 @@ var app = {
         numeral.locale('es'); // http://numeraljs.com/
         numeral.defaultFormat('0,0.[00]');
 
-
+        debugger;
         // Verificacion de plugins
         if(typeof(Capacitor) != 'undefined'){
             console.log("Capacitor App");
