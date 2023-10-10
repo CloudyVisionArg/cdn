@@ -13,7 +13,20 @@ export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 export { _htmlEntities as htmlEntities }
 
+//await loadUtils();
+
+var utilsPromise = loadUtils();
+/*
+todo: Safari soporta await at module top level recien en la v15
+https://caniuse.com/?search=top%20level%20await
+Cuando esta sea estandar reemplazar la linea anterior por:
+
 await loadUtils();
+
+Mientras tanto, si en algun metodo da error xq no esta el modulo esperar la promise asi:
+
+await utilsPromise;
+*/
 
 async function loadUtils() {
 
@@ -177,7 +190,7 @@ export function inNode() {
 
 
 export class DoorsMap extends Map {
-    #parseKey(key) {
+    _parseKey(key) {
         var k;
         if (typeof key === 'string') {
             k = key.toUpperCase();
@@ -193,7 +206,7 @@ export class DoorsMap extends Map {
     }
 
     delete(key) {
-        return super.delete(this.#parseKey(key));
+        return super.delete(this._parseKey(key));
     }
 
     /** Alias de has */
@@ -219,11 +232,11 @@ export class DoorsMap extends Map {
     }
 
     get(key) {
-        return super.get(this.#parseKey(key));
+        return super.get(this._parseKey(key));
     }
 
     has(key) {
-        return super.has(this.#parseKey(key));
+        return super.has(this._parseKey(key));
     }
 
     /** Alias de get */
@@ -233,7 +246,7 @@ export class DoorsMap extends Map {
 
     /** Alias de size */
     get length() {
-        return super.size;
+        return this.size;
     }
 
     /** Alias de delete */
@@ -242,7 +255,7 @@ export class DoorsMap extends Map {
     }
 
     set(key, value) {
-        return super.set(this.#parseKey(key), value);
+        return super.set(this._parseKey(key), value);
     }
 };
 
@@ -282,7 +295,7 @@ export class Session {
         this.#authToken = authToken;
     }
     
-    #reset() {
+    _reset() {
         this.#apiKey = undefined;
         this.#authToken = undefined;
         this.#currentUser = undefined;
@@ -298,7 +311,7 @@ export class Session {
         return this.#apiKey;
     }
     set apiKey(value) {
-        this.#reset();
+        this._reset();
         this.#apiKey = value;
     }
 
@@ -309,7 +322,7 @@ export class Session {
         return this.#authToken;
     }
     set authToken(value) {
-        this.#reset();
+        this._reset();
         this.#authToken = value;
     }
 
@@ -571,7 +584,7 @@ export class Session {
             var url = 'session/logoff';
             me.restClient.fetch(url, 'POST', {}, '').then(
                 res => {
-                    me.#reset();
+                    me._reset();
                     resolve(res);
                 },
                 reject
@@ -660,8 +673,8 @@ export class Session {
         return this.#serverUrl;
     }
     set serverUrl(value) {
+        this._reset();
         this.#serverUrl = value;
-        this.#reset();
     }
 
     /**
@@ -836,7 +849,7 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    #accountsGet(listFunction, account) {
+    _accountsGet(listFunction, account) {
         var me = this;
         return new Promise((resolve, reject) => {
             me[listFunction]().then(
@@ -861,18 +874,18 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    #accountsList(property, endPoint) {
+    _accountsList(property, endPoint) {
         var me = this;
         return new Promise((resolve, reject) => {
             if (me.#json[property]) {
-                resolve(me.#accountsMap(me.#json[property]));
+                resolve(me._accountsMap(me.#json[property]));
 
             } else {
                 var url = 'accounts/' + me.id + '/' + endPoint;
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         me.#json[property] = res;
-                        resolve(me.#accountsMap(me.#json[property]));
+                        resolve(me._accountsMap(me.#json[property]));
                     },
                     reject
                 )
@@ -881,7 +894,7 @@ export class Account {
     }
 
     /** Metodo interno, no usar */
-    #accountsMap(accounts) {
+    _accountsMap(accounts) {
         var me = this;
         var map = new DoorsMap();
         accounts.forEach(el => {
@@ -915,9 +928,9 @@ export class Account {
     */
     childAccounts(account) {
         if (account == undefined) {
-            return this.#accountsList('ChildAccountsList', 'childAccounts');
+            return this._accountsList('ChildAccountsList', 'childAccounts');
         } else {
-            return this.#accountsGet('childAccounts', account);
+            return this._accountsGet('childAccounts', account);
         }
     }
 
@@ -941,9 +954,9 @@ export class Account {
     */
     childAccountsRecursive(account) {
         if (account == undefined) {
-            return this.#accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
+            return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
         } else {
-            return this.#accountsGet('childAccountsRecursive', account);
+            return this._accountsGet('childAccountsRecursive', account);
         }
     }
 
@@ -1053,9 +1066,9 @@ export class Account {
     */
     parentAccounts(account) {
         if (account == undefined) {
-            return this.#accountsList('ParentAccountsList', 'parentAccounts');
+            return this._accountsList('ParentAccountsList', 'parentAccounts');
         } else {
-            return this.#accountsGet('parentAccounts', account);
+            return this._accountsGet('parentAccounts', account);
         }
     }
 
@@ -1079,9 +1092,9 @@ export class Account {
     */
     parentAccountsRecursive(account) {
         if (account == undefined) {
-            return this.#accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
+            return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
         } else {
-            return this.#accountsGet('parentAccountsRecursive', account);
+            return this._accountsGet('parentAccountsRecursive', account);
         }
     }
 
@@ -1102,7 +1115,7 @@ export class Account {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -1174,7 +1187,7 @@ export class Account {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -1437,7 +1450,7 @@ export class Attachment {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -1532,7 +1545,7 @@ export class Attachment {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -1547,12 +1560,19 @@ export class Database {
         this.#session = session;
     }
 
-    /** No implementado aun */
-    /*
-    async execute(sql) {
-        // todo
-    }
+    /**
+    Ejecuta un sql y devuelve los registros afectados.
+    @returns {Promise<number>}
     */
+    async execute(sql) {
+        var res = await this.session.utils.execVbs(`
+            Dim aff
+            dSession.Db.Execute ${ this.session.utils.vbsEncodeString(sql) }, aff
+            Response.Write aff
+        `);
+
+        return parseInt(await res.text());
+    }
 
     /**
     Obtiene el siguiente valor de la secuencia.
@@ -1648,7 +1668,7 @@ export class Database {
                 };
     
             } else {
-                throw 'Unknown type: ' + type;
+                throw new Error('sqlEncode error - Unknown type: ' + type);
             }
         };
     }
@@ -1777,7 +1797,7 @@ export class Document {
         this.#attachmentsMap._loaded = false;
     }
 
-    #reset() {
+    _reset() {
         this.#parent = undefined;
         this.#fieldsMap = undefined;
         /* Por si cargue adjuntos para guardar dps de Save
@@ -2190,7 +2210,7 @@ export class Document {
             },
             doc: this.toJSON(),
         });
-        this.#reset();
+        this._reset();
     }
 
     /**
@@ -2256,7 +2276,7 @@ export class Document {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -2294,7 +2314,7 @@ export class Document {
                                 reject(err);
                             }
 
-                            me.#reset();
+                            me._reset();
                             resolve(me);
                         },
                         reject
@@ -2374,7 +2394,7 @@ export class Document {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -2492,7 +2512,7 @@ export class Field {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -2541,7 +2561,7 @@ export class Field {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -3130,7 +3150,7 @@ export class Folder {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -3292,7 +3312,7 @@ export class Folder {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -3603,7 +3623,7 @@ export class Form {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -3682,7 +3702,7 @@ export class Form {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);
@@ -3973,6 +3993,16 @@ export class Properties extends DoorsMap {
         });
     }
 
+    has(key) {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.has(key)) },
+                reject
+            )
+        });
+    }
+
     get parent() {
         return this.#parent;
     }
@@ -4020,6 +4050,16 @@ export class Properties extends DoorsMap {
                 )
             });
         }
+    }
+
+    get size() {
+        var me = this;
+        return new Promise((resolve, reject) => {
+            me.#loadProm.then(
+                () => { resolve(super.size) },
+                reject
+            )
+        });
     }
 
     get user() {
@@ -4836,12 +4876,12 @@ export class View {
         this.#loaded = view.Definition ? true : false;
     }
 
-    async #asyncGet(property) {
-        await this.#load();
+    async _asyncGet(property) {
+        await this._load();
         return this.#json[property];
     }
 
-    async #load() {
+    async _load() {
         if (!this.#loaded) {
             var url = 'folders/' + this.parentId + '/views/' + this.id;
             var res = await this.session.restClient.fetch(url, 'GET', '', '');
@@ -4918,7 +4958,7 @@ export class View {
     }
 
     get definition() {
-        return this.#asyncGet('Definition');
+        return this._asyncGet('Definition');
     }
     set definition(value) {
         this.#json.Definition = value;
@@ -4932,7 +4972,7 @@ export class View {
     }
 
     get descriptionRaw() {
-        return this.#asyncGet('DescriptionRaw');
+        return this._asyncGet('DescriptionRaw');
     }
     set descriptionRaw(value) {
         this.#json.DescriptionRaw = value;
@@ -5023,7 +5063,7 @@ export class View {
     properties() // Devuelve la coleccion.
     properties(property) // Devuelve el valor de la property.
     properties(property, value) // Setea el valor de la property.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     properties(property, value) {
         if (!this.#properties) this.#properties = new Properties(this);
@@ -5047,14 +5087,14 @@ export class View {
     }
 
     get styleScript() {
-        return this.#asyncGet('StyleScriptDefinition');
+        return this._asyncGet('StyleScriptDefinition');
     }
     set styleScript(value) {
         this.#json.StyleScriptDefinition = value;
     }
 
     get tags() {
-        return this.#asyncGet('Tags');
+        return this._asyncGet('Tags');
     }
 
     get type() {
@@ -5069,7 +5109,7 @@ export class View {
     userProperties() // Devuelve la coleccion.
     userProperties(property) // Devuelve el valor de la userProperty.
     userProperties(property, value) // Setea el valor de la userProperty.
-    @returns {(Promise<Properties>|Promise<string>)}
+    @returns {(Properties|Promise<string>)}
     */
     userProperties(property, value) {
         if (!this.#userProperties) this.#userProperties = new Properties(this, true);

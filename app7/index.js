@@ -383,23 +383,7 @@ var app = {
 };
 
 function sessionMsg() {
-    dSession.tags.then(
-        res => {
-            if (res.message) {
-                app7.toast.create({
-                    text: res.message,
-                    closeTimeout: 15000,
-                    position: 'center',
-                    closeButton: false,
-                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
-                }).open();
-            }
-        }
-    )
-}
-
-function sessionMsg() {
-    dSession.tags.then(
+    dSession.tags().then(
         res => {
             if (res.message) {
                 app7.toast.create({

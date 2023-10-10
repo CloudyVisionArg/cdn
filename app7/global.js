@@ -2261,7 +2261,7 @@ function audioRecorder(pCallback) {
 
 async function requestPermissionsImages(cameraPermissionType){
     const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
-    return (oPermissionStatus[cameraPermissionType] == 'granted');
+    return (oPermissionStatus[cameraPermissionType] == 'granted' || oPermissionStatus[cameraPermissionType] == 'limited');
 }
 
 async function pickImages(opts){
