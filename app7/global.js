@@ -467,7 +467,7 @@ async function showLogin() {
             $get('#logon').click(function (e) {
                 logon();
             });
-
+            debugger;
             $get('#logongoogle').click(async function (e) {
                 Capacitor.Plugins.GoogleAuth.initialize();
                 const response = await GoogleAuth.signIn();
