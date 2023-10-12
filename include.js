@@ -341,7 +341,8 @@ function scriptSrc(scriptId, version) {
                     //src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
                     src = gitCdn({ path: script.path, fresh: true, url: true });
                 } else {
-                    src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
+                    //src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
+                    src = gitCdn({ path: script.path, ref: v, url: true });
                 }
 
             } else {
