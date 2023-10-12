@@ -89,6 +89,52 @@ export class AppSession extends doorsapi2.Session {
         });
     }
 
+    appLogonGoogle(pSuccess, pFailure) {
+        var me = this;
+
+        var endPoint = window.localStorage.getItem('endPoint');
+        if (!endPoint) {
+            if (pFailure) pFailure('Falta el end point');
+            return;
+        };
+
+        var instance = window.localStorage.getItem('instance');
+        if (!instance) {
+            if (pFailure) pFailure('Falta la instancia');
+            return;
+        };
+
+        var userName = window.localStorage.getItem('userName');
+        if (!userName) {
+            if (pFailure) pFailure('Falta el usuario');
+            return;
+        };
+
+        me.serverUrl = endPoint;
+        Doors.RESTFULL.ServerUrl = endPoint;
+        
+        //var password = this.decryptPass(window.localStorage.getItem('userPassword'));
+
+        // super.logon(userName, password, instance).then(function (token) {
+        //     Doors.RESTFULL.AuthToken = token;
+        //     me.setToken(token);
+        //     DoorsAPI.loggedUser().then(function (user) {
+        //         window.localStorage.setItem('loggedUser', JSON.stringify(user));
+        //     });
+        //     DoorsAPI.currentInstance().then(function (inst) {
+        //         window.localStorage.setItem('instanceDesc', inst['Description']);
+        //     });
+        //     DoorsAPI.instanceSettingsGet('apps_folder').then(function (setting) {
+        //         window.localStorage.setItem('appsFolder', setting ? setting : '');
+        //         if (pSuccess) pSuccess();
+        //     });
+
+        // }, function (err) {
+        //     console.log(err);
+        //     if (pFailure) pFailure(err);
+        // });
+    }
+
     appLogoff() {
         super.logoff();
         Doors.RESTFULL.AuthToken = '';

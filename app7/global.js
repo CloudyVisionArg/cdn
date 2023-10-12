@@ -468,6 +468,14 @@ async function showLogin() {
                 logon();
             });
 
+            $get('#logongoogle').click(async function (e) {
+                Capacitor.Plugins.GoogleAuth.initialize();
+                const response = await GoogleAuth.signIn();
+                console.log(response);
+                debugger;
+                //logonGoogle();
+            });
+
             $get('#logoff').click(function (e) {
                 logoff();
             });
@@ -555,6 +563,43 @@ async function showLogin() {
                 localStorage.setItem('userName', $get('#username').val());
                 localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                 
+                dSession.appLogon(function () {
+                    setMessage('Sincronizando datos... aguarde por favor', 'white');
+
+                    try {
+                        sync.sync(true, function() {
+                            location.href = 'index.html';
+                        })
+                    } catch(err) {
+                        setMessage(errMsg(err));
+                        console.error(errMsg(err));
+                        fillControls();
+                    }
+                }, function (err) {
+                    console.error(errMsg(err));
+                    setMessage(errMsg(err));
+                    if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                        $get('#chpass').closest('li').show();
+                    }
+                    disableInputs(false);
+                    $get('#logon').closest('li').removeClass('disabled');
+                    $get('#signin').closest('li').removeClass('disabled');
+                    $get('#resetpass').closest('li').removeClass('disabled');
+                });
+            }
+
+            function logonGoogle(){
+                disableInputs(true);
+                $get('#logon').closest('li').addClass('disabled');
+                $get('#signin').closest('li').addClass('disabled');
+                $get('#chpass').closest('li').hide();
+                $get('#resetpass').closest('li').addClass('disabled');
+
+                localStorage.setItem('instance', $get('#instance').val());
+                localStorage.setItem('endPoint', $get('#endpoint').val());
+                localStorage.setItem('appName', $get('#appname').val());
+                //localStorage.setItem('userName', $get('#username').val());
+                //localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                 dSession.appLogon(function () {
                     setMessage('Sincronizando datos... aguarde por favor', 'white');
 
