@@ -468,10 +468,13 @@ async function showLogin() {
                 logon();
             });
             debugger;
-            $get('#logongoogle').click(async function (e) {
+            $get('#logongoogle').click(function (e) {
                 //Capacitor.Plugins.GoogleAuth.initialize();
-                const response = await Capacitor.Plugins.GoogleAuth.signIn();
-                console.log(response);
+                Capacitor.Plugins.GoogleAuth.signIn().then((res)=>{
+                    console.log(res);
+                },(err)=>{
+                    console.log(err);
+                });
                 debugger;
                 //logonGoogle();
             });
