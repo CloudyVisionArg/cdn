@@ -4,6 +4,9 @@
  * Bootstrap.js: Ventanas modales
  * Doorsapi.js: Busqueda de datos
  */
+
+// fresh: https://cdn.cloudycrm.net/ghcv/cdn/conversation/conversation.wapp.js
+
 var wappOpts = {
     rootFldId: 5318,
     formula: "FROM = '+5493876112574' OR TO = '+5493876112574'",
@@ -132,7 +135,7 @@ function whatsAppDataProvider(opts){
 			style: 'width: 20%; text-align: center;',
 		}).appendTo($(me.options.sessionStatusContainer));
 		
-		$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/red.png" />');
+		$headingSession.append('<img height="30" src="https://cdn.cloudycrm.net/ghcv/cdn@55/wapp/red.png" />');
 		$headingSession.append('<div class="session-time"></div>');
 
 		me.checkSession(function () {
@@ -415,7 +418,7 @@ function whatsAppDataProvider(opts){
 			}
 			
             var $img = $(me.options.sessionStatusContainer).find('.session img');
-            $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/' + light + '.png');
+            $img.attr('src', 'https://cdn.cloudycrm.net/ghcv/cdn@55/wapp/' + light + '.png');
 			var $remain = $(me.options.sessionStatusContainer).find('.session .session-time');
 			$remain.html(remain);
 		}

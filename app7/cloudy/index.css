@@ -1,5 +1,5 @@
 .login-screen .page {
-    background-image: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@167/app7/cloudy/background.png');
+    background-image: url('https://cdn.cloudycrm.net/ghcv/cdn@167/app7/cloudy/background.png');
     background-size: cover;
 }
 .login-screen .page-content {
@@ -12,7 +12,7 @@
     text-align: center;
 }
 .login-screen .login-screen-logo img {
-    content: url('https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@167/app7/cloudy/logo.png');
+    content: url('https://cdn.cloudycrm.net/ghcv/cdn@167/app7/cloudy/logo.png');
     max-width: 80%;
 }
 .login-screen .list {
