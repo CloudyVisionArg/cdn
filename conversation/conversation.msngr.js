@@ -5,7 +5,7 @@
  * Doorsapi.js: Busqueda de datos
  */
 
-// fresh: https://cdn.cloudycrm.net/ghcv/cdn/conversation/conversation.msngr.js
+// fresh: https://cdn.cloudycrm.net/ghcv/cdn/conversation/conversation.msngr.js?_fresh=1
 
 var messengerOpts = {
     rootFldId: 5593,

@@ -5,7 +5,7 @@
  * Doorsapi.js: Busqueda de datos
  */
 
-// fresh: https://cdn.cloudycrm.net/ghcv/cdn/conversation/conversation.wapp.js
+// fresh: https://cdn.cloudycrm.net/ghcv/cdn/conversation/conversation.wapp.js?_fresh=1
 
 var wappOpts = {
     rootFldId: 5318,
