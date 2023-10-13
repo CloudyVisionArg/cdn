@@ -603,7 +603,7 @@ async function showLogin() {
                 localStorage.setItem('appName', $get('#appname').val());
                 
                 localStorage.setItem('userName',  accInfo.email);
-                localStorage.setItem('token',  accInfo.token);
+                localStorage.setItem('idToken',  accInfo.idToken);
                 //localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                 dSession.appLogonGoogle(function () {
                     setMessage('Sincronizando datos... aguarde por favor', 'white');

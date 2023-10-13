@@ -110,16 +110,16 @@ export class AppSession extends doorsapi2.Session {
             return;
         };
 
-        var token = window.localStorage.getItem('token');
-        if (!token) {
-            if (pFailure) pFailure('Falta el token');
+        var idToken = window.localStorage.getItem('idToken');
+        if (!idToken) {
+            if (pFailure) pFailure('Falta el idToken');
             return;
         };
 
         me.serverUrl = endPoint;
         Doors.RESTFULL.ServerUrl = endPoint;
 
-        super.logonGoogle(userName, instance, token, null, false).then(
+        super.logonGoogle(userName, instance, idToken, null, false).then(
             function(token){
                 Doors.RESTFULL.AuthToken = token;
                 me.setToken(token);
