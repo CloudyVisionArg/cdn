@@ -110,29 +110,34 @@ export class AppSession extends doorsapi2.Session {
             return;
         };
 
+        var token = window.localStorage.getItem('token');
+        if (!token) {
+            if (pFailure) pFailure('Falta el token');
+            return;
+        };
+
         me.serverUrl = endPoint;
         Doors.RESTFULL.ServerUrl = endPoint;
-        
-        //var password = this.decryptPass(window.localStorage.getItem('userPassword'));
 
-        // super.logon(userName, password, instance).then(function (token) {
-        //     Doors.RESTFULL.AuthToken = token;
-        //     me.setToken(token);
-        //     DoorsAPI.loggedUser().then(function (user) {
-        //         window.localStorage.setItem('loggedUser', JSON.stringify(user));
-        //     });
-        //     DoorsAPI.currentInstance().then(function (inst) {
-        //         window.localStorage.setItem('instanceDesc', inst['Description']);
-        //     });
-        //     DoorsAPI.instanceSettingsGet('apps_folder').then(function (setting) {
-        //         window.localStorage.setItem('appsFolder', setting ? setting : '');
-        //         if (pSuccess) pSuccess();
-        //     });
-
-        // }, function (err) {
-        //     console.log(err);
-        //     if (pFailure) pFailure(err);
-        // });
+        super.logonGoogle(userName, instance, token, null, false).then(
+            function(token){
+                Doors.RESTFULL.AuthToken = token;
+                me.setToken(token);
+                DoorsAPI.loggedUser().then(function (user) {
+                    window.localStorage.setItem('loggedUser', JSON.stringify(user));
+                });
+                DoorsAPI.currentInstance().then(function (inst) {
+                    window.localStorage.setItem('instanceDesc', inst['Description']);
+                });
+                DoorsAPI.instanceSettingsGet('apps_folder').then(function (setting) {
+                    window.localStorage.setItem('appsFolder', setting ? setting : '');
+                    if (pSuccess) pSuccess();
+                });
+            },
+            function (err) {
+                console.log(err);
+                if (pFailure) pFailure(err);
+            });
     }
 
     appLogoff() {

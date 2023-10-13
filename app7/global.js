@@ -469,17 +469,13 @@ async function showLogin() {
             });
             debugger;
             $get('#logongoogle').click(function (e) {
-                // Capacitor.Plugins.GoogleAuth.initialize({
-                //     clientId : "897362933368-fmaq4mm1h4epajc0oseejhav4s30icnh.apps.googleusercontent.com",
-                //     scopes : ['profile', 'email']
-                // });
-                Capacitor.Plugins.GoogleAuth.signIn().then((res)=>{
-                    console.log(res);
+                Capacitor.Plugins.GoogleAuth.signIn().then((accInfo)=>{
+                    console.log(accInfo);
+                    logonGoogle(accInfo)
                 },(err)=>{
+                    setMessage(errMsg(err));
                     console.log(err);
                 });
-                //debugger;
-                //logonGoogle();
             });
 
             $get('#logoff').click(function (e) {
@@ -594,9 +590,10 @@ async function showLogin() {
                 });
             }
 
-            function logonGoogle(){
+            function logonGoogle(accInfo){
                 disableInputs(true);
                 $get('#logon').closest('li').addClass('disabled');
+                $get('#logongoogle').closest('li').addClass('disabled');
                 $get('#signin').closest('li').addClass('disabled');
                 $get('#chpass').closest('li').hide();
                 $get('#resetpass').closest('li').addClass('disabled');
@@ -604,9 +601,11 @@ async function showLogin() {
                 localStorage.setItem('instance', $get('#instance').val());
                 localStorage.setItem('endPoint', $get('#endpoint').val());
                 localStorage.setItem('appName', $get('#appname').val());
-                //localStorage.setItem('userName', $get('#username').val());
+                
+                localStorage.setItem('userName',  accInfo.email);
+                localStorage.setItem('token',  accInfo.token);
                 //localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
-                dSession.appLogon(function () {
+                dSession.appLogonGoogle(function () {
                     setMessage('Sincronizando datos... aguarde por favor', 'white');
 
                     try {
@@ -626,6 +625,7 @@ async function showLogin() {
                     }
                     disableInputs(false);
                     $get('#logon').closest('li').removeClass('disabled');
+                    $get('#logongoogle').closest('li').removeClass('disabled');
                     $get('#signin').closest('li').removeClass('disabled');
                     $get('#resetpass').closest('li').removeClass('disabled');
                 });

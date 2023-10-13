@@ -617,6 +617,31 @@ export class Session {
     };
 
     /**
+    Inicia la sesion usando google. Devuelve el authToken.
+    @returns {Promise<string>}
+    */
+    logonGoogle(email, instanceName, idToken, openId, liteMode) {
+        var me = this;
+        var url = 'session/logonGoogle';
+        var data = {
+            email: email,
+            instanceName: instanceName,
+            idToken: idToken,
+            openId: openId,
+            liteMode: liteMode ? true : false,
+        };
+        return new Promise((resolve, reject) => {
+            me.restClient.fetch(url, 'POST', data, '').then(
+                token => {
+                    me.authToken = token;
+                    resolve(token);
+                },
+                reject
+            );
+        });
+    };
+
+    /**
     Ejecucion de codigo en el servidor.
     @returns {Node}
     */
