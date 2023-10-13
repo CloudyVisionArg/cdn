@@ -469,13 +469,16 @@ async function showLogin() {
             });
             debugger;
             $get('#logongoogle').click(function (e) {
-                //Capacitor.Plugins.GoogleAuth.initialize();
+                Capacitor.Plugins.GoogleAuth.initialize({
+                    clientId : "897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com",
+                    scopes : ['profile', 'email']
+                });
                 Capacitor.Plugins.GoogleAuth.signIn().then((res)=>{
                     console.log(res);
                 },(err)=>{
                     console.log(err);
                 });
-                debugger;
+                //debugger;
                 //logonGoogle();
             });
 
