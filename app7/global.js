@@ -470,7 +470,7 @@ async function showLogin() {
             debugger;
             $get('#logongoogle').click(function (e) {
                 Capacitor.Plugins.GoogleAuth.initialize({
-                    clientId : "897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com",
+                    clientId : "897362933368-fmaq4mm1h4epajc0oseejhav4s30icnh.apps.googleusercontent.com",
                     scopes : ['profile', 'email']
                 });
                 Capacitor.Plugins.GoogleAuth.signIn().then((res)=>{
