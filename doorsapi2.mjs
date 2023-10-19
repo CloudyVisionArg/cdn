@@ -3785,6 +3785,10 @@ export class Node {
         }
     }
 
+    set config(value) {
+        me.#config = value;
+    }
+
     get debug() {
         return this.#debug;
     }
