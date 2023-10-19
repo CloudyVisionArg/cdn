@@ -3786,7 +3786,7 @@ export class Node {
     }
 
     set config(value) {
-        me.#config = value;
+        this.#config = value;
     }
 
     get debug() {
