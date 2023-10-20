@@ -179,6 +179,7 @@ dSession.foldersGetFromId(fld_id).then(
                         var $li = $(this).closest('li');
                         var doc_id = $li.attr('doc_id');
                         var prop = findProp(folder.UserProperties, propEditPage);
+                        debugger;
                         if (!prop) prop = findProp(folder.Properties, propEditPage);
                         if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
                         if (prop) {
