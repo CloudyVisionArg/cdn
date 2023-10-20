@@ -1676,6 +1676,16 @@ function getFolderElements(pFolder) {
         errFunction
     );
 
+    // Lee las UserProperties del Folder
+    pFolder.pendingCalls++;
+    DoorsAPI.folderUserPropertiesGet(pFolder.FldId).then(
+        function (props) {
+            pFolder.UserProperties = props;
+            pFolder.pendingCalls--;
+        },
+        errFunction
+    );
+
     if (pFolder.Type == 1) {
         // Lee el Form
         pFolder.pendingCalls++;
