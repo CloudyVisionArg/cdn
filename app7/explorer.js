@@ -178,7 +178,8 @@ dSession.foldersGetFromId(fld_id).then(
                         $list.attr('clicked', 1);
                         var $li = $(this).closest('li');
                         var doc_id = $li.attr('doc_id');
-                        var prop = findProp(folder.Properties, propEditPage);
+                        var prop = findProp(folder.UserProperties, propEditPage);
+                        if (!prop) prop = findProp(folder.Properties, propEditPage);
                         if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
                         if (prop) {
                             prop += (prop.indexOf('?') >= 0 ? '&' : '?');
