@@ -180,8 +180,8 @@ dSession.foldersGetFromId(fld_id).then(
                         var doc_id = $li.attr('doc_id');
                         var prop = findProp(folder.UserProperties, propEditPage);
                         debugger;
-                        if (!prop) prop = findProp(folder.Properties, propEditPage);
-                        if (!prop) prop = findProp(folder.Form.Properties, propEditPage);
+                        if (prop == undefined) prop = findProp(folder.Properties, propEditPage);
+                        if (prop == undefined) prop = findProp(folder.Form.Properties, propEditPage);
                         if (prop) {
                             prop += (prop.indexOf('?') >= 0 ? '&' : '?');
                             if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
