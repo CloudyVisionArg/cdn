@@ -2350,7 +2350,7 @@ async function pickFiles(opts){
     }
 }
 
-async function takePhoto(){
+async function takePhoto() {
     var files = [];
     if (_isCapacitor()) {
         const opts = cameraOptionsCapacitor(CameraSource.Camera);

@@ -1508,6 +1508,8 @@ function deleteAtt(e) {
 }
 
 function addAtt(e) {
+    var beforeAdd = this.beforeAdd;
+
     var $this = $(this);
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
@@ -1515,6 +1517,8 @@ function addAtt(e) {
     if (action == 'camera') {
         takePhoto().then(
             (files)=>{
+                if (beforeAdd) beforeAdd(files, action);
+
                 files.forEach((file)=>{
                     att.URL = file.uri;
                     att.Name = file.name;
@@ -1527,6 +1531,8 @@ function addAtt(e) {
     } else if (action == 'photo') {
         pickImages().then(
             (files)=>{
+                if (beforeAdd) beforeAdd(files, action);
+
                 files.forEach((file)=>{
                     att.URL = file.uri;
                     att.Name = file.name;
@@ -1540,6 +1546,8 @@ function addAtt(e) {
     } else if (action == 'doc') {
         pickFiles().then(
             (files)=>{
+                if (beforeAdd) beforeAdd(files, action);
+
                 files.forEach((file)=>{
                     att.URL = file.uri;
                     att.Name = file.name;
@@ -1551,6 +1559,8 @@ function addAtt(e) {
         );
     } else if (action == 'audio') {
         audioRecorder(function (file) {
+            if (beforeAdd) beforeAdd(files, action);
+            
             var att = {};
             att.URL = file.localURL;
             att.Name = file.name;
