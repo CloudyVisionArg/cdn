@@ -1678,7 +1678,8 @@ y los botones de accion para agregar
 function getAttachments(pId, pTitle, pTag) {
     var $li = getCollapsible(pId, pTitle ? pTitle : 'Attachments');
     $li.attr('data-attachments', pTag ? pTag : 'all');
-
+    $li.data({ addHandler2: function(a) { debugger; } });
+    // 
     var $accCont = $li.find('.accordion-item-content');
     
     var $btnRow = $('<div/>', {
@@ -1686,11 +1687,13 @@ function getAttachments(pId, pTitle, pTag) {
         style: 'padding-top: var(--f7-list-item-padding-vertical); padding-bottom: var(--f7-list-item-padding-vertical);',
     }).appendTo($accCont);
 
-    debugger;
+    
     var elem = $btnRow[0];
     bindToNode(elem, 'addHandler', function(e) {
         debugger;
     });
+
+
 
 
 

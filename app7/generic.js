@@ -1524,15 +1524,20 @@ function addAtt(e) {
     if (action == 'camera') {
         takePhoto().then(
             (files)=>{
-                if (beforeAdd) beforeAdd(files, action);
+                debugger;
+                $.when($(this).trigger('addHandlerEvent')).done(function(e){
+                    debugger;
+                
+                //if (beforeAdd) beforeAdd(files, action);
 
-                files.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    att.Tag = tag;
-                    renderNewAtt(att, $attachs);
-                });
+                    files.forEach((file)=>{
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        att.Tag = tag;
+                        renderNewAtt(att, $attachs);
+                    });
+            });
 
                 if (change) change(files, action);
             },
