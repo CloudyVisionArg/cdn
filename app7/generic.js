@@ -1509,13 +1509,15 @@ function deleteAtt(e) {
 
 function addAtt(e) {
     debugger;
-    var beforeAdd = this.beforeAdd;
-    var change = this.change;
+    //var beforeAdd = this.beforeAdd;
+    //var change = this.change;
 
     var $this = $(this);
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var tag = $attachs.attr("data-attachments");
+    var beforeAdd = $attachs.attr("beforeAdd");
+    var change = $attachs.attr("change");
 
     var att = {};
     if (action == 'camera') {
