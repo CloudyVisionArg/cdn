@@ -267,6 +267,7 @@ async function renderPage() {
         $ctl.find('div.row').on('click', 'button', addAtt);
 
 
+
         // tabHeader
 
         $tabHeader = $('<div/>', {
@@ -795,8 +796,8 @@ async function renderControls(pCont, pParent) {
             $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
             $this.find('div.row').on('click', 'button', addAtt);
             $this.find('.list').on('change', 'a.item-content', downloadAtt);
-            $this.addHandler = function(){
-                
+            $this.find('div.row').addHandler = $this.addHandler = function(){
+
             }
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
@@ -1513,15 +1514,14 @@ function deleteAtt(e) {
 
 function addAtt(e) {
     debugger;
-    //var beforeAdd = this.beforeAdd;
-    //var change = this.change;
-
     var $this = $(this);
     var $attachs = $this.closest('li');
+    var beforeAdd = $this.find('div.row').addHandler;
     var action = $this.attr('id');
     var tag = $attachs.attr("data-attachments");
-    var beforeAdd = $attachs.attr("data-beforeAdd");
-    var change = $attachs.attr("change");
+
+    //var beforeAdd = $attachs.attr("data-beforeAdd");
+    //var change = $attachs.attr("change");
 
     var att = {};
     if (action == 'camera') {
