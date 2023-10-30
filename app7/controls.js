@@ -1686,6 +1686,14 @@ function getAttachments(pId, pTitle, pTag) {
         style: 'padding-top: var(--f7-list-item-padding-vertical); padding-bottom: var(--f7-list-item-padding-vertical);',
     }).appendTo($accCont);
 
+    debugger;
+    var elem = $btnRow[0];
+    this.bindToNode(elem, 'addHandler', function(e) {
+        debugger;
+    });
+
+
+
     var $btn = $('<button/>', {
         id: 'camera',
         class: 'button col',
@@ -1737,6 +1745,10 @@ function getAttachments(pId, pTitle, pTag) {
     }).append('<ul/>').appendTo($accCont);
 
     return $li;
+
+    function bindToNode(node, name, fn) {
+        node[name] = fn.bind(node);
+    }
 }
 
 /*

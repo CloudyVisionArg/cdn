@@ -794,9 +794,9 @@ async function renderControls(pCont, pParent) {
             $this = getAttachments(ctl['NAME'], label);
             $this.find('.list').on('click', 'a.item-content', downloadAtt);
             $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
-            $this.find('div.row').on('click', 'button', addAtt);
             $this.find('.list').on('change', 'a.item-content', downloadAtt);
-
+            $this.find('div.row').on('click', 'button', addAtt);
+            
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.attr('readonly', true);
                 $this.find('div.row').hide();
