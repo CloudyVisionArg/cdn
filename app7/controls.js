@@ -1688,7 +1688,7 @@ function getAttachments(pId, pTitle, pTag) {
 
     debugger;
     var elem = $btnRow[0];
-    this.bindToNode(elem, 'addHandler', function(e) {
+    bindToNode(elem, 'addHandler', function(e) {
         debugger;
     });
 
@@ -1745,10 +1745,10 @@ function getAttachments(pId, pTitle, pTag) {
     }).append('<ul/>').appendTo($accCont);
 
     return $li;
+}
 
-    function bindToNode(node, name, fn) {
-        node[name] = fn.bind(node);
-    }
+function bindToNode (node, name, fn) {
+    node[name] = fn.bind(node);
 }
 
 /*
