@@ -1523,17 +1523,27 @@ function addAtt(e) {
     var att = {};
     if (action == 'camera') {
         takePhoto().then(
-            (files)=>{
+            (f)=>{
                 debugger;
-                $.when($(this).trigger('addHandlerEvent', [{files:files}])).done(function(files){
-                    files.forEach((file)=>{
-                        att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        att.Tag = tag;
-                        renderNewAtt(att, $attachs);
-                    });
-            });
+                $(this).triggerHandler('addHandlerEvent', f);
+                debugger;
+                f.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    att.Tag = tag;
+                    renderNewAtt(att, $attachs);
+                });
+
+                // $.when($(this).trigger('addHandlerEvent', [{files:f}])).done(function(e){
+                //     f.forEach((file)=>{
+                //         att.URL = file.uri;
+                //         att.Name = file.name;
+                //         att.Size = file.size;
+                //         att.Tag = tag;
+                //         renderNewAtt(att, $attachs);
+                //     });
+                // });
 
                 if (change) change(files, action);
             },
