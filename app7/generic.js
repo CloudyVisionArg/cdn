@@ -1516,7 +1516,7 @@ function addAtt(e) {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var tag = $attachs.attr("data-attachments");
-    var beforeAdd = $attachs.attr("beforeAdd");
+    var beforeAdd = $attachs.attr("data-beforeAdd");
     var change = $attachs.attr("change");
 
     var att = {};
