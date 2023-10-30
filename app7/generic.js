@@ -1525,25 +1525,16 @@ function addAtt(e) {
         takePhoto().then(
             (f)=>{
                 debugger;
-                $(this).triggerHandler('addHandlerEvent', f);
-                debugger;
-                f.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    att.Tag = tag;
-                    renderNewAtt(att, $attachs);
+                $.when($(this).trigger('addHandlerEvent', [{f}])).done(function(e){
+                    debugger;
+                    f.forEach((file)=>{
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        att.Tag = tag;
+                        renderNewAtt(att, $attachs);
+                    });
                 });
-
-                // $.when($(this).trigger('addHandlerEvent', [{files:f}])).done(function(e){
-                //     f.forEach((file)=>{
-                //         att.URL = file.uri;
-                //         att.Name = file.name;
-                //         att.Size = file.size;
-                //         att.Tag = tag;
-                //         renderNewAtt(att, $attachs);
-                //     });
-                // });
 
                 if (change) change(files, action);
             },
