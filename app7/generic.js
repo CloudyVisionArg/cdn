@@ -1516,7 +1516,7 @@ function addAtt(e) {
     debugger;
     var $this = $(this);
     var $attachs = $this.closest('li');
-    var beforeAdd = $this.find('div.row').addHandler;
+    var beforeAdd = $this.closest('div.row').addHandler;
     var action = $this.attr('id');
     var tag = $attachs.attr("data-attachments");
 
