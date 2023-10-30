@@ -796,7 +796,7 @@ async function renderControls(pCont, pParent) {
             $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
             $this.find('div.row').on('click', 'button', addAtt);
             $this.find('.list').on('change', 'a.item-content', downloadAtt);
-            $this.find('div.row').addHandler = $this.addHandler = function(){
+            $this.find('div.row').addHandler = function(){
 
             }
 
