@@ -795,7 +795,7 @@ async function renderControls(pCont, pParent) {
             $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
             $this.find('div.row').on('click', 'button', addAtt);
             $this.find('.list').on('change', 'a.item-content', downloadAtt);
-            debugger;
+            
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.attr('readonly', true);
@@ -850,6 +850,7 @@ async function renderControls(pCont, pParent) {
             if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT'], context);
+            debugger;
 
         } catch (err) {
             console.error(err);
