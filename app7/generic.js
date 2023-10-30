@@ -1508,11 +1508,15 @@ function deleteAtt(e) {
 }
 
 function addAtt(e) {
+    debugger;
     var beforeAdd = this.beforeAdd;
+    var change = this.change;
 
     var $this = $(this);
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
+    var tag = $attachs.attr("data-attachments");
+
     var att = {};
     if (action == 'camera') {
         takePhoto().then(
@@ -1523,8 +1527,11 @@ function addAtt(e) {
                     att.URL = file.uri;
                     att.Name = file.name;
                     att.Size = file.size;
+                    att.Tag = tag;
                     renderNewAtt(att, $attachs);
                 });
+
+                if (change) change(files, action);
             },
             errMgr
         );
@@ -1537,8 +1544,11 @@ function addAtt(e) {
                     att.URL = file.uri;
                     att.Name = file.name;
                     att.Size = file.size;
+                    att.Tag = tag;
                     renderNewAtt(att, $attachs);
                 });
+
+                if (change) change(files, action);
             },
             errMgr
         );
@@ -1552,8 +1562,11 @@ function addAtt(e) {
                     att.URL = file.uri;
                     att.Name = file.name;
                     att.Size = file.size;
+                    att.Tag = tag;
                     renderNewAtt(att, $attachs);
                 });
+
+                if (change) change(files, action);
             },
             errMgr
         );
@@ -1565,8 +1578,12 @@ function addAtt(e) {
             att.URL = file.localURL;
             att.Name = file.name;
             att.Size = file.size;
+            att.Tag = tag;
             renderNewAtt(att, $attachs);
+            
+            if (change) change(files, action);
         });
+        
     };
 
     function errMgr(pErr) {

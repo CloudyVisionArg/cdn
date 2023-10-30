@@ -1759,6 +1759,7 @@ function getAttachment(pAttach, pReadonly) {
         class: 'item-link item-content',
         'data-att-id': att.AttId,
         'data-att-name': att.Name,
+        'data-attachments': att.Description 
     }).appendTo($swipeCont);
 
     var $itemInner = $('<div/>', {
