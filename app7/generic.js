@@ -1525,7 +1525,7 @@ function addAtt(e) {
         takePhoto().then(
             (files)=>{
                 debugger;
-                $.when($(this).trigger('addHandlerEvent')).done(function(files){
+                $.when($(this).trigger('addHandlerEvent', [{files:files}])).done(function(files){
                     files.forEach((file)=>{
                         att.URL = file.uri;
                         att.Name = file.name;
