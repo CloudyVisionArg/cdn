@@ -265,7 +265,6 @@ async function renderPage() {
         $ctl.find('.list').on('click', 'a', downloadAtt);
         $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
         $ctl.find('div.row').on('click', 'button', addAtt);
-        debugger;
 
 
         // tabHeader
@@ -796,6 +795,7 @@ async function renderControls(pCont, pParent) {
             $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
             $this.find('div.row').on('click', 'button', addAtt);
             $this.find('.list').on('change', 'a.item-content', downloadAtt);
+            debugger;
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.attr('readonly', true);
