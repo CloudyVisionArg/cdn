@@ -2358,7 +2358,7 @@ async function takePhoto(el) {
         const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
         if(hasPermission){
             var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
-            file.filename = photo.path.replace(/^.*[\\\/]/, '');
+            file.filename = file.path.replace(/^.*[\\\/]/, '');
             (el) ? await $.when($(el).trigger('beforeAdd', [{file}])) : null;
             const svdFile = await writeFileInCachePath(file.path, file.filename);
             files.push({ uri : svdFile.uri, name : svdFile.name, size : svdFile.size });      
