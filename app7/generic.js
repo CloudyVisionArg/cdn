@@ -1923,7 +1923,7 @@ async function evalCode(code, ctx) {
 
 
 
-async function takePhotoGeneric(target) {
+async function takePhoto(target) {
     var files = [];
     if (_isCapacitor()) {
         const opts = cameraOptionsCapacitor(CameraSource.Camera);
