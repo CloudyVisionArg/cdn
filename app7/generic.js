@@ -1520,8 +1520,9 @@ function addAtt() {
     if (action == 'camera') {
         takePhoto().then(
             async (file)=>{
-                //Espero al evento
                 //Dialogo para modificar el nombre?
+                
+                //Espero al evento
                 (target) ? await $.when($(this).trigger('beforeAdd', [{file}])) : null;
                 if(file){ // setea null en el evento descarto el guardado / agregado?
                     if (!attExist($attachs, file.filename)){
