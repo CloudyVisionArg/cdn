@@ -1921,6 +1921,185 @@ async function evalCode(code, ctx) {
     }
 }
 
+
+
+async function takePhotoGeneric(target) {
+    var files = [];
+    if (_isCapacitor()) {
+        const opts = cameraOptionsCapacitor(CameraSource.Camera);
+        opts.resultType = CameraResultType.Uri;
+        const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+        if(hasPermission){
+            var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
+            file.filename = file.path.replace(/^.*[\\\/]/, '');
+            (target) ? await $.when($(target).trigger('beforeAdd', [{file}])) : null;
+            const svdFile = await writeFileInCachePath(file.path, file.filename);
+            files.push({ uri : svdFile.uri, name : svdFile.name, size : svdFile.size });      
+            return files;
+        }
+        throw new Error('Se necesita permiso de acceso a la c&aacutemara');
+    }
+    else{
+        return new Promise((resolve, reject)=>{
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        (file) => {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    )
+                },
+                function (err){
+                    reject(err);
+                },
+                cameraOptions(Camera.PictureSourceType.CAMERA)
+            )
+        });
+    }
+}
+
+async function pickImages(opts){
+    var files = [];
+    if (_isCapacitor()) {
+        let options = {};
+        if(opts) { options = opts; }
+        const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
+        if(hasPermission){
+            const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
+            for(let idx=0; idx < selectedPhotos.photos.length; idx++){
+                const item = selectedPhotos.photos[idx];
+                const fileInCache = await writeFileInCachePath(item.path);
+                files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+            }
+            return files;
+        }
+        throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+    }
+
+    else {
+        return new Promise((resolve, reject)=>{
+        navigator.camera.getPicture(
+            function (fileURL) {
+                getFile(fileURL).then(
+                    (file)=> {
+                        files.push({ uri : file.localURL, name : file.name, size : file.size });
+                        resolve(files)
+                    },
+                    (err)=>{
+                        reject(err);
+                    }
+                );
+            },
+            function (err){
+                reject(err);
+            },
+                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            );
+        });
+    }
+}
+
+async function pickFiles(opts){
+    var files = [];
+    if (_isCapacitor()) {
+        let options =  { multiple : true };
+        if(opts) { options = opts; }
+        const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
+        for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
+            const item = pickFilesResultSucc.files[idx];
+            const fileInCache = await writeFileInCachePath(item.path, item.name);
+            files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+        }
+        return files;
+    }
+    else {
+        return new Promise((resolve, reject)=>{
+            chooser.getFileMetadata().then(
+                function (res) {
+                    getFile(res.uri).then(
+                        (file) => {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    )
+                },
+                function (err){
+                    reject(err);
+                }
+            )
+        });
+    }
+}
+
+async function requestPermissionsImages(cameraPermissionType){
+    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
+    return (oPermissionStatus[cameraPermissionType] == 'granted' || oPermissionStatus[cameraPermissionType] == 'limited');
+}
+
+
+function cameraOptions(pSource) {
+	return {
+		quality: 50,
+		destinationType: Camera.DestinationType.FILE_URI,
+		sourceType: pSource,
+		encodingType: Camera.EncodingType.JPEG,
+		mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+};
+
+function cameraOptionsCapacitor(pSource){
+    return {
+		quality: 50,
+		saveToGallery: true,    
+		source: pSource,
+		//encodingType: Camera.EncodingType.JPEG,
+		//mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+        resultType: CameraResultType.DataUrl,
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+}
+
+const CameraResultType = {
+    Uri: 'uri',
+    Base64: 'base64',
+    DataUrl: 'dataUrl'
+};
+
+const CameraPermissionType = {
+    Camera: 'camera', 
+    Photos: 'photos'
+};
+
+const CameraSource = {
+    Prompt: 'PROMPT', //Prompts the user to select either the photo album or take a photo.
+    Camera: 'CAMERA', //Take a new photo using the camera.
+    Photos: 'PHOTOS' //Pick an existing photo from the gallery or photo album.
+};
+
+const CameraDirection = {
+    Rear: 'REAR',
+    Front: 'FRONT'
+};
+
+
 /*
 Function getTimeInterval(pCtlNode, pProps)
 	Dim ctl
