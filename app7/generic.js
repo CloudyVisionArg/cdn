@@ -1509,7 +1509,7 @@ function deleteAtt(e) {
     }
 }
 
-function addAtt(e) {
+function addAtt() {
     debugger;
     var $this = $(this);
     var $attachs = $this.closest('li');

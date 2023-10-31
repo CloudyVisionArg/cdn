@@ -2358,12 +2358,12 @@ async function takePhoto(el) {
         const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
         if(hasPermission){
             var photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
-            await $.when($(el).trigger('beforeAdd', [{photo}])); //.done(async (e)=>{
-            const file = await writeFileInCachePath(photo.path);
+            var filename = photo.path.replace(/^.*[\\\/]/, '');
+            (el) ?? await $.when($(el).trigger('beforeAdd', [{photo, filename}]));
+            const file = await writeFileInCachePath(photo.path, filename);
             files.push({ uri : file.uri, name : file.name, size : file.size });
             console.log("2");         
             return files;
-            //});       
         }
         throw new Error('Se necesita permiso de acceso a la c&aacutemara');
     }
