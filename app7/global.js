@@ -2350,7 +2350,7 @@ async function pickFiles(opts){
     }
 }
 
-async function takePhoto() {
+async function takePhoto(el) {
     var files = [];
     if (_isCapacitor()) {
         const opts = cameraOptionsCapacitor(CameraSource.Camera);
@@ -2358,7 +2358,7 @@ async function takePhoto() {
         const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
         if(hasPermission){
             var photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
-            photo = await $.when($(this).trigger('beforeAdd', [{photo}])); //.done(async (e)=>{
+            await $.when($(el).trigger('beforeAdd', [{photo}])); //.done(async (e)=>{
             const file = await writeFileInCachePath(photo.path);
             files.push({ uri : file.uri, name : file.name, size : file.size });
             console.log("2");         
