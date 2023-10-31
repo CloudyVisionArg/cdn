@@ -1513,30 +1513,27 @@ function addAtt(e) {
     debugger;
     var $this = $(this);
     var $attachs = $this.closest('li');
-    var beforeAdd = $this.closest('div.row')[0].addHandler;
     var action = $this.attr('id');
     var tag = $attachs.attr("data-attachments");
-
-    //var beforeAdd = $attachs.attr("data-beforeAdd");
-    //var change = $attachs.attr("change");
 
     var att = {};
     if (action == 'camera') {
         takePhoto().then(
-            (f)=>{
-                debugger;
-                $.when($(this).trigger('addHandlerEvent', [{f}])).done(function(e){
+            (files)=>{
+                $.when($(this).trigger('beforeAdd', [{files}])).done(function(e){
                     debugger;
-                    f.forEach((file)=>{
+                    files.forEach((file)=>{
                         att.URL = file.uri;
                         att.Name = file.name;
                         att.Size = file.size;
                         att.Tag = tag;
                         renderNewAtt(att, $attachs);
                     });
-                });
 
-                if (change) change(files, action);
+                    //TODO: Este podria ser asincrono
+                    $.when($(this).trigger('change', [{files}])).done(function(e){
+                    });
+                });
             },
             errMgr
         );
