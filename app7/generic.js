@@ -1518,7 +1518,7 @@ function addAtt() {
 
     var att = {};
     if (action == 'camera') {
-        takePhoto($attachs).then(
+        takePhoto(this).then(
             (files)=>{
                 files.forEach((file)=>{
                     att.URL = file.uri;
