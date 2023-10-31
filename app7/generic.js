@@ -1518,15 +1518,22 @@ function addAtt() {
 
     var att = {};
     if (action == 'camera') {
-        takePhoto(this,$attachs).then(
-            (files)=>{
-                files.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    att.Tag = tag;
-                    renderNewAtt(att, $attachs);
-                });
+        takePhoto().then(
+            async (file)=>{
+                //Espero al evento
+                (target) ? await $.when($(this).trigger('beforeAdd', [{file}])) : null;
+                if(file){ // setea null en el evento descarto el guardado / agregado?
+                    if (!attExist($attachs, file.filename)){
+                        const svdFile = await writeFileInCachePath(file.path, file.filename);
+                        file.push({ uri : svdFile.uri, name : svdFile.name, size : svdFile.size });      
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        att.Tag = tag;
+                        renderNewAtt(att, $attachs);
+                    }
+                    //Disparar el mensaje de duplicado
+                }
             },
             errMgr
         );
@@ -1598,6 +1605,17 @@ function renderNewAtt(pAtt, pCont) {
     }
     $att.attr('data-att-action', 'save');
     $li.prependTo(pCont.find('ul'));
+}
+
+function attExist(pCont, filename) {
+   //Validar si no existe un adjunto con el mismo nombre para evitar que se pisen sin querer
+    let arrAdj = pCont.find('.media-list a.item-link.item-content');
+    arrAdj.forEach((item)=>{
+        if(item.getAttribute('data-att-name').toLowerCase() == filename.toLowerCase()){
+            return true;
+        }
+    })
+    return false;
 }
 
 async function saveDoc(exitOnSuccess) {
@@ -1923,7 +1941,7 @@ async function evalCode(code, ctx) {
 
 
 
-async function takePhoto(target) {
+async function takePhoto() {
     var files = [];
     if (_isCapacitor()) {
         const opts = cameraOptionsCapacitor(CameraSource.Camera);
@@ -1932,10 +1950,7 @@ async function takePhoto(target) {
         if(hasPermission){
             var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
             file.filename = file.path.replace(/^.*[\\\/]/, '');
-            (target) ? await $.when($(target).trigger('beforeAdd', [{file}])) : null;
-            const svdFile = await writeFileInCachePath(file.path, file.filename);
-            files.push({ uri : svdFile.uri, name : svdFile.name, size : svdFile.size });      
-            return files;
+            return file;
         }
         throw new Error('Se necesita permiso de acceso a la c&aacutemara');
     }
