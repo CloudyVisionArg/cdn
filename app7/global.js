@@ -2358,9 +2358,13 @@ async function takePhoto() {
         const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
         if(hasPermission){
             const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
-            const file = await writeFileInCachePath(photo.path);
-            files.push({ uri : file.uri, name : file.name, size : file.size });
-            return files;
+            $.when($(this).trigger('beforeAdd', [{photo}])).done(async (e)=>{
+                const file = await writeFileInCachePath(photo.path);
+                files.push({ uri : file.uri, name : file.name, size : file.size });
+                console.log("2");         
+                return files;
+            }); 
+            console.log("1");         
         }
         throw new Error('Se necesita permiso de acceso a la c&aacutemara');
     }

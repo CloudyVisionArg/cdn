@@ -1520,20 +1520,26 @@ function addAtt(e) {
     if (action == 'camera') {
         takePhoto().then(
             (files)=>{
-                $.when($(this).trigger('beforeAdd', [{files}])).done(function(e){
-                    debugger;
-                    files.forEach((file)=>{
-                        att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
-                        att.Tag = tag;
-                        renderNewAtt(att, $attachs);
-                    });
-
-                    //TODO: Este podria ser asincrono
-                    $.when($(this).trigger('change', [{files}])).done(function(e){
-                    });
+                files.forEach((file)=>{
+                    att.URL = file.uri;
+                    att.Name = file.name;
+                    att.Size = file.size;
+                    att.Tag = tag;
+                    renderNewAtt(att, $attachs);
                 });
+                // $.when($(this).trigger('beforeAdd', [{files}])).done(function(e){
+                //     files.forEach((file)=>{
+                //         att.URL = file.uri;
+                //         att.Name = file.name;
+                //         att.Size = file.size;
+                //         att.Tag = tag;
+                //         renderNewAtt(att, $attachs);
+                //     });
+
+                //     // //TODO: Este podria ser asincrono
+                //     // $.when($(this).trigger('change', [{files}])).done(function(e){
+                //     // });
+                // });
             },
             errMgr
         );
