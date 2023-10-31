@@ -2350,7 +2350,7 @@ async function pickFiles(opts){
     }
 }
 
-async function takePhoto(el) {
+async function takePhoto(target, control) {
     var files = [];
     if (_isCapacitor()) {
         const opts = cameraOptionsCapacitor(CameraSource.Camera);
@@ -2359,7 +2359,7 @@ async function takePhoto(el) {
         if(hasPermission){
             var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
             file.filename = file.path.replace(/^.*[\\\/]/, '');
-            (el) ? await $.when($(el).trigger('beforeAdd', [{file}])) : null;
+            (target) ? await $.when($(target).trigger('beforeAdd', [{file, control}])) : null;
             const svdFile = await writeFileInCachePath(file.path, file.filename);
             files.push({ uri : svdFile.uri, name : svdFile.name, size : svdFile.size });      
             return files;
