@@ -2361,8 +2361,7 @@ async function takePhoto(el) {
             var filename = photo.path.replace(/^.*[\\\/]/, '');
             (el) ?? await $.when($(el).trigger('beforeAdd', [{photo, filename}]));
             const file = await writeFileInCachePath(photo.path, filename);
-            files.push({ uri : file.uri, name : file.name, size : file.size });
-            console.log("2");         
+            files.push({ uri : file.uri, name : file.name, size : file.size });      
             return files;
         }
         throw new Error('Se necesita permiso de acceso a la c&aacutemara');
