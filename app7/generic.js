@@ -1563,10 +1563,6 @@ function addAtt() {
                         file.filename = await renameFile(file.filename);
                     }
                     await $.when($(this).trigger('beforeAdd', [{file}]));
-                }
-                console.log(1);
-                 //Espero al evento
-                for (const file of files) {
                     if (!attExist($attachs, file.filename)){
                         att.URL = file.uri;
                         att.Name = file.name;
