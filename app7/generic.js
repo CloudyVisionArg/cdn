@@ -1626,10 +1626,10 @@ function attExist(pCont, filename) {
     let arrAdj = pCont.find('.media-list a.item-link.item-content');
     for(let idx=0; idx< arrAdj.length; idx++){
         if(arrAdj[idx].getAttribute('data-att-name').toLowerCase() == filename.toLowerCase()){
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 async function saveDoc(exitOnSuccess) {
