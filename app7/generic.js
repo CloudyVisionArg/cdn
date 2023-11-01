@@ -1521,7 +1521,7 @@ function addAtt() {
         takePhoto().then(
             async (file)=>{
                 debugger;
-                //Dialogo para modificar el nombre?
+                //Parametrizar esta posibilidad.
                 var filename = await new Promise((resolve, reject) => {
                     app7.dialog.prompt('¿Renombrar el archivo?', 
                         (filename) => {
@@ -1539,10 +1539,9 @@ function addAtt() {
                 if(file){ // setea null en el evento descarto el guardado / agregado?
                     if (!attExist($attachs, file.filename)){
                         const svdFile = await writeFileInCachePath(file.path, file.filename);
-                        file.push({ uri : svdFile.uri, name : svdFile.name, size : svdFile.size });      
-                        att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
+                        att.URL = svdFile.uri;
+                        att.Name = svdFile.name;
+                        att.Size = svdFile.size;
                         att.Tag = tag;
                         renderNewAtt(att, $attachs);
                     }
