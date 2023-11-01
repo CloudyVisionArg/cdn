@@ -1535,7 +1535,7 @@ function addAtt() {
                 (filename) ? file.filename = filename : null;
 
                 //Espero al evento
-                (target) ? await $.when($(this).trigger('beforeAdd', [{file}])) : null;
+                await $.when($(this).trigger('beforeAdd', [{file}]));
                 if(file){ // setea null en el evento descarto el guardado / agregado?
                     if (!attExist($attachs, file.filename)){
                         const svdFile = await writeFileInCachePath(file.path, file.filename);
