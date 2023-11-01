@@ -1515,7 +1515,7 @@ function addAtt() {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var tag = $attachs.attr("data-attachments");
-    var enableRename = $attachs.attr("data-rename-enable");
+    var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
 
     var att = {};
     if (action == 'camera') {
