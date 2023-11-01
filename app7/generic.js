@@ -1624,8 +1624,12 @@ function attExist(pCont, filename) {
     debugger;
     //Validar si no existe un adjunto con el mismo nombre para evitar que se pisen sin querer
     let arrAdj = pCont.find('.media-list a.item-link.item-content');
-    const found = arrAdj.find((item) => { item.getAttribute('data-att-name').toLowerCase()== filename.toLowerCase()});
-    return (found.length > 0);
+    for(let idx=0; idx< arrAdj.length; idx++){
+        if(arrAdj[idx].getAttribute('data-att-name').toLowerCase() == filename.toLowerCase()){
+            return false;
+        }
+    }
+    return true;
 }
 
 async function saveDoc(exitOnSuccess) {
