@@ -1560,10 +1560,10 @@ function addAtt() {
             async (files)=>{
                 for (const file of files) {
                     if(enableRename){
-                        file.filename = await renameFile(file.filename);
+                        file.name = await renameFile(file.name);
                     }
                     await $.when($(this).trigger('beforeAdd', [{file}]));
-                    if (!attExist($attachs, file.filename)){
+                    if (!attExist($attachs, file.name)){
                         att.URL = file.uri;
                         att.Name = file.name;
                         att.Size = file.size;
