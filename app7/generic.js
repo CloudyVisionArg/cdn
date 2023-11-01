@@ -1622,14 +1622,11 @@ function renderNewAtt(pAtt, pCont) {
 }
 
 function attExist(pCont, filename) {
+    debugger;
     //Validar si no existe un adjunto con el mismo nombre para evitar que se pisen sin querer
     let arrAdj = pCont.find('.media-list a.item-link.item-content');
-    arrAdj.forEach((item)=>{
-        if(item.getAttribute('data-att-name').toLowerCase() == filename.toLowerCase()){
-            return true;
-        }
-    });
-    return false;
+    const found = arrAdj.find((item) => { item.getAttribute('data-att-name').toLowerCase()== filename.toLowerCase()});
+    return (found);
 }
 
 async function saveDoc(exitOnSuccess) {
