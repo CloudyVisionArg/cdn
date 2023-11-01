@@ -1509,6 +1509,20 @@ function deleteAtt(e) {
     }
 }
 
+async function renameFile(pFileName){
+    var filename = await new Promise((resolve, reject) => {
+        app7.dialog.prompt('¿Renombrar el archivo?', 
+            (filename) => {
+                resolve(filename);
+            },
+            () => {
+                resolve(pFileName);
+            }
+        , pFileName)
+    });
+    return filename;
+}
+
 function addAtt() {
     debugger;
     var $this = $(this);
@@ -1522,22 +1536,12 @@ function addAtt() {
         takePhoto().then(
             async (file)=>{
                 if(enableRename){
-                    //Muestra dialogo para renombrado,.
-                    var filename = await new Promise((resolve, reject) => {
-                        app7.dialog.prompt('¿Renombrar el archivo?', 
-                            (filename) => {
-                                resolve(filename);
-                            },
-                            (dialog) => {
-                                resolve(null);
-                            }
-                        , file.filename)
-                    });
-                    (filename) ? file.filename = filename : null;
+                    file.filename = renameFile(file.filename);
                 }
 
                 //Espero al evento
                 await $.when($(this).trigger('beforeAdd', [{file}]));
+
                 if(file){ // setea null en el evento descarto el guardado / agregado?
                     if (!attExist($attachs, file.filename)){
                         const svdFile = await writeFileInCachePath(file.path, file.filename);
@@ -1547,28 +1551,29 @@ function addAtt() {
                         att.Tag = tag;
                         renderNewAtt(att, $attachs);
                     }
-                    else{
-                        toast(`La foto con el nombre ${file.filename} ya existe`);
-                    }
-                    //Disparar el mensaje de duplicado
                 }
             },
             errMgr
         );
     } else if (action == 'photo') {
         pickImages().then(
-            (files)=>{
-                if (beforeAdd) beforeAdd(files, action);
-
+            async (files)=>{
+                for (const file of files) {
+                    if(enableRename){
+                        file.filename = renameFile(file.filename);
+                    }
+                    await $.when($(this).trigger('beforeAdd', [{file}]));
+                }
+                 //Espero al evento
                 files.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    att.Tag = tag;
-                    renderNewAtt(att, $attachs);
+                    if (!attExist($attachs, file.filename)){
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        att.Tag = tag;
+                        renderNewAtt(att, $attachs);
+                    }
                 });
-
-                if (change) change(files, action);
             },
             errMgr
         );
@@ -1626,12 +1631,13 @@ function renderNewAtt(pAtt, pCont) {
 }
 
 function attExist(pCont, filename) {
-    debugger;
+
     //Validar si no existe un adjunto con el mismo nombre para evitar que se pisen sin querer
     let arrAdj = pCont.find('.media-list a.item-link.item-content');
     for(let idx=0; idx< arrAdj.length; idx++){
-        debugger;
         if(arrAdj[idx].getAttribute('data-att-name').toLowerCase() == filename.toLowerCase()){
+            //Muestro error de imagen duplicada
+            toast(`La archivo con el nombre '${filename}' ya existe`);
             return true;
         }
     }
