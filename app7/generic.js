@@ -1520,8 +1520,20 @@ function addAtt() {
     if (action == 'camera') {
         takePhoto().then(
             async (file)=>{
+                debugger;
                 //Dialogo para modificar el nombre?
-                
+                var filename = await new Promise((resolve, reject) => {
+                    app7.dialog.prompt('¿Renombrar el archivo?', 
+                        (filename) => {
+                            resolve(filename);
+                        },
+                        (dialog) => {
+                            resolve(null);
+                        }
+                    , file.fileName)
+                });
+                (filename) ? file.filename = filename : null;
+
                 //Espero al evento
                 (target) ? await $.when($(this).trigger('beforeAdd', [{file}])) : null;
                 if(file){ // setea null en el evento descarto el guardado / agregado?
@@ -1610,13 +1622,13 @@ function renderNewAtt(pAtt, pCont) {
 }
 
 function attExist(pCont, filename) {
-   //Validar si no existe un adjunto con el mismo nombre para evitar que se pisen sin querer
+    //Validar si no existe un adjunto con el mismo nombre para evitar que se pisen sin querer
     let arrAdj = pCont.find('.media-list a.item-link.item-content');
     arrAdj.forEach((item)=>{
         if(item.getAttribute('data-att-name').toLowerCase() == filename.toLowerCase()){
             return true;
         }
-    })
+    });
     return false;
 }
 
