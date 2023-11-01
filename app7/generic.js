@@ -1515,24 +1515,26 @@ function addAtt() {
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
     var tag = $attachs.attr("data-attachments");
+    var enableRename = $attachs.attr("data-rename-enable");
 
     var att = {};
     if (action == 'camera') {
         takePhoto().then(
             async (file)=>{
-                debugger;
-                //Parametrizar esta posibilidad.
-                var filename = await new Promise((resolve, reject) => {
-                    app7.dialog.prompt('¿Renombrar el archivo?', 
-                        (filename) => {
-                            resolve(filename);
-                        },
-                        (dialog) => {
-                            resolve(null);
-                        }
-                    , file.filename)
-                });
-                (filename) ? file.filename = filename : null;
+                if(enableRename){
+                    //Muestra dialogo para renombrado,.
+                    var filename = await new Promise((resolve, reject) => {
+                        app7.dialog.prompt('¿Renombrar el archivo?', 
+                            (filename) => {
+                                resolve(filename);
+                            },
+                            (dialog) => {
+                                resolve(null);
+                            }
+                        , file.filename)
+                    });
+                    (filename) ? file.filename = filename : null;
+                }
 
                 //Espero al evento
                 await $.when($(this).trigger('beforeAdd', [{file}]));
@@ -1544,6 +1546,9 @@ function addAtt() {
                         att.Size = svdFile.size;
                         att.Tag = tag;
                         renderNewAtt(att, $attachs);
+                    }
+                    else{
+                        toast(`La foto con el nombre ${file.filename} ya existe`);
                     }
                     //Disparar el mensaje de duplicado
                 }
