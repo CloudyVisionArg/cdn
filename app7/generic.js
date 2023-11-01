@@ -1560,7 +1560,7 @@ function addAtt() {
             async (files)=>{
                 for (const file of files) {
                     if(enableRename){
-                        file.filename = renameFile(file.filename);
+                        file.filename = await renameFile(file.filename);
                     }
                     await $.when($(this).trigger('beforeAdd', [{file}]));
                 }
