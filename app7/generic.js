@@ -1535,50 +1535,17 @@ function addAtt() {
     var tag = $attachs.attr("data-attachments");
     var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
 
-    var att = {};
     if (action == 'camera') {
         takePhoto().then(
             async (files)=>{
-                for (const file of files) {
-                    if(enableRename){
-                        file.filename = await  renameFile(file.name);
-                    }
-
-                    //Espero al evento
-                    await $.when($(this).trigger('beforeAdd', [{file}]));
-
-                    if(file){ // setea null en el evento descarto el guardado / agregado?
-                        if (!attExist($attachs, file.name)){
-                            const svdFile = await writeFileInCachePath(file.uri, file.name);
-                            att.URL = svdFile.uri;
-                            att.Name = svdFile.name;
-                            att.Size = svdFile.size;
-                            att.Tag = tag;
-                            renderNewAtt(att, $attachs);
-                        }
-                    }
-                }
+                appendAtts($attachs, files);
             },
             errMgr
         );
     } else if (action == 'photo') {
         pickImages().then(
             async (files)=>{
-                for (const file of files) {
-                    if(enableRename){
-                        file.name = await renameFile(file.name);
-                    }
-                    debugger;
-                    await $.when($(this).trigger('beforeAdd', [{file}]));
-                    if (!attExist($attachs, file.name)){
-                        const svdFile = await writeFileInCachePath(file.uri, file.name);
-                        att.URL = svdFile.uri;
-                        att.Name = svdFile.name;
-                        att.Size = svdFile.size;
-                        att.Tag = tag;
-                        renderNewAtt(att, $attachs);
-                    }
-                }
+                appendAtts($attachs, files);
             },
             errMgr
         );
@@ -1586,51 +1553,43 @@ function addAtt() {
     } else if (action == 'doc') {
         pickFiles().then(
             async (files)=>{
-                for (const file of files) {
-                    if(enableRename){
-                        file.name = await renameFile(file.name);
-                    }
-                    await $.when($(this).trigger('beforeAdd', [{file}]));
-                    if (!attExist($attachs, file.name)){
-                        const svdFile = await writeFileInCachePath(file.uri, file.name);
-                        att.URL = svdFile.uri;
-                        att.Name = svdFile.name;
-                        att.Size = svdFile.size;
-                        att.Tag = tag;
-                        renderNewAtt(att, $attachs);
-                    }
-                }
+                appendAtts($attachs, files);
             },
             errMgr
         );
     } else if (action == 'audio') {
         audioRecorder(async (file)=> {
-            if(enableRename){
-                file.filename = await  renameFile(file.name);
-            }
-            await $.when($(this).trigger('beforeAdd', [{file}]));
-            if (!attExist($attachs, file.name)){
-                const svdFile = await writeFileInCachePath(file.uri, file.name);
-                att.URL = svdFile.uri;
-                att.Name = svdFile.name;
-                att.Size = svdFile.size;
-                att.Tag = tag;
-                renderNewAtt(att, $attachs);
-            }
-
-            // var att = {};
-            // att.URL = file.localURL;
-            // att.Name = file.name;
-            // att.Size = file.size;
-            // att.Tag = tag;
-            // renderNewAtt(att, $attachs);
-        });
+            let files = [];
+            files.push(file);
+            appendAtts($attachs, files);
+        },
+            errMgr
+        );
         
     };
 
     function errMgr(pErr) {
         logAndToast(errMsg(pErr));
     };
+}
+
+async function appendAtts(pCont, files){
+    var att = {};
+    for (const file of files) {
+        if(enableRename){
+            file.name = await renameFile(file.name);
+        }
+        await $.when($(this).trigger('beforeAdd', [{file}]));
+        if (!attExist($attachs, file.name)){
+            const svdFile = await writeFileInCachePath(file.uri, file.name);
+            att.URL = svdFile.uri;
+            att.Name = svdFile.name;
+            att.Size = svdFile.size;
+            att.Tag = tag;
+            renderNewAtt(att, $attachs);
+            await $.when($(this).trigger('afterAdd', [{file}]));
+        }
+    }
 }
 
 function renderNewAtt(pAtt, pCont) {
@@ -2159,7 +2118,7 @@ const CameraDirection = {
     Front: 'FRONT'
 };
 
-function audioRecorder(pCallback) {
+function audioRecorder(pCallback, pErrorCallback) {
     var mediaRec, interv, timer, save;
 
     var $sheet = $('<div/>', {
@@ -2271,6 +2230,9 @@ function audioRecorder(pCallback) {
                                 },
                                 function (err) {
                                     logAndToast('getFile error: ' + err.code);
+                                    if (pErrorCallback) {
+                                        pErrorCallback('getFile error: ' + err.code);
+                                    }
                                 }
                             );
                         }
