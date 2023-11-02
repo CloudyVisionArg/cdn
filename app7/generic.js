@@ -1511,11 +1511,12 @@ function deleteAtt(e) {
 
 async function renameFile(pFileName){
     debugger;
-    const re = /(?:\.([^.]+))?$/;
-    let arr = re.exec(pFileName);
-    let sName = arr[0];
-    let sExt = arr[1];
-    let sModifiedName = await new Promise((resolve) => {
+
+    const ultimoPuntoIndex = pFileName.lastIndexOf('.');
+    const sName = pFileName.slice(0, ultimoPuntoIndex);
+    const extension = pFileName.slice(ultimoPuntoIndex + 1);
+
+    let modifiedName = await new Promise((resolve) => {
         app7.dialog.prompt('¿Renombrar el archivo?', 
             (name) => {
                 resolve(name);
@@ -1525,7 +1526,7 @@ async function renameFile(pFileName){
             }
         , sName)
     });
-    return `${sModifiedName}.${sExt}`;
+    return `${modifiedName}.${extension}`;
 }
 
 function addAtt() {
