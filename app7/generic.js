@@ -2072,9 +2072,9 @@ async function pickFiles(opts){
         if(opts) { options = opts; }
         const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
         for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
-            const item = pickFilesResultSucc.files[idx];
-            const fileInCache = await writeFileInCachePath(item.path, item.name);
-            files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+            const file = pickFilesResultSucc.files[idx];
+            file.filename = file.path.replace(/^.*[\\\/]/, '');
+            files.push({ uri : file.path, name : file.filename, size : file.size });
         }
         return files;
     }
