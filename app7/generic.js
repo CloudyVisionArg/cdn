@@ -1529,21 +1529,20 @@ async function renameFile(pFileName){
 
 function addAtt() {
     debugger;
-    var $this = $(this);
-    var $attachs = $this.closest('li');
+    var $this = $($this);
     var action = $this.attr('id');
 
     if (action == 'camera') {
         takePhoto().then(
             async (files)=>{
-                appendAtts($attachs, files);
+                appendAtts(this, files);
             },
             errMgr
         );
     } else if (action == 'photo') {
         pickImages().then(
             async (files)=>{
-                appendAtts($attachs, files);
+                appendAtts(this, files);
             },
             errMgr
         );
@@ -1551,7 +1550,7 @@ function addAtt() {
     } else if (action == 'doc') {
         pickFiles().then(
             async (files)=>{
-                appendAtts($attachs, files);
+                appendAtts(this, files);
             },
             errMgr
         );
@@ -1572,8 +1571,9 @@ function addAtt() {
 }
 
 async function appendAtts(pCont, files){
+    var $attachs = pCont.closest('li');
     var tag = pCont.attr("data-attachments");
-    var enableRename = (pCont.attr("data-rename-enable")) ? (pCont.attr("data-rename-enable") == "true") : false;
+    var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
     var att = {};
     for (const file of files) {
         if(enableRename){
@@ -1586,7 +1586,7 @@ async function appendAtts(pCont, files){
             att.Name = svdFile.name;
             att.Size = svdFile.size;
             att.Tag = tag;
-            renderNewAtt(att, pCont);
+            renderNewAtt(att, $attachs);
             await $.when(pCont.trigger('afterAdd', [{file}]));
         }
     }
