@@ -1571,8 +1571,8 @@ function addAtt() {
 }
 
 async function appendAtts(pCont, files){
-    var $attachs = pCont.closest('li');
-    var tag = pCont.attr("data-attachments");
+    var $attachs = $(pCont).closest('li');
+    var tag =  $(pCont).attr("data-attachments");
     var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
     var att = {};
     for (const file of files) {
