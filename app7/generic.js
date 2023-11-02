@@ -1540,7 +1540,7 @@ function addAtt() {
         takePhoto().then(
             async (file)=>{
                 if(enableRename){
-                    file.filename = renameFile(file.filename);
+                    file.filename = await  renameFile(file.filename);
                 }
 
                 //Espero al evento
@@ -1566,6 +1566,7 @@ function addAtt() {
                     if(enableRename){
                         file.name = await renameFile(file.name);
                     }
+                    debugger;
                     await $.when($(this).trigger('beforeAdd', [{file}]));
                     if (!attExist($attachs, file.name)){
                         const svdFile = await writeFileInCachePath(file.path, file.filename);
