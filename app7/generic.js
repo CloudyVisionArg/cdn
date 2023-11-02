@@ -1510,8 +1510,6 @@ function deleteAtt(e) {
 }
 
 async function renameFile(pFileName){
-    debugger;
-
     const ultimoPuntoIndex = pFileName.lastIndexOf('.');
     const sName = pFileName.slice(0, ultimoPuntoIndex);
     const extension = pFileName.slice(ultimoPuntoIndex + 1);
@@ -1570,9 +1568,10 @@ function addAtt() {
                     }
                     await $.when($(this).trigger('beforeAdd', [{file}]));
                     if (!attExist($attachs, file.name)){
-                        att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
+                        const svdFile = await writeFileInCachePath(file.path, file.filename);
+                        att.URL = svdFile.uri;
+                        att.Name = svdFile.name;
+                        att.Size = svdFile.size;
                         att.Tag = tag;
                         renderNewAtt(att, $attachs);
                     }
@@ -1590,9 +1589,10 @@ function addAtt() {
                     }
                     await $.when($(this).trigger('beforeAdd', [{file}]));
                     if (!attExist($attachs, file.name)){
+                        const svdFile = await writeFileInCachePath(file.path, file.filename);
                         att.URL = file.uri;
-                        att.Name = file.name;
-                        att.Size = file.size;
+                        att.Name = svdFile.name;
+                        att.Size = svdFile.size;
                         att.Tag = tag;
                         renderNewAtt(att, $attachs);
                     }
