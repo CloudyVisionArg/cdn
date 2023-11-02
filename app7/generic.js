@@ -1577,18 +1577,20 @@ function addAtt() {
         
     } else if (action == 'doc') {
         pickFiles().then(
-            (files)=>{
-                if (beforeAdd) beforeAdd(files, action);
-
-                files.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    att.Tag = tag;
-                    renderNewAtt(att, $attachs);
-                });
-
-                if (change) change(files, action);
+            async (files)=>{
+                for (const file of files) {
+                    if(enableRename){
+                        file.name = await renameFile(file.name);
+                    }
+                    await $.when($(this).trigger('beforeAdd', [{file}]));
+                    if (!attExist($attachs, file.name)){
+                        att.URL = file.uri;
+                        att.Name = file.name;
+                        att.Size = file.size;
+                        att.Tag = tag;
+                        renderNewAtt(att, $attachs);
+                    }
+                }
             },
             errMgr
         );
