@@ -1529,7 +1529,7 @@ async function renameFile(pFileName){
 
 function addAtt() {
     debugger;
-    var $this = $($this);
+    var $this = $(this);
     var action = $this.attr('id');
 
     if (action == 'camera') {
