@@ -1581,11 +1581,18 @@ async function appendAtts(pCont, files){
         }
         await $.when(pCont.trigger('beforeAdd', [{file}]));
         if (!attExist(pCont, file.name)){
-            const svdFile = await writeFileInCachePath(file.uri, file.name);
-            att.URL = svdFile.uri;
-            att.Name = svdFile.name;
-            att.Size = svdFile.size;
-            att.Tag = tag;
+            if(_isCapacitor()){
+                const svdFile = await writeFileInCachePath(file.uri, file.name);
+                att.URL = svdFile.uri;
+                att.Name = svdFile.name;
+                att.Size = svdFile.size;
+                att.Tag = tag;
+            }else{
+                att.URL = file.uri;
+                att.Name = file.name;
+                att.Size = file.size;
+                att.Tag = tag;
+            }
             renderNewAtt(att, $attachs);
             await $.when(pCont.trigger('afterAdd', [{file}]));
         }
