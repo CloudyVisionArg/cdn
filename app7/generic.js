@@ -1510,17 +1510,20 @@ function deleteAtt(e) {
 }
 
 async function renameFile(pFileName){
-    var filename = await new Promise((resolve, reject) => {
+    const re = /(?:\.([^.]+))?$/;
+    let sName = re.exec(pFileName)[0];
+    let sExt = re.exec(pFileName)[1];
+    let sModifiedName = await new Promise((resolve) => {
         app7.dialog.prompt('¿Renombrar el archivo?', 
-            (filename) => {
-                resolve(filename);
+            (name) => {
+                resolve(name);
             },
             () => {
-                resolve(pFileName);
+                resolve(sName);
             }
-        , pFileName)
+        , sName)
     });
-    return filename;
+    return `${sModifiedName}.${sExt}`;
 }
 
 function addAtt() {
