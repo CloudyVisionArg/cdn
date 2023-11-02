@@ -1532,8 +1532,6 @@ function addAtt() {
     var $this = $(this);
     var $attachs = $this.closest('li');
     var action = $this.attr('id');
-    var tag = $attachs.attr("data-attachments");
-    var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
 
     if (action == 'camera') {
         takePhoto().then(
@@ -1574,19 +1572,21 @@ function addAtt() {
 }
 
 async function appendAtts(pCont, files){
+    var tag = pCont.attr("data-attachments");
+    var enableRename = (pCont.attr("data-rename-enable")) ? (pCont.attr("data-rename-enable") == "true") : false;
     var att = {};
     for (const file of files) {
         if(enableRename){
             file.name = await renameFile(file.name);
         }
         await $.when($(this).trigger('beforeAdd', [{file}]));
-        if (!attExist($attachs, file.name)){
+        if (!attExist(pCont, file.name)){
             const svdFile = await writeFileInCachePath(file.uri, file.name);
             att.URL = svdFile.uri;
             att.Name = svdFile.name;
             att.Size = svdFile.size;
             att.Tag = tag;
-            renderNewAtt(att, $attachs);
+            renderNewAtt(att, pCont);
             await $.when($(this).trigger('afterAdd', [{file}]));
         }
     }
