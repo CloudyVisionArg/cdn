@@ -1541,7 +1541,7 @@ function addAtt() {
             async (files)=>{
                 for (const file of files) {
                     if(enableRename){
-                        file.filename = await  renameFile(file.filename);
+                        file.filename = await  renameFile(file.name);
                     }
 
                     //Espero al evento
