@@ -1575,13 +1575,14 @@ async function appendAtts(pCont, files){
     var tag =  pCont.attr("data-attachments");
     var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
     var att = {};
+    const isCapacitor = _isCapacitor();
     for (const file of files) {
-        if(enableRename){
+        if(enableRename && isCapacitor){
             file.name = await renameFileDialog(file.name);
         }
         await $.when(pCont.trigger('beforeAdd', [{file}]));
         if (!attExist(pCont, file.name)){
-            if(_isCapacitor()){
+            if(isCapacitor){
                 const svdFile = await writeFileInCachePath(file.uri, file.name);
                 att.URL = svdFile.uri;
                 att.Name = svdFile.name;
