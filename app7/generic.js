@@ -1593,7 +1593,7 @@ function addAtt() {
                     await $.when($(this).trigger('beforeAdd', [{file}]));
                     if (!attExist($attachs, file.name)){
                         const svdFile = await writeFileInCachePath(file.uri, file.name);
-                        att.URL = file.uri;
+                        att.URL = svdFile.uri;
                         att.Name = svdFile.name;
                         att.Size = svdFile.size;
                         att.Tag = tag;
@@ -1611,7 +1611,7 @@ function addAtt() {
             await $.when($(this).trigger('beforeAdd', [{file}]));
             if (!attExist($attachs, file.name)){
                 const svdFile = await writeFileInCachePath(file.uri, file.name);
-                att.URL = file.uri;
+                att.URL = svdFile.uri;
                 att.Name = svdFile.name;
                 att.Size = svdFile.size;
                 att.Tag = tag;
