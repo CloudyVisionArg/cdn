@@ -1538,22 +1538,24 @@ function addAtt() {
     var att = {};
     if (action == 'camera') {
         takePhoto().then(
-            async (file)=>{
-                if(enableRename){
-                    file.filename = await  renameFile(file.filename);
-                }
+            async (files)=>{
+                for (const file of files) {
+                    if(enableRename){
+                        file.filename = await  renameFile(file.filename);
+                    }
 
-                //Espero al evento
-                await $.when($(this).trigger('beforeAdd', [{file}]));
+                    //Espero al evento
+                    await $.when($(this).trigger('beforeAdd', [{file}]));
 
-                if(file){ // setea null en el evento descarto el guardado / agregado?
-                    if (!attExist($attachs, file.filename)){
-                        const svdFile = await writeFileInCachePath(file.path, file.filename);
-                        att.URL = svdFile.uri;
-                        att.Name = svdFile.name;
-                        att.Size = svdFile.size;
-                        att.Tag = tag;
-                        renderNewAtt(att, $attachs);
+                    if(file){ // setea null en el evento descarto el guardado / agregado?
+                        if (!attExist($attachs, file.name)){
+                            const svdFile = await writeFileInCachePath(file.uri, file.name);
+                            att.URL = svdFile.uri;
+                            att.Name = svdFile.name;
+                            att.Size = svdFile.size;
+                            att.Tag = tag;
+                            renderNewAtt(att, $attachs);
+                        }
                     }
                 }
             },
@@ -1569,7 +1571,7 @@ function addAtt() {
                     debugger;
                     await $.when($(this).trigger('beforeAdd', [{file}]));
                     if (!attExist($attachs, file.name)){
-                        const svdFile = await writeFileInCachePath(file.path, file.filename);
+                        const svdFile = await writeFileInCachePath(file.uri, file.name);
                         att.URL = svdFile.uri;
                         att.Name = svdFile.name;
                         att.Size = svdFile.size;
@@ -1982,7 +1984,8 @@ async function takePhoto() {
         if(hasPermission){
             var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
             file.filename = file.path.replace(/^.*[\\\/]/, '');
-            return file;
+            files.push({ uri : file.path, name : file.filename, size : file.size });
+            return files;
         }
         throw new Error('Se necesita permiso de acceso a la c&aacutemara');
     }
