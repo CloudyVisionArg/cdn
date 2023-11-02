@@ -2017,10 +2017,12 @@ async function pickImages(opts){
         const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
         if(hasPermission){
             const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
+            debugger;
             for(let idx=0; idx < selectedPhotos.photos.length; idx++){
                 const item = selectedPhotos.photos[idx];
-                const fileInCache = await writeFileInCachePath(item.path);
-                files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+                files.push({ uri : file.path, name : file.name, size : file.size });
+                //const fileInCache = await writeFileInCachePath(item.path);
+                //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
             }
             return files;
         }
