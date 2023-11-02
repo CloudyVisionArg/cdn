@@ -1579,7 +1579,7 @@ async function appendAtts(pCont, files){
         if(enableRename){
             file.name = await renameFile(file.name);
         }
-        await $.when($(this).trigger('beforeAdd', [{file}]));
+        await $.when(pCont.trigger('beforeAdd', [{file}]));
         if (!attExist(pCont, file.name)){
             const svdFile = await writeFileInCachePath(file.uri, file.name);
             att.URL = svdFile.uri;
@@ -1587,7 +1587,7 @@ async function appendAtts(pCont, files){
             att.Size = svdFile.size;
             att.Tag = tag;
             renderNewAtt(att, pCont);
-            await $.when($(this).trigger('afterAdd', [{file}]));
+            await $.when(pCont.trigger('afterAdd', [{file}]));
         }
     }
 }
