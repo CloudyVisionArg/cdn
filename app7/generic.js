@@ -1535,14 +1535,14 @@ function addAtt() {
     if (action == 'camera') {
         takePhoto().then(
             async (files)=>{
-                appendAtts(this, files);
+                appendAtts($this, files);
             },
             errMgr
         );
     } else if (action == 'photo') {
         pickImages().then(
             async (files)=>{
-                appendAtts(this, files);
+                appendAtts($this, files);
             },
             errMgr
         );
@@ -1550,7 +1550,7 @@ function addAtt() {
     } else if (action == 'doc') {
         pickFiles().then(
             async (files)=>{
-                appendAtts(this, files);
+                appendAtts($this, files);
             },
             errMgr
         );
@@ -1558,7 +1558,7 @@ function addAtt() {
         audioRecorder(async (file)=> {
             let files = [];
             files.push(file);
-            appendAtts($attachs, files);
+            appendAtts($this, files);
         },
             errMgr
         );
@@ -1571,8 +1571,8 @@ function addAtt() {
 }
 
 async function appendAtts(pCont, files){
-    var $attachs = $(pCont).closest('li');
-    var tag =  $(pCont).attr("data-attachments");
+    var $attachs = pCont.closest('li');
+    var tag =  pCont.attr("data-attachments");
     var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
     var att = {};
     for (const file of files) {
