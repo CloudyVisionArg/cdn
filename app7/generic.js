@@ -2019,8 +2019,9 @@ async function pickImages(opts){
             const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
             debugger;
             for(let idx=0; idx < selectedPhotos.photos.length; idx++){
-                const item = selectedPhotos.photos[idx];
-                files.push({ uri : file.path, name : file.name, size : file.size });
+                const file = selectedPhotos.photos[idx];
+                file.filename = file.path.replace(/^.*[\\\/]/, '');
+                files.push({ uri : file.path, name : file.filename, size : file.size });
                 //const fileInCache = await writeFileInCachePath(item.path);
                 //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
             }
