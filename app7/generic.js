@@ -1509,7 +1509,7 @@ function deleteAtt(e) {
     }
 }
 
-async function renameFile(pFileName){
+async function renameFileDialog(pFileName){
     const ultimoPuntoIndex = pFileName.lastIndexOf('.');
     const sName = pFileName.slice(0, ultimoPuntoIndex);
     const extension = pFileName.slice(ultimoPuntoIndex + 1);
@@ -1577,7 +1577,7 @@ async function appendAtts(pCont, files){
     var att = {};
     for (const file of files) {
         if(enableRename){
-            file.name = await renameFile(file.name);
+            file.name = await renameFileDialog(file.name);
         }
         await $.when(pCont.trigger('beforeAdd', [{file}]));
         if (!attExist(pCont, file.name)){
