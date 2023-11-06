@@ -1572,33 +1572,30 @@ function addAtt() {
 
 async function appendAtts(pCont, files){
     var $attachs = pCont.closest('li');
-    var tag =  pCont.attr("data-attachments");
+    var tag =  $attachs.attr("data-attachments");
     var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
     var att = {};
     const isCapacitor = _isCapacitor();
-    for (const file of files) {
+    for (let file of files) {
         if(enableRename && isCapacitor){
             file.name = await renameFileDialog(file.name);
         }
-        debugger;
+       //Unificamos en un objeto para manejar lo mismo en el beforeAdd y afterAdd
         att.URL = file.uri;
         att.Name = file.name;
         att.Size = file.size;
         att.Tag = tag;
+
         await $.when(pCont.trigger('beforeAdd', [{att}]));
         if (!attExist(pCont, file.name)){
             if(isCapacitor){
-                const svdFile = await writeFileInCachePath(file.uri, file.name);
-                att.URL = svdFile.uri;
-                att.Name = svdFile.name;
-                att.Size = svdFile.size;
-                att.Tag = tag;
-            }else{
-                att.URL = file.uri;
-                att.Name = file.name;
-                att.Size = file.size;
-                att.Tag = tag;
+                file = await writeFileInCachePath(file.uri, file.name);
             }
+            att.URL = file.uri;
+            att.Name = file.name;
+            att.Size = file.size;
+            att.Tag = tag;
+
             renderNewAtt(att, $attachs);
             await $.when(pCont.trigger('afterAdd', [{att}]));
         }
