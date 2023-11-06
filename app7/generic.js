@@ -1580,7 +1580,12 @@ async function appendAtts(pCont, files){
         if(enableRename && isCapacitor){
             file.name = await renameFileDialog(file.name);
         }
-        await $.when(pCont.trigger('beforeAdd', [{file}]));
+        debugger;
+        att.URL = file.uri;
+        att.Name = file.name;
+        att.Size = file.size;
+        att.Tag = tag;
+        await $.when(pCont.trigger('beforeAdd', [{att}]));
         if (!attExist(pCont, file.name)){
             if(isCapacitor){
                 const svdFile = await writeFileInCachePath(file.uri, file.name);
@@ -1595,7 +1600,7 @@ async function appendAtts(pCont, files){
                 att.Tag = tag;
             }
             renderNewAtt(att, $attachs);
-            await $.when(pCont.trigger('afterAdd', [{file : att}]));
+            await $.when(pCont.trigger('afterAdd', [{att}]));
         }
     }
 }
