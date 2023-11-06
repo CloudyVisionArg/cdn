@@ -1595,7 +1595,7 @@ async function appendAtts(pCont, files){
                 att.Tag = tag;
             }
             renderNewAtt(att, $attachs);
-            await $.when(pCont.trigger('afterAdd', [{file}]));
+            await $.when(pCont.trigger('afterAdd', [{file : att}]));
         }
     }
 }
