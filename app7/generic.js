@@ -1242,9 +1242,15 @@ async function fillControls() {
         });
     }
 
-    $get('[data-attachments]').each(function (ix, el) {
-        fillAttachments($(el));
-    });
+    debugger;
+    const arrAtt = $get('[data-attachments]');
+    for(const itemAt in arrAtt){
+        await fillAttachments($(itemAt));
+    }
+
+    // $get('[data-attachments]').each(function (ix, el) {
+    //    fillAttachments($(el));
+    // });
 
     try {
         // Evento afterFillControls
