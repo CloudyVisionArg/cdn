@@ -1244,14 +1244,9 @@ async function fillControls() {
 
     debugger;
     const arrAtt = $get('[data-attachments]');
-    console.log("espero la carga de adjuntos");
-    for(const itemAt in arrAtt){
-        await fillAttachments(arrAtt[itemAt]);
-    }
-
-    // $get('[data-attachments]').each(function (ix, el) {
-    //    fillAttachments($(el));
-    // });
+    $get('[data-attachments]').each(function (ix, el) {
+        fillAttachments($(el));
+    });
 
     try {
         // Evento afterFillControls
@@ -1289,10 +1284,11 @@ async function fillAttachments(pEl) {
                 getAttachment(att, readonly).appendTo($ul);
             }
         }
+
     } else {
         noAttachs();
     }
-
+    await $.when($ul.trigger('afterFillAttachment', []));
     function noAttachs() {
         // Agrega la leyenda Sin adjuntos
         var $li = $('<li/>').appendTo($ul);
