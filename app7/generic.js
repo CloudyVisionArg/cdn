@@ -1244,6 +1244,7 @@ async function fillControls() {
 
     debugger;
     const arrAtt = $get('[data-attachments]');
+    console.log("espero la carga de adjuntos");
     for(const itemAt in arrAtt){
         await fillAttachments($(itemAt));
     }
