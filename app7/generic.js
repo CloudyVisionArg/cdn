@@ -1504,14 +1504,14 @@ async function deleteAtt(e) {
     var $this = $(this);
     var $att = $this.find('a.item-link');
     
-    await $.when($att.trigger('beforeDelete'));
+    await $.when($this.trigger('beforeDelete'));
     if ($att.attr('data-att-action') == 'save') {
         // Era uno nuevo, lo vuelo
         $this.remove();
     } else {
         $att.attr('data-att-action', 'delete');
     }
-    await $.when($att.trigger('afterDelete'));
+    await $.when($this.trigger('afterDelete'));
 }
 
 async function renameFileDialog(pFileName){
