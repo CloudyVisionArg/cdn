@@ -1590,6 +1590,7 @@ async function appendAtts(pCont, files){
         att.Name = file.name;
         att.Size = file.size;
         att.Tag = tag;
+        att.Description = tag;
 
         await $.when(pCont.trigger('beforeAdd', [{att}]));
         if (!attExist(pCont, file.name)){
@@ -1600,6 +1601,7 @@ async function appendAtts(pCont, files){
             att.Name = file.name;
             att.Size = file.size;
             att.Tag = tag;
+            att.Description = tag;
 
             renderNewAtt(att, $attachs);
             await $.when(pCont.trigger('afterAdd', [{att}]));
@@ -1843,7 +1845,13 @@ function saveAtt() {
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
             var $this = $($attsToSave[loop.iteration()]);
-            var tag = $this.closest('li.accordion-item').attr('data-attachments');
+
+            // Si el item tiene un tag propio lo conservo
+            var tag = $this.attr('data-attachments');
+            if (!tag){
+                //Si no uso el definido en el control
+                tag = $this.closest('li.accordion-item').attr('data-attachments');
+            }
             tag = (tag == 'all' ? null : tag);
             var attName = $this.attr('data-att-name');
             var attAction = $this.attr('data-att-action');
