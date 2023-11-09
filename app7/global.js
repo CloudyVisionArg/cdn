@@ -1945,6 +1945,25 @@ async function getFileFromCache(pFileName) {
     });
 };
 
+async function removeFileFromCache(fileName){
+    if (_isCapacitor()) {
+        try {
+            const result = await Capacitor.Plugins.Filesystem.deleteFile({
+                path: fileName,
+                directory: Directory.Cache,
+            });
+            console.log('Archivo ' +  fileName + ' eliminado del cache del app');
+
+        } catch(e) {
+            console.log('Error intentando quitar el archivo ' +  fileName + ' del cache del app');
+        }
+    }else{
+        let msg = "Borrado de archivos en cache no soportado para Cordova";
+        console.log(msg);
+        throw new Error(msg);
+    }
+}
+
 async function writeFileInCache(pFileName, pFileData) {
     return Capacitor.Plugins.Filesystem.writeFile({
         path : pFileName,
