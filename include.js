@@ -21,10 +21,12 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 330 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 329 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 329 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 329 });
     /*
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 322 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 309 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 308 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 327 });
@@ -32,7 +34,6 @@ function registeredScripts() {
 
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 328, hasdep: true });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 322 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 325 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 325 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });        
