@@ -292,6 +292,8 @@ var app = {
                     console.error('openDatabase Err: ' + errMsg(err));        
                 }
             );
+
+            window.localStorage.getItem('syncing') == '0';
         //};
 
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
