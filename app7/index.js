@@ -293,7 +293,7 @@ var app = {
                 }
             );
 
-            window.localStorage.getItem('syncing') == '0';
+            window.localStorage.getItem('syncing') = '0';
         //};
 
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
