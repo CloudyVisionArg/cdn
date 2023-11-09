@@ -1744,6 +1744,8 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             await saveAtt();
+            doc.attachmentsReset();
+            
         } catch (err) {
             var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
             console.log(attErr);
