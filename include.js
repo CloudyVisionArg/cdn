@@ -21,24 +21,23 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 334 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 334, hasdep: true });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
+    /*
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 329 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 328, hasdep: true });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 313 });
+    */
+
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 329 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 329 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 329 });
-    /*
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 322 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 309 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 308 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 327 });
-    */
-
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 328, hasdep: true });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 325 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 325 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });        
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 325, hasdep: true });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 313 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 318 });
