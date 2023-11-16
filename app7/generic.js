@@ -1507,11 +1507,12 @@ async function deleteAtt(e) {
     await $.when($att.trigger('beforeDelete'));
     if ($att.attr('data-att-action') == 'save') {
         // Era uno nuevo, lo vuelo
+        await $.when($att.trigger('afterDelete'));
         $this.remove();
     } else {
         $att.attr('data-att-action', 'delete');
+        await $.when($att.trigger('afterDelete'));
     }
-    await $.when($att.trigger('afterDelete'));
 }
 
 async function renameFileDialog(pFileName){
