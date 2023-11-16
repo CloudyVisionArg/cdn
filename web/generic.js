@@ -429,12 +429,14 @@ async function renderPage() {
     // Validacion de numero
     $('[data-numeral]').change(function (e) {
         var $this = $(this);
-        var n = numeral($this.val());
-        if (n.value()) {
-            $this.val(n.format($this.attr('data-numeral')));
-        } else {
-            $this.val('');
-            toast('Ingrese un numero valido');
+        if ($this.val() != '') {
+            var n = numeral($this.val());
+            if (n.value() || n.value() == 0) {
+                $this.val(n.format($this.attr('data-numeral')));
+            } else {
+                $this.val('');
+                toast('Ingrese un numero valido');
+            }
         }
     });
 

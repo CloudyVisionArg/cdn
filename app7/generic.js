@@ -930,12 +930,14 @@ function pageInit(e, page) {
     // Validacion de numero
     $get('[data-numeral]').change(function (e) {
         var $this = $(this);
-        var n = numeral($this.val());
-        if (n.value()) {
-            setInputVal($this, n.format($this.attr('data-numeral')));
-        } else {
-            setInputVal($this, '');
-            toast('Ingrese un numero valido');
+        if ($this.val() != '') {
+            var n = numeral($this.val());
+            if (n.value() || n.value() == 0) {
+                setInputVal($this, n.format($this.attr('data-numeral')));
+            } else {
+                setInputVal($this, '');
+                toast('Ingrese un numero valido');
+            }
         }
     });
 
