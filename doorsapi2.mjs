@@ -4395,7 +4395,7 @@ export class Utilities {
     que debo esperar antes de realizar la prox iteracion. Si en iterations
     paso undefined, se repite el loop hasta loop.break()
     @example
-    asyncLoop(10,
+    await asyncLoop(10,
         function (loop) {
             console.log(loop.iteration()); // Nro de iteracion
             setTimeout(function () {
