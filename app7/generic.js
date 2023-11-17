@@ -700,7 +700,6 @@ async function renderControls(pCont, pParent) {
             $input.attr('data-fill-withoutnothing',
                 (ctl.attr('withoutnull') == '1' || ctl.attr('mode') == '2') ? '1' : '0');
 
-            debugger;
             if (ctl.attr('searchbar') == '1') {
                 f7ctl.params.openIn = 'popup';
                 f7ctl.params.searchbar = true;
