@@ -4410,32 +4410,35 @@ export class Utilities {
     );
     */
     asyncLoop(iterations, loopFunc, callback) {
-        var index = 0;
-        var done = false;
-        var loop = {
-            next: function() {
-                if (done) return;
-        
-                if (iterations == undefined || index < iterations) {
-                    index++;
-                    loopFunc(loop);
-                } else {
+        return new Promise((resolve, reject) => {
+            var index = 0;
+            var done = false;
+            var loop = {
+                next: function() {
+                    if (done) return;
+            
+                    if (iterations == undefined || index < iterations) {
+                        index++;
+                        loopFunc(loop);
+                    } else {
+                        done = true;
+                        if (callback) callback();
+                        resolve(true);
+                    }
+                },
+            
+                iteration: function() {
+                    return index - 1;
+                },
+            
+                break: function() {
                     done = true;
                     if (callback) callback();
+                    resolve(false);
                 }
-            },
-        
-            iteration: function() {
-                return index - 1;
-            },
-        
-            break: function() {
-                done = true;
-                if (callback) callback();
-            }
-        };
-        loop.next();
-        return loop;
+            };
+            loop.next();
+        });
     }
 
     /**
