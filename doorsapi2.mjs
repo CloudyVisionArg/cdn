@@ -4392,8 +4392,10 @@ export class Utilities {
 
     /**
     Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
-    que debo esperar antes de realizar la prox iteracion. Si en iterations
-    paso undefined, se repite el loop hasta loop.break()
+    que debo esperar antes de realizar la prox iteracion.
+    Si en iterations paso undefined, se repite el loop hasta loop.break()
+    La funcion de callback es opcional, puedo hacer await del loop.
+
     @example
     await asyncLoop(10,
         function (loop) {
@@ -4405,6 +4407,7 @@ export class Utilities {
             //loop.break(); // Finaliza el loop
         },
         function() {
+            // Opcional
             console.log('Loop terminado')
         }
     );
