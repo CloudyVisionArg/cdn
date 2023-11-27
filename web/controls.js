@@ -364,7 +364,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
     } else {
         var notFound = (pNotFoundAction === undefined) ? 1 : pNotFoundAction;
 
-        if (pValue) {
+        if (pValue || pValue == 0) {
             pSelect.val(pValue);
         } else {
             pSelect.find('option').filter(function() {
