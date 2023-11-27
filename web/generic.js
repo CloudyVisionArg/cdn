@@ -352,7 +352,7 @@ async function renderPage() {
 
     // Footer
     $('<hr/>').appendTo($cont);
-    $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
+    $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a></span>');
 
     // Boton Borrar
     var $delBtn = $('<button/>', {
