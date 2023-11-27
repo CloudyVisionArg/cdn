@@ -509,8 +509,6 @@ function newDocLog(pId, pLabel) {
 	var $ctl, $table, $thead, $tbody;
 	
 	var $ctl = newFieldset(pId, pLabel ? pLabel : 'Cambios de datos');
-    debugger;
-    $ctl.css('margin-top', '2rem !important'); // Para alinear mejor con los inputs
 
 	$table = $('<table/>', {
         class: 'table',

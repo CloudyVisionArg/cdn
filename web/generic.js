@@ -758,7 +758,10 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'DOCUMENTLOG') {
             $this = newDocLog(ctl['NAME'], label);
-            $this.addClass('mt-3');
+            //$this.addClass('mt-3');
+            debugger;
+            $this.css('margin-top', '2rem !important'); // Para alinear mejor con los inputs
+        
 
 
         // -- HtmlArea --
