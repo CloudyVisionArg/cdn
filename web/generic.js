@@ -1102,6 +1102,7 @@ async function fillControls() {
             xmlField = undefined;
         }
         
+        debugger;
         if (textField || valueField || xmlField) {
             var f, v;
             if (textField) {
