@@ -762,7 +762,7 @@ async function renderControls(pCont, pParent) {
             debugger;
             //$this.css('margin-top', '2rem !important'); // Para alinear mejor con los inputs
         
-            $this.attr('style', 'margin-top: 2rem !important;'); // Para alinear mejor con los inputs
+            $this.attr('style', 'margin-top: 2.5rem !important;'); // Para alinear mejor con los inputs
         
 
 
