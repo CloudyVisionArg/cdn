@@ -760,9 +760,9 @@ async function renderControls(pCont, pParent) {
             $this = newDocLog(ctl['NAME'], label);
             //$this.addClass('mt-3');
             debugger;
-            //$this.css('margin-top', '2rem !important'); // Para alinear mejor con los inputs
+            $this.css('margin-top', '2.2rem !important'); // Para alinear mejor con los inputs
         
-            $this.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
+            //$this.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
         
 
 
