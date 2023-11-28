@@ -317,6 +317,10 @@ const CameraDirection = {
     Front: 'FRONT'
 };
 
+async function requestPermissionsImages(cameraPermissionType){
+    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
+    return (oPermissionStatus[cameraPermissionType] == 'granted' || oPermissionStatus[cameraPermissionType] == 'limited');
+}
 
 function cameraOptions(pSource) {
 	return {
