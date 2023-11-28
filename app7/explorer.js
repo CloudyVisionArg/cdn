@@ -27,7 +27,7 @@ actionsPopup = getActionsPopup();
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
-        folder = fld.toJSON(); // TODO: cambiar el codigo para q use el objeto
+        folder = fld.toJSON(); // TODO: cambiar a doorsapi2
         getFolderElements(folder);
 
         // -- Documents Folder --
@@ -69,7 +69,7 @@ dSession.foldersGetFromId(fld_id).then(
             }
             
             // Boton Acciones
-            $btn = getLink({ iosicon: 'square_arrow_up', mdicon: 'menu' });
+            $btn = getLink({ iosicon: 'menu', mdicon: 'menu' });
             $btn.attr('id', 'buttonActions');
             $btn.appendTo($page.find('.navbar-inner .left'));
             $btn.on('click', function (e) {
@@ -265,6 +265,7 @@ function newDoc(e) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
+    pageEl.crm = {};
 
 	// En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'));
@@ -330,6 +331,8 @@ function pageInit(e, page) {
             }
         }
 
+        if (!fldActions) fldActions = app7.actions.create({ buttons: stdFldActions });
+
         var prop = findProp(folder.Properties, propFldActions);
         if (!prop) prop = findProp(folder.Form.Properties, propFldActions);
         if (prop) {
@@ -337,19 +340,12 @@ function pageInit(e, page) {
                 function (res) {
                     if (Array.isArray(res)) {
                         fldActions = app7.actions.create({ buttons: [res, stdFldActions] });
-                    } else {
-                        fldActions = app7.actions.create({ buttons: stdFldActions });
                     }
                 },
-                function (err) {
-                    console.log(err)
-                    fldActions = app7.actions.create({ buttons: stdFldActions });
-                }
+                function (err) { console.error(err) }
             )
-
-        } else {
-            fldActions = app7.actions.create({ buttons: stdFldActions });
         }
+
 
         // Acciones de documento
         var stdDocActions = [
@@ -364,6 +360,8 @@ function pageInit(e, page) {
             },
         ];
 
+        if (!docActions) docActions = app7.actions.create({ buttons: stdDocActions });
+
         var prop = findProp(folder.Properties, propDocActions);
         if (!prop) prop = findProp(folder.Form.Properties, propDocActions);
         if (prop) {
@@ -371,19 +369,12 @@ function pageInit(e, page) {
                 function (res) {
                     if (Array.isArray(res)) {
                         docActions = app7.actions.create({ buttons: [res, stdDocActions] });
-                    } else {
-                        docActions = app7.actions.create({ buttons: stdDocActions });
                     }
                 },
-                function (err) {
-                    console.log(err)
-                    docActions = app7.actions.create({ buttons: stdDocActions });
-                }
+                function (err) { console.error(err) }
             )
-
-        } else {
-            docActions = app7.actions.create({ buttons: stdDocActions });
         }
+
 
         // Evento Init
         var prop = findProp(folder.Properties, propInit);
@@ -410,14 +401,11 @@ function pageInit(e, page) {
         })
     }
 
-    pageEl.crm = {
-        reloadView,
-        toggleSelectionMode,
-        refreshOnFocus,
-        folder,
-        $navbar,
-        import: importProp,
-    };
+    if (!pageEl.crm) pageEl.crm = {};
+    Object.assign(pageEl.crm, {
+        reloadView, toggleSelectionMode, refreshOnFocus,
+        folder, $navbar, import: importProp, f7Page,
+    });
 }
 
 function taphold(e) {
@@ -587,7 +575,7 @@ function loadViewSection(pContainer, pCallback) {
         if (order) order = order.substring(2);
 
         folderSearch(fld_id, arrFields.join(', '), formula, order, searchLimit(), maxLen, forceOnline).then(
-            function (res) {
+            async function (res) {
                 if (res.length == 0) {
                     noResults().appendTo(pContainer);
 
@@ -630,7 +618,10 @@ function loadViewSection(pContainer, pCallback) {
 
                         if (view.ItemRenderer) {
                             try {
-                                eval(view.ItemRenderer);
+                                let pipe = {};
+                                eval(`pipe.fn = async () => {\n\n${view.ItemRenderer}\n};`);
+                                await pipe.fn();
+
                             } catch (err) {
                                 renderItem({ text: errMsg(err) }, $itemContent);
                             }

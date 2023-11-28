@@ -80,21 +80,26 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
     doc_id = urlParams.get('doc_id');
     
     if (fld_id) {
-        folder = await dSession.foldersGetFromId(fld_id);
-        folderJson = folder.toJSON();
-        folder.form; // Para q vaya cargando el form
-        if (folder.type == 1) {
-            if (doc_id) {
-                doc = await folder.documents(doc_id);
+        try {
+            folder = await dSession.foldersGetFromId(fld_id);
+            folderJson = folder.toJSON();
+            folder.form; // Para q vaya cargando el form
+
+            if (folder.type == 1) {
+                if (doc_id) {
+                    doc = await folder.documents(doc_id);
+                } else {
+                    doc = await folder.documentsNew();
+                }
+                docJson = doc.toJSON();
+                loadControls();
+
             } else {
-                doc = await folder.documentsNew();
+                end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
             }
-            docJson = doc.toJSON();
 
-            loadControls();
-
-        } else {
-            end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
+        } catch(err) {
+            end(dSession.utils.errMsg(err));
         }
     
     } else {
@@ -451,7 +456,9 @@ async function renderPage() {
 
         } else {
             // Evento afterRender
-            document.dispatchEvent(new CustomEvent('afterRender'));
+            let context = {};
+            document.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Control Event AfterRender
             let ev = getEvent('AfterRender');
@@ -608,6 +615,7 @@ async function renderControls(pCont, pParent) {
                 $this = newTextarea(ctl['NAME'], label);
                 $this.addClass('mt-3');
                 $input = $this.find('textarea');
+                if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
 
             } else {
                 $this = newInputText(ctl['NAME'], label);
@@ -1001,11 +1009,12 @@ async function renderControls(pCont, pParent) {
 
         try {
             var context = {
-                ctl, $this, $input, bsctl, textField, valueField
+                ctl, $this, $input, bsctl, textField, valueField, label
             };
 
             // Evento renderControl
             document.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
             
@@ -1104,7 +1113,7 @@ async function fillControls() {
             if (el.tagName == 'INPUT') {
                 let type = $el.attr('type').toLowerCase();
 
-                if (type == 'text') {
+                if (type == 'text' || type == 'email' || type == 'password') {
                     var format = $el.attr('data-numeral');
                     if (f.type == 3 || format) {
                         // Input numeric
@@ -1232,16 +1241,18 @@ async function fillControls() {
     }
 
     $('[data-attachments]').each(function (ix, el) {
-        this._value(doc_id);
+        this._value(doc);
     });
 
     $('[data-doc-log]').each(function (ix) {
-        this._value(doc_id);
+        this._value(doc);
     });
 
     try {
         // Evento afterFillControls
-        document.dispatchEvent(new CustomEvent('afterFillControls'));
+        let context = {};
+        document.dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
+        if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event AfterFillControls
         let ev = getEvent('AfterFillControls');
@@ -1277,7 +1288,7 @@ async function saveDoc(exitOnSuccess) {
                 
                 } else if (el.tagName == 'INPUT') {
                     var type = $el.attr('type').toLowerCase();
-                    if (type == 'text' || type == 'hidden') {
+                    if (type == 'text' || type == 'hidden' || type == 'email' || type == 'password') {
                         if ($el.attr('data-numeral')) {
                             field.value = numeral($el.val()).value();
                         } else {
@@ -1340,6 +1351,7 @@ async function saveDoc(exitOnSuccess) {
 
         // Evento beforeSave
         document.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
@@ -1360,6 +1372,7 @@ async function saveDoc(exitOnSuccess) {
         try {
             // Evento afterSave
             document.dispatchEvent(new CustomEvent('afterSave', { detail : context }));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
@@ -1402,6 +1415,19 @@ async function saveDoc(exitOnSuccess) {
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
+
+        // Guarda los adjuntos que se puedan haber agregado por codigo
+        try {
+            await doc.saveAttachments();
+
+        } catch (err) {
+            errors.push({
+                action: 'saveAttachments',
+                error: dSession.utils.errMsg(err),
+            });
+        }
+
+        // Guarda los adjuntos de los controles attachments
         var $attsToSave = $('div[data-attachments] [data-att-action]');
         var attMap = await doc.attachments();
 
@@ -1419,8 +1445,10 @@ function saveAtt() {
                     try {
                         var att = doc.attachmentsAdd(file.name);
                         att.fileStream = new Blob([this.result], { type: file.type });
-                        att.description = tag;
-                        att.group = tag;
+                        if (tag || tag == 0) {
+                            att.description = tag;
+                            att.group = tag;
+                        }
                         await att.save();
 
                     } catch (err) {
@@ -1463,7 +1491,7 @@ async function evalCode(code, ctx) {
     try {
         var pipe = {};
         eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-        await pipe.fn(ctx);
+        return await pipe.fn(ctx);
 
     } catch(err) {
         console.error(err);

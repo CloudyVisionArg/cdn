@@ -51,6 +51,7 @@ function recorder(opts){
     var capacitorFilename = null;
     this.recordCapacitor = function(){
         return new Promise(async(resolve,reject)=>{
+            
             capacitorCallback = resolve;
             capacitorCallbackError = reject;
             //TODO: https://github.com/tchvu3/capacitor-voice-recorder
@@ -119,7 +120,6 @@ function recorder(opts){
     }
 
     this.stopRecording = function(){
-        debugger;
         if(_isCapacitor()){
             saveCapacitor();
         }
@@ -137,6 +137,7 @@ function recorder(opts){
     }
 
     async function saveCapacitor() {
+
         const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
         var now = new Date();
         let millis = recordingData.value.msDuration;
@@ -150,27 +151,48 @@ function recorder(opts){
         var min = Math.trunc(dur / 60);
         
         var completeName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + capacitorFilename;
+        //let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+
         //Guarda en cache.
         //Habria que borrarlo posteriormente al guardado
-        Capacitor.Plugins.Filesystem.writeFile({
-            path : completeName,
-            data : recordingData.value.recordDataBase64,
-            directory: Directory.Cache,
-        }).then(
+        writeFileInCache(completeName, recordingData.value.recordDataBase64).then(
             (res)=>{
-                getFile(res.uri).then(
-                    function (file) {
-                        if(capacitorCallback !=null){
-                            capacitorCallback(file);
-                        }
-                    },(err)=>{
-                        console.log("Error obteniendo el audio.");
-                        capacitorCallbackError(err);
-                    });
-            },(err)=>{
-                console.log("Error escribiendo el audio.");
-                capacitorCallbackError(err);
+                    let byteCharacters = atob(recordingData.value.recordDataBase64);
+                    let byteNumbers = new Array(byteCharacters.length);
+
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+
+                    let byteArray = new Uint8Array(byteNumbers);
+                    let blob = new Blob([byteArray], { type: recordingData.value.mimeType });
+
+                    let file = new File([blob], capacitorFilename, { type: recordingData.value.mimeType });
+                    capacitorCallback(file);
+                },(err)=>{
+                    capacitorCallbackError(err);
             });
+
+
+            // Capacitor.Plugins.Filesystem.writeFile({
+            //     path : completeName,
+            //     data : recordingData.value.recordDataBase64,
+            //     directory: Directory.Cache,
+            // }).then(
+            //     (res)=>{
+            //         getFile(res.uri).then(
+            //             function (file) {
+            //                 if(capacitorCallback !=null){
+            //                     capacitorCallback(file);
+            //                 }
+            //             },(err)=>{
+            //                 console.log("Error obteniendo el audio.");
+            //                 capacitorCallbackError(err);
+            //             });
+            //     },(err)=>{
+            //         console.log("Error escribiendo el audio.");
+            //         capacitorCallbackError(err);
+            //     });
     }
 
     this.recordFromCordova = function(){
@@ -184,39 +206,64 @@ function recorder(opts){
                 src += '.aac';
             }
         
-            
-            mediaRec = new Media(cordova.file.dataDirectory + src,
-                    // success callback
-				function() {
-					debugger;
-						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-							function (fileSystem) {
-                            getFile(cordova.file.dataDirectory + src).then(
+            mediaRec = new Media('cdvfile://localhost/temporary/' + src,
+            // success callback
+            function() {
+                if (save) {
+                    window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
+                        function (fileSystem) {
+                            fileSystem.root.getFile(src, { create: false, exclusive: false	},
                                 function (fileEntry) {
-                                    
-									resolve(fileEntry);
-									
-									/*addDuration(fileSystem, fileEntry, mediaRec, function (file) {
-                                        
-                                    });*/
-    
+                                    addDuration(fileSystem, fileEntry, mediaRec, function (file) {
+                                        resolve(fileEntry);
+                                    });
                                 },
                                 function (err) {
                                     reject('getFile error: ' + err.code);
                                 }
                             );
-                        },
-						function(errors) {
-							debugger;
-						}
+                        }
                     );
-                },
-                // error callback
-                function (err) {
-                    reject('Media error: ' + err.code);
-                }
-            );
-            mediaRec.startRecord();
+                };
+            },
+            // error callback
+            function (err) {
+                logAndToast('Media error: ' + err.code);
+            }
+        );
+            
+            // mediaRec = new Media(cordova.file.dataDirectory + src,
+            //         // success callback
+			// 	function() {
+			// 		debugger;
+			// 			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+			// 				function (fileSystem) {
+            //                 getFile(cordova.file.dataDirectory + src).then(
+            //                     function (fileEntry) {
+                                    
+			// 						resolve(fileEntry);
+									
+			// 						/*addDuration(fileSystem, fileEntry, mediaRec, function (file) {
+                                        
+            //                         });*/
+    
+            //                     },
+            //                     function (err) {
+            //                         reject('getFile error: ' + err.code);
+            //                     }
+            //                 );
+            //             },
+			// 			function(errors) {
+			// 				debugger;
+			// 			}
+            //         );
+            //     },
+            //     // error callback
+            //     function (err) {
+            //         reject('Media error: ' + err.code);
+            //     }
+            // );
+            // mediaRec.startRecord();
         });
     }
 
@@ -228,8 +275,8 @@ function recorder(opts){
                 mediaRec = new MediaRecorder(stream);
                 var chunks = [];
                 mediaRec.ondataavailable = e => {
-                  chunks.push(e.data);
-                  if(mediaRec.state == 'inactive'){
+                    chunks.push(e.data);
+                    if(mediaRec.state == 'inactive'){
                     var now = new Date();
                     var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
                     let file = new File(chunks, `${src}.ogg`,{ 'type' : 'audio/ogg' })
@@ -237,13 +284,11 @@ function recorder(opts){
                     url = URL.createObjectURL(file);
                     stream.getTracks().forEach( track => track.stop() );
                     resolve(file);
-
-                  }
+                    }
                 };
                 console.log('got media successfully');
                 mediaRec.start();
-              }).catch(reject);
-
+            }).catch(reject);
         });
     }
 }

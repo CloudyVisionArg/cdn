@@ -516,6 +516,7 @@ function whatsAppDataProvider(opts){
 		this.audioRecorder(function (file) {
 			const previewReader = new FileReader()
 			previewReader.onloadend = function(e){
+				debugger;
 				var previewBlob = new Blob([new Uint8Array(e.target.result)],{type: file.type});
 				var previewURL = URL.createObjectURL(previewBlob)
 
@@ -576,7 +577,8 @@ function whatsAppDataProvider(opts){
 
 	this.sendCamera = function (pChat) {
 		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
-		me.getPicture(source,
+		let permisssion = _isCapacitor() ? CameraPermissionType.Camera : null;
+		me.getPicture(source, permisssion,
 			function (file) {
 				me.sendMedia(file, pChat);
 			}
@@ -585,41 +587,35 @@ function whatsAppDataProvider(opts){
 
 	this.sendPhoto = function (pChat) {
 		let source = _isCapacitor() ? CameraSource.Photos : Camera.PictureSourceType.PHOTOLIBRARY;
-		me.getPicture(source, 
+		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
+		me.getMedia(source, permission,
 			function (file) {
 				me.sendMedia(file, pChat);
 			}
-		)
+		);
 	};
 
-	this.getPicture = function (pSource, pCallback) {
-
-		/*if(_isCapacitor()){
-            Capacitor.Plugins.FilePicker.pickFiles().then(*/
-
+	this.getMedia = async function (pSource, pPermission, pCallback) {
 		if (_isCapacitor()) {
-			//NOTE: si utilizamos el pickimage podemos seleccionar multiples fotos.
-			// quizas estaria bueno 
-			const opts = cameraOptionsCapacitor(pSource);
-			Capacitor.Plugins.Camera.getPhoto(opts).then((res)=>{
-				onFileSelected(res.path);
-			}, errMgr);
-		} else {
+			let res = await Capacitor.Plugins.FilePicker.pickMedia({multiple : true, readData : true});
+			let files = res.files;
+			for(let idx=0; idx < files.length; idx++){
+				let file = me.getBlobFromFile(files[idx].name, files[idx].data, files[idx].mimeType);
+				if (pCallback) pCallback(file);
+			}
+		}else{
 			navigator.camera.getPicture(
 				function (fileURL) {
-					onFileSelected(fileURL);
+					getFile(fileURL).then(
+						function (file) {
+							if (pCallback) pCallback(file);
+						},
+						errMgr
+					)
 				},
 				errMgr,
 				cameraOptions(pSource)
 			);
-		}
-		function onFileSelected(fileUrl){
-			getFile(fileUrl).then(
-				function (file) {
-					if (pCallback) pCallback(file);
-				},
-				errMgr
-			)
 		}
 
 		function errMgr(pMsg) {
@@ -629,24 +625,83 @@ function whatsAppDataProvider(opts){
 		}
 	};
 
+	this.getPicture = async function (pSource, pPermission, pCallback) {
+		if (_isCapacitor()) {
+			const opts = cameraOptionsCapacitor(pSource);
+			opts.resultType = CameraResultType.Uri;
+			const hasPermission = await requestPermissionsImages(pPermission);
+			if(!hasPermission){ throw new Error('Se necesita permiso de acceso a la c&aacutemara'); }
+			try{
+				const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
+				const file = await writeFileInCachePath(photo.path);
+				file.type = `image/${photo.format}`;
+				let fileRes = me.getBlobFromFile(file.name, file.data, file.type);
+				debugger;
+				if (pCallback) pCallback(fileRes);
+			}catch(err){
+				errMgr(err);
+			}
+		} else {
+			navigator.camera.getPicture(
+				function (fileURL) {
+					getFile(fileURL).then(
+						function (file) {
+							if (pCallback) pCallback(file);
+						},
+						errMgr
+					)
+				},
+				errMgr,
+				cameraOptions(pSource)
+			);
+		}
+
+		function errMgr(pMsg) {
+			debugger;
+			console.log(pMsg);
+			toast(pMsg);
+		}
+
+	};
+
+
+	this.getBlobFromFile = function(pFileName, pFileData, pFileType){
+		let byteCharacters = atob(pFileData);
+		let byteNumbers = new Array(byteCharacters.length);
+
+		for (let i = 0; i < byteCharacters.length; i++) {
+			byteNumbers[i] = byteCharacters.charCodeAt(i);
+		}
+
+		let byteArray = new Uint8Array(byteNumbers);
+		let blob = new Blob([byteArray], { type: pFileType });
+
+		return new File([blob], pFileName, { type: pFileType });
+	}
+
 	this.sendMedia = function (pFile, pChat) {
 		//todo
         //wapp.cursorLoading(true);
-        let me = this;
-		if (typeof(cordova) == 'object') {
-			getFile(pFile.localURL).then(
-				function(){
-					me.sendMediaFromFile.call(me, ...arguments);
-				},
-				function (err) {
-					//wapp.cursorLoading(false);
-					debugger;
-				}
-			);
-		} else {
-			//me.sendMediaFromFile(pFile,pChat);
+		if(_isCapacitor()){
 			me.sendMediaFromFile.call(me, pFile, pChat);
-		};
+			
+		}else{
+			let me = this;
+			if (typeof(cordova) == 'object') {
+				getFile(pFile.localURL).then(
+					function(){
+						me.sendMediaFromFile.call(me, ...arguments);
+					},
+					function (err) {
+						//wapp.cursorLoading(false);
+						debugger;
+					}
+				);
+			} else {
+				//me.sendMediaFromFile(pFile,pChat);
+				me.sendMediaFromFile.call(me, pFile, pChat);
+			};
+		}
 	};
 	
 	this.sendMediaFromFile = function(file2, pChat) {
@@ -665,10 +720,11 @@ function whatsAppDataProvider(opts){
 				blobData.contentType = 'audio/mpeg';
 			} else if (file2.type == 'audio/aac') {
 				//blobData.contentType = 'audio/basic';
+				blobData.contentType = file2.type; // audio/aac
 			} else {
 				blobData.contentType = file2.type;
 			}
-
+			
 			// Pasos para configurar un Bucket publico en S3:
 			// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
 			me.getS3(function () {
@@ -811,34 +867,16 @@ function whatsAppDataProvider(opts){
 		if(_isCapacitor()){
             //Obtengo el archivo seleccionado, lo copio al cache del app y desde ahi dejo asociado.
             //Esto deberia tener un momento en el cual se borra del cache estos files despues de subirlos.
-            Capacitor.Plugins.FilePicker.pickFiles().then((res)=>{
-			const files = res.files;
-
-			//lee el archivo
-			Capacitor.Plugins.Filesystem.readFile({
-				path: files[0].path,
-			}).then((contents) => {
-				//Escribe en cache
-				Capacitor.Plugins.Filesystem.writeFile({
-					path : files[0].name,
-					data : contents.data,
-					directory: Directory.Cache,
-				}).then(
-					(res)=>{
-						getFile(res.uri).then(
-							function (file) {
-								me.sendMedia(file);
-							},function(erro){
-								alert(errMsg(erro));
-							});
-						},function(er){
-							alert(errMsg(er));
-						});
-					},function(er){
-						alert(errMsg(er));
-					});
-			},function(er){
-				alert(errMsg(er));
+            Capacitor.Plugins.FilePicker.pickFiles({multiple:true, readData:true}).then(
+				(res)=>{
+					const files = res.files;
+					for (let idx=0; idx < files.length; idx++){
+						let file = files[idx];
+						let blobFile = me.getBlobFromFile(file.name, file.data, file.mimeType);
+						me.sendMedia(blobFile);
+					}
+				},(er)=>{
+					alert(errMsg(er));
 			});			
         }else{
 			if (typeof(cordova) == 'object') {
@@ -868,7 +906,7 @@ function whatsAppDataProvider(opts){
 				this.sendFileWeb("");
 			}
 		}
-	}
+	};
 
 	this.displayWhatsAppOptions = function(container){
 		var $media;
@@ -1166,7 +1204,7 @@ function whatsAppDataProvider(opts){
 			$recBtnRow.show();
 			$saveBtnRow.hide();
 		}
-	}
+	};
 }
 
 function wappMsg(){

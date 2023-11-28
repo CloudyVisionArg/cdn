@@ -149,6 +149,15 @@ function getControlsRights(pControls) {
     })
 }
 
+function explorerRefresh() {
+    if (!pageEl.crm.saved) {
+        // Si nunca guarde evito el refresh del explorer
+        $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
+            $(el).removeClass('refresh-on-focus');
+        })
+    }
+}
+
 async function renderPage() {
     var $tabbar, $tabbarInner, $tabs;
 
@@ -167,12 +176,7 @@ async function renderPage() {
             f7Page.view.router.back();
         }
         */
-        if (!pageEl.crm.saved) {
-            // Si nunca guarde evito el refresh del explorer
-            $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
-                $(el).removeClass('refresh-on-focus');
-            })
-        }
+        explorerRefresh();
         f7Page.view.router.back();
     });
 
@@ -836,11 +840,12 @@ async function renderControls(pCont, pParent) {
 
         try {
             var context = {
-                ctl, $this, $input, f7ctl, textField, valueField
+                ctl, $this, $input, f7ctl, textField, valueField, label
             };
 
             // Evento renderControl
             $page[0].dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['APP7_SCRIPT']) await evalCode(ctl['APP7_SCRIPT'], context);
 
@@ -871,7 +876,7 @@ async function renderControls(pCont, pParent) {
         try {
             var pipe = {};
             eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-            await pipe.fn(ctx);
+            return await pipe.fn(ctx);
     
         } catch(err) {
             console.error(err);
@@ -911,6 +916,11 @@ function getDefaultControl(pField) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
+    pageEl.crm = {};
+
+    f7Page.view.on('swipebackMove', (ev) => {
+        explorerRefresh();
+    })
 
     // En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
@@ -1000,7 +1010,9 @@ function pageInit(e, page) {
 
         } else {
             // Evento afterRender
-            $page[0].dispatchEvent(new CustomEvent('afterRender'));
+            let context = {};
+            $page[0].dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Deprecado, usar el anterior
             $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
@@ -1014,10 +1026,11 @@ function pageInit(e, page) {
         }
     }, 0);
 
-    pageEl.crm = {
-        fillControls, saveDoc, fld_id, folder, 
-        folderJson, doc_id, doc, docJson, $navbar,
-    };
+    if (!pageEl.crm) pageEl.crm = {};
+    Object.assign(pageEl.crm, {
+        fillControls, saveDoc, fld_id, folder, folderJson, 
+        doc_id, doc, docJson, $navbar, f7Page, goBack,
+    });
 }
 
 // Usar solo despues del pageInit
@@ -1095,7 +1108,7 @@ async function fillControls() {
             if (el.tagName == 'INPUT') {
                 var type = $el.attr('type').toLowerCase();
 
-                if (type == 'text') {
+                if (type == 'text' || type == 'email' || type == 'password') {
                     var format = $el.attr('data-numeral');
                     if (f.type == 3 || format) {
                         // Input numeric
@@ -1233,14 +1246,16 @@ async function fillControls() {
 
     try {
         // Evento afterFillControls
-        $page[0].dispatchEvent(new CustomEvent('afterFillControls'));
+        let context = {};
+        $page[0].dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
+        if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event AfterFillControls
         var ev = getEvent('AfterFillControls');
         if (ev) await evalCode(ev);
 
         // Control Event AfterRender
-        // todo: este habria que sacarlo cdo se pase todo el cod al anterior
+        // todo: Deprecado, hay que sacarlo cdo se pase todo al anterior
         ev = getEvent('AfterRender');
         if (ev) await evalCode(ev);
 
@@ -1581,7 +1596,7 @@ async function saveDoc(exitOnSuccess) {
 
                 } else if (el.tagName == 'INPUT') {
                     var type = $el.attr('type').toLowerCase();
-                    if (type == 'text' || type == 'hidden') {
+                    if (type == 'text' || type == 'hidden' || type == 'email' || type == 'password') {
                         if ($el.attr('data-numeral')) {
                             field.value = numeral($el.val()).value();
                         } else {
@@ -1649,16 +1664,18 @@ async function saveDoc(exitOnSuccess) {
         });
 
         //Parametros para disponibilizar en los eventos
-        var eventArgs = { exitOnSuccess };
+        var context = { exitOnSuccess };
 
         // Evento beforeSave
-        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : eventArgs }));
+        $page[0].dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event BeforeSave
         var ev = getEvent('BeforeSave');
         if (ev) await evalCode(ev);
 
         await doc.save();
+
         docJson = doc.toJSON();
         doc_id = doc.id;
 
@@ -1676,7 +1693,8 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             // Evento afterSave
-            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : eventArgs }));
+            $page[0].dispatchEvent(new CustomEvent('afterSave', { detail : context }));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Control Event AfterSave
             var ev = getEvent('AfterSave');
@@ -1723,7 +1741,7 @@ async function saveDoc(exitOnSuccess) {
         try {
             var pipe = {};
             eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-            await pipe.fn(ctx);
+            return await pipe.fn(ctx);
     
         } catch(err) {
             console.error(err);
@@ -1750,6 +1768,19 @@ async function removeAttFromCache(fileName){
 function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
+
+        // Guarda los adjuntos que se puedan haber agregado por codigo
+        try {
+            await doc.saveAttachments();
+
+        } catch (err) {
+            errors.push({
+                action: 'saveAttachments',
+                error: dSession.utils.errMsg(err),
+            });
+        }
+
+        // Guarda los adjuntos de los controles attachments
         var $attsToSave = $get('li[data-attachments] [data-att-action]');
         var attMap = await doc.attachments();
 
@@ -1775,8 +1806,10 @@ function saveAtt() {
                     try {
                         var att = doc.attachmentsAdd(attName);
                         att.fileStream = file;
-                        att.description = tag;
-                        att.group = tag;
+                        if (tag || tag == 0) {
+                            att.description = tag;
+                            att.group = tag;
+                        }
                         await att.save();
                         await removeAttFromCache(attName);
                         $this.removeAttr('data-att-url');
@@ -1802,9 +1835,10 @@ function saveAtt() {
                         try {
                             var att = doc.attachmentsAdd(attName);
                             att.fileStream = new Blob([this.result], { type: file.type });
-                            //att.fileStream = new Blob([this.result]);
-                            att.description = tag;
-                            att.group = tag;
+                            if (tag || tag == 0) {
+                                att.description = tag;
+                                att.group = tag;
+                            }
                             await att.save();
     
                         } catch (err) {
@@ -1857,7 +1891,7 @@ async function evalCode(code, ctx) {
     try {
         var pipe = {};
         eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-        await pipe.fn(ctx);
+        return await pipe.fn(ctx);
 
     } catch(err) {
         console.error(err);
