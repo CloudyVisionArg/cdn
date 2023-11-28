@@ -365,7 +365,6 @@ async function renderPage() {
 
     $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
     $delBtn.click(function () {
-        debugger;
         if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
             doc.delete().then(
                 async function (res) {
