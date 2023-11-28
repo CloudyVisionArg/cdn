@@ -40,9 +40,7 @@ folderSearchGroups(fldId, groups, totals, formula, order, limit, forceOnline)
 convertSqliteResultSet(pRes)
 convertSqliteAccounts(pRes)
 clearTextSelection()
-cameraOptions(pSource)
 getFile(pFileURL)
-audioRecorder(pCallback)
 */
 
 // Incluye jslib como dependencia
@@ -1676,6 +1674,16 @@ function getFolderElements(pFolder) {
         errFunction
     );
 
+    // Lee las UserProperties del Folder
+    pFolder.pendingCalls++;
+    DoorsAPI.folderUserPropertiesGet(pFolder.FldId).then(
+        function (props) {
+            pFolder.UserProperties = props;
+            pFolder.pendingCalls--;
+        },
+        errFunction
+    );
+
     if (pFolder.Type == 1) {
         // Lee el Form
         pFolder.pendingCalls++;
@@ -1876,38 +1884,6 @@ function clearTextSelection() {
     }
 }
 
-function cameraOptions(pSource) {
-	return {
-		quality: 50,
-		destinationType: Camera.DestinationType.FILE_URI,
-		sourceType: pSource,
-		encodingType: Camera.EncodingType.JPEG,
-		mediaType: Camera.MediaType.ALLMEDIA,
-		//allowEdit: (device.platform == 'iOS'),
-		correctOrientation: true, //Corrects Android orientation quirks
-		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
-		//targetHeight: 
-		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
-		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
-	};
-};
-
-function cameraOptionsCapacitor(pSource){
-    return {
-		quality: 50,
-		saveToGallery: true,    
-		source: pSource,
-		//encodingType: Camera.EncodingType.JPEG,
-		//mediaType: Camera.MediaType.ALLMEDIA,
-		//allowEdit: (device.platform == 'iOS'),
-		correctOrientation: true, //Corrects Android orientation quirks
-        resultType: CameraResultType.DataUrl,
-		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
-		//targetHeight: 
-		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
-		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
-	};
-}
 
 //Get file solo para uso de Cordova
 function getFile(pFileURL) {
@@ -1969,21 +1945,23 @@ async function getFileFromCache(pFileName) {
     });
 };
 
-async function getFileFromUrl(pFileURL) {
-    return new Promise(function (resolve, reject) {
-        Capacitor.Plugins.Filesystem.readFile({
-            path : pFileURL,
-        }).then(
-            async (fileReadSucc)=>{
-                let file = await getFileStatFromCache(pFileName)
-                file.data = fileReadSucc.data;
-                file.name = pFileName;
-                resolve(file);
-            },
-            (fileReadErr)=>{
-                reject(fileReadErr);
-        });
-    });
+async function removeFileFromCache(fileName){
+    if (_isCapacitor()) {
+        try {
+            const result = await Capacitor.Plugins.Filesystem.deleteFile({
+                path: fileName,
+                directory: Directory.Cache,
+            });
+            console.log('Archivo ' +  fileName + ' eliminado del cache del app');
+
+        } catch(e) {
+            console.log('Error intentando quitar el archivo ' +  fileName + ' del cache del app');
+        }
+    }else{
+        let msg = "Borrado de archivos en cache no soportado para Cordova";
+        console.log(msg);
+        throw new Error(msg);
+    }
 }
 
 async function writeFileInCache(pFileName, pFileData) {
@@ -2011,411 +1989,6 @@ async function writeFileInCachePath(pFilePath, pFileName) {
     return getFileFromCache(filename);
 }
 
-function audioRecorder(pCallback) {
-    var mediaRec, interv, timer, save;
-
-    var $sheet = $('<div/>', {
-        class: 'sheet-modal',
-    });
-    
-    $('<div/>', {
-        class: 'swipe-handler',
-    }).appendTo($sheet);
-    
-    var $block = $('<div/>', {
-        class: 'block',
-    }).appendTo($sheet);
-    
-    var $timer = $('<div/>', {
-        class: 'text-align-center',
-        style: 'font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%',
-    }).append('0:00').appendTo($block);
-    
-    var $recBtnRow = $('<div/>', {
-        class: 'row',
-    }).appendTo($block);
-    
-    var $btn = $('<button/>', {
-        class: 'col button button-large button-round button-fill color-pink',
-    }).append('Grabar').appendTo($recBtnRow);
-    
-    $btn.click(record);
-    
-    var $saveBtnRow = $('<div/>', {
-        class: 'row',
-    }).hide().appendTo($block);
-    
-    var $btn = $('<button/>', {
-        class: 'col button button-large button-round button-outline',
-    }).append('Cancelar').appendTo($saveBtnRow);
-    
-    $btn.click(cancelAudio);
-    
-    var $btn = $('<button/>', {
-        class: 'col button button-large button-round button-fill',
-    }).append('Guardar').appendTo($saveBtnRow);
-    
-    $btn.click(saveAudio);
-    
-    // Abre el sheet
-    var sheet = app7.sheet.create({
-        swipeToClose: true,
-        content: $sheet[0],
-    }).open();
-
-    function record() {
-        (_isCapacitor())
-        ? recordCapacitor() 
-        : recordCordova()
-    }
-
-    async function recordCapacitor(){
-        //TODO: https://github.com/tchvu3/capacitor-voice-recorder
-        //Evaluar mejor los permisos 
-        const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
-        if(result.value){
-            save = false;
-            
-            const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
-            if(currentStatusResult.status != 'NONE'){
-                const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-            }
-            const startRecordingResult = await Capacitor.Plugins.VoiceRecorder.startRecording();
-            $recBtnRow.hide();
-            $saveBtnRow.show();
-            $timer.css('opacity', '100%');
-
-            timer = new Date();
-            interv = setInterval(function () {
-                var secs = Math.trunc((new Date() - timer) / 1000);
-                var mins = Math.trunc(secs / 60);
-                secs = secs - mins * 60;
-                $timer.html(mins + ':' + leadingZeros(secs, 2));
-            }, 200);
-        }
-    }
-
-    function recordCordova(){
-        save = false;
-        var now = new Date();
-        var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
-        if (device.platform == 'iOS') {
-            src += '.m4a';
-        } else {
-            src += '.aac';
-        }
-    
-        mediaRec = new Media('cdvfile://localhost/temporary/' + src,
-            // success callback
-            function() {
-                if (save) {
-                    window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
-                        function (fileSystem) {
-                            fileSystem.root.getFile(src, { create: false, exclusive: false	},
-                                function (fileEntry) {
-                                    addDuration(fileSystem, fileEntry, mediaRec, function (file) {
-                                        if (pCallback) {
-                                            pCallback(file);
-                                        };
-                                        sheet.close();
-                                    });
-
-                                },
-                                function (err) {
-                                    logAndToast('getFile error: ' + err.code);
-                                }
-                            );
-                        }
-                    );
-                };
-            },
-            // error callback
-            function (err) {
-                logAndToast('Media error: ' + err.code);
-            }
-        );
-        
-        mediaRec.startRecord();
-        $recBtnRow.hide();
-        $saveBtnRow.show();
-        $timer.css('opacity', '100%');
-        
-        timer = new Date();
-        interv = setInterval(function () {
-            var secs = Math.trunc((new Date() - timer) / 1000);
-            var mins = Math.trunc(secs / 60);
-            secs = secs - mins * 60;
-            $timer.html(mins + ':' + leadingZeros(secs, 2));
-        }, 200);
-    }
-    
-
-    function saveAudio(){
-        if (_isCapacitor()) {
-            saveAudioCapacitor();
-        } else {
-            saveAudioCordova();
-        }
-    }
-
-    function cancelAudio(){
-        if (_isCapacitor()) {
-            cancelAudioCapacitor();
-        } else {
-            cancelAudioCordova();
-        }
-    }
-
-    async function saveAudioCapacitor() {
-        const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-        var now = new Date();
-        let millis = recordingData.value.msDuration;
-        let minutes = Math.floor(millis / 60000);
-        let seconds = ((millis % 60000) / 1000).toFixed(0);
-        let durationString = (seconds == 60) ?
-            (minutes+1) + ":00" :
-            minutes + ":" + (seconds < 10 ? "0" : "") + seconds
-        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
-        writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
-            (res)=>{
-                Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
-                    (file)=> {
-                        file.localURL = file.uri;
-                        file.name = fileName;
-                        pCallback(file);
-                    },(err)=>{
-                        console.error("Error obteniendo el audio.", errMsg(err))
-                    }
-                );
-            },(err)=>{
-                console.error("Error escribiendo el audio.", errMsg(err))
-            });
-        clearInterval(interv);
-        sheet.close();
-    }
-
-    function saveAudioCordova() {
-        save = true;
-        clearInterval(interv);
-        mediaRec.stopRecord();
-        mediaRec.release();
-    }
-
-    async function cancelAudioCapacitor() {
-        clearInterval(interv);
-        const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
-        console.log("VoiceRecorder.getCurrentStatus : " + currentStatusResult.status);
-        if(currentStatusResult.status != 'NONE'){
-            const stopRecordingResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-            console.log("VoiceRecorder.stopRecording : " + stopRecordingResult.value);
-            //Evaluar el resultado para logearlo
-        }
-        $timer.html('0:00');
-        $timer.css('opacity', '20%');
-        $recBtnRow.show();
-        $saveBtnRow.hide();
-    }
-
-    function cancelAudioCordova() {
-        clearInterval(interv);
-        mediaRec.stopRecord();
-        mediaRec.release();
-        $timer.html('0:00');
-        $timer.css('opacity', '20%');
-        $recBtnRow.show();
-        $saveBtnRow.hide();
-    }
-
-    function addDuration(pFileSystem, pFileEntry, pMediaRec, pCallback) {
-        // Agrega la duracion al nombre del archivo, usa moveTo para renombrar
-        if (pMediaRec.getDuration() == -1) {
-            // El play/stop lo arregla en Android, para iOs hay que meter este fix:
-            // https://github.com/apache/cordova-plugin-media/issues/177?_pjax=%23js-repo-pjax-container#issuecomment-487823086
-            
-            save = false;
-            pMediaRec.play();
-            pMediaRec.stop();
-            pMediaRec.release();
-
-            // Espera 2 segs a getDuration
-            var counter = 0;
-            var timerDur = setInterval(function() {
-                counter = counter + 100;
-                if (counter > 2000) {
-                    clearInterval(timerDur);
-                    resume();
-                }
-                if (pMediaRec.getDuration() > 0) {
-                    clearInterval(timerDur);
-                    resume();
-                }
-            }, 100);
-
-        } else {
-            resume();
-        }
-
-        function resume() {
-            if (pMediaRec.getDuration() > -1) {
-                var dur = pMediaRec.getDuration();
-                var min = Math.trunc(dur / 60);
-                var fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + pFileEntry.name;
-                pFileEntry.moveTo(pFileSystem.root, fileName,
-                        function (fileEntry) {
-                        fileEntry.file(pCallback);
-                    },
-                    function (err) {
-                        console.error('moveTo error: ' + err.code);
-                        pFileEntry.file(pCallback); // Pasa el que venia nomas
-                    }
-                )
-            } else {
-                pFileEntry.file(pCallback); // Pasa el que venia nomas
-            }
-        }
-    }
-}
-
-async function requestPermissionsImages(cameraPermissionType){
-    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
-    return (oPermissionStatus[cameraPermissionType] == 'granted' || oPermissionStatus[cameraPermissionType] == 'limited');
-}
-
-async function pickImages(opts){
-    var files = [];
-    if (_isCapacitor()) {
-        let options = {};
-        if(opts) { options = opts; }
-        const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
-        if(hasPermission){
-            const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
-            for(let idx=0; idx < selectedPhotos.photos.length; idx++){
-                const item = selectedPhotos.photos[idx];
-                const fileInCache = await writeFileInCachePath(item.path);
-                files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
-            }
-            return files;
-        }
-        throw new Error('Se necesita permiso de acceso a im&aacutegenes');
-    }
-
-    else {
-        return new Promise((resolve, reject)=>{
-        navigator.camera.getPicture(
-            function (fileURL) {
-                getFile(fileURL).then(
-                    (file)=> {
-                        files.push({ uri : file.localURL, name : file.name, size : file.size });
-                        resolve(files)
-                    },
-                    (err)=>{
-                        reject(err);
-                    }
-                );
-            },
-            function (err){
-                reject(err);
-            },
-                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-            );
-        });
-    }
-}
-
-async function pickFiles(opts){
-    var files = [];
-    if (_isCapacitor()) {
-        let options =  { multiple : true };
-        if(opts) { options = opts; }
-        const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
-        for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
-            const item = pickFilesResultSucc.files[idx];
-            const fileInCache = await writeFileInCachePath(item.path, item.name);
-            files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
-        }
-        return files;
-    }
-    else {
-        return new Promise((resolve, reject)=>{
-            chooser.getFileMetadata().then(
-                function (res) {
-                    getFile(res.uri).then(
-                        (file) => {
-                            files.push({ uri : file.localURL, name : file.name, size : file.size });
-                            resolve(files)
-                        },
-                        (err)=>{
-                            reject(err);
-                        }
-                    )
-                },
-                function (err){
-                    reject(err);
-                }
-            )
-        });
-    }
-}
-
-async function takePhoto(){
-    var files = [];
-    if (_isCapacitor()) {
-        const opts = cameraOptionsCapacitor(CameraSource.Camera);
-        opts.resultType = CameraResultType.Uri;
-        const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
-        if(hasPermission){
-            const photo =  await Capacitor.Plugins.Camera.getPhoto(opts);
-            const file = await writeFileInCachePath(photo.path);
-            files.push({ uri : file.uri, name : file.name, size : file.size });
-            return files;
-        }
-        throw new Error('Se necesita permiso de acceso a la c&aacutemara');
-    }
-    else{
-        return new Promise((resolve, reject)=>{
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        (file) => {
-                            files.push({ uri : file.localURL, name : file.name, size : file.size });
-                            resolve(files)
-                        },
-                        (err)=>{
-                            reject(err);
-                        }
-                    )
-                },
-                function (err){
-                    reject(err);
-                },
-                cameraOptions(Camera.PictureSourceType.CAMERA)
-            )
-        });
-    }
-}
-
-//Plugin Camera
-const CameraResultType = {
-    Uri: 'uri',
-    Base64: 'base64',
-    DataUrl: 'dataUrl'
-};
-
-const CameraPermissionType = {
-    Camera: 'camera', 
-    Photos: 'photos'
-};
-
-const CameraSource = {
-    Prompt: 'PROMPT', //Prompts the user to select either the photo album or take a photo.
-    Camera: 'CAMERA', //Take a new photo using the camera.
-    Photos: 'PHOTOS' //Pick an existing photo from the gallery or photo album.
-};
-
-const CameraDirection = {
-    Rear: 'REAR',
-    Front: 'FRONT'
-};
 
 //FileSystem
 const Directory ={

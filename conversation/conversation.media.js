@@ -316,3 +316,37 @@ const CameraDirection = {
     Rear: 'REAR',
     Front: 'FRONT'
 };
+
+
+function cameraOptions(pSource) {
+	return {
+		quality: 50,
+		destinationType: Camera.DestinationType.FILE_URI,
+		sourceType: pSource,
+		encodingType: Camera.EncodingType.JPEG,
+		mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+};
+
+function cameraOptionsCapacitor(pSource){
+    return {
+		quality: 50,
+		saveToGallery: true,    
+		source: pSource,
+		//encodingType: Camera.EncodingType.JPEG,
+		//mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+        resultType: CameraResultType.DataUrl,
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+}
