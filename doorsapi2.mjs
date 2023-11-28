@@ -2609,11 +2609,6 @@ export class Field {
     get valueOld() {
         return this.#json.ValueOld;
     }
-
-    toString() {
-        debugger;
-        return this.value;
-    }
 };
 
 
