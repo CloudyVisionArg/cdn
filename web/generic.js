@@ -367,8 +367,14 @@ async function renderPage() {
     $delBtn.click(function () {
         if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
             doc.delete().then(
-                function (res) {
+                async function (res) {
                     toast('El documento ha sido enviado a la papelera');
+
+                    // Evento afterDelete
+                    let context = {};
+                    document.dispatchEvent(new CustomEvent('afterDelete', { detail : context }));
+                    if (context.return && typeof context.return.then == 'function') await context.return;
+
                     exitForm();
                 },
                 function (err) {
