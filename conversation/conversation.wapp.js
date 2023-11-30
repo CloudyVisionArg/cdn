@@ -1494,10 +1494,16 @@ async function newWhatsAppChatControl(opts){
     
 		
 		let reversedNum = mobilePhone.slice(-8).split("").reverse().join("");
+		let finalFormula = "FROM_NUMREV LIKE '" + reversedNum + "%' OR TO_NUMREV LIKE '" + reversedNum + "%'";
+		//Si le pasó un from explícito por campo, buscamos solo los mensajes con ese from
+		if(fromField){
+			finalFormula = "(FROM_NUMREV LIKE '" + reversedNum + "%' AND TO = '" + from + "') OR (TO_NUMREV LIKE '" + reversedNum + "%' AND FROM = '" + from + "')";
+		}
+
 		var wappOpts = {
 			rootFldId: wappFolderId,
 			messagesFolder: fldMsg.id,
-			formula: "FROM_NUMREV LIKE '" + reversedNum + "%' OR TO_NUMREV LIKE '" + reversedNum + "%'",
+			formula: finalFormula,
 			sessionStatusContainer: 'div.chat-container[data-chat-id=' + refDocId + '] .chat-header .whatsapp-status-container',
 			from: from,
 			to: mobilePhone,
