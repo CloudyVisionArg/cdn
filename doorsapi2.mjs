@@ -1253,7 +1253,9 @@ export class Application {
     @returns {number}
     */
     get rootFolderId() {
-        return this.#parent.toJSON().RootFolderId;
+        //return this.#parent.toJSON().RootFolderId;
+        debugger;
+        return this.#parent.rootFolderId;
     }
 
     /**
