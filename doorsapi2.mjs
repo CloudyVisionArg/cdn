@@ -1209,7 +1209,6 @@ export class Application {
     @returns {Promise<Folder>}
     */
     folder(folderPath) {
-        debugger;
         return this.session.folder(folderPath, this.rootFolderId);
     }
 
