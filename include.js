@@ -21,7 +21,7 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 340 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 341 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 339 });
     scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 337 });
     /*
