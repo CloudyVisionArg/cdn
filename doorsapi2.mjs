@@ -3410,7 +3410,7 @@ export class Form {
         this.#json = form;
         this.#session = session;
     }
-
+    
     /*
     acl() {
         //todo
@@ -3684,12 +3684,11 @@ export class Form {
     }
 
     get url() {
-        //todo
-        debugger;
+        return this.#json.Url;
     }
 
     get urlRaw() {
-        //todo
+        return this.#json.UrlRaw;
     }
     /*
     set urlRaw(value) {
