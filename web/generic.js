@@ -1366,7 +1366,6 @@ async function saveDoc(exitOnSuccess) {
         var ev = getEvent('BeforeSave');
         if (ev) await evalCode(ev, context);
 
-        debugger;
         await doc.save();
         docJson = doc.toJSON();
         doc_id = doc.id;
