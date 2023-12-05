@@ -686,8 +686,8 @@ async function renderControls(pCont, pParent) {
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {
-            debugger;
             $this = $('<div/>', {
+                id: ctl['NAME'],
                 class: 'mt-3',
             });
 
