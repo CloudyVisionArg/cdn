@@ -96,7 +96,7 @@ function newDTPicker(pId, pLabel, pType) {
         var $self = $(this);
 
         if (pValue == undefined) {
-            //get
+            // get
             return dSession.utils.cDate($self.val());
 
         } else {
@@ -442,31 +442,36 @@ function newCheckbox(pId, pLabel) {
 }
 
 function newFieldset(pId, pLabel) {
-    var $div = $('<div/>', {
-        class: 'card',
-    });
+    if (pLabel) {
+        var $div = $('<div/>', {
+            class: 'card',
+        });
 
-    var $header = $('<h6/>', {
-        class: 'card-header',
-    }).appendTo($div);
+        var $header = $('<h6/>', {
+            class: 'card-header',
+        }).appendTo($div);
 
-    $('<a/>', {
-        'data-bs-toggle': 'collapse',
-        class: 'link-secondary',
-        style: 'text-decoration: none;',
-        href: '#' + pId,
-    }).append(pLabel).appendTo($header);
+        $('<a/>', {
+            'data-bs-toggle': 'collapse',
+            class: 'link-secondary',
+            style: 'text-decoration: none;',
+            href: '#' + pId,
+        }).append(pLabel).appendTo($header);
 
-    var $body = $('<div/>', {
-        id: pId,
-        class: 'card-body collapse show',
-    }).appendTo($div);
+        var $body = $('<div/>', {
+            id: pId,
+            class: 'card-body collapse show',
+        }).appendTo($div);
 
-    $('<fieldset/>').appendTo($body);
+        $('<fieldset/>').appendTo($body);
 
-    $body[0].bscollapse = new bootstrap.Collapse($body, {
-        toggle: false,
-    });
+        $body[0].bscollapse = new bootstrap.Collapse($body, {
+            toggle: false,
+        });
+
+    } else {
+        $div = `<div id="${ pId }"><fieldset /></div>`;
+    }
 
     return $div;
 }
