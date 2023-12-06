@@ -470,7 +470,7 @@ function newFieldset(pId, pLabel) {
         });
 
     } else {
-        $div = `<div id="${ pId }"><fieldset /></div>`;
+        $div = $(`<div id="${ pId }"><fieldset /></div>`);
     }
 
     return $div;
