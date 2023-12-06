@@ -470,6 +470,7 @@ function newFieldset(pId, pLabel) {
         });
 
     } else {
+        // Si no viene label devuelvo un fieldset invisible
         $div = $(`<div id="${ pId }"><fieldset /></div>`);
     }
 
