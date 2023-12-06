@@ -823,7 +823,7 @@ async function renderControls(pCont, pParent) {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
 
             let $coll = $this.find('.collapse');
-            if ($coll.length) {
+            if ($coll.length) { // Si no tiene .collapse es invisible
                 $this.addClass('mt-3');
                 $this.find('.card-body').css('padding-top', '0');
                 bsctl = $this.find('.collapse')[0].bscollapse;
