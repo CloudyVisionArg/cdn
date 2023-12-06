@@ -749,8 +749,9 @@ function conversationControl(opt) {
 	var send = function (el) {
 		var $chat = $(el).closest(me.options.selector);
 		var $inp = $chat.find('.wapp-reply');
-		if ($inp.val()) {
+		if ($inp.val() && $inp.prop("disabled") == false) {
 			me.cursorLoading(true);
+			$inp.prop("disabled",true);
 			let body = $inp.val();
 			let type = $(me.options.selector + " .message-type-button").attr('data-message-class');
 			let message = null;
@@ -759,17 +760,20 @@ function conversationControl(opt) {
 				eval("message = new " + type + "();");
 			} catch (error) {
 				console.error("Error al enviar mensaje de tipo " + type);
+				$inp.prop("disabled",false);
 				return;
 			}
+			$inp.val('');
 			message.body = body;
 			message.date = new Date();
 			me.dataProvider.sendMessage(message).then(function (obj) {
+				$inp.prop("disabled",false);
 				me.insertMsg(obj).then(function () {
-					$inp.val('');
 					inputResize($inp[0]);
 					me.cursorLoading(false);
 				});
 			}, function (err) {
+				$inp.prop("disabled",false);
 				console.error("err " + JSON.stringify(err), err);
 				me.cursorLoading(false);
 			});
