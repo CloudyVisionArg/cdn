@@ -164,9 +164,14 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	var span = $('<span/>', {
 		'class': spanClass,
 		'style': 'cursor: pointer;',
-		'onclick': pAction,
 	});
 	span.append('<span class="' + pIcon + '"></span>');
+
+	if (typeof(pAction) == 'function') {
+		span.click(pAction);
+	} else {
+		span.attr('onclick', pAction);
+	}
 	
 	if (pPrepend) {
 		span.prependTo(div);
@@ -175,7 +180,8 @@ function addInputButton(pControl, pIcon, pAction, pPrepend) {
 	};
 	
 	if (!esGroup) pControl.replaceWith(div);
-	return newControl ? newControl : pControl;
+	//return newControl ? newControl : pControl;
+	return span;
 }
 
 function addPhoneButton(pControl) {
