@@ -24,7 +24,9 @@ function registeredScripts() {
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 341 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 342 });
     scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 342 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 343, hasdep: true });
     /*
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 325, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 336 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 339 });
     scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 337 });
@@ -38,7 +40,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 325 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 325 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });        
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 325, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 318 });
