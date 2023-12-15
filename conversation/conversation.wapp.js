@@ -58,6 +58,7 @@ function whatsAppDataProvider(opts){
 	this.allAccounts = [];
 	this.messagesFolder = opts.messagesFolder || null;
     let me = this;
+	var wappLib = opts.wappLib || null;
 	var intervalId;
     if (typeof(cordova) == 'object') {
         this.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
@@ -209,9 +210,13 @@ function whatsAppDataProvider(opts){
 		let selector = me.conversationControl.options.selector;
 		let input = $(selector).find(".wapp-reply");
 		if(input.attr("data-template")){
-			let template = JSON.stringify(input.attr("data-template"));
+			let template = JSON.parse(input.attr("data-template"));
+			let vars = input.attr("data-template-vars") ? JSON.parse(input.attr("data-template-vars")) : [];
+			let exists = wappLib != null;
 			debugger;
 			input.removeAttr("data-template");
+			input.removeAttr("data-template-vars");
+
 		}
 		return new Promise(function(resolve, reject){
 			xhr({
@@ -1528,6 +1533,9 @@ async function newWhatsAppChatControl(opts){
 					{variable:"{{2}}","type":"text",value: "Casa"},
 					{variable:"{{3}}","type":"loggedusername", value: "NAME"}
 				]*/
+				if(txt == null && templateObj != null){
+					txt = templateObj.NAME;
+				}
 				vars.map((varObj) => {
 					var val = null;
 					if(varObj.type == "field"){
@@ -1543,7 +1551,7 @@ async function newWhatsAppChatControl(opts){
 					if(val == null) return;
 					txt = txt.replaceAll(varObj.variable, val);
 				})
-				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj);
+				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj, variablesProp);
 			}
 		};
 		let providers = [];
@@ -1594,9 +1602,14 @@ async function newWhatsAppChatControl(opts){
     });
 }
 
-function onWhatsappPutTemplate(chatInputSelector, text, templateObj){
+function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
     let input =  $(chatInputSelector);
-	$(input).attr("data-template", JSON.stringify(templateObj));
+	if(templateObj){
+		$(input).attr("data-template", JSON.stringify(templateObj));
+	}
+	if(vars){
+		$(input).attr("data-template-vars", JSON.stringify(vars));
+	}
     insertAtCaret(input[0], text);
 }
 
