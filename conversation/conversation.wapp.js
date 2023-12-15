@@ -229,7 +229,7 @@ function whatsAppDataProvider(opts){
 				let contentVariablesObj = {};
 				vars.forEach(v=>{
 					let prop = v.variable.replaceAll("{","").replaceAll("}","");
-					contentVariables[prop] = v.value;
+					contentVariablesObj[prop] = v.value;
 				});
                 msg.contentVariables = contentVariablesObj;
                 //Borro la propiedad body
