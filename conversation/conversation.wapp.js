@@ -245,8 +245,13 @@ function whatsAppDataProvider(opts){
 			if(wappLib != null){
 				wappLib.send(msg).then(function(msgSent){
 					var msgObj = new wappMsg();
-					/*msgObj.sid = $dom.find('Message Sid').html();
+					msgObj.sid = msgSent.sid;
+					msgObj.operator = me.options.loggedUser.Name;
 					msgObj.direction = 'outbound';
+					msgObj.status = msgSent.status;
+					msgObj.body = msgSent.body;
+					msgObj.date = msgSent.dateCreated;
+					/*msgObj.sid = $dom.find('Message Sid').html();
 					msgObj.operator = me.options.loggedUser.Name;
 					msgObj.status = $dom.find('Message Status').html();
 					msgObj.body = $dom.find('Message Body').html();
