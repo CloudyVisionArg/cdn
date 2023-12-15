@@ -1,3 +1,6 @@
+/**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.js?_fresh=true
+ */
 window._isCapacitor = function () {
 	try { return (Capacitor != undefined); }
 	catch (e) { return false; }
@@ -282,10 +285,10 @@ function conversationControl(opt) {
 
 	var $mainContainer = $(this.options.selector);
 	this.dataProvider = this.options.dataProvider;
-	this.dataProvider.msgproviders.map(function (p) { 
-		p.conversationControl = this; 
-	});
 	var me = this;
+	this.dataProvider.msgproviders.map(function (p) { 
+		p.conversationControl = me;
+	});
 	var intervalId;
 	this.cursorLoading = function (pLoading) {
 		if (typeof (cordova) == 'object') {
