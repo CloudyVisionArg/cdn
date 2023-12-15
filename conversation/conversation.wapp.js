@@ -209,43 +209,83 @@ function whatsAppDataProvider(opts){
 		let me = this;
 		let selector = me.conversationControl.options.selector;
 		let input = $(selector).find(".wapp-reply");
+		let msg = {
+			from: from,
+			to: to,
+			body: msge.body
+		}
 		if(input.attr("data-template")){
 			let template = JSON.parse(input.attr("data-template"));
 			let vars = input.attr("data-template-vars") ? JSON.parse(input.attr("data-template-vars")) : [];
-			let exists = wappLib != null;
-			debugger;
+			
+			if(template["MEDIA"] !== undefined && template["MEDIA"] !== null && template["MEDIA"] !== ""){
+                msg["mediaUrl"] = [template["MEDIA"]];
+                msg["body"] = template["NAME"];
+            }
+            if(template["CONTENT_SID"]){
+                msg.contentSid = template["CONTENT_SID"];
+                //Fuerzo para que se busque y se agregue el service id
+                msg.from = from; //["NAME"];
+				let contentVariables = {};
+				vars.forEach(v=>{
+					//let prop = v.variable.replaceAll("{","").replaceAll("}","");
+					//contentVariables[prop] = v;
+				});
+                msg.contentVariables = vars;
+                //Borro la propiedad body
+                //delete msg.body;
+                delete msg.mediaUrl;
+            }
+
 			input.removeAttr("data-template");
 			input.removeAttr("data-template-vars");
-
 		}
+		debugger;
 		return new Promise(function(resolve, reject){
-			xhr({
-				wappaction: 'send',
-				from: from,
-				to: to,
-				body:msge.body,
-			}).then(
-				function (res) {
-					var $dom = $($.parseXML(res.jqXHR.responseText));
-
+			if(wappLib != null){
+				wappLib.send(msg).then(function(msgSent){
 					var msgObj = new wappMsg();
-					msgObj.sid = $dom.find('Message Sid').html();
+					/*msgObj.sid = $dom.find('Message Sid').html();
 					msgObj.direction = 'outbound';
 					msgObj.operator = me.options.loggedUser.Name;
 					msgObj.status = $dom.find('Message Status').html();
 					msgObj.body = $dom.find('Message Body').html();
-					msgObj.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
-
-					//let msgeSent = getMessageByActType(res);
+					msgObj.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();*/
 					
 					resolve(msgObj);
-				},
-				function (err) {
-					//wapp.cursorLoading(false);
-					//alert('Error: ' + err.jqXHR.responseText);
+				},function(err){
 					reject(err);
-				}
-			)
+				});
+			}
+			else{
+				xhr({
+					wappaction: 'send',
+					from: from,
+					to: to,
+					body:msge.body,
+				}).then(
+					function (res) {
+						var $dom = $($.parseXML(res.jqXHR.responseText));
+
+						var msgObj = new wappMsg();
+						msgObj.sid = $dom.find('Message Sid').html();
+						msgObj.direction = 'outbound';
+						msgObj.operator = me.options.loggedUser.Name;
+						msgObj.status = $dom.find('Message Status').html();
+						msgObj.body = $dom.find('Message Body').html();
+						msgObj.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
+
+						//let msgeSent = getMessageByActType(res);
+						
+						resolve(msgObj);
+					},
+					function (err) {
+						//wapp.cursorLoading(false);
+						//alert('Error: ' + err.jqXHR.responseText);
+						reject(err);
+					}
+				)
+			}
 		});
 	};
 	this.updateMessage = function(id, docFieldValues){
@@ -1551,6 +1591,7 @@ async function newWhatsAppChatControl(opts){
 
 					if(val == null) return;
 					txt = txt.replaceAll(varObj.variable, val);
+					varObj["value"] = val;
 				})
 				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj, variablesProp);
 			}
