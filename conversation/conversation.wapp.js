@@ -226,12 +226,12 @@ function whatsAppDataProvider(opts){
                 msg.contentSid = template["CONTENT_SID"];
                 //Fuerzo para que se busque y se agregue el service id
                 msg.from = from; //["NAME"];
-				let contentVariables = {};
+				let contentVariablesObj = {};
 				vars.forEach(v=>{
-					//let prop = v.variable.replaceAll("{","").replaceAll("}","");
-					//contentVariables[prop] = v;
+					let prop = v.variable.replaceAll("{","").replaceAll("}","");
+					contentVariables[prop] = v.value;
 				});
-                msg.contentVariables = vars;
+                msg.contentVariables = contentVariablesObj;
                 //Borro la propiedad body
                 //delete msg.body;
                 delete msg.mediaUrl;
@@ -1593,7 +1593,7 @@ async function newWhatsAppChatControl(opts){
 					txt = txt.replaceAll(varObj.variable, val);
 					varObj["value"] = val;
 				})
-				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj, variablesProp);
+				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj, vars);
 			}
 		};
 		let providers = [];
