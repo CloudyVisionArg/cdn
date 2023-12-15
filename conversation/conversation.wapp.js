@@ -1522,6 +1522,7 @@ async function newWhatsAppChatControl(opts){
 			loggedUser: userData,
 			googleMapsKey: null, //TODO
 			s3Key: s3Key,
+			wappLib: opts.wappLib,
 			onMessageSent:function (msg){
 
 			},
