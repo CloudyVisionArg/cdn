@@ -206,6 +206,13 @@ function whatsAppDataProvider(opts){
 	};
 	this.sendMessage = function(msge){
 		let me = this;
+		let selector = me.conversationControl.options.selector;
+		let input = $(selector).find(".wapp-reply");
+		if(input.attr("data-template")){
+			let template = JSON.stringify(input.attr("data-template"));
+			debugger;
+			input.removeAttr("data-template");
+		}
 		return new Promise(function(resolve, reject){
 			xhr({
 				wappaction: 'send',
@@ -493,10 +500,10 @@ function whatsAppDataProvider(opts){
     this.putTemplate = function (template) {
 		//wapp.cursorLoading(true);
 		var me = this;
-		DoorsAPI.folderSearch(this.templatesFolder, 'text', 'name = \'' + template + '\'', '', 1, null, 0).then(
+		DoorsAPI.folderSearch(this.templatesFolder, '*', 'name = \'' + template + '\'', '', 1, null, 0).then(
 			function (res) {
 				if(me.options.putTemplateRequested){
-					me.options.putTemplateRequested(res[0]['TEXT']);
+					me.options.putTemplateRequested(res[0]['TEXT'], res[0]);
 				}
 				
 				//wapp.cursorLoading(false);
@@ -1513,7 +1520,7 @@ async function newWhatsAppChatControl(opts){
 			onMessageSent:function (msg){
 
 			},
-			putTemplateRequested: function(txt){
+			putTemplateRequested: function(txt, templateObj){
 				debugger;
 				let vars = variablesProp;
 				/*[
@@ -1536,7 +1543,7 @@ async function newWhatsAppChatControl(opts){
 					if(val == null) return;
 					txt = txt.replaceAll(varObj.variable, val);
 				})
-				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt);
+				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj);
 			}
 		};
 		let providers = [];
@@ -1587,8 +1594,9 @@ async function newWhatsAppChatControl(opts){
     });
 }
 
-function onWhatsappPutTemplate(chatInputSelector, text){
+function onWhatsappPutTemplate(chatInputSelector, text, templateObj){
     let input =  $(chatInputSelector);
+	$(input).attr("data-template", JSON.stringify(templateObj));
     insertAtCaret(input[0], text);
 }
 

@@ -149,6 +149,7 @@ function msg() {
  */
 function conversationBaseDataProvider() {
 	this.supportedTypes = ["msg"];
+	this.conversationControl = null;
 	this.getMessages = function (msgLimit, maxDate) {
 		return new Promise(function (resolve, reject) { resolve([]) });
 	};
@@ -281,6 +282,9 @@ function conversationControl(opt) {
 
 	var $mainContainer = $(this.options.selector);
 	this.dataProvider = this.options.dataProvider;
+	this.dataProvider.msgproviders.map(function (p) { 
+		p.conversationControl = this; 
+	});
 	var me = this;
 	var intervalId;
 	this.cursorLoading = function (pLoading) {
