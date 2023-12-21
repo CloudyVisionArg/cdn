@@ -207,14 +207,17 @@ function whatsAppDataProvider(opts){
 	};
 	this.sendMessage = function(msge){
 		let me = this;
-		let selector = me.conversationControl.options.selector;
-		let input = $(selector).find(".wapp-reply");
+		let input = null;
+		if(me.conversationControl != null && me.conversationControl.options != null && me.conversationControl.options.selector != null){
+			let selector = me.conversationControl.options.selector;
+			input = $(selector).find(".wapp-reply");
+		}
 		let msg = {
 			from: from,
 			to: to,
 			body: msge.body
 		}
-		if(input.attr("data-template")){
+		if(input && input.attr("data-template")){
 			let template = JSON.parse(input.attr("data-template"));
 			let vars = input.attr("data-template-vars") ? JSON.parse(input.attr("data-template-vars")) : [];
 			
