@@ -788,6 +788,7 @@ function activitiesDataProvider(opts){
 }
 function notasDataProvider(opts){
     this.parent = conversationBaseDataProvider;
+    this.parent();
     this.supportedTypes = ["notaMsg"];
     var notasFolder = opts.fldId || 5321;
     var notasFormula = opts.formula || "1=0";
