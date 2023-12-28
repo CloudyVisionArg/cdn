@@ -969,6 +969,18 @@ function whatsAppDataProvider(opts){
 		}
 	};
 	this.getQuickMessageOptions = function(messageType){
+		let templates = [];
+		if (this.templates && this.templates.length > 0) {
+			this.templates.forEach(it => {
+				templates.push({
+					text: it.NAME,
+					name: it.NAME,
+					icon: "doc",
+					webIcon: "fa-file-text-o",
+					selectable: true
+				});
+			});
+		}
 		return [
 			{
 				text: "Mensaje de voz",
@@ -980,51 +992,38 @@ function whatsAppDataProvider(opts){
 			{
 				text: "C&aacute;mara",
 				name: "camera",
-				icon: "mic",
-				webIcon: "fa-microphone",
+				icon: "camera",
+				webIcon: "fa-camera",
 				selectable: true
 			},
 			{
 				text: "Fotos y Videos",
 				name: "pictures",
-				icon: "mic",
-				webIcon: "fa-microphone",
+				icon: "photo",
+				webIcon: "fa-picture-o",
 				selectable: true
 			},
 			{
 				text: "Documento",
 				name: "document",
-				icon: "mic",
-				webIcon: "fa-microphone",
+				icon: "doc",
+				webIcon: "fa-file-o",
 				selectable: true
 			},
 			{
 				text: "Ubicaci&oacute;n",
 				name: "location",
-				icon: "mic",
-				webIcon: "fa-microphone",
+				icon: "placemark",
+				webIcon: "fa-map-marker",
 				selectable: true
 			},
 			{
 				text: "Plantillas",
 				name: "template",
-				icon: "mic",
-				webIcon: "fa-microphone",
+				icon: "chat_bubble_text",
+				webIcon: "fa-file-text-o",
 				selectable: false,
-				children: [
-					{
-						text: "Plantillas",
-						name: "template",
-						icon: "mic",
-						webIcon: "fa-microphone",
-						selectable: true
-					}
-				]
-			},
-			{
-				text: "Cancelar",
-				name: "cancel",
-				selectable: true
+				children: templates
 			}
 		]
 	};

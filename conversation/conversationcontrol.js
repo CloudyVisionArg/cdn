@@ -933,8 +933,7 @@ function conversationControl(opt) {
 							}
 						}*/
 						//Si efectivamente se está cambiando de tipo de mensaje, oculto los submenu de los otros tipos
-						if(currentType != msgInst.type)
-						{
+						if(currentType != msgInst.type) {
 							$(thisInstance.options.selector + " .message-type-button li.dropdown-submenu ul").hide()
 						}
 						//PArent li
@@ -947,9 +946,7 @@ function conversationControl(opt) {
 
 					if(prov.getQuickMessageOptions){
 						let options = prov.getQuickMessageOptions(typeName);
-						addRecursively($li, options, function(option){
-							//TODO Trigger quickOptionClicked
-						});
+						addRecursively($li, options, thisInstance.options.quickOptionSelected);
 					}
 				}
 				else{
@@ -972,7 +969,7 @@ function conversationControl(opt) {
 		} catch (error) {
 			//TODO
 		}
-		function addRecursively(liItem,children, clickHandler){
+		function addRecursively(liItem, children, clickHandler){
 			if(children && children.length > 0){
 				liItem.addClass("dropdown-submenu");
 				var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo(liItem);
@@ -989,6 +986,9 @@ function conversationControl(opt) {
 						//.css('display',display);
 						e.stopPropagation();
 						if(option.selectable){
+							hideMenu();
+						}
+						if(option.selectable && clickHandler){
 							clickHandler(option);
 						}
 					});
@@ -998,6 +998,11 @@ function conversationControl(opt) {
 				}
 			}
 		}
+	};
+
+	var hideMenu = function(){
+		//TODO Cordova
+		$mainContainer.find(".message-type-button > .dropdown-menu.show").removeClass("show")
 	};
 
 	var insertMobileMessageTypeOptionsMenu = function ($div) {
@@ -1027,11 +1032,16 @@ function conversationControl(opt) {
 								if (thisInstance.options.quickMessageChanged) {
 									thisInstance.options.quickMessageChanged(msgInst.constructor.name);
 								}
+								if(prov.getQuickMessageOptions){
+									let subOptions = prov.getQuickMessageOptions(typeName);
+									if(subOptions && subOptions.length > 0){
+										tryToDisplayQuickMessageOptions(subOptions);
+									}
+								}
+								
 							}
 						})
-						if(prov.getQuickMessageOptions){
-							let subOptions = prov.getQuickMessageOptions(typeName);
-						}
+						
 					}
 				} catch (error) {
 				}
@@ -1056,6 +1066,25 @@ function conversationControl(opt) {
 			mediaActions.open();
 		});
 	};
+
+	var tryToDisplayQuickMessageOptions = function(options){
+		//TODO
+		/*//  Media options
+		var mediaActions = app7.actions.create({
+			buttons: [
+				btns,
+				[
+					{
+						text: 'Cancelar',
+						bold: true,
+						close: true,
+					}
+				]
+			]
+		});
+		mediaActions.params.chatEl = $div;
+		mediaActions.open();*/
+	}
 
 	//Inicio el chat
 	init($mainContainer);
