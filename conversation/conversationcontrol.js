@@ -917,9 +917,9 @@ function conversationControl(opt) {
 				if(quickTypes > 1){
 					var $li = $('<li/>', {class: "dropdown-item"}).appendTo($menu);
 					let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
-					$actionLink.click(function (e) {
+					$li.click(function (e) {
 						var $this = $(this);
-						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.children('i').attr('class'));
+						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.find('i').attr('class'));
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
 						if (thisInstance.options.quickMessageChanged) {
@@ -931,7 +931,8 @@ function conversationControl(opt) {
 								e.stopPropagation();
 							}
 						}*/
-						let subMenuToShow = $this.siblings("ul.dropdown-menu");
+						//PArent li
+						let subMenuToShow = $this.children("ul.dropdown-menu");
 						if(subMenuToShow.length > 0){
 							subMenuToShow.toggle();
 							e.stopPropagation();
@@ -986,7 +987,7 @@ function conversationControl(opt) {
 						}
 					});
 					if(option.children && option.children.length > 0){
-						addRecursively($li, option.children);
+						addRecursively($li, option.children, clickHandler);
 					}
 				}
 			}
@@ -1022,6 +1023,9 @@ function conversationControl(opt) {
 								}
 							}
 						})
+						if(prov.getQuickMessageOptions){
+							let subOptions = prov.getQuickMessageOptions(typeName);
+						}
 					}
 				} catch (error) {
 				}
