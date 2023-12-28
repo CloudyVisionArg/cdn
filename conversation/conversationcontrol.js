@@ -153,6 +153,7 @@ function msg() {
 function conversationBaseDataProvider() {
 	this.supportedTypes = ["msg"];
 	this.conversationControl = null;
+	this.accounts = [];
 	this.getMessages = function (msgLimit, maxDate) {
 		return new Promise(function (resolve, reject) { resolve([]) });
 	};
@@ -163,6 +164,7 @@ function conversationBaseDataProvider() {
 		return new Promise(function (resolve, reject) { resolve(null) });
 	};
 	this.destroy = function () { };
+	this.executeQuickOption = function (option, typeName) { };
 }
 /**
  * Proveedor de datos de chat. Utilizar este objeto para proveer de datos al chat de la siguiente forma
@@ -225,8 +227,6 @@ function conversationDataProvider() {
 
 			reject(null);
 		});
-	};
-	this.executeQuickOption = function (option, typeName) {
 	};
 }
 
