@@ -400,6 +400,7 @@ function whatsAppDataProvider(opts){
 
     var getMessageByActType = function(actDoc){
         let msgIns = new wappMsg();
+		msgIns.viewImage = me.viewImage;
         let actType = "WhatsApp";
         
         if(msgIns && actDoc){
@@ -1279,6 +1280,7 @@ function wappMsg(){
 	this.mapsUrl = null;
 	this.placesUrl = null;
 	this.referralSourceUrl = null;
+	this.viewImage = function(e){};
 	this.getMessageHtml = function(message){
 		var me = this;
 		return new Promise((resolve, reject) => {
@@ -1322,7 +1324,7 @@ function wappMsg(){
 								$('<img/>', {
 									src: it.Url,
 									style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
-								}).click(whatsAppProvider.viewImage).appendTo($div);
+								}).click(me.viewImage).appendTo($div);
 								
 							} else if (it.ContentType.substr(0, 5) == 'audio') {
 								var $med = $('<audio/>', {
