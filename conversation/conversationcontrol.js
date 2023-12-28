@@ -559,6 +559,7 @@ function conversationControl(opt) {
 					class: 'fa ' + defaultIcon,
 					'data-toggle': 'dropdown',
 					'data-bs-toggle': 'dropdown',
+					'aria-expanded': 'false',
 				}).appendTo($dropup);
 
 				var $menu = $('<ul/>', {
