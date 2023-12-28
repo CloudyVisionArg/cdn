@@ -961,11 +961,11 @@ function conversationControl(opt) {
 			//TODO
 		}
 		function addRecursively(liItem,children, clickHandler){
-			if(children && options.length > 0){
+			if(children && children.length > 0){
 				liItem.addClass("dropdown-submenu");
 				var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo(liItem);
-				for (let index = 0; index < options.length; index++) {
-					const option = options[index];
+				for (let index = 0; index < children.length; index++) {
+					const option = children[index];
 					var $li = $('<li/>', {class: "dropdown-item"}).appendTo($subMenu);
 					let $actionLink = $('<a/>').append('<i class="fa ' + option.webIcon + '"></i> ' + option.text).appendTo($li);
 					
