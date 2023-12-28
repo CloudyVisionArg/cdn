@@ -939,11 +939,14 @@ function conversationControl(opt) {
 						if(currentType != msgInst.type) {
 							$(thisInstance.options.selector + " .message-type-button li.dropdown-submenu ul").hide()
 						}
-						//PArent li
+						//Parent li
 						let subMenuToShow = $this.children("ul.dropdown-menu");
 						if(subMenuToShow.length > 0){
 							subMenuToShow.toggle();
 							e.stopPropagation();
+						}
+						else{
+							$this.parent().toggle();
 						}
 					});
 
