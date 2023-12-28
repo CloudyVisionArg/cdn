@@ -934,7 +934,7 @@ function conversationControl(opt) {
 					});
 
 					if(prov.getQuickMessageOptions){
-						let options = prov.getQuickMessageOptions(foundType);
+						let options = prov.getQuickMessageOptions(typeName);
 						if(options && options.length > 0){
 							$li.addClass("dropdown-submenu");
 							var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo($li);
