@@ -968,7 +968,7 @@ function whatsAppDataProvider(opts){
 			}
 		}
 	};
-	this.getQuickMessageOptions = async function(messageType){
+	this.getQuickMessageOptions = function(messageType){
 		return [
 			{
 				text: "Mensaje de voz",
