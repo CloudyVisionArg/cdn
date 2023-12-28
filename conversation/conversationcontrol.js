@@ -935,20 +935,9 @@ function conversationControl(opt) {
 
 					if(prov.getQuickMessageOptions){
 						let options = prov.getQuickMessageOptions(typeName);
-						if(options && options.length > 0){
-							$li.addClass("dropdown-submenu");
-							var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo($li);
-							for (let index = 0; index < options.length; index++) {
-								const option = options[index];
-								var $li = $('<li/>', {class: "dropdown-item"}).appendTo($subMenu);
-								let $actionLink = $('<a/>').append('<i class="fa ' + option.icon + '"></i> ' + option.text).appendTo($li);
-								$actionLink.click(function (e) {
-									var $this = $(this);
-									$(this).parents(".dropup").addClass('open');
-									e.stopPropagation();
-								});
-							}
-						}
+						addRecursively($li, options, function(option){
+							//TODO Trigger quickOptionClicked
+						});
 					}
 				}
 				else{
@@ -970,6 +959,32 @@ function conversationControl(opt) {
 			}
 		} catch (error) {
 			//TODO
+		}
+		function addRecursively(liItem,children, clickHandler){
+			if(children && options.length > 0){
+				liItem.addClass("dropdown-submenu");
+				var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo(liItem);
+				for (let index = 0; index < options.length; index++) {
+					const option = options[index];
+					var $li = $('<li/>', {class: "dropdown-item"}).appendTo($subMenu);
+					let $actionLink = $('<a/>').append('<i class="fa ' + option.webIcon + '"></i> ' + option.text).appendTo($li);
+					
+					$li.click(function (e) {
+						var $this = $(this);
+						let subMenuToShow = $(this).siblings("ul.dropdown-menu");
+						subMenuToShow.toggle();
+						//let display = subMenuToShow.css("display") == "none" ? display = "block" : display = "none";
+						//.css('display',display);
+						e.stopPropagation();
+						if(option.selectable){
+							clickHandler(option);
+						}
+					});
+					if(option.children && option.children.length > 0){
+						addRecursively($li, option.children);
+					}
+				}
+			}
 		}
 	};
 
