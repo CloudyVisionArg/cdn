@@ -678,6 +678,75 @@ function messengerDataProvider(opts){
 		$file.prop('data-chat', pChat);
 		$file.click();
 	};
+	this.getQuickMessageOptions = function(messageType){
+		let templates = [];
+		if (this.templates && this.templates.length > 0) {
+			this.templates.forEach(it => {
+				templates.push({
+					text: it.NAME,
+					name: "template",
+					icon: "doc",
+					webIcon: "fa-file-text-o",
+					selectable: true
+				});
+			});
+		}
+		return [
+			{
+				text: "Plantillas",
+				name: "template",
+				icon: "chat_bubble_text",
+				webIcon: "fa-file-text-o",
+				selectable: false,
+				children: templates
+			}
+		]
+	};
+	this.executeQuickOption = function (option, messageType) {
+		let me = this;
+		//TODO
+		if (option.name == "template") {
+			//TODO
+			me.putTemplate(option.text);
+		} else {
+			//TODO
+			//me.sendText(option.name);
+		}
+	};
+	/*
+	if (me.templates && me.templates.length > 0) {
+		var tempButtons = [
+			[],
+			[{
+				text: 'Cancelar',
+				bold: true,
+				close: true,
+			}]
+		];
+
+		me.templates.forEach(it => {
+			tempButtons[0].push({
+				text: it.NAME,
+				onClick: tempClick,
+			})
+		});
+
+		tempActions = app7.actions.create({
+			buttons: tempButtons,
+		});
+
+		tempActions.params.chatEl = actions.params.chatEl;
+		tempActions.open();
+
+		function tempClick(actions, e) {
+			me.putTemplate(this.text);
+		};
+
+	} else {
+		toast('No hay plantillas definidas');
+	} 
+	*/
+	
 
 	this.displayMessengerOptions = function(container){
 		var $media;
