@@ -925,11 +925,16 @@ function conversationControl(opt) {
 						if (thisInstance.options.quickMessageChanged) {
 							thisInstance.options.quickMessageChanged(msgInst.constructor.name, $li);
 						}
-						if(typeof(menuOption) == "object"){
+						/*if(typeof(menuOption) == "object"){
 							if(menuOption.children && menuOption.children.length > 0){
 								//$this.parents(".dropup").addClass('open');
 								e.stopPropagation();
 							}
+						}*/
+						let subMenuToShow = $this.siblings("ul.dropdown-menu");
+						if(subMenuToShow.length > 0){
+							subMenuToShow.toggle();
+							e.stopPropagation();
 						}
 					});
 
