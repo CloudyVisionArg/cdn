@@ -976,7 +976,7 @@ function conversationControl(opt) {
 					
 					$li.click(function (e) {
 						var $this = $(this);
-						let subMenuToShow = $(this).siblings("ul.dropdown-menu");
+						let subMenuToShow = $(this).children("ul.dropdown-menu");
 						subMenuToShow.toggle();
 						//let display = subMenuToShow.css("display") == "none" ? display = "block" : display = "none";
 						//.css('display',display);
