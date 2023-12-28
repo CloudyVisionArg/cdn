@@ -982,7 +982,7 @@ function conversationControl(opt) {
 						var $this = $(this);
 						let subMenuToShow = $(this).children("ul.dropdown-menu");
 						subMenuToShow.toggle();
-						if(subMenuToShow.height() > 499){
+						if(subMenuToShow.outerHeight() > 390){
 							subMenuToShow.css("overflow-y","auto");
 						}
 						//let display = subMenuToShow.css("display") == "none" ? display = "block" : display = "none";
