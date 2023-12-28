@@ -919,7 +919,9 @@ function conversationControl(opt) {
 			if (msgInst != null) {
 				if(quickTypes > 1){
 					var $li = $('<li/>', {class: "dropdown-item"}).appendTo($menu);
-					let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
+					let $actionLink = $('<a/>',{
+						class:"quick-message-item"
+					}).append('<i class="fa ' + msgInst.icon + '"></i> <span>' + msgInst.type + '</span>').appendTo($li);
 					$li.click(function (e) {
 						var $this = $(this);
 						let currentType = $(thisInstance.options.selector + " .message-type-button").attr('data-message-type');
