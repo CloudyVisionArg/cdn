@@ -946,7 +946,8 @@ function conversationControl(opt) {
 							e.stopPropagation();
 						}
 						else{
-							$this.parent().toggle();
+							$this.parent().removeClass("show");
+							$this.children("i").attr("aria-expanded","false");
 						}
 					});
 
