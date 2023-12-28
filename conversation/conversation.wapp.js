@@ -373,7 +373,7 @@ function whatsAppDataProvider(opts){
 					resolve(res.data);
 				},
 				function (err) {
-					debugger;
+					//debugger;
 					reject(err.jqXHR);
 				}
 			)
@@ -1409,7 +1409,7 @@ function wappMsg(){
 					try {
 						media = JSON.parse(pMsg.media);
 					} catch (err) {
-						debugger;
+						//debugger;
 						console.log(err);
 					};
 					if (media) {
