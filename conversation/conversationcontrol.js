@@ -923,7 +923,7 @@ function conversationControl(opt) {
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
 						if (thisInstance.options.quickMessageChanged) {
-							thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+							thisInstance.options.quickMessageChanged(msgInst.constructor.name, $li);
 						}
 						if(typeof(menuOption) == "object"){
 							if(menuOption.children && menuOption.children.length > 0){
@@ -936,7 +936,7 @@ function conversationControl(opt) {
 				else{
 					$menu.parent().children("i").click(function(e){
 						if (thisInstance.options.quickMessageChanged) {
-							thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+							thisInstance.options.quickMessageChanged(msgInst.constructor.name, null);
 						}
 					});
 				}
