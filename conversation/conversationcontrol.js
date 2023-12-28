@@ -919,7 +919,7 @@ function conversationControl(opt) {
 					let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
 					$li.click(function (e) {
 						var $this = $(this);
-						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.find('i').attr('class'));
+						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.find('i').first().attr('class'));
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
 						if (thisInstance.options.quickMessageChanged) {
