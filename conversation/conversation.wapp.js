@@ -973,7 +973,7 @@ function whatsAppDataProvider(opts){
 			this.templates.forEach(it => {
 				templates.push({
 					text: it.NAME,
-					name: it.NAME,
+					name: "template",
 					icon: "doc",
 					webIcon: "fa-file-text-o",
 					selectable: true
@@ -1214,18 +1214,38 @@ function whatsAppDataProvider(opts){
 		let me = this;
 		//TODO
 		if (option.name == "audio") {
-			me.sendAudio.call(me);
+			if(typeof(cordova) == "object"){
+				me.sendAudio.call(me);
+			}
+			else{
+				alert("En desarrollo");
+			}
 		} else if (option.name == "camera") {
-			me.sendCamera.call(me);
+			if(typeof(cordova) == "object"){
+				me.sendCamera.call(me);
+			}
+			else{
+				me.sendFileWeb("");
+			}
 		} else if (option.name == "pictures") {
-			me.sendPhoto.call(me);
+			if(typeof(cordova) == "object"){
+				me.sendPhoto.call(me);
+			}
+			else{
+				me.sendFileWeb("");
+			}
 		} else if (option.name == "document") {
-			me.sendFile.call(me);
+			if(typeof(cordova) == "object"){
+				me.sendFile.call(me);
+			}
+			else{
+				me.sendFileWeb("");
+			}
 		} else if (option.name == "location") {
-			me.sendLocation.call(me);
+			alert("En desarrollo");
 		} else if (option.name == "template") {
 			//TODO
-			//me.putTemplate();
+			me.putTemplate(option.text);
 		} else {
 			//TODO
 			//me.sendText(option.name);
