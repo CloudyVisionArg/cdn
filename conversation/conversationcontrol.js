@@ -903,12 +903,12 @@ function conversationControl(opt) {
 
 				if(foundType == null) continue;
 				
-				appendWebMessageTypeOption($menu, foundType, typeName,me.options.quickMessageTypes.length);
+				appendWebMessageTypeOption($menu, foundType, typeName,me.options.quickMessageTypes.length,prov);
 			}
 		}
 	};
 
-	var appendWebMessageTypeOption = function($menu, menuOption, typeName, quickTypes){
+	var appendWebMessageTypeOption = function($menu, menuOption, typeName, quickTypes, prov){
 		let msgInst = null;
 		try {
 			eval("msgInst = new " + typeName + "();");
@@ -932,6 +932,24 @@ function conversationControl(opt) {
 							}
 						}
 					});
+
+					if(prov.getQuickMessageOptions){
+						let options = prov.getQuickMessageOptions(foundType);
+						if(options && options.length > 0){
+							$li.addClass("dropdown-submenu");
+							var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo($li);
+							for (let index = 0; index < options.length; index++) {
+								const option = options[index];
+								var $li = $('<li/>', {class: "dropdown-item"}).appendTo($subMenu);
+								let $actionLink = $('<a/>').append('<i class="fa ' + option.icon + '"></i> ' + option.text).appendTo($li);
+								$actionLink.click(function (e) {
+									var $this = $(this);
+									$(this).parents(".dropup").addClass('open');
+									e.stopPropagation();
+								});
+							}
+						}
+					}
 				}
 				else{
 					$menu.parent().children("i").click(function(e){

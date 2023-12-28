@@ -968,7 +968,66 @@ function whatsAppDataProvider(opts){
 			}
 		}
 	};
-
+	this.getQuickMessageOptions = async function(messageType){
+		return [
+			{
+				text: "Mensaje de voz",
+				name: "audio",
+				icon: "mic",
+				webIcon: "fa-microphone",
+				selectable: true
+			},
+			{
+				text: "C&aacute;mara",
+				name: "camera",
+				icon: "mic",
+				webIcon: "fa-microphone",
+				selectable: true
+			},
+			{
+				text: "Fotos y Videos",
+				name: "pictures",
+				icon: "mic",
+				webIcon: "fa-microphone",
+				selectable: true
+			},
+			{
+				text: "Documento",
+				name: "document",
+				icon: "mic",
+				webIcon: "fa-microphone",
+				selectable: true
+			},
+			{
+				text: "Ubicaci&oacute;n",
+				name: "location",
+				icon: "mic",
+				webIcon: "fa-microphone",
+				selectable: true
+			},
+			{
+				text: "Plantillas",
+				name: "template",
+				icon: "mic",
+				webIcon: "fa-microphone",
+				selectable: false,
+				children: [
+					{
+						text: "Plantillas",
+						name: "template",
+						icon: "mic",
+						webIcon: "fa-microphone",
+						selectable: true
+					}
+				]
+			},
+			{
+				text: "Cancelar",
+				name: "cancel",
+				selectable: true
+			}
+		]
+	};
 	this.displayWhatsAppOptions = function(container){
 		var $media;
 		var me = this;
