@@ -226,6 +226,8 @@ function conversationDataProvider() {
 			reject(null);
 		});
 	};
+	this.executeQuickOption = function (option, typeName) {
+	};
 }
 
 /**
@@ -946,7 +948,7 @@ function conversationControl(opt) {
 
 					if(prov.getQuickMessageOptions){
 						let options = prov.getQuickMessageOptions(typeName);
-						addRecursively($li, options, thisInstance.options.quickOptionSelected);
+						addRecursively($li, options, thisInstance.options.quickOptionSelected, typeName, prov);
 					}
 				}
 				else{
@@ -969,7 +971,7 @@ function conversationControl(opt) {
 		} catch (error) {
 			//TODO
 		}
-		function addRecursively(liItem, children, clickHandler){
+		function addRecursively(liItem, children, clickHandler, typeName, provider){
 			if(children && children.length > 0){
 				liItem.addClass("dropdown-submenu");
 				var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo(liItem);
@@ -992,11 +994,14 @@ function conversationControl(opt) {
 							hideMenu();
 						}
 						if(option.selectable && clickHandler){
-							clickHandler(option);
+							if(provider.executeQuickOption){
+								provider.executeQuickOption(option, typeName);
+							}
+							clickHandler(option, typeName, provider);
 						}
 					});
 					if(option.children && option.children.length > 0){
-						addRecursively($li, option.children, clickHandler);
+						addRecursively($li, option.children, clickHandler, typeName, provider);
 					}
 				}
 			}

@@ -572,7 +572,7 @@ function whatsAppDataProvider(opts){
 		)
 	};
 
-	this.sendAudio = function (pChat) {
+	this.sendAudio = function () {
 		var me = this;
 		this.audioRecorder(function (file) {
 			const previewReader = new FileReader()
@@ -624,7 +624,7 @@ function whatsAppDataProvider(opts){
 				debugger;
 				$btnEnviar.on("click",()=>{
 					URL.revokeObjectURL(previewURL);
-					me.sendMediaFromFile(file, pChat);
+					me.sendMediaFromFile(file);
 					app7.sheet.close(".modal-in");
 					let $modal = $('#wappModal');
 					if($modal.length > 0){
@@ -636,22 +636,22 @@ function whatsAppDataProvider(opts){
         });
 	};
 
-	this.sendCamera = function (pChat) {
+	this.sendCamera = function () {
 		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
 		let permisssion = _isCapacitor() ? CameraPermissionType.Camera : null;
 		me.getPicture(source, permisssion,
 			function (file) {
-				me.sendMedia(file, pChat);
+				me.sendMedia(file);
 			}
 		)
 	};
 
-	this.sendPhoto = function (pChat) {
+	this.sendPhoto = function () {
 		let source = _isCapacitor() ? CameraSource.Photos : Camera.PictureSourceType.PHOTOLIBRARY;
 		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
 		me.getMedia(source, permission,
 			function (file) {
-				me.sendMedia(file, pChat);
+				me.sendMedia(file);
 			}
 		);
 	};
@@ -740,11 +740,11 @@ function whatsAppDataProvider(opts){
 		return new File([blob], pFileName, { type: pFileType });
 	}
 
-	this.sendMedia = function (pFile, pChat) {
+	this.sendMedia = function (pFile) {
 		//todo
         //wapp.cursorLoading(true);
 		if(_isCapacitor()){
-			me.sendMediaFromFile.call(me, pFile, pChat);
+			me.sendMediaFromFile.call(me, pFile);
 			
 		}else{
 			let me = this;
@@ -760,12 +760,12 @@ function whatsAppDataProvider(opts){
 				);
 			} else {
 				//me.sendMediaFromFile(pFile,pChat);
-				me.sendMediaFromFile.call(me, pFile, pChat);
+				me.sendMediaFromFile.call(me, pFile);
 			};
 		}
 	};
 	
-	this.sendMediaFromFile = function(file2, pChat) {
+	this.sendMediaFromFile = function(file2) {
 		//var me = this; se pierde la referencia y en este caso this queda apuntando a window en vez del dataprovider 
 		//var me = whatsAppProvider;
 		//se vuelve a cambiar porque se puede obtener la referencia con el this, si se llama con el ".call"
@@ -806,7 +806,6 @@ function whatsAppDataProvider(opts){
 							alert(errMsg(err));
 
 						} else {
-							var $chat = $(pChat);
 							var fromN = from; //$chat.attr('data-internal-number');
 							var toN = to; //$chat.attr('data-external-number');
 
@@ -916,7 +915,7 @@ function whatsAppDataProvider(opts){
 		}
 	};
 
-	this.sendFileWeb = function (pChat) {
+	this.sendFileWeb = function () {
 		var $file = $('#wappFile');
 		$file.prop('data-chat', "");
 		$file.click();
@@ -1129,19 +1128,19 @@ function whatsAppDataProvider(opts){
 						{
 							text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
 							onClick: function () {
-								me.sendAudio.call(me, mediaActions.params.chatEl);
+								me.sendAudio.call(me);
 							}
 						},
 						{
 							text: '<i class="f7-icons">camera</i>&nbsp;&nbsp;C&aacute;mara',
 							onClick: function () {
-								me.sendCamera(mediaActions.params.chatEl);
+								me.sendCamera();
 							}
 						},
 						{
 							text: '<i class="f7-icons">photo</i>&nbsp;&nbsp;Fotos y Videos',
 							onClick: function () {
-								me.sendPhoto(mediaActions.params.chatEl);
+								me.sendPhoto();
 							}
 						},
 						{
@@ -1183,7 +1182,7 @@ function whatsAppDataProvider(opts){
 										buttons: tempButtons,
 									});
 
-									tempActions.params.chatEl = actions.params.chatEl;
+									
 									tempActions.open();
 
 									function tempClick(actions, e) {
@@ -1206,8 +1205,30 @@ function whatsAppDataProvider(opts){
 				]
 			});
 
-			mediaActions.params.chatEl = $(container)[0];
+			
 			mediaActions.open();
+		}
+	};
+
+	this.executeQuickOption = function (option, messageType) {
+		let me = this;
+		//TODO
+		if (option.name == "audio") {
+			me.sendAudio.call(me);
+		} else if (option.name == "camera") {
+			me.sendCamera.call(me);
+		} else if (option.name == "pictures") {
+			me.sendPhoto.call(me);
+		} else if (option.name == "document") {
+			me.sendFile.call(me);
+		} else if (option.name == "location") {
+			me.sendLocation.call(me);
+		} else if (option.name == "template") {
+			//TODO
+			//me.putTemplate();
+		} else {
+			//TODO
+			//me.sendText(option.name);
 		}
 	};
 
