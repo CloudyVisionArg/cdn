@@ -76,8 +76,8 @@ function conversationStatusBar(options) {
 		if(options.customerData.email) {
 			email = options.customerData.email;
 		}
-		if(options.customerData.phone) {
-			phone = options.customerData.phone;
+		if(options.customerData.mobilePhone) {
+			phone = options.customerData.mobilePhone;
 		}
 
 		$(options.selector).html(`

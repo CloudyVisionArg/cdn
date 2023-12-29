@@ -383,7 +383,7 @@ function messengerDataProvider(opts){
 				},
 				function (err) {
 					console.log(err);
-					debugger;
+					//debugger;
 				}
 			)
 		};

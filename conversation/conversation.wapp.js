@@ -467,26 +467,46 @@ function whatsAppDataProvider(opts){
 
 			// Elimina los caracteres no numericos y da vuelta
 			var extNumberRev = me.cleanNumber(to);
-			var intNumberRev = me.cleanNumber(from);
+			//var intNumberRev = me.cleanNumber(from);
 
-			var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
+			//var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
+			var formula = 'from_numrev like \'' + extNumberRev + '%\' ';
 			
-			DoorsAPI.folderSearch(me.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
+			/*let accArray = [];
+			me.accounts.forEach(function(account){
+				accArray.push("whatsapp:" + account.id);
+			});
+			formula += " and to in ('" + accArray.join("','") + "')";*/
+
+			
+			
+			
+			DoorsAPI.folderSearchGroups(me.messagesFolder,"TO","MAX(CREATED) AS LASTEST",formula).then(
 				function (res) {
 					if (res.length > 0) {
-						render(res[0]['CREATED']);
-					} else {
-						render(undefined);
+						res.forEach(function (it) {
+							let latestMsgDate = new Date(it["LASTEST"]);
+							let account = me.accounts.find(a=> a.id == it["TO"].replace("whatsapp:",""));
+							if(account){
+								var hours = (new Date() - latestMsgDate) / (60 * 60 * 1000);
+								if (hours < 24) {
+									account.status = "go";
+								}
+								else{
+									account.status = "stop";
+								}
+							}
+						});
 					}
 				},
 				function (err) {
 					console.log(err);
-					debugger;
+					//debugger;
 				}
 			)
 		};
 		
-		function render(pDate) {
+		/*function render(pDate) {
 			var light, remain;
 
 			if (pDate) {
@@ -509,7 +529,7 @@ function whatsAppDataProvider(opts){
             $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/' + light + '.png');
 			var $remain = $(me.options.sessionStatusContainer).find('.session .session-time');
 			$remain.html(remain);
-		}
+		}*/
 	}
 
     //TODO Mover afuera? Mover a mensaje?
