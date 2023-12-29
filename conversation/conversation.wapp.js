@@ -131,7 +131,8 @@ function whatsAppDataProvider(opts){
 			me.accounts.push({
 				id: num["NUMBER"],
 				name: num["NAME"],
-				status: "stop"
+				status: "stop",
+				selected: num["DEFAULT"] == "1" ? true : false,
 			});
 		});
 	}

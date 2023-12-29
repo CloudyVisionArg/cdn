@@ -47,7 +47,7 @@ function messengerDataProvider(opts){
 
     var setupRequiredInfo = function () {
         return new Promise((resolve,reject)=>{
-            let reqs = 3;
+            let reqs = 4;
             DoorsAPI.foldersGetByPath(me.rootFolder, '/messenger/messages').then(
                 function (fld) {
                     me.messagesFolder = fld.FldId;
@@ -74,6 +74,22 @@ function messengerDataProvider(opts){
                     tryResolve();
                 }
             );
+            DoorsAPI.foldersGetByPath(me.rootFolder, '/config/registered_connections').then(
+                function (fld) {
+                    me.pagesFolder = fld;
+                    DoorsAPI.folderSearch(me.pagesFolder.FldId, '*', "").then(
+                        function (res) {
+							me.allPages = res;//.map(it => it['NAME']);
+							fillAccounts();
+                            tryResolve();
+                        },function (err){
+                            tryResolve();
+                        }
+                    );
+                },function(err){
+                    tryResolve();
+                }
+            );
 
 			DoorsAPI.accountsSearch("","").then(function(allAccounts){
 				me.allAccounts = allAccounts;
@@ -88,6 +104,7 @@ function messengerDataProvider(opts){
             }
         });
     };
+
 
     setupRequiredInfo().then(function () {
         // Actualiza el estado de la sesion cada 1'
@@ -113,6 +130,17 @@ function messengerDataProvider(opts){
 			refreshSession();
 		});
     });
+
+	var fillAccounts = function(){
+		me.allPages.forEach(function(page){
+			me.accounts.push({
+				id: page["PAGE_ID"],
+				name: page["PAGE_NAME"],
+				status: "stop",
+				selected: page["PAGE_ID"] == me.options.from
+			});
+		});
+	}
 
     this.getMessages = function (msgLimit, maxDate){
 		let me = this;
@@ -373,12 +401,22 @@ function messengerDataProvider(opts){
 
 			var formula = 'sender_id = \'' + to + '\' and recipient_id = \'' + from + '\'';
 			
-			DoorsAPI.folderSearch(me.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
+			DoorsAPI.folderSearchGroups(me.messagesFolder,"TO","MAX(CREATED) AS LASTEST",formula).then(
 				function (res) {
 					if (res.length > 0) {
-						render(res[0]['CREATED']);
-					} else {
-						render(undefined);
+						res.forEach(function (it) {
+							let latestMsgDate = new Date(it["LASTEST"]);
+							let account = me.accounts.find(a=> a.id == it["TO"]);
+							if(account){
+								var hours = (new Date() - latestMsgDate) / (60 * 60 * 1000);
+								if (hours < 24) {
+									account.status = "go";
+								}
+								else{
+									account.status = "stop";
+								}
+							}
+						});
 					}
 				},
 				function (err) {
@@ -388,7 +426,7 @@ function messengerDataProvider(opts){
 			)
 		};
 		
-		function render(pDate) {
+		/*function render(pDate) {
 			var light, remain;
 
 			if (pDate) {
@@ -411,7 +449,7 @@ function messengerDataProvider(opts){
             $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/' + light + '.png');
 			var $remain = $(me.options.sessionStatusContainer).find('.session .session-time');
 			$remain.html(remain);
-		}
+		}*/
 	}
 
     //TODO Mover afuera? Mover a mensaje?
