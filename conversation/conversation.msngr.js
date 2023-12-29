@@ -371,7 +371,7 @@ function messengerDataProvider(opts){
 			//var extNumberRev = me.cleanNumber(to);
 			//var intNumberRev = me.cleanNumber(from);
 
-			var formula = 'sender_id = \'' + to + '\' or recipient_id = \'' + to + '\'';
+			var formula = 'sender_id = \'' + to + '\' and recipient_id = \'' + from + '\'';
 			
 			DoorsAPI.folderSearch(me.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
 				function (res) {

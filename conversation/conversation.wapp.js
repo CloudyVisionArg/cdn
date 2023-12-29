@@ -244,6 +244,10 @@ function whatsAppDataProvider(opts){
 			to: to,
 			body: msge.body
 		}
+		let selectedAccount = me.accounts.find(a=> a.selected == true);
+		if(selectedAccount){
+			msg.from = selectedAccount.name;
+		}
 		if(input && input.attr("data-template")){
 			let template = JSON.parse(input.attr("data-template"));
 			let vars = input.attr("data-template-vars") ? JSON.parse(input.attr("data-template-vars")) : [];

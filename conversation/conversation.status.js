@@ -168,8 +168,13 @@ function conversationStatusBar(options) {
 			var accountId = account.val();
 			//var accountStatus = account.data('accountStatus');
 			me.selectedProvider = provider;
-			me.selectedAccount = provider.accounts.find(a=> a.id == accountId);
+			me.selectedAccount = provider.accounts.find((a)=>{
+				a.selected = false; 
+				return a.id == accountId;
+			});
+			me.selectedAccount.selected = true;
 			updateAccountStatus();
+			
 			//me.selectedAccount.status = accountStatus;
 			//Trigger event
 			//$(me).trigger('providerChanged', [me.selectedProvider, me.selectedAccount]);
