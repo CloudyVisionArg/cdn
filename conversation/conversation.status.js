@@ -69,7 +69,7 @@ function conversationStatusBar(options) {
 		var accountsHtml = getAccountsHtml(options.providers);
 		let name = "(sin nombre)";
 		let email = "(sin email)";
-		let celular = "(sin celular)";
+		let phone = "(sin celular)";
 		if(options.customerData.name) {
 			name = options.customerData.name;
 		}
@@ -77,7 +77,7 @@ function conversationStatusBar(options) {
 			email = options.customerData.email;
 		}
 		if(options.customerData.phone) {
-			celular = options.customerData.phone;
+			phone = options.customerData.phone;
 		}
 
 		$(options.selector).html(`
