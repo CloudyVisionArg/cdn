@@ -111,13 +111,13 @@ function conversationStatusBar(options) {
 							fill:#F44336;
 						}
 						svg.stop #Green_Light .light-shine {
-							fill: #b5b5b5;
+							fill: #e1e1e1;
 						}
 						svg.stop #Green_Light circle {
 							fill: ${options.disabledColor};
 						}
 						svg.go #Red_Light .light-shine {
-							fill: #b5b5b5;
+							fill: #e1e1e1;
 						}
 						svg.go #Red_Light circle {
 							fill: ${options.disabledColor};
@@ -182,8 +182,8 @@ function conversationStatusBar(options) {
 		providers.forEach(function (provider) {
 			let accounts = provider.accounts;
 			accounts.forEach(function (account) {
-				let contentRender = "<div class='conv-account-cont'><div class='conv-account' data-account-status='" + account.status + "' ></div><div class='conv-account-info'><span class='conv-account-name'>" + account.name + "</span><span>" + 
-				account.description + "</span></div></div>";
+				let contentRender = "<div class='conv-account-cont'><div class='conv-account " + account.status + "' data-account-status='" + account.status + "' ></div><div class='conv-account-info'><span class='conv-account-name'>" + account.name + "</span><span>" + 
+				account.id + "</span></div></div>";
 				optionHtml = `<option value="${account.id}" data-content="${contentRender}" data-provider-indx="${provIndx}">${account.name}</option>`;
 				html += optionHtml;
 			});
