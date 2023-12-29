@@ -187,7 +187,8 @@ function conversationStatusBar(options) {
 		providers.forEach(function (provider) {
 			let accounts = provider.accounts;
 			accounts.forEach(function (account) {
-				let contentRender = "<div class='conv-account-cont'><div class='conv-account " + account.status + "' data-account-status='" + account.status + "' ></div><div class='conv-account-info'><span class='conv-account-name'>" + account.name + "</span><span>" + 
+				let contentRender = "<div class='conv-account-cont'><div class='conv-account " + account.status + "' data-account-status='" + 
+				account.status + "' ><i class='fa " + account.icon + "'></i></div><div class='conv-account-info'><span class='conv-account-name'>" + account.name + "</span><span>" + 
 				account.id + "</span></div></div>";
 				let selected = account.selected ? "selected" : "";
 				optionHtml = `<option value="${account.id}" ${selected} data-content="${contentRender}" data-provider-indx="${provIndx}">${account.name}</option>`;

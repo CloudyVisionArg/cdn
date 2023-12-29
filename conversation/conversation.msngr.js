@@ -133,12 +133,15 @@ function messengerDataProvider(opts){
 
 	var fillAccounts = function(){
 		me.allPages.forEach(function(page){
-			me.accounts.push({
-				id: page["PAGE_ID"],
-				name: page["PAGE_NAME"],
-				status: "stop",
-				selected: page["PAGE_ID"] == me.options.from
-			});
+			if(page["PAGE_ID"] == me.options.pageId){
+				me.accounts.push({
+					id: page["PAGE_ID"],
+					name: page["PAGE_NAME"],
+					status: "stop",
+					selected: page["PAGE_ID"] == me.options.from,
+					icon: "fa-wechat"
+				});
+			}
 		});
 	}
 

@@ -133,6 +133,7 @@ function whatsAppDataProvider(opts){
 				name: num["NAME"],
 				status: "stop",
 				selected: num["DEFAULT"] == "1" ? true : false,
+				icon: "fa-whatsapp"
 			});
 		});
 	}
