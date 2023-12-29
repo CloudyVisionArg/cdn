@@ -203,7 +203,7 @@ function conversationStatusBar(options) {
 			else if(provider instanceof messengerDataProvider){
 				provName = "Facebook";
 			}
-			html += `<optgroup label="${provName}">`;
+			html += `<optgroup label="${provName}" data-content="<span>${provName}</span>">`;
 			accounts.forEach(function (account) {
 				let contentRender = getContentRender(account);
 				let selected = account.selected ? "selected" : "";
