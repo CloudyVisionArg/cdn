@@ -20,6 +20,7 @@ function conversationStatusBar(options) {
 		disabledColor: '#b5b5b5',
 		stopColor: '#F44336',
 		goColor: '#37e13e',
+		accountsFilter: 0 == 0,
 		render: null
 	};
 	var options = $.extend(defaults, options);
@@ -112,7 +113,7 @@ function conversationStatusBar(options) {
 							fill:#FF8155;
 						}
 						svg.stop #Red_Light circle {
-							fill:#F44336;
+							fill:${options.stopColor};
 						}
 						svg.stop #Green_Light .light-shine {
 							fill: #e1e1e1;
@@ -130,7 +131,7 @@ function conversationStatusBar(options) {
 							fill:#aff3af;
 						}
 						svg.go #Green_Light circle {
-							fill:#37e13e;
+							fill:${options.goColor};
 						}
 					</style>
 					<path class="st0" d="M0,412.5v-330C0,37,27.9,0,62.3,0h660.2c34.4,0,62.3,37,62.3,82.5v330.1c0,45.6-27.9,82.5-62.3,82.5H62.3
@@ -194,7 +195,7 @@ function conversationStatusBar(options) {
 		var html = "<select class='conversation-providers-select'>";
 		let provIndx = 0;
 		providers.forEach(function (provider) {
-			let accounts = provider.accounts;
+			let accounts = provider.accounts.filter((a)=>{ options.accountsFilter });
 			accounts.forEach(function (account) {
 				let contentRender = getContentRender(account);
 				let selected = account.selected ? "selected" : "";
