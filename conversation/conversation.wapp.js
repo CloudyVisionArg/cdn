@@ -57,6 +57,7 @@ function whatsAppDataProvider(opts){
     this.s3Key = opts.s3Key || null;
 	this.allAccounts = [];
 	this.messagesFolder = opts.messagesFolder || null;
+	this.numbers = [];
     let me = this;
 	var wappLib = opts.wappLib || null;
 	var intervalId;
@@ -69,7 +70,7 @@ function whatsAppDataProvider(opts){
 
     var setupRequiredInfo = function () {
         return new Promise((resolve,reject)=>{
-            let reqs = 3;
+            let reqs = 4;
             DoorsAPI.foldersGetByName(me.rootFolder, 'messages').then(
                 function (fld) {
                     me.messagesFolder = fld.FldId;
@@ -94,6 +95,22 @@ function whatsAppDataProvider(opts){
                     tryResolve();
                 }
             );
+            DoorsAPI.foldersGetByName(me.rootFolder, 'numbers').then(
+                function (fld) {
+                    me.numbersFolder = fld;
+                    DoorsAPI.folderSearch(fld.FldId, '*', '', 'name').then(
+                        function (res) {
+                            me.numbers = res;//.map(it => it['NAME']);
+							fillAccounts();
+                            tryResolve();
+                        },function (err){
+                            tryResolve();
+                        }
+                    );
+                },function(err){
+                    tryResolve();
+                }
+            );
 
 			DoorsAPI.accountsSearch("","").then(function(allAccounts){
 				me.allAccounts = allAccounts;
@@ -108,6 +125,16 @@ function whatsAppDataProvider(opts){
             }
         });
     };
+
+	var fillAccounts = function(){
+		me.numbers.forEach(function(num){
+			me.accounts.push({
+				id: num["NUMBER"],
+				name: num["NAME"],
+				status: "stop"
+			});
+		});
+	}
 
     setupRequiredInfo().then(function () {
         // Carga mensajes nuevos cada 5 segs
