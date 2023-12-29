@@ -401,12 +401,12 @@ function messengerDataProvider(opts){
 
 			var formula = 'sender_id = \'' + to + '\' and recipient_id = \'' + from + '\'';
 			
-			DoorsAPI.folderSearchGroups(me.messagesFolder,"TO","MAX(CREATED) AS LASTEST",formula).then(
+			DoorsAPI.folderSearchGroups(me.messagesFolder,"recipient_id","MAX(CREATED) AS LASTEST",formula).then(
 				function (res) {
 					if (res.length > 0) {
 						res.forEach(function (it) {
 							let latestMsgDate = new Date(it["LASTEST"]);
-							let account = me.accounts.find(a=> a.id == it["TO"]);
+							let account = me.accounts.find(a=> a.id == it["RECIPIENT_ID"]);
 							if(account){
 								var hours = (new Date() - latestMsgDate) / (60 * 60 * 1000);
 								if (hours < 24) {
