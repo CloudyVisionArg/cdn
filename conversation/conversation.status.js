@@ -199,6 +199,9 @@ function conversationStatusBar(options) {
 		let provIndx = 0;
 		providers.forEach(function (provider) {
 			let accounts = provider.accounts.filter(options.accountsFilter);
+			if(accounts.length == 0){
+				return;
+			}
 			let provName = "";
 			if(provider instanceof whatsAppDataProvider){
 				provName = "Whatsapp";
@@ -214,7 +217,7 @@ function conversationStatusBar(options) {
 					me.selectedProvider = provider;
 					me.selectedAccount = account;
 				}
-				optionHtml = `<option value="${account.id}" ${selected} data-content="${contentRender}" data-provider-indx="${provIndx}">${account.name}</option>`;
+				let optionHtml = `<option value="${account.id}" ${selected} data-content="${contentRender}" data-provider-indx="${provIndx}">${account.name}</option>`;
 				html += optionHtml;
 			});
 			html += "</optgroup>";
