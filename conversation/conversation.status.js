@@ -20,7 +20,7 @@ function conversationStatusBar(options) {
 		disabledColor: '#b5b5b5',
 		stopColor: '#F44336',
 		goColor: '#37e13e',
-		accountsFilter: 0 == 0,
+		accountsFilter: (a)=> 0 == 0,
 		render: null
 	};
 	var options = $.extend(defaults, options);
@@ -195,7 +195,7 @@ function conversationStatusBar(options) {
 		var html = "<select class='conversation-providers-select'>";
 		let provIndx = 0;
 		providers.forEach(function (provider) {
-			let accounts = provider.accounts.filter((a)=>{ options.accountsFilter });
+			let accounts = provider.accounts.filter(options.accountsFilter);
 			accounts.forEach(function (account) {
 				let contentRender = getContentRender(account);
 				let selected = account.selected ? "selected" : "";
