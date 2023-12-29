@@ -57,6 +57,10 @@ function conversationStatusBar(options) {
 			else if(me.selectedAccount.status == "go"){
 				statusSvg.removeClass("stop").addClass("go");
 			}
+
+			let contentRender = getContentRender(me.selectedAccount);
+			$(options.selector + ' .conversation-providers-select option[value="' + me.selectedAccount.id + '"]').attr('data-content', contentRender);
+			$(options.selector + ' .conversation-providers-select').selectpicker('refresh');
 		}
 		//me.selectedProvider
 		//#b5b5b5
@@ -180,16 +184,19 @@ function conversationStatusBar(options) {
 			//$(me).trigger('providerChanged', [me.selectedProvider, me.selectedAccount]);
 		});
 	}
-
+	var getContentRender = function (account) {
+		let contentRender = "<div class='conv-account-cont'><div class='conv-account " + account.status + "' data-account-status='" + 
+				account.status + "' ><i class='fa " + account.icon + "'></i></div><div class='conv-account-info'><span class='conv-account-name'>" + account.name + "</span><span>" + 
+				account.id + "</span></div></div>";
+		return contentRender;
+	};
 	var getAccountsHtml = function (providers) {
 		var html = "<select class='conversation-providers-select'>";
 		let provIndx = 0;
 		providers.forEach(function (provider) {
 			let accounts = provider.accounts;
 			accounts.forEach(function (account) {
-				let contentRender = "<div class='conv-account-cont'><div class='conv-account " + account.status + "' data-account-status='" + 
-				account.status + "' ><i class='fa " + account.icon + "'></i></div><div class='conv-account-info'><span class='conv-account-name'>" + account.name + "</span><span>" + 
-				account.id + "</span></div></div>";
+				let contentRender = getContentRender(account);
 				let selected = account.selected ? "selected" : "";
 				if(account.selected){
 					me.selectedProvider = provider;
