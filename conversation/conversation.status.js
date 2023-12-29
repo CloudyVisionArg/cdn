@@ -209,7 +209,7 @@ function conversationStatusBar(options) {
 			else if(provider instanceof messengerDataProvider){
 				provName = "Facebook";
 			}
-			html += `<optgroup label="${provName}" data-content="<span>${provName}</span>">`;
+			//html += `<optgroup label="${provName}" data-content="<span>${provName}</span>">`;
 			accounts.forEach(function (account) {
 				let contentRender = getContentRender(account);
 				let selected = account.selected ? "selected" : "";
@@ -220,7 +220,7 @@ function conversationStatusBar(options) {
 				let optionHtml = `<option value="${account.id}" ${selected} data-content="${contentRender}" data-provider-indx="${provIndx}">${account.name}</option>`;
 				html += optionHtml;
 			});
-			html += "</optgroup>";
+			//html += "</optgroup>";
 			provIndx++;
 		});
 		html += "</select>";
