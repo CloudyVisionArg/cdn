@@ -139,7 +139,7 @@ function messengerDataProvider(opts){
 					name: page["PAGE_NAME"],
 					status: "stop",
 					selected: page["PAGE_ID"] == me.options.from,
-					icon: "fa-wechat"
+					icon: "fa-facebook"
 				});
 			}
 		});
