@@ -133,7 +133,7 @@ function messengerDataProvider(opts){
 
 	var fillAccounts = function(){
 		me.allPages.forEach(function(page){
-			if(page["PAGE_ID"] == me.options.pageId){
+			if(page["PAGE_ID"] == me.options.from){
 				me.accounts.push({
 					id: page["PAGE_ID"],
 					name: page["PAGE_NAME"],
