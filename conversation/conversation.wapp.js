@@ -293,6 +293,10 @@ function whatsAppDataProvider(opts){
 					
 					resolve(msgObj);
 				},function(err){
+					//if(input){
+					//	input.val(msg.body);
+					//}
+					alert("No se pudo enviar el mensaje. Detalle: " + err.message);
 					reject(err);
 				});
 			}
@@ -320,7 +324,7 @@ function whatsAppDataProvider(opts){
 					},
 					function (err) {
 						//wapp.cursorLoading(false);
-						//alert('Error: ' + err.jqXHR.responseText);
+						alert('No se pudo enviar el mensaje. Detalle: ' + err.jqXHR.responseText);
 						reject(err);
 					}
 				)
