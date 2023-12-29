@@ -171,6 +171,9 @@ function conversationStatusBar(options) {
 			var providerIndx = account.attr('data-provider-indx');
 			var provider = options.providers[providerIndx];
 			var accountId = account.val();
+			if(me.selectedAccount && me.selectedAccount.id == accountId){
+				return;
+			}
 			//var accountStatus = account.data('accountStatus');
 			me.selectedProvider = provider;
 			me.selectedAccount = provider.accounts.find((a)=>{
