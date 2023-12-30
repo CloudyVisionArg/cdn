@@ -529,6 +529,49 @@ function exitForm() {
         history.back();
     }
 }
+function exitFormv2(triggerCallback) {
+    let callbackFn = urlParams.get('callbackfunction');
+    let closeonexit = urlParams.get('closeonexit');
+    if(callbackFn){
+        if (triggerCallback) {
+            if (window.opener) {
+                eval("window.opener." + callbackFn + "(" + doc.id + ")");
+            }
+            if (window.parent) {
+                try {
+                    let existsInParent = eval("window.parent." + callbackFn);
+                    if (existsInParent) {
+                        eval("window.parent." + callbackFn + "(" + doc.id + ")");
+                    } else {
+                        eval("window.parent.exFrameDer.contentWindow." + callbackFn + "(" + doc.id + ")");
+                    }
+                } catch(ee){
+
+                }
+            }
+        }
+    }
+    if(closeonexit == "1"){
+        try{
+            if (window.top == window.self) {
+                window.close();
+            }
+            document.write('Se guardaron los cambios, debe cerrar la pagina manualmente');
+        } catch(ex){
+            document.write('Se guardaron correctamente los cambios, debe cerrar la pagina manualmente');
+        }
+    } else {
+        let contentUrl = "/c/content.asp?fld_id=" + fld_id;
+        if (top.navigate) {
+            window.location = contentUrl;
+        }
+        else {
+            document.location.href = contentUrl;
+        }
+    }
+    //TODO: sBackToFld
+}
+
 
 function getDefaultControl(pField) {
     var $ret, $input, label;
