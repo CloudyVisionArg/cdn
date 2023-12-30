@@ -522,14 +522,14 @@ function printForm() {
 	frm.window ? frm.window.print() : frm.print();
 }
 
-function exitForm() {
+function exitFormv1() {
     if (window.top == window.self) {
         window.close();
     } else {
         history.back();
     }
 }
-function exitFormv2(triggerCallback) {
+function exitForm(triggerCallback) {
     let callbackFn = urlParams.get('callbackfunction');
     let closeonexit = urlParams.get('closeonexit');
     if(callbackFn){
