@@ -356,6 +356,7 @@ function messengerDataProvider(opts){
 
     var getMessageByActType = function(actDoc){
         let msgIns = new messengerMsg();
+		msgIns.viewImage = me.viewImage;
         let actType = "Messenger";
         
         if(msgIns && actDoc){
@@ -1162,6 +1163,7 @@ function messengerMsg(){
 	this.placesUrl = null;
 	this.pageId = null;
 	this.jsonBody = null;
+	this.viewImage = function(e){};
 	this.getMessageHtml = function(message){
 		var me = this;
 		return new Promise((resolve, reject) => {
@@ -1194,7 +1196,7 @@ function messengerMsg(){
 							$('<img/>', {
 								src: att.payload.url,
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
-							}).click(messengerProvider.viewImage).appendTo($div);
+							}).click(me.viewImage).appendTo($div);
 								
 						} else if (att.type == 'audio') {
 							var $med = $('<audio/>', {
