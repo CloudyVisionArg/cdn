@@ -413,7 +413,7 @@ function messengerDataProvider(opts){
 							let account = me.accounts.find(a=> a.id == it["RECIPIENT_ID"]);
 							if(account){
 								var hours = (new Date() - latestMsgDate) / (60 * 60 * 1000);
-								if (hours < 24) {
+								if (hours < 144) {
 									account.status = "go";
 								}
 								else{
