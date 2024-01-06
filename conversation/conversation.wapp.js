@@ -1024,64 +1024,91 @@ function whatsAppDataProvider(opts){
 			}
 		}
 	};
-	this.getQuickMessageOptions = function(messageType){
-		let templates = [];
-		if (this.templates && this.templates.length > 0) {
-			this.templates.forEach(it => {
-				templates.push({
-					text: it.NAME,
-					name: "template",
-					icon: "doc",
-					webIcon: "fa-file-text-o",
-					selectable: true
-				});
-			});
-		}
-		return [
-			{
-				text: "Mensaje de voz",
-				name: "audio",
-				icon: "mic",
-				webIcon: "fa-microphone",
-				selectable: true
-			},
-			{
-				text: "C&aacute;mara",
-				name: "camera",
-				icon: "camera",
-				webIcon: "fa-camera",
-				selectable: true
-			},
-			{
-				text: "Fotos y Videos",
-				name: "pictures",
-				icon: "photo",
-				webIcon: "fa-picture-o",
-				selectable: true
-			},
-			{
-				text: "Documento",
-				name: "document",
-				icon: "doc",
-				webIcon: "fa-file-o",
-				selectable: true
-			},
-			{
-				text: "Ubicaci&oacute;n",
-				name: "location",
-				icon: "placemark",
-				webIcon: "fa-map-marker",
-				selectable: true
-			},
-			{
-				text: "Plantillas",
-				name: "template",
-				icon: "chat_bubble_text",
-				webIcon: "fa-file-text-o",
-				selectable: false,
-				children: templates
+	this.getQuickMessageOptions = async function(messageType){
+		let me = this;
+		return new Promise(resolve,reject=>{
+			let templates = [];
+			if (me.templates.length == 0){
+				DoorsAPI.foldersGetByName(me.rootFolder, 'templates').then(
+					function (fld) {
+						me.templatesFolder = fld.FldId;
+						DoorsAPI.folderSearch(me.templatesFolder, 'name,text,doc_id', '', 'name').then(
+							function (res) {
+								me.templates = res;//.map(it => it['NAME']);
+								tryResolve();
+							},function (err){
+								reject(err);
+							}
+						);
+					},function(err){
+						reject(err);
+					}
+				);
 			}
-		]
+			else{
+				tryResolve();
+			}
+
+			function tryResolve(){
+				if (me.templates && me.templates.length > 0) {
+					me.templates.forEach(it => {
+						templates.push({
+							text: it.NAME,
+							name: "template",
+							icon: "doc",
+							webIcon: "fa-file-text-o",
+							selectable: true
+						});
+					});
+				}
+				
+				resolve([
+					{
+						text: "Mensaje de voz",
+						name: "audio",
+						icon: "mic",
+						webIcon: "fa-microphone",
+						selectable: true
+					},
+					{
+						text: "C&aacute;mara",
+						name: "camera",
+						icon: "camera",
+						webIcon: "fa-camera",
+						selectable: true
+					},
+					{
+						text: "Fotos y Videos",
+						name: "pictures",
+						icon: "photo",
+						webIcon: "fa-picture-o",
+						selectable: true
+					},
+					{
+						text: "Documento",
+						name: "document",
+						icon: "doc",
+						webIcon: "fa-file-o",
+						selectable: true
+					},
+					{
+						text: "Ubicaci&oacute;n",
+						name: "location",
+						icon: "placemark",
+						webIcon: "fa-map-marker",
+						selectable: true
+					},
+					{
+						text: "Plantillas",
+						name: "template",
+						icon: "chat_bubble_text",
+						webIcon: "fa-file-text-o",
+						selectable: false,
+						children: templates
+					}
+				])
+			}
+		});
 	};
 	this.displayWhatsAppOptions = function(container){
 		var $media;

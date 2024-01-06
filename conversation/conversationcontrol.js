@@ -154,6 +154,7 @@ function conversationBaseDataProvider() {
 	this.supportedTypes = ["msg"];
 	this.conversationControl = null;
 	this.accounts = [];
+	this.getQuickMessageOptions = null;
 	this.getMessages = function (msgLimit, maxDate) {
 		return new Promise(function (resolve, reject) { resolve([]) });
 	};
@@ -938,7 +939,7 @@ function conversationControl(opt) {
 		}
 	};
 
-	var appendWebMessageTypeOption = function($menu, menuOption, typeName, quickTypes, prov){
+	var appendWebMessageTypeOption = async function($menu, menuOption, typeName, quickTypes, prov){
 		let msgInst = null;
 		try {
 			eval("msgInst = new " + typeName + "();");
@@ -981,7 +982,7 @@ function conversationControl(opt) {
 					});
 
 					if(prov.getQuickMessageOptions){
-						let options = prov.getQuickMessageOptions(typeName);
+						let options = await prov.getQuickMessageOptions(typeName);
 						addRecursively($li, options, thisInstance.options.quickOptionSelected, typeName, prov);
 					}
 				}
@@ -1066,7 +1067,7 @@ function conversationControl(opt) {
 						var thisInstance = me;
 						btns.push({
 							text: '<i class="fa ' + msgInst.icon + '"></i> <span>' + msgInst.type + '</span>',
-							onClick: function () {
+							onClick: async function () {
 								debugger;
 								$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $(this.text).attr("class"));
 								$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
@@ -1075,7 +1076,7 @@ function conversationControl(opt) {
 									thisInstance.options.quickMessageChanged(msgInst.constructor.name);
 								}
 								if(prov.getQuickMessageOptions){
-									let subOptions = prov.getQuickMessageOptions(typeName);
+									let subOptions = await prov.getQuickMessageOptions(typeName);
 									if(subOptions && subOptions.length > 0){
 										tryToDisplayQuickMessageOptions(subOptions);
 									}

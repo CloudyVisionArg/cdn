@@ -720,29 +720,32 @@ function messengerDataProvider(opts){
 		$file.prop('data-chat', pChat);
 		$file.click();
 	};
-	this.getQuickMessageOptions = function(messageType){
-		let templates = [];
-		if (this.templates && this.templates.length > 0) {
-			this.templates.forEach(it => {
-				templates.push({
-					text: it.NAME,
-					name: "template",
-					icon: "doc",
-					webIcon: "fa-file-text-o",
-					selectable: true
+	this.getQuickMessageOptions = async function(messageType){
+		let me = this;
+		return new Promise(resolve,reject=>{
+			let templates = [];
+			if (me.templates && me.templates.length > 0) {
+				me.templates.forEach(it => {
+					templates.push({
+						text: it.NAME,
+						name: "template",
+						icon: "doc",
+						webIcon: "fa-file-text-o",
+						selectable: true
+					});
 				});
-			});
-		}
-		return [
-			{
-				text: "Plantillas",
-				name: "template",
-				icon: "chat_bubble_text",
-				webIcon: "fa-file-text-o",
-				selectable: false,
-				children: templates
 			}
-		]
+			resolve([
+				{
+					text: "Plantillas",
+					name: "template",
+					icon: "chat_bubble_text",
+					webIcon: "fa-file-text-o",
+					selectable: false,
+					children: templates
+				}
+			]);
+		});
 	};
 	this.executeQuickOption = function (option, messageType) {
 		let me = this;
