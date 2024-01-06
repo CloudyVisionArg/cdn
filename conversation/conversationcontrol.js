@@ -561,6 +561,7 @@ function conversationControl(opt) {
 					'data-bs-toggle': 'dropdown',
 					'data-bs-auto-close': 'outside',
 					'aria-expanded': 'false',
+					'data-bs-target': "#messageTypesFirstMenu"
 				}).appendTo($dropup);
 
 				$media.click(function () {
@@ -573,6 +574,7 @@ function conversationControl(opt) {
 				})
 
 				var $menu = $('<ul/>', {
+					id: "messageTypesFirstMenu",
 					class: 'dropdown-menu',
 				}).appendTo($dropup);
 
