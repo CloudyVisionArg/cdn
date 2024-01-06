@@ -1028,7 +1028,7 @@ function whatsAppDataProvider(opts){
 		let me = this;
 		return new Promise((resolve,reject)=>{
 			let templates = [];
-			if (me.templates.length == 0){
+			if (!me.templates || me.templates.length == 0){
 				DoorsAPI.foldersGetByName(me.rootFolder, 'templates').then(
 					function (fld) {
 						me.templatesFolder = fld.FldId;
