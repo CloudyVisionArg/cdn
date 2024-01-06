@@ -589,6 +589,7 @@ function conversationControl(opt) {
 
 				var $menu = $('<ul/>', {
 					id: "messageTypesFirstMenu",
+					style: "position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(44px, -34px);",
 					class: 'dropdown-menu',
 				}).appendTo($dropup);
 
