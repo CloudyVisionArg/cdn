@@ -564,13 +564,27 @@ function conversationControl(opt) {
 					'data-bs-target': "#messageTypesFirstMenu"
 				}).appendTo($dropup);
 
-				$media.click(function () {
-					/*let $this = $(this);
-					let $dropup = $this.closest('div.dropup');
-					let $menu = $dropup.find('ul.dropdown-menu');
-					if($menu.hasClass('show')){
-						$menu.removeClass('show');
-					}*/
+				$media.click(function (event) {
+					event.preventDefault();
+    				event.stopPropagation();
+
+    				//$(this).parents(".dropdown-menu").first().find(".show").removeClass("show");
+    				//$(this).parents(".dropdown-menu").first().find("[aria-expanded='true']").attr("aria-expanded", false);
+					if($(this).attr("aria-expanded") == "true"){
+
+						$(this).attr("aria-expanded", false);
+					}
+					else{
+						$(this).attr("aria-expanded", true);
+					}
+    				$(this).siblings(".dropdown-menu").toggleClass("show");
+
+					// $(this)
+					// 	.parents(".nav-item.dropdown")
+					// 	.on("hidden.bs.dropdown", function (e) {
+					// 		$(".dropdown-submenu .show").removeClass("show");
+					// 		$(".dropdown-submenu [aria-expanded='true']").attr("aria-expanded", false);
+					// 	});
 				})
 
 				var $menu = $('<ul/>', {
