@@ -1026,7 +1026,7 @@ function whatsAppDataProvider(opts){
 	};
 	this.getQuickMessageOptions = async function(messageType){
 		let me = this;
-		return new Promise(resolve,reject=>{
+		return new Promise((resolve,reject)=>{
 			let templates = [];
 			if (me.templates.length == 0){
 				DoorsAPI.foldersGetByName(me.rootFolder, 'templates').then(
@@ -1035,7 +1035,7 @@ function whatsAppDataProvider(opts){
 						DoorsAPI.folderSearch(me.templatesFolder, 'name,text,doc_id', '', 'name').then(
 							function (res) {
 								me.templates = res;//.map(it => it['NAME']);
-								tryResolve();
+								tryResolve(resolve);
 							},function (err){
 								reject(err);
 							}
@@ -1046,10 +1046,10 @@ function whatsAppDataProvider(opts){
 				);
 			}
 			else{
-				tryResolve();
+				tryResolve(resolve);
 			}
 
-			function tryResolve(){
+			function tryResolve(res){
 				if (me.templates && me.templates.length > 0) {
 					me.templates.forEach(it => {
 						templates.push({
@@ -1062,7 +1062,7 @@ function whatsAppDataProvider(opts){
 					});
 				}
 				
-				resolve([
+				res([
 					{
 						text: "Mensaje de voz",
 						name: "audio",
