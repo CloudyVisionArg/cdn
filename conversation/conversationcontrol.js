@@ -559,16 +559,17 @@ function conversationControl(opt) {
 					class: 'fa ' + defaultIcon,
 					'data-toggle': 'dropdown',
 					'data-bs-toggle': 'dropdown',
+					'data-bs-auto-close': 'outside',
 					'aria-expanded': 'false',
 				}).appendTo($dropup);
 
 				$media.click(function () {
-					let $this = $(this);
+					/*let $this = $(this);
 					let $dropup = $this.closest('div.dropup');
 					let $menu = $dropup.find('ul.dropdown-menu');
 					if($menu.hasClass('show')){
 						$menu.removeClass('show');
-					}
+					}*/
 				})
 
 				var $menu = $('<ul/>', {
