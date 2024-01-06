@@ -557,9 +557,9 @@ function conversationControl(opt) {
 
 				$media = $('<i/>', {
 					class: 'fa ' + defaultIcon,
-					'data-toggle': 'dropdown',
+					/*'data-toggle': 'dropdown',
 					'data-bs-toggle': 'dropdown',
-					'data-bs-auto-close': 'outside',
+					'data-bs-auto-close': 'outside',*/
 					'aria-expanded': 'false',
 					'data-bs-target': "#messageTypesFirstMenu"
 				}).appendTo($dropup);
