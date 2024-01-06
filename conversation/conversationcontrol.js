@@ -562,6 +562,15 @@ function conversationControl(opt) {
 					'aria-expanded': 'false',
 				}).appendTo($dropup);
 
+				$media.click(function () {
+					let $this = $(this);
+					let $dropup = $this.closest('div.dropup');
+					let $menu = $dropup.find('ul.dropdown-menu');
+					if($menu.hasClass('show')){
+						$menu.removeClass('show');
+					}
+				})
+
 				var $menu = $('<ul/>', {
 					class: 'dropdown-menu',
 				}).appendTo($dropup);
