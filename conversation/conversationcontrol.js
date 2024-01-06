@@ -939,7 +939,7 @@ function conversationControl(opt) {
 		}
 	};
 
-	var appendWebMessageTypeOption = async function($menu, menuOption, typeName, quickTypes, prov){
+	var appendWebMessageTypeOption = function($menu, menuOption, typeName, quickTypes, prov){
 		let msgInst = null;
 		try {
 			eval("msgInst = new " + typeName + "();");
@@ -982,8 +982,9 @@ function conversationControl(opt) {
 					});
 
 					if(prov.getQuickMessageOptions){
-						let options = await prov.getQuickMessageOptions(typeName);
-						addRecursively($li, options, thisInstance.options.quickOptionSelected, typeName, prov);
+						prov.getQuickMessageOptions(typeName).then(options=>{
+							addRecursively($li, options, thisInstance.options.quickOptionSelected, typeName, prov);
+						});
 					}
 				}
 				else{
@@ -1067,7 +1068,7 @@ function conversationControl(opt) {
 						var thisInstance = me;
 						btns.push({
 							text: '<i class="fa ' + msgInst.icon + '"></i> <span>' + msgInst.type + '</span>',
-							onClick: async function () {
+							onClick: function () {
 								debugger;
 								$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $(this.text).attr("class"));
 								$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
@@ -1076,10 +1077,11 @@ function conversationControl(opt) {
 									thisInstance.options.quickMessageChanged(msgInst.constructor.name);
 								}
 								if(prov.getQuickMessageOptions){
-									let subOptions = await prov.getQuickMessageOptions(typeName);
-									if(subOptions && subOptions.length > 0){
-										tryToDisplayQuickMessageOptions(subOptions);
-									}
+									prov.getQuickMessageOptions(typeName).then(subOptions=>{
+										if(subOptions && subOptions.length > 0){
+											tryToDisplayQuickMessageOptions(subOptions);
+										}
+									});
 								}
 								
 							}
