@@ -1278,7 +1278,7 @@ export class Application {
     @returns {number}
     */
     get rootFolderId() {
-        return this.#parent.toJSON().RootFolderId;
+        return this.#parent.rootFolderId;
     }
 
     /**
@@ -1825,10 +1825,6 @@ export class Document {
     _reset() {
         this.#parent = undefined;
         this.#fieldsMap = undefined;
-        /* Por si cargue adjuntos para guardar dps de Save
-        this.#attachmentsMap = new DoorsMap();
-        this.#attachmentsMap._loaded = false;
-        */
         this.#properties = undefined;
         this.#userProperties = undefined;
         this.#owner = undefined;
@@ -2036,6 +2032,11 @@ export class Document {
 
         this.#attachmentsMap.set(name, att);
         return att;
+    }
+
+    attachmentsReset() {
+        this.#attachmentsMap = new DoorsMap();
+        this.#attachmentsMap._loaded = false;
     }
 
     /** No implementado aun */
@@ -3434,7 +3435,7 @@ export class Form {
         this.#json = form;
         this.#session = session;
     }
-
+    
     /*
     acl() {
         //todo
@@ -3707,16 +3708,14 @@ export class Form {
         return this.#json;
     }
 
-    /*
     get url() {
-        //todo
+        return this.#json.Url;
     }
-    */
 
-    /*
     get urlRaw() {
-        //todo
+        return this.#json.UrlRaw;
     }
+    /*
     set urlRaw(value) {
         //todo
     }
@@ -3808,6 +3807,10 @@ export class Node {
             var url = new me.session.utils.URL(value);
             return url.origin;
         }
+    }
+
+    set config(value) {
+        this.#config = value;
     }
 
     get debug() {
@@ -4412,10 +4415,12 @@ export class Utilities {
 
     /**
     Loop asincrono, utilizar cuando dentro del loop tengo llamadas asincronas
-    que debo esperar antes de realizar la prox iteracion. Si en iterations
-    paso undefined, se repite el loop hasta loop.break()
+    que debo esperar antes de realizar la prox iteracion.
+    Si en iterations paso undefined, se repite el loop hasta loop.break()
+    La funcion de callback es opcional, puedo hacer await del loop.
+
     @example
-    asyncLoop(10,
+    await asyncLoop(10,
         function (loop) {
             console.log(loop.iteration()); // Nro de iteracion
             setTimeout(function () {
@@ -4425,37 +4430,41 @@ export class Utilities {
             //loop.break(); // Finaliza el loop
         },
         function() {
+            // Opcional
             console.log('Loop terminado')
         }
     );
     */
     asyncLoop(iterations, loopFunc, callback) {
-        var index = 0;
-        var done = false;
-        var loop = {
-            next: function() {
-                if (done) return;
-        
-                if (iterations == undefined || index < iterations) {
-                    index++;
-                    loopFunc(loop);
-                } else {
+        return new Promise((resolve, reject) => {
+            var index = 0;
+            var done = false;
+            var loop = {
+                next: function() {
+                    if (done) return;
+            
+                    if (iterations == undefined || index < iterations) {
+                        index++;
+                        loopFunc(loop);
+                    } else {
+                        done = true;
+                        if (callback) callback();
+                        resolve(true);
+                    }
+                },
+            
+                iteration: function() {
+                    return index - 1;
+                },
+            
+                break: function() {
                     done = true;
                     if (callback) callback();
+                    resolve(false);
                 }
-            },
-        
-            iteration: function() {
-                return index - 1;
-            },
-        
-            break: function() {
-                done = true;
-                if (callback) callback();
-            }
-        };
-        loop.next();
-        return loop;
+            };
+            loop.next();
+        });
     }
 
     /**

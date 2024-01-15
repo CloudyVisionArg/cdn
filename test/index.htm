@@ -2,7 +2,6 @@
 	typeahead: https://github.com/corejavascript/typeahead.js
 	Ejemplo: https://digitalfortress.tech/tutorial/smart-search-using-twitter-typeahead-bloodhound/
 	bootstrap-tagsinput: https://github.com/bootstrap-tagsinput/bootstrap-tagsinput
-
 -->
 <!DOCTYPE html>
 <html>
@@ -46,56 +45,40 @@
 <script src="tagsinput/bootstrap-tagsinput.js"></script>
 <script>
 	var countries = new Bloodhound({
-		datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+		datumTokenizer: function (datum) {debugger}, //Bloodhound.tokenizers.obj.whitespace('name'),
 		queryTokenizer: Bloodhound.tokenizers.whitespace,
 		
-		/*
-		prefetch: {
-			url: 'countries.json',
-			transform: function (data) {
+    	remote: {
+        	url: 'https://restcountries.com/v3.1/alpha/%QUERY',
+        	wildcard: '%QUERY',                    // %QUERY will be replace by users input in
+			transform: function (data) {          // we modify the prefetch response
 				debugger;
-            	var newData = [];
-            	data.forEach(function (item) {
-                	newData.push({'name': item});
-            	});
-            	return newData;
-        	},
-			filter: function (list) {
-				debugger;
-				return $.map(list, function(name) {
-					return { name: name };
+				return data;
+				/*
+				var newData = [];                 // here to match the response format 
+				data.forEach(function (item) {    // of the remote endpoint
+					newData.push({'name': item});
 				});
+				return newData;
+				*/
+	        },
+			
+			prepare: function(query, settings) {
+				// En esta funcion se puede preparar la url
+				settings.url = settings.url.replace('%QUERY', query)
+				return settings;
 			},
 			
-			prepare: function (settings) {
-				debugger;
+			filter: function (response) {   
+				debugger;   
+      			return response;
 			}
-			
-		},
-		*/
-		
-		/*
-		prefetch: {
-        	url:'https://raw.githubusercontent.com/twitter/typeahead.js/gh-pages/data/countries.json',
-        	transform: function (data) {          // we modify the prefetch response
-				debugger;
-            	var newData = [];                 // here to match the response format 
-            	data.forEach(function (item) {    // of the remote endpoint
-                	newData.push({'name': item});
-            	});
-            	return newData;
-        	}
-    	},
-		*/
-    	remote: {
-        	url: 'https://restcountries.com/v3.1/alpha?codes=%QUERY',
-        	wildcard: '%QUERY'                    // %QUERY will be replace by users input in
     	},
 		 
 	});
 	countries.initialize();
 
-	
+	/*
 	$('#tags-input').tagsinput({
 	  typeaheadjs: {
 		name: 'countries',
@@ -104,9 +87,9 @@
 		source: countries.ttAdapter()
 	  }
 	});
+	*/
 	
-
-	/*
+	
 	$('#input').typeahead({
   		hint: true,
   		highlight: true,
@@ -114,9 +97,10 @@
 	},
 	{
   		name: 'countries',
+		displayKey: 'cioc',
   		source: countries   // Bloodhound instance is passed as the source
 	});
-	*/
+	
 </script>
 </body>
 </html>

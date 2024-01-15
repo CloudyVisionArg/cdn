@@ -267,6 +267,7 @@ async function renderPage() {
         $ctl.find('div.row').on('click', 'button', addAtt);
 
 
+
         // tabHeader
 
         $tabHeader = $('<div/>', {
@@ -793,8 +794,9 @@ async function renderControls(pCont, pParent) {
             $this = getAttachments(ctl['NAME'], label);
             $this.find('.list').on('click', 'a.item-content', downloadAtt);
             $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
+            $this.find('.list').on('change', 'a.item-content', downloadAtt);
             $this.find('div.row').on('click', 'button', addAtt);
-
+            
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 $this.attr('readonly', true);
                 $this.find('div.row').hide();
@@ -928,12 +930,14 @@ function pageInit(e, page) {
     // Validacion de numero
     $get('[data-numeral]').change(function (e) {
         var $this = $(this);
-        var n = numeral($this.val());
-        if (n.value()) {
-            setInputVal($this, n.format($this.attr('data-numeral')));
-        } else {
-            setInputVal($this, '');
-            toast('Ingrese un numero valido');
+        if ($this.val() != '') {
+            var n = numeral($this.val());
+            if (n.value() || n.value() == 0) {
+                setInputVal($this, n.format($this.attr('data-numeral')));
+            } else {
+                setInputVal($this, '');
+                toast('Ingrese un numero valido');
+            }
         }
     });
 
@@ -1240,6 +1244,8 @@ async function fillControls() {
         });
     }
 
+    debugger;
+    const arrAtt = $get('[data-attachments]');
     $get('[data-attachments]').each(function (ix, el) {
         fillAttachments($(el));
     });
@@ -1280,10 +1286,11 @@ async function fillAttachments(pEl) {
                 getAttachment(att, readonly).appendTo($ul);
             }
         }
+
     } else {
         noAttachs();
     }
-
+    await $.when(pEl.trigger('afterFillAttachment'));
     function noAttachs() {
         // Agrega la leyenda Sin adjuntos
         var $li = $('<li/>').appendTo($ul);
@@ -1495,73 +1502,115 @@ function openAtt(pURL) {
     }
 }
 
-function deleteAtt(e) {
+async function deleteAtt(e) {
     var $this = $(this);
     var $att = $this.find('a.item-link');
     
+    await $.when($att.trigger('beforeDelete'));
     if ($att.attr('data-att-action') == 'save') {
         // Era uno nuevo, lo vuelo
+        await $.when($att.trigger('afterDelete'));
         $this.remove();
     } else {
         $att.attr('data-att-action', 'delete');
+        await $.when($att.trigger('afterDelete'));
     }
+    
 }
 
-function addAtt(e) {
+async function renameFileDialog(pFileName){
+    const ultimoPuntoIndex = pFileName.lastIndexOf('.');
+    const sName = pFileName.slice(0, ultimoPuntoIndex);
+    const extension = pFileName.slice(ultimoPuntoIndex + 1);
+
+    let modifiedName = await new Promise((resolve) => {
+        app7.dialog.prompt('¿Renombrar el archivo?', 
+            (name) => {
+                resolve(name);
+            },
+            () => {
+                resolve(sName);
+            }
+        , sName)
+    });
+    return `${modifiedName}.${extension}`;
+}
+
+function addAtt() {
+    debugger;
     var $this = $(this);
-    var $attachs = $this.closest('li');
     var action = $this.attr('id');
-    var att = {};
+
     if (action == 'camera') {
         takePhoto().then(
-            (files)=>{
-                files.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    renderNewAtt(att, $attachs);
-                });
+            async (files)=>{
+                appendAtts($this, files);
             },
             errMgr
         );
     } else if (action == 'photo') {
         pickImages().then(
-            (files)=>{
-                files.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    renderNewAtt(att, $attachs);
-                });
+            async (files)=>{
+                appendAtts($this, files);
             },
             errMgr
         );
         
     } else if (action == 'doc') {
         pickFiles().then(
-            (files)=>{
-                files.forEach((file)=>{
-                    att.URL = file.uri;
-                    att.Name = file.name;
-                    att.Size = file.size;
-                    renderNewAtt(att, $attachs);
-                });
+            async (files)=>{
+                appendAtts($this, files);
             },
             errMgr
         );
     } else if (action == 'audio') {
-        audioRecorder(function (file) {
-            var att = {};
-            att.URL = file.localURL;
-            att.Name = file.name;
-            att.Size = file.size;
-            renderNewAtt(att, $attachs);
-        });
+        audioRecorder(async (file)=> {
+            let files = [];
+            files.push(file);
+            appendAtts($this, files);
+        },
+            errMgr
+        );
+        
     };
 
     function errMgr(pErr) {
         logAndToast(errMsg(pErr));
     };
+}
+
+async function appendAtts(pCont, files){
+    var $attachs = pCont.closest('li');
+    var tag =  $attachs.attr("data-attachments");
+    var enableRename = ($attachs.attr("data-rename-enable")) ? ($attachs.attr("data-rename-enable") == "true") : false;
+    var att = {};
+    const isCapacitor = _isCapacitor();
+    for (let file of files) {
+        if(enableRename && isCapacitor){
+            file.name = await renameFileDialog(file.name);
+        }
+       //Unificamos en un objeto para manejar lo mismo en el beforeAdd y afterAdd
+        att.URL = file.uri;
+        att.Name = file.name;
+        att.Size = file.size;
+        att.Tag = tag;
+        att.Description = tag;
+
+        await $.when(pCont.trigger('beforeAdd', [{att}]));
+        if (!attExist(pCont, file.name)){
+            if(isCapacitor){
+                file = await writeFileInCachePath(file.uri, file.name);
+            }
+            att.URL = file.uri;
+            att.Name = file.name;
+            att.Size = file.size;
+            att.Tag = tag;
+            att.Description = tag;
+
+            renderNewAtt(att, $attachs);
+            await $.when(pCont.trigger('afterAdd', [{att}]));
+        }
+    }
 }
 
 function renderNewAtt(pAtt, pCont) {
@@ -1576,6 +1625,20 @@ function renderNewAtt(pAtt, pCont) {
     }
     $att.attr('data-att-action', 'save');
     $li.prependTo(pCont.find('ul'));
+}
+
+function attExist(pCont, filename) {
+
+    //Validar si no existe un adjunto con el mismo nombre para evitar que se pisen sin querer
+    let arrAdj = pCont.find('.media-list a.item-link.item-content');
+    for(let idx=0; idx< arrAdj.length; idx++){
+        if(arrAdj[idx].getAttribute('data-att-name').toLowerCase() == filename.toLowerCase()){
+            //Muestro error de imagen duplicada
+            toast(`La archivo con el nombre '${filename}' ya existe`);
+            return true;
+        }
+    }
+    return false;
 }
 
 async function saveDoc(exitOnSuccess) {
@@ -1685,6 +1748,8 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             await saveAtt();
+            doc.attachmentsReset();
+            
         } catch (err) {
             var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
             console.log(attErr);
@@ -1786,7 +1851,13 @@ function saveAtt() {
 
         dSession.utils.asyncLoop($attsToSave.length, async loop => {
             var $this = $($attsToSave[loop.iteration()]);
-            var tag = $this.closest('li.accordion-item').attr('data-attachments');
+
+            // Si el item tiene un tag propio lo conservo
+            var tag = $this.attr('data-attachments');
+            if (!tag){
+                //Si no uso el definido en el control
+                tag = $this.closest('li.accordion-item').attr('data-attachments');
+            }
             tag = (tag == 'all' ? null : tag);
             var attName = $this.attr('data-att-name');
             var attAction = $this.attr('data-att-action');
@@ -1899,6 +1970,450 @@ async function evalCode(code, ctx) {
     }
 }
 
+
+
+async function takePhoto() {
+    var files = [];
+    if (_isCapacitor()) {
+        const opts = cameraOptionsCapacitor(CameraSource.Camera);
+        opts.resultType = CameraResultType.Uri;
+        const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+        if(hasPermission){
+            var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
+            file.filename = file.path.replace(/^.*[\\\/]/, '');
+            files.push({ uri : file.path, name : file.filename, size : file.size });
+            return files;
+        }
+        throw new Error('Se necesita permiso de acceso a la c&aacutemara');
+    }
+    else{
+        return new Promise((resolve, reject)=>{
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        (file) => {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    )
+                },
+                function (err){
+                    reject(err);
+                },
+                cameraOptions(Camera.PictureSourceType.CAMERA)
+            )
+        });
+    }
+}
+
+async function pickImages(opts){
+    var files = [];
+    if (_isCapacitor()) {
+        let options = {};
+        if(opts) { options = opts; }
+        const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
+        if(hasPermission){
+            const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
+            debugger;
+            for(let idx=0; idx < selectedPhotos.photos.length; idx++){
+                const file = selectedPhotos.photos[idx];
+                file.filename = file.path.replace(/^.*[\\\/]/, '');
+                files.push({ uri : file.path, name : file.filename, size : file.size });
+                //const fileInCache = await writeFileInCachePath(item.path);
+                //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+            }
+            return files;
+        }
+        throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+    }
+
+    else {
+        return new Promise((resolve, reject)=>{
+        navigator.camera.getPicture(
+            function (fileURL) {
+                getFile(fileURL).then(
+                    (file)=> {
+                        files.push({ uri : file.localURL, name : file.name, size : file.size });
+                        resolve(files)
+                    },
+                    (err)=>{
+                        reject(err);
+                    }
+                );
+            },
+            function (err){
+                reject(err);
+            },
+                cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            );
+        });
+    }
+}
+
+async function pickFiles(opts){
+    var files = [];
+    if (_isCapacitor()) {
+        let options =  { multiple : true };
+        if(opts) { options = opts; }
+        const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
+        for(let idx=0; idx < pickFilesResultSucc.files.length; idx++){
+            const file = pickFilesResultSucc.files[idx];
+            files.push({ uri : file.path, name : file.name, size : file.size });
+        }
+        return files;
+    }
+    else {
+        return new Promise((resolve, reject)=>{
+            chooser.getFileMetadata().then(
+                function (res) {
+                    getFile(res.uri).then(
+                        (file) => {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    )
+                },
+                function (err){
+                    reject(err);
+                }
+            )
+        });
+    }
+}
+
+async function requestPermissionsImages(cameraPermissionType){
+    const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
+    return (oPermissionStatus[cameraPermissionType] == 'granted' || oPermissionStatus[cameraPermissionType] == 'limited');
+}
+
+function cameraOptions(pSource) {
+	return {
+		quality: 50,
+		destinationType: Camera.DestinationType.FILE_URI,
+		sourceType: pSource,
+		encodingType: Camera.EncodingType.JPEG,
+		mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+};
+
+function cameraOptionsCapacitor(pSource){
+    return {
+		quality: 50,
+		saveToGallery: true,    
+		source: pSource,
+		//encodingType: Camera.EncodingType.JPEG,
+		//mediaType: Camera.MediaType.ALLMEDIA,
+		//allowEdit: (device.platform == 'iOS'),
+		correctOrientation: true, //Corrects Android orientation quirks
+        resultType: CameraResultType.DataUrl,
+		//targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+		//targetHeight: 
+		//saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+		//cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+	};
+}
+
+const CameraResultType = {
+    Uri: 'uri',
+    Base64: 'base64',
+    DataUrl: 'dataUrl'
+};
+
+const CameraPermissionType = {
+    Camera: 'camera', 
+    Photos: 'photos'
+};
+
+const CameraSource = {
+    Prompt: 'PROMPT', //Prompts the user to select either the photo album or take a photo.
+    Camera: 'CAMERA', //Take a new photo using the camera.
+    Photos: 'PHOTOS' //Pick an existing photo from the gallery or photo album.
+};
+
+const CameraDirection = {
+    Rear: 'REAR',
+    Front: 'FRONT'
+};
+
+function audioRecorder(pCallback, pErrorCallback) {
+    var mediaRec, interv, timer, save;
+
+    var $sheet = $('<div/>', {
+        class: 'sheet-modal',
+    });
+    
+    $('<div/>', {
+        class: 'swipe-handler',
+    }).appendTo($sheet);
+    
+    var $block = $('<div/>', {
+        class: 'block',
+    }).appendTo($sheet);
+    
+    var $timer = $('<div/>', {
+        class: 'text-align-center',
+        style: 'font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%',
+    }).append('0:00').appendTo($block);
+    
+    var $recBtnRow = $('<div/>', {
+        class: 'row',
+    }).appendTo($block);
+    
+    var $btn = $('<button/>', {
+        class: 'col button button-large button-round button-fill color-pink',
+    }).append('Grabar').appendTo($recBtnRow);
+    
+    $btn.click(record);
+    
+    var $saveBtnRow = $('<div/>', {
+        class: 'row',
+    }).hide().appendTo($block);
+    
+    var $btn = $('<button/>', {
+        class: 'col button button-large button-round button-outline',
+    }).append('Cancelar').appendTo($saveBtnRow);
+    
+    $btn.click(cancelAudio);
+    
+    var $btn = $('<button/>', {
+        class: 'col button button-large button-round button-fill',
+    }).append('Guardar').appendTo($saveBtnRow);
+    
+    $btn.click(saveAudio);
+    
+    // Abre el sheet
+    var sheet = app7.sheet.create({
+        swipeToClose: true,
+        content: $sheet[0],
+    }).open();
+
+    function record() {
+        (_isCapacitor())
+        ? recordCapacitor() 
+        : recordCordova()
+    }
+
+    async function recordCapacitor(){
+        //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+        //Evaluar mejor los permisos 
+        const result = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+        if(result.value){
+            save = false;
+            
+            const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+            if(currentStatusResult.status != 'NONE'){
+                const startStopResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+            }
+            const startRecordingResult = await Capacitor.Plugins.VoiceRecorder.startRecording();
+            $recBtnRow.hide();
+            $saveBtnRow.show();
+            $timer.css('opacity', '100%');
+
+            timer = new Date();
+            interv = setInterval(function () {
+                var secs = Math.trunc((new Date() - timer) / 1000);
+                var mins = Math.trunc(secs / 60);
+                secs = secs - mins * 60;
+                $timer.html(mins + ':' + leadingZeros(secs, 2));
+            }, 200);
+        }
+    }
+
+    function recordCordova(){
+        save = false;
+        var now = new Date();
+        var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
+        if (device.platform == 'iOS') {
+            src += '.m4a';
+        } else {
+            src += '.aac';
+        }
+    
+        mediaRec = new Media('cdvfile://localhost/temporary/' + src,
+            // success callback
+            function() {
+                if (save) {
+                    window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
+                        function (fileSystem) {
+                            fileSystem.root.getFile(src, { create: false, exclusive: false	},
+                                function (fileEntry) {
+                                    addDuration(fileSystem, fileEntry, mediaRec, function (file) {
+                                        if (pCallback) {
+                                            pCallback(file);
+                                        };
+                                        sheet.close();
+                                    });
+
+                                },
+                                function (err) {
+                                    logAndToast('getFile error: ' + err.code);
+                                    if (pErrorCallback) {
+                                        pErrorCallback('getFile error: ' + err.code);
+                                    }
+                                }
+                            );
+                        }
+                    );
+                };
+            },
+            // error callback
+            function (err) {
+                logAndToast('Media error: ' + err.code);
+            }
+        );
+        
+        mediaRec.startRecord();
+        $recBtnRow.hide();
+        $saveBtnRow.show();
+        $timer.css('opacity', '100%');
+        
+        timer = new Date();
+        interv = setInterval(function () {
+            var secs = Math.trunc((new Date() - timer) / 1000);
+            var mins = Math.trunc(secs / 60);
+            secs = secs - mins * 60;
+            $timer.html(mins + ':' + leadingZeros(secs, 2));
+        }, 200);
+    }
+    
+
+    function saveAudio(){
+        if (_isCapacitor()) {
+            saveAudioCapacitor();
+        } else {
+            saveAudioCordova();
+        }
+    }
+
+    function cancelAudio(){
+        if (_isCapacitor()) {
+            cancelAudioCapacitor();
+        } else {
+            cancelAudioCordova();
+        }
+    }
+
+    async function saveAudioCapacitor() {
+        const recordingData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+        var now = new Date();
+        let millis = recordingData.value.msDuration;
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        let durationString = (seconds == 60) ?
+            (minutes+1) + ":00" :
+            minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+        let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+        writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
+            (res)=>{
+                Capacitor.Plugins.Filesystem.stat({path : res.uri}).then(
+                    (file)=> {
+                        file.localURL = file.uri;
+                        file.name = fileName;
+                        pCallback(file);
+                    },(err)=>{
+                        console.error("Error obteniendo el audio.", errMsg(err))
+                    }
+                );
+            },(err)=>{
+                console.error("Error escribiendo el audio.", errMsg(err))
+            });
+        clearInterval(interv);
+        sheet.close();
+    }
+
+    function saveAudioCordova() {
+        save = true;
+        clearInterval(interv);
+        mediaRec.stopRecord();
+        mediaRec.release();
+    }
+
+    async function cancelAudioCapacitor() {
+        clearInterval(interv);
+        const currentStatusResult = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+        console.log("VoiceRecorder.getCurrentStatus : " + currentStatusResult.status);
+        if(currentStatusResult.status != 'NONE'){
+            const stopRecordingResult = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+            console.log("VoiceRecorder.stopRecording : " + stopRecordingResult.value);
+            //Evaluar el resultado para logearlo
+        }
+        $timer.html('0:00');
+        $timer.css('opacity', '20%');
+        $recBtnRow.show();
+        $saveBtnRow.hide();
+    }
+
+    function cancelAudioCordova() {
+        clearInterval(interv);
+        mediaRec.stopRecord();
+        mediaRec.release();
+        $timer.html('0:00');
+        $timer.css('opacity', '20%');
+        $recBtnRow.show();
+        $saveBtnRow.hide();
+    }
+
+    function addDuration(pFileSystem, pFileEntry, pMediaRec, pCallback) {
+        // Agrega la duracion al nombre del archivo, usa moveTo para renombrar
+        if (pMediaRec.getDuration() == -1) {
+            // El play/stop lo arregla en Android, para iOs hay que meter este fix:
+            // https://github.com/apache/cordova-plugin-media/issues/177?_pjax=%23js-repo-pjax-container#issuecomment-487823086
+            
+            save = false;
+            pMediaRec.play();
+            pMediaRec.stop();
+            pMediaRec.release();
+
+            // Espera 2 segs a getDuration
+            var counter = 0;
+            var timerDur = setInterval(function() {
+                counter = counter + 100;
+                if (counter > 2000) {
+                    clearInterval(timerDur);
+                    resume();
+                }
+                if (pMediaRec.getDuration() > 0) {
+                    clearInterval(timerDur);
+                    resume();
+                }
+            }, 100);
+
+        } else {
+            resume();
+        }
+
+        function resume() {
+            if (pMediaRec.getDuration() > -1) {
+                var dur = pMediaRec.getDuration();
+                var min = Math.trunc(dur / 60);
+                var fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + pFileEntry.name;
+                pFileEntry.moveTo(pFileSystem.root, fileName,
+                        function (fileEntry) {
+                        fileEntry.file(pCallback);
+                    },
+                    function (err) {
+                        console.error('moveTo error: ' + err.code);
+                        pFileEntry.file(pCallback); // Pasa el que venia nomas
+                    }
+                )
+            } else {
+                pFileEntry.file(pCallback); // Pasa el que venia nomas
+            }
+        }
+    }
+}
 /*
 Function getTimeInterval(pCtlNode, pProps)
 	Dim ctl

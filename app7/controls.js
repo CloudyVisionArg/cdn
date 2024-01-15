@@ -1686,6 +1686,7 @@ function getAttachments(pId, pTitle, pTag) {
         style: 'padding-top: var(--f7-list-item-padding-vertical); padding-bottom: var(--f7-list-item-padding-vertical);',
     }).appendTo($accCont);
 
+
     var $btn = $('<button/>', {
         id: 'camera',
         class: 'button col',
@@ -1739,6 +1740,10 @@ function getAttachments(pId, pTitle, pTag) {
     return $li;
 }
 
+function bindToNode (node, name, fn) {
+    node[name] = fn.bind(node);
+}
+
 /*
 Devuelve el markup de un attachment para agregar
 al ul del control anterior
@@ -1759,6 +1764,7 @@ function getAttachment(pAttach, pReadonly) {
         class: 'item-link item-content',
         'data-att-id': att.AttId,
         'data-att-name': att.Name,
+        'data-attachments': att.Description 
     }).appendTo($swipeCont);
 
     var $itemInner = $('<div/>', {

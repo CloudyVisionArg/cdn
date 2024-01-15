@@ -188,7 +188,7 @@ async function renderPage() {
 
     // Barra de botones
     $cont.append(`
-        <div class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
+        <div id="mainButtons" class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
             <button type="button" id="print" class="btn btn-primary" onclick="printForm();">
                 <i class="bi bi-printer-fill"></i>
                 <span class="d-none d-md-inline-block"> Imprimir</span>
@@ -352,7 +352,7 @@ async function renderPage() {
 
     // Footer
     $('<hr/>').appendTo($cont);
-    $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://www.cloudy-vision.com" target="_blank">CloudyVision</a></span>');
+    $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a></span>');
 
     // Boton Borrar
     var $delBtn = $('<button/>', {
@@ -367,8 +367,14 @@ async function renderPage() {
     $delBtn.click(function () {
         if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
             doc.delete().then(
-                function (res) {
+                async function (res) {
                     toast('El documento ha sido enviado a la papelera');
+
+                    // Evento afterDelete
+                    let context = {};
+                    document.dispatchEvent(new CustomEvent('afterDelete', { detail : context }));
+                    if (context.return && typeof context.return.then == 'function') await context.return;
+
                     exitForm();
                 },
                 function (err) {
@@ -429,12 +435,14 @@ async function renderPage() {
     // Validacion de numero
     $('[data-numeral]').change(function (e) {
         var $this = $(this);
-        var n = numeral($this.val());
-        if (n.value()) {
-            $this.val(n.format($this.attr('data-numeral')));
-        } else {
-            $this.val('');
-            toast('Ingrese un numero valido');
+        if ($this.val() != '') {
+            var n = numeral($this.val());
+            if (n.value() || n.value() == 0) {
+                $this.val(n.format($this.attr('data-numeral')));
+            } else {
+                $this.val('');
+                toast('Ingrese un numero valido');
+            }
         }
     });
 
@@ -514,13 +522,56 @@ function printForm() {
 	frm.window ? frm.window.print() : frm.print();
 }
 
-function exitForm() {
+function exitFormv1() {
     if (window.top == window.self) {
         window.close();
     } else {
         history.back();
     }
 }
+function exitForm(triggerCallback) {
+    let callbackFn = urlParams.get('callbackfunction');
+    let closeonexit = urlParams.get('closeonexit');
+    if(callbackFn){
+        if (triggerCallback) {
+            if (window.opener) {
+                eval("window.opener." + callbackFn + "(" + doc.id + ")");
+            }
+            if (window.parent) {
+                try {
+                    let existsInParent = eval("window.parent." + callbackFn);
+                    if (existsInParent) {
+                        eval("window.parent." + callbackFn + "(" + doc.id + ")");
+                    } else {
+                        eval("window.parent.exFrameDer.contentWindow." + callbackFn + "(" + doc.id + ")");
+                    }
+                } catch(ee){
+
+                }
+            }
+        }
+    }
+    if(closeonexit == "1"){
+        try{
+            if (window.top == window.self) {
+                window.close();
+            }
+            document.write('Se guardaron los cambios, debe cerrar la pagina manualmente');
+        } catch(ex){
+            document.write('Se guardaron correctamente los cambios, debe cerrar la pagina manualmente');
+        }
+    } else {
+        let contentUrl = "/c/content.asp?fld_id=" + fld_id;
+        if (top.navigate) {
+            window.location = contentUrl;
+        }
+        else {
+            document.location.href = contentUrl;
+        }
+    }
+    //TODO: sBackToFld
+}
+
 
 function getDefaultControl(pField) {
     var $ret, $input, label;
@@ -679,6 +730,7 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'HTMLRAW') {
             $this = $('<div/>', {
+                id: ctl['NAME'],
                 class: 'mt-3',
             });
 
@@ -756,7 +808,8 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'DOCUMENTLOG') {
             $this = newDocLog(ctl['NAME'], label);
-            $this.addClass('mt-3');
+            //$this.addClass('mt-3');
+            $this.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
 
 
         // -- HtmlArea --
@@ -811,10 +864,13 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'FIELDSET') {
             $this = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
-            $this.addClass('mt-3');
-            $this.find('.card-body').css('padding-top', '0');
 
-            bsctl = $this.find('.collapse')[0].bscollapse;
+            let $coll = $this.find('.collapse');
+            if ($coll.length) { // Si no tiene .collapse es invisible
+                $this.addClass('mt-3');
+                $this.find('.card-body').css('padding-top', '0');
+                bsctl = $this.find('.collapse')[0].bscollapse;
+            }
 
             await renderControls($this.find('fieldset'), ctl['NAME']);
 
@@ -1363,6 +1419,8 @@ async function saveDoc(exitOnSuccess) {
 
         try {
             await saveAtt();
+            doc.attachmentsReset();
+
         } catch(err) {
             var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
             console.log(attErr);

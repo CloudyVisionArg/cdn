@@ -4,6 +4,9 @@
  * Bootstrap.js: Ventanas modales
  * Doorsapi.js: Busqueda de datos
  */
+
+// fresh: https://cdn.cloudycrm.net/ghcv/cdn/conversation/conversation.msngr.js?_fresh=1
+
 var messengerOpts = {
     rootFldId: 5593,
     formula: "FROM = '982374598723498' OR TO = '982374598723498'",
@@ -109,7 +112,7 @@ function messengerDataProvider(opts){
 			style: 'width: 20%; text-align: center;',
 		}).appendTo($(me.options.sessionStatusContainer));
 		
-		$headingSession.append('<img height="30" src="https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/red.png" />');
+		$headingSession.append('<img height="30" src="https://cdn.cloudycrm.net/ghcv/cdn@55/wapp/red.png" />');
 		$headingSession.append('<div class="session-time"></div>');
 
 		me.checkSession(function () {
@@ -412,7 +415,7 @@ function messengerDataProvider(opts){
 			}
 			
             var $img = $(me.options.sessionStatusContainer).find('.session img');
-            $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/' + light + '.png');
+            $img.attr('src', 'https://cdn.cloudycrm.net/ghcv/cdn@55/wapp/' + light + '.png');
 			var $remain = $(me.options.sessionStatusContainer).find('.session .session-time');
 			$remain.html(remain);
 		}

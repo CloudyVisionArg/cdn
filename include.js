@@ -21,25 +21,29 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
 
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 322 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 324 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 341 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 342 });
+    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 342 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 343, hasdep: true });
     /*
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 321 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 312 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 325, hasdep: true });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 336 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 339 });
+    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 337 });
     */
 
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 313 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 313 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 335 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 334, hasdep: true });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
+    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 325 });
+    scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 325 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });        
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 318, hasdep: true });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 318 });
-    scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 311 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 309 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 308 });
     scripts.push({ id: 'app7-sync', path: '/app7/sync.js', version: 296 });
-    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 297 });
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 283, hasdep: true });
     scripts.push({ id: 'app7-scrversions', path: '/app7/scrversions.js', version: 267 });
     scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
@@ -49,10 +53,8 @@ function registeredScripts() {
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
     scripts.push({ id: 'app7-signin', path: '/app7/signin.html', version: 202 });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 196 });
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 189 });        
     scripts.push({ id: 'app7-resetpass', path: '/app7/resetpass.html', version: 184 });
     scripts.push({ id: 'app7-cloudy-index', path: '/app7/cloudy/index.js', version: 149 });
-    scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 149 });
     scripts.push({ id: 'app7-sade-index', path: '/app7/sade/index.js', version: 149 });
     scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
     scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
@@ -341,7 +343,8 @@ function scriptSrc(scriptId, version) {
                     //src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
                     src = gitCdn({ path: script.path, fresh: true, url: true });
                 } else {
-                    src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
+                    //src = 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@' + v + script.path;
+                    src = gitCdn({ path: script.path, ref: v, url: true });
                 }
 
             } else {
