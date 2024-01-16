@@ -1248,7 +1248,6 @@ async function fillControls() {
         });
     }
 
-    debugger;
     const arrAtt = $get('[data-attachments]');
     $get('[data-attachments]').each(function (ix, el) {
         fillAttachments($(el));
@@ -1541,7 +1540,6 @@ async function renameFileDialog(pFileName){
 }
 
 function addAtt() {
-    debugger;
     var $this = $(this);
     var action = $this.attr('id');
 
