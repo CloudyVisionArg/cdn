@@ -158,6 +158,11 @@ function explorerRefresh() {
     }
 }
 
+function goBack() {
+    explorerRefresh();
+    f7Page.view.router.back();
+}
+
 async function renderPage() {
     var $tabbar, $tabbarInner, $tabs;
 
@@ -176,8 +181,7 @@ async function renderPage() {
             f7Page.view.router.back();
         }
         */
-        explorerRefresh();
-        f7Page.view.router.back();
+        goBack();
     });
 
     $page.find('.navbar-inner .right .link').on('click', function (e) {
@@ -1783,7 +1787,7 @@ async function saveDoc(exitOnSuccess) {
         }
 
         if (exitOnSuccess) {
-            f7Page.view.router.back();
+            goBack();
         } else {
             await fillControls();
         }
