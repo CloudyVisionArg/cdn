@@ -490,11 +490,10 @@ async function renderControls(pCont, pParent) {
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {
-            $this = $('<li/>')
-            $('<div/>', {
+            $this = $('<li/>', {
                 id: ctl['NAME'],
                 name: ctl['NAME'],
-            }).appendTo($this);
+            });
 
 
         // -- Select --
