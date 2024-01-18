@@ -9,29 +9,6 @@
             <!-- Login form -->
             <div class="list">
                 <ul>
-                <li class="item-content item-input">
-                    <div class="item-inner">
-                    <div class="item-title item-floating-label">Usuario</div>
-                    <div class="item-input-wrap">
-                        <input type="text" id="username" placeholder="Usuario">
-                        <span class="input-clear-button"></span>
-                    </div>
-                    </div>
-                </li>
-
-                <li class="item-content item-input">
-                    <div class="item-inner">
-                    <div class="item-title item-floating-label">Contrase&ntilde;a</div>
-                    <div class="item-input-wrap">
-                        <input type="password" id="password" placeholder="Contrase&ntilde;a">
-                        <span class="input-clear-button"></span>
-                    </div>
-                    </div>
-                    <div class="item-media" style="min-width: 40px; align-self: flex-end;">
-                        <i id="showpwd" class="f7-icons">eye</i>
-                    </div>
-                </li>
-
                 <li style="margin-top: 25px;">
                     <div class="item-content">
                         <div class="item-inner">
@@ -56,6 +33,35 @@
                     </div>
                 </li>
 
+                <li class="item-content not-logged-item">
+                    <button id="logongoogle" class="button button-large">Iniciar con Google</button>
+                </li>
+                Or
+                <li class="item-content not-logged-item" style="display:none">
+                    <button id="logon" class="button button-large">Iniciar sesi&oacute;n</button>
+                </li>
+                <li class="item-content item-input">
+                    <div class="item-inner">
+                    <div class="item-title item-floating-label">Usuario</div>
+                    <div class="item-input-wrap">
+                        <input type="text" id="username" placeholder="Usuario">
+                        <span class="input-clear-button"></span>
+                    </div>
+                    </div>
+                </li>
+
+                <li class="item-content item-input">
+                    <div class="item-inner">
+                    <div class="item-title item-floating-label">Contrase&ntilde;a</div>
+                    <div class="item-input-wrap">
+                        <input type="password" id="password" placeholder="Contrase&ntilde;a">
+                        <span class="input-clear-button"></span>
+                    </div>
+                    </div>
+                    <div class="item-media" style="min-width: 40px; align-self: flex-end;">
+                        <i id="showpwd" class="f7-icons">eye</i>
+                    </div>
+                </li>
                 <li class="accordion-item corp-item" style="margin-top: 20px;">
                     <a href="" class="item-link item-content">
                         <div class="item-inner">
@@ -98,9 +104,9 @@
                 <li class="item-content not-logged-item" style="display:none">
                     <button id="logon" class="button button-large">Iniciar sesi&oacute;n</button>
                 </li>
-                <li class="item-content not-logged-item">
+                <!-- <li class="item-content not-logged-item">
                     <button id="logongoogle" class="button button-large">Iniciar con Google</button>
-                </li>
+                </li> -->
                 <li class="item-content logged-item">
                     <button id="logoff" class="button button-large">Cerrar sesi&oacute;n</button>
                 </li>
