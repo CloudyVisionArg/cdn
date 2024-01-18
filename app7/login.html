@@ -1,3 +1,19 @@
+<style>
+    .login-screen-content .credentials-data{
+        background: #349ccf;
+        border-radius: 6px;
+        border: 1px solid white;
+    }
+    .login-screen-content .separator-or{
+        text-align: center;
+        color: white;
+    }
+
+    .login-screen-content .list .item-content{
+        padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right) - var(--menu-list-offset));
+    }
+
+</style>
 <div class="login-screen">
     <!-- Default view-page layout -->
     <div class="view">
@@ -33,7 +49,7 @@
                         </div>
                     </li>
                 </ul>
-                <ul>
+                <ul class="credentials-data">
                     <li class="item-content item-input">
                         <div class="item-inner">
                         <div class="item-title item-floating-label">Usuario</div>
@@ -57,11 +73,11 @@
                         </div>
                     </li>
                     <li class="item-content not-logged-item" style="display:none">
-                        <button id="logon" class="button button-large">Iniciar sesi&oacute;n</button>
+                        <button id="logon" class="button button-raised">Iniciar sesi&oacute;n</button>
                     </li>
-                    <li><center>Or</center></li>
+                    <li><div class="separator-or">Or</div></li>
                     <li class="item-content not-logged-item">
-                        <button id="logongoogle" class="button button-large">Iniciar con Google</button>
+                        <button id="logongoogle" class="button button-raised">Iniciar con Google</button>
                     </li>
                     <li class="accordion-item corp-item" style="margin-top: 20px;">
                         <a href="" class="item-link item-content">
@@ -91,7 +107,7 @@
                                         </div>
                                     </li>
                                     <li class="item-content" style="margin-top: 15px;">
-                                        <button id="console" class="button button-large">Consola</button>
+                                        <button id="console" class="button button-raised">Consola</button>
                                     </li>
                                 </ul>
                             </div>
@@ -109,19 +125,19 @@
                     <button id="logongoogle" class="button button-large">Iniciar con Google</button>
                 </li> -->
                 <li class="item-content logged-item">
-                    <button id="logoff" class="button button-large">Cerrar sesi&oacute;n</button>
+                    <button id="logoff" class="button button-raised">Cerrar sesi&oacute;n</button>
                 </li>
                 <li class="item-content logged-item" style="display:none">
-                    <button id="chpass" class="button button-large">Cambiar contrase&ntilde;a</button>
+                    <button id="chpass" class="button button-raised">Cambiar contrase&ntilde;a</button>
                 </li>
                 <li class="item-content not-logged-item free-item" style="display:none">
-                    <button id="signin" class="button button-large">Registrarme</button>
+                    <button id="signin" class="button button-raised">Registrarme</button>
                 </li>
                 <li class="item-content not-logged-item free-item" style="display:none">
-                    <button id="resetpass" class="button button-large">Olvid&eacute; mi contrase&ntilde;a</button>
+                    <button id="resetpass" class="button button-raised">Olvid&eacute; mi contrase&ntilde;a</button>
                 </li>
                 <li class="item-content logged-item" >
-                    <button id="cancel" class="button button-large">Volver</button>
+                    <button id="cancel" class="button button-raised">Volver</button>
                 </li>
                 </ul>
             </div>
