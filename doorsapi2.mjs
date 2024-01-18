@@ -622,7 +622,7 @@ export class Session {
     */
     logonGoogle(email, instanceName, idToken, openId, liteMode) {
         var me = this;
-        var url = 'session/logonGoogle';
+        var url = 'session/googlelogon';
         var data = {
             email: email,
             instanceName: instanceName,
