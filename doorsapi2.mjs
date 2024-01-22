@@ -1703,13 +1703,19 @@ export class Directory {
         var me = this;
         return new Promise((resolve, reject) => {
             var url;
-            if (isNaN(parseInt(account))) {
-                //url = 'accounts?accName=' + me.session.utils.encUriC(account);
-                url = 'accounts/name/' + me.session.utils.encUriC(account);
+            if (account || account == 0) {
+                if (isNaN(parseInt(account))) {
+                    //url = 'accounts?accName=' + me.session.utils.encUriC(account);
+                    url = 'accounts/name/' + me.session.utils.encUriC(account);
+                } else {
+                    // todo: cambiar por /accounts/{accId}
+                    url = 'accounts?accIds=' + account;
+                }
+
             } else {
-                // todo: cambiar por /accounts/{accId}
-                url = 'accounts?accIds=' + account;
+                reject(new Error('Invalid account spec: ' + account));
             }
+
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     if (res.length == 0) {
