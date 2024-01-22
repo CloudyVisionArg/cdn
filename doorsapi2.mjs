@@ -5191,8 +5191,8 @@ class RestClient {
                     try {
                         parsedJson = JSON.parse(textBody);
                     } catch(err) {
-                        console.warn('Cannot parse server response', completeUrl, textBody);
                         debugger;
+                        console.warn('Cannot parse server response', completeUrl, textBody);
                     }
                     if (response.ok) {
                         resolve(parsedJson.InternalObject);
