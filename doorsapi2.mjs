@@ -4727,8 +4727,28 @@ export class Utilities {
         } else {
             return null;
         }
-    }
+    }    
 
+    /**
+    Replacer para JSON.stringify que incluye el path.
+    @example
+    // Incluye solo algunas propiedades raiz completas
+    JSON.stringify(myObject, dSession.utils.jsonReplacerWithPath(function (key, value, path) {
+        let rootProps = ['prop1', 'prop2', ...];
+        let root = path.split('.')[0];
+        if (path == '' || rootProps.indexOf(root) >= 0) return value;
+    }))
+    */
+    jsonReplacerWithPath(replacer) {
+        let m = new Map();
+      
+        return function(key, value) {
+            let path = m.get(this) + (Array.isArray(this) ? `[${key}]` : '.' + key); 
+            if (value === Object(value)) m.set(value, path);  
+            return replacer.call(this, key, value, path.replace(/undefined\.\.?/,''));
+        }
+    }
+    
     /** Completa con ceros a la izquierda */
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
