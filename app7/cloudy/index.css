@@ -59,9 +59,10 @@
     max-width: 100%;
 }
 .login-screen .list .button {
-    background-color: rgba(255, 255, 255, 0.8);
-    color: rgb(75, 168, 223);
+    background-color: rgb(255 255 255);
+    color: rgb(113 113 113);
     padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right) - var(--menu-list-offset));
+    text-transform: uppercase;
     /* margin-bottom: 10px; */
     /* border-radius: 10px; */
 }
