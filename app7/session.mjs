@@ -33,7 +33,12 @@ export class AppSession extends doorsapi2.Session {
             Doors.RESTFULL.AuthToken = authToken;
             me.isLogged.then(function (res) {
                 if (!res) {
-                    me.appLogon(pSuccess, pFailure);
+                    var idToken = window.localStorage.getItem('idToken');
+                    if(idToken){
+                        me.appLogonGoogle(pSuccess, pFailure);
+                    }else{
+                        me.appLogon(pSuccess, pFailure);
+                    }
                 } else {
                     if (pSuccess) pSuccess();
                 }

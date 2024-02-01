@@ -465,9 +465,8 @@ async function showLogin() {
             $get('#logon').click(function (e) {
                 logon();
             });
-            debugger;
+            
             $get('#logongoogle').click(function (e) {
-                debugger;
                 Capacitor.Plugins.GoogleAuth.signIn().then((accInfo)=>{
                     console.log("Google accInfo: " ,accInfo);
                     logonGoogle(accInfo)
