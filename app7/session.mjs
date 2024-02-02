@@ -25,6 +25,7 @@ export class AppSession extends doorsapi2.Session {
     checkToken(pSuccess, pFailure) {
         var me = this;
         var authToken = me.getToken();
+        debugger;
         if (!authToken) {
             var idTokenTemp = window.localStorage.getItem('idToken');
             if(idTokenTemp){
