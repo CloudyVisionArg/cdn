@@ -401,9 +401,9 @@ async function checkGoogleLoggedIn () {
         .then((data) => {
             debugger;
             if (data.accessToken) {
-                localStorage.setItem('userName',  data.email);
+                //localStorage.setItem('userName',  data.email);
                 localStorage.setItem('idToken',  data.idToken);
-                this.currentTokens = data;
+                //this.currentTokens = data;
                 resolve(data);
             }
         })
