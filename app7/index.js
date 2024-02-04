@@ -368,7 +368,7 @@ var app = {
         if (app7.online) {
             var ls = window.localStorage;
             if (ls.getItem('userName') && ls.getItem('instance') && ls.getItem('endPoint')) {
-                
+                debugger;
                 dSession.checkToken(
                     function () {
                         sync.sync(false);
