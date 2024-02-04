@@ -412,7 +412,7 @@ async function checkGoogleLoggedIn () {
             }
             reject(error);
         });
-    }
+    });
 }
 
 function sessionMsg() {
