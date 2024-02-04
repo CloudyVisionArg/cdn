@@ -396,7 +396,6 @@ var app = {
 
 async function checkGoogleLoggedIn () {
     return new Promise((resolve, reject) => {
-        debugger;
         Capacitor.Plugins.GoogleAuth.refresh()
         .then((data) => {
             debugger;
@@ -408,7 +407,6 @@ async function checkGoogleLoggedIn () {
             }
         })
         .catch((error) => {
-            debugger;
             if (error.type === 'userLoggedOut') {
                 //this.signin()
             }
