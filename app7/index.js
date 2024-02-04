@@ -396,6 +396,7 @@ var app = {
 
 async function checkGoogleLoggedIn () {
     return new Promise((resolve, reject) => {
+        debugger;
         GoogleAuth.refresh()
         .then((data) => {
             debugger;
