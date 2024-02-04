@@ -88,7 +88,7 @@ function Sync() {
             if (callback) callback();
             return;
         }
-
+        debugger;
         dSession.checkToken(function () {
             syncPriv(full, callback);
         }, function (err) {
