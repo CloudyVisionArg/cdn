@@ -307,20 +307,26 @@ var app = {
             showLogin();
         } else {
             if (app7.online) {
-                dSession.checkToken(
-                    () => {
-                        execOnDeviceReady();
-                        sessionMsg();
-                    },
-                    function (err) {
-                        console.error(errMsg(err));
-                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
-                            showLogin();
-                        } else {
-                            showConsole();
+                checkGoogleLoggedIn().then((s)=>{
+                    dSession.checkToken(
+                        () => {
+                            execOnDeviceReady();
+                            sessionMsg();
+                        },
+                        function (err) {
+                            console.error(errMsg(err));
+                            if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                                showLogin();
+                            } else {
+                                showConsole();
+                            }
                         }
-                    }
-                );
+                    );
+                },
+                (er)=>{
+                    showLogin();
+                });
+                
             } else {
                 execOnDeviceReady();
             }
@@ -362,6 +368,7 @@ var app = {
         if (app7.online) {
             var ls = window.localStorage;
             if (ls.getItem('userName') && ls.getItem('instance') && ls.getItem('endPoint')) {
+                
                 dSession.checkToken(
                     function () {
                         sync.sync(false);
@@ -385,6 +392,26 @@ var app = {
         };
     },
 };
+
+async function checkGoogleLoggedIn () {
+    return new Promise((resolve, reject) => {
+        GoogleAuth.refresh()
+        .then((data) => {
+            debugger;
+            if (data.accessToken) {
+                this.currentTokens = data;
+                resolve(data);
+            }
+        })
+        .catch((error) => {
+            debugger;
+            if (error.type === 'userLoggedOut') {
+                //this.signin()
+            }
+            reject(error);
+        });
+    }
+}
 
 function sessionMsg() {
     dSession.tags().then(
