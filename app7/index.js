@@ -308,6 +308,7 @@ var app = {
         } else {
             if (app7.online) {
                 checkGoogleLoggedIn().then((s)=>{
+                    debugger;
                     dSession.checkToken(
                         () => {
                             execOnDeviceReady();
