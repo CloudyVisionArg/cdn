@@ -307,7 +307,7 @@ var app = {
             showLogin();
         } else {
             if (app7.online) {
-                checkGoogleLoggedIn().then((s)=>{
+                checkGoogleLoggedIn().then(()=>{
                     debugger;
                     dSession.checkToken(
                         () => {
@@ -369,24 +369,7 @@ var app = {
         if (app7.online) {
             var ls = window.localStorage;
             if (ls.getItem('userName') && ls.getItem('instance') && ls.getItem('endPoint')) {
-                debugger;
-                dSession.checkToken(
-                    function () {
-                        sync.sync(false);
-                        if (window.refreshNotifications) window.refreshNotifications();
-                        executeCode('onResume');
-                        //sessionMsg();
-                    },
-                    function (err) {
-                        console.error(errMsg(err));
-                        toast(errMsg(err), 5000);
-                        if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
-                            showLogin();
-                        } else {
-                            showConsole();
-                        }
-                    }
-                )
+                checkToken();
             }
         } else {
             executeCode('onResume');
@@ -394,15 +377,41 @@ var app = {
     },
 };
 
+async function checkToken(){
+    let gTokenId = localStorage.getItem('idToken');
+    if(gTokenId){
+        try{
+            await checkGoogleLoggedIn();
+        }catch(e){
+            console.log("Error refreshing google token id")
+        }
+    }
+    dSession.checkToken(
+        function () {
+            sync.sync(false);
+            if (window.refreshNotifications) window.refreshNotifications();
+            executeCode('onResume');
+            //sessionMsg();
+        },
+        function (err) {
+            console.error(errMsg(err));
+            toast(errMsg(err), 5000);
+            if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                showLogin();
+            } else {
+                showConsole();
+            }
+        }
+    );
+}
+
 async function checkGoogleLoggedIn () {
     return new Promise((resolve, reject) => {
         Capacitor.Plugins.GoogleAuth.refresh()
         .then((data) => {
             debugger;
             if (data.accessToken) {
-                //localStorage.setItem('userName',  data.email);
                 localStorage.setItem('idToken',  data.idToken);
-                //this.currentTokens = data;
                 resolve(data);
             }
         })
