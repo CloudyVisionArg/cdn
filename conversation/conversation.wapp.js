@@ -269,7 +269,7 @@ function whatsAppDataProvider(opts){
 				});
                 msg.contentVariables = contentVariablesObj;
                 //Borro la propiedad body
-                //delete msg.body;
+                delete msg.body;
                 delete msg.mediaUrl;
             }
 
