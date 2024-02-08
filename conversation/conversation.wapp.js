@@ -261,7 +261,8 @@ function whatsAppDataProvider(opts){
             if(template["CONTENT_SID"]){
                 msg.contentSid = template["CONTENT_SID"];
                 //Fuerzo para que se busque y se agregue el service id
-                msg.from = from; //["NAME"];
+				//Ya no aplica porque se utiliza la cuenta seleccionada
+                //msg.from = from; //["NAME"];
 				let contentVariablesObj = {};
 				vars.forEach(v=>{
 					let prop = v.variable.replaceAll("{","").replaceAll("}","");
