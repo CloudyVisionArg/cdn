@@ -11,7 +11,7 @@
   padding: .375rem .75rem;
   color: #555;
   vertical-align: middle;
-  border-radius: 4px;
+  border-radius: .25rem;
   /* max-width: 100%; */
   line-height: 22px;
   cursor: text;
@@ -24,12 +24,10 @@ font-size: 1rem;
 font-weight: 400;
 line-height: 1.5;
 color: #212529;
-background-color: #fff;
 background-clip: padding-box;
 -webkit-appearance: none;
 -moz-appearance: none;
 appearance: none;
-border-radius: .25rem;
 transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 */
 
