@@ -8,21 +8,18 @@
   border: 1px solid #ced4da;
   display: block;
   padding: .375rem .75rem;
-  color: #555;
   border-radius: .25rem;
   /* max-width: 100%; */
   line-height: 1.5;
   cursor: text;
   width: 100%;
   background-clip: padding-box;
-
   font-size: 1rem;
   font-weight: 400;
   color: #212529;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .bootstrap-tagsinput input {
   border: none;
