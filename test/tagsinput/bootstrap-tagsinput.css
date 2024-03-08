@@ -15,17 +15,17 @@
   cursor: text;
   width: 100%;
   background-clip: padding-box;
+
+  font-size: 1rem;
+  font-weight: 400;
+  color: #212529;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 /*
-display: block;
-font-size: 1rem;
-font-weight: 400;
-color: #212529;
--webkit-appearance: none;
--moz-appearance: none;
-appearance: none;
-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 */
 
 .bootstrap-tagsinput input {
