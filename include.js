@@ -35,7 +35,7 @@ function registeredScripts() {
     scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 337 });
     */
 
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 334, hasdep: true });
+    //scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 334, hasdep: true });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
