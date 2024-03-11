@@ -257,12 +257,12 @@ async function showConsole(allowClose) {
         function supportMail() {
             debugger;
             var mail = {
-                to: 'soporte@cloudycrm.net',
                 subject: 'Cloudy CRM - App issue',
                 body: 'Por favor describanos su problema',
             }
 
             if (_isCapacitor()) {
+                mail.to = ['soporte@cloudycrm.net'];
                 mail.attachments = [
                     {
                         type: 'base64',
@@ -278,6 +278,7 @@ async function showConsole(allowClose) {
                 Capacitor.Plugins.EmailComposer.open(mail);
 
             } else {
+                mail.to = 'soporte@cloudycrm.net';
                 mail.attachments = [
                     'base64:console.txt//' + window.btoa(localStorage.getItem('consoleLog')),
                     'base64:localStorage.txt//' + localStorageBase64(),
