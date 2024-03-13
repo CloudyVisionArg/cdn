@@ -1517,6 +1517,7 @@ function statusBar(pShow) {
             refStatusBarPLugin.styleDefault();
         } else {
             refStatusBarPLugin.setStyle({ style: 'LIGHT' });
+            refStatusBarPLugin.setOverlaysWebView({ overlay: true });
         }
 
     } else {
