@@ -1498,7 +1498,7 @@ function _isCapacitor(){
 
 function statusBar(pShow) {
     let refStatusBarPLugin; 
-
+return;
     if (_isCapacitor()) {
         //refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
         //refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
