@@ -1516,8 +1516,8 @@ function statusBar(pShow) {
         if (device.platform == 'iOS') {
             refStatusBarPLugin.styleDefault();
         } else {
-            refStatusBarPLugin.setStyle({ style: 'LIGHT' });
-            refStatusBarPLugin.setOverlaysWebView({ overlay: true });
+            refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
+            refStatusBarPLugin.setOverlaysWebView({ overlay: false });
         }
 
     } else {
