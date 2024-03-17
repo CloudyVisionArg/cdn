@@ -60,9 +60,16 @@
 <script>
 	var doorsapi, dSession, fldCon;
 
-	(async ()=>{
-		$('.js-example-basic-single').select2();
-	});
+	document.addEventListener("DOMContentLoaded", function(event) {
+		(async ()=>{
+			init();
+		});
+	});	
+
+	function init(){
+		$('.js-example-basic-single').select2();		
+	}
+	
 	// (async () => {
 	// 	doorsapi = await import(scriptSrc('doorsapi2'));
 	// 	dSession = new doorsapi.Session();
