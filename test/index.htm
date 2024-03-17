@@ -6,13 +6,19 @@
 -->
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Select2 Bootstrap Autocomplete</title>
-	<link href="tagsinput/bootstrap-tagsinput-typeahead.css" rel="stylesheet" />
-	<link href="tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-	/*
+    <head>
+        <title>Select2 Bootstrap Autocomplete</title>
+        <link
+            href="tagsinput/bootstrap-tagsinput-typeahead.css"
+            rel="stylesheet"
+        />
+        <link href="tagsinput/bootstrap-tagsinput.css" rel="stylesheet" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            /*
 	body{ font-family:calibri;}
 	.twitter-typeahead { display:initial !important; }
 	.bootstrap-tagsinput {line-height:40px;display:block !important;}
@@ -26,17 +32,24 @@
 	.demo-label {font-size:1.5em;color: #686868;font-weight: 500;}
 	.bgcolor {max-width: 440px;height: 200px;background-color: #c3e8cb;padding: 40px 70px;border-radius:4px;margin:20px 0px;}
 	*/
-	</style>
-</head>
-<body>
-	<h1>Autocomplete Select2</h1>
-	<select class="js-example-basic-single" name="state">
-		<option value="AL">Alabama</option>
-		<option value="AL">Alabama2</option>
-		<option value="WY">Wyoming</option>
-		<option value="WY">Wyoming3</option>
-	</select>
-	<!-- <div class="bgcolor">
+        </style>
+    </head>
+    <body>
+        <h1>Autocomplete Select2</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+					<select class="js-example-basic-single" name="states[]"  multiple="multiple">
+						<option value="AL">Alabama</option>
+						<option value="AL">Alabama2</option>
+						<option value="WY">Wyoming</option>
+						<option value="WY">Wyoming3</option>
+					</select>
+				</div>
+                <div class="col">Column</div>
+            </div>
+        </div>
+        <!-- <div class="bgcolor">
 	<div class="mb-3">
 		<label class="form-label">Contratos tags-input</label>
 		<select multiple class="form-control" id="tags-input"></select>
@@ -50,157 +63,155 @@
 		<input type="text" class="form-control" id="input2" autocomplete="off" />
 	</div>
 	</div> -->
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="typeahead.bundle.js"></script>
 <script src="tagsinput/bootstrap-tagsinput.js"></script> -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.cloudycrm.net/ghcv/cdn/include.js"></script>
-<script>
-	var doorsapi, dSession, fldCon;
+        <link
+            href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.cloudycrm.net/ghcv/cdn/include.js"></script>
+        <script>
+            var doorsapi, dSession, fldCon;
 
-	document.addEventListener("DOMContentLoaded", function(event) {
-		debugger;
-		init();
-	});	
+            document.addEventListener("DOMContentLoaded", function (event) {
+                debugger;
+                init();
+            });
 
-	function init(){
-		$('.js-example-basic-single').select2();		
-	}
-	
-	// (async () => {
-	// 	doorsapi = await import(scriptSrc('doorsapi2'));
-	// 	dSession = new doorsapi.Session();
-	// 	dSession.serverUrl = 'https://cloudyvision.cloudycrm.net/restful';
-	// 	await dSession.logon('admin', 'ZXCewq321', 'cloudyvision');
-	// 	fldCon = await dSession.folder(5049);
+            function init() {
+                $(".js-example-basic-single").select2();
+            }
 
-	// 	var bhContratos = new Bloodhound({
-	// 		datumTokenizer: Bloodhound.tokenizers.whitespace,
-	// 		//datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
-	// 		queryTokenizer: Bloodhound.tokenizers.whitespace,
-	// 		remote: {
-	// 			url: '-',
-	// 			cache: false,
-	// 			prepare: function(query, settings) {
-	// 				// El ej muestra el loader aca
-	// 				//debugger;
-	// 				settings.query = query;
-	// 				return settings;
-	// 			},
-				
-	// 			filter: function (response) {  
-	// 				// El ej oculta el loader aca
-	// 				debugger;
-	// 				return response;
-	// 			},
+            // (async () => {
+            // 	doorsapi = await import(scriptSrc('doorsapi2'));
+            // 	dSession = new doorsapi.Session();
+            // 	dSession.serverUrl = 'https://cloudyvision.cloudycrm.net/restful';
+            // 	await dSession.logon('admin', 'ZXCewq321', 'cloudyvision');
+            // 	fldCon = await dSession.folder(5049);
 
-	// 			transform: function (response) {
-	// 				debugger;
-	// 				return response;
-	// 			},
+            // 	var bhContratos = new Bloodhound({
+            // 		datumTokenizer: Bloodhound.tokenizers.whitespace,
+            // 		//datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+            // 		queryTokenizer: Bloodhound.tokenizers.whitespace,
+            // 		remote: {
+            // 			url: '-',
+            // 			cache: false,
+            // 			prepare: function(query, settings) {
+            // 				// El ej muestra el loader aca
+            // 				//debugger;
+            // 				settings.query = query;
+            // 				return settings;
+            // 			},
 
-	// 			transport: async function (options, onSuccess, onError) {
-	// 				try {
-	// 					//debugger;
-	// 					var res = await fldCon.search({
-	// 						fields: 'subject, tipo, estado',
-	// 						formula: 'subject like ' + dSession.db.sqlEnc('%' + options.query + '%', 1),
-	// 						order: 'subject',
-	// 					});
-	// 					onSuccess(res);
+            // 			filter: function (response) {
+            // 				// El ej oculta el loader aca
+            // 				debugger;
+            // 				return response;
+            // 			},
 
-	// 				} catch (er) {
-	// 					onError(er);
-	// 				}
-	// 			}
-	// 		},
-			
-	// 	});
+            // 			transform: function (response) {
+            // 				debugger;
+            // 				return response;
+            // 			},
 
-	// 	bhContratos.initialize();
+            // 			transport: async function (options, onSuccess, onError) {
+            // 				try {
+            // 					//debugger;
+            // 					var res = await fldCon.search({
+            // 						fields: 'subject, tipo, estado',
+            // 						formula: 'subject like ' + dSession.db.sqlEnc('%' + options.query + '%', 1),
+            // 						order: 'subject',
+            // 					});
+            // 					onSuccess(res);
 
-		
-	// 	var bhCountries = new Bloodhound({
-	// 		datumTokenizer: function (datum) {debugger}, //Bloodhound.tokenizers.obj.whitespace('name'),
-	// 		queryTokenizer: Bloodhound.tokenizers.whitespace,
-			
-	// 		remote: {
-	// 			url: 'https://restcountries.com/v3.1/alpha/%QUERY',
-	// 			wildcard: '%QUERY',                    // %QUERY will be replace by users input in
-	// 			transform: function (data) {          // we modify the prefetch response
-	// 				debugger;
-	// 				return data;
-	// 				/*
-	// 				var newData = [];                 // here to match the response format 
-	// 				data.forEach(function (item) {    // of the remote endpoint
-	// 					newData.push({'name': item});
-	// 				});
-	// 				return newData;
-	// 				*/
-	// 			},
-				
-	// 			prepare: function(query, settings) {
-	// 				// En esta funcion se puede preparar la url
-	// 				debugger;
-	// 				settings.url = settings.url.replace('%QUERY', query)
-	// 				return settings;
-	// 			},
-				
-	// 			filter: function (response) {   
-	// 				debugger;   
-	// 				return response;
-	// 			},
+            // 				} catch (er) {
+            // 					onError(er);
+            // 				}
+            // 			}
+            // 		},
 
-	// 			transport: function (options, onSuccess, onError) {
-	// 				// Modify the options or replace the next line
-	// 				debugger;
-	// 				$.ajax(options)
-	// 					.done(function(data, textStatus, request) { onSuccess(data); })
-	// 					.fail(function(request, textStatus, errorThrown) { onError(errorThrown); });
-	// 			}
-	// 		},
-			
-	// 	});
-		
-	// 	bhCountries.initialize();
+            // 	});
 
-		
-	// 	$('#tags-input').tagsinput({
-	// 	typeaheadjs: {
-	// 		name: 'contratos',
-	// 		displayKey: 'SUBJECT',
-	// 		valueKey: 'SUBJECT',
-	// 		source: bhContratos.ttAdapter()
-	// 	}
-	// 	});
-		
-		
-		
-	// 	$('#input').typeahead({
-	// 		hint: true,
-	// 		highlight: true,
-	// 		minLength: 2
-	// 	},
-	// 	{
-	// 		name: 'countries',
-	// 		displayKey: 'SUBJECT',
-	// 		source: bhContratos   // Bloodhound instance is passed as the source
-	// 	});
+            // 	bhContratos.initialize();
 
-	// 	$('#input2').typeahead({
-	// 		hint: true,
-	// 		highlight: true,
-	// 		minLength: 2
-	// 	},
-	// 	{
-	// 		name: 'countries2',
-	// 		displayKey: 'cioc',
-	// 		source: bhCountries   // Bloodhound instance is passed as the source
-	// 	});
-	// })();
-	
-</script>
-</body>
+            // 	var bhCountries = new Bloodhound({
+            // 		datumTokenizer: function (datum) {debugger}, //Bloodhound.tokenizers.obj.whitespace('name'),
+            // 		queryTokenizer: Bloodhound.tokenizers.whitespace,
+
+            // 		remote: {
+            // 			url: 'https://restcountries.com/v3.1/alpha/%QUERY',
+            // 			wildcard: '%QUERY',                    // %QUERY will be replace by users input in
+            // 			transform: function (data) {          // we modify the prefetch response
+            // 				debugger;
+            // 				return data;
+            // 				/*
+            // 				var newData = [];                 // here to match the response format
+            // 				data.forEach(function (item) {    // of the remote endpoint
+            // 					newData.push({'name': item});
+            // 				});
+            // 				return newData;
+            // 				*/
+            // 			},
+
+            // 			prepare: function(query, settings) {
+            // 				// En esta funcion se puede preparar la url
+            // 				debugger;
+            // 				settings.url = settings.url.replace('%QUERY', query)
+            // 				return settings;
+            // 			},
+
+            // 			filter: function (response) {
+            // 				debugger;
+            // 				return response;
+            // 			},
+
+            // 			transport: function (options, onSuccess, onError) {
+            // 				// Modify the options or replace the next line
+            // 				debugger;
+            // 				$.ajax(options)
+            // 					.done(function(data, textStatus, request) { onSuccess(data); })
+            // 					.fail(function(request, textStatus, errorThrown) { onError(errorThrown); });
+            // 			}
+            // 		},
+
+            // 	});
+
+            // 	bhCountries.initialize();
+
+            // 	$('#tags-input').tagsinput({
+            // 	typeaheadjs: {
+            // 		name: 'contratos',
+            // 		displayKey: 'SUBJECT',
+            // 		valueKey: 'SUBJECT',
+            // 		source: bhContratos.ttAdapter()
+            // 	}
+            // 	});
+
+            // 	$('#input').typeahead({
+            // 		hint: true,
+            // 		highlight: true,
+            // 		minLength: 2
+            // 	},
+            // 	{
+            // 		name: 'countries',
+            // 		displayKey: 'SUBJECT',
+            // 		source: bhContratos   // Bloodhound instance is passed as the source
+            // 	});
+
+            // 	$('#input2').typeahead({
+            // 		hint: true,
+            // 		highlight: true,
+            // 		minLength: 2
+            // 	},
+            // 	{
+            // 		name: 'countries2',
+            // 		displayKey: 'cioc',
+            // 		source: bhCountries   // Bloodhound instance is passed as the source
+            // 	});
+            // })();
+        </script>
+    </body>
 </html>
