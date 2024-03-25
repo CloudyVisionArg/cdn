@@ -887,6 +887,7 @@ async function renderControls(pCont, pParent) {
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
+            debugger;
             /*
             // todo: faltan editurl y addurl
 

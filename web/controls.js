@@ -850,3 +850,112 @@ function newButton(pId, pText, pOptions){
             </button>`);
     return $btnObj;
 }
+
+
+function newAutocomplete(pId, pLabel, options){
+    var $div = $('<div/>');
+
+    $div.append('<label class="form-label">' + pLabel + '</label>');
+
+    let pOptions = { //Valores por defecto
+        idField: "DOC_ID",
+        textField: "SUBJECT",
+        fieldSearch: "SUBJECT",
+        fields: "subject,doc_id",
+        order: "SUBJECT",
+        maxDocs: 30,
+        recursive: false,
+        maxDescrLength: 200,
+        minimumInputLength: 3,
+        placeholder: "Buscar",
+        multiple: false
+    }
+    pOptions = Object.assign(pOptions, options);
+
+    let parentEl = $div;
+    let $oSel = $("<select/>", {
+        id: pId,
+        class: "ac-g5",
+        multiple: pOptions.multiple
+    });
+    if (pOptions.width) {
+        $oSel.attr("data-width", pOptions.width);
+    }
+    let sURL = pOptions.url ? pOptions.url : "";
+    let fld_id = pOptions.fld_id;
+    if (!sURL && fld_id) {
+        sURL = `${Doors.RESTFULL.ServerUrl}/folders/${fld_id}/documents`  
+    } 
+    let oConfig = {
+        ajax: {
+            url: sURL,
+            dataType: 'json',
+            delay: 250,
+            headers: pOptions.headers,
+            data: function (params) {
+                let strFormula = pOptions.formula.replaceAll("{{searchValue}}", params.term);
+            
+                return {
+                    fields: pOptions.fields,
+                    formula: strFormula, // search term
+                    order: pOptions.order,
+                    maxDocs: pOptions.maxDocs,
+                    recursive: pOptions.recursive,
+                    maxDescrLength: pOptions.maxDescrLength
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                data.InternalObject.map(el =>{
+                    el.id = el[pOptions.idField];
+                    if (pOptions.textField)
+                        el.text = el[pOptions.textField];
+                })
+                return {
+                    results: data.InternalObject
+                };
+            },
+        cache: true
+        },
+        escapeMarkup: function(markup) {
+            return markup;
+        },
+        placeholder: pOptions.placeholder || "Buscar",
+        minimumResultsForSearch: 1,
+        maximumSelectionLength: pOptions.maximumSelectionLength || 0,
+        minimumInputLength: pOptions.minimumInputLength || 3,
+        templateResult: pOptions.templateResult,
+        templateSelection: pOptions.templateSelection
+    }
+    if (pOptions.selectedElements) {
+        let data = pOptions.selectedElements;
+        if (Array.isArray(data)) {
+            data.map(el => {
+            el.id = el[pOptions.idField];
+            if (pOptions.textField) {
+                el.text = el[pOptions.textField];
+            }
+            let formattedText = typeof pOptions.templateSelection === 'function' ? pOptions.templateSelection(el) : el.text;
+            var option = new Option(formattedText, el.id, true, true);
+            $oSel.append(option);
+            });
+        }
+        else{
+            let optId = data.id || data[pOptions.idField];
+            let optText = data.text || data[pOptions.textField];
+            // Aplicar el formato de templateSelection al texto de la opción
+            let formattedText = typeof pOptions.templateSelection === 'function' ? pOptions.templateSelection(data) : optText;
+            var option = new Option(formattedText, optId, true, true);
+            $oSel.append(option);
+        }
+    }
+    
+    $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
+    if (parentEl) {
+        $oSel.appendTo(parentEl);
+        $oSel.select2(oConfig);
+        return $oSel;
+    }
+    
+    return $div;
+}
