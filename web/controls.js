@@ -479,7 +479,6 @@ function newFieldset(pId, pLabel) {
 
 function newMapsAutocomplete(pId, pLabel) {
     var $ctl = newInputText(pId, pLabel);
-    debugger;
     var $inp = $ctl.find('input');
     addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     $inp = $ctl.find('input'); // Lo instancio de nuevo xq addInputButton lo clona
@@ -499,18 +498,7 @@ function newMapsAutocomplete(pId, pLabel) {
     });
 
     return $ctl;
-    /*
-    todo: readonly
-
-    $inp.on('placeChange', function (e) {
-        var addrComp = e.originalEvent.detail.addressComponents;
-        if (addrComp) {
-            $('#ciudad').val(addrComp['administrative_area_level_2'] + ' - ' + addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
-            $('#provincia').val(addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
-            $('#pais').val(addrComp['country']);
-        }
-    })
-    */
+    // todo: readonly
 }
 
 function newDocLog(pId, pLabel) {
