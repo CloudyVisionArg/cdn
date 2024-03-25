@@ -8,7 +8,6 @@
 
   var defaultOptions = {
     tagClass: function(item) {
-      //return 'badge bg-primary';
       return 'label label-info';
     },
     focusClass: 'focus',
