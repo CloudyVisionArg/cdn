@@ -480,8 +480,9 @@ function newFieldset(pId, pLabel) {
 function newMapsAutocomplete(pId, pLabel) {
     var $ctl = newInputText(pId, pLabel);
     debugger;
-    addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     var $inp = $ctl.find('input');
+    addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
+    $inp = $ctl.find('input'); // Lo instancio de nuevo xq addInputButton lo clona
     $inp.addClass('maps-autocomplete');
     $inp.attr('placeholder', 'Calle nro, Localidad');
 
