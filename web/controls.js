@@ -481,7 +481,7 @@ function newMapsAutocomplete(pId, pLabel) {
     var $ctl = newInputText(pId, pLabel);
     var $inp = $ctl.find('input');
     debugger;
-    addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
+    var $ctl2 = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
     $inp.addClass('maps-autocomplete');
     $inp.attr('placeholder', 'Calle nro, Localidad');
 
