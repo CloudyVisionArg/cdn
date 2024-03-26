@@ -1118,12 +1118,12 @@ async function renderControls(pCont, pParent) {
 //Desde aca
 async function newAutocomplete(pId, options) {
 
-    var incProm = include([
+   /* var incProm = include([
         { id: 'bootstrap-5.css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' },
         { id: 'select2.css', src: 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css' },
         { id: 'select2-bootstrap-5.css', src: 'https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css' },
         { id: 'select2.js', src: 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js' },
-    ]);
+    ]);*/
 
     let opt = { //Valores por defecto
         textSource: '',
@@ -1164,7 +1164,7 @@ async function newAutocomplete(pId, options) {
 
     var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
     console.log(fldAc.Name);
-    await incProm;
+    //await incProm;
     let pOptions = opt;
     var $cont = $('<div/>');
     $cont.append(`<label class="form-label" for='${pId}'>${ dSession.utils.htmlEncode(opt.label) }</label>`);
