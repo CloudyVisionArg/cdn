@@ -890,7 +890,7 @@ async function renderControls(pCont, pParent) {
         } else if (type == 'AUTOCOMPLETE') {
             debugger;
 
-            let $this = await newAutocomplete("test33",{
+            $this = await newAutocomplete("test34",{
                 textSource: 'subject',
                 valueSource: 'doc_id',
                 label: 'Contrato (Select2)',
@@ -903,8 +903,7 @@ async function renderControls(pCont, pParent) {
                 order: 'subject, estado',
                 multiple: false,
             });
-            //ac.appendTo(ctx.$this);
-            if ($this) $this.appendTo($col);
+            //ac.appendTo(ctx.$this);            
 
 
             /*
