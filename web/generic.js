@@ -890,7 +890,7 @@ async function renderControls(pCont, pParent) {
         } else if (type == 'AUTOCOMPLETE') {
             debugger;
 
-            $this = await newAutocomplete("test34",{
+            $this = await newAutocompleteTest("test34",{
                 textSource: 'subject',
                 valueSource: 'doc_id',
                 label: 'Contrato (Select2)',
@@ -1116,7 +1116,7 @@ async function renderControls(pCont, pParent) {
 }
 
 //Desde aca
-async function newAutocomplete(pId, options) {
+async function newAutocompleteTest(pId, options) {
 
    /* var incProm = include([
         { id: 'bootstrap-5.css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' },
