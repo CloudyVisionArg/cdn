@@ -889,7 +889,7 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'AUTOCOMPLETE') {
             debugger;
-
+            console.log("test");
             $this = newAutocompleteTest("test34",{
                 textSource: 'subject',
                 valueSource: 'doc_id',
