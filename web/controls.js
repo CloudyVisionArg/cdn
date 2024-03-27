@@ -877,7 +877,9 @@ async function newAutocomplete(pId, pLabel, options){
     opt.searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
     opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
     opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
+
     opt.showFieldsArr = opt.showFields.split(',').map(el => el.trim().toLowerCase());
+    (opt.showFieldsArr.length == 0 )? opt.showFieldsArr = opt.searchFieldsArr : null;
     
     opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
         if (opt.fieldsArr.indexOf(el) < 0) opt.fieldsArr.push(el);
