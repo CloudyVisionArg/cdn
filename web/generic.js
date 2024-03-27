@@ -901,8 +901,8 @@ async function renderControls(pCont, pParent) {
                 showFields : '', //Fields que se muestran cuando se busca
                 //selectFields: 'subject, estado,doc_id', //Fields que se muestran cuando se selecciona
                 formula: ctl.attr("searchfilter"),
-                order: (ctl.attr("mode")) ? ctl.attr("mode") == "1" : false,
-                multiple: false,
+                order: ctl.attr("searchorder"),
+                multiple: (ctl.attr("mode")) ? ctl.attr("mode") == "1" : false,
             });           
 
 
