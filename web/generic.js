@@ -892,11 +892,11 @@ async function renderControls(pCont, pParent) {
         } else if (type == 'AUTOCOMPLETE') {
             debugger;
             
-            $this = newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
+            $this = await newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
                 textSource: 'subject',
                 valueSource: 'doc_id',
                 label: 'Contrato (Select2)',
-                folder: 5049,
+                folder: ctl.attr("searchfolder"),
                 searchFields: 'subject, estado, horaspactadas', //Fields por los que se realiza la busqueda
                 extraFields: 'tipo, tipo, cliente', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
                 showFields : 'subject, estado, horaspactadas', //Fields que se muestran cuando se busca

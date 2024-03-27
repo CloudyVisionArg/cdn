@@ -851,7 +851,7 @@ function newButton(pId, pText, pOptions){
 }
 
 
-function newAutocomplete(pId, pLabel, options){
+async function newAutocomplete(pId, pLabel, options){
     let opt = { //Valores por defecto
         textSource: '',
         valueSource: '',
@@ -1022,9 +1022,11 @@ function newAutocomplete(pId, pLabel, options){
         //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
     }
 
+    var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
+    debugger;
     let sURL = pOptions.url ? pOptions.url : "";
-    if (!sURL && pOptions.folderId) {
-        sURL = `${Doors.RESTFULL.ServerUrl}/folders/${pOptions.folderId}/documents`  
+    if (!sURL && fldAc.fldId) {
+        sURL = `${Doors.RESTFULL.ServerUrl}/folders/${fldAc.fldId}/documents`  
     } 
     let oConfig = {
         theme: "bootstrap-5",
