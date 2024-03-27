@@ -166,7 +166,7 @@ function inputDataList(pInput, pSource) {
         }
     )
 }
-
+debugger;
 function newSelect(pId, pLabel, pOptions) {
     var $div = $('<div/>');
 
