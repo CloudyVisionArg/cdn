@@ -1025,8 +1025,8 @@ async function newAutocomplete(pId, pLabel, options){
     var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
     debugger;
     let sURL = pOptions.url ? pOptions.url : "";
-    if (!sURL && fldAc.fldId) {
-        sURL = `${Doors.RESTFULL.ServerUrl}/folders/${fldAc.fldId}/documents`  
+    if (!sURL && fldAc.id) {
+        sURL = `${Doors.RESTFULL.ServerUrl}/folders/${fldAc.id}/documents`  
     } 
     let oConfig = {
         theme: "bootstrap-5",
