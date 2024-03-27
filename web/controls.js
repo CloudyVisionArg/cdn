@@ -1023,7 +1023,6 @@ async function newAutocomplete(pId, pLabel, options){
     }
 
     var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
-    debugger;
     let sURL = pOptions.url ? pOptions.url : "";
     if (!sURL && fldAc.id) {
         sURL = `${Doors.RESTFULL.ServerUrl}/folders/${fldAc.id}/documents`  
@@ -1046,7 +1045,6 @@ async function newAutocomplete(pId, pLabel, options){
                 'AuthToken': Doors.RESTFULL.AuthToken
             },
             data: function (params) {
-                debugger;
                 //Prepara formula para buscar.
                 let finalFormula = "";
                 pOptions.searchFieldsArr.forEach((fld)=>{
@@ -1131,7 +1129,7 @@ async function newAutocomplete(pId, pLabel, options){
     // Función para formatear la selección
     function formatSelection (option) {
         var objeto = $(option.element).data('objeto');
-        
+        debugger;
         if (objeto ) {
             let txt = "";
             for (let index = 0; index < opt.selectFieldsArr.length; index++) {
