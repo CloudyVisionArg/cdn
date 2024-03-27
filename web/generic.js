@@ -889,21 +889,21 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'AUTOCOMPLETE') {
             debugger;
-            // console.log("test222");
-            // $this = newAutocompleteTest("test34",{
-            //     textSource: 'subject',
-            //     valueSource: 'doc_id',
-            //     label: 'Contrato (Select2)',
-            //     folder: 5049,
-            //     searchFields: 'subject, estado, horaspactadas', //Fields por los que se realiza la busqueda
-            //     extraFields: 'tipo, tipo, cliente', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-            //     showFields : 'subject, estado, horaspactadas', //Fields que se muestran cuando se busca
-            //     //selectFields: 'subject, estado,doc_id', //Fields que se muestran cuando se selecciona
-            //     formula: 'estado <> \'Finalizado\'',
-            //     order: 'subject, estado',
-            //     multiple: false,
-            // });
-            //ac.appendTo(ctx.$this);            
+            
+            $this = newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
+                textSource: 'subject',
+                valueSource: 'doc_id',
+                label: 'Contrato (Select2)',
+                folder: 5049,
+                searchFields: 'subject, estado, horaspactadas', //Fields por los que se realiza la busqueda
+                extraFields: 'tipo, tipo, cliente', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
+                showFields : 'subject, estado, horaspactadas', //Fields que se muestran cuando se busca
+                //selectFields: 'subject, estado,doc_id', //Fields que se muestran cuando se selecciona
+                formula: 'estado <> \'Finalizado\'',
+                order: 'subject, estado',
+                multiple: false,
+            });
+            ac.appendTo(ctx.$this);            
 
 
             /*
