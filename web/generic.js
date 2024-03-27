@@ -898,7 +898,7 @@ async function renderControls(pCont, pParent) {
                 folder: ctl.attr("searchfolder"),
                 searchFields: ctl.attr("searchfields"), //Fields por los que se realiza la busqueda
                 extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-                showFields : '', //Fields que se muestran cuando se busca
+                //showFields : '', //Fields que se muestran cuando se busca
                 //selectFields: 'subject, estado,doc_id', //Fields que se muestran cuando se selecciona
                 formula: ctl.attr("searchfilter"),
                 order: ctl.attr("searchorder"),
