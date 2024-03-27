@@ -20,10 +20,7 @@ newAttachments(pId, pLabel)
 */
 
 function newInputText(pId, pLabel) {
-    debugger;
-    console.log("naniel");
     var $div = $('<div/>');
-
     $div.append('<label class="form-label">' + pLabel + '</label>');
 
     $('<input/>', {

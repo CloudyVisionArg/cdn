@@ -904,8 +904,7 @@ async function renderControls(pCont, pParent) {
                 formula: 'estado <> \'Finalizado\'',
                 order: 'subject, estado',
                 multiple: false,
-            });
-            ac.appendTo(ctx.$this);            
+            });           
 
 
             /*
