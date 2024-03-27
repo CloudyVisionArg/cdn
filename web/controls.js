@@ -20,6 +20,7 @@ newAttachments(pId, pLabel)
 */
 
 function newInputText(pId, pLabel) {
+    debugger;
     var $div = $('<div/>');
 
     $div.append('<label class="form-label">' + pLabel + '</label>');
@@ -166,7 +167,7 @@ function inputDataList(pInput, pSource) {
         }
     )
 }
-debugger;
+
 function newSelect(pId, pLabel, pOptions) {
     var $div = $('<div/>');
 
