@@ -890,7 +890,7 @@ async function renderControls(pCont, pParent) {
         } else if (type == 'AUTOCOMPLETE') {
             debugger;
 
-            $this = await newAutocompleteTest("test34",{
+            $this = newAutocompleteTest("test34",{
                 textSource: 'subject',
                 valueSource: 'doc_id',
                 label: 'Contrato (Select2)',
