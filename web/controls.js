@@ -852,50 +852,214 @@ function newButton(pId, pText, pOptions){
 
 
 function newAutocomplete(pId, pLabel, options){
-    var $div = $('<div/>');
-
-    $div.append('<label class="form-label">' + pLabel + '</label>');
-
-    let pOptions = { //Valores por defecto
-        idField: "DOC_ID",
-        textField: "SUBJECT",
-        fieldSearch: "SUBJECT",
-        fields: "subject,doc_id",
-        order: "SUBJECT",
+    let opt = { //Valores por defecto
+        textSource: '',
+        valueSource: '',
+        idField: "doc_id",   
+        searchFields: 'subject', //Fields por los que se realiza la busqueda
+        extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
+        showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
+        selectFields: 'subject', //Fields que se muestran cuando se selecciona
+        templateSelection : formatSelection,
+        showFieldsSeparator : " - ",
+        //fields: "subject,doc_id",,
+        order: "subject",
         maxDocs: 30,
         recursive: false,
         maxDescrLength: 200,
         minimumInputLength: 3,
-        placeholder: "Buscar",
+        placeholder: "Buscar...",
         multiple: false
     }
-    pOptions = Object.assign(pOptions, options);
 
-    let parentEl = $div;
-    let $oSel = $("<select/>", {
+    opt = Object.assign(opt, options);
+
+    opt.searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
+    opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
+    opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
+    opt.showFieldsArr = opt.showFields.split(',').map(el => el.trim().toLowerCase());
+    
+    opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
+        if (opt.fieldsArr.indexOf(el) < 0) opt.fieldsArr.push(el);
+    });
+
+    opt.searchFieldsArr.push("doc_id");
+    opt.searchFieldsArr.push("fld_id");
+    opt.selectFieldsArr =  opt.selectFields.split(',').map(el => el.trim().toLowerCase());
+
+    opt.selectFieldsArr = (opt.selectFieldsArr.length == 0) ? [textSource] : opt.selectFieldsArr;
+
+    let pOptions = opt;
+    var $cont = $('<div/>');
+    $cont.append(`<label class="form-label" for='${pId}'>${ dSession.utils.htmlEncode(pLabel) }</label>`);
+    let parentEl = $cont;
+    var $oSel = $("<select/>", {
         id: pId,
-        class: "ac-g5",
+        name: pId,
+        class: "",
+        width: '100%',
         multiple: pOptions.multiple
     });
-    if (pOptions.width) {
-        $oSel.attr("data-width", pOptions.width);
+    if (opt.width) {
+        $oSel.attr("data-width", opt.width);
     }
+    $oSel[0]._value = function(pValue){
+        debugger;
+        var $self = $(this);
+        if (pValue == undefined) {
+            //get
+            var val = $self.val();
+            return val && val != '[NULL]' ? val : null;
+
+        } else {
+            //set
+            if ($self.attr('multiple')) {
+                
+                //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
+            } else {
+                _selectOption(undefined,  pValue ? pValue.split(';') : null );
+                //setSelectVal($self, undefined, pValue);
+            }
+        }
+    }
+    
+    $oSel[0]._text = function (pText) {
+        var $self = $(this);
+
+        if (pText == undefined) {
+            let res = [];
+            if($self.select2('data').length > 0){
+                for (let index = 0; index < $self.select2('data').length; index++) {
+                    res.push($self.select2('data')[index].text);
+                }
+            }
+            // si es mas de uno devuelve un array sino el texto
+            return (res.length > 1) ? res : res[0] ;
+        } else {
+            debugger;
+            //set
+            if ($self.attr('multiple')) {
+            
+            } else {
+                $self.text(pText).trigger('change');
+                var newOpt = new Option(pText, null, false, true);
+                $self.append(newOpt);
+            }
+        }
+    }
+
+    $oSel[0]._addOption = function (text, value, objExtraData, defaultSelected){
+        
+        // create the option and append to Select2
+        var data = { text : text, value : value};
+        var option = new Option(text, value, objExtraData ?? false, defaultSelected ??true);
+        $oSel.append(option).trigger('change');
+        //manually trigger the `select2:select` event
+        $oSel.trigger({
+            type: 'select2:select',
+            params: {
+                data: data
+            }
+        });
+    }
+
+    $oSel[0]._selectOption = function (text, value, objExtraData){
+        var data = { text : text, value : value};
+        //Buscar si no esta agregarla.
+        $oSel.trigger({
+            type: 'select2:select',
+            params: {
+                data: data
+            }
+        });
+    }   
+
+     //Ver si podemos reutilizar para el set text o set value
+    $oSel[0]._setSelectVal = function(pSelect, pText, pValue, pNotFoundAction) {
+        pSelect.val('[NULL]');
+    
+        if (pSelect.attr('multiple')) {
+            if (pValue) {
+                pSelect.val(pValue);
+            } else if (pText) {
+                pSelect.find('option').filter(function() {
+                    return pText.indexOf($(this).text()) >= 0;
+                }).prop('selected', true);
+            }
+    
+        } else {
+            var notFound = (pNotFoundAction === undefined) ? 1 : pNotFoundAction;
+    
+            if (pValue || pValue == 0) {
+                pSelect.val(pValue);
+            } else {
+                pSelect.find('option').filter(function() {
+                    return $(this).text() == pText;
+                }).prop('selected', true);
+            };
+    
+            if (pSelect[0].selectedIndex < 0) {
+                if (notFound == 1 && (pValue || pText)) {
+                    var option = $('<option/>', {
+                        value: pValue,
+                        selected: 'selected',
+                    });
+                    option.html(pText);
+                    option.appendTo(pSelect);
+    
+                } else if (notFound == 0) {
+                    pSelect[0].selectedIndex = 0;
+                }
+            }
+        }
+    
+        $oSel.trigger({
+            type: 'select2:select',
+            params: {
+                data: data
+            }
+        });
+        //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
+    }
+
     let sURL = pOptions.url ? pOptions.url : "";
-    let fld_id = pOptions.fld_id;
-    if (!sURL && fld_id) {
-        sURL = `${Doors.RESTFULL.ServerUrl}/folders/${fld_id}/documents`  
+    if (!sURL && pOptions.folderId) {
+        sURL = `${Doors.RESTFULL.ServerUrl}/folders/${pOptions.folderId}/documents`  
     } 
     let oConfig = {
+        theme: "bootstrap-5",
+        placeholder: pOptions.placeholder || "Buscar...",
+        minimumResultsForSearch: 1,
+        maximumSelectionLength: pOptions.maximumSelectionLength || 0,
+        minimumInputLength: pOptions.minimumInputLength || 3,
+        templateResult: pOptions.templateResult,
+        templateSelection: pOptions.templateSelection,
+        allowClear: true,
+        multiple : pOptions.multiple || false,        
         ajax: {
             url: sURL,
             dataType: 'json',
             delay: 250,
-            headers: pOptions.headers,
+            headers:{
+                'AuthToken': Doors.RESTFULL.AuthToken
+            },
             data: function (params) {
-                let strFormula = pOptions.formula.replaceAll("{{searchValue}}", params.term);
-            
+                debugger;
+                //Prepara formula para buscar.
+                let finalFormula = "";
+                pOptions.searchFieldsArr.forEach((fld)=>{
+                    if(finalFormula!="")  finalFormula += " OR ";
+                    finalFormula += `${fld} like '%{{searchValue}}%'`;
+                });
+
+                let baseFormula = pOptions.formula;
+                if (finalFormula != "" ){
+                    baseFormula += (baseFormula != "")  ? " AND (" + finalFormula + ")" : finalFormula;
+                }
+                
+                let strFormula = baseFormula.replaceAll("{{searchValue}}", params.term);
                 return {
-                    fields: pOptions.fields,
+                    fields: opt.searchFieldsArr.join(','),
                     formula: strFormula, // search term
                     order: pOptions.order,
                     maxDocs: pOptions.maxDocs,
@@ -904,29 +1068,28 @@ function newAutocomplete(pId, pLabel, options){
                 };
             },
             processResults: function (data, params) {
+                debugger;
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
-                    el.id = el[pOptions.idField];
-                    if (pOptions.textField)
-                        el.text = el[pOptions.textField];
-                })
+                    el.id = el[pOptions.idField.toUpperCase()];
+                    el.text = "";
+                    for (let index = 0; index < pOptions.showFieldsArr.length; index++) {
+                        el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
+                        el.text +=  el[pOptions.showFieldsArr[index].toUpperCase()];
+                    }
+                });
                 return {
                     results: data.InternalObject
                 };
             },
-        cache: true
+            cache: true
         },
         escapeMarkup: function(markup) {
             return markup;
-        },
-        placeholder: pOptions.placeholder || "Buscar",
-        minimumResultsForSearch: 1,
-        maximumSelectionLength: pOptions.maximumSelectionLength || 0,
-        minimumInputLength: pOptions.minimumInputLength || 3,
-        templateResult: pOptions.templateResult,
-        templateSelection: pOptions.templateSelection
+        }
     }
     if (pOptions.selectedElements) {
+        debugger;
         let data = pOptions.selectedElements;
         if (Array.isArray(data)) {
             data.map(el => {
@@ -950,11 +1113,34 @@ function newAutocomplete(pId, pLabel, options){
     }
     
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
+
+
+    $oSel.on("select2:clear", function(e){
+        var x = e;
+        debugger;
+    });
+
     if (parentEl) {
         $oSel.appendTo(parentEl);
-        $oSel.select2(oConfig);
-        return $oSel;
+        var select2Ref =  $oSel.select2(oConfig);
+        return parentEl;
     }
+
+    // Función para formatear la selección
+    function formatSelection (option) {
+        var objeto = $(option.element).data('objeto');
+        
+        if (objeto ) {
+            let txt = "";
+            for (let index = 0; index < opt.selectFieldsArr.length; index++) {
+                const element = opt.selectFieldsArr[index];
+                txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
+                txt += option[element.toUpperCase()];
+            }
+            option.text = txt;
+            return option.text;
+        }
     
-    return $div;
+        return option.text;
+    }
 }
