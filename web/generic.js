@@ -42,13 +42,15 @@ arrScripts.push({ id: 'bootstrap-select', depends: ['jquery', 'bootstrap', 'boot
 arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
 // todo: esto deberia ser segun el lng_id
 arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
-
+arrScripts.push({ id: 'select2.js', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js' });
 // Includes que no es necesario esperar
 var arrScriptsPos = [];
 arrScriptsPos.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
 arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
+arrScriptsPos.push({ id: 'select2.css', src: 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css' });
+arrScriptsPos.push({ id: 'select2-bootstrap-5.css', src: 'https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css' });
 
 (async () => {
     await include(arrScriptsPre);
