@@ -893,16 +893,15 @@ async function renderControls(pCont, pParent) {
             debugger;
             
             $this = await newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
-                textSource: 'subject',
-                valueSource: 'doc_id',
-                label: 'Contrato (Select2)',
+                textSource: tf,
+                valueSource: vf,
                 folder: ctl.attr("searchfolder"),
-                searchFields: 'subject, estado, horaspactadas', //Fields por los que se realiza la busqueda
-                extraFields: 'tipo, tipo, cliente', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-                showFields : 'subject, estado, horaspactadas', //Fields que se muestran cuando se busca
+                searchFields: ctl.attr("searchfields"), //Fields por los que se realiza la busqueda
+                extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
+                showFields : '', //Fields que se muestran cuando se busca
                 //selectFields: 'subject, estado,doc_id', //Fields que se muestran cuando se selecciona
-                formula: 'estado <> \'Finalizado\'',
-                order: 'subject, estado',
+                formula: ctl.attr("searchfilter"),
+                order: (ctl.attr("mode")) ? ctl.attr("mode") == "1" : false,
                 multiple: false,
             });           
 
