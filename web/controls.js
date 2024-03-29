@@ -878,8 +878,8 @@ async function newAutocomplete(pId, pLabel, options){
     opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
     opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
 
-    opt.showFieldsArr = (opt.showFieldsArr) ? opt.showFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.searchFieldsArr];
-    opt.showFieldsArr=  (opt.showFieldsArr.length == 0 )? opt.searchFieldsArr : [];
+    //opt.showFieldsArr = (opt.showFieldsArr) ? opt.showFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.searchFieldsArr];
+   //opt.showFieldsArr=  (opt.showFieldsArr.length == 0 )? opt.searchFieldsArr : [];
     
     
     opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
@@ -1075,10 +1075,14 @@ async function newAutocomplete(pId, pLabel, options){
                 data.InternalObject.map(el =>{
                     el.id = el[pOptions.idField.toUpperCase()];
                     el.text = "";
-                    for (let index = 0; index < pOptions.showFieldsArr.length; index++) {
+                    for (let index = 0; index < pOptions.searchFields.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
-                        el.text +=  el[pOptions.showFieldsArr[index].toUpperCase()];
+                        el.text +=  el[pOptions.searchFields[index].toUpperCase()];
                     }
+                // for (let index = 0; index < .    pOptions.showFieldsArr.length; index++) {
+                    //     el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
+                    //     el.text +=  el[pOptions.showFieldsArr[index].toUpperCase()];
+                    // }
                 });
                 return {
                     results: data.InternalObject
