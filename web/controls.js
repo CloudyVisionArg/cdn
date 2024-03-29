@@ -889,7 +889,7 @@ async function newAutocomplete(pId, pLabel, options){
     opt.searchFieldsArr.push("doc_id");
     opt.searchFieldsArr.push("fld_id");
 
-    opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.selectFieldsArr];
+    //opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.selectFieldsArr];
 
     let pOptions = opt;
     var $cont = $('<div/>');
@@ -1138,11 +1138,16 @@ async function newAutocomplete(pId, pLabel, options){
         debugger;
         if (objeto ) {
             let txt = "";
-            for (let index = 0; index < opt.selectFieldsArr.length; index++) {
-                const element = opt.selectFieldsArr[index];
+            for (let index = 0; index < opt.searchFields.length; index++) {
+                const element = opt.searchFields[index];
                 txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
                 txt += option[element.toUpperCase()];
             }
+            // for (let index = 0; index < opt.selectFieldsArr.length; index++) {
+            //     const element = opt.selectFieldsArr[index];
+            //     txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
+            //     txt += option[element.toUpperCase()];
+            // }
             option.text = txt;
             return option.text;
         }
