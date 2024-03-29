@@ -858,7 +858,7 @@ async function newAutocomplete(pId, pLabel, options){
         idField: "doc_id",   
         searchFields: 'subject', //Fields por los que se realiza la busqueda
         extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-        showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
+        //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
         //selectFields: null, //Fields que se muestran cuando se selecciona
         templateSelection : formatSelection,
         showFieldsSeparator : " - ",
@@ -878,7 +878,7 @@ async function newAutocomplete(pId, pLabel, options){
     opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
     opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
 
-    opt.showFieldsArr = opt.showFields.split(',').map(el => el.trim().toLowerCase());
+    opt.showFieldsArr = (opt.showFieldsArr) ? opt.showFields.split(',').map(el => el.trim().toLowerCase()) : opt.searchFieldsArr;
     (opt.showFieldsArr.length == 0 )? opt.showFieldsArr = opt.searchFieldsArr : null;
     
     
@@ -888,6 +888,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     opt.searchFieldsArr.push("doc_id");
     opt.searchFieldsArr.push("fld_id");
+
     opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : opt.selectFieldsArr;
 
     let pOptions = opt;
