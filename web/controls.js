@@ -878,8 +878,8 @@ async function newAutocomplete(pId, pLabel, options){
     opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
     opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
 
-    opt.showFieldsArr = (opt.showFieldsArr) ? opt.showFields.split(',').map(el => el.trim().toLowerCase()) : opt.searchFieldsArr;
-    (opt.showFieldsArr.length == 0 )? opt.showFieldsArr = opt.searchFieldsArr : null;
+    opt.showFieldsArr = (opt.showFieldsArr) ? opt.showFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.searchFieldsArr];
+    opt.showFieldsArr=  (opt.showFieldsArr.length == 0 )? opt.searchFieldsArr : [];
     
     
     opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
@@ -889,7 +889,7 @@ async function newAutocomplete(pId, pLabel, options){
     opt.searchFieldsArr.push("doc_id");
     opt.searchFieldsArr.push("fld_id");
 
-    opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : opt.selectFieldsArr;
+    opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.selectFieldsArr];
 
     let pOptions = opt;
     var $cont = $('<div/>');
