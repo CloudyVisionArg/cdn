@@ -888,7 +888,8 @@ async function newAutocomplete(pId, pLabel, options){
 
     opt.searchFieldsArr.push("doc_id");
     opt.searchFieldsArr.push("fld_id");
-    opt.selectFieldsArr =  opt.selectFields.split(',').map(el => el.trim().toLowerCase());
+    opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : [], 
+    //opt.selectFieldsArr =  opt.selectFields.split(',').map(el => el.trim().toLowerCase());
 
     opt.selectFieldsArr = (opt.selectFieldsArr.length == 0) ? [textSource] : opt.selectFieldsArr;
 
