@@ -859,7 +859,7 @@ async function newAutocomplete(pId, pLabel, options){
         searchFields: 'subject', //Fields por los que se realiza la busqueda
         extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
-        selectFields: 'subject', //Fields que se muestran cuando se selecciona
+        selectFields: null, //Fields que se muestran cuando se selecciona
         templateSelection : formatSelection,
         showFieldsSeparator : " - ",
         //fields: "subject,doc_id",,
@@ -880,6 +880,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     opt.showFieldsArr = opt.showFields.split(',').map(el => el.trim().toLowerCase());
     (opt.showFieldsArr.length == 0 )? opt.showFieldsArr = opt.searchFieldsArr : null;
+    
     
     opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
         if (opt.fieldsArr.indexOf(el) < 0) opt.fieldsArr.push(el);
