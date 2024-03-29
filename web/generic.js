@@ -890,8 +890,6 @@ async function renderControls(pCont, pParent) {
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
-            debugger;
-            
             $this = await newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
                 textSource: tf,
                 valueSource: vf,
