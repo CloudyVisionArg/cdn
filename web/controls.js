@@ -952,7 +952,7 @@ async function newAutocomplete(pId, pLabel, options){
                 $oSel[0]._selectInitialValue(arrText[idx], null );
             }
 
-            $oSel.trigger('change');
+            
             /* if ($self.attr('multiple')) {
                 debugger;
             } else {              
@@ -984,8 +984,7 @@ async function newAutocomplete(pId, pLabel, options){
                 //selected: 'selected',
             });
             option.html(text);
-            //option.appendTo($oSel).trigger('change');
-            option.appendTo($oSel);
+            option.appendTo($oSel).trigger('change');
         }
         if(value){
             if($oSel[0].options.length > 0){
