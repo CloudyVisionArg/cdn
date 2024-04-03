@@ -984,7 +984,8 @@ async function newAutocomplete(pId, pLabel, options){
                 //selected: 'selected',
             });
             option.html(text);
-            option.appendTo($oSel).trigger('change');
+            //option.appendTo($oSel).trigger('change');
+            option.appendTo($oSel);
         }
         if(value){
             if($oSel[0].options.length > 0){
