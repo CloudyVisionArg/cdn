@@ -1498,32 +1498,36 @@ function _isCapacitor(){
 
 function statusBar(pShow) {
     let refStatusBarPLugin; 
-return;
+
     if (_isCapacitor()) {
+        refStatusBarPLugin = Capacitor.Plugins.StatusBar;
+        setTimeout(async () => {
+            await StatusBar.setOverlaysWebView({ overlay: false });
+            return;
+        }, 1000);
         //refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
         //refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
         //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
         //refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
         //refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
-        refStatusBarPLugin = Capacitor.Plugins.StatusBar;
+        
     } else {
         refStatusBarPLugin = StatusBar; //Cordova
-    }
-
-
-    if (pShow) {
-        refStatusBarPLugin.show();
-        if (device.platform == 'iOS') {
-            refStatusBarPLugin.styleDefault();
+        if (pShow) {
+            refStatusBarPLugin.show();
+            if (device.platform == 'iOS') {
+                refStatusBarPLugin.styleDefault();
+            } else {
+                refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
+                refStatusBarPLugin.setOverlaysWebView({ overlay: false });
+            }
+    
         } else {
-            refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
-            refStatusBarPLugin.setOverlaysWebView({ overlay: false });
+            //StatusBar.hide();
+            refStatusBarPLugin.hide();
         }
-
-    } else {
-        //StatusBar.hide();
-        refStatusBarPLugin.hide();
     }
+    
 }
 
 function formatNumber(pValue) {
