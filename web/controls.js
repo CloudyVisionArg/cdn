@@ -952,13 +952,7 @@ async function newAutocomplete(pId, pLabel, options){
                 $oSel[0]._selectInitialValue(arrText[idx], null );
             }
 
-            $oSel.trigger({
-                type: 'select2:select',
-                // params: {
-                //     data: data
-                // }
-            });
-
+            $oSel.trigger('change');
             /* if ($self.attr('multiple')) {
                 debugger;
             } else {              
@@ -1012,7 +1006,7 @@ async function newAutocomplete(pId, pLabel, options){
                 data: data
             }
         });*/
-    }   
+    }
 
      //Ver si podemos reutilizar para el set text o set value
     $oSel[0]._setSelectVal = function(pSelect, pText, pValue, pNotFoundAction) {
