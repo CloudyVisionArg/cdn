@@ -970,7 +970,7 @@ async function newAutocomplete(pId, pLabel, options){
     }
 
     $oSel[0]._selectInitialValue = function (text, value){
-       
+
         if(text && $oSel.find("option:contains('"+ text + "')").length ==0){
             let option = $('<option/>', {
                 value: value,
@@ -992,13 +992,12 @@ async function newAutocomplete(pId, pLabel, options){
             }
         }
 
-        //var data = { text : text, value : value};
-        //Buscar si no esta agregarla.
+        var data = { text : $oSel[0].options[0].text, value : $oSel[0].options[0].value};        
         $oSel.trigger({
             type: 'select2:select',
-            /*params: {
+            params: {
                 data: data
-            }*/
+            }
         });
     }   
 
