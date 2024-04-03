@@ -992,13 +992,13 @@ async function newAutocomplete(pId, pLabel, options){
             }
         }
         //$oSel.append(option).trigger('change');
-        var data = { text : $oSel[0].options[0].text, value : $oSel[0].options[0].value};        
+        /*var data = { text : $oSel[0].options[0].text, value : $oSel[0].options[0].value};        
         $oSel.trigger({
             type: 'select2:select',
             params: {
                 data: data
             }
-        });
+        });*/
     }   
 
      //Ver si podemos reutilizar para el set text o set value
