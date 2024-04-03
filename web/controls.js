@@ -952,6 +952,13 @@ async function newAutocomplete(pId, pLabel, options){
                 $oSel[0]._selectInitialValue(arrText[idx], null );
             }
 
+            $oSel.trigger({
+                type: 'select2:select',
+                // params: {
+                //     data: data
+                // }
+            });
+
             /* if ($self.attr('multiple')) {
                 debugger;
             } else {              
