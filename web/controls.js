@@ -921,7 +921,7 @@ async function newAutocomplete(pId, pLabel, options){
                 
                 //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
             } else {
-                _selectOption(undefined,  pValue ? pValue.split(';') : null );
+                //_selectOption(undefined,  pValue ? pValue.split(';') : null );
                 //setSelectVal($self, undefined, pValue);
             }
         }
