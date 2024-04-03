@@ -1157,11 +1157,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel.on("select2:clear", function(e){
         let el = e;
-        debugger
-        /*
-        for(let idx= 0 ;idx< el.currentTarget.options.length; idx++){
-            (el.currentTarget.options[idx].hasAttribute("selected"))? el.currentTarget.options[idx].removeAttribute("selected") :null
-        }   */
+        debugger      
     });
 
     $oSel.on("select2:selecting", function(e){
