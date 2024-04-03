@@ -945,7 +945,7 @@ async function newAutocomplete(pId, pLabel, options){
             if ($self.attr('multiple')) {
             
             } else {
-                $self.text(pText).trigger('change');
+                //$self.text(pText).trigger('change');
                 var newOpt = new Option(pText, null, false, true);
                 $self.append(newOpt);
             }
