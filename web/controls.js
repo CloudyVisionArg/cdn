@@ -918,10 +918,9 @@ async function newAutocomplete(pId, pLabel, options){
         } else {
             //set
             if ($self.attr('multiple')) {
-                
+                debugger;
                 //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
-            } else {
-                //$oSel[0]._selectInitialValue(undefined,  pValue ? pValue : null );
+            } else {                
                 $oSel[0]._selectInitialValue(null, pValue);
                 //$oSel[0]._setSelectVal($self, undefined, pValue);
             }
@@ -944,7 +943,7 @@ async function newAutocomplete(pId, pLabel, options){
             debugger;
             //set
             if ($self.attr('multiple')) {
-            
+                debugger;
             } else {
                 //$self.text(pText).trigger('change');
                 //var newOpt = new Option(pText, null, false, true);
