@@ -860,7 +860,7 @@ async function newAutocomplete(pId, pLabel, options){
         extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
         //selectFields: null, //Fields que se muestran cuando se selecciona
-        //templateSelection : formatSelection,
+        templateSelection : formatSelection,
         showFieldsSeparator : " - ",
         //fields: "subject,doc_id",,
         order: "subject",
