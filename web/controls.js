@@ -1164,6 +1164,11 @@ async function newAutocomplete(pId, pLabel, options){
         }   */
     });
 
+    $oSel.on("select2:select", function(e){
+        let el = e;
+        debugger        
+    });
+
     if (parentEl) {
         $oSel.appendTo(parentEl);
         var select2Ref =  $oSel.select2(oConfig);
