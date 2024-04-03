@@ -921,7 +921,7 @@ async function newAutocomplete(pId, pLabel, options){
                 
                 //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
             } else {
-                //$oSel[0]._selectOption(undefined,  pValue ? pValue : null );
+                $oSel[0]._selectOption(undefined,  pValue ? pValue : null );
                 //$oSel[0]._setSelectVal($self, undefined, pValue);
             }
         }
@@ -946,7 +946,7 @@ async function newAutocomplete(pId, pLabel, options){
             
             } else {
                 //$self.text(pText).trigger('change');
-                var newOpt = new Option(pText, null, true, true);
+                var newOpt = new Option(pText, null, false, true);
                 $self.append(newOpt);
             }
         }
