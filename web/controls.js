@@ -917,13 +917,18 @@ async function newAutocomplete(pId, pLabel, options){
 
         } else {
             //set
-            if ($self.attr('multiple')) {
+            let arrValues = pValue.split(";")
+            for(let idx=0;idx<arrValues.length;idx++){
+                $oSel[0]._selectInitialValue(null, arrValues[idx], idx);
+            }
+
+           /* if ($self.attr('multiple')) {
                 debugger;
                 //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
             } else {                
                 $oSel[0]._selectInitialValue(null, pValue);
                 //$oSel[0]._setSelectVal($self, undefined, pValue);
-            }
+            }*/
         }
     }
     
@@ -940,16 +945,18 @@ async function newAutocomplete(pId, pLabel, options){
             // si es mas de uno devuelve un array sino el texto
             return (res.length > 1) ? res : res[0] ;
         } else {
-            debugger;
+            debugger;                
             //set
-            if ($self.attr('multiple')) {
-                debugger;
-            } else {
-                //$self.text(pText).trigger('change');
-                //var newOpt = new Option(pText, null, false, true);
-                //$self.append(newOpt);
-                $oSel[0]._selectInitialValue(pText, null );
+            let arrText = pText.split(";")
+            for(let idx=0;idx<arrText.length;idx++){
+                $oSel[0]._selectInitialValue(arrText[idx], null );
             }
+
+            /* if ($self.attr('multiple')) {
+                debugger;
+            } else {              
+                $oSel[0]._selectInitialValue(pText, null );
+            }*/
         }
     }
 
@@ -968,7 +975,7 @@ async function newAutocomplete(pId, pLabel, options){
         });
     }
 
-    $oSel[0]._selectInitialValue = function (text, value){
+    $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
         if(text && $oSel.find("option:contains('"+ text + "')").length ==0){
             let option = $('<option/>', {
@@ -980,7 +987,7 @@ async function newAutocomplete(pId, pLabel, options){
         }
         if(value){
             if($oSel[0].options.length > 0){
-                $oSel[0].options[0].value = value
+                $oSel[0].options[selectedIndex].value = value
             }else{
                 let option = $('<option/>', {
                     value: value,
