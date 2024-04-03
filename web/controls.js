@@ -974,7 +974,7 @@ async function newAutocomplete(pId, pLabel, options){
         if(text && $oSel.find("option:contains('"+ text + "')").length ==0){
             let option = $('<option/>', {
                 value: value,
-                selected: 'selected',
+                //selected: 'selected',
             });
             option.html(text);
             option.appendTo($oSel).trigger('change');
@@ -985,7 +985,7 @@ async function newAutocomplete(pId, pLabel, options){
             }else{
                 let option = $('<option/>', {
                     value: value,
-                    selected: 'selected',
+                   // selected: 'selected',
                 });
                 option.html(value);
                 option.appendTo($oSel).trigger('change');
