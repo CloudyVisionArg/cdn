@@ -972,9 +972,9 @@ async function newAutocomplete(pId, pLabel, options){
         //Buscar si no esta agregarla.
         $oSel.trigger({
             type: 'select2:select',
-           /* params: {
+            params: {
                 data: data
-            }*/
+            }
         });
     }   
 
