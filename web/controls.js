@@ -952,7 +952,7 @@ async function newAutocomplete(pId, pLabel, options){
             for(let idx=0;idx<arrText.length;idx++){
                 $oSel[0]._selectInitialValue(arrText[idx], null );
             }           
-            
+            $oSel.val(arrText).trigger("change");
             /* if ($self.attr('multiple')) {
                 debugger;
             } else {              
@@ -980,7 +980,7 @@ async function newAutocomplete(pId, pLabel, options){
 
         if(text && $oSel.find("option:contains('"+ text + "')").length ==0){
             let option = $('<option/>', {
-                value: value,
+                value: text,
                 //selected: 'selected',
             });
             option.html(text);
