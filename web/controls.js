@@ -1164,7 +1164,7 @@ async function newAutocomplete(pId, pLabel, options){
         }   */
     });
 
-    $oSel.on("select2:select", function(e){
+    $oSel.on("select2:selecting", function(e){
         let el = e;
         debugger        
     });
