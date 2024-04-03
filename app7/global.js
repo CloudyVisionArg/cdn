@@ -1497,12 +1497,12 @@ function _isCapacitor(){
 }
 
 function statusBar(pShow) {
-    let refStatusBarPLugin; 
+    var refStatusBarPLugin; 
 
     if (_isCapacitor()) {
         refStatusBarPLugin = Capacitor.Plugins.StatusBar;
         setTimeout(async () => {
-            await StatusBar.setOverlaysWebView({ overlay: false });
+            await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
             return;
         }, 1000);
         //refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
