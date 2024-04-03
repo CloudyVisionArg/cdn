@@ -1042,9 +1042,9 @@ async function newAutocomplete(pId, pLabel, options){
     
         pSelect.trigger({
             type: 'select2:select',
-            /*params: {
+            params: {
                 data: data
-            }*/
+            }
         });
         //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
     }
