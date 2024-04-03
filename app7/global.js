@@ -1505,7 +1505,7 @@ function statusBar(pShow) {
             await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
             await refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
             return;
-        }, 5000);
+        }, 1000);
         //refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
         //refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
         //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
