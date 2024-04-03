@@ -1019,9 +1019,9 @@ async function newAutocomplete(pId, pLabel, options){
     
         $oSel.trigger({
             type: 'select2:select',
-            params: {
+            /*params: {
                 data: data
-            }
+            }*/
         });
         //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
     }
