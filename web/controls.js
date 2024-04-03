@@ -1023,7 +1023,7 @@ async function newAutocomplete(pId, pLabel, options){
                 data: data
             }*/
         });
-        //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
+        if (pSelect.selectpicker) pSelect.selectpicker('refresh');
     }
 
     var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
