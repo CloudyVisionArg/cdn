@@ -921,8 +921,9 @@ async function newAutocomplete(pId, pLabel, options){
                 
                 //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
             } else {
-                //$oSel[0]._selectOption(undefined,  pValue ? pValue : null );
-                $oSel[0]._setSelectVal($self, undefined, pValue);
+                //$oSel[0]._selectInitialValue(undefined,  pValue ? pValue : null );
+                $oSel[0]._selectInitialValue(null, pValue);
+                //$oSel[0]._setSelectVal($self, undefined, pValue);
             }
         }
     }
@@ -946,8 +947,9 @@ async function newAutocomplete(pId, pLabel, options){
             
             } else {
                 //$self.text(pText).trigger('change');
-                var newOpt = new Option(pText, null, false, true);
-                $self.append(newOpt);
+                //var newOpt = new Option(pText, null, false, true);
+                //$self.append(newOpt);
+                $oSel[0]._selectInitialValue(pText, null );
             }
         }
     }
@@ -967,14 +969,36 @@ async function newAutocomplete(pId, pLabel, options){
         });
     }
 
-    $oSel[0]._selectOption = function (text, value, objExtraData){
-        var data = { text : text, value : value};
+    $oSel[0]._selectInitialValue = function (text, value){
+       
+        if(text && $oSel.find("option:contains('"+ text + "')").length ==0){
+            let option = $('<option/>', {
+                value: value,
+                selected: 'selected',
+            });
+            option.html(text);
+            option.appendTo($oSel);
+        }
+        if(value){
+            if($oSel[0].options.length > 0){
+                $oSel[0].options[0].value = value
+            }else{
+                let option = $('<option/>', {
+                    value: value,
+                    selected: 'selected',
+                });
+                option.html(value);
+                option.appendTo($oSel);
+            }
+        }
+
+        //var data = { text : text, value : value};
         //Buscar si no esta agregarla.
         $oSel.trigger({
             type: 'select2:select',
-            params: {
+            /*params: {
                 data: data
-            }
+            }*/
         });
     }   
 
