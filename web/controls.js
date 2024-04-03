@@ -1017,7 +1017,7 @@ async function newAutocomplete(pId, pLabel, options){
             }
         }
     
-        $oSel.trigger({
+        pSelect.trigger({
             type: 'select2:select',
             /*params: {
                 data: data
