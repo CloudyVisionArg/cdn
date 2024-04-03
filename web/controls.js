@@ -946,7 +946,7 @@ async function newAutocomplete(pId, pLabel, options){
             
             } else {
                 //$self.text(pText).trigger('change');
-                var newOpt = new Option(pText, null, false, true);
+                var newOpt = new Option(pText, null, true, true);
                 $self.append(newOpt);
             }
         }
@@ -972,16 +972,16 @@ async function newAutocomplete(pId, pLabel, options){
         //Buscar si no esta agregarla.
         $oSel.trigger({
             type: 'select2:select',
-            params: {
+           /* params: {
                 data: data
-            }
+            }*/
         });
     }   
 
      //Ver si podemos reutilizar para el set text o set value
     $oSel[0]._setSelectVal = function(pSelect, pText, pValue, pNotFoundAction) {
         pSelect.val('[NULL]');
-    
+        debugger;
         if (pSelect.attr('multiple')) {
             if (pValue) {
                 pSelect.val(pValue);
@@ -1137,7 +1137,7 @@ async function newAutocomplete(pId, pLabel, options){
     // Función para formatear la selección
     function formatSelection (option) {
         var objeto = $(option.element).data('objeto');
-        debugger;
+        
         if (objeto ) {
             let txt = "";
             for (let index = 0; index < opt.searchFields.length; index++) {
