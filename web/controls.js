@@ -1150,7 +1150,7 @@ async function newAutocomplete(pId, pLabel, options){
         debugger
         let el = e;
         for(let idx= 0 ;idx< el.currentTarget.options.length; idx++){
-            (x.currentTarget.options[idx].hasAttribute("selected"))? x.currentTarget.options[idx].removeAttribute("selected") :null
+            (el.currentTarget.options[idx].hasAttribute("selected"))? el.currentTarget.options[idx].removeAttribute("selected") :null
         }      
     });
 
