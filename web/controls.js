@@ -977,7 +977,7 @@ async function newAutocomplete(pId, pLabel, options){
                 selected: 'selected',
             });
             option.html(text);
-            option.appendTo($oSel);
+            option.appendTo($oSel).trigger('change');
         }
         if(value){
             if($oSel[0].options.length > 0){
@@ -988,10 +988,10 @@ async function newAutocomplete(pId, pLabel, options){
                     selected: 'selected',
                 });
                 option.html(value);
-                option.appendTo($oSel);
+                option.appendTo($oSel).trigger('change');
             }
         }
-
+        //$oSel.append(option).trigger('change');
         var data = { text : $oSel[0].options[0].text, value : $oSel[0].options[0].value};        
         $oSel.trigger({
             type: 'select2:select',
