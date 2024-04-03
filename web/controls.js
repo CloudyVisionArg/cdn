@@ -923,7 +923,7 @@ async function newAutocomplete(pId, pLabel, options){
             }
 
             $oSel.val(arrValues).trigger("change");
-           /* if ($self.attr('multiple')) {
+            /* if ($self.attr('multiple')) {
                 debugger;
                 //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
             } else {                
@@ -961,7 +961,7 @@ async function newAutocomplete(pId, pLabel, options){
         }
     }
 
-    $oSel[0]._addOption = function (text, value, objExtraData, defaultSelected){
+    /*$oSel[0]._addOption = function (text, value, objExtraData, defaultSelected){
         
         // create the option and append to Select2
         var data = { text : text, value : value};
@@ -974,7 +974,7 @@ async function newAutocomplete(pId, pLabel, options){
                 data: data
             }
         });
-    }
+    }*/
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
