@@ -1166,6 +1166,12 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel.on("select2:selecting", function(e){
         let el = e;
+
+        //data ya seleccionada
+        let selectedData = $(el.currentTarget).select2("data");
+        
+        //data nueva
+        console.log(e.params.args.data)
         debugger        
     });
 
