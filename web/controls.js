@@ -1156,7 +1156,7 @@ async function newAutocomplete(pId, pLabel, options){
                 //debugger;
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
-                    el.id = el[pOptions.valueSourceField.toUpperCase()];
+                    el.id = el[pOptions.valueSource.toUpperCase()];
                     el.text = "";
                     for (let index = 0; index < pOptions.searchFieldsArr.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
@@ -1182,7 +1182,7 @@ async function newAutocomplete(pId, pLabel, options){
         let data = pOptions.selectedElements;
         if (Array.isArray(data)) {
             data.map(el => {
-            el.id = el[pOptions.valueSourceField];
+            el.id = el[pOptions.valueSource];
             if (pOptions.textField) {
                 el.text = el[pOptions.textField];
             }
@@ -1192,7 +1192,7 @@ async function newAutocomplete(pId, pLabel, options){
             });
         }
         else{
-            let optId = data.id || data[pOptions.valueSourceField];
+            let optId = data.id || data[pOptions.valueSource];
             let optText = data.text || data[pOptions.textField];
             // Aplicar el formato de templateSelection al texto de la opción
             let formattedText = typeof pOptions.templateSelection === 'function' ? pOptions.templateSelection(data) : optText;
