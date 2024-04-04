@@ -869,9 +869,9 @@ async function newAutocomplete(pId, pLabel, options){
         maxDescrLength: 200,
         minimumInputLength: 3,
         placeholder: "Buscar...",
-        multiple: false
-    }
-
+        multiple: false,
+        selectedElements : [{TITULO: "ABM Empleados - 249522 - 5050", DOC_ID: 249522}, {TITULO:" Actualizar plantillas de proyecto en desa - 255912 - 5050", DOC_ID: 255912}]
+    }    
     opt = Object.assign(opt, options);
 
     opt.searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
