@@ -1211,8 +1211,10 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel.on("select2:unselect", function (e) { 
         debugger;
-        let el = e;
-        log("select2:unselect", e);
+        let optVal = e.params.data.id;
+        let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
+        opt[0].remove();
+        //log("select2:unselect", e);
      });
 
     $oSel.on("select2:selecting", function(e){
