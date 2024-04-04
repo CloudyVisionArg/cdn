@@ -1507,7 +1507,7 @@ function statusBar(pShow) {
     if (pShow) {
         refStatusBarPLugin.show();
         if (device.platform == 'iOS') {
-            refStatusBarPLugin.styleDefault();
+            //refStatusBarPLugin.styleDefault();
         } else {
             setTimeout(async () => {
                 await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
