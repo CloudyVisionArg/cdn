@@ -898,12 +898,14 @@ async function renderControls(pCont, pParent) {
 
         } else if (type == 'AUTOCOMPLETE') {
             $this = await newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
-                textSource: tf,
-                valueSource: vf,
-                xmlSource: xmlf,
+                textField: tf, //requerimiento // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
+                valueField: vf, // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
+                xmlField: xmlf , // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
+                textSource: ctl.attr("textsource"), //titulo
+                valueSource: ctl.attr("valuesource"), //doc_id
+                xmlSource: ctl.attr("returnfields"), //contratos,responsable, etc
                 folder: ctl.attr("searchfolder"),
                 searchFields: ctl.attr("searchfields"), //Fields por los que se realiza la busqueda
-                xmlSourceFields: ctl.attr("returnfields"), // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
                 //extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
                 //showFields : '', //Fields que se muestran cuando se busca
                 //selectFields: 'subject, estado,doc_id', //Fields que se muestran cuando se selecciona

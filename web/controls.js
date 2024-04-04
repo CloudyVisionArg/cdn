@@ -856,9 +856,10 @@ async function newAutocomplete(pId, pLabel, options){
         textSource: '',
         valueSource: '',
         xmlSource: '',
-        idField: "doc_id",   
+        textField: '',
+        valueField: '',
+        xmlField: '', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         searchFields: 'subject', //Fields por los que se realiza la busqueda
-        xmlSourceFields: '', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         //extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
         //selectFields: null, //Fields que se muestran cuando se selecciona
@@ -878,7 +879,7 @@ async function newAutocomplete(pId, pLabel, options){
     
     //opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
     let searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
-    let xmlFieldsArr = opt.xmlSourceFields.split(',').map(el => el.trim().toLowerCase());
+    let xmlFieldsArr = opt.xmlSource.split(',').map(el => el.trim().toLowerCase());
     let fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
     let arrays = [searchFieldsArr, xmlFieldsArr, fieldsArr]
     //Tengo que buscar: textSource, ValueSource, xmlSoruce, ifFIeld, searchFields, extraFields
@@ -886,7 +887,6 @@ async function newAutocomplete(pId, pLabel, options){
     // Itera sobre cada array y agrega sus elementos al conjunto
     arrays.forEach(array => {
         array.forEach(elemento => {
-            debugger;
             if(elemento)
                 conjunto.add(elemento);
         });
@@ -1156,7 +1156,7 @@ async function newAutocomplete(pId, pLabel, options){
                 //debugger;
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
-                    el.id = el[pOptions.idField.toUpperCase()];
+                    el.id = el[pOptions.valueSourceField.toUpperCase()];
                     el.text = "";
                     for (let index = 0; index < pOptions.searchFieldsArr.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
@@ -1182,7 +1182,7 @@ async function newAutocomplete(pId, pLabel, options){
         let data = pOptions.selectedElements;
         if (Array.isArray(data)) {
             data.map(el => {
-            el.id = el[pOptions.idField];
+            el.id = el[pOptions.valueSourceField];
             if (pOptions.textField) {
                 el.text = el[pOptions.textField];
             }
@@ -1192,7 +1192,7 @@ async function newAutocomplete(pId, pLabel, options){
             });
         }
         else{
-            let optId = data.id || data[pOptions.idField];
+            let optId = data.id || data[pOptions.valueSourceField];
             let optText = data.text || data[pOptions.textField];
             // Aplicar el formato de templateSelection al texto de la opción
             let formattedText = typeof pOptions.templateSelection === 'function' ? pOptions.templateSelection(data) : optText;
