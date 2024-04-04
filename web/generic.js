@@ -612,7 +612,7 @@ function getDefaultControl(pField) {
 async function renderControls(pCont, pParent) {
     //debugger;
     var $row, $col, ctl, type, $this, domAttr, label, $input, aux, bsctl;
-    var tf, textField, vf, valueField;
+    var tf, textField, vf, valueField, xmlf, xmlField;
 
     var subset = controls.filter(function (el) {
         return el['PARENT'] == pParent && el['CONTROL'].toUpperCase() != 'TAB' &&
@@ -644,6 +644,8 @@ async function renderControls(pCont, pParent) {
         textField = undefined;
         vf = undefined;
         valueField = undefined;
+        xmlf = undefined;
+        xmlField = undefined;
 
         var tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
@@ -653,6 +655,11 @@ async function renderControls(pCont, pParent) {
         var vf = ctl.attr('valuefield');
         if (vf && vf != '[NULL]') {
             var valueField = doc.fields(vf);
+        };
+
+        var xmlf = ctl.attr('xmlfield');
+        if (xmlf && xmlf != '[NULL]') {
+            var xmlField = doc.fields(xmlf);
         };
 
         $row = getRow($row, pCont, ctl['COLUMN']);
@@ -893,6 +900,7 @@ async function renderControls(pCont, pParent) {
             $this = await newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
                 textSource: tf,
                 valueSource: vf,
+                xmlSource: xmlf,
                 folder: ctl.attr("searchfolder"),
                 searchFields: ctl.attr("searchfields"), //Fields por los que se realiza la busqueda
                 extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar

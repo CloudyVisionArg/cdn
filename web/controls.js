@@ -855,6 +855,7 @@ async function newAutocomplete(pId, pLabel, options){
     let opt = { //Valores por defecto
         textSource: '',
         valueSource: '',
+        xmlSource: '',
         idField: "doc_id",   
         searchFields: 'subject', //Fields por los que se realiza la busqueda
         extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
@@ -902,7 +903,8 @@ async function newAutocomplete(pId, pLabel, options){
         width: '100%',
         multiple: pOptions.multiple,
         "data-textfield": pOptions.textSource,
-        "data-valuefield": pOptions.valueSource
+        "data-valuefield": pOptions.valueSource,
+        "data-xmlfield": pOptions.xmlSource,
     });
     if (opt.width) {
         $oSel.attr("data-width", opt.width);
@@ -958,6 +960,29 @@ async function newAutocomplete(pId, pLabel, options){
             } else {              
                 $oSel[0]._selectInitialValue(pText, null );
             }*/
+        }
+    }
+
+    
+    $oSel[0]._xml = function (pXml) {
+        var $self = $(this);
+
+        if (pXml == undefined) {
+            let res = [];
+            if($self.select2('data').length > 0){
+                debugger;
+                for (let index = 0; index < $self.select2('data').length; index++) {
+                    res.push($self.select2('data')[index].text);
+                }
+            }
+            // si es mas de uno devuelve un array sino el texto
+            return (res.length > 1) ? res : res[0] ;
+        } else {
+            // let arrText = pXml.split(";")
+            // for(let idx=0;idx<arrText.length;idx++){
+            //     $oSel[0]._selectInitialValue(arrText[idx], null );
+            // }           
+            // $oSel.val(arrText).trigger("change");
         }
     }
 
