@@ -990,6 +990,7 @@ async function newAutocomplete(pId, pLabel, options){
         if(value){
             if($oSel[0].options.length > 0){
                 $oSel[0].options[selectedIndex].value = value
+                $oSel.select2("data")[selectedIndex].id = value
             }else{
                 let option = $('<option/>', {
                     value: value,
