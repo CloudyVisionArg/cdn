@@ -932,7 +932,7 @@ async function newAutocomplete(pId, pLabel, options){
 
         } else {
             //set
-            let arrValues = pValue.split(";")
+            let arrValues = pValue.toString().split(";")
             for(let idx=0;idx<arrValues.length;idx++){
                 $oSel[0]._selectInitialValue(null, arrValues[idx], idx);
             }
@@ -963,7 +963,7 @@ async function newAutocomplete(pId, pLabel, options){
         } else {
             //debugger;                
             //set
-            let arrText = pText.split(";")
+            let arrText = pText.toString().split(";")
             for(let idx=0;idx<arrText.length;idx++){
                 $oSel[0]._selectInitialValue(arrText[idx], null );
             }           
