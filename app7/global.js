@@ -1495,33 +1495,27 @@ function getCodelib(pCode) {
 function _isCapacitor(){
     return (typeof(Capacitor) != 'undefined');
 }
-
 function statusBar(pShow) {
-    let refStatusBarPLugin; 
-return;
+    var refStatusBarPLugin; 
     if (_isCapacitor()) {
-        //refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
-        //refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
-        //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
-        //refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
-        //refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
         refStatusBarPLugin = Capacitor.Plugins.StatusBar;
     } else {
         refStatusBarPLugin = StatusBar; //Cordova
     }
-
 
     if (pShow) {
         refStatusBarPLugin.show();
         if (device.platform == 'iOS') {
             refStatusBarPLugin.styleDefault();
         } else {
-            refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
-            refStatusBarPLugin.setOverlaysWebView({ overlay: false });
+            setTimeout(async () => {
+                await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
+                await refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
+                return;
+            }, 1000);
         }
 
     } else {
-        //StatusBar.hide();
         refStatusBarPLugin.hide();
     }
 }

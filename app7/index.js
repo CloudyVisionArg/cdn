@@ -296,6 +296,10 @@ var app = {
             window.localStorage.setItem('syncing', '0');
         //};
 
+
+        if(typeof(Capacitor) != 'undefined'){
+            Capacitor.Plugins.SplashScreen.hide();
+        }
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
         statusBar(val != 'off');
