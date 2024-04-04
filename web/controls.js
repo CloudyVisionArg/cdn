@@ -1131,7 +1131,7 @@ async function newAutocomplete(pId, pLabel, options){
             data: function (params) {
                 //Prepara formula para buscar.
                 let finalFormula = "";
-                pOptions.searchFieldsArr.forEach((fld)=>{
+                searchFieldsArr.forEach((fld)=>{
                     if(finalFormula!="")  finalFormula += " OR ";
                     finalFormula += `${fld} like '%{{searchValue}}%'`;
                 });
