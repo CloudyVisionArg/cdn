@@ -858,6 +858,7 @@ async function newAutocomplete(pId, pLabel, options){
         xmlSource: '',
         idField: "doc_id",   
         searchFields: 'subject', //Fields por los que se realiza la busqueda
+        xmlSourceFields: '', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         //extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
         //selectFields: null, //Fields que se muestran cuando se selecciona
@@ -875,10 +876,11 @@ async function newAutocomplete(pId, pLabel, options){
     }    
     opt = Object.assign(opt, options);
     
-    opt.searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
     //opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
-    opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase(), opt.xmlSource.toLowerCase()];
-    let arrays = [opt.searchFieldsArr, opt.fieldsArr]
+    let searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
+    let xmlFieldsArr = opt.xmlSourceFields.split(',').map(el => el.trim().toLowerCase());
+    let fieldsArr = [op.textSource.toLowerCase(), op.valueSource.toLowerCase()];
+    let arrays = [searchFieldsArr, xmlFieldsArr, fieldsArr]
     //Tengo que buscar: textSource, ValueSource, xmlSoruce, ifFIeld, searchFields, extraFields
     let conjunto = new Set();
     // Itera sobre cada array y agrega sus elementos al conjunto
