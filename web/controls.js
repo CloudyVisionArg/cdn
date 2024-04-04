@@ -999,6 +999,8 @@ async function newAutocomplete(pId, pLabel, options){
                 //option.appendTo($oSel).trigger('change');
                 option.appendTo($oSel);
             }
+
+            $oSel.select2("data",option)
         }
         //$oSel.append(option).trigger('change');
         /*var data = { text : $oSel[0].options[0].text, value : $oSel[0].options[0].value};        
