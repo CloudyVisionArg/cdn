@@ -1209,6 +1209,12 @@ async function newAutocomplete(pId, pLabel, options){
         debugger      
     });
 
+    $oSel.on("select2:unselect", function (e) { 
+        debugger;
+        let el = e;
+        log("select2:unselect", e);
+     });
+
     $oSel.on("select2:selecting", function(e){
         let el = e;
 
