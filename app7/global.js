@@ -1498,6 +1498,7 @@ function _isCapacitor(){
 function statusBar(pShow) {
     var refStatusBarPLugin; 
     if (_isCapacitor()) {
+        Capacitor.Plugins.SplashScreen.hide();
         refStatusBarPLugin = Capacitor.Plugins.StatusBar;
     } else {
         refStatusBarPLugin = StatusBar; //Cordova
