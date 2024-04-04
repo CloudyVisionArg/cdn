@@ -870,7 +870,7 @@ async function newAutocomplete(pId, pLabel, options){
         minimumInputLength: 3,
         placeholder: "Buscar...",
         multiple: false,
-        selectedElements : [{TITULO: "ABM Empleados - 249522 - 5050", DOC_ID: 249522}, {TITULO:" Actualizar plantillas de proyecto en desa - 255912 - 5050", DOC_ID: 255912}]
+        //selectedElements : [{TITULO: "ABM Empleados - 249522 - 5050", DOC_ID: 249522}, {TITULO:" Actualizar plantillas de proyecto en desa - 255912 - 5050", DOC_ID: 255912}]
     }    
     opt = Object.assign(opt, options);
 
@@ -919,7 +919,7 @@ async function newAutocomplete(pId, pLabel, options){
             //set
             let arrValues = pValue.split(";")
             for(let idx=0;idx<arrValues.length;idx++){
-            //    $oSel[0]._selectInitialValue(null, arrValues[idx], idx);
+                $oSel[0]._selectInitialValue(null, arrValues[idx], idx);
             }
 
             $oSel.val(arrValues).trigger("change");
@@ -950,7 +950,7 @@ async function newAutocomplete(pId, pLabel, options){
             //set
             let arrText = pText.split(";")
             for(let idx=0;idx<arrText.length;idx++){
-               // $oSel[0]._selectInitialValue(arrText[idx], null );
+                $oSel[0]._selectInitialValue(arrText[idx], null );
             }           
             $oSel.val(arrText).trigger("change");
             /* if ($self.attr('multiple')) {
