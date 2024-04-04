@@ -879,7 +879,7 @@ async function newAutocomplete(pId, pLabel, options){
     //opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
     let searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
     let xmlFieldsArr = opt.xmlSourceFields.split(',').map(el => el.trim().toLowerCase());
-    let fieldsArr = [op.textSource.toLowerCase(), op.valueSource.toLowerCase()];
+    let fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
     let arrays = [searchFieldsArr, xmlFieldsArr, fieldsArr]
     //Tengo que buscar: textSource, ValueSource, xmlSoruce, ifFIeld, searchFields, extraFields
     let conjunto = new Set();
