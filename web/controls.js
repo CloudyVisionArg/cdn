@@ -858,7 +858,7 @@ async function newAutocomplete(pId, pLabel, options){
         xmlSource: '',
         idField: "doc_id",   
         searchFields: 'subject', //Fields por los que se realiza la busqueda
-        extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
+        //extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
         //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
         //selectFields: null, //Fields que se muestran cuando se selecciona
         templateSelection : formatSelection,
@@ -874,22 +874,33 @@ async function newAutocomplete(pId, pLabel, options){
         //selectedElements : [{TITULO: "ABM Empleados - 249522 - 5050", DOC_ID: 249522}, {TITULO:" Actualizar plantillas de proyecto en desa - 255912 - 5050", DOC_ID: 255912}]
     }    
     opt = Object.assign(opt, options);
-
+    
     opt.searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
-    opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
-    opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
+    //opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
+    opt.fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase(), opt.xmlSource.toLowerCase()];
+    let arrays = [opt.searchFieldsArr, opt.fieldsArr]
+    //Tengo que buscar: textSource, ValueSource, xmlSoruce, ifFIeld, searchFields, extraFields
+    let conjunto = new Set();
+    // Itera sobre cada array y agrega sus elementos al conjunto
+    arrays.forEach(array => {
+        array.forEach(elemento => {
+            debugger;
+            if(elemento)
+                conjunto.add(elemento);
+        });
+    });
 
     //opt.showFieldsArr = (opt.showFieldsArr) ? opt.showFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.searchFieldsArr];
    //opt.showFieldsArr=  (opt.showFieldsArr.length == 0 )? opt.searchFieldsArr : [];
     
     
-    opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
-        if (opt.fieldsArr.indexOf(el) < 0) opt.fieldsArr.push(el);
-    });
+    //opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
+    //    if (opt.fieldsArr.indexOf(el) < 0) opt.fieldsArr.push(el);
+    //});
 
-    opt.searchFieldsArr.push("doc_id");
-    opt.searchFieldsArr.push("fld_id");
-
+    conjunto.add("doc_id");
+    conjunto.add("fld_id");
+    const sFieldsArr = Array.from(conjunto);
     //opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.selectFieldsArr];
 
     let pOptions = opt;
@@ -967,7 +978,7 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel[0]._xml = function (pXml) {
         var $self = $(this);
 
-        if (pXml == undefined) {
+        if (pXml === undefined) {
             let res = [];
             if($self.select2('data').length > 0){
                 debugger;
@@ -1129,8 +1140,9 @@ async function newAutocomplete(pId, pLabel, options){
                 }
                 
                 let strFormula = baseFormula.replaceAll("{{searchValue}}", params.term);
+                
                 return {
-                    fields: opt.searchFieldsArr.join(','),
+                    fields: sFieldsArr.join(','),
                     formula: strFormula, // search term
                     order: pOptions.order,
                     maxDocs: pOptions.maxDocs,
