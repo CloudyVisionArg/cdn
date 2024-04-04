@@ -610,7 +610,7 @@ function getDefaultControl(pField) {
 }
 
 async function renderControls(pCont, pParent) {
-    debugger;
+    //debugger;
     var $row, $col, ctl, type, $this, domAttr, label, $input, aux, bsctl;
     var tf, textField, vf, valueField;
 

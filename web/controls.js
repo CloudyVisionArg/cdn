@@ -908,7 +908,7 @@ async function newAutocomplete(pId, pLabel, options){
         $oSel.attr("data-width", opt.width);
     }
     $oSel[0]._value = function(pValue){
-        debugger;
+        //debugger;
         var $self = $(this);
         if (pValue == undefined) {
             //get
@@ -946,7 +946,7 @@ async function newAutocomplete(pId, pLabel, options){
             // si es mas de uno devuelve un array sino el texto
             return (res.length > 1) ? res : res[0] ;
         } else {
-            debugger;                
+            //debugger;                
             //set
             let arrText = pText.split(";")
             for(let idx=0;idx<arrText.length;idx++){
@@ -1013,7 +1013,7 @@ async function newAutocomplete(pId, pLabel, options){
      //Ver si podemos reutilizar para el set text o set value
     $oSel[0]._setSelectVal = function(pSelect, pText, pValue, pNotFoundAction) {
         pSelect.val('[NULL]');
-        debugger;
+        //debugger;
         if (pSelect.attr('multiple')) {
             if (pValue) {
                 pSelect.val(pValue);
@@ -1104,7 +1104,7 @@ async function newAutocomplete(pId, pLabel, options){
                 };
             },
             processResults: function (data, params) {
-                debugger;
+                //debugger;
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
                     el.id = el[pOptions.idField.toUpperCase()];
