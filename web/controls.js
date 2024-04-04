@@ -1158,9 +1158,9 @@ async function newAutocomplete(pId, pLabel, options){
                 data.InternalObject.map(el =>{
                     el.id = el[pOptions.valueSource.toUpperCase()];
                     el.text = "";
-                    for (let index = 0; index < pOptions.searchFieldsArr.length; index++) {
+                    for (let index = 0; index < searchFieldsArr.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
-                        el.text +=  el[pOptions.searchFieldsArr[index].toUpperCase()];
+                        el.text +=  el[searchFieldsArr[index].toUpperCase()];
                     }
                 // for (let index = 0; index < .    pOptions.showFieldsArr.length; index++) {
                     //     el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
