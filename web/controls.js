@@ -978,27 +978,34 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
-        if(text && $oSel.find("option:contains('"+ text + "')").length ==0){
-            let option = $('<option/>', {
-                value: text,
-                //selected: 'selected',
-            });
-            option.html(text);
-            //option.appendTo($oSel).trigger('change');
-            option.appendTo($oSel);
+        if(text){
+            // let option = $('<option/>', {
+            //     value: text,
+            //     //selected: 'selected',
+            // });
+            // option.html(text);
+            // //option.appendTo($oSel).trigger('change');
+            // option.appendTo($oSel);
+            let option = new Option(text, text, true, true);
+            $oSel.append(option);
         }
         if(value){
             if($oSel[0].options.length > 0){
                 $oSel[0].options[selectedIndex].value = value
-                $oSel.select2("data")[selectedIndex].id = value
+                let oData = $oSel.select2("data");
+                if(oData && oData.length > 0){
+                    $oSel.select2("data")[selectedIndex].id = value
+                }
             }else{
-                let option = $('<option/>', {
-                    value: value,
-                   // selected: 'selected',
-                });
-                option.html(value);
-                //option.appendTo($oSel).trigger('change');
-                option.appendTo($oSel);
+                // let option = $('<option/>', {
+                //     value: value,
+                //    // selected: 'selected',
+                // });
+                // option.html(value);
+                // //option.appendTo($oSel).trigger('change');
+                // option.appendTo($oSel);
+                let option = new Option(value, value, true, true);
+                $oSel.append(option);
             }
 
             //$oSel.select2("data",option)
