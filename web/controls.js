@@ -915,9 +915,9 @@ async function newAutocomplete(pId, pLabel, options){
         class: "",
         width: '100%',
         multiple: pOptions.multiple,
-        "data-textfield": pOptions.textSource,
-        "data-valuefield": pOptions.valueSource,
-        "data-xmlfield": pOptions.xmlSource,
+        "data-textfield": pOptions.textField,
+        "data-valuefield": pOptions.valueField,
+        "data-xmlfield": pOptions.xmlField,
     });
     if (opt.width) {
         $oSel.attr("data-width", opt.width);
