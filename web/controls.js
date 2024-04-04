@@ -986,7 +986,7 @@ async function newAutocomplete(pId, pLabel, options){
             // option.html(text);
             // //option.appendTo($oSel).trigger('change');
             // option.appendTo($oSel);
-            let option = new Option(text, text, true, true);
+            let option = new Option(text, text, false, false);
             $oSel.append(option);
         }
         if(value){
@@ -1004,7 +1004,7 @@ async function newAutocomplete(pId, pLabel, options){
                 // option.html(value);
                 // //option.appendTo($oSel).trigger('change');
                 // option.appendTo($oSel);
-                let option = new Option(value, value, true, true);
+                let option = new Option(value, value, false, false);
                 $oSel.append(option);
             }
 
