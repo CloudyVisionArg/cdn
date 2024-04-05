@@ -916,10 +916,9 @@ async function newAutocomplete(pId, pLabel, options){
         width: '100%',
         multiple: pOptions.multiple,
         "data-textfield": pOptions.textField,
-        "data-valuefield": pOptions.valueField,
-        "data-xmlfield": pOptions.xmlField,
+        "data-valuefield": pOptions.valueField,       
     });
-    $cont.append(`<input type="hidden" id="${pId}_xml" value="${pOptions.xmlField}" />`);
+    $cont.append(`<input type="hidden" data-xmlfield="${pOptions.xmlField}"  id="${pId}_xml" value="${pOptions.xmlField}" />`);
 
     if (opt.width) {
         $oSel.attr("data-width", opt.width);
