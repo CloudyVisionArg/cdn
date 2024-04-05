@@ -1273,7 +1273,7 @@ async function newAutocomplete(pId, pLabel, options){
         debugger;
         let optVal = e.params.data.id;
         let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
-        opt[0].remove();
+        //opt[0].remove();
         //log("select2:unselect", e);
     });
 
