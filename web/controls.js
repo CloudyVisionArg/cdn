@@ -1260,42 +1260,41 @@ async function newAutocomplete(pId, pLabel, options){
         return option.text;
     }
 
-    function _XMLtoJSON(xmlString) {
+    $oSel[0]._XMLtoJSON = function(xmlString) {   
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
         const items = xmlDoc.getElementsByTagName('item');
         const resultado = [];
-      
+
         for (let i = 0; i < items.length; i++) {
-          const item = items[i];
-          const atributos = item.attributes;
-          const objetoJSON = {};
-      
-          for (let j = 0; j < atributos.length; j++) {
-            const atributo = atributos[j];
-            objetoJSON[atributo.nodeName.toUpperCase()] = atributo.nodeValue;
-          }
-      
-          resultado.push(objetoJSON);
+            const item = items[i];
+            const atributos = item.attributes;
+            const objetoJSON = {};
+
+            for (let j = 0; j < atributos.length; j++) {
+                const atributo = atributos[j];
+                objetoJSON[atributo.nodeName.toUpperCase()] = atributo.nodeValue;
+            }
+
+            resultado.push(objetoJSON);
         }
-      
+
         return resultado;
     }
 
-    function _JSONtoXML(objetosJSON) {
+    $oSel[0]._JSONtoXML = function(objetosJSON) {   
         let xmlString = '<root>';
-      
+
         objetosJSON.forEach(objeto => {
-          xmlString += '<item ';
-          for (let key in objeto) {
+            xmlString += '<item ';
+            for (let key in objeto) {
             xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
-          }
-          xmlString += '/>';
+            }
+            xmlString += '/>';
         });
-      
+
         xmlString += '</root>';
-      
+
         return xmlString;
     }
-      
 }
