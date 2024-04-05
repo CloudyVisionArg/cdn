@@ -1263,10 +1263,10 @@ async function newAutocomplete(pId, pLabel, options){
      });
 
     $oSel.on("select2:select", function(e){
-        let el = e;
-
-        //data ya seleccionada
-        let selectedData = $(el.currentTarget).select2("data");      
+        let el = e;       
+        let selectedData = $(el.currentTarget).select2("data");
+        let strXml = $oSel[0]._JSONtoXML(selectedData);
+        $("#" + el.currentTarget.id + "_xml").val(strXml);
         debugger        
     });
 
