@@ -1064,6 +1064,45 @@ async function newAutocomplete(pId, pLabel, options){
         });*/
     }
 
+    $oSel[0]._XMLtoJSON = function(xmlString) {   
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+        const items = xmlDoc.getElementsByTagName('item');
+        const resultado = [];
+
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const atributos = item.attributes;
+            const objetoJSON = {};
+
+            for (let j = 0; j < atributos.length; j++) {
+                const atributo = atributos[j];
+                objetoJSON[atributo.nodeName.toUpperCase()] = atributo.nodeValue;
+            }
+
+            resultado.push(objetoJSON);
+        }
+
+        return resultado;
+    }
+
+    $oSel[0]._JSONtoXML = function(objetosJSON) {   
+        let xmlString = '<root>';
+
+        objetosJSON.forEach(objeto => {
+            xmlString += '<item ';
+            for (let key in objeto) {
+            xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
+            }
+            xmlString += '/>';
+        });
+
+        xmlString += '</root>';
+
+        return xmlString;
+    }
+
+
      //Ver si podemos reutilizar para el set text o set value
     $oSel[0]._setSelectVal = function(pSelect, pText, pValue, pNotFoundAction) {
         pSelect.val('[NULL]');
@@ -1258,43 +1297,5 @@ async function newAutocomplete(pId, pLabel, options){
         }
     
         return option.text;
-    }
-
-    $oSel[0]._XMLtoJSON = function(xmlString) {   
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
-        const items = xmlDoc.getElementsByTagName('item');
-        const resultado = [];
-
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            const atributos = item.attributes;
-            const objetoJSON = {};
-
-            for (let j = 0; j < atributos.length; j++) {
-                const atributo = atributos[j];
-                objetoJSON[atributo.nodeName.toUpperCase()] = atributo.nodeValue;
-            }
-
-            resultado.push(objetoJSON);
-        }
-
-        return resultado;
-    }
-
-    $oSel[0]._JSONtoXML = function(objetosJSON) {   
-        let xmlString = '<root>';
-
-        objetosJSON.forEach(objeto => {
-            xmlString += '<item ';
-            for (let key in objeto) {
-            xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
-            }
-            xmlString += '/>';
-        });
-
-        xmlString += '</root>';
-
-        return xmlString;
-    }
+    }    
 }
