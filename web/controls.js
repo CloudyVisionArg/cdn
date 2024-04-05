@@ -1092,7 +1092,7 @@ async function newAutocomplete(pId, pLabel, options){
         objetosJSON.forEach(objeto => {
             xmlString += '<item ';
             for (let key in objeto) {
-            xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
+                xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
             }
             xmlString += '/>';
         });
@@ -1265,6 +1265,16 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel.on("select2:select", function(e){
         let el = e;       
         let selectedData = $(el.currentTarget).select2("data");
+
+        //Dejo en la data del xml solo los campos que estan seleccionados
+        selectedData.forEach(objeto => {
+            Object.keys(objeto).forEach(key => {
+                if (!sFieldsArr.includes(key) ) {
+                    delete objeto[key];
+                }
+            });
+        });
+
         let strXml = $oSel[0]._JSONtoXML(selectedData);
         $("#" + el.currentTarget.id + "_xml").val(strXml);
         debugger        
