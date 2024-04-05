@@ -919,6 +919,8 @@ async function newAutocomplete(pId, pLabel, options){
         "data-valuefield": pOptions.valueField,
         "data-xmlfield": pOptions.xmlField,
     });
+    $cont.append(`<input type="hidden" id="${pId}_xml" value="${pOptions.xmlField}" />`);
+
     if (opt.width) {
         $oSel.attr("data-width", opt.width);
     }
@@ -981,16 +983,20 @@ async function newAutocomplete(pId, pLabel, options){
         var $self = $(this);
 
         if (pXml === undefined) {
-            let res = [];
-            if($self.select2('data').length > 0){
-                debugger;
-                for (let index = 0; index < $self.select2('data').length; index++) {
-                    res.push($self.select2('data')[index].text);
-                }
-            }
-            // si es mas de uno devuelve un array sino el texto
-            return (res.length > 1) ? res : res[0] ;
+            // let res = [];
+            // if($self.select2('data').length > 0){
+            //     debugger;
+            //     for (let index = 0; index < $self.select2('data').length; index++) {
+            //         res.push($self.select2('data')[index].text);
+            //     }
+            // }
+            // // si es mas de uno devuelve un array sino el texto
+            // return (res.length > 1) ? res : res[0] ;
+            return $("#" + pId + "_xml").val();
+
         } else {
+
+            $("#" + pId + "_xml").val(pXml);
             // let arrText = pXml.split(";")
             // for(let idx=0;idx<arrText.length;idx++){
             //     $oSel[0]._selectInitialValue(arrText[idx], null );
@@ -1217,14 +1223,11 @@ async function newAutocomplete(pId, pLabel, options){
         //log("select2:unselect", e);
      });
 
-    $oSel.on("select2:selecting", function(e){
+    $oSel.on("select2:select", function(e){
         let el = e;
 
         //data ya seleccionada
-        let selectedData = $(el.currentTarget).select2("data");
-        
-        //data nueva
-        console.log(e.params.args.data)
+        let selectedData = $(el.currentTarget).select2("data");      
         debugger        
     });
 
