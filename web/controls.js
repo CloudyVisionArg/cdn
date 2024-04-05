@@ -1269,7 +1269,7 @@ async function newAutocomplete(pId, pLabel, options){
         //Dejo en la data del xml solo los campos que estan seleccionados
         selectedData.forEach(objeto => {
             Object.keys(objeto).forEach(key => {
-                if (!sFieldsArr.includes(key) ) {
+                if (!sFieldsArr.includes(key.toLowerCase()) ) {
                     delete objeto[key];
                 }
             });
