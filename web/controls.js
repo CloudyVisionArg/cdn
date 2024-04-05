@@ -1063,43 +1063,43 @@ async function newAutocomplete(pId, pLabel, options){
         });*/
     }
 
-    $oSel[0]._XMLtoJSON = function(xmlString) {   
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
-        const items = xmlDoc.getElementsByTagName('item');
-        const resultado = [];
+    // $oSel[0]._XMLtoJSON = function(xmlString) {   
+    //     const parser = new DOMParser();
+    //     const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+    //     const items = xmlDoc.getElementsByTagName('item');
+    //     const resultado = [];
 
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            const atributos = item.attributes;
-            const objetoJSON = {};
+    //     for (let i = 0; i < items.length; i++) {
+    //         const item = items[i];
+    //         const atributos = item.attributes;
+    //         const objetoJSON = {};
 
-            for (let j = 0; j < atributos.length; j++) {
-                const atributo = atributos[j];
-                objetoJSON[atributo.nodeName.toUpperCase()] = atributo.nodeValue;
-            }
+    //         for (let j = 0; j < atributos.length; j++) {
+    //             const atributo = atributos[j];
+    //             objetoJSON[atributo.nodeName.toUpperCase()] = atributo.nodeValue;
+    //         }
 
-            resultado.push(objetoJSON);
-        }
+    //         resultado.push(objetoJSON);
+    //     }
 
-        return resultado;
-    }
+    //     return resultado;
+    // }
 
-    $oSel[0]._JSONtoXML = function(objetosJSON) {   
-        let xmlString = '<root>';
+    // $oSel[0]._JSONtoXML = function(objetosJSON) {   
+    //     let xmlString = '<root>';
 
-        objetosJSON.forEach(objeto => {
-            xmlString += '<item ';
-            for (let key in objeto) {
-                xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
-            }
-            xmlString += '/>';
-        });
+    //     objetosJSON.forEach(objeto => {
+    //         xmlString += '<item ';
+    //         for (let key in objeto) {
+    //             xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
+    //         }
+    //         xmlString += '/>';
+    //     });
 
-        xmlString += '</root>';
+    //     xmlString += '</root>';
 
-        return xmlString;
-    }
+    //     return xmlString;
+    // }
 
 
      //Ver si podemos reutilizar para el set text o set value
@@ -1262,8 +1262,19 @@ async function newAutocomplete(pId, pLabel, options){
     });
 
     $oSel.on("select2:select", function(e){
-        let el = e;       
-        let selectedData =  JSON.parse(JSON.stringify($(el.currentTarget).select2("data")));       
+        debugger;
+        $oSel[0]._setXmlVal(e.currentTarget);
+
+    });
+
+    if (parentEl) {
+        $oSel.appendTo(parentEl);
+        var select2Ref =  $oSel.select2(oConfig);
+        return parentEl;
+    }
+
+    $oSel[0]._setXmlVal = function(el) {         
+        let selectedData =  JSON.parse(JSON.stringify($(el).select2("data")));       
 
         //Dejo en la data del xml solo los campos que estan seleccionados
         selectedData.forEach(objeto => {
@@ -1274,15 +1285,8 @@ async function newAutocomplete(pId, pLabel, options){
             });
         });
 
-        let strXml = $oSel[0]._JSONtoXML(selectedData);
-        $("#" + el.currentTarget.id + "_xml").val(strXml);
-        debugger        
-    });
-
-    if (parentEl) {
-        $oSel.appendTo(parentEl);
-        var select2Ref =  $oSel.select2(oConfig);
-        return parentEl;
+        let strXml = JSONtoXML(selectedData);
+        $("#" + el.id + "_xml").val(strXml);
     }
 
     // Función para formatear la selección
