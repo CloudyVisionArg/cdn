@@ -1150,6 +1150,22 @@ async function newAutocomplete(pId, pLabel, options){
         //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
     }
 
+    $oSel[0]._setXmlVal = function(el) {         
+        let selectedData =  JSON.parse(JSON.stringify($(el).select2("data")));       
+
+        //Dejo en la data del xml solo los campos que estan seleccionados
+        selectedData.forEach(objeto => {
+            Object.keys(objeto).forEach(key => {
+                if (!sFieldsArr.includes(key.toLowerCase()) ) {
+                    delete objeto[key];
+                }
+            });
+        });
+
+        let strXml = JSONtoXML(selectedData);
+        $("#" + el.id + "_xml").val(strXml);
+    }
+
     var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
     let sURL = pOptions.url ? pOptions.url : "";
     if (!sURL && fldAc.id) {
@@ -1271,23 +1287,7 @@ async function newAutocomplete(pId, pLabel, options){
         $oSel.appendTo(parentEl);
         var select2Ref =  $oSel.select2(oConfig);
         return parentEl;
-    }
-
-    $oSel[0]._setXmlVal = function(el) {         
-        let selectedData =  JSON.parse(JSON.stringify($(el).select2("data")));       
-
-        //Dejo en la data del xml solo los campos que estan seleccionados
-        selectedData.forEach(objeto => {
-            Object.keys(objeto).forEach(key => {
-                if (!sFieldsArr.includes(key.toLowerCase()) ) {
-                    delete objeto[key];
-                }
-            });
-        });
-
-        let strXml = JSONtoXML(selectedData);
-        $("#" + el.id + "_xml").val(strXml);
-    }
+    }    
 
     // Función para formatear la selección
     function formatSelection (option) {
