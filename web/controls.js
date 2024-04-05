@@ -1260,11 +1260,11 @@ async function newAutocomplete(pId, pLabel, options){
         let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
         opt[0].remove();
         //log("select2:unselect", e);
-     });
+    });
 
     $oSel.on("select2:select", function(e){
         let el = e;       
-        let selectedData = $(el.currentTarget).select2("data");
+        let selectedData =  JSON.parse(JSON.stringify($(el.currentTarget).select2("data")));       
 
         //Dejo en la data del xml solo los campos que estan seleccionados
         selectedData.forEach(objeto => {
