@@ -1164,7 +1164,8 @@ async function newAutocomplete(pId, pLabel, options){
     let sURL = pOptions.url ? pOptions.url : "";
     if (!sURL && fldAc.id) {
         sURL = `${Doors.RESTFULL.ServerUrl}/folders/${fldAc.id}/documents`  
-    } 
+    }
+
     let oConfig = {
         theme: "bootstrap-5",
         placeholder: pOptions.placeholder || "Buscar...",
@@ -1210,7 +1211,8 @@ async function newAutocomplete(pId, pLabel, options){
                 //debugger;
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
-                    el.id = el[pOptions.valueSource.toUpperCase()];
+                   // el.id = el[pOptions.valueSource.toUpperCase()];
+                    el.id = (el[pOptions.valueSource.toUpperCase()])?el[pOptions.valueSource.toUpperCase()]:el[pOptions.textSource.toUpperCase()]
                     el.text = "";
                     for (let index = 0; index < searchFieldsArr.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
