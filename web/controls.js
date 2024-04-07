@@ -1216,8 +1216,8 @@ async function newAutocomplete(pId, pLabel, options){
                 //debugger;
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
-                   // el.id = el[pOptions.valueSource.toUpperCase()];
-                    el.id = (el[pOptions.valueSource.toUpperCase()])?el[pOptions.valueSource.toUpperCase()]:el[pOptions.textSource.toUpperCase()]
+                    el.id = el[pOptions.valueSource.toUpperCase()];
+                    //el.id = (el[pOptions.valueSource.toUpperCase()])?el[pOptions.valueSource.toUpperCase()]:el[pOptions.textSource.toUpperCase()]
                     el.text = "";
                     for (let index = 0; index < searchFieldsArr.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
