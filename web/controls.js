@@ -1021,10 +1021,10 @@ async function newAutocomplete(pId, pLabel, options){
             // option.html(text);
             // //option.appendTo($oSel).trigger('change');
             // option.appendTo($oSel);
-            if($oSel.find("option[value='"+ text +"']").text() != text){
+            //if($oSel.find("option[value='"+ text +"']").text() != text){
                 let option = new Option(text, text, false, false);
                 $oSel.append(option);
-            }
+            //}
         }
         if(value){
             if($oSel[0].options.length > 0){
@@ -1041,10 +1041,10 @@ async function newAutocomplete(pId, pLabel, options){
                 // option.html(value);
                 // //option.appendTo($oSel).trigger('change');
                 // option.appendTo($oSel);
-                if($oSel.find("option[value='"+ value +"']").text() != value){
+                //if($oSel.find("option[value='"+ value +"']").text() != value){
                     let option = new Option(value, value, false, false);
                     $oSel.append(option);
-                }
+                //}
             }
 
             //$oSel.select2("data",option)
