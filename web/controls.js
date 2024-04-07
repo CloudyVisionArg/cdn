@@ -1299,7 +1299,7 @@ async function newAutocomplete(pId, pLabel, options){
         if(!$oSel.attr("multiple")){
             let optVal = e.params.data.id;
             let opt = $(e.currentTarget).find("option[value!='" + optVal + "']")
-            opt[0].remove();
+            (opt.length > 0 )?opt[0].remove():null
         }
 
         //Actualizo el xml
