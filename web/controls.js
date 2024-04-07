@@ -1013,8 +1013,13 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
         if(text){
-            let option = new Option(text, text, false, false);
-            $oSel.append(option);
+            //let option = new Option(text, text, false, false);
+            //$oSel.append(option);
+            if($oSel.find("option").text() != text){
+                let option = new Option(text, text, false, false);
+                $oSel.append(option);
+            }
+
 
             /*if($oSel[0].hasAttribute("data-valuefield")){
                 let option = new Option(text, text, false, false);
@@ -1025,9 +1030,8 @@ async function newAutocomplete(pId, pLabel, options){
             }*/
         }
         if(value){
-
             //if($oSel[0].options.length > 0){
-            if($oSel[0].hasAttribute("data-textfield")){            
+            if($oSel[0].hasAttribute("data-textfield")){
                 $oSel[0].options[selectedIndex].value = value
                 let oData = $oSel.select2("data");
                 if(oData && oData.length > 0){
@@ -1041,10 +1045,10 @@ async function newAutocomplete(pId, pLabel, options){
                 // option.html(value);
                 // //option.appendTo($oSel).trigger('change');
                 // option.appendTo($oSel);
-                //if($oSel.find("option[value='"+ value +"']").text() != value){
+                if($oSel.find("option[value='"+ value +"']").length == 0){
                     let option = new Option(value, value, false, false);
                     $oSel.append(option);
-                //}
+                }
             }
 
             //$oSel.select2("data",option)
@@ -1216,8 +1220,8 @@ async function newAutocomplete(pId, pLabel, options){
                 //debugger;
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
-                    el.id = el[pOptions.valueSource.toUpperCase()];
-                    //el.id = (el[pOptions.valueSource.toUpperCase()])?el[pOptions.valueSource.toUpperCase()]:el[pOptions.textSource.toUpperCase()]
+                    //el.id = el[pOptions.valueSource.toUpperCase()];
+                    el.id = (el[pOptions.valueSource.toUpperCase()])?el[pOptions.valueSource.toUpperCase()]:el[pOptions.textSource.toUpperCase()]
                     el.text = "";
                     for (let index = 0; index < searchFieldsArr.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
