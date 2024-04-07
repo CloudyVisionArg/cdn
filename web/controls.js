@@ -1295,6 +1295,14 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel.on("select2:select", function(e){
         debugger;
+        //Si no es multiple debo borrar la opcion que se cambio
+        if(!$oSel.attr("multiple")){
+            let optVal = e.params.data.id;
+            let opt = $(e.currentTarget).find("option[value!='" + optVal + "']")
+            opt[0].remove();
+        }
+
+        //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
 
     });
