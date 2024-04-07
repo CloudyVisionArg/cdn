@@ -981,8 +981,8 @@ async function newAutocomplete(pId, pLabel, options){
         }
     }
 
-    
-    $oSel[0]._xml = function (pXml) {
+    //No tiene set de xml porque el xml-datafield esta en un input hidden aparte y no en el propio select
+    /*$oSel[0]._xml = function (pXml) {
         var $self = $(this);
         debugger;
         if (pXml === undefined) {            
@@ -993,7 +993,7 @@ async function newAutocomplete(pId, pLabel, options){
             $("#" + pId + "_xml").val(pXml);
             
         }
-    }
+    }*/
 
     /*$oSel[0]._addOption = function (text, value, objExtraData, defaultSelected){
         
