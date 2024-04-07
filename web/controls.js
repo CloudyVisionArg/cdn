@@ -1013,21 +1013,21 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
         if(text){
-           
-            // let option = $('<option/>', {
-            //     value: text,
-            //     //selected: 'selected',
-            // });
-            // option.html(text);
-            // //option.appendTo($oSel).trigger('change');
-            // option.appendTo($oSel);
-            //if($oSel.find("option[value='"+ text +"']").text() != text){
+            let option = new Option(text, text, false, false);
+            $oSel.append(option);
+
+            /*if($oSel[0].hasAttribute("data-valuefield")){
                 let option = new Option(text, text, false, false);
                 $oSel.append(option);
-            //}
+            }else if($oSel.find("option[value='"+ text +"']").text() != text){
+                let option = new Option(text, text, false, false);
+                $oSel.append(option);
+            }*/
         }
         if(value){
-            if($oSel[0].options.length > 0){
+
+            //if($oSel[0].options.length > 0){
+            if($oSel[0].hasAttribute("data-textfield")){            
                 $oSel[0].options[selectedIndex].value = value
                 let oData = $oSel.select2("data");
                 if(oData && oData.length > 0){
