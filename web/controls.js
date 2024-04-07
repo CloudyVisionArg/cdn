@@ -970,7 +970,7 @@ async function newAutocomplete(pId, pLabel, options){
             //set
             let arrText = pText.toString().split(";")
             for(let idx=0;idx<arrText.length;idx++){
-                $oSel[0]._selectInitialValue(arrText[idx], null );
+                $oSel[0]._selectInitialValue(arrText[idx], null,idx );
             }           
             $oSel.val(arrText).trigger("change");
             /* if ($self.attr('multiple')) {
@@ -1015,7 +1015,8 @@ async function newAutocomplete(pId, pLabel, options){
         if(text){
             //let option = new Option(text, text, false, false);
             //$oSel.append(option);
-            if($oSel.find("option").text() != text){
+            //if($oSel.find("option").text() != text){
+            if($oSel[0].options[selectedIndex].text != text){
                 let option = new Option(text, text, false, false);
                 $oSel.append(option);
             }
