@@ -1013,6 +1013,7 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
         if(text){
+           
             // let option = $('<option/>', {
             //     value: text,
             //     //selected: 'selected',
@@ -1020,8 +1021,10 @@ async function newAutocomplete(pId, pLabel, options){
             // option.html(text);
             // //option.appendTo($oSel).trigger('change');
             // option.appendTo($oSel);
-            let option = new Option(text, text, false, false);
-            $oSel.append(option);
+            if($oSel.find("option[value='"+ text +"']").text() != text){
+                let option = new Option(text, text, false, false);
+                $oSel.append(option);
+            }
         }
         if(value){
             if($oSel[0].options.length > 0){
@@ -1038,8 +1041,10 @@ async function newAutocomplete(pId, pLabel, options){
                 // option.html(value);
                 // //option.appendTo($oSel).trigger('change');
                 // option.appendTo($oSel);
-                let option = new Option(value, value, false, false);
-                $oSel.append(option);
+                if($oSel.find("option[value='"+ value +"']").text() != value){
+                    let option = new Option(value, value, false, false);
+                    $oSel.append(option);
+                }
             }
 
             //$oSel.select2("data",option)
