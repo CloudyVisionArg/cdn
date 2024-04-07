@@ -1264,9 +1264,8 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
 
 
-    $oSel.on("select2:clear", function(e){
-        let el = e;
-        debugger      
+    $oSel.on("select2:clear", function(e){       
+        $oSel[0]._setXmlVal(e.currentTarget);
     });
 
     $oSel.on("select2:unselect", function (e) { 
@@ -1274,7 +1273,10 @@ async function newAutocomplete(pId, pLabel, options){
         let optVal = e.params.data.id;
         let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
         opt[0].remove();
-        //log("select2:unselect", e);
+
+        //Actualizo el xml
+        $oSel[0]._setXmlVal(e.currentTarget);
+
     });
 
     $oSel.on("select2:select", function(e){
