@@ -1272,7 +1272,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel.on("change", function (e) { 
         debugger;
-        let optVal = e.params.data.id;
+        //let optVal = e.params.data.id;
         //let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
        // opt[0].remove();
         //log("change"); 
