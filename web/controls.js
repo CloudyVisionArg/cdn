@@ -918,7 +918,11 @@ async function newAutocomplete(pId, pLabel, options){
         "data-textfield": pOptions.textField,
         "data-valuefield": pOptions.valueField,       
     });
-    $cont.append(`<input type="hidden" data-xmlfield="${pOptions.xmlField}"  id="${pId}_xml" value="${pOptions.xmlField}" />`);
+
+    //Si existe xml field lo agrego
+    if(pOptions.xmlField){
+        $cont.append(`<input type="hidden" data-xmlfield="${pOptions.xmlField}"  id="${pId}_xml" value="${pOptions.xmlField}" />`);
+    }
 
     if (opt.width) {
         $oSel.attr("data-width", opt.width);
@@ -980,27 +984,14 @@ async function newAutocomplete(pId, pLabel, options){
     
     $oSel[0]._xml = function (pXml) {
         var $self = $(this);
-
-        if (pXml === undefined) {
-            // let res = [];
-            // if($self.select2('data').length > 0){
-            //     debugger;
-            //     for (let index = 0; index < $self.select2('data').length; index++) {
-            //         res.push($self.select2('data')[index].text);
-            //     }
-            // }
-            // // si es mas de uno devuelve un array sino el texto
-            // return (res.length > 1) ? res : res[0] ;
+        debugger;
+        if (pXml === undefined) {            
             return $("#" + pId + "_xml").val();
 
         } else {
 
             $("#" + pId + "_xml").val(pXml);
-            // let arrText = pXml.split(";")
-            // for(let idx=0;idx<arrText.length;idx++){
-            //     $oSel[0]._selectInitialValue(arrText[idx], null );
-            // }           
-            // $oSel.val(arrText).trigger("change");
+            
         }
     }
 
@@ -1150,10 +1141,13 @@ async function newAutocomplete(pId, pLabel, options){
         //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
     }
 
-    $oSel[0]._setXmlVal = function(el) {         
-        let selectedData =  JSON.parse(JSON.stringify($(el).select2("data")));       
+    $oSel[0]._setXmlVal = function(el) {       
+        if(!pOptions.xmlField)
+            return;
+        
+        let selectedData =  JSON.parse(JSON.stringify($(el).select2("data")));
 
-        //Dejo en la data del xml solo los campos que estan seleccionados
+        //Dejo en la data del xml solo los campos que estan seleccionados en el sFieldsArr
         selectedData.forEach(objeto => {
             Object.keys(objeto).forEach(key => {
                 if (!sFieldsArr.includes(key.toLowerCase()) ) {
