@@ -1016,7 +1016,7 @@ async function newAutocomplete(pId, pLabel, options){
             //let option = new Option(text, text, false, false);
             //$oSel.append(option);
             //if($oSel.find("option").text() != text){
-            if($oSel[0].options[selectedIndex].text != text){
+            if($oSel[0].options.length == 0 || $oSel[0].options[selectedIndex].text != text){
                 let option = new Option(text, text, false, false);
                 $oSel.append(option);
             }
