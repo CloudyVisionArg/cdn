@@ -1242,6 +1242,13 @@ async function newAutocomplete(pId, pLabel, options){
             cache: true
         },
         escapeMarkup: function(markup) {
+            if(markup == "No result found"){
+                let editUrl = pOptions.editUrl + "&doc_id=411427"
+                markup = $(`<a title="Crear elemento" href="${editUrl}" target="_blank" id="${pId}">
+                    <b class="text-primary">Crear documento</b>              
+                </a>`);
+            }
+
             return markup;
         }
     }
