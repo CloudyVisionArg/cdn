@@ -1330,10 +1330,10 @@ async function newAutocomplete(pId, pLabel, options){
     function formatSelection (option) {
         //var objeto = $(option.element).data('objeto');
         debugger;
-        if(!option.id)
+        if(!option.id || !pOptions.editUrl)
             return option.text;
 
-        let $itemObj = $(`<a title="Editar elemento" href="#" id="${pId}">
+        let $itemObj = $(`<a title="Editar elemento" href="${pOptions.editUrl}" id="${pId}">
                 <b class="text-primary">${option.text}</b>              
             </a>`);
         return $itemObj;
