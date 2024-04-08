@@ -257,12 +257,12 @@ async function showConsole(allowClose) {
         function supportMail() {
             debugger;
             var mail = {
-                to: 'soporte@cloudycrm.net',
                 subject: 'Cloudy CRM - App issue',
                 body: 'Por favor describanos su problema',
             }
 
             if (_isCapacitor()) {
+                mail.to = ['soporte@cloudycrm.net'];
                 mail.attachments = [
                     {
                         type: 'base64',
@@ -278,6 +278,7 @@ async function showConsole(allowClose) {
                 Capacitor.Plugins.EmailComposer.open(mail);
 
             } else {
+                mail.to = 'soporte@cloudycrm.net';
                 mail.attachments = [
                     'base64:console.txt//' + window.btoa(localStorage.getItem('consoleLog')),
                     'base64:localStorage.txt//' + localStorageBase64(),
@@ -1494,17 +1495,11 @@ function getCodelib(pCode) {
 function _isCapacitor(){
     return (typeof(Capacitor) != 'undefined');
 }
-
 function statusBar(pShow) {
-    let refStatusBarPLugin; 
-
+    var refStatusBarPLugin; 
     if (_isCapacitor()) {
-        refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
-        refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
-        //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
-        refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
-        refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
-
+        Capacitor.Plugins.SplashScreen.hide();
+        refStatusBarPLugin = Capacitor.Plugins.StatusBar;
     } else {
         refStatusBarPLugin = StatusBar; //Cordova
     }
@@ -1512,16 +1507,17 @@ function statusBar(pShow) {
     if (pShow) {
         refStatusBarPLugin.show();
         if (device.platform == 'iOS') {
-            refStatusBarPLugin.styleDefault();
-            //refStatusBarPLugin.backgroundColorByHexString('12A0D8');
-            //refStatusBarPLugin.backgroundColorByHexString('2BA0DA');
-            //refStatusBarPLugin.overlaysWebView(false)
+            //refStatusBarPLugin.styleDefault();
         } else {
-            //refStatusBarPLugin.styleLightContent();
+            setTimeout(async () => {
+                await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
+                await refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
+                return;
+            }, 1000);
         }
 
     } else {
-        StatusBar.hide();
+        refStatusBarPLugin.hide();
     }
 }
 

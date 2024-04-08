@@ -2,6 +2,7 @@
 	typeahead: https://github.com/corejavascript/typeahead.js
 	Ejemplo: https://digitalfortress.tech/tutorial/smart-search-using-twitter-typeahead-bloodhound/
 	bootstrap-tagsinput: https://github.com/bootstrap-tagsinput/bootstrap-tagsinput
+	MDBootstrap (usd 300): https://mdbootstrap.com/docs/standard/components/chips/
 -->
 <!DOCTYPE html>
 <html>
@@ -28,18 +29,18 @@
 	</style>
 </head>
 <body>
-	<h1>Bootstrap Tags Input with Autocomplete</h1>
+	<h1>Autocomplete</h1>
 	<div class="bgcolor">
 	<div class="mb-3">
-		<label class="form-label">Pais</label>
-		<input type="text" class="form-control" id="tags-input" />
+		<label class="form-label">Contratos tags-input</label>
+		<select multiple class="form-control" id="tags-input"></select>
 	</div>
 	<div class="mb-3">
-		<label class="form-label">Pais</label>
+		<label class="form-label">Contratos typeahead</label>
 		<input type="text" class="form-control" id="input" autocomplete="off" />
 	</div>
 	<div class="mb-3">
-		<label class="form-label">Pais2</label>
+		<label class="form-label">Pais typeahead</label>
 		<input type="text" class="form-control" id="input2" autocomplete="off" />
 	</div>
 	</div>
@@ -55,10 +56,10 @@
 		doorsapi = await import(scriptSrc('doorsapi2'));
 		dSession = new doorsapi.Session();
 		dSession.serverUrl = 'https://cloudyvision.cloudycrm.net/restful';
-		await dSession.logon('admin', 'QWEdsa123', 'cloudyvision');
+		await dSession.logon('admin', 'ZXCewq321', 'cloudyvision');
 		fldCon = await dSession.folder(5049);
 
-		var countries = new Bloodhound({
+		var bhContratos = new Bloodhound({
 			datumTokenizer: Bloodhound.tokenizers.whitespace,
 			//datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -67,7 +68,7 @@
 				cache: false,
 				prepare: function(query, settings) {
 					// El ej muestra el loader aca
-					debugger;
+					//debugger;
 					settings.query = query;
 					return settings;
 				},
@@ -75,7 +76,6 @@
 				filter: function (response) {  
 					// El ej oculta el loader aca
 					debugger;
-
 					return response;
 				},
 
@@ -86,7 +86,7 @@
 
 				transport: async function (options, onSuccess, onError) {
 					try {
-						debugger;
+						//debugger;
 						var res = await fldCon.search({
 							fields: 'subject, tipo, estado',
 							formula: 'subject like ' + dSession.db.sqlEnc('%' + options.query + '%', 1),
@@ -102,10 +102,10 @@
 			
 		});
 
-		countries.initialize();
+		bhContratos.initialize();
 
 		
-		var countries2 = new Bloodhound({
+		var bhCountries = new Bloodhound({
 			datumTokenizer: function (datum) {debugger}, //Bloodhound.tokenizers.obj.whitespace('name'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			
@@ -147,15 +147,15 @@
 			
 		});
 		
-		countries2.initialize();
+		bhCountries.initialize();
 
 		
 		$('#tags-input').tagsinput({
 		typeaheadjs: {
-			name: 'countries',
+			name: 'contratos',
 			displayKey: 'SUBJECT',
 			valueKey: 'SUBJECT',
-			source: countries.ttAdapter()
+			source: bhContratos.ttAdapter()
 		}
 		});
 		
@@ -169,7 +169,7 @@
 		{
 			name: 'countries',
 			displayKey: 'SUBJECT',
-			source: countries   // Bloodhound instance is passed as the source
+			source: bhContratos   // Bloodhound instance is passed as the source
 		});
 
 		$('#input2').typeahead({
@@ -180,7 +180,7 @@
 		{
 			name: 'countries2',
 			displayKey: 'cioc',
-			source: countries2   // Bloodhound instance is passed as the source
+			source: bhCountries   // Bloodhound instance is passed as the source
 		});
 	})();
 	
