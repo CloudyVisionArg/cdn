@@ -1365,7 +1365,13 @@ function setSelectValAutocomplete(pSelect, pText, pValue) {
 
             if(pSelect.find("option[value='" + optValue + "']").length == 0){
                 let option = new Option(optText, optValue, false, false);
-                pSelect.append(option).trigger("change");
+                pSelect.append(option);
+
+                let allOptValues = pSelect.find("option").map(function() {
+                    return $(this).val();
+                }).get().join(",");
+                pSelect.val(allOptValues).trigger("change");
+
                 $("#autocomplete_new").trigger({
                     type: 'select2:select',
                     params: {
