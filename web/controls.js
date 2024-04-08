@@ -1327,13 +1327,13 @@ async function newAutocomplete(pId, pLabel, options){
 
 
     // Función para formatear la selección
-    function formatSelection (option) {
-        //var objeto = $(option.element).data('objeto');
+    function formatSelection (option) {       
         debugger;
-        if(!option.id || !pOptions.editUrl)
+        if(!option.id || !pOptions.editUrl || !option.DOC_ID)
             return option.text;
 
-        let $itemObj = $(`<a title="Editar elemento" href="${pOptions.editUrl}" id="${pId}">
+        let editUrl = pOptions.editUrl + "&doc_id=" + option.DOC_ID
+        let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" id="${pId}">
                 <b class="text-primary">${option.text}</b>              
             </a>`);
         return $itemObj;
