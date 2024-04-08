@@ -864,6 +864,7 @@ async function newAutocomplete(pId, pLabel, options){
         //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
         //selectFields: null, //Fields que se muestran cuando se selecciona
         templateSelection : formatSelection,
+        templateResult: templateResult,
         showFieldsSeparator : " - ",
         //fields: "subject,doc_id",,
         order: "subject",
@@ -1314,6 +1315,14 @@ async function newAutocomplete(pId, pLabel, options){
         var select2Ref =  $oSel.select2(oConfig);
         return parentEl;
     }    
+
+    function templateResult(item){
+        //if (!item.id) { return item.text; }
+		debugger;
+        let $currency = $('<span>' + item.text + '</span>');
+		return $currency;       
+    }
+
 
     // Función para formatear la selección
     function formatSelection (option) {
