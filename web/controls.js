@@ -1358,48 +1358,47 @@ function JSONtoXML(objetosJSON) {
  //Ver si podemos reutilizar para el set text o set value
 function setSelectValAutocomplete(pSelect, pText, pValue) {   
     debugger;
-    if (pSelect.attr('multiple')) {
-        if(pValue || pText){
-            let optValue = (pValue)?pValue:pText
-            let optText = (pText)?pText:pValue
 
-            if(pSelect.find("option[value='" + optValue + "']").length == 0){
-                let option = new Option(optText, optValue, false, false);
-                pSelect.append(option);
+    if(!pValue && !pText){
+        console.log("debe ingresar un value y/o un text")
+        return false    
+    }    
 
-                let allOptValues = pSelect.find("option").map(function() {
-                    return $(this).val();
-                }).get();
-                pSelect.val(allOptValues).trigger("change");
+    let optValue = (pValue)?pValue:pText;
+    let optText = (pText)?pText:pValue;
 
-                // $("#autocomplete_new").trigger({
-                //     type: 'select2:select',
-                //     params: {
-                //         data: {id: optValue}
-                //     }
-                // });
+    if(pSelect.find("option[value='" + optValue + "']").length == 0){
+        let option = new Option(optText, optValue, false, false);
+        pSelect.append(option);
+
+        let allOptValues = pSelect.find("option").map(function() {
+            return $(this).val();
+        }).get();
+        pSelect.val(allOptValues).trigger("change");
+
+        $("#autocomplete_new").trigger({
+            type: 'select2:select',
+            params: {
+                data: {id: optValue}
             }
-        }
-
-    } else {
-        if(pValue || pText){
-            let optValue = (pValue)?pValue:pText
-            let optText = (pText)?pText:pValue
-
-            if(pSelect.find("option[value='" + optValue + "']").length == 0){
-                let option = new Option(optText, optValue, false, false);
-                //pSelect.append(option).trigger("change");
-                pSelect.append(option).val(optValue).trigger("change");
-                $("#autocomplete_new").trigger({
-                    type: 'select2:select',
-                    params: {
-                        data: {id: optValue}
-                    }
-                });
-            }
-        }else{
-            //Obtener lo seleccionado?
-            debugger
-        }
+        });
     }
+
+    
+    // let optValue = (pValue)?pValue:pText
+    // let optText = (pText)?pText:pValue
+
+    // if(pSelect.find("option[value='" + optValue + "']").length == 0){
+    //     let option = new Option(optText, optValue, false, false);
+    //     //pSelect.append(option).trigger("change");
+    //     pSelect.append(option).val(optValue).trigger("change");
+    //     $("#autocomplete_new").trigger({
+    //         type: 'select2:select',
+    //         params: {
+    //             data: {id: optValue}
+    //         }
+    //     });
+    // }
+        
+    
 }
