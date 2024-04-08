@@ -1364,8 +1364,16 @@ function setSelectValAutocomplete(pSelect, pText, pValue) {
 
     } else {
         if(pValue || pText){
-            let option = new Option((pText)?pText:pValue, (pValue)?pValue:pText, false, false);
-            pSelect.append(option).trigger("change");
+            let optValue = (pValue)?pValue:pText
+            let optText = (pValue)?pValue:pText
+            let option = new Option(optText, optValue, false, false);
+            pSelect.append(option).trigger("change");            
+            $("#autocomplete_new").trigger({
+                type: 'select2:select',
+                params: {
+                    data: {id: optValue}
+                }
+            });
         }else{
             //Obtener lo seleccionado?
             debugger
