@@ -1356,55 +1356,19 @@ function JSONtoXML(objetosJSON) {
 }
 
  //Ver si podemos reutilizar para el set text o set value
-function setSelectValAutocomplete(pSelect, pText, pValue, pNotFoundAction) {
-    //pSelect.val('[NULL]');
+function setSelectValAutocomplete(pSelect, pText, pValue) {   
     debugger;
     if (pSelect.attr('multiple')) {
-        if (pValue) {
-            pSelect.val(pValue);
-        } else if (pText) {
-            pSelect.find('option').filter(function() {
-                return pText.indexOf($(this).text()) >= 0;
-            }).prop('selected', true);
-        }
+        let option = new Option((pText)?pText:pValue, (pValue)?pValue:pText, false, false);
+        pSelect.append(option).trigger("change");
 
     } else {
-        var notFound = (pNotFoundAction === undefined) ? 1 : pNotFoundAction;
-
-        if (pValue || pValue == 0) {            
-            if(pSelect.find("option[value='"+ pValue +"']").length == 0){
-                debugger;
-            }else{
-                //ya esta elegido, debemos ignorarlo? o esta en el set de datos del select
-                debugger;
-                //pSelect.val(pValue)
-            }
-
-        }else if(pText || pText == 0) {
-
-            if(pSelect.find("option").filter(function () { return $(this).html() == pText }).length == 0){
-                debugger;
-            }else{
-                debugger;
-                //ya esta elegido, debemos ignorarlo? o esta en el set de datos del select
-            }
-        };
-
-        if (pSelect[0].selectedIndex < 0) {
-            if (notFound == 1 && (pValue || pText)) {
-                let option = new Option((pText)?pText:pValue, (pValue)?pValue:pText, false, false);
-                pSelect.append(option).trigger("change");              
-            } else if (notFound == 0) {
-                pSelect[0].selectedIndex = 0;
-            }
+        if(pValue || pText){
+            let option = new Option((pText)?pText:pValue, (pValue)?pValue:pText, false, false);
+            pSelect.append(option).trigger("change");
+        }else{
+            //Obtener lo seleccionado?
+            debugger
         }
     }
-
-    // let data = [{SUBJECT: pText, DOC_ID: pValue}]
-    // pSelect.trigger({
-    //     type: 'select2:select',
-    //     params: {
-    //         data: data
-    //     }
-    // });    
 }
