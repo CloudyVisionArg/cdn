@@ -1032,7 +1032,7 @@ async function newAutocomplete(pId, pLabel, options){
         }
         if(value){
             //if($oSel[0].options.length > 0){
-            if($oSel[0].hasAttribute("data-textfield")){
+            if($oSel[0].getAttribute("data-textfield") != "[NULL]"){
                 $oSel[0].options[selectedIndex].value = value
                 let oData = $oSel.select2("data");
                 if(oData && oData.length > 0){
