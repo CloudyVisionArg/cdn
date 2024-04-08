@@ -1380,7 +1380,6 @@ function setSelectValAutocomplete(pSelect, pText, pValue, pNotFoundAction) {
                 //pSelect.val(pValue)
             }
 
-            pSelect.val(pValue).trigger("change");
         }else if(pText || pText == 0) {
 
             if(pSelect.find("option").filter(function () { return $(this).html() == pText }).length == 0){
@@ -1395,12 +1394,13 @@ function setSelectValAutocomplete(pSelect, pText, pValue, pNotFoundAction) {
             if (notFound == 1 && (pValue || pText)) {
                 let option = new Option((pValue)?pValue:pText, (pText)?pText:pValue, false, false);
                 pSelect.append(option);
+                pSelect.val(pValue).trigger("change");
             } else if (notFound == 0) {
                 pSelect[0].selectedIndex = 0;
             }
         }
     }
-    
+
     let data = [{SUBJECT: pText, DOC_ID: pValue}]
     pSelect.trigger({
         type: 'select2:select',
