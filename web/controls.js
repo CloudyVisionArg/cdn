@@ -864,7 +864,7 @@ async function newAutocomplete(pId, pLabel, options){
         //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
         //selectFields: null, //Fields que se muestran cuando se selecciona
         templateSelection : formatSelection,
-        templateResult: templateResult,
+        //templateResult: templateResult,
         showFieldsSeparator : " - ",
         //fields: "subject,doc_id",,
         order: "subject",
@@ -1283,8 +1283,7 @@ async function newAutocomplete(pId, pLabel, options){
         $oSel[0]._setXmlVal(e.currentTarget);
     });
 
-    $oSel.on("select2:unselect", function (e) { 
-        debugger;
+    $oSel.on("select2:unselect", function (e) {
         let optVal = e.params.data.id;
         let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
         opt[0].remove();
@@ -1294,8 +1293,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     });
 
-    $oSel.on("select2:select", function(e){
-        debugger;
+    $oSel.on("select2:select", function(e){       
         //Si no es multiple debo borrar la opcion que se cambio
         if(!$oSel.attr("multiple")){
             let optVal = e.params.data.id;
@@ -1316,18 +1314,21 @@ async function newAutocomplete(pId, pLabel, options){
         return parentEl;
     }    
 
-    function templateResult(item){
-        //if (!item.id) { return item.text; }
-		debugger;
-        let $currency = $('<span>' + item.text + '</span>');
-		return $currency;       
-    }
+    // function templateResult(item){
+    //     //if (!item.id) { return item.text; }
+    //     if(item.loading){
+    //         return item.text
+    //     }
+	// 	debugger;
+    //     let $currency = $('<span>' + item.text + '</span>');
+	// 	return $currency;       
+    // }
 
 
     // Función para formatear la selección
     function formatSelection (option) {
         var objeto = $(option.element).data('objeto');
-        
+        debugger;
         if (objeto ) {
             let txt = "";
             for (let index = 0; index < opt.searchFields.length; index++) {
