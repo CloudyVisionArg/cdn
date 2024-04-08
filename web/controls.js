@@ -1103,56 +1103,7 @@ async function newAutocomplete(pId, pLabel, options){
     //     xmlString += '</root>';
 
     //     return xmlString;
-    // }
-
-
-     //Ver si podemos reutilizar para el set text o set value
-    $oSel[0]._setSelectVal = function(pSelect, pText, pValue, pNotFoundAction) {
-        pSelect.val('[NULL]');
-        //debugger;
-        if (pSelect.attr('multiple')) {
-            if (pValue) {
-                pSelect.val(pValue);
-            } else if (pText) {
-                pSelect.find('option').filter(function() {
-                    return pText.indexOf($(this).text()) >= 0;
-                }).prop('selected', true);
-            }
-    
-        } else {
-            var notFound = (pNotFoundAction === undefined) ? 1 : pNotFoundAction;
-    
-            if (pValue || pValue == 0) {
-                pSelect.val(pValue);
-            } else {
-                pSelect.find('option').filter(function() {
-                    return $(this).text() == pText;
-                }).prop('selected', true);
-            };
-    
-            if (pSelect[0].selectedIndex < 0) {
-                if (notFound == 1 && (pValue || pText)) {
-                    var option = $('<option/>', {
-                        value: pValue,
-                        selected: 'selected',
-                    });
-                    option.html(pText);
-                    option.appendTo(pSelect);
-    
-                } else if (notFound == 0) {
-                    pSelect[0].selectedIndex = 0;
-                }
-            }
-        }
-    
-        pSelect.trigger({
-            type: 'select2:select',
-            params: {
-                data: data
-            }
-        });
-        //if (pSelect.selectpicker) pSelect.selectpicker('refresh');
-    }
+    // }   
 
     $oSel[0]._setXmlVal = function(el) {       
         if(!pOptions.xmlField)
@@ -1402,4 +1353,59 @@ function JSONtoXML(objetosJSON) {
     xmlString += '</root>';
 
     return xmlString;
+}
+
+ //Ver si podemos reutilizar para el set text o set value
+function setSelectValAutocomplete(pSelect, pText, pValue, pNotFoundAction) {
+    //pSelect.val('[NULL]');
+    debugger;
+    if (pSelect.attr('multiple')) {
+        if (pValue) {
+            pSelect.val(pValue);
+        } else if (pText) {
+            pSelect.find('option').filter(function() {
+                return pText.indexOf($(this).text()) >= 0;
+            }).prop('selected', true);
+        }
+
+    } else {
+        var notFound = (pNotFoundAction === undefined) ? 1 : pNotFoundAction;
+
+        if (pValue || pValue == 0) {            
+            if(pSelect.find("option[value='"+ pValue +"']").length == 0){
+                debugger;
+            }else{
+                //ya esta elegido, debemos ignorarlo? o esta en el set de datos del select
+                debugger;
+                //pSelect.val(pValue)
+            }
+
+            pSelect.val(pValue).trigger("change");
+        }else if(pText || pText == 0) {
+
+            if(pSelect.find("option").filter(function () { return $(this).html() == pText }).length == 0){
+                debugger;
+            }else{
+                debugger;
+                //ya esta elegido, debemos ignorarlo? o esta en el set de datos del select
+            }
+        };
+
+        if (pSelect[0].selectedIndex < 0) {
+            if (notFound == 1 && (pValue || pText)) {
+                let option = new Option((pValue)?pValue:pText, (pText)?pText:pValue, false, false);
+                pSelect.append(option);
+            } else if (notFound == 0) {
+                pSelect[0].selectedIndex = 0;
+            }
+        }
+    }
+    
+    let data = [{SUBJECT: pText, DOC_ID: pValue}]
+    pSelect.trigger({
+        type: 'select2:select',
+        params: {
+            data: data
+        }
+    });    
 }
