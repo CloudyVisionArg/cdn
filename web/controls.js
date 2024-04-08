@@ -1369,7 +1369,7 @@ function setSelectValAutocomplete(pSelect, pText, pValue) {
 
                 let allOptValues = pSelect.find("option").map(function() {
                     return $(this).val();
-                }).get().join(",");
+                }).get();
                 pSelect.val(allOptValues).trigger("change");
 
                 $("#autocomplete_new").trigger({
