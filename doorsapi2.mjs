@@ -275,10 +275,11 @@ export class SimpleBuffer extends Uint8Array {
         https://nodejs.org/api/buffer.html#buffers-and-character-encodings
         utf8/utf-8, utf16le/utf-16le, latin1, base64, base64url, hex, ascii, binary/latin1, ucs2/ucs-2/utf16le
         */
-        var td = new TextDecoder();
         if (encoding.toLowerCase() == 'base64') {
+            var td = new TextDecoder('utf-16');
             return btoa(td.decode(this));
         } else {
+            var td = new TextDecoder();
             return td.decode(this);
         }
     }   
