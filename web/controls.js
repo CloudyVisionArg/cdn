@@ -1359,21 +1359,35 @@ function JSONtoXML(objetosJSON) {
 function setSelectValAutocomplete(pSelect, pText, pValue) {   
     debugger;
     if (pSelect.attr('multiple')) {
-        let option = new Option((pText)?pText:pValue, (pValue)?pValue:pText, false, false);
-        pSelect.append(option).trigger("change");
+        let optValue = (pValue)?pValue:pText
+        let optText = (pText)?pText:pValue
+
+        if(pSelect.find("option[value='" + optValue + "']").length == 0){
+            let option = new Option(optText, optValue, false, false);
+            pSelect.append(option).trigger("change");            
+            // $("#autocomplete_new").trigger({
+            //     type: 'select2:select',
+            //     params: {
+            //         data: {id: optValue}
+            //     }
+            // });
+        }
 
     } else {
         if(pValue || pText){
             let optValue = (pValue)?pValue:pText
             let optText = (pText)?pText:pValue
-            let option = new Option(optText, optValue, false, false);
-            pSelect.append(option).trigger("change");            
-            $("#autocomplete_new").trigger({
-                type: 'select2:select',
-                params: {
-                    data: {id: optValue}
-                }
-            });
+
+            if(pSelect.find("option[value='" + optValue + "']").length == 0){
+                let option = new Option(optText, optValue, false, false);
+                pSelect.append(option).trigger("change");            
+                $("#autocomplete_new").trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: {id: optValue}
+                    }
+                });
+            }
         }else{
             //Obtener lo seleccionado?
             debugger
