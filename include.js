@@ -28,8 +28,8 @@ function registeredScripts() {
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 343, hasdep: true });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 344 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
-    //scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });
     /*
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 347, hasdep: true });
 
@@ -380,7 +380,7 @@ gitCdn({
     url // Devuelve la url en vez del buffer. Def false
     server // Opcional, def https://cdn.cloudycrm.net
 }
-@returns {string|Promise<SimpleBuffer>}
+@returns {string|Promise<SimpleBuffer2>}
 */
 function gitCdn(options) {
     if (options.repo && options.path) {
@@ -417,7 +417,7 @@ function gitCdn(options) {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        resolve(new SimpleBuffer(await res.arrayBuffer()));
+                        resolve(new SimpleBuffer2(await res.arrayBuffer()));
 
                     } else {
                         try {
@@ -452,7 +452,7 @@ Si hace falta algo mas completo usar https://github.com/feross/buffer
     await include('buffer', 'https://bundle.run/buffer@6.0.3');
     resolve(buffer.Buffer.from(await res.arrayBuffer()));
 */
-class SimpleBuffer extends Uint8Array {
+class SimpleBuffer2 extends Uint8Array {
     toString() {
         var td = new TextDecoder();
         return td.decode(this);
