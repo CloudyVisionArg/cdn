@@ -268,9 +268,19 @@ Si hace falta algo mas completo usar https://github.com/feross/buffer
     resolve(buffer.Buffer.from(await res.arrayBuffer()));
 */
 export class SimpleBuffer extends Uint8Array {
-    toString() {
+    toString(encoding) {
+        /*
+        TODO: Hay que terminar de implementar los encodings, falta el start/end tb
+        https://nodejs.org/api/buffer.html#buftostringencoding-start-end
+        https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+        utf8/utf-8, utf16le/utf-16le, latin1, base64, base64url, hex, ascii, binary/latin1, ucs2/ucs-2/utf16le
+        */
         var td = new TextDecoder();
-        return td.decode(this);
+        if (encoding.toLowerCase() == 'base64') {
+            return btoa(td.decode(this));
+        } else {
+            return td.decode(this);
+        }
     }   
 }
 
