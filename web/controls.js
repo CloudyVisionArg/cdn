@@ -1359,18 +1359,24 @@ function JSONtoXML(objetosJSON) {
 function setSelectValAutocomplete(pSelect, pText, pValue) {   
     debugger;
     if (pSelect.attr('multiple')) {
-        let optValue = (pValue)?pValue:pText
-        let optText = (pText)?pText:pValue
+        if(pValue || pText){
+            let optValue = (pValue)?pValue:pText
+            let optText = (pText)?pText:pValue
+            
+            document.getElementById(pId).querySelectorAll("option")
 
-        if(pSelect.find("option[value='" + optValue + "']").length == 0){
-            let option = new Option(optText, optValue, false, false);
-            pSelect.append(option).val(optValue).trigger("change");            
-            $("#autocomplete_new").trigger({
-                type: 'select2:select',
-                params: {
-                    data: {id: optValue}
-                }
-            });
+
+
+            if(pSelect.find("option[value='" + optValue + "']").length == 0){
+                let option = new Option(optText, optValue, false, false);
+                pSelect.append(option).trigger("change");
+                $("#autocomplete_new").trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: {id: optValue}
+                    }
+                });
+            }
         }
 
     } else {
