@@ -1016,7 +1016,7 @@ async function newAutocomplete(pId, pLabel, options){
             //let option = new Option(text, text, false, false);
             //$oSel.append(option);
             //if($oSel.find("option").text() != text){
-            if($oSel.find("option").text() != text){
+            if($oSel.find("option").filter(function () { return $(this).html() == text }).length == 0){
                 let option = new Option(text, text, false, false);
                 $oSel.append(option);
             }
