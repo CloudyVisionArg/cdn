@@ -978,7 +978,7 @@ var wapp = {
 			
 			if(contentId !== undefined && contentId !== null && contentId !== ""){
 				sendObj.contentSid = contentId;
-				sendObj.contentVariables = contentVariables;
+				sendObj.contentVariables = contentVariables || null;
 				let fromName = $chat.attr('data-internal-name');
 				sendObj.from = fromName;
 			}
