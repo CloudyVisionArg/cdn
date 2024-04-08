@@ -1355,7 +1355,7 @@ function JSONtoXML(objetosJSON) {
     return xmlString;
 }
 
- //Ver si podemos reutilizar para el set text o set value
+//setSelectValAutocomplete($("#autocomplete_new"),"tests 3",12348)
 function setSelectValAutocomplete(pSelect, pText, pValue) {   
     debugger;
 
