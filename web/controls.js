@@ -1365,7 +1365,7 @@ function setSelectValAutocomplete(pSelect, pText, pValue) {
     } else {
         if(pValue || pText){
             let optValue = (pValue)?pValue:pText
-            let optText = (pValue)?pValue:pText
+            let optText = (pText)?pText:pValue
             let option = new Option(optText, optValue, false, false);
             pSelect.append(option).trigger("change");            
             $("#autocomplete_new").trigger({
