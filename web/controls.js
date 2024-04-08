@@ -874,6 +874,7 @@ async function newAutocomplete(pId, pLabel, options){
         minimumInputLength: 3,
         placeholder: "Buscar...",
         multiple: false,
+        editUrl:''
         //selectedElements : [{TITULO: "ABM Empleados - 249522 - 5050", DOC_ID: 249522}, {TITULO:" Actualizar plantillas de proyecto en desa - 255912 - 5050", DOC_ID: 255912}]
     }    
     opt = Object.assign(opt, options);
@@ -1330,9 +1331,9 @@ async function newAutocomplete(pId, pLabel, options){
         //var objeto = $(option.element).data('objeto');
         debugger;
         
-        var $btnObj = $(`<div title="Editar elemento" onclick="alert(12)" id="${pId}">
+        var $btnObj = $(`<a title="Editar elemento" href="#" id="${pId}">
             <b class="text-primary">${option.text}</b>              
-        </div>`);
+        </a>`);
         return $btnObj;
     
         // if (objeto ) {

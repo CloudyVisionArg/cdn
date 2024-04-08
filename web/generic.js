@@ -912,6 +912,7 @@ async function renderControls(pCont, pParent) {
                 formula: ctl.attr("searchfilter"),
                 order: ctl.attr("searchorder"),
                 multiple: (ctl.attr("mode")) ? ctl.attr("mode") == "1" : false,
+                editUrl: ctl.attr("editurl")
             });           
 
 
