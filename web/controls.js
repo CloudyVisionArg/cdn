@@ -1327,25 +1327,31 @@ async function newAutocomplete(pId, pLabel, options){
 
     // Función para formatear la selección
     function formatSelection (option) {
-        var objeto = $(option.element).data('objeto');
+        //var objeto = $(option.element).data('objeto');
         debugger;
-        if (objeto ) {
-            let txt = "";
-            for (let index = 0; index < opt.searchFields.length; index++) {
-                const element = opt.searchFields[index];
-                txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
-                txt += option[element.toUpperCase()];
-            }
-            // for (let index = 0; index < opt.selectFieldsArr.length; index++) {
-            //     const element = opt.selectFieldsArr[index];
-            //     txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
-            //     txt += option[element.toUpperCase()];
-            // }
-            option.text = txt;
-            return option.text;
-        }
+        
+        var $btnObj = $(`<div title="Editar elemento" onclick="alert(12)" id="${pId}">
+            <b class="text-primary">${option.text}</b>              
+        </div>`);
+        return $btnObj;
     
-        return option.text;
+        // if (objeto ) {
+        //     let txt = "";
+        //     for (let index = 0; index < opt.searchFields.length; index++) {
+        //         const element = opt.searchFields[index];
+        //         txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
+        //         txt += option[element.toUpperCase()];
+        //     }
+        //     // for (let index = 0; index < opt.selectFieldsArr.length; index++) {
+        //     //     const element = opt.selectFieldsArr[index];
+        //     //     txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
+        //     //     txt += option[element.toUpperCase()];
+        //     // }
+        //     option.text = txt;
+        //     return option.text;
+        // }
+    
+        //return option.text;
     }    
 }
 
