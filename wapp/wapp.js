@@ -964,16 +964,27 @@ var wapp = {
 		var $inp = $chat.find('.wapp-reply');
 		if ($inp.val()) {
 			wapp.cursorLoading(true);
-
 			var fromN = $chat.attr('data-internal-number');
 			var toN = $chat.attr('data-external-number');
-
-			wapp.xhr({
+			let sendObj = {
 				wappaction: 'send',
 				from: fromN,
 				to: toN,
 				body: $inp.val(),
-			}).then(
+			};
+			
+			let contentId = $inp.attr("data-content-sid");
+			let contentVariables = $inp.attr("data-content-variables");
+			
+			if(contentId !== undefined && contentId !== null && contentId !== ""){
+				sendObj.contentSid = contentId;
+				sendObj.contentVariables = contentVariables;
+				let fromName = $chat.attr('data-internal-name');
+				sendObj.from = fromName;
+			}
+			
+			
+			wapp.xhr(sendObj).then(
 				function (res) {
 					var $dom = $($.parseXML(res.jqXHR.responseText));
 					msg = {};
@@ -989,6 +1000,7 @@ var wapp = {
 						$cont.scrollTop($cont[0].scrollHeight);
 						wapp.cursorLoading(false);
 					});
+					$inp.removeAttr("data-content-sid");
 				},
 				function (err) {
 					wapp.cursorLoading(false);
@@ -1016,9 +1028,16 @@ var wapp = {
 	
 	putTemplate: function (template, target) {
 		wapp.cursorLoading(true);
-		DoorsAPI.folderSearch(wapp.templatesFolder, 'text', 'name = \'' + template + '\'', '', 1, null, 0).then(
+		DoorsAPI.folderSearch(wapp.templatesFolder, 'text,CONTENT_SID', 'name = \'' + template + '\'', '', 1, null, 0).then(
 			function (res) {
 				wapp.cursorLoading(false);
+				let template = res[0];
+				if(template["CONTENT_SID"] != null){
+					$(target).attr('data-content-sid', template["CONTENT_SID"]);
+				}
+				else{
+					$(target).removeAttr('data-content-sid');
+				}
 				insertAtCaret(target, res[0]['TEXT']);
 				wapp.inputResize(target);
 				$(target).focus();
@@ -1176,14 +1195,15 @@ var wapp = {
 								var toN = $chat.attr('data-external-number');
 
 								debugger;
-					
-								wapp.xhr({
+								let sendObj = {
 									wappaction: 'send',
 									from: fromN,
 									to: toN,
 									body: file2.name, // todo: el body va solo en documentos
 									mediaUrl: data.Location,
-								}).then(
+								};
+
+								wapp.xhr(sendObj).then(
 									function (res) {
 										debugger;
 										var $dom = $($.parseXML(res.jqXHR.responseText));
@@ -1195,17 +1215,17 @@ var wapp = {
 										msg.body = $dom.find('Message Body').html();
 										msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
 										msg.nummedia = $dom.find('Message NumMedia').html();;
-
+										
 										msg.media = JSON.stringify([{
 											Url: data.Location,
 											ContentType: file2.type,
 										}]);
-
+										
 										/*
 										msg.latitude = row['LATITUDE'];
 										msg.longitude = row['LONGITUDE'];
 										*/
-
+										
 										wapp.renderMsg(msg, function (msgRow) {
 											var $cont = $chat.find('div.wapp-messages');
 											$cont.append(msgRow);
