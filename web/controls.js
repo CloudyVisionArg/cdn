@@ -874,7 +874,8 @@ async function newAutocomplete(pId, pLabel, options){
         minimumInputLength: 3,
         placeholder: "Buscar...",
         multiple: false,
-        editUrl:''
+        editUrl:'',
+        addUrl:''
         //selectedElements : [{TITULO: "ABM Empleados - 249522 - 5050", DOC_ID: 249522}, {TITULO:" Actualizar plantillas de proyecto en desa - 255912 - 5050", DOC_ID: 255912}]
     }    
     opt = Object.assign(opt, options);
@@ -1242,9 +1243,8 @@ async function newAutocomplete(pId, pLabel, options){
             cache: true
         },
         escapeMarkup: function(markup) {
-            if(markup == "No results found"){
-                let editUrl = pOptions.editUrl + "&doc_id=411427"
-                markup = $(`<a title="Crear elemento" href="${editUrl}" target="_blank" id="${pId}">
+            if(markup == "No results found" && pOptions.addUrl !=''){              
+                markup = $(`<a title="Crear elemento" href="${pOptions.addUrl}" target="_blank" id="${pId}">
                     <b class="text-primary">Crear documento</b>              
                 </a>`);
             }
