@@ -275,7 +275,7 @@ export class SimpleBuffer extends Uint8Array {
         https://nodejs.org/api/buffer.html#buffers-and-character-encodings
         utf8/utf-8, utf16le/utf-16le, latin1, base64, base64url, hex, ascii, binary/latin1, ucs2/ucs-2/utf16le
         */
-        let enc = encoding ? encoding.toLowerCase() : enc;
+        let enc = encoding ? encoding.toLowerCase() : encoding;
         if (enc == 'base64') {
             return btoa(this);
         } else {
