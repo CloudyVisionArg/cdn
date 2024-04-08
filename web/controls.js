@@ -1329,7 +1329,7 @@ async function newAutocomplete(pId, pLabel, options){
     // Función para formatear la selección
     function formatSelection (option) {       
         debugger;
-        if(!option.id || !pOptions.editUrl)
+        if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return option.text;
 
         let editUrl = pOptions.editUrl + "&doc_id=" + option.id
