@@ -1356,7 +1356,7 @@ function JSONtoXML(objetosJSON) {
 }
 
 //setSelectValAutocomplete($("#autocomplete_new"),"tests 3",12348)
-function setSelectValAutocomplete(pSelect, pText, pValue) {   
+function setSelectAutocomplete(pSelect, pText, pValue) {   
     debugger;
 
     if(!pValue && !pText){
