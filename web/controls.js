@@ -1393,19 +1393,18 @@ function setSelectValAutocomplete(pSelect, pText, pValue, pNotFoundAction) {
         if (pSelect[0].selectedIndex < 0) {
             if (notFound == 1 && (pValue || pText)) {
                 let option = new Option((pText)?pText:pValue, (pValue)?pValue:pText, false, false);
-                pSelect.append(option);
-                pSelect.val(pValue).trigger("change");
+                pSelect.append(option).trigger("change");              
             } else if (notFound == 0) {
                 pSelect[0].selectedIndex = 0;
             }
         }
     }
 
-    let data = [{SUBJECT: pText, DOC_ID: pValue}]
-    pSelect.trigger({
-        type: 'select2:select',
-        params: {
-            data: data
-        }
-    });    
+    // let data = [{SUBJECT: pText, DOC_ID: pValue}]
+    // pSelect.trigger({
+    //     type: 'select2:select',
+    //     params: {
+    //         data: data
+    //     }
+    // });    
 }
