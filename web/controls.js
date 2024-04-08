@@ -1362,10 +1362,6 @@ function setSelectValAutocomplete(pSelect, pText, pValue) {
         if(pValue || pText){
             let optValue = (pValue)?pValue:pText
             let optText = (pText)?pText:pValue
-            
-            document.getElementById(pId).querySelectorAll("option")
-
-
 
             if(pSelect.find("option[value='" + optValue + "']").length == 0){
                 let option = new Option(optText, optValue, false, false);
