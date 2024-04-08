@@ -1392,7 +1392,7 @@ function setSelectValAutocomplete(pSelect, pText, pValue, pNotFoundAction) {
 
         if (pSelect[0].selectedIndex < 0) {
             if (notFound == 1 && (pValue || pText)) {
-                let option = new Option((pValue)?pValue:pText, (pText)?pText:pValue, false, false);
+                let option = new Option((pText)?pText:pValue, (pValue)?pValue:pText, false, false);
                 pSelect.append(option);
                 pSelect.val(pValue).trigger("change");
             } else if (notFound == 0) {
