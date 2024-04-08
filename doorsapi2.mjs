@@ -277,7 +277,7 @@ export class SimpleBuffer extends Uint8Array {
         */
         let enc = encoding ? encoding.toLowerCase() : encoding;
         if (enc == 'base64') {
-            return btoa(this);
+            return btoa(this.buffer);
         } else {
             var td = new TextDecoder();
             return td.decode(this);
