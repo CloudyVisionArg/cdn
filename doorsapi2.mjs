@@ -4786,6 +4786,13 @@ export class Utilities {
         return e;
     }
 
+    /**
+    @returns {SimpleBuffer}
+    */
+    newSimpleBuffer() {
+        return new SimpleBuffer(...arguments);
+    }
+
     /** http://numeraljs.com/ */
     get numeral() {
         return _numeral;
