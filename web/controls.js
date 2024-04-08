@@ -1333,7 +1333,7 @@ async function newAutocomplete(pId, pLabel, options){
             return option.text;
 
         let editUrl = pOptions.editUrl + "&doc_id=" + option.id
-        let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" id="${pId}">
+        let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}">
                 <b class="text-primary">${option.text}</b>              
             </a>`);
         return $itemObj;
