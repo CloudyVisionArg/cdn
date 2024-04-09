@@ -1243,7 +1243,7 @@ function enableAutocomplete(pSelect) {
 }
 
 //Limpia los valores de un autocomplete
-function clearAUtocomplete(pSelect){
+function clearAutocomplete(pSelect){
     pSelect.val(null).trigger('change');
 }
 
