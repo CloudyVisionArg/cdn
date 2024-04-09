@@ -858,15 +858,10 @@ async function newAutocomplete(pId, pLabel, options){
         xmlSource: '',
         textField: '',
         valueField: '',
-        xmlField: '', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-        searchFields: 'subject', //Fields por los que se realiza la busqueda
-        //extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-        //showFields : 'subject', //Fields que se muestran cuando se busca en el panel desplegado
-        //selectFields: null, //Fields que se muestran cuando se selecciona
-        templateSelection : formatSelection,
-        //templateResult: templateResult,
-        showFieldsSeparator : " - ",
-        //fields: "subject,doc_id",,
+        xmlField: '',
+        searchFields: 'subject', //Fields por los que se realiza la busqueda       
+        templateSelection : formatSelection,        
+        showFieldsSeparator : " - ",        
         order: "subject",
         maxDocs: 30,
         recursive: false,
@@ -875,17 +870,15 @@ async function newAutocomplete(pId, pLabel, options){
         placeholder: "Buscar...",
         multiple: false,
         editUrl:'',
-        addUrl:''
-        //selectedElements : [{TITULO: "ABM Empleados - 249522 - 5050", DOC_ID: 249522}, {TITULO:" Actualizar plantillas de proyecto en desa - 255912 - 5050", DOC_ID: 255912}]
+        addUrl:''        
     }    
     opt = Object.assign(opt, options);
-    
-    //opt.extraFieldsArr = opt.extraFields.split(',').map(el => el.trim().toLowerCase());
+
     let searchFieldsArr = opt.searchFields.split(',').map(el => el.trim().toLowerCase());
     let xmlFieldsArr = opt.xmlSource.split(',').map(el => el.trim().toLowerCase());
     let fieldsArr = [opt.textSource.toLowerCase(), opt.valueSource.toLowerCase()];
     let arrays = [searchFieldsArr, xmlFieldsArr, fieldsArr]
-    //Tengo que buscar: textSource, ValueSource, xmlSoruce, ifFIeld, searchFields, extraFields
+    
     let conjunto = new Set();
     // Itera sobre cada array y agrega sus elementos al conjunto
     arrays.forEach(array => {
@@ -893,20 +886,11 @@ async function newAutocomplete(pId, pLabel, options){
             if(elemento)
                 conjunto.add(elemento);
         });
-    });
-
-    //opt.showFieldsArr = (opt.showFieldsArr) ? opt.showFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.searchFieldsArr];
-   //opt.showFieldsArr=  (opt.showFieldsArr.length == 0 )? opt.searchFieldsArr : [];
-    
-    
-    //opt.searchFieldsArr.concat(opt.extraFieldsArr).forEach(el => {
-    //    if (opt.fieldsArr.indexOf(el) < 0) opt.fieldsArr.push(el);
-    //});
+    });   
 
     conjunto.add("doc_id");
     conjunto.add("fld_id");
-    const sFieldsArr = Array.from(conjunto);
-    //opt.selectFieldsArr = (opt.selectFields) ? opt.selectFields.split(',').map(el => el.trim().toLowerCase()) : [...opt.selectFieldsArr];
+    const sFieldsArr = Array.from(conjunto);   
 
     let pOptions = opt;
     var $cont = $('<div/>');
@@ -922,7 +906,7 @@ async function newAutocomplete(pId, pLabel, options){
         "data-valuefield": pOptions.valueField,       
     });
 
-    //Si existe xml field lo agrego
+    //Si existe xml field lo agrego como hidden
     if(pOptions.xmlField){
         $cont.append(`<input type="hidden" data-xmlfield="${pOptions.xmlField}"  id="${pId}_xml" value="${pOptions.xmlField}" />`);
     }
@@ -945,14 +929,7 @@ async function newAutocomplete(pId, pLabel, options){
                 $oSel[0]._selectInitialValue(null, arrValues[idx], idx);
             }
 
-            $oSel.val(arrValues).trigger("change");
-            /* if ($self.attr('multiple')) {
-                debugger;
-                //setSelectVal($self, undefined, pValue ? pValue.split(';') : null);
-            } else {                
-                $oSel[0]._selectInitialValue(null, pValue);
-                //$oSel[0]._setSelectVal($self, undefined, pValue);
-            }*/
+            $oSel.val(arrValues).trigger("change");            
         }
     }
     
@@ -969,141 +946,39 @@ async function newAutocomplete(pId, pLabel, options){
             // si es mas de uno devuelve un array sino el texto
             return (res.length > 1) ? res : res[0] ;
         } else {
-            //debugger;                
-            //set
+            //debugger;            
             let arrText = pText.toString().split(";")
             for(let idx=0;idx<arrText.length;idx++){
                 $oSel[0]._selectInitialValue(arrText[idx], null,idx );
             }           
-            $oSel.val(arrText).trigger("change");
-            /* if ($self.attr('multiple')) {
-                debugger;
-            } else {              
-                $oSel[0]._selectInitialValue(pText, null );
-            }*/
+            $oSel.val(arrText).trigger("change");            
         }
-    }
-
-    //No tiene set de xml porque el xml-datafield esta en un input hidden aparte y no en el propio select
-    /*$oSel[0]._xml = function (pXml) {
-        var $self = $(this);
-        debugger;
-        if (pXml === undefined) {            
-            return $("#" + pId + "_xml").val();
-
-        } else {
-
-            $("#" + pId + "_xml").val(pXml);
-            
-        }
-    }*/
-
-    /*$oSel[0]._addOption = function (text, value, objExtraData, defaultSelected){
-        
-        // create the option and append to Select2
-        var data = { text : text, value : value};
-        var option = new Option(text, value, objExtraData ?? false, defaultSelected ??true);
-        $oSel.append(option).trigger('change');
-        //manually trigger the `select2:select` event
-        $oSel.trigger({
-            type: 'select2:select',
-            params: {
-                data: data
-            }
-        });
-    }*/
+    }    
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
-        if(text){
-            //let option = new Option(text, text, false, false);
-            //$oSel.append(option);
-            //if($oSel.find("option").text() != text){
+        if(text){            
             if($oSel.find("option").filter(function () { return $(this).html() == text }).length == 0){
                 let option = new Option(text, text, false, false);
                 $oSel.append(option);
             }
-
-
-            /*if($oSel[0].hasAttribute("data-valuefield")){
-                let option = new Option(text, text, false, false);
-                $oSel.append(option);
-            }else if($oSel.find("option[value='"+ text +"']").text() != text){
-                let option = new Option(text, text, false, false);
-                $oSel.append(option);
-            }*/
         }
-        if(value){
-            //if($oSel[0].options.length > 0){
+        if(value){            
             if($oSel[0].getAttribute("data-textfield") != "[NULL]"){
                 $oSel[0].options[selectedIndex].value = value
                 let oData = $oSel.select2("data");
                 if(oData && oData.length > 0){
                     $oSel.select2("data")[selectedIndex].id = value
                 }
-            }else{
-                // let option = $('<option/>', {
-                //     value: value,
-                //    // selected: 'selected',
-                // });
-                // option.html(value);
-                // //option.appendTo($oSel).trigger('change');
-                // option.appendTo($oSel);
+            }else{                
                 if($oSel.find("option[value='"+ value +"']").length == 0){
                     let option = new Option(value, value, false, false);
                     $oSel.append(option);
                 }
-            }
-
-            //$oSel.select2("data",option)
+            }           
         }
-        //$oSel.append(option).trigger('change');
-        /*var data = { text : $oSel[0].options[0].text, value : $oSel[0].options[0].value};        
-        $oSel.trigger({
-            type: 'select2:select',
-            params: {
-                data: data
-            }
-        });*/
-    }
-
-    // $oSel[0]._XMLtoJSON = function(xmlString) {   
-    //     const parser = new DOMParser();
-    //     const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
-    //     const items = xmlDoc.getElementsByTagName('item');
-    //     const resultado = [];
-
-    //     for (let i = 0; i < items.length; i++) {
-    //         const item = items[i];
-    //         const atributos = item.attributes;
-    //         const objetoJSON = {};
-
-    //         for (let j = 0; j < atributos.length; j++) {
-    //             const atributo = atributos[j];
-    //             objetoJSON[atributo.nodeName.toUpperCase()] = atributo.nodeValue;
-    //         }
-
-    //         resultado.push(objetoJSON);
-    //     }
-
-    //     return resultado;
-    // }
-
-    // $oSel[0]._JSONtoXML = function(objetosJSON) {   
-    //     let xmlString = '<root>';
-
-    //     objetosJSON.forEach(objeto => {
-    //         xmlString += '<item ';
-    //         for (let key in objeto) {
-    //             xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
-    //         }
-    //         xmlString += '/>';
-    //     });
-
-    //     xmlString += '</root>';
-
-    //     return xmlString;
-    // }   
+        
+    }  
 
     $oSel[0]._setXmlVal = function(el) {       
         if(!pOptions.xmlField)
@@ -1181,11 +1056,7 @@ async function newAutocomplete(pId, pLabel, options){
                     for (let index = 0; index < searchFieldsArr.length; index++) {
                         el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
                         el.text +=  el[searchFieldsArr[index].toUpperCase()];
-                    }
-                // for (let index = 0; index < .    pOptions.showFieldsArr.length; index++) {
-                    //     el.text += (index > 0 ) ?  pOptions.showFieldsSeparator  : "";
-                    //     el.text +=  el[pOptions.showFieldsArr[index].toUpperCase()];
-                    // }
+                    }                
                 });
                 return {
                     results: data.InternalObject
@@ -1229,15 +1100,6 @@ async function newAutocomplete(pId, pLabel, options){
     
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
 
-
-    /*$oSel.on("change", function (e) { 
-        debugger;
-        //let optVal = e.params.data.id;
-        //let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
-       // opt[0].remove();
-        //log("change"); 
-    });*/
-
     $oSel.on("select2:clear", function(e){       
         $oSel[0]._setXmlVal(e.currentTarget);
     });
@@ -1271,18 +1133,7 @@ async function newAutocomplete(pId, pLabel, options){
         $oSel.appendTo(parentEl);
         var select2Ref =  $oSel.select2(oConfig);
         return parentEl;
-    }    
-
-    // function templateResult(item){
-    //     //if (!item.id) { return item.text; }
-    //     if(item.loading){
-    //         return item.text
-    //     }
-	// 	debugger;
-    //     let $currency = $('<span>' + item.text + '</span>');
-	// 	return $currency;       
-    // }
-
+    }   
 
     // Función para formatear la selección
     function formatSelection (option) {       
@@ -1294,25 +1145,7 @@ async function newAutocomplete(pId, pLabel, options){
         let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}">
                 <b class="text-primary">${option.text}</b>              
             </a>`);
-        return $itemObj;
-    
-        // if (objeto ) {
-        //     let txt = "";
-        //     for (let index = 0; index < opt.searchFields.length; index++) {
-        //         const element = opt.searchFields[index];
-        //         txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
-        //         txt += option[element.toUpperCase()];
-        //     }
-        //     // for (let index = 0; index < opt.selectFieldsArr.length; index++) {
-        //     //     const element = opt.selectFieldsArr[index];
-        //     //     txt += (txt != "") ? opt.showFieldsSeparator  : ""; 
-        //     //     txt += option[element.toUpperCase()];
-        //     // }
-        //     option.text = txt;
-        //     return option.text;
-        // }
-    
-        //return option.text;
+        return $itemObj;    
     }    
 }
 
@@ -1355,8 +1188,15 @@ function JSONtoXML(objetosJSON) {
     return xmlString;
 }
 
-//setSelectValAutocomplete($("#autocomplete_new"),"tests 3",12348)
-function setSelectAutocomplete(pSelect, pText, pValue) {   
+
+/*
+Asigna el value a un Autocomplete
+Ej:
+setAutocompleteVal($("#autocomplete_new"),"tests 3",12348)
+setAutocompleteVal($("#autocomplete_new"),"tests 3",null);
+setAutocompleteVal($("#autocomplete_new"),null,12348);
+*/
+function setAutocompleteVal(pSelect, pText, pValue) {   
     debugger;
 
     if(!pValue && !pText){
@@ -1383,4 +1223,9 @@ function setSelectAutocomplete(pSelect, pText, pValue) {
             }
         });
     }
+}
+
+//Retorna el valor de un autocomplete
+function getAutocompleteVal(pSelect) {   
+    return pSelect.select2("data");
 }
