@@ -1256,7 +1256,7 @@ $("#" + ctrlName).on("select2:clear", function(e){
 
 //Seleccionar
 $("#" + ctrlName).on("select2:select", function(e){
-   let data = e.params.data
+    let data = e.params.data
     console.log("se cambio autocomplete" ,data)
 });
 */
