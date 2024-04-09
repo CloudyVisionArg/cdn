@@ -17,6 +17,11 @@ newFieldset(pId, pLabel)
 newMapsAutocomplete(pId, pLabel)
 newDocLog(pId, pLabel)
 newAttachments(pId, pLabel)
+newAutocomplete(pId, pLabel, options)
+setAutocompleteVal(pSelect, pText, pValue)
+getAutocompleteVal(pSelect)
+JSONtoXML(objetosJSON)
+XMLtoJSON(xmlString)
 */
 
 function newInputText(pId, pLabel) {
