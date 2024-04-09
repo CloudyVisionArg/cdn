@@ -1231,3 +1231,18 @@ function setAutocompleteVal(pSelect, pText, pValue) {
 function getAutocompleteVal(pSelect) {   
     return pSelect.select2("data");
 }
+
+//Deshabilita el control autocomplete
+function disableAutocomplete(pSelect) {   
+    pSelect.prop("disabled",true);
+}
+
+//Habilita el control autocomplete
+function enableAutocomplete(pSelect) {   
+    pSelect.prop("disabled",false);
+}
+
+//Limpia los valores de un autocomplete
+function clearAUtocomplete(pSelect){
+    pSelect.val(null).trigger('change');
+}
