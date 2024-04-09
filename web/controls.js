@@ -875,7 +875,7 @@ async function newAutocomplete(pId, pLabel, options){
         placeholder: "Buscar...",
         multiple: false,
         editUrl:'',
-        addUrl:''        
+        addUrl:''
     }    
     opt = Object.assign(opt, options);
 
@@ -1013,6 +1013,7 @@ async function newAutocomplete(pId, pLabel, options){
     let oConfig = {
         theme: "bootstrap-5",
         placeholder: pOptions.placeholder || "Buscar...",
+        language: pOptions.language || "es",
         minimumResultsForSearch: 1,
         maximumSelectionLength: pOptions.maximumSelectionLength || 0,
         minimumInputLength: pOptions.minimumInputLength || 3,
