@@ -276,13 +276,16 @@ export class SimpleBuffer extends Uint8Array {
         utf8/utf-8, utf16le/utf-16le, latin1, base64, base64url, hex, ascii, binary/latin1, ucs2/ucs-2/utf16le
         */
         let enc = encoding ? encoding.toLowerCase() : encoding;
-        
+
         if (enc == 'base64') {
-            let bin = Array.from(this, (byte) => String.fromCodePoint(byte)).join('');
+            // Ver: https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
+            // let bin = Array.from(this, (byte) => String.fromCodePoint(byte)).join('');
+            let td = new TextDecoder('utf-8');
+            let bin = td.decode(this);
             return btoa(bin);
 
         } else {
-            var td = new TextDecoder();
+            let td = new TextDecoder('utf-8');
             return td.decode(this);
         }
     }   
