@@ -920,7 +920,7 @@ async function newAutocomplete(pId, pLabel, options){
         $oSel.attr("data-width", opt.width);
     }
     $oSel[0]._value = function(pValue){
-        //debugger;
+        
         var $self = $(this);
         if (pValue == undefined) {
             //get
@@ -951,7 +951,7 @@ async function newAutocomplete(pId, pLabel, options){
             // si es mas de uno devuelve un array sino el texto
             return (res.length > 1) ? res : res[0] ;
         } else {
-            //debugger;            
+
             let arrText = pText.toString().split(";")
             for(let idx=0;idx<arrText.length;idx++){
                 $oSel[0]._selectInitialValue(arrText[idx], null,idx );
@@ -1052,7 +1052,7 @@ async function newAutocomplete(pId, pLabel, options){
                 };
             },
             processResults: function (data, params) {
-                //debugger;
+                
                 params.page = params.page || 1;
                 data.InternalObject.map(el =>{
                     //el.id = el[pOptions.valueSource.toUpperCase()];
@@ -1080,7 +1080,7 @@ async function newAutocomplete(pId, pLabel, options){
         }
     }
     if (pOptions.selectedElements) {
-        debugger;
+
         let data = pOptions.selectedElements;
         if (Array.isArray(data)) {
             data.map(el => {
@@ -1141,8 +1141,7 @@ async function newAutocomplete(pId, pLabel, options){
     }   
 
     // Función para formatear la selección
-    function formatSelection (option) {       
-        debugger;
+    function formatSelection (option) {
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return option.text;
 
@@ -1202,7 +1201,6 @@ setAutocompleteVal($("#autocomplete_new"),"tests 3",null);
 setAutocompleteVal($("#autocomplete_new"),null,12348);
 */
 function setAutocompleteVal(pSelect, pText, pValue) {   
-    debugger;
 
     if(!pValue && !pText){
         console.log("debe ingresar un value y/o un text")
