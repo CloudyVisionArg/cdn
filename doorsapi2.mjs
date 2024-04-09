@@ -4745,6 +4745,24 @@ export class Utilities {
     }    
 
     /**
+    Parse con soporte para buffers binarios
+    */
+    jsonParse(value) {
+        var me = this;
+        return JSON.parse(value, (key, value) => {
+            if (typeof value == 'string' && value.substring(0, 11) == '__base64__!') {
+                if (me.session.node.inNode) {
+                    return Buffer.from(atob(value.substring(11)), 'binary');
+                } else {
+                    return me.newSimpleBuffer(atob(value.substring(11)));
+                }
+            } else {
+                return value;
+            }
+        });
+    }
+
+    /**
     Replacer para JSON.stringify que incluye el path.
     @example
     // Incluye solo algunas propiedades raiz completas
