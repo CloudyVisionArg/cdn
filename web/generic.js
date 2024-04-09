@@ -43,7 +43,6 @@ arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src
 // todo: esto deberia ser segun el lng_id
 arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
 arrScripts.push({ id: 'select2.js', src: 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js' });
-arrScripts.push({ id: 'select2-lang', src: 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/i18n/es.js'});
 // Includes que no es necesario esperar
 var arrScriptsPos = [];
 arrScriptsPos.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
