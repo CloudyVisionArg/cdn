@@ -4768,7 +4768,7 @@ export class Utilities {
     Stringify con soporte para buffers binarios (los pasa a base64)
     */
     jsonStringify(value) {
-        return JSON.stringify(msg, (key, value) => {
+        return JSON.stringify(value, (key, value) => {
             let cls = value.constructor ? value.constructor.name : undefined;
             let prefix = '__base64__!';
 
