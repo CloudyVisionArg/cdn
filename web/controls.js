@@ -1193,37 +1193,35 @@ function JSONtoXML(objetosJSON) {
 }
 
 
-/*
-Asigna el value a un Autocomplete
-Ej:
-setAutocompleteVal($("#autocomplete_new"),"tests 3",12348)
-setAutocompleteVal($("#autocomplete_new"),"tests 3",null);
-setAutocompleteVal($("#autocomplete_new"),null,12348);
-*/
-function setAutocompleteVal(pSelect, pText, pValue) {   
+/**
+ * Sets the value of an autocomplete input field.
+ * @param {jQuery} pSelect - The autocomplete input field.
+ * @param {string} pText - The text to be displayed in the autocomplete field.
+ * @param {*} pValue - The value associated with the text. 
+ */
+function setAutocompleteVal(pSelect, pText, pValue) {
+    if (!pValue && !pText) {
+        console.log("Debe ingresar un value y/o un text");
+        return false;
+    }
 
-    if(!pValue && !pText){
-        console.log("debe ingresar un value y/o un text")
-        return false    
-    }    
+    const optValue = pValue || pText;
+    const optText = pText || pValue;
 
-    let optValue = (pValue)?pValue:pText;
-    let optText = (pText)?pText:pValue;
-
-    if(pSelect.find("option[value='" + optValue + "']").length == 0){
-        let option = new Option(optText, optValue, false, false);
+    if (!pSelect.find(`option[value="${optValue}"]`).length) {
+        const option = new Option(optText, optValue, false, false);
         pSelect.append(option);
 
-        let allOptValues = pSelect.find("option").map(function() {
-            return $(this).val();
+        const allOptValues = pSelect.find("option").map(function () {
+        return $(this).val();
         }).get();
         pSelect.val(allOptValues).trigger("change");
 
-        $("#autocomplete_new").trigger({
-            type: 'select2:select',
-            params: {
-                data: {id: optValue}
-            }
+        pSelect.trigger({
+        type: "select2:select",
+        params: {
+            data: { id: optValue },
+        },
         });
     }
 }
