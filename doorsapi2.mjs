@@ -279,9 +279,7 @@ export class SimpleBuffer extends Uint8Array {
 
         if (enc == 'base64') {
             // Ver: https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
-            // let bin = Array.from(this, (byte) => String.fromCodePoint(byte)).join('');
-            let td = new TextDecoder('utf-8');
-            let bin = td.decode(this);
+            let bin = Array.from(this, (byte) => String.fromCodePoint(byte)).join('');
             return btoa(bin);
 
         } else {
