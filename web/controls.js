@@ -1246,3 +1246,17 @@ function enableAutocomplete(pSelect) {
 function clearAUtocomplete(pSelect){
     pSelect.val(null).trigger('change');
 }
+
+//Como atacharse a eventos , Ej:
+/*
+//Limpiar
+$("#" + ctrlName).on("select2:clear", function(e){
+    console.log("se limpio autocomplete");
+})
+
+//Seleccionar
+$("#" + ctrlName).on("select2:select", function(e){
+   let data = e.params.data
+    console.log("se cambio autocomplete" ,data)
+});
+*/
