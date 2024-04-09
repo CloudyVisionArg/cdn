@@ -3864,7 +3864,7 @@ export class Node {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data),
+                    body: JSON.stringify(data), // todo: base64
                 });
 
                 if (res.ok) {
@@ -4764,6 +4764,29 @@ export class Utilities {
         }
     }
     
+    /**
+    Stringify con soporte para buffers binarios (los pasa a base64)
+    */
+    jsonStringify(value) {
+        return JSON.stringify(msg, (key, value) => {
+            let cls = value.constructor ? value.constructor.name : undefined;
+            let prefix = '__base64__!';
+
+            if (cls == 'SimpleBuffer') {
+                return prefix + value.toString('base64');
+
+            } else if (cls == 'Uint8Array') {
+                return prefix + dSession.utils.newSimpleBuffer(value.buffer).toString('base64');
+
+            } else if (cls == 'ArrayBuffer') {
+                return prefix + dSession.utils.newSimpleBuffer(value).toString('base64');
+
+            } else {
+                return value;
+            }
+        });
+    }
+
     /** Completa con ceros a la izquierda */
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
