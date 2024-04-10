@@ -4749,12 +4749,13 @@ export class Utilities {
     */
     jsonParse(value) {
         var me = this;
+        let prefix = '__base64__=>';
         return JSON.parse(value, (key, value) => {
-            if (typeof value == 'string' && value.substring(0, 11) == '__base64__!') {
+            if (typeof value == 'string' && value.substring(0, prefix.length) == prefix) {
                 if (me.session.node.inNode) {
-                    return Buffer.from(atob(value.substring(11)), 'binary');
+                    return Buffer.from(atob(value.substring(prefix.length)), 'binary');
                 } else {
-                    return me.newSimpleBuffer(atob(value.substring(11)));
+                    return me.newSimpleBuffer(atob(value.substring(prefix.length)));
                 }
             } else {
                 return value;
@@ -4788,7 +4789,7 @@ export class Utilities {
     jsonStringify(value) {
         return JSON.stringify(value, (key, value) => {
             let cls = value.constructor ? value.constructor.name : undefined;
-            let prefix = '__base64__!';
+            let prefix = '__base64__=>';
 
             if (cls == 'SimpleBuffer') {
                 return prefix + value.toString('base64');
