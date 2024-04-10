@@ -3838,6 +3838,7 @@ export class Node {
     */
     exec(options) {
         var me = this;
+        var jsonStringify = me.session.utils.jsonStringify;
 
         return new Promise(async (resolve, reject) => {
             let data = {
@@ -3855,7 +3856,7 @@ export class Node {
 
             if (options.url) {
                 var url = await me.server + '/exec';
-                url += '?msg=' + encodeURIComponent(JSON.stringify(data));
+                url += '?msg=' + encodeURIComponent(jsonStringify(data));
                 resolve(url);
 
             } else {
@@ -3864,7 +3865,7 @@ export class Node {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data), // todo: base64
+                    body: jsonStringify(data),
                 });
 
                 if (res.ok) {
