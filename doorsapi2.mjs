@@ -4746,11 +4746,12 @@ export class Utilities {
     }    
 
     /**
-    Parse con soporte para buffers binarios
+    Parse con soporte para buffers en binarios en base64
     */
     jsonParse(value) {
         var me = this;
         let prefix = '__base64__=>';
+
         return JSON.parse(value, (key, value) => {
             if (typeof value == 'string' && value.substring(0, prefix.length) == prefix) {
                 if (me.session.node.inNode) {
@@ -4788,9 +4789,10 @@ export class Utilities {
     Stringify con soporte para buffers binarios (los pasa a base64)
     */
     jsonStringify(value) {
+        let prefix = '__base64__=>';
+
         return JSON.stringify(value, (key, value) => {
-            let cls = value.constructor ? value.constructor.name : undefined;
-            let prefix = '__base64__=>';
+            let cls = value && value.constructor ? value.constructor.name : undefined;
 
             if (cls == 'SimpleBuffer') {
                 return prefix + value.toString('base64');
