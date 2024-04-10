@@ -4752,15 +4752,15 @@ export class Utilities {
         var me = this;
         let prefix = '__base64__=>';
 
-        return JSON.parse(value, (key, value) => {
-            if (typeof value == 'string' && value.substring(0, prefix.length) == prefix) {
+        return JSON.parse(value, (key, val) => {
+            if (typeof val == 'string' && val.substring(0, prefix.length) == prefix) {
                 if (me.session.node.inNode) {
-                    return Buffer.from(atob(value.substring(prefix.length)), 'binary');
+                    return Buffer.from(atob(val.substring(prefix.length)), 'binary');
                 } else {
-                    return me.newSimpleBuffer(atob(value.substring(prefix.length)));
+                    return me.newSimpleBuffer(atob(val.substring(prefix.length)));
                 }
             } else {
-                return value;
+                return val;
             }
         });
     }
@@ -4791,20 +4791,20 @@ export class Utilities {
     jsonStringify(value) {
         let prefix = '__base64__=>';
 
-        return JSON.stringify(value, (key, value) => {
-            let cls = value && value.constructor ? value.constructor.name : undefined;
+        return JSON.stringify(value, (key, val) => {
+            let cls = val && val.constructor ? val.constructor.name : undefined;
 
             if (cls == 'SimpleBuffer') {
-                return prefix + value.toString('base64');
+                return prefix + val.toString('base64');
 
             } else if (cls == 'Uint8Array') {
-                return prefix + dSession.utils.newSimpleBuffer(value.buffer).toString('base64');
+                return prefix + dSession.utils.newSimpleBuffer(val.buffer).toString('base64');
 
             } else if (cls == 'ArrayBuffer') {
-                return prefix + dSession.utils.newSimpleBuffer(value).toString('base64');
+                return prefix + dSession.utils.newSimpleBuffer(val).toString('base64');
 
             } else {
-                return value;
+                return val;
             }
         });
     }
