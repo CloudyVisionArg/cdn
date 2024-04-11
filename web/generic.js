@@ -895,108 +895,23 @@ async function renderControls(pCont, pParent) {
 
 
         // -- Autocomplete --
-
+        
         } else if (type == 'AUTOCOMPLETE') {
             $this = await newAutocomplete(ctl['NAME'],ctl['DESCRIPTION'], {
-                textField: tf, //requerimiento // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-                valueField: vf, // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-                xmlField: xmlf , // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-                textSource: ctl.attr("textsource"), //titulo
-                valueSource: ctl.attr("valuesource"), //doc_id
-                xmlSource: ctl.attr("returnfields"), //contratos,responsable, etc
+                textField: tf,
+                valueField: vf,
+                xmlField: xmlf ,
+                textSource: ctl.attr("textsource"), 
+                valueSource: ctl.attr("valuesource"), 
+                xmlSource: ctl.attr("returnfields"),
                 folder: ctl.attr("searchfolder"),
-                searchFields: ctl.attr("searchfields"), //Fields por los que se realiza la busqueda
-                //extraFields: 'doc_id,fld_id', // Fields que se agregan en las opciones como attr extras a la hora de seleccionar
-                //showFields : '', //Fields que se muestran cuando se busca
-                //selectFields: 'subject, estado,doc_id', //Fields que se muestran cuando se selecciona
+                searchFields: ctl.attr("searchfields"),
                 formula: ctl.attr("searchfilter"),
                 order: ctl.attr("searchorder"),
                 multiple: (ctl.attr("mode")) ? ctl.attr("mode") == "1" : false,
                 editUrl: ctl.attr("editurl"),
                 addUrl: ctl.attr("addurl")
             });           
-
-
-            /*
-            // todo: faltan editurl y addurl
-
-            $this = getAutocomplete(ctl['NAME'], label, {
-                folder: ctl.attr('searchfolder'),
-                rootFolder: folder.RootFolderId,
-                searchFields: ctl.attr('searchfields'),
-                extraFields: ctl.attr('returnfields'),
-                formula: ctl.attr('searchfilter'),
-                order: ctl.attr('searchorder'),
-            }, ctl.attr('mode') == '1');
-
-            $input = $this.find('[data-autocomplete]');
-            f7ctl = app7.autocomplete.get($input);
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                if ($input[0].tagName == 'INPUT') {
-                    inputReadonly($input, true);
-                } else {
-                    $input.addClass('disabled');
-                }
-            }
-
-            $input.attr('data-textfield', tf)
-            f7ctl.params.textSource = ctl.attr('textsource');
-
-            $('<input/>', {
-                type: 'hidden',
-                'data-valuefield': vf,
-            }).appendTo($this);
-            f7ctl.params.valueSource = ctl.attr('valuesource');
-
-            $('<input/>', {
-                type: 'hidden',
-                'data-xmlfield': ctl.attr('xmlfield'),
-            }).appendTo($this);
-
-            f7ctl.on('change', function (value) {
-                var self = this;
-
-                if (self.inputEl) {
-                    // Dropdown (simple)
-                    var $li = $(self.inputEl).closest('li')
-                } else {
-                    // Popup (multiple)
-                    var $li = $(self.openerEl).closest('li')
-                    var $t = $(self.openerEl).find('.item-after');
-                    var ts = self.params.textSource.toUpperCase();
-                    var ta = [];
-                }
-                var $v = $li.find('[data-valuefield]');
-                var vs = self.params.valueSource.toUpperCase();
-                var va = [];
-
-                var $x = $li.find('[data-xmlfield]');
-                var dom = $.parseXML('<root/>');
-
-                if (value.length > 0) {
-                    var $it;
-                    value.forEach(el => {
-                        va.push(el[vs]);
-                        if ($t) ta.push(el[ts]);
-                        var $it = $('<item/>', dom);
-                        Object.keys(el).forEach(prop => {
-                            $it.attr(prop.toLowerCase(), el[prop]);
-                        });
-                        $it.appendTo(dom.documentElement);
-                    })
-                    $v.val(va.join(';'));
-                    if ($t) $t.html(ta.join(';'));
-                    $x.val((new XMLSerializer()).serializeToString(dom));
-
-                } else {
-                    $v.val('');
-                    $x.val('');
-                    if ($t) $t.empty();
-                };
-            });
-            */
-
 
         // -- Maps Autocomplete --
 
