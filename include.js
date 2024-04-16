@@ -20,12 +20,14 @@ function registeredScripts() {
     */
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 354, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 353 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 351, hasdep: true });
     /*
     Por si hay que volver atras
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 343, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 345 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
@@ -34,7 +36,6 @@ function registeredScripts() {
 
     scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 348 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 342 });
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 343, hasdep: true });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 344 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
