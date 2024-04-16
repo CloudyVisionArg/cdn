@@ -2,8 +2,12 @@
 web-javascript
 Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
+Changelog:
+2024-04-16: JP - Agrego openWindowWithPost
+
 Inventario de metodos:
 
+openWindowWithPost(url, data)
 logAndToast(pMsg, pToastOptions)
 preloader
 bootstrapVersion()
@@ -24,6 +28,35 @@ wappNumber(pPhone)
 		n._hasdep = false;
 	});
 })();
+
+/**
+Abre una ventana haciendo post a la misma
+@example
+openWindowWithPost('http://my.url.address/path', {
+    param1: 'value1',
+    param2: 'value2',
+    //:
+});
+*/
+function openWindowWithPost(url, data) {
+    var form = document.createElement('form');
+    form.target = '_blank';
+    form.method = 'POST';
+    form.action = url;
+    form.style.display = 'none';
+
+    for (var key in data) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = data[key];
+        form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
 
 function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);

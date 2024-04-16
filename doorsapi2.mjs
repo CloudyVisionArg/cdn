@@ -3918,6 +3918,7 @@ export class Node {
     });
     */
     async modCall(options) {
+        //todo: soporte para apiKey y url
         return await this.exec({
             code: { repo: 'Global', path: 'server/modproxy.js' },
             payload: options,
