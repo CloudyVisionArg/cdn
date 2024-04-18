@@ -1733,13 +1733,16 @@ export class Directory {
 
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
-                    debugger;
-                    if (res.length == 0) {
-                        reject(new Error('Account not found'));
-                    } else if (res.length > 1) {
-                        reject(new Error('Vague expression'));
+                    if (Array.isArray(res)) {
+                        if (res.length == 0) {
+                            reject(new Error('Account not found'));
+                        } else if (res.length > 1) {
+                            reject(new Error('Vague expression'));
+                        } else {
+                            resolve(new Account(res[0], me.session));
+                        }
                     } else {
-                        resolve(new Account(res[0], me.session));
+                        resolve(new Account(res, me.session));
                     }
                 },
                 reject
