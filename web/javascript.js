@@ -30,6 +30,21 @@ wappNumber(pPhone)
 })();
 
 /**
+Descarga un buffer como archivo
+@example
+downloadFile(buffer, 'logo.jpg');
+*/
+function downloadFile(buffer, fileName) {
+    var url = window.URL.createObjectURL(buffer);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();    
+    a.remove(); 
+}
+
+/**
 Abre una ventana haciendo post a la misma
 @example
 openWindowWithPost('http://my.url.address/path', {
