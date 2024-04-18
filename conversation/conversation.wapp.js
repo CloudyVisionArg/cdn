@@ -496,7 +496,6 @@ function whatsAppDataProvider(opts){
 				//$cont.html($img);
 				//$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
 			});
-
 			popup.open();
 
 		} else {
@@ -1322,7 +1321,7 @@ function wappMsg(){
 								$('<img/>', {
 									src: it.Url,
 									style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
-								}).click(whatsAppProvider.viewImage).appendTo($div);
+								}).click(alert('Imagen')).appendTo($div);
 								
 							} else if (it.ContentType.substr(0, 5) == 'audio') {
 								var $med = $('<audio/>', {
@@ -1509,6 +1508,7 @@ async function newWhatsAppChatControl(opts){
 	]
 	*/
 
+	var wappProvider = null;
     Promise.allSettled(allProms).then(async proms=>{
         let numbers = proms[0].value;
         let docs = proms[1].value;
@@ -1605,7 +1605,7 @@ async function newWhatsAppChatControl(opts){
 			}
 		};
 		let providers = [];
-		var wappProvider = getWhatsAppDataProvider(wappOpts);
+		wappProvider = getWhatsAppDataProvider(wappOpts);
 		providers.push(wappProvider);
 		var dataProvider = new conversationDataProvider();
 		dataProvider.msgproviders = providers;
@@ -1650,65 +1650,10 @@ async function newWhatsAppChatControl(opts){
 		let control = new conversationControl(conversationOptions);
 		return control;
     });
-}
 
-function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
-    let input =  $(chatInputSelector);
-	if(templateObj){
-		$(input).attr("data-template", JSON.stringify(templateObj));
-	}
-	if(vars){
-		$(input).attr("data-template-vars", JSON.stringify(vars));
-	}
-    insertAtCaret(input[0], text);
-}
 
-/*
-todo:
-- Enviar media
-*/
 
-(function() {
-	include('whatsapp-css');
-	include('jslib');
-	include('emojis');
 
-	var root = document.documentElement;
-
-	if (typeof(cordova) == 'object') {
-		// App
-		root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
-		root.style.setProperty('--wapp-chat-vertical-margin', '10px');
-		root.style.setProperty('--wapp-button-size', '30px');
-		
-	} else {
-		// Web
-		root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
-		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
-		root.style.setProperty('--wapp-button-size', '25px');
-	};
-}());
-
-$(document).ready(function () {
-	/*DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
-		function (res) {
-			wapp.rootFolder = res;
-			
-			if (typeof(cordova) == 'object') {
-				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
-			} else {
-				wapp.codelibUrl = '/c/codelibapi.asp';
-			};
-		
-			
-		}
-	);
-
-	DoorsAPI.loggedUser().then(
-		function (res) {
-			wapp.loggedUser = res;
-		}
-	);*/
 
 	if (typeof(cordova) != 'object') {
 		// El DIV para mostrar imagenes fullScreen
@@ -1735,24 +1680,21 @@ $(document).ready(function () {
 		$file.change(function (e) {
 			let inp = e.target;
 			if (inp.files.length > 0) {
-				whatsAppProvider.sendMedia(inp.files[0], $(inp).prop('data-chat'));
+				wappProvider.sendMedia(inp.files[0], $(inp).prop('data-chat'));
 				inp.value = '';
 			}
 		})
-
 	}
-});
 
 
-
-/*
-function newProxAccionControl(pId,pLabel,pOptions){
-	var arrScripts = [];
-	//Requiere JQuery, moment, Bootrap y bootstrap-datetimepicker
-	arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
-	arrScripts.push({ id: 'lib-moment' });
-	arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
-	arrScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
-	arrScripts.push({ id: 'tempus-dominus', depends: ['jquery', 'bootstrap-css', 'lib-moment'], src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js' });
-	arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
-}*/
+	function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
+		let input =  $(chatInputSelector);
+		if(templateObj){
+			$(input).attr("data-template", JSON.stringify(templateObj));
+		}
+		if(vars){
+			$(input).attr("data-template-vars", JSON.stringify(vars));
+		}
+		insertAtCaret(input[0], text);
+	}
+}
