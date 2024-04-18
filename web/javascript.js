@@ -3,13 +3,14 @@ web-javascript
 Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
 Changelog:
+2024-04-18: JP - Renombrado de openWindowWithPost a submitData
 2024-04-18: JP - Agrego downloadFile
 2024-04-16: JP - Agrego openWindowWithPost
 
 Inventario de metodos:
 
 downloadFile(buffer, fileName)
-openWindowWithPost(url, data)
+submitData(options)
 logAndToast(pMsg, pToastOptions)
 preloader
 bootstrapVersion()
@@ -47,26 +48,37 @@ function downloadFile(buffer, fileName) {
 }
 
 /**
-Abre una ventana haciendo post a la misma
+Crea un formulario, hace submit de los datos y lo borra
+Se puede usar para abrir una nueva ventana haciendo POST
 @example
-openWindowWithPost('http://my.url.address/path', {
-    param1: 'value1',
-    param2: 'value2',
-    //:
+submitData({
+	url: 'http://my.url.address/path',
+	data: {
+		param1: 'value1',
+		param2: 'value2',
+	},
+	method: 'GET', // Opcional, default POST
+	target: '_self', // Opcional, default _blank
 });
 */
-function openWindowWithPost(url, data) {
+function submitData(options) {
+	var opt = {
+		method: 'POST',
+		target: '_blank',
+	}
+	Object.assign(opt, options);
+
     var form = document.createElement('form');
-    form.target = '_blank';
-    form.method = 'POST';
-    form.action = url;
+    form.target = opt.target;
+    form.method = opt.method;
+    form.action = opt.url;
     form.style.display = 'none';
 
-    for (var key in data) {
+    for (var key in opt.data) {
         var input = document.createElement('input');
         input.type = 'hidden';
         input.name = key;
-        input.value = data[key];
+        input.value = opt.data[key];
         form.appendChild(input);
     }
     document.body.appendChild(form);
