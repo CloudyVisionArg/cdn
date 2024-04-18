@@ -1720,6 +1720,7 @@ export class Directory {
             var url;
             if (account || account == 0) {
                 if (isNaN(parseInt(account))) {
+                    debugger;
                     url = 'accounts?accName=' + me.session.utils.encUriC(account);
                     //url = 'accounts/name/' + me.session.utils.encUriC(account);
                 } else {
