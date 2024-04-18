@@ -3,10 +3,12 @@ web-javascript
 Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
 Changelog:
+2024-04-18: JP - Agrego downloadFile
 2024-04-16: JP - Agrego openWindowWithPost
 
 Inventario de metodos:
 
+downloadFile(buffer, fileName)
 openWindowWithPost(url, data)
 logAndToast(pMsg, pToastOptions)
 preloader
