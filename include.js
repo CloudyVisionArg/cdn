@@ -20,8 +20,8 @@ function registeredScripts() {
     */
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 354, hasdep: true });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 355 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 356, hasdep: true });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 356 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 351, hasdep: true });
