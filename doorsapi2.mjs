@@ -1721,7 +1721,7 @@ export class Directory {
             if (account || account == 0) {
                 if (isNaN(parseInt(account))) {
                     debugger;
-                    url = 'accounts?name=' + me.session.utils.encUriC(account);
+                    url = 'accounts/name=' + me.session.utils.encUriC(account);
                     //url = 'accounts/name/' + me.session.utils.encUriC(account);
                 } else {
                     // todo: cambiar por /accounts/{accId}
