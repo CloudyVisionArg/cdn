@@ -8,6 +8,7 @@
  * Doorsapi.js: Busqueda de datos
  */
 
+var branch = "unificacionControlesGlobalesChat";
 var wappRequiredScripts = [];
 wappRequiredScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
 wappRequiredScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
@@ -16,9 +17,9 @@ wappRequiredScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn
 wappRequiredScripts.push({ id: 'lib-moment' });
 wappRequiredScripts.push({ id: 'emojis'});
 wappRequiredScripts.push({ id: 'doorsapi', depends: ['emojis']});
-wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.js' });
-wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.css' });
-wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversation.media.js' });
+wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.js' });
+wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.css' });
+wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.media.js' });
 
 var whatsAppProvider = null; //new whatsAppDataProvider(wappOpts);
 
