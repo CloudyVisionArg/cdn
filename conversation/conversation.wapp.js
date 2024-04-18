@@ -1685,7 +1685,28 @@ async function newWhatsAppChatControl(opts){
 			}
 		})
 	}
-
+	function getHeaderHtml(mobilePhone, name){
+		var $heading = $('<div/>', {
+			'class': 'chat-header'
+		});
+		var $headingLeft = $('<div/>', {
+			'class': 'info'
+		}).appendTo($heading);
+		if(name){
+			$headingLeft.append('<div><b><span class="external-number">' + name + '</span></b></div>');
+		}
+		$headingLeft.append('<div><b>(<span class="external-number">' + mobilePhone + ')</span></b></div>');
+	
+		$('<div/>', {
+			class: 'whatsapp-status-container',
+		}).appendTo($heading);
+	
+		$('<div/>', {
+			class: 'right-container',
+		}).appendTo($heading);
+		
+		return $heading;
+	}
 
 	function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
 		let input =  $(chatInputSelector);
