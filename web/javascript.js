@@ -52,7 +52,7 @@ Crea un formulario, hace submit de los datos y lo borra
 Se puede usar para abrir una nueva ventana haciendo POST
 @example
 submitData({
-	url: 'http://my.url.address/path',
+	url: 'http://my.url/path',
 	data: {
 		param1: 'value1',
 		param2: 'value2',
