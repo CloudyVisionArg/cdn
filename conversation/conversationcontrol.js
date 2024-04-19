@@ -153,6 +153,8 @@ function msg() {
 function conversationBaseDataProvider() {
 	this.supportedTypes = ["msg"];
 	this.conversationControl = null;
+	this.accounts = [];
+	this.getQuickMessageOptions = null;
 	this.getMessages = function (msgLimit, maxDate) {
 		return new Promise(function (resolve, reject) { resolve([]) });
 	};
@@ -163,6 +165,7 @@ function conversationBaseDataProvider() {
 		return new Promise(function (resolve, reject) { resolve(null) });
 	};
 	this.destroy = function () { };
+	this.executeQuickOption = function (option, typeName) { };
 }
 /**
  * Proveedor de datos de chat. Utilizar este objeto para proveer de datos al chat de la siguiente forma
@@ -555,11 +558,39 @@ function conversationControl(opt) {
 
 				$media = $('<i/>', {
 					class: 'fa ' + defaultIcon,
-					'data-toggle': 'dropdown',
+					/*'data-toggle': 'dropdown',
 					'data-bs-toggle': 'dropdown',
+					'data-bs-auto-close': 'outside',*/
+					'aria-expanded': 'false',
+					'data-bs-target': "#messageTypesFirstMenu"
 				}).appendTo($dropup);
 
+				$media.click(function (event) {
+					event.preventDefault();
+    				event.stopPropagation();
+
+    				//$(this).parents(".dropdown-menu").first().find(".show").removeClass("show");
+    				//$(this).parents(".dropdown-menu").first().find("[aria-expanded='true']").attr("aria-expanded", false);
+					if($(this).attr("aria-expanded") == "true"){
+
+						$(this).attr("aria-expanded", false);
+					}
+					else{
+						$(this).attr("aria-expanded", true);
+					}
+    				$(this).siblings(".dropdown-menu").toggleClass("show");
+
+					// $(this)
+					// 	.parents(".nav-item.dropdown")
+					// 	.on("hidden.bs.dropdown", function (e) {
+					// 		$(".dropdown-submenu .show").removeClass("show");
+					// 		$(".dropdown-submenu [aria-expanded='true']").attr("aria-expanded", false);
+					// 	});
+				})
+
 				var $menu = $('<ul/>', {
+					id: "messageTypesFirstMenu",
+					style: "position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(44px, -34px);",
 					class: 'dropdown-menu',
 				}).appendTo($dropup);
 
@@ -903,40 +934,63 @@ function conversationControl(opt) {
 
 				if(foundType == null) continue;
 				
-				appendWebMessageTypeOption($menu, foundType, typeName,me.options.quickMessageTypes.length);
+				appendWebMessageTypeOption($menu, foundType, typeName,me.options.quickMessageTypes.length,prov);
 			}
 		}
 	};
 
-	var appendWebMessageTypeOption = function($menu, menuOption, typeName, quickTypes){
+	var appendWebMessageTypeOption = function($menu, menuOption, typeName, quickTypes, prov){
 		let msgInst = null;
 		try {
 			eval("msgInst = new " + typeName + "();");
 			var thisInstance = me;
 			if (msgInst != null) {
 				if(quickTypes > 1){
-					var $li = $('<li/>').appendTo($menu);
-					let $actionLink = $('<a/>').append('<i class="fa ' + msgInst.icon + '"></i> ' + msgInst.type).appendTo($li);
-					$actionLink.click(function (e) {
+					var $li = $('<li/>', {class: "dropdown-item"}).appendTo($menu);
+					let $actionLink = $('<a/>',{
+						class:"quick-message-item"
+					}).append('<i class="fa ' + msgInst.icon + '"></i> <span>' + msgInst.type + '</span>').appendTo($li);
+					$li.click(function (e) {
 						var $this = $(this);
-						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.children('i').attr('class'));
+						let currentType = $(thisInstance.options.selector + " .message-type-button").attr('data-message-type');
+						$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $this.find('i').first().attr('class'));
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
 						$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
 						if (thisInstance.options.quickMessageChanged) {
-							thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+							thisInstance.options.quickMessageChanged(msgInst.constructor.name, $li);
 						}
-						if(typeof(menuOption) == "object"){
+						/*if(typeof(menuOption) == "object"){
 							if(menuOption.children && menuOption.children.length > 0){
 								//$this.parents(".dropup").addClass('open');
 								e.stopPropagation();
 							}
+						}*/
+						//Si efectivamente se está cambiando de tipo de mensaje, oculto los submenu de los otros tipos
+						if(currentType != msgInst.type) {
+							$(thisInstance.options.selector + " .message-type-button li.dropdown-submenu ul").hide()
+						}
+						//Parent li
+						let subMenuToShow = $this.children("ul.dropdown-menu");
+						if(subMenuToShow.length > 0){
+							subMenuToShow.toggle();
+							e.stopPropagation();
+						}
+						else{
+							$this.parent().removeClass("show");
+							$this.children("i").attr("aria-expanded","false");
 						}
 					});
+
+					if(prov.getQuickMessageOptions){
+						prov.getQuickMessageOptions(typeName).then(options=>{
+							addRecursively($li, options, thisInstance.options.quickOptionSelected, typeName, prov);
+						});
+					}
 				}
 				else{
 					$menu.parent().children("i").click(function(e){
 						if (thisInstance.options.quickMessageChanged) {
-							thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+							thisInstance.options.quickMessageChanged(msgInst.constructor.name, null);
 						}
 					});
 				}
@@ -953,6 +1007,46 @@ function conversationControl(opt) {
 		} catch (error) {
 			//TODO
 		}
+		function addRecursively(liItem, children, clickHandler, typeName, provider){
+			if(children && children.length > 0){
+				liItem.addClass("dropdown-submenu");
+				var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo(liItem);
+				for (let index = 0; index < children.length; index++) {
+					const option = children[index];
+					var $li = $('<li/>', {class: "dropdown-item"}).appendTo($subMenu);
+					let $actionLink = $('<a/>').append('<i class="fa ' + option.webIcon + '"></i> ' + option.text).appendTo($li);
+					
+					$li.click(function (e) {
+						var $this = $(this);
+						let subMenuToShow = $(this).children("ul.dropdown-menu");
+						subMenuToShow.toggle();
+						if(subMenuToShow.outerHeight() > 390){
+							subMenuToShow.css("overflow-y","auto");
+						}
+						//let display = subMenuToShow.css("display") == "none" ? display = "block" : display = "none";
+						//.css('display',display);
+						e.stopPropagation();
+						if(option.selectable){
+							hideMenu();
+						}
+						if(option.selectable && clickHandler){
+							if(provider.executeQuickOption){
+								provider.executeQuickOption(option, typeName);
+							}
+							clickHandler(option, typeName, provider);
+						}
+					});
+					if(option.children && option.children.length > 0){
+						addRecursively($li, option.children, clickHandler, typeName, provider);
+					}
+				}
+			}
+		}
+	};
+
+	var hideMenu = function(){
+		//TODO Cordova
+		$mainContainer.find(".message-type-button > .dropdown-menu.show").removeClass("show")
 	};
 
 	var insertMobileMessageTypeOptionsMenu = function ($div) {
@@ -982,8 +1076,17 @@ function conversationControl(opt) {
 								if (thisInstance.options.quickMessageChanged) {
 									thisInstance.options.quickMessageChanged(msgInst.constructor.name);
 								}
+								if(prov.getQuickMessageOptions){
+									prov.getQuickMessageOptions(typeName).then(subOptions=>{
+										if(subOptions && subOptions.length > 0){
+											tryToDisplayQuickMessageOptions(subOptions);
+										}
+									});
+								}
+								
 							}
 						})
+						
 					}
 				} catch (error) {
 				}
@@ -1008,6 +1111,25 @@ function conversationControl(opt) {
 			mediaActions.open();
 		});
 	};
+
+	var tryToDisplayQuickMessageOptions = function(options){
+		//TODO
+		/*//  Media options
+		var mediaActions = app7.actions.create({
+			buttons: [
+				btns,
+				[
+					{
+						text: 'Cancelar',
+						bold: true,
+						close: true,
+					}
+				]
+			]
+		});
+		mediaActions.params.chatEl = $div;
+		mediaActions.open();*/
+	}
 
 	//Inicio el chat
 	init($mainContainer);

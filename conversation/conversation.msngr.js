@@ -47,7 +47,7 @@ function messengerDataProvider(opts){
 
     var setupRequiredInfo = function () {
         return new Promise((resolve,reject)=>{
-            let reqs = 3;
+            let reqs = 4;
             DoorsAPI.foldersGetByPath(me.rootFolder, '/messenger/messages').then(
                 function (fld) {
                     me.messagesFolder = fld.FldId;
@@ -74,6 +74,22 @@ function messengerDataProvider(opts){
                     tryResolve();
                 }
             );
+            DoorsAPI.foldersGetByPath(me.rootFolder, '/config/registered_connections').then(
+                function (fld) {
+                    me.pagesFolder = fld;
+                    DoorsAPI.folderSearch(me.pagesFolder.FldId, '*', "").then(
+                        function (res) {
+							me.allPages = res;//.map(it => it['NAME']);
+							fillAccounts();
+                            tryResolve();
+                        },function (err){
+                            tryResolve();
+                        }
+                    );
+                },function(err){
+                    tryResolve();
+                }
+            );
 
 			DoorsAPI.accountsSearch("","").then(function(allAccounts){
 				me.allAccounts = allAccounts;
@@ -88,6 +104,7 @@ function messengerDataProvider(opts){
             }
         });
     };
+
 
     setupRequiredInfo().then(function () {
         // Actualiza el estado de la sesion cada 1'
@@ -113,6 +130,20 @@ function messengerDataProvider(opts){
 			refreshSession();
 		});
     });
+
+	var fillAccounts = function(){
+		me.allPages.forEach(function(page){
+			if(page["PAGE_ID"] == me.options.from){
+				me.accounts.push({
+					id: page["PAGE_ID"],
+					name: page["PAGE_NAME"],
+					status: "stop",
+					selected: page["PAGE_ID"] == me.options.from,
+					icon: "fa-facebook"
+				});
+			}
+		});
+	}
 
     this.getMessages = function (msgLimit, maxDate){
 		let me = this;
@@ -325,6 +356,7 @@ function messengerDataProvider(opts){
 
     var getMessageByActType = function(actDoc){
         let msgIns = new messengerMsg();
+		msgIns.viewImage = me.viewImage;
         let actType = "Messenger";
         
         if(msgIns && actDoc){
@@ -371,24 +403,34 @@ function messengerDataProvider(opts){
 			//var extNumberRev = me.cleanNumber(to);
 			//var intNumberRev = me.cleanNumber(from);
 
-			var formula = 'sender_id = \'' + to + '\' or recipient_id = \'' + to + '\'';
+			var formula = 'sender_id = \'' + to + '\' and recipient_id = \'' + from + '\'';
 			
-			DoorsAPI.folderSearch(me.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
+			DoorsAPI.folderSearchGroups(me.messagesFolder,"recipient_id","MAX(CREATED) AS LASTEST",formula).then(
 				function (res) {
 					if (res.length > 0) {
-						render(res[0]['CREATED']);
-					} else {
-						render(undefined);
+						res.forEach(function (it) {
+							let latestMsgDate = new Date(it["LASTEST"]);
+							let account = me.accounts.find(a=> a.id == it["RECIPIENT_ID"]);
+							if(account){
+								var hours = (new Date() - latestMsgDate) / (60 * 60 * 1000);
+								if (hours < 144) {
+									account.status = "go";
+								}
+								else{
+									account.status = "stop";
+								}
+							}
+						});
 					}
 				},
 				function (err) {
 					console.log(err);
-					debugger;
+					//debugger;
 				}
 			)
 		};
 		
-		function render(pDate) {
+		/*function render(pDate) {
 			var light, remain;
 
 			if (pDate) {
@@ -411,7 +453,7 @@ function messengerDataProvider(opts){
             $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/' + light + '.png');
 			var $remain = $(me.options.sessionStatusContainer).find('.session .session-time');
 			$remain.html(remain);
-		}
+		}*/
 	}
 
     //TODO Mover afuera? Mover a mensaje?
@@ -678,6 +720,78 @@ function messengerDataProvider(opts){
 		$file.prop('data-chat', pChat);
 		$file.click();
 	};
+	this.getQuickMessageOptions = async function(messageType){
+		let me = this;
+		return new Promise(resolve,reject=>{
+			let templates = [];
+			if (me.templates && me.templates.length > 0) {
+				me.templates.forEach(it => {
+					templates.push({
+						text: it.NAME,
+						name: "template",
+						icon: "doc",
+						webIcon: "fa-file-text-o",
+						selectable: true
+					});
+				});
+			}
+			resolve([
+				{
+					text: "Plantillas",
+					name: "template",
+					icon: "chat_bubble_text",
+					webIcon: "fa-file-text-o",
+					selectable: false,
+					children: templates
+				}
+			]);
+		});
+	};
+	this.executeQuickOption = function (option, messageType) {
+		let me = this;
+		//TODO
+		if (option.name == "template") {
+			//TODO
+			me.putTemplate(option.text);
+		} else {
+			//TODO
+			//me.sendText(option.name);
+		}
+	};
+	/*
+	if (me.templates && me.templates.length > 0) {
+		var tempButtons = [
+			[],
+			[{
+				text: 'Cancelar',
+				bold: true,
+				close: true,
+			}]
+		];
+
+		me.templates.forEach(it => {
+			tempButtons[0].push({
+				text: it.NAME,
+				onClick: tempClick,
+			})
+		});
+
+		tempActions = app7.actions.create({
+			buttons: tempButtons,
+		});
+
+		tempActions.params.chatEl = actions.params.chatEl;
+		tempActions.open();
+
+		function tempClick(actions, e) {
+			me.putTemplate(this.text);
+		};
+
+	} else {
+		toast('No hay plantillas definidas');
+	} 
+	*/
+	
 
 	this.displayMessengerOptions = function(container){
 		var $media;
@@ -1052,6 +1166,7 @@ function messengerMsg(){
 	this.placesUrl = null;
 	this.pageId = null;
 	this.jsonBody = null;
+	this.viewImage = function(e){};
 	this.getMessageHtml = function(message){
 		var me = this;
 		return new Promise((resolve, reject) => {
@@ -1084,7 +1199,7 @@ function messengerMsg(){
 							$('<img/>', {
 								src: att.payload.url,
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
-							}).click(messengerProvider.viewImage).appendTo($div);
+							}).click(me.viewImage).appendTo($div);
 								
 						} else if (att.type == 'audio') {
 							var $med = $('<audio/>', {

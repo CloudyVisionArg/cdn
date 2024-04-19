@@ -191,9 +191,9 @@ span.msg-operator {
 .wapp-message-text .fa.fa-phone {
     color: #0081AF;
 }
-.page-content > .list.no-hairlines-md {
-    /*display: none;*/
-}
+/*.page-content > .list.no-hairlines-md {
+    display: none;
+}*/
 #view-leads .page-content > .toolbar.tabbar.toolbar-top {
     margin-top: -50px;
 }
@@ -220,6 +220,7 @@ span.msg-operator {
 }
 .activity-actions {
     display: flex;
+    column-gap: 10px;
 }
 .msngr-message {
     width: 100%;

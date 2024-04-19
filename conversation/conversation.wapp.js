@@ -58,6 +58,7 @@ function whatsAppDataProvider(opts){
     this.s3Key = opts.s3Key || null;
 	this.allAccounts = [];
 	this.messagesFolder = opts.messagesFolder || null;
+	this.numbers = [];
     let me = this;
 	var wappLib = opts.wappLib || null;
 	var intervalId;
@@ -70,7 +71,7 @@ function whatsAppDataProvider(opts){
 
     var setupRequiredInfo = function () {
         return new Promise((resolve,reject)=>{
-            let reqs = 3;
+            let reqs = 4;
             DoorsAPI.foldersGetByName(me.rootFolder, 'messages').then(
                 function (fld) {
                     me.messagesFolder = fld.FldId;
@@ -95,6 +96,22 @@ function whatsAppDataProvider(opts){
                     tryResolve();
                 }
             );
+            DoorsAPI.foldersGetByName(me.rootFolder, 'numbers').then(
+                function (fld) {
+                    me.numbersFolder = fld;
+                    DoorsAPI.folderSearch(fld.FldId, '*', '', 'name').then(
+                        function (res) {
+                            me.numbers = res;//.map(it => it['NAME']);
+							fillAccounts();
+                            tryResolve();
+                        },function (err){
+                            tryResolve();
+                        }
+                    );
+                },function(err){
+                    tryResolve();
+                }
+            );
 
 			DoorsAPI.accountsSearch("","").then(function(allAccounts){
 				me.allAccounts = allAccounts;
@@ -109,6 +126,18 @@ function whatsAppDataProvider(opts){
             }
         });
     };
+
+	var fillAccounts = function(){
+		me.numbers.forEach(function(num){
+			me.accounts.push({
+				id: num["NUMBER"],
+				name: num["NAME"],
+				status: "stop",
+				selected: num["DEFAULT"] == "1" ? true : false,
+				icon: "fa-whatsapp"
+			});
+		});
+	}
 
     setupRequiredInfo().then(function () {
         // Carga mensajes nuevos cada 5 segs
@@ -218,6 +247,10 @@ function whatsAppDataProvider(opts){
 			to: to,
 			body: msge.body
 		}
+		let selectedAccount = me.accounts.find(a=> a.selected == true);
+		if(selectedAccount){
+			msg.from = selectedAccount.name;
+		}
 		if(input && input.attr("data-template")){
 			let template = JSON.parse(input.attr("data-template"));
 			let vars = input.attr("data-template-vars") ? JSON.parse(input.attr("data-template-vars")) : [];
@@ -229,7 +262,8 @@ function whatsAppDataProvider(opts){
             if(template["CONTENT_SID"]){
                 msg.contentSid = template["CONTENT_SID"];
                 //Fuerzo para que se busque y se agregue el service id
-                msg.from = from; //["NAME"];
+				//Ya no aplica porque se utiliza la cuenta seleccionada
+                //msg.from = from; //["NAME"];
 				let contentVariablesObj = {};
 				vars.forEach(v=>{
 					let prop = v.variable.replaceAll("{","").replaceAll("}","");
@@ -263,6 +297,10 @@ function whatsAppDataProvider(opts){
 					
 					resolve(msgObj);
 				},function(err){
+					//if(input){
+					//	input.val(msg.body);
+					//}
+					alert("No se pudo enviar el mensaje. Detalle: " + err.message);
 					reject(err);
 				});
 			}
@@ -290,7 +328,7 @@ function whatsAppDataProvider(opts){
 					},
 					function (err) {
 						//wapp.cursorLoading(false);
-						//alert('Error: ' + err.jqXHR.responseText);
+						alert('No se pudo enviar el mensaje. Detalle: ' + err.jqXHR.responseText);
 						reject(err);
 					}
 				)
@@ -374,7 +412,7 @@ function whatsAppDataProvider(opts){
 					resolve(res.data);
 				},
 				function (err) {
-					debugger;
+					//debugger;
 					reject(err.jqXHR);
 				}
 			)
@@ -401,6 +439,7 @@ function whatsAppDataProvider(opts){
 
     var getMessageByActType = function(actDoc){
         let msgIns = new wappMsg();
+		msgIns.viewImage = me.viewImage;
         let actType = "WhatsApp";
         
         if(msgIns && actDoc){
@@ -440,26 +479,46 @@ function whatsAppDataProvider(opts){
 
 			// Elimina los caracteres no numericos y da vuelta
 			var extNumberRev = me.cleanNumber(to);
-			var intNumberRev = me.cleanNumber(from);
+			//var intNumberRev = me.cleanNumber(from);
 
-			var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
+			//var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
+			var formula = 'from_numrev like \'' + extNumberRev + '%\' ';
 			
-			DoorsAPI.folderSearch(me.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
+			/*let accArray = [];
+			me.accounts.forEach(function(account){
+				accArray.push("whatsapp:" + account.id);
+			});
+			formula += " and to in ('" + accArray.join("','") + "')";*/
+
+			
+			
+			
+			DoorsAPI.folderSearchGroups(me.messagesFolder,"TO","MAX(CREATED) AS LASTEST",formula).then(
 				function (res) {
 					if (res.length > 0) {
-						render(res[0]['CREATED']);
-					} else {
-						render(undefined);
+						res.forEach(function (it) {
+							let latestMsgDate = new Date(it["LASTEST"]);
+							let account = me.accounts.find(a=> a.id == it["TO"].replace("whatsapp:",""));
+							if(account){
+								var hours = (new Date() - latestMsgDate) / (60 * 60 * 1000);
+								if (hours < 24) {
+									account.status = "go";
+								}
+								else{
+									account.status = "stop";
+								}
+							}
+						});
 					}
 				},
 				function (err) {
 					console.log(err);
-					debugger;
+					//debugger;
 				}
 			)
 		};
 		
-		function render(pDate) {
+		/*function render(pDate) {
 			var light, remain;
 
 			if (pDate) {
@@ -482,7 +541,7 @@ function whatsAppDataProvider(opts){
             $img.attr('src', 'https://cdn.jsdelivr.net/gh/CloudyVisionArg/cdn@55/wapp/' + light + '.png');
 			var $remain = $(me.options.sessionStatusContainer).find('.session .session-time');
 			$remain.html(remain);
-		}
+		}*/
 	}
 
     //TODO Mover afuera? Mover a mensaje?
@@ -571,7 +630,7 @@ function whatsAppDataProvider(opts){
 		)
 	};
 
-	this.sendAudio = function (pChat) {
+	this.sendAudio = function () {
 		var me = this;
 		this.audioRecorder(function (file) {
 			const previewReader = new FileReader()
@@ -623,7 +682,7 @@ function whatsAppDataProvider(opts){
 				debugger;
 				$btnEnviar.on("click",()=>{
 					URL.revokeObjectURL(previewURL);
-					me.sendMediaFromFile(file, pChat);
+					me.sendMediaFromFile(file);
 					app7.sheet.close(".modal-in");
 					let $modal = $('#wappModal');
 					if($modal.length > 0){
@@ -635,22 +694,22 @@ function whatsAppDataProvider(opts){
         });
 	};
 
-	this.sendCamera = function (pChat) {
+	this.sendCamera = function () {
 		let source = _isCapacitor() ? CameraSource.Camera : Camera.PictureSourceType.CAMERA;
 		let permisssion = _isCapacitor() ? CameraPermissionType.Camera : null;
 		me.getPicture(source, permisssion,
 			function (file) {
-				me.sendMedia(file, pChat);
+				me.sendMedia(file);
 			}
 		)
 	};
 
-	this.sendPhoto = function (pChat) {
+	this.sendPhoto = function () {
 		let source = _isCapacitor() ? CameraSource.Photos : Camera.PictureSourceType.PHOTOLIBRARY;
 		let permission = _isCapacitor() ? CameraPermissionType.Photos : null;
 		me.getMedia(source, permission,
 			function (file) {
-				me.sendMedia(file, pChat);
+				me.sendMedia(file);
 			}
 		);
 	};
@@ -739,11 +798,11 @@ function whatsAppDataProvider(opts){
 		return new File([blob], pFileName, { type: pFileType });
 	}
 
-	this.sendMedia = function (pFile, pChat) {
+	this.sendMedia = function (pFile) {
 		//todo
         //wapp.cursorLoading(true);
 		if(_isCapacitor()){
-			me.sendMediaFromFile.call(me, pFile, pChat);
+			me.sendMediaFromFile.call(me, pFile);
 			
 		}else{
 			let me = this;
@@ -759,12 +818,12 @@ function whatsAppDataProvider(opts){
 				);
 			} else {
 				//me.sendMediaFromFile(pFile,pChat);
-				me.sendMediaFromFile.call(me, pFile, pChat);
+				me.sendMediaFromFile.call(me, pFile);
 			};
 		}
 	};
 	
-	this.sendMediaFromFile = function(file2, pChat) {
+	this.sendMediaFromFile = function(file2) {
 		//var me = this; se pierde la referencia y en este caso this queda apuntando a window en vez del dataprovider 
 		//var me = whatsAppProvider;
 		//se vuelve a cambiar porque se puede obtener la referencia con el this, si se llama con el ".call"
@@ -805,7 +864,6 @@ function whatsAppDataProvider(opts){
 							alert(errMsg(err));
 
 						} else {
-							var $chat = $(pChat);
 							var fromN = from; //$chat.attr('data-internal-number');
 							var toN = to; //$chat.attr('data-external-number');
 
@@ -915,7 +973,7 @@ function whatsAppDataProvider(opts){
 		}
 	};
 
-	this.sendFileWeb = function (pChat) {
+	this.sendFileWeb = function () {
 		var $file = $('#wappFile');
 		$file.prop('data-chat', "");
 		$file.click();
@@ -967,7 +1025,92 @@ function whatsAppDataProvider(opts){
 			}
 		}
 	};
+	this.getQuickMessageOptions = async function(messageType){
+		let me = this;
+		return new Promise((resolve,reject)=>{
+			let templates = [];
+			if (!me.templates || me.templates.length == 0){
+				DoorsAPI.foldersGetByName(me.rootFolder, 'templates').then(
+					function (fld) {
+						me.templatesFolder = fld.FldId;
+						DoorsAPI.folderSearch(me.templatesFolder, 'name,text,doc_id', '', 'name').then(
+							function (res) {
+								me.templates = res;//.map(it => it['NAME']);
+								tryResolve(resolve);
+							},function (err){
+								reject(err);
+							}
+						);
+					},function(err){
+						reject(err);
+					}
+				);
+			}
+			else{
+				tryResolve(resolve);
+			}
 
+			function tryResolve(res){
+				if (me.templates && me.templates.length > 0) {
+					me.templates.forEach(it => {
+						templates.push({
+							text: it.NAME,
+							name: "template",
+							icon: "doc",
+							webIcon: "fa-file-text-o",
+							selectable: true
+						});
+					});
+				}
+				
+				res([
+					{
+						text: "Mensaje de voz",
+						name: "audio",
+						icon: "mic",
+						webIcon: "fa-microphone",
+						selectable: true
+					},
+					{
+						text: "C&aacute;mara",
+						name: "camera",
+						icon: "camera",
+						webIcon: "fa-camera",
+						selectable: true
+					},
+					{
+						text: "Fotos y Videos",
+						name: "pictures",
+						icon: "photo",
+						webIcon: "fa-picture-o",
+						selectable: true
+					},
+					{
+						text: "Documento",
+						name: "document",
+						icon: "doc",
+						webIcon: "fa-file-o",
+						selectable: true
+					},
+					{
+						text: "Ubicaci&oacute;n",
+						name: "location",
+						icon: "placemark",
+						webIcon: "fa-map-marker",
+						selectable: true
+					},
+					{
+						text: "Plantillas",
+						name: "template",
+						icon: "chat_bubble_text",
+						webIcon: "fa-file-text-o",
+						selectable: false,
+						children: templates
+					}
+				])
+			}
+		});
+	};
 	this.displayWhatsAppOptions = function(container){
 		var $media;
 		var me = this;
@@ -1070,19 +1213,19 @@ function whatsAppDataProvider(opts){
 						{
 							text: '<i class="f7-icons">mic</i>&nbsp;&nbsp;Mensaje de voz',
 							onClick: function () {
-								me.sendAudio.call(me, mediaActions.params.chatEl);
+								me.sendAudio.call(me);
 							}
 						},
 						{
 							text: '<i class="f7-icons">camera</i>&nbsp;&nbsp;C&aacute;mara',
 							onClick: function () {
-								me.sendCamera(mediaActions.params.chatEl);
+								me.sendCamera();
 							}
 						},
 						{
 							text: '<i class="f7-icons">photo</i>&nbsp;&nbsp;Fotos y Videos',
 							onClick: function () {
-								me.sendPhoto(mediaActions.params.chatEl);
+								me.sendPhoto();
 							}
 						},
 						{
@@ -1124,7 +1267,7 @@ function whatsAppDataProvider(opts){
 										buttons: tempButtons,
 									});
 
-									tempActions.params.chatEl = actions.params.chatEl;
+									
 									tempActions.open();
 
 									function tempClick(actions, e) {
@@ -1147,8 +1290,50 @@ function whatsAppDataProvider(opts){
 				]
 			});
 
-			mediaActions.params.chatEl = $(container)[0];
+			
 			mediaActions.open();
+		}
+	};
+
+	this.executeQuickOption = function (option, messageType) {
+		let me = this;
+		//TODO
+		if (option.name == "audio") {
+			if(typeof(cordova) == "object"){
+				me.sendAudio.call(me);
+			}
+			else{
+				alert("En desarrollo");
+			}
+		} else if (option.name == "camera") {
+			if(typeof(cordova) == "object"){
+				me.sendCamera.call(me);
+			}
+			else{
+				me.sendFileWeb("");
+			}
+		} else if (option.name == "pictures") {
+			if(typeof(cordova) == "object"){
+				me.sendPhoto.call(me);
+			}
+			else{
+				me.sendFileWeb("");
+			}
+		} else if (option.name == "document") {
+			if(typeof(cordova) == "object"){
+				me.sendFile.call(me);
+			}
+			else{
+				me.sendFileWeb("");
+			}
+		} else if (option.name == "location") {
+			alert("En desarrollo");
+		} else if (option.name == "template") {
+			//TODO
+			me.putTemplate(option.text);
+		} else {
+			//TODO
+			//me.sendText(option.name);
 		}
 	};
 
@@ -1279,6 +1464,7 @@ function wappMsg(){
 	this.mapsUrl = null;
 	this.placesUrl = null;
 	this.referralSourceUrl = null;
+	this.viewImage = function(e){};
 	this.getMessageHtml = function(message){
 		var me = this;
 		return new Promise((resolve, reject) => {
@@ -1308,7 +1494,7 @@ function wappMsg(){
 					try {
 						media = JSON.parse(pMsg.media);
 					} catch (err) {
-						debugger;
+						//debugger;
 						console.log(err);
 					};
 					if (media) {
@@ -1322,7 +1508,7 @@ function wappMsg(){
 								$('<img/>', {
 									src: it.Url,
 									style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
-								}).click(alert('Imagen')).appendTo($div);
+								}).click(me.viewImage).appendTo($div);
 								
 							} else if (it.ContentType.substr(0, 5) == 'audio') {
 								var $med = $('<audio/>', {

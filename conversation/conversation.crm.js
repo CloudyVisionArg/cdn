@@ -321,7 +321,7 @@ function llamadaMsg(){
                         body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los _ con <i>
                     };
                     
-                    body = "<h4><i class='fa fa-phone'></i> Llamada saliente</h4>";
+                    body = "<h6><i class='fa fa-phone'></i> Llamada saliente</h6>";
                     if (msj.status && msj.status != "Pendiente") {
                         let icon = msj.status == "Realizada" || msj.status == "Contactado" ? "fa-thumbs-up text-success" : "fa-thumbs-down text-danger";
                         body += "<div class='msg-detail-container'><i class='fa " + icon + "'></i> " + msj.status + "</div>";
@@ -788,6 +788,7 @@ function activitiesDataProvider(opts){
 }
 function notasDataProvider(opts){
     this.parent = conversationBaseDataProvider;
+    this.parent();
     this.supportedTypes = ["notaMsg"];
     var notasFolder = opts.fldId || 5321;
     var notasFormula = opts.formula || "1=0";
