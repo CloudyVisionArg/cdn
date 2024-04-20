@@ -1731,7 +1731,7 @@ async function newWhatsAppChatControl(opts){
         }
 		let chatId = refDocId;
 		if(typeof(container) == "string"){
-			chatId += container.replace(/^[a-zA-Z0-9]+$/g, '');
+			chatId += container.replace(/[^a-zA-Z0-9]/g, '');
 
 		}
 		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${chatId}" style="max-height: 100vh;"></div>`);
