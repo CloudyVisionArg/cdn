@@ -16,10 +16,11 @@ wappRequiredScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'ht
 wappRequiredScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
 wappRequiredScripts.push({ id: 'lib-moment' });
 wappRequiredScripts.push({ id: 'emojis'});
-wappRequiredScripts.push({ id: 'doorsapi', depends: ['emojis']});
+wappRequiredScripts.push({ id: 'doorsapi'});
 wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.js' });
 wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.css' });
 wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.media.js' });
+wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.status.js' });
 
 var whatsAppProvider = null; //new whatsAppDataProvider(wappOpts);
 
@@ -1821,7 +1822,7 @@ async function newWhatsAppChatControl(opts){
 				]
 			}
 		];
-		conversationOptions.headerHtml = getHeaderHtml(mobilePhone, name);
+		conversationOptions.headerHtml = ""; //getHeaderHtml(mobilePhone, name);
 		conversationOptions.subheaderHtml = "";
 		conversationOptions.selector = 'div.chat-container[data-chat-id=' + refDocId + ']';
 		conversationOptions.quickMessageTypes = quickMessageTypes;
@@ -1835,6 +1836,18 @@ async function newWhatsAppChatControl(opts){
 			}
 		};
 		let control = new conversationControl(conversationOptions);
+
+		setTimeout(async function(){
+            let statusCtrl = await newConversationStatusControl({
+				selector: 'div.chat-container[data-chat-id=' + refDocId + '] .wapp-header',
+				customerData: {
+					name:name, 
+					mobilePhone: mobilePhone
+				}, 
+				providers: [wappProvider] 
+			});
+        },1000);
+
 		return control;
     });
 
