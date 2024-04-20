@@ -1764,7 +1764,7 @@ async function newWhatsAppChatControl(opts){
 			},
 			putTemplateRequested: function(txt, templateObj){
 				debugger;
-				let vars = variablesProp;
+				let vars = variablesProp || [];
 				/*[
 					{variable:"{{1}}","type":"field",value: "NAME"},
 					{variable:"{{2}}","type":"text",value: "Casa"},
