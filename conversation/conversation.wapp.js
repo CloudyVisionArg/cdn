@@ -22,7 +22,9 @@ if(typeof(bootstrapVersion) === 'undefined'){
 wappRequiredScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
 wappRequiredScripts.push({ id: 'lib-moment' });
 wappRequiredScripts.push({ id: 'emojis'});
-wappRequiredScripts.push({ id: 'doorsapi'});
+if(typeof(DoorsAPI) === 'undefined'){
+	wappRequiredScripts.push({ id: 'doorsapi'});
+}
 wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.js' });
 wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.css' });
 wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.media.js' });
