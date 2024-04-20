@@ -20,7 +20,7 @@ wappRequiredScripts.push({ id: 'doorsapi'});
 wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.js' });
 wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.css' });
 wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.media.js' });
-wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.status.js' });
+wappRequiredScripts.push({ id: 'conversation-status', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.status.js' });
 
 var whatsAppProvider = null; //new whatsAppDataProvider(wappOpts);
 
