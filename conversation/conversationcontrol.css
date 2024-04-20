@@ -1,4 +1,6 @@
-/*Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionControlesGlobalesChat/conversation/conversationcontrol.css?_fresh=true*/
+/*
+    Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionControlesGlobalesChat/conversation/conversationcontrol.css?_fresh=true
+*/
 .wapp-chat {
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
     background-color: #eee5db;
@@ -322,6 +324,9 @@ span.msg-operator {
     font-size: 12px;
 }
 
+.message-type-button li.dropdown-item a{
+    font-size: 16px;
+}
 
 .conversation-providers-status-bar {
     display: flex;
