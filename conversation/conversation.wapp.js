@@ -1729,9 +1729,12 @@ async function newWhatsAppChatControl(opts){
 				from = docs[0][fromField.toUpperCase()]
 			}
         }
+		let chatId = refDocId;
+		if(typeof(container) == "string"){
+			chatId += container.replace(/^[a-zA-Z0-9]+$/g, '');
 
-
-		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${refDocId}" style="max-height: 100vh;"></div>`);
+		}
+		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${chatId}" style="max-height: 100vh;"></div>`);
 
 		mobilePhone = mobilePhone != null && mobilePhone.length == 10 ? "+549" + mobilePhone : mobilePhone + "";
         /*let opts = {
@@ -1766,7 +1769,7 @@ async function newWhatsAppChatControl(opts){
 			rootFldId: wappFolderId,
 			messagesFolder: fldMsg.id,
 			formula: finalFormula,
-			sessionStatusContainer: 'div.chat-container[data-chat-id=' + refDocId + '] .chat-header .whatsapp-status-container',
+			sessionStatusContainer: 'div.chat-container[data-chat-id=' + chatId + '] .chat-header .whatsapp-status-container',
 			from: from,
 			to: mobilePhone,
 			loggedUser: userData,
@@ -1803,7 +1806,7 @@ async function newWhatsAppChatControl(opts){
 					txt = txt.replaceAll(varObj.variable, val);
 					varObj["value"] = val;
 				})
-				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj, vars);
+				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + chatId + '] .wapp-reply', txt, templateObj, vars);
 			}
 		};
 		let providers = [];
@@ -1838,7 +1841,7 @@ async function newWhatsAppChatControl(opts){
 		];
 		conversationOptions.headerHtml = ""; //getHeaderHtml(mobilePhone, name);
 		conversationOptions.subheaderHtml = "";
-		conversationOptions.selector = 'div.chat-container[data-chat-id=' + refDocId + ']';
+		conversationOptions.selector = 'div.chat-container[data-chat-id=' + chatId + ']';
 		conversationOptions.quickMessageTypes = quickMessageTypes;
 		conversationOptions.defaultQuickMessageType = "wappMsg";
 		conversationOptions.quickMessageChanged = function(newMessageType){
@@ -1846,14 +1849,14 @@ async function newWhatsAppChatControl(opts){
 				//TODO: What??
 				//$("div.chat-container[data-chat-id='" + refDocId + "'] .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
 				//$('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu').html("<li></li>");
-				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu'));
+				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + chatId + '] .message-type-button ul.dropdown-menu'));
 			}
 		};
 		let control = new conversationControl(conversationOptions);
 
 		setTimeout(async function(){
             let statusCtrl = await newConversationStatusControl({
-				selector: 'div.chat-container[data-chat-id=' + refDocId + '] .wapp-header',
+				selector: 'div.chat-container[data-chat-id=' + chatId + '] .wapp-header',
 				customerData: {
 					name:name, 
 					mobilePhone: mobilePhone
@@ -1909,30 +1912,6 @@ async function newWhatsAppChatControl(opts){
 				inp.value = '';
 			}
 		})
-	}
-
-	
-	function getHeaderHtml(mobilePhone, name){
-		var $heading = $('<div/>', {
-			'class': 'chat-header'
-		});
-		var $headingLeft = $('<div/>', {
-			'class': 'info'
-		}).appendTo($heading);
-		if(name){
-			$headingLeft.append('<div><b><span class="external-number">' + name + '</span></b></div>');
-		}
-		$headingLeft.append('<div><b>(<span class="external-number">' + mobilePhone + ')</span></b></div>');
-	
-		$('<div/>', {
-			class: 'whatsapp-status-container',
-		}).appendTo($heading);
-	
-		$('<div/>', {
-			class: 'right-container',
-		}).appendTo($heading);
-		
-		return $heading;
 	}
 
 	function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
