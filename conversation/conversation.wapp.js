@@ -1851,9 +1851,20 @@ async function newWhatsAppChatControl(opts){
 		return control;
     });
 
+	var root = document.documentElement;
 
-
-
+	if (typeof(cordova) == 'object') {
+		// App
+		root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
+		root.style.setProperty('--wapp-chat-vertical-margin', '10px');
+		root.style.setProperty('--wapp-button-size', '30px');
+		
+	} else {
+		// Web
+		root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
+		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
+		root.style.setProperty('--wapp-button-size', '25px');
+	}
 
 	if (typeof(cordova) != 'object') {
 		// El DIV para mostrar imagenes fullScreen
@@ -1885,6 +1896,8 @@ async function newWhatsAppChatControl(opts){
 			}
 		})
 	}
+
+	
 	function getHeaderHtml(mobilePhone, name){
 		var $heading = $('<div/>', {
 			'class': 'chat-header'
