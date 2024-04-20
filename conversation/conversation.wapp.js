@@ -1669,8 +1669,14 @@ async function newWhatsAppChatControl(opts){
 	let refFldId = opts.fldId;
 	let s3Key = opts.s3Key;
 	let container = opts.container;
+	
 
 	await include(wappRequiredScripts);
+
+	if(!opts.wappLib){
+		opts.wappLib = await import(gitCdn({ repo: 'global', path: 'wappcnn/wapp.mjs', fresh: false, url: true }));
+		await opts.wappLib.setContext({ dSession });
+	}
 
 	let wappFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
     if (!wappFolderId) alert('WHATSAPP_CONNECTOR_FOLDER setting missing');
