@@ -67,6 +67,7 @@ function whatsAppDataProvider(opts){
     this.s3Key = opts.s3Key || null;
 	this.allAccounts = [];
 	this.messagesFolder = opts.messagesFolder || null;
+	this.forceSingleFrom = opts.forceSingleFrom || false;
 	this.numbers = [];
     let me = this;
 	var wappLib = opts.wappLib || null;
@@ -138,11 +139,12 @@ function whatsAppDataProvider(opts){
 
 	var fillAccounts = function(){
 		me.numbers.forEach(function(num){
+			let selected = me.forceSingleFrom ? num["NUMBER"] == from : num["DEFAULT"] == "1";
 			me.accounts.push({
 				id: num["NUMBER"],
 				name: num["NAME"],
 				status: "stop",
-				selected: num["DEFAULT"] == "1" ? true : false,
+				selected: selected,//num["DEFAULT"] == "1" ? true : false,
 				icon: "fa-whatsapp"
 			});
 		});
@@ -1780,6 +1782,7 @@ async function newWhatsAppChatControl(opts){
 			formula: finalFormula,
 			sessionStatusContainer: 'div.chat-container[data-chat-id=' + chatId + '] .chat-header .whatsapp-status-container',
 			from: from,
+			forceSingleFrom: forceSingleFrom,
 			to: mobilePhone,
 			loggedUser: userData,
 			googleMapsKey: null, //TODO
