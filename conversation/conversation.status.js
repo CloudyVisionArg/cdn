@@ -60,8 +60,8 @@ function conversationStatusBar(options) {
 			}
 
 			let contentRender = getContentRender(me.selectedAccount);
-			$(options.selector + ' .conversation-providers-select option[value="' + me.selectedAccount.id + '"]').attr('data-content', contentRender);
-			$(options.selector + ' .conversation-providers-select').selectpicker('refresh');
+			$(options.selector + ' select.conversation-providers-select option[value="' + me.selectedAccount.id + '"]').attr('data-content', contentRender);
+			$(options.selector + ' select.conversation-providers-select').selectpicker('refresh');
 		}
 		//me.selectedProvider
 		//#b5b5b5
@@ -161,12 +161,12 @@ function conversationStatusBar(options) {
 		</div>`);
 
 		//Apply selectpicker
-		$(options.selector + ' .conversation-providers-select').selectpicker({
+		$(options.selector + ' select.conversation-providers-select').selectpicker({
 			style: 'btn-default',
 			width: '100%'
 		});
 		//Listen to change event
-		$(options.selector + ' .conversation-providers-select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+		$(options.selector + ' select.conversation-providers-select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 			var account = $(this).find('option').eq(clickedIndex);
 			var providerIndx = account.attr('data-provider-indx');
 			var provider = options.providers[providerIndx];
@@ -232,7 +232,7 @@ function conversationStatusBar(options) {
 
 async function newConversationStatusControl(opts){
     let arrScripts = [];
-	
+
 	if(typeof(bootstrapVersion) === 'undefined'){
 		arrScripts.push({ id: 'bootstrap-select', depends: ['bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js' });
 		arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
