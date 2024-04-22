@@ -1671,6 +1671,7 @@ async function newWhatsAppChatControl(opts){
 	let refFldId = opts.fldId;
 	let s3Key = opts.s3Key;
 	let container = opts.container;
+	let from = opts.from;
 	
 
 	await include(wappRequiredScripts);
@@ -1715,20 +1716,24 @@ async function newWhatsAppChatControl(opts){
         let numbers = proms[0].value;
         let docs = proms[1].value;
         let mobilePhone = null;
-        let from = null;
+        //let from = null;
 		let name = null;
-		if(numbers.length > 0){
-			from = numbers[0]["NUMBER"];
+		let forceSingleFrom = false;
+		if(fromField || opts.from){
+			forceSingleFrom = true;
 		}
-        if(docs.length > 0){
-            mobilePhone = docs[0][phoneField.toUpperCase()];
+		if(docs.length > 0){
+			mobilePhone = docs[0][phoneField.toUpperCase()];
 			if(nameField){
 				name = docs[0][nameField.toUpperCase()]
 			}
 			if(fromField){
 				from = docs[0][fromField.toUpperCase()]
 			}
-        }
+		}
+		if(numbers.length > 0 && !from){
+			from = numbers[0]["NUMBER"];
+		}
 		let chatId = refDocId;
 		if(typeof(container) == "string"){
 			chatId += container.replace(/[^a-zA-Z0-9]/g, '');
@@ -1760,8 +1765,8 @@ async function newWhatsAppChatControl(opts){
 		
 		let reversedNum = mobilePhone.slice(-8).split("").reverse().join("");
 		let finalFormula = "FROM_NUMREV LIKE '" + reversedNum + "%' OR TO_NUMREV LIKE '" + reversedNum + "%'";
-		//Si le pasó un from explícito por campo, buscamos solo los mensajes con ese from
-		if(fromField){
+		//Si le pasó un from explícito por campo o por opciones, buscamos solo los mensajes con ese from
+		if(forceSingleFrom){
 			finalFormula = "(FROM_NUMREV LIKE '" + reversedNum + "%' AND TO = 'whatsapp:" + from + "') OR (TO_NUMREV LIKE '" + reversedNum + "%' AND FROM = 'whatsapp:" + from + "')";
 		}
 
