@@ -1719,6 +1719,7 @@ async function newWhatsAppChatControl(opts){
         //let from = null;
 		let name = null;
 		let forceSingleFrom = false;
+		let accountFilter = (a) => 0 == 0;
 		if(fromField || opts.from){
 			forceSingleFrom = true;
 		}
@@ -1730,6 +1731,9 @@ async function newWhatsAppChatControl(opts){
 			if(fromField){
 				from = docs[0][fromField.toUpperCase()]
 			}
+		}
+		if(forceSingleFrom){
+			eval("accountFilter = (a) => a.id == '" + from + "'");
 		}
 		if(numbers.length > 0 && !from){
 			from = numbers[0]["NUMBER"];
@@ -1865,7 +1869,8 @@ async function newWhatsAppChatControl(opts){
 				customerData: {
 					name:name, 
 					mobilePhone: mobilePhone
-				}, 
+				},
+				accountsFilter: accountFilter,
 				providers: [wappProvider] 
 			});
         },1000);
