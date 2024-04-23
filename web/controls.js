@@ -1107,11 +1107,8 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
 
     $oSel.on("select2:clear", function(e){       
-        $oSel[0]._setXmlVal(e.currentTarget);
-        debugger;
-        //e.preventDefault();
-        e.stopPropagation();
-        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
+        //$oSel[0]._setXmlVal(e.currentTarget);
+        //$oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
 
     $oSel.on("select2:unselect", function (e) {
@@ -1140,6 +1137,12 @@ async function newAutocomplete(pId, pLabel, options){
         debugger;
         $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
+
+    $oSel.on("change.select2", function(e){       
+        debugger;
+        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
+    });
+    
 
     if (parentEl) {
         $oSel.appendTo(parentEl);
