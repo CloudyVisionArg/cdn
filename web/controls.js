@@ -1106,14 +1106,12 @@ async function newAutocomplete(pId, pLabel, options){
     
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
 
-    $oSel.on("select2:clear", function(e){       
-        console.log("select2:clear", $oSel.select2("data"));
-        //let unselectHandler = $oSel.data('select2')._events['unselect'];
+    $oSel.on("select2:clear", function(e){
         $oSel.off('select2:unselect');
-        let opt = $(e.currentTarget).find("option")
+        let opt = $(e.currentTarget).find("option");
         opt.remove();
-        //$oSel[0]._setXmlVal(e.currentTarget);
-        //$oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
+        $oSel[0]._setXmlVal(e.currentTarget);
+        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
 
     
@@ -1131,7 +1129,6 @@ async function newAutocomplete(pId, pLabel, options){
 
         //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
-        debugger;
         const events = $._data($oSel[0], 'events');
         if (!events['select2:unselect']) {
             $oSel.on("select2:unselect", function (e) {
@@ -1141,7 +1138,6 @@ async function newAutocomplete(pId, pLabel, options){
                 opt[0].remove();
                 //Actualizo el xml
                 $oSel[0]._setXmlVal(e.currentTarget);
-                debugger;
                 $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
             });
         }
@@ -1149,18 +1145,7 @@ async function newAutocomplete(pId, pLabel, options){
         $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
         
     });
-
-    $oSel.on("select2:close", function(e){       
-        debugger;
-        console.log("select2:close", $oSel.select2("data"));
-    });
-
-    $oSel.on("select2:clearing", function(e){       
-        debugger;
-        console.log("select2:clearing", $oSel.select2("data"));
-    });
     
-
     if (parentEl) {
         $oSel.appendTo(parentEl);
         var select2Ref =  $oSel.select2(oConfig);
