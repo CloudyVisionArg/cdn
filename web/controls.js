@@ -1110,7 +1110,8 @@ async function newAutocomplete(pId, pLabel, options){
         console.log("select2:clear", $oSel.select2("data"));
         //let unselectHandler = $oSel.data('select2')._events['unselect'];
         $oSel.off('select2:unselect');
-
+        let opt = $(e.currentTarget).find("option")
+        opt.remove();
         //$oSel[0]._setXmlVal(e.currentTarget);
         //$oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
@@ -1131,17 +1132,22 @@ async function newAutocomplete(pId, pLabel, options){
         //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
         debugger;
+        const events = $._data($oSel[0], 'events');
+        if (!events['select2:unselect']) {
+            $oSel.on("select2:unselect", function (e) {
+                console.log("select2:unselect", $oSel.select2("data"));
+                let optVal = e.params.data.id;
+                let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
+                opt[0].remove();
+                //Actualizo el xml
+                $oSel[0]._setXmlVal(e.currentTarget);
+                debugger;
+                $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
+            });
+        }
+
         $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
-        $oSel.on("select2:unselect", function (e) {
-            console.log("select2:unselect", $oSel.select2("data"));
-            let optVal = e.params.data.id;
-            let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
-            opt[0].remove();
-            //Actualizo el xml
-            $oSel[0]._setXmlVal(e.currentTarget);
-            debugger;
-            $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
-        });
+        
     });
 
     $oSel.on("select2:close", function(e){       
