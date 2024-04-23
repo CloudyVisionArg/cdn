@@ -1109,7 +1109,7 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel.on("select2:clear", function(e){       
         $oSel[0]._setXmlVal(e.currentTarget);
         debugger;
-        $oSel[0].dispatchEvent(new CustomEvent('acChange', $oSel.select2("data")));
+        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
 
     $oSel.on("select2:unselect", function (e) {
@@ -1120,7 +1120,7 @@ async function newAutocomplete(pId, pLabel, options){
         //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
         debugger;
-        $oSel[0].dispatchEvent(new CustomEvent('acChange', $oSel.select2("data")));
+        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
 
     });
 
@@ -1137,7 +1137,7 @@ async function newAutocomplete(pId, pLabel, options){
         //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
         debugger;
-        $oSel[0].dispatchEvent(new CustomEvent('acChange', $oSel.select2("data")));
+        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
 
     if (parentEl) {
