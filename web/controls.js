@@ -1108,7 +1108,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel.on("select2:clear", function(e){       
         console.log("select2:clear", $oSel.select2("data"));
-        e.preventDefaul();
+        e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
         //$oSel[0]._setXmlVal(e.currentTarget);
