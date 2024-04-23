@@ -1117,7 +1117,6 @@ async function newAutocomplete(pId, pLabel, options){
         let optVal = e.params.data.id;
         let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
         opt[0].remove();
-        e.
         //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
         debugger;
