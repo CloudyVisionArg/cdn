@@ -1109,6 +1109,7 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel.on("select2:clear", function(e){       
         $oSel[0]._setXmlVal(e.currentTarget);
         debugger;
+        e.preventDefault();
         $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
 
@@ -1116,7 +1117,7 @@ async function newAutocomplete(pId, pLabel, options){
         let optVal = e.params.data.id;
         let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
         opt[0].remove();
-
+        e.
         //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
         debugger;
