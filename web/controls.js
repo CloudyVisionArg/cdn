@@ -1107,11 +1107,13 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
 
     $oSel.on("select2:clear", function(e){       
+        console.log("select2:clear");
         //$oSel[0]._setXmlVal(e.currentTarget);
         //$oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
 
     $oSel.on("select2:unselect", function (e) {
+        console.log("select2:unselect");
         let optVal = e.params.data.id;
         let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
         opt[0].remove();
@@ -1122,7 +1124,8 @@ async function newAutocomplete(pId, pLabel, options){
 
     });
 
-    $oSel.on("select2:select", function(e){       
+    $oSel.on("select2:select", function(e){      
+        console.log("select2:select");
         //Si no es multiple debo borrar la opcion que se cambio
         if(!$oSel.attr("multiple")){
             let optVal = e.params.data.id;
@@ -1138,9 +1141,9 @@ async function newAutocomplete(pId, pLabel, options){
         $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
     });
 
-    $oSel.on("change.select2", function(e){       
+    $oSel.on("select2:close", function(e){       
         debugger;
-        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
+        console.log("select2:close");
     });
     
 
