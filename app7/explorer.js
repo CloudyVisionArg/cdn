@@ -188,7 +188,7 @@ dSession.foldersGetFromId(fld_id).then(
                         } else {
                             let route;
                             debugger;
-                            if (folder.Form) {
+                            if (folder.Form.UrlRaw.indexOf('_id=generic6') >= 0) {
                                 route = '/generic6/';
                             } else {
                                 route = '/generic6/';
