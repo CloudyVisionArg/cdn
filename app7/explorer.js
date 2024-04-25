@@ -191,7 +191,7 @@ dSession.foldersGetFromId(fld_id).then(
                             if (folder.Form.UrlRaw.indexOf('_id=generic6') >= 0) {
                                 route = '/generic6/';
                             } else {
-                                route = '/generic6/';
+                                route = '/generic/';
                             }
                             f7Page.view.router.navigate(route + '?fld_id=' + fld_id + '&doc_id=' + doc_id);
                         }
