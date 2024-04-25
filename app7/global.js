@@ -51,6 +51,14 @@ getFile(pFileURL)
 	});
 })();
 
+// Devuelve el route en funcion del UrlRaw del Form
+function formUrlRoute(url) {
+    if (url.indexOf('_id=generic6') >= 0) {
+        return '/generic6/';
+    } else {
+        return '/generic/';
+    }
+}
 
 /*
 Utilizar esta funcion para resolver la Promise de una ruta
