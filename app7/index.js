@@ -147,6 +147,13 @@ var app = {
                     }
                 },
                 {
+                    path: '/generic6/',
+                    async: function () {
+                        var context = getRouterContext(arguments);
+                        loadJS(scriptSrc('generic6'), context.to, context.from, context.resolve, context.reject);
+                    }
+                },
+                {
                     path: '/cdn/',
                     async: function () {
                         var context = getRouterContext(arguments);
