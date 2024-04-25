@@ -42,12 +42,7 @@ var inApp = typeof app7 == 'object';
         include(arrScriptsPos);
     
         await dSession.runSyncEventsOnClient(false);
-    
-        // todo: setar segun el LNG_ID
-        moment.locale('es');
-        numeral.locale('es'); // http://numeraljs.com/
-        numeral.defaultFormat('0,0.[00]');
-    
+        
         urlParams = new URLSearchParams(window.location.search);
         fld_id = urlParams.get('fld_id');
         doc_id = urlParams.get('doc_id');
