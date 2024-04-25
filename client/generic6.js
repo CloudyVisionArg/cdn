@@ -5,6 +5,15 @@ var fld_id, folder, doc_id, doc;
 var inApp = typeof app7 == 'object';
 var utils = dSession.utils;
 
+if (inApp) {
+    fld_id = routeTo.query.fld_id;
+    doc_id = routeTo.query.doc_id;
+
+    app7.preloader.show();
+    
+} else {
+}
+
 (async () => {
     if (fld_id) {
         try {
