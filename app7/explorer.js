@@ -186,8 +186,14 @@ dSession.foldersGetFromId(fld_id).then(
                             if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
                             f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
                         } else {
+                            let route;
                             debugger;
-                            f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
+                            if (folder.Form) {
+                                route = '/generic6/';
+                            } else {
+                                route = '/generic6/';
+                            }
+                            f7Page.view.router.navigate(route + '?fld_id=' + fld_id + '&doc_id=' + doc_id);
                         }
                         $li.addClass('refresh-on-focus');
                         $list.removeAttr('clicked');
