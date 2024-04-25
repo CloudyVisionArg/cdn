@@ -115,3 +115,45 @@ async function loadControls() {
         renderPage(); // Dibuja igual, sin controles
     }
 }
+
+function getControlsRights(pControls) {
+	var cr = objPropCI(doc.tags, 'controlsRights');
+	if (cr) {
+		try {
+			controlsRights = $.parseXML(cr);
+		} catch (err) {
+			console.log('Error parsing controlsRights: ' + errMsg(err));
+		}
+	}
+
+	var ctl;
+	if (controlsRights) {
+        // Mergea controlsRights en controls
+		var $cr = $(controlsRights);
+		var name, r, w;
+		$cr.find('item').each(function (ix, el) {
+			name = el.getAttribute('control').toLowerCase();
+			r = el.getAttribute('r');
+			w = el.getAttribute('w');
+			if (r || w) {
+				ctl = controls.find(function (el) {
+					if (el['NAME']) return el['NAME'].toLowerCase() == name;
+				});
+				if (ctl) {
+					if (r) ctl['R'] = r;
+					if (w) ctl['W'] = w;
+				}
+			}
+		});
+	}
+	
+	// Setea todo lo que no se especifico a 1
+	controls.forEach(ctl => {
+		if (!ctl['R']) ctl['R'] = '1';
+		if (!ctl['W']) ctl['W'] = '1';
+	})
+}
+
+async function renderPage() {
+    toast('render');
+}

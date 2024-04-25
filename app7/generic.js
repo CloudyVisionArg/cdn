@@ -124,6 +124,7 @@ function getControlsRights(pControls) {
 
     var ctl;
     if (controlsRights) {
+        // Mergea controlsRights en controls
         var $cr = $(controlsRights);
         var name, r, w;
         $cr.find('item').each(function (ix, el) {
