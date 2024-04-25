@@ -98,7 +98,20 @@ function errMgr(pErr) {
     }
 }
 
-function loadControls() {
-    toast('hola');
-    preldr.hide();
+async function loadControls() {
+    var cf = objPropCI(doc.tags, 'controlsFolder');
+
+    try {
+        if (cf) {
+            controlsFolder = await folder.app.folders(cf);
+        } else {
+            controlsFolder = await folder.folders('controls');
+        }
+        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+        getControlsRights(controls);
+        renderPage();    
+
+    } catch(err) {
+        renderPage(); // Dibuja igual, sin controles
+    }
 }
