@@ -29,12 +29,14 @@ var inApp = typeof app7 == 'object';
             { id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' },
         ]);
     
-        doorsapi2 = await import(scriptSrc('doorsapi2'));
-        dSession = new doorsapi2.Session();
+        if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
+        if (!window.dSession) {
+            window.dSession = new doorsapi2.Session();
     
-        if (!await dSession.webSession() || !await dSession.isLogged) {
-            end('La sesion no ha sido iniciada');
-            return;
+            if (!await dSession.webSession() || !await dSession.isLogged) {
+                end('La sesion no ha sido iniciada');
+                return;
+            }
         }
     
         include(arrScriptsPos);
