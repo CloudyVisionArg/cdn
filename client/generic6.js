@@ -1,6 +1,7 @@
 'use strict';
 
-var fld_id, folder, doc_id, doc, utils, urlParams;
+var fld_id, folder, doc_id, doc;
+var utils, urlParams, preldr;
 
 var inApp = typeof app7 == 'object';
 
@@ -9,7 +10,8 @@ var inApp = typeof app7 == 'object';
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
     
-        app7.preloader.show();
+        preldr = app7.preloader;
+        preldr.show();
         
     } else {
         await include([
@@ -18,7 +20,9 @@ var inApp = typeof app7 == 'object';
             { id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' },
             { id: 'web-javascript', depends: ['jquery', 'bootstrap'] },
         ]);
-        preloader.show();
+
+        preldr = preloader;
+        preldr.show();
 
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
         if (!window.dSession) {
@@ -95,5 +99,6 @@ function errMgr(pErr) {
 }
 
 function loadControls() {
-    console.log('hola');
+    toast('hola');
+    preldr.hide();
 }
