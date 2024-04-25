@@ -1,6 +1,6 @@
 'use strict';
 
-var fld_id, folder, doc_id, doc, utils;
+var fld_id, folder, doc_id, doc, utils, urlParams;
 
 var inApp = typeof app7 == 'object';
 
@@ -51,11 +51,9 @@ var inApp = typeof app7 == 'object';
         urlParams = new URLSearchParams(window.location.search);
         fld_id = urlParams.get('fld_id');
         doc_id = urlParams.get('doc_id');
-    
     }
 
     utils = dSession.utils;
-
 
     if (fld_id) {
         try {
@@ -94,4 +92,8 @@ function errMgr(pErr) {
         toast(dSession.utils.errMsg(pErr), { delay: 10000 });
         preloader.hide();
     }
+}
+
+function loadControls() {
+    console.log('hola');
 }
