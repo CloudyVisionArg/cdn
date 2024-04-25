@@ -1,6 +1,6 @@
 'use strict';
 
-var fld_id, folder, doc_id, doc;
+var fld_id, folder, doc_id, doc, utils;
 
 var inApp = typeof app7 == 'object';
 
@@ -23,9 +23,8 @@ var inApp = typeof app7 == 'object';
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
         if (!window.dSession) {
             window.dSession = new doorsapi2.Session();
-    
             if (!await dSession.webSession() || !await dSession.isLogged) {
-                end('La sesion no ha sido iniciada');
+                errMgr(new Error('La sesion no ha sido iniciada'));
                 return;
             }
         }
@@ -49,6 +48,8 @@ var inApp = typeof app7 == 'object';
         doc_id = urlParams.get('doc_id');
     
     }
+
+    utils = dSession.utils;
 
 
     if (fld_id) {
@@ -81,11 +82,11 @@ function errMgr(pErr) {
     if (inApp) {
         console.error(pErr);
         app7.preloader.hide();
-        resolve({ content: errPage(pErr) });
+        resolve({ content: errPage(dSession.utils.errMsg(pErr)) });
 
     } else {
         console.error(pErr);
-        toast(utils.errMsg(pErr), { delay: 10000 });
+        toast(dSession.utils.errMsg(pErr), { delay: 10000 });
         preloader.hide();
     }
 }
