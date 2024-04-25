@@ -39,7 +39,12 @@ var inApp = typeof app7 == 'object';
             { id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' },
         ]);
     
-        include(arrScriptsPos);
+        include([
+            { id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' },
+            { id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' },
+            { id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' },
+            { id: 'lib-filesaver' },
+        ]);
     
         await dSession.runSyncEventsOnClient(false);
         
@@ -66,14 +71,14 @@ var inApp = typeof app7 == 'object';
 
                 loadControls();
             } else {
-                errMgr('La carpeta ' + fld_id + ' no es una carpeta de documentos');
+                errMgr(new Error('La carpeta ' + fld_id + ' no es una carpeta de documentos'));
             }
 
         } catch (err) {
             errMgr(err)
         }
     } else {
-        errMgr('Se requiere fld_id');
+        errMgr(new Error('Se requiere fld_id'));
 
     }
 })();
