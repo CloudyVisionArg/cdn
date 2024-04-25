@@ -135,7 +135,6 @@ var app = {
                 {
                     path: '/explorer/',
                     async: function () {
-                        debugger;
                         var context = getRouterContext(arguments);
                         loadJS(scriptSrc('app7-explorer'), context.to, context.from, context.resolve, context.reject);
                     }
