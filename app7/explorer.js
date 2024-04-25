@@ -187,7 +187,6 @@ dSession.foldersGetFromId(fld_id).then(
                             f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
                         } else {
                             debugger;
-                            
                             f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
                         }
                         $li.addClass('refresh-on-focus');
