@@ -9,8 +9,6 @@ var inApp = typeof app7 == 'object';
 var propControls = 'App7_controls';
 
 (async () => {
-    modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls.mjs', url: true, fresh: true }));
-
     if (inApp) {
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
@@ -54,7 +52,7 @@ var propControls = 'App7_controls';
             { id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' },
             { id: 'lib-filesaver' },
         ]);
-    
+
         await dSession.runSyncEventsOnClient(false);
         
         urlParams = new URLSearchParams(window.location.search);
@@ -76,6 +74,9 @@ var propControls = 'App7_controls';
                     doc = await folder.documentsNew();
                 }
 
+                modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls.mjs', url: true, fresh: true }));
+                modControls.setContext({ dSession, folder, doc });
+                    
                 loadControls();
             } else {
                 errMgr(new Error('La carpeta ' + fld_id + ' no es una carpeta de documentos'));
