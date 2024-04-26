@@ -1,11 +1,16 @@
 'use strict';
 
 var fld_id, folder, doc_id, doc;
-var utils, urlParams, preldr;
+var utils, urlParams, preldr, modControls;
+var controls, controlsFolder;
 
 var inApp = typeof app7 == 'object';
 
+var propControls = 'App7_controls';
+
 (async () => {
+    modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls.mjs', url: true, fresh: true }));
+
     if (inApp) {
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
@@ -99,21 +104,31 @@ function errMgr(pErr) {
 }
 
 async function loadControls() {
-    var cf = objPropCI(doc.tags, 'controlsFolder');
+    var controlsProp;
+    try { controlsProp = JSON.parse(await folder.properties(propControls)) }
+        catch(err) { console.error(err) };
+    
+    if (controlsProp && controlsProp.viaHub) {
+        controls = await modControls.controlsHub(folder);
 
-    try {
-        if (cf) {
-            controlsFolder = await folder.app.folders(cf);
-        } else {
-            controlsFolder = await folder.folders('controls');
+    } else {
+        var cf = objPropCI(doc.tags, 'controlsFolder');
+
+        try {
+            if (cf) {
+                controlsFolder = await folder.app.folders(cf);
+            } else {
+                controlsFolder = await folder.folders('controls');
+            }
+            controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+            getControlsRights(controls);
+
+        } catch(err) {
+            console.error(err);
         }
-        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
-        getControlsRights(controls);
-        renderPage();    
-
-    } catch(err) {
-        renderPage(); // Dibuja igual, sin controles
     }
+
+    renderPage();    
 }
 
 function getControlsRights(pControls) {

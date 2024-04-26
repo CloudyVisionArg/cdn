@@ -164,10 +164,13 @@ var app = {
                 {
                     path: '/gh/',
                     async: function () {
-                        //todo: terminar
+                        //todo: terminar y agregar ghcv
                         var context = getRouterContext(arguments);
-                        //repo, ref, path var script = context.to.query.script;
-                        //loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
+                        /*
+                        repo, ref, path
+                        var script = context.to.query.script;
+                        loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
+                        */
                     }
                 },
                 {
