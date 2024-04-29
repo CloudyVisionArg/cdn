@@ -1004,6 +1004,107 @@ async function newAutocomplete(pId, pLabel, options){
         $("#" + el.id + "_xml").val(strXml);
     }
 
+    
+    $oSel[0]._getDom = async function(docId){
+        debugger;
+        var current = this;
+        return new Promise((resolve, reject) => {
+            //var param = current;
+            var paramId = docId;
+            //resolve(result);
+            //reject(error)
+        });
+
+
+        /**
+         * Codigo de referencia:
+         * 
+        var current = this;
+        var param = this.fSAParameter;
+        var folderParameters = param.getFolderSearchParam();
+        var returnValue;
+        var fields = 'doc_id';
+        var excludeFieldsString = "";
+        var mustBeFields = [];
+        var fieldsArr = [];
+        fieldsArr.push("doc_id");
+        if (param.returnFields != '') {
+            fields += ',' + param.returnFields.toLowerCase();
+            mustBeFields = fields.split(",");
+            fieldsArr.push.apply(fieldsArr, param.returnFields.split(","));
+        }
+        else {
+            fields += ',' + param.searchFields.toLowerCase();
+            mustBeFields = fields.split(",");
+            fieldsArr.push.apply(fieldsArr, param.searchFields.split(","));
+        }
+        if (param.valueSource != '') {
+            if (fields.indexOf(param.valueSource) < 0) {
+                fields += ',' + param.valueSource;
+                excludeFieldsString += ',' + param.valueSource;
+                fieldsArr.push(param.valueSource);
+            }
+        }
+        if (param.textSource != '') {
+            if (fields.indexOf(param.textSource) < 0) {
+                fields += ',' + param.textSource;
+                excludeFieldsString += ',' + param.textSource;
+                fieldsArr.push(param.textSource);
+            }
+        }
+        var domExcludeFields = excludeFieldsString.toLowerCase().split(',').filter(function (item, i, all) {
+            return i == all.indexOf(item) && !mustBeFields.contains(item.toLowerCase().toString().trim());
+        });
+
+
+        var uniqueList = fields.toLowerCase().split(',').filter(function (item, i, allItems) {
+            return i == allItems.indexOf(item);
+        }).join(',');
+
+        uniqueList = fieldsArr.unique().join(',');
+
+        folderParameters.Fields = uniqueList;
+
+        if (id) {
+            var finalFilter = 'DOC_ID = ' + id;
+            folderParameters.Formula = finalFilter;
+            restCallOptions = {
+                serverUrl: current.serverUrl,
+                authToken: current.token
+            };
+            Gestar.REST.call('FolderSearchNewObj', 'POST', folderParameters, 'folderSearchParam',
+                function (result) {
+                    var dom = _XML('<root/>');
+                    var itemToAdd = null;
+                    itemToAdd = dom.createElement('item');
+                    for (var prop in result[0]) {
+                        var exclude = false;
+                        for (var f = 0; f < domExcludeFields.length; f++) {
+                            if (domExcludeFields[f].toLowerCase().trim() == prop.toLowerCase()) {
+                                exclude = true;
+                                break;
+                            }
+                        }
+                        if (exclude)
+                            continue;
+                        var val = result[0][prop];
+                        if (val == null)
+                            val = "";
+                        itemToAdd.setAttribute(prop.toLowerCase(), val);
+                    }
+                    dom.documentElement.appendChild(itemToAdd);
+                    current.setExtraValues(result[0]);
+                    returnValue = dom;
+                },
+                function (err) {
+                    alert(err.Message);
+                }
+            );
+        }
+        return returnValue;
+         */
+    }
+
     var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
     let sURL = pOptions.url ? pOptions.url : "";
     if (!sURL && fldAc.id) {
@@ -1103,6 +1204,14 @@ async function newAutocomplete(pId, pLabel, options){
             $oSel.append(option);
         }
     }
+
+    eval(`
+        window.reloadAutocomplete${oConfig.id} = function (docId){
+            //definir el getDom. Referencia: doors.web.sdk.controls.folderSearchAutocomplete.prototype.getDom
+            let aux = docId;
+            debugger;
+        }
+    `)
     
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
 
@@ -1158,6 +1267,7 @@ async function newAutocomplete(pId, pLabel, options){
     });
 
 
+
     if (parentEl) {
         $oSel.appendTo(parentEl);
         var select2Ref =  $oSel.select2(oConfig);
@@ -1169,7 +1279,8 @@ async function newAutocomplete(pId, pLabel, options){
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return option.text;
 
-        let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
+        let editUrl = `${pOptions.editUrl}&callBackFunction=reloadAutocomplete${pOptions.id}&doc_id=${option.id}`
+        //let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
         let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}', '_blank');return false;" target="_blank" id="${pId}">       
             <b class="text-primary">${option.text}</b>
         </a>`);
@@ -1187,10 +1298,7 @@ async function newAutocomplete(pId, pLabel, options){
     }
 }
 
-window.reloadAutocomplete = function (docId){
-    let aux = docId;
-    debugger;
-}
+
 
 //Funciones agregadas que tal vez no deban estar aca sino en algun lugar mas global
 function XMLtoJSON(xmlString) {
