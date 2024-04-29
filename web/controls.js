@@ -1170,10 +1170,10 @@ async function newAutocomplete(pId, pLabel, options){
             return option.text;
 
         let editUrl = pOptions.editUrl + "&doc_id=" + option.id
-        var nuevaVentana = window.open(option.link, '_blank', 'width=600,height=400');
+        //var nuevaVentana = window.open(option.link, '_blank', 'width=600,height=400');
 
         //let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}">
-        let $itemObj = $(`<a title="Editar elemento" click="window.open('${editUrl}')" target="_blank" id="${pId}">
+        let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}')" target="_blank" id="${pId}">
                 <b class="text-primary">${option.text}</b>              
             </a>`);
         return $itemObj;    
