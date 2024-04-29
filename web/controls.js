@@ -1068,7 +1068,7 @@ async function newAutocomplete(pId, pLabel, options){
                     results: data.InternalObject
                 };
             },
-            cache: true
+            cache: false
         },
         escapeMarkup: function(markup) {
             if(markup == "No results found" && pOptions.addUrl !=''){              
