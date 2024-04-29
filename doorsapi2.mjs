@@ -3557,9 +3557,7 @@ export class Form {
     }
 
     get guid() {
-        //todo
-        debugger;
-        return this.#json.Guid;
+        return this.#json.Guid.replaceAll('-', '');
     }
     set guid(value) {
         this.#json.Guid = value;
