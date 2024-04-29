@@ -1005,8 +1005,9 @@ async function newAutocomplete(pId, pLabel, options){
     }
 
     
-    $oSel[0]._getDom = async function(docId){
-        debugger;
+    $oSel[0]._getDom = function(docId){
+        debugger; //TODO
+        return docId;
         var current = this;
         return new Promise((resolve, reject) => {
             //var param = current;
@@ -1208,8 +1209,11 @@ async function newAutocomplete(pId, pLabel, options){
     eval(`
         window.reloadAutocomplete_${$oSel[0].id} = function (docId){
             //definir el getDom. Referencia: doors.web.sdk.controls.folderSearchAutocomplete.prototype.getDom
-            let aux = docId;
             debugger;
+            let $oSel = $("#${$oSel[0].id}");
+            if($oSel[0]._getDom){
+                $oSel[0]._getDom(docId);
+            }
         }
     `)
     
