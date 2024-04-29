@@ -1169,11 +1169,18 @@ async function newAutocomplete(pId, pLabel, options){
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return option.text;
 
-        let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
-        let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}">
+        let editUrl = pOptions.editUrl + "&doc_id=" + option.id
+        var nuevaVentana = window.open(option.link, '_blank', 'width=600,height=400');
+
+        //let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}">
+        let $itemObj = $(`<a title="Editar elemento" click="window.open(${editUrl})" target="_blank" id="${pId}">
                 <b class="text-primary">${option.text}</b>              
             </a>`);
         return $itemObj;    
+
+        nuevaVentana.beforeunload = function(ev) {           
+            debugger;
+        };
     }
 
     function reloadAutocomplete(ev){
