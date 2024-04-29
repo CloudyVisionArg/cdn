@@ -1107,14 +1107,13 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel.attr("data-config", JSON.stringify(oConfig)); //no guarda los atributos que son funciones
 
     $oSel.on("select2:clear", function(e){
+        console.log("select2:clear", $oSel.select2("data"));
         $oSel.off('select2:unselect');
         let opt = $(e.currentTarget).find("option");
         opt.remove();
         $oSel[0]._setXmlVal(e.currentTarget);
         $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
-    });
-
-    
+    });    
 
     $oSel.on("select2:select", function(e){      
         console.log("select2:select", $oSel.select2("data"));
