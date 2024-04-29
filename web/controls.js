@@ -1187,7 +1187,7 @@ async function newAutocomplete(pId, pLabel, options){
     }
 }
 
-function reloadAutocomplete(docId){
+window.reloadAutocomplete = function (docId){
     let aux = docId;
     debugger;
 }
