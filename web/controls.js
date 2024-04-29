@@ -1169,28 +1169,28 @@ async function newAutocomplete(pId, pLabel, options){
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return option.text;
 
-        let editUrl = pOptions.editUrl + "&doc_id=" + option.id
-        //var nuevaVentana = window.open(option.link, '_blank', 'width=600,height=400');
+        let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
+        //let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}"> 
+        let $itemObj = $(`<a title="Editar elemento" id="${pId}">        
+            <b class="text-primary">${option.text}</b>              
+        </a>`);
 
-        //let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}">
-        let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}')" target="_blank" id="${pId}">
-                <b class="text-primary">${option.text}</b>              
-            </a>`);
-        return $itemObj;    
-
-        //nuevaVentana.beforeunload = function(ev) {
-        $(window).on('beforeunload', function() {
-            debugger;
+        // Definir la función de callback cuando se cierre la ventana
+        $itemObj.on('click', function() {
+            let nuevaVentana = window.open(editUrl, '_blank', 'width=600,height=400');
+            $(nuevaVentana).on('beforeunload', function() {
+                reloadAutocomplete();
+            });
         });
-    }
-
-    function reloadAutocomplete(ev){
-        var aux = ev;
-        debugger;
+        
+        return $itemObj;
     }
 }
 
-
+function reloadAutocomplete(ev){
+    var aux = ev;
+    debugger;
+}
 
 //Funciones agregadas que tal vez no deban estar aca sino en algun lugar mas global
 function XMLtoJSON(xmlString) {
