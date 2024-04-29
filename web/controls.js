@@ -1172,7 +1172,7 @@ async function newAutocomplete(pId, pLabel, options){
         let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
         let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}', '_blank');return false;" target="_blank" id="${pId}">       
             <b class="text-primary">${option.text}</b>
-        </a>`);     
+        </a>`);
         
         return $itemObj;
     }
