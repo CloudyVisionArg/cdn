@@ -3556,14 +3556,14 @@ export class Form {
         }
     }
 
-    /*
     get guid() {
         //todo
+        debugger;
+        return this.#json.Guid;
     }
     set guid(value) {
-        //todo
+        this.#json.Guid = value;
     }
-    */
 
     /*
     get icon() {
