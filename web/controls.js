@@ -1169,23 +1169,27 @@ async function newAutocomplete(pId, pLabel, options){
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return option.text;
 
-        let editUrl = pOptions.editUrl + "&doc_id=" + option.id
-        //let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}"> 
-        let $itemObj = $(`<a title="Editar elemento" id="${pId}">
+        let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
+        let $itemObj = $(`<a title="Editar elemento" href="${editUrl}" target="_blank" id="${pId}">       
             <b class="text-primary">${option.text}</b>
         </a>`);
 
         // Definir la función de callback cuando se cierre la ventana
-        $itemObj.on('click', function() {
-            let editWindow = window.open(editUrl, '_blank');
-            $(editWindow).on('beforeunload', function() {
-                debugger;
-                console.log("se ejecuta calback")
-            });
-        });
+        // $itemObj.on('click', function() {
+        //     let editWindow = window.open(editUrl, '_blank');
+        //     $(editWindow).on('beforeunload', function() {
+        //         debugger;
+        //         console.log("se ejecuta calback")
+        //     });
+        // });
         
         return $itemObj;
     }
+}
+
+function reloadAutocomplete(docId){
+    let aux = docId;
+    debugger;
 }
 
 //Funciones agregadas que tal vez no deban estar aca sino en algun lugar mas global
