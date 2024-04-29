@@ -1174,13 +1174,15 @@ async function newAutocomplete(pId, pLabel, options){
                 <b class="text-primary">${option.text}</b>              
             </a>`);
         return $itemObj;    
-    }    
+    }
+
+    function reloadAutocomplete(ev){
+        var aux = ev;
+        debugger;
+    }
 }
 
-function reloadAutocomplete(ev){
-    var aux = ev;
-    debugger;
-}
+
 
 //Funciones agregadas que tal vez no deban estar aca sino en algun lugar mas global
 function XMLtoJSON(xmlString) {
