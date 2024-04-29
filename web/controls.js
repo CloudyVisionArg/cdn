@@ -1178,9 +1178,10 @@ async function newAutocomplete(pId, pLabel, options){
             </a>`);
         return $itemObj;    
 
-        nuevaVentana.beforeunload = function(ev) {           
+        //nuevaVentana.beforeunload = function(ev) {
+        $(window).on('beforeunload', function() {
             debugger;
-        };
+        });
     }
 
     function reloadAutocomplete(ev){
