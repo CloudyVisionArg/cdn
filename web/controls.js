@@ -1130,7 +1130,9 @@ async function newAutocomplete(pId, pLabel, options){
         //Actualizo el xml
         $oSel[0]._setXmlVal(e.currentTarget);
         const events = $._data($oSel[0], 'events');
-        if (!events['select2:unselect']) {
+        //Puede que el evento unselect este apagado porque se utilizo el clear anteriormente.
+        // por eso al agregar una nueva opcion se pregunta si existe, y si no , lo vuelve a agregar
+        if (!events['select2:unselect']) {            
             $oSel.on("select2:unselect", function (e) {
                 console.log("select2:unselect", $oSel.select2("data"));
                 let optVal = e.params.data.id;
@@ -1146,6 +1148,17 @@ async function newAutocomplete(pId, pLabel, options){
         
     });
     
+    $oSel.on("select2:unselect", function (e) {
+        console.log("select2:unselect", $oSel.select2("data"));
+        let optVal = e.params.data.id;
+        let opt = $(e.currentTarget).find("option[value='" + optVal + "']")
+        opt[0].remove();
+        //Actualizo el xml
+        $oSel[0]._setXmlVal(e.currentTarget);
+        $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
+    });
+
+
     if (parentEl) {
         $oSel.appendTo(parentEl);
         var select2Ref =  $oSel.select2(oConfig);
