@@ -1284,15 +1284,6 @@ async function newAutocomplete(pId, pLabel, options){
         let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}', '_blank');return false;" target="_blank" id="${pId}">       
             <b class="text-primary">${option.text}</b>
         </a>`);
-
-        // Definir la función de callback cuando se cierre la ventana
-        // $itemObj.on('click', function() {
-        //     let editWindow = window.open(editUrl, '_blank');
-        //     // $(editWindow).on('beforeunload', function() {
-        //     //     debugger;
-        //     //     console.log("se ejecuta calback")
-        //     // });
-        // });
         
         return $itemObj;
     }
