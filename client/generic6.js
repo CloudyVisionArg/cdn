@@ -171,5 +171,6 @@ function getControlsRights(pControls) {
 }
 
 async function renderPage() {
+    debugger;
     toast('render');
 }
