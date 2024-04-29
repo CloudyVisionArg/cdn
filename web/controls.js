@@ -1177,9 +1177,10 @@ async function newAutocomplete(pId, pLabel, options){
 
         // Definir la función de callback cuando se cierre la ventana
         $itemObj.on('click', function() {
-            let nuevaVentana = window.open(editUrl, '_blank');
-            $(nuevaVentana).on('beforeunload', function() {
+            let editWindow = window.open(editUrl, '_blank');
+            $(editWindow).on('beforeunload', function() {
                 debugger;
+                console.log("se ejecuta calback")
             });
         });
         
