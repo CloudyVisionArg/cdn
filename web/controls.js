@@ -1028,6 +1028,7 @@ async function newAutocomplete(pId, pLabel, options){
                 });
                 
                 $oSel.select2("data", selData);
+                $oSel[0]._setXmlVal($oSel);
             },
             function (err) {
                 debugger;
