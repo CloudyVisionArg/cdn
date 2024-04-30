@@ -1015,14 +1015,15 @@ async function newAutocomplete(pId, pLabel, options){
                 let selData = $oSel.select2("data");
                 let doc = oDoc
                 selData.forEach(function(option) {
-                    if (option.id === docId) {
+                    if (option.id == docId) {
                         debugger;
                         sFieldsArr.forEach(field => {
                             field = field.toUpperCase();
-                            if(field && field != 'DOC_ID' && field != 'FLD_ID'){
+                            if(field && field != 'DOC_ID' && field != 'FLD_ID'){                               
                                 option[field] = doc[0][field];
                             }                            
-                        });                       
+                        });
+                        option.text = doc[0][pOptions.textSource.toUpperCase()];
                     }
                 });
                 
