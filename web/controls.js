@@ -1310,7 +1310,7 @@ async function newAutocomplete(pId, pLabel, options){
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return option.text;
 
-        let editUrl = `${pOptions.editUrl}&callBackFunction=reloadAutocomplete_${$oSel[0].id}&doc_id=${option.id}`
+        let editUrl = `${pOptions.editUrl}&callbackfunction=reloadAutocomplete_${$oSel[0].id}&doc_id=${option.id}`
         //let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
         let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}', '_blank');return false;" target="_blank" id="${pId}">       
             <b class="text-primary">${option.text}</b>
