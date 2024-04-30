@@ -1010,13 +1010,19 @@ async function newAutocomplete(pId, pLabel, options){
         if(!docId)return false;
         
         DoorsAPI.folderSearch(fldAc.id, sFieldsArr.toString(),"doc_id="+ docId).then(
-            function (doc) {
+            function (oDoc) {
                 debugger;
                 let selData = $oSel.select2("data");
+                let doc = oDoc
                 selData.forEach(function(option) {
-                    if (option.DOC_ID === docId) {
+                    if (option.id === docId) {
                         debugger;
-                        //option.REQUERIMIENTO = "otra cosa";
+                        sFieldsArr.forEach(field => {
+                            field = field.toUpperCase();
+                            if(field && field != 'DOC_ID' && field != 'FLD_ID'){
+                                option[field] = doc[0][field];
+                            }                            
+                        });                       
                     }
                 });
                 
