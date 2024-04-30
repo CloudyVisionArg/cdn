@@ -1007,14 +1007,26 @@ async function newAutocomplete(pId, pLabel, options){
     
     $oSel[0]._getDom = function(docId){
         debugger; //TODO
-        return docId;
-        var current = this;
-        return new Promise((resolve, reject) => {
-            //var param = current;
-            var paramId = docId;
-            //resolve(result);
-            //reject(error)
-        });
+        if(!docId)return false;
+        
+        DoorsAPI.folderSearch(fldAc.id, sFieldsArr.toString(),"doc_id="+ docId).then(
+            function (doc) {
+                debugger;
+            },
+            function (err) {
+                debugger;
+            }
+        )        
+        
+        
+        //return docId;
+        // var current = this;
+        // return new Promise((resolve, reject) => {
+        //     //var param = current;
+        //     var paramId = docId;
+        //     //resolve(result);
+        //     //reject(error)
+        // });
 
 
         /**
