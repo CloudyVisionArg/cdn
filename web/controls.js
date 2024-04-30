@@ -1012,6 +1012,15 @@ async function newAutocomplete(pId, pLabel, options){
         DoorsAPI.folderSearch(fldAc.id, sFieldsArr.toString(),"doc_id="+ docId).then(
             function (doc) {
                 debugger;
+                let selData = $oSel.select2("data");
+                selData.forEach(function(option) {
+                    if (option.DOC_ID === docId) {
+                        debugger;
+                        //option.REQUERIMIENTO = "otra cosa";
+                    }
+                });
+                
+                $oSel.select2("data", selData);
             },
             function (err) {
                 debugger;
@@ -1220,8 +1229,6 @@ async function newAutocomplete(pId, pLabel, options){
 
     eval(`
         window.reloadAutocomplete_${$oSel[0].id} = function (docId){
-            //definir el getDom. Referencia: doors.web.sdk.controls.folderSearchAutocomplete.prototype.getDom
-            debugger;
             let $oSel = $("#${$oSel[0].id}");
             if($oSel[0]._getDom){
                 $oSel[0]._getDom(docId);
