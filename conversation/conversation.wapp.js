@@ -1714,7 +1714,7 @@ async function newWhatsAppChatControl(opts){
 		fields:"*",
 		formula:"default = 1"
 	}));
-
+	let fld = null;
 	if(phoneField || fromField || nameField){
 		if(!refFldId){
 			alert("El folder id es requerido para el control de chat de whatsapp");
@@ -1724,7 +1724,6 @@ async function newWhatsAppChatControl(opts){
 			alert("La opcion docId o doc del chat es requerido");
 			return;
 		}
-		let fld = null;
 		if(!refDoc){
 			fld = await dSession.folders(parseInt(refFldId));
 		}
