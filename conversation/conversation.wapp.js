@@ -17,6 +17,7 @@ if(typeof(jQuery) === 'undefined'){
 if(typeof(bootstrapVersion) === 'undefined'){
 	wappRequiredScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
 	wappRequiredScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+	bootstrapVersion = function(){ return [5,1,3]; };
 }
 
 wappRequiredScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
@@ -1665,17 +1666,34 @@ function wappMsg(){
 	};
 }
 
+/**
+ * Crea un chat de WhatsApp en un contenedor
+ * Compatible con generic3, generic5 y APP7
+ * @param {string} opts.container - Requerido - Selector del contenedor donde se creará el chat
+ * @param {string} opts.phoneField - Nombre del campo que contiene el número de teléfono externo. Opcional si se pasa opcion "to"
+ * @param {number} opts.docId - DocId del documento. Requerido si se envío phoneField/fromField/nameField
+ * @param {object} opts.doc - (opcional) Documento. Requerido si se envío phoneField/fromField/nameField y no se envió docId
+ * @param {number} opts.fldId - FldId del documento. Requerido si se envío phoneField/fromField/nameField
+ * @param {string} opts.to - Número de teléfono externo. Opcional si se pasa opcion "phoneField"
+ * @param {string} opts.s3Key - Clave de S3 para subir archivos
+ * @param {string} opts.nameField - (opcional) Nombre del campo que contiene el nombre del contacto
+ * @param {string} opts.fromField - (opcional) Nombre del campo que contiene el número de teléfono interno
+ * @param {string} opts.from - (opcional) Número de teléfono interno
+ * @param {boolean} opts.forceSingleFrom - (opcional) Si es true, filtra los mensajes solo por el from
+ * @param {object} opts.variables - (opcional) Variables a reemplazar en el mensaje
+ */
 async function newWhatsAppChatControl(opts){
 	let phoneField = opts.phoneField;
 	let fromField = opts.fromField;
 	let nameField = opts.nameField;
+	let to = opts.to;
 	let refDocId = opts.docId;
+	let refDoc = opts.doc;
 	let refFldId = opts.fldId;
 	let s3Key = opts.s3Key;
 	let container = opts.container;
 	let from = opts.from;
 	
-
 	await include(wappRequiredScripts);
 
 	if(!opts.wappLib){
@@ -1686,23 +1704,47 @@ async function newWhatsAppChatControl(opts){
 	let wappFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
     if (!wappFolderId) alert('WHATSAPP_CONNECTOR_FOLDER setting missing');
 
-    let wappFolder = await dSession.folders(wappFolderId);
+	let wappFolder = await dSession.folders(wappFolderId);
     let fldMsg = await wappFolder.folder('messages');
     let fldNumbers = await wappFolder.folder('numbers');
-    let fld = await dSession.folders(parseInt(refFldId));
+    
+	let allProms = [];
+	
+	allProms.push(fldNumbers.search({
+		fields:"*",
+		formula:"default = 1"
+	}));
 
-    let allProms = [];
-    allProms.push(fldNumbers.search({
-        fields:"*",
-        formula:"default = 1"
-    }));
-    allProms.push(fld.search({
-        fields:"*",
-        formula:"doc_id = " + refDocId
-    }));
-	let variablesProp = await fld.properties("WAPP_VARIABLES");
-	if(variablesProp){
-		variablesProp = JSON.parse(variablesProp);
+	if(phoneField || fromField || nameField){
+		if(!refFldId){
+			alert("El folder id es requerido para el control de chat de whatsapp");
+			return;
+		}
+		if(!refDocId && !refDoc){
+			alert("La opcion docId o doc del chat es requerido");
+			return;
+		}
+		let fld = null;
+		if(!refDoc){
+			fld = await dSession.folders(parseInt(refFldId));
+		}
+		else{
+			fld = await refDoc.parent;
+		}
+
+		allProms.push(fld.search({
+			fields:"*",
+			formula:"doc_id = " + refDocId
+		}));
+	}
+
+	let variablesProp = opts.variables;
+
+	if(opts.variables === undefined || opts.variables === null){
+		variablesProp = await fld.properties("WAPP_VARIABLES");
+		if(variablesProp){
+			variablesProp = JSON.parse(variablesProp);
+		}
 	}
 	//debugger;
 	/*
@@ -1717,13 +1759,17 @@ async function newWhatsAppChatControl(opts){
     Promise.allSettled(allProms).then(async proms=>{
         let numbers = proms[0].value;
         let docs = proms[1].value;
-        let mobilePhone = null;
+        let mobilePhone = to || null;
         //let from = null;
 		let name = null;
-		let forceSingleFrom = false;
+		let forceSingleFrom = opts.forceSingleFrom || false;
 		let accountFilter = (a) => 0 == 0;
-		if(fromField || opts.from){
-			forceSingleFrom = true;
+
+		//Si no llega la opcion, la calculamos
+		if(opts.forceSingleFrom === undefined || opts.forceSingleFrom === null){
+			if(fromField || opts.from){
+				forceSingleFrom = true;
+			}
 		}
 		if(docs.length > 0){
 			mobilePhone = docs[0][phoneField.toUpperCase()];
