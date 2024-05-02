@@ -162,18 +162,23 @@ var app = {
                     }
                 },
                 {
+                    path: '/gh/:owner/:repo/:path+/',
+                    async: function () {
+                        debugger;
+                        var context = getRouterContext(arguments);
+                        let params = context.to.params;
+                        let url = 'https://cdn.cloudycrm.net/gh/' + params.owner + '/' + params.repo + '/' + params.path;
+                        loadJS(url, context.to, context.from, context.resolve, context.reject);
+                    }
+                },
+                {
                     path: '/ghcv/:repo/:path+/',
                     async: function () {
                         debugger;
-                        //todo: terminar y agregar ghcv
                         var context = getRouterContext(arguments);
                         let params = context.to.params;
                         let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
-                        /*
-                        repo, ref, path
-                        var script = context.to.query.script;
-                        */
                     }
                 },
                 {
