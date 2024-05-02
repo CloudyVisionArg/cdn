@@ -252,7 +252,7 @@ var app = {
                     }
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
+                console.log(url, jqXHR.responseText);
                 debugger;
             });
         }
