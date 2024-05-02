@@ -10,6 +10,8 @@ var inApp = typeof app7 == 'object';
 var propControls = 'App7_controls';
 
 (async () => {
+    debugger;
+    
     if (inApp) {
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;

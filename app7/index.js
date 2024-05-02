@@ -135,29 +135,29 @@ var app = {
                 {
                     path: '/explorer/',
                     async: function () {
-                        var context = getRouterContext(arguments);
+                        let context = getRouterContext(arguments);
                         loadJS(scriptSrc('app7-explorer'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/generic/',
                     async: function () {
-                        var context = getRouterContext(arguments);
+                        let context = getRouterContext(arguments);
                         loadJS(scriptSrc('app7-generic'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/generic6/',
                     async: function () {
-                        var context = getRouterContext(arguments);
+                        let context = getRouterContext(arguments);
                         loadJS(scriptSrc('generic6'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/cdn/',
                     async: function () {
-                        var context = getRouterContext(arguments);
-                        var script = context.to.query.script;
+                        let context = getRouterContext(arguments);
+                        let script = context.to.query.script;
                         loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
                     }
                 },
@@ -167,10 +167,12 @@ var app = {
                         debugger;
                         //todo: terminar y agregar ghcv
                         var context = getRouterContext(arguments);
+                        let params = context.to.params;
+                        let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
+                        loadJS(url, context.to, context.from, context.resolve, context.reject);
                         /*
                         repo, ref, path
                         var script = context.to.query.script;
-                        loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
                         */
                     }
                 },
