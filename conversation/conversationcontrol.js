@@ -604,7 +604,13 @@ function conversationControl(opt) {
 					"data-message-type": defaultMsgType,
 					"data-message-class": defaultMsgClass,
 				}).appendTo($div);
-				insertMobileMessageTypeOptionsMenu($dropup);
+
+				$media = $('<i/>', {
+					id: "",
+					class: 'fa ' + defaultIcon,
+				}).appendTo($div);
+
+				insertMobileMessageTypeOptionsMenu($dropup, $media);
 			}
 
 			// Boton Emoji
@@ -1049,11 +1055,8 @@ function conversationControl(opt) {
 		$mainContainer.find(".message-type-button > .dropdown-menu.show").removeClass("show")
 	};
 
-	var insertMobileMessageTypeOptionsMenu = function ($div) {
-		$media = $('<i/>', {
-			id: "",
-			class: 'fa fa fa-pencil-square-o',
-		}).appendTo($div);
+	var insertMobileMessageTypeOptionsMenu = function ($div, $media) {
+		
 
 		var btns = [];
 		for (let index = 0; index < me.dataProvider.msgproviders.length; index++) {
