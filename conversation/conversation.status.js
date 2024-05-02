@@ -61,7 +61,9 @@ function conversationStatusBar(options) {
 
 			let contentRender = getContentRender(me.selectedAccount);
 			$(options.selector + ' select.conversation-providers-select option[value="' + me.selectedAccount.id + '"]').attr('data-content', contentRender);
-			$(options.selector + ' select.conversation-providers-select').selectpicker('refresh');
+			if (typeof(cordova) != 'object') {
+				$(options.selector + ' select.conversation-providers-select').selectpicker('refresh');
+			}
 		}
 		//me.selectedProvider
 		//#b5b5b5
@@ -160,13 +162,20 @@ function conversationStatusBar(options) {
 			</div>
 		</div>`);
 
-		//Apply selectpicker
-		$(options.selector + ' select.conversation-providers-select').selectpicker({
-			style: 'btn-default',
-			width: '100%'
-		});
-		//Listen to change event
-		$(options.selector + ' select.conversation-providers-select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+		if (typeof(cordova) != 'object') {
+			//Apply selectpicker
+			$(options.selector + ' select.conversation-providers-select').selectpicker({
+				style: 'btn-default',
+				width: '100%'
+			});
+			//Listen to change event
+			$(options.selector + ' select.conversation-providers-select').on('changed.bs.select', onChangeAccount);
+		}
+		else{
+			$(options.selector + ' select.conversation-providers-select').on('change', onChangeAccount);
+		}
+
+		function onChangeAccount(e, clickedIndex, isSelected, previousValue) {
 			var account = $(this).find('option').eq(clickedIndex);
 			var providerIndx = account.attr('data-provider-indx');
 			var provider = options.providers[providerIndx];
@@ -186,7 +195,7 @@ function conversationStatusBar(options) {
 			//me.selectedAccount.status = accountStatus;
 			//Trigger event
 			//$(me).trigger('providerChanged', [me.selectedProvider, me.selectedAccount]);
-		});
+		}
 	}
 	var getContentRender = function (account) {
 		let contentRender = "<div class='conv-account-cont'><div class='conv-account " + account.status + "' data-account-status='" + 
@@ -238,7 +247,7 @@ async function newConversationStatusControl(opts){
 		arrScripts.push({ id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' });
 		// todo: esto deberia ser segun el lng_id
 		arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' });
-		await include(arrScripts);
+		//await include(arrScripts);
 	}
     return new conversationStatusBar(opts);
 }
