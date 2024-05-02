@@ -2,7 +2,8 @@
 
 var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr, modControls;
-var controls, controlsFolder;
+var controls, controlsFolder, controlsRights;
+var $page, $navbar, f7Page, pageEl, saving;
 
 var inApp = typeof app7 == 'object';
 
@@ -170,7 +171,360 @@ function getControlsRights(pControls) {
 	})
 }
 
+
 async function renderPage() {
     debugger;
     toast('render');
+    inApp ? renderPageApp() : renderPageWeb();
+}
+
+async function renderPageApp() {
+    // page
+    $page = getPage({
+        id: 'generic6_' + getGuid(),
+        title: 'Cargando...',
+        leftbutton: 'exit',
+        rightbutton: 'save',
+    });
+
+    $page.find('.navbar-inner .left .link').on('click', function (e) {
+        // todo: ver si se puede detectar si hubo cambios
+        /*
+        app7.dialog.confirm('Perdera los cambios relizados', (dialog) => {
+            f7Page.view.router.back();
+        }
+        */
+        goBack();
+    });
+
+    $page.find('.navbar-inner .right .link').on('click', function (e) {
+        saveDoc();
+    });
+
+    // Boton Guardar y salir
+    var $nbRight = $page.find('.navbar-inner .right');
+
+    var $saveExitBtn = $('<a/>', {
+        href: '#',
+        class: 'link icon-only',
+        style: app7.theme == 'ios' ? 'margin-left: 8px;' : 'margin-right: 6px;',
+    }).appendTo($nbRight);
+    $saveExitBtn.append('<i class="material-icons-outlined" style="font-size: 30px;">cloud_done</i>');
+
+    $saveExitBtn.click(function () {
+        saveDoc(true);
+    });
+
+    // Page Content
+    var $pageCont = $page.find('.page-content');
+}
+
+async function renderPageWeb() {
+    var $body = $('body');
+    var $d = $(document);
+
+    $d.ready(function () {
+        // Key shortcuts
+        $d.keypress(function (e) {
+            if (e.code == 'KeyS' && e.ctrlKey) { // CTRL+S
+                e.preventDefault();
+                saveDoc();
+            }
+        });
+    });
+
+    var $cont = $('<div/>', {
+        class: 'container',
+    }).appendTo($body);
+
+    // Barra de botones
+    $cont.append(`
+        <div id="mainButtons" class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
+            <button type="button" id="print" class="btn btn-primary" onclick="printForm();">
+                <i class="bi bi-printer-fill"></i>
+                <span class="d-none d-md-inline-block"> Imprimir</span>
+            </button>
+            <button type="button" id="save" class="btn btn-primary" onclick="saveDoc();" title="CTRL+S" data-bs-toggle="tooltip">
+                <i class="bi bi-cloudy-fill"></i>
+                <span class="d-none d-md-inline-block"> Guardar</span>
+            </button>
+            <button type="button" id="saveexit" class="btn btn-primary" onclick="saveDoc(true);">
+                <i class="bi bi-cloud-check-fill"></i>
+                <span class="d-none d-md-inline-block"> Guardar y salir</span>
+            </button>
+            <button type="button" id="cancel" class="btn btn-primary" onclick="exitForm();">
+                <i class="bi bi-caret-right-fill"></i>
+                <span class="d-none d-md-inline-block"> Salir</span>
+            </button>
+    </div>
+    `);
+
+    $cont.append(`
+        <div class="row" style="padding-top: 8px; max-width: 50%">
+            <h4 id="title">Cargando...</h4>
+        </div>
+        <hr>
+    `);
+    
+    if (!controls) {
+
+        // SIN CONTROLES
+
+        $cont.append(`
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" data-bs-toggle="tab" 
+                        data-bs-target="#tabMain">Datos</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-bs-toggle="tab" 
+                        data-bs-target="#tabHeader">Header</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-bs-toggle="tab" 
+                        data-bs-target="#tabHist">Historial</button>
+                </li>
+            </ul>
+        `);
+
+        $cont.append(`
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tabMain"></div>
+                <div class="tab-pane fade" id="tabHeader"></div>
+                <div class="tab-pane fade" id="tabHist"></div>
+            </div>
+        `);
+
+        var $tab, $row, $col;
+
+        // tabMain
+
+        $tab = $cont.find('#tabMain');
+        $row = undefined;
+
+        doc.fields().forEach(field => {
+            if (!field.headerTable && field.name != 'DOC_ID') {
+                $row = getRow($row, $tab);
+                $col = $('<div/>', {
+                    class: 'col-12 col-md-6 form-group',
+                }).appendTo($row);
+
+                getDefaultControl(field).appendTo($col);
+            }
+        });
+
+        $row = getRow(undefined, $tab);
+        $col = $('<div/>', {
+            class: 'col-12 form-group',
+        }).appendTo($row);
+
+        newAttachments('attachments', 'Adjuntos').addClass('mt-3').appendTo($col);
+
+        // tabHeader
+
+        $tab = $cont.find('#tabHeader');
+        $row = undefined;
+
+        doc.fields().forEach(field => {
+            if (field.headerTable) {
+                $row = getRow($row, $tab);
+                $col = $('<div/>', {
+                    class: 'col-12 col-md-6 form-group',
+                }).appendTo($row);
+
+                getDefaultControl(field).appendTo($col);
+            }
+        })
+
+        // tabHist
+
+        $tab = $cont.find('#tabHist');
+        $row = undefined;
+        newDocLog('docLog').addClass('mt-3').appendTo($tab);
+
+    } else {
+
+        // CON CONTROLES
+
+        try {
+            // Control Event BeforeRender
+            var ev = getEvent('BeforeRender');
+            if (ev) await evalCode(ev);
+
+        } catch(err) {
+            console.error(err);
+            toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+        }
+
+        // Membrete
+
+        await renderControls($cont, '[NULL]');
+
+        // TABS
+
+        var tabs = controls.filter(function (el) {
+            return el['CONTROL'].toUpperCase() == 'TAB' && el['DONOTRENDER'] != 1 && el['R'] != '0'
+        });
+
+        if (tabs.length > 0) {
+            var $navTabs = $('<ul/>', {
+                class: 'nav nav-tabs mt-3',
+            }).appendTo($cont);
+
+            var $tabCont = $('<div/>', {
+                class: 'tab-content',
+            }).appendTo($cont);
+
+            var tab, label, $tab, $li;
+            for (var i = 0; i < tabs.length; i++) {
+                tab = tabs[i];
+                label = tab['DESCRIPTION'] ? tab['DESCRIPTION'] : tab['NAME'];
+
+                $li = $('<li/>', {
+                    class: 'nav-item',
+                }).appendTo($navTabs);
+
+                $('<button/>', {
+                    type: 'button',
+                    class: 'nav-link' + (i == 0 ? ' active' : ''),
+                    'data-bs-toggle': 'tab',
+                    'data-bs-target': '#' + tab['NAME'],
+                }).append(label).appendTo($li);
+
+                $tab = $('<div/>', {
+                    class: 'tab-pane fade' + (i == 0 ? ' show active' : ''),
+                    id: tab['NAME'],
+                }).appendTo($tabCont);
+
+                await renderControls($tab, tab['NAME']);
+            }
+        }
+    };
+
+    // Footer
+    $('<hr/>').appendTo($cont);
+    $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a></span>');
+
+    // Boton Borrar
+    var $delBtn = $('<button/>', {
+        type: 'button',
+        id: 'deleteDoc',
+        class: 'btn btn-outline-danger',
+        title: 'Enviar a la papelera',
+        style: 'float: right;',
+    }).appendTo($cont);
+
+    $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
+    $delBtn.click(function () {
+        if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
+            doc.delete().then(
+                async function (res) {
+                    toast('El documento ha sido enviado a la papelera');
+
+                    // Evento afterDelete
+                    let context = {};
+                    document.dispatchEvent(new CustomEvent('afterDelete', { detail : context }));
+                    if (context.return && typeof context.return.then == 'function') await context.return;
+
+                    exitForm();
+                },
+                function (err) {
+                    logAndToast(errMsg(err));
+                }
+            )
+        }
+    });
+
+    // Llena controles Select
+    $('[data-fill]').each(function (ix, el) {
+        var $el = $(el);
+        $el.removeAttr('data-fill');
+        $el.attr('data-filling', '1');
+        var fld = $el.attr('data-fill-folder');
+
+        if (fld == 'accounts') {
+            fillSelect($el,
+                accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
+                $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
+                function (res) {
+                    $el.find('option').each(function (ix, el) {
+                        var $e = $(el);
+                        var type = $e.attr('data-field-type');
+                        if (type == '1') {
+                            $e.attr('data-icon', 'bi bi-person');
+                        } else if (type == '2') {
+                            $e.attr('data-icon', 'bi bi-people-fill');
+                        }
+                    })
+                }
+            );
+
+        } else {
+            folder.app.folder($el.attr('data-fill-folder')).then(
+                function (fld) {
+                    var arrFields, textField, valueField, dataFields;
+
+                    var arrFields = $el.attr('data-fill-fields').split(',');
+                    if (arrFields.length > 0) textField = arrFields.shift().trim();
+                    if (arrFields.length > 0) valueField = arrFields.shift().trim();
+                    if (arrFields.length > 0) dataFields = arrFields.join(',');
+
+                    fillSelect($el,
+                        fld.search({ fields: $el.attr('data-fill-fields'),
+                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
+                        }),
+                        $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
+                    );
+                },
+                function (err) {
+                    console.log(err);
+                }
+            )
+        }
+    });
+
+    // Validacion de numero
+    $('[data-numeral]').change(function (e) {
+        var $this = $(this);
+        if ($this.val() != '') {
+            var n = numeral($this.val());
+            if (n.value() || n.value() == 0) {
+                $this.val(n.format($this.attr('data-numeral')));
+            } else {
+                $this.val('');
+                toast('Ingrese un numero valido');
+            }
+        }
+    });
+
+    // Tooltips
+    $('[data-bs-toggle="tooltip"]').each(function (ix) {
+        new bootstrap.Tooltip(this);
+    });
+
+    // Espera que se terminen de llenar todos los controles antes de hacer el fill
+    var wt = 0;
+    setTimeout(async function waiting() {
+        if ($('[data-filling]').length > 0) {
+            wt += 100;
+            if (wt == 3000) {
+                console.log('data-filling esta demorando demasiado');
+                debugger; // Para poder ver q corno pasa
+            }
+            setTimeout(waiting, 100);
+
+        } else {
+            // Evento afterRender
+            let context = {};
+            document.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
+
+            // Control Event AfterRender
+            let ev = getEvent('AfterRender');
+            if (ev) await evalCode(ev);
+
+            await fillControls();
+            preloader.hide();
+        }
+    }, 0);
 }

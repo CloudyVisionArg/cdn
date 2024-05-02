@@ -162,8 +162,9 @@ var app = {
                     }
                 },
                 {
-                    path: '/gh/',
+                    path: '/ghcv/:repo/*',
                     async: function () {
+                        debugger;
                         //todo: terminar y agregar ghcv
                         var context = getRouterContext(arguments);
                         /*
@@ -213,29 +214,6 @@ var app = {
             ]
         });
 
-        /* Para que funcione el boton back "fisico" de android */
-        var onBackKeyDown = function() {
-            var leftp = app7.panel.left && app7.panel.left.opened;
-            var rightp = app7.panel.right && app7.panel.right.opened;
-            
-            if ($$('.modal-in').length > 0) {
-                app7.dialog.close();
-                app7.popup.close();
-                app7.popover.close();
-                return false;    
-            }else if ( leftp || rightp ) {
-                app7.panel.close();
-                return false; 
-            } else if (app7.view.current.history.length == 1) {        
-                navigator.app.exitApp();
-            } else {
-                app7.view.current.router.back();
-            }
-
-        }
-
-        document.addEventListener("backbutton", onBackKeyDown, false);
-
         function getRouterContext(pArgs) {
             if (pArgs.length == 1) {
                 // F7 v7
@@ -272,6 +250,28 @@ var app = {
         }
 
         //showConsole();
+
+        /* Para que funcione el boton back "fisico" de android */
+        var onBackKeyDown = function() {
+            var leftp = app7.panel.left && app7.panel.left.opened;
+            var rightp = app7.panel.right && app7.panel.right.opened;
+            
+            if ($$('.modal-in').length > 0) {
+                app7.dialog.close();
+                app7.popup.close();
+                app7.popover.close();
+                return false;    
+            }else if ( leftp || rightp ) {
+                app7.panel.close();
+                return false; 
+            } else if (app7.view.current.history.length == 1) {        
+                navigator.app.exitApp();
+            } else {
+                app7.view.current.router.back();
+            }
+
+        }
+        document.addEventListener('backbutton', onBackKeyDown, false);
 
         var path = location.pathname;
         self.rootPath = path.substring(0, path.lastIndexOf('/'));
