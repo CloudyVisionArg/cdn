@@ -1,5 +1,7 @@
 'use strict';
 
+// Fresh: https://cdn.cloudycrm.net/ghcv/cdn/client/generic6.js?_fresh=1
+
 var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr, modControls;
 var controls, controlsFolder, controlsRights;
@@ -11,7 +13,7 @@ var propControls = 'App7_controls';
 
 (async () => {
     debugger;
-    
+
     if (inApp) {
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
