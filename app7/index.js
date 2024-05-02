@@ -182,7 +182,6 @@ var app = {
                         let params = context.to.params;
                         let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
                         url = url.replaceAll('!', '?');
-                        debugger;
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
                     }
                 },
