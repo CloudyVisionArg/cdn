@@ -1735,9 +1735,9 @@ export class Directory {
                 res => {
                     if (Array.isArray(res)) {
                         if (res.length == 0) {
-                            reject(new Error('Account not found'));
+                            reject(new Error('Account not found (' + account + ')'));
                         } else if (res.length > 1) {
-                            reject(new Error('Vague expression'));
+                            reject(new Error('Vague expression (' + account + ')'));
                         } else {
                             resolve(new Account(res[0], me.session));
                         }
@@ -2854,7 +2854,7 @@ export class Folder {
                 if (res.length == 0) {
                     reject(new Error('Document not found (' + formula + ')'));
                 } else if (res.length > 1) {
-                    reject(new Error('Vague expression'));
+                    reject(new Error('Vague expression (' + formula + ')'));
                 } else {
                     let docId = res[0]['DOC_ID'];
                     resolve(await me.session.doc(docId));
