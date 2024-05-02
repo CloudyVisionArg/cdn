@@ -167,8 +167,10 @@ var app = {
                         var context = getRouterContext(arguments);
                         let params = context.to.params;
                         let url = 'https://cdn.cloudycrm.net/gh/' + params.owner + '/' + params.repo + '/' + params.path;
-                        // Esto es para poder enviar file.js!_fresh=1 que se tome como file.js?_fresh=1
-                        // Si lo pasas con ? se rompe
+                        /*
+                        Esto es para poder enviar file.js!_fresh=1 y que se lea como file.js?_fresh=1
+                        Si lo pasas con ? se rompe
+                        */
                         url = url.replaceAll('!', '?');
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
                     }

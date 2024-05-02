@@ -13,8 +13,6 @@ var propControls = 'App7_controls';
 
 (async () => {
     if (inApp) {
-        debugger;
-
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
     
