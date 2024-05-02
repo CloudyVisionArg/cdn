@@ -1027,7 +1027,10 @@ async function newAutocomplete(pId, pLabel, options){
                     }
                 });
                 
-                $oSel.select2("data", selData).trigger("change");
+                $oSel.select2("data", selData);
+                
+                $oSel.trigger("change");
+
                 $oSel[0]._setXmlVal($oSel);
             },
             function (err) {
