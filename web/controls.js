@@ -958,11 +958,7 @@ async function newAutocomplete(pId, pLabel, options){
             }           
             $oSel.val(arrText).trigger("change");            
         }
-    }    
-
-    $oSel[0]._xml = function (pText) {
-        debugger;
-    }    
+    }  
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
