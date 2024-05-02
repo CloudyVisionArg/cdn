@@ -1069,7 +1069,7 @@ function conversationControl(opt) {
 							const option = options[opIndx];
 							var thisInstance = me;
 							btns.push({
-								text: '<i class="fa ' + option.icon + '"></i> <span>' + option.text + '</span>',
+								text: '<i class="f7-icons">' + option.icon + '</i> <span>' + option.text + '</span>',
 								onClick: function () {
 									debugger;
 									$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $(this.text).attr("class"));
