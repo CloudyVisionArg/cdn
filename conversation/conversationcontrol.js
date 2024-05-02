@@ -239,7 +239,7 @@ function conversationDataProvider() {
  * @param {string} opt.selector - Selector CSS del elemento donde se renderizará el chat
  * @param {conversationDataProvider} opt.dataProvider: Instancia de conversationDataProvider para obtener mensajes
  * @param {string} opt.defaultQuickMessageType: Tipo de mensaje a seleccionar por defecto en el menu de mensajes rapidos de texto. En caso de no enviarlo se tomar el primer tipo de mensaje del primer proveedor enviado 
- * @param {string[]} opt.quickMessageTypes  - Tipos de mensaje para enviar por texto
+ * @param {string[] | object[]} opt.quickMessageTypes  - Tipos de mensaje para enviar por texto
  * @param {(string | Function)} [opt.header] - Html, function o promesa para barra de encabezado
  * @param {(string | Function)} [opt.subheader] - Html, function o promesa que devuelve HTML para la barra inferior al encabezado
  * @param {(string | Function)} [opt.moreOptions] - Html o promesa que devuelve opciones del menu izq inferior
@@ -1060,7 +1060,17 @@ function conversationControl(opt) {
 			const prov = me.dataProvider.msgproviders[index];
 			for (let p = 0; p < prov.supportedTypes.length; p++) {
 				const typeName = prov.supportedTypes[p];
-				if (me.options.quickMessageTypes.indexOf(typeName) == -1) continue;
+				
+				var found = me.options.quickMessageTypes.find((element) =>{
+					if(typeof(element) == "string"){
+						return element == typeName;
+					}
+					if(typeof(element) == "object"){
+						return element.type == typeName;
+					}
+				})
+
+				if (!found) continue;
 				let msgInst = null;
 				try {
 					eval("msgInst = new " + typeName + "();");
