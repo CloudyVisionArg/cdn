@@ -2852,7 +2852,7 @@ export class Folder {
                 var res = await me.search({ fields: 'doc_id', formula });
 
                 if (res.length == 0) {
-                    reject(new Error('Document not found'));
+                    reject(new Error('No se encontró el documento con la formula: ' + formula));
                 } else if (res.length > 1) {
                     reject(new Error('Vague expression'));
                 } else {
