@@ -162,7 +162,7 @@ var app = {
                     }
                 },
                 {
-                    path: '/ghcv/:repo/:path',
+                    path: '/ghcv/:repo/:path/',
                     async: function () {
                         debugger;
                         //todo: terminar y agregar ghcv
