@@ -908,12 +908,13 @@ async function newAutocomplete(pId, pLabel, options){
         width: '100%',
         multiple: pOptions.multiple,
         "data-textfield": pOptions.textField,
-        "data-valuefield": pOptions.valueField,       
+        "data-valuefield": pOptions.valueField,     
+        "data-xmlfield" : pOptions.xmlField
     });
 
     //Si existe xml field lo agrego como hidden
-    if(pOptions.xmlField){
-        $cont.append(`<input type="hidden" data-xmlfield="${pOptions.xmlField}"  id="${pId}_xml" value="${pOptions.xmlField}" />`);
+    if(pOptions.xmlField){       
+        $cont.append(`<input type="hidden" data-xmlfield="${pOptions.xmlField}"  id="${pId}_xml" value="" />`);
     }
 
     if (opt.width) {
@@ -959,6 +960,10 @@ async function newAutocomplete(pId, pLabel, options){
             $oSel.val(arrText).trigger("change");            
         }
     }  
+
+    $oSel[0]._xml = function (pText) {
+        debugger;
+    }
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
