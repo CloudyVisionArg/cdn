@@ -1006,7 +1006,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     
     $oSel[0]._getDom = function(docId){
-        debugger; //TODO
+        
         if(!docId)return false;
         
         DoorsAPI.folderSearch(fldAc.id, sFieldsArr.toString(),"doc_id="+ docId).then(
@@ -1027,24 +1027,13 @@ async function newAutocomplete(pId, pLabel, options){
                     }
                 });
                 
-                $oSel.select2("data", selData);
+                $oSel.select2("data", selData).trigger("change");
                 $oSel[0]._setXmlVal($oSel);
             },
             function (err) {
                 debugger;
             }
-        )        
-        
-        
-        //return docId;
-        // var current = this;
-        // return new Promise((resolve, reject) => {
-        //     //var param = current;
-        //     var paramId = docId;
-        //     //resolve(result);
-        //     //reject(error)
-        // });
-
+        )
 
         /**
          * Codigo de referencia:
