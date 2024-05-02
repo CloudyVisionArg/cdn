@@ -296,34 +296,25 @@ var app = {
             'device.version: ' + device.version + ' / ' +
             'device.uuid: ' + device.uuid);
 
-        /*
-        if (device.platform == 'browser'){
-            db = window.openDatabase(
-                'DbName', '', 'Db Display Name', 5*1024*1024,
-                function (db) { console.log('db created'); }
-            );
-        } else {
-        */
-            db = window.sqlitePlugin.openDatabase({
-                name: 'DbName',
-                location: 'default',
-                },
-                function(db) {
-                    console.log('openDatabase OK');
-                },
-                function(err) {
-                    console.error('openDatabase Err: ' + errMsg(err));        
-                }
-            );
+        // sqlite Db
+        db = window.sqlitePlugin.openDatabase({
+            name: 'DbName',
+            location: 'default',
+            },
+            function(db) {
+                console.log('openDatabase OK');
+            },
+            function(err) {
+                console.error('openDatabase Err: ' + errMsg(err));        
+            }
+        );
 
-            window.localStorage.setItem('syncing', '0');
-        //};
-
+        window.localStorage.setItem('syncing', '0');
 
         if (typeof(Capacitor) != 'undefined') {
             Capacitor.Plugins.SplashScreen.hide();
         }
-        
+
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
         statusBar(val != 'off');
