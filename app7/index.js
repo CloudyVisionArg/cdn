@@ -252,6 +252,7 @@ var app = {
                     }
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
                 debugger;
             });
         }
