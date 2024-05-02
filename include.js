@@ -24,7 +24,7 @@ function registeredScripts() {
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 357, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 356 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 358 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 351, hasdep: true });
     /*
     Por si hay que volver atras
