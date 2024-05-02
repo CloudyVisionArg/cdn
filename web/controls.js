@@ -1303,13 +1303,14 @@ async function newAutocomplete(pId, pLabel, options){
 
     // Función para formatear la selección
     function formatSelection (option) {
+        let sText = option[pOptions.textSource.toUpperCase()] || option.text;
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
-            return option.text;
+            return sText;
 
         let editUrl = `${pOptions.editUrl}&callbackfunction=reloadAutocomplete_${$oSel[0].id}&doc_id=${option.id}`
         //let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
         let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}', '_blank');return false;" target="_blank" id="${pId}">       
-            <b class="text-primary">${option.text}</b>
+            <b class="text-primary">${sText}</b>
         </a>`);
         
         return $itemObj;
