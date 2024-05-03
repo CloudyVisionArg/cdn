@@ -1045,9 +1045,9 @@ async function newAutocomplete(pId, pLabel, options){
                         let opt = $("#autocomplete_new").find("option").not('[value="' + doc[0][pOptions.valueSource.toUpperCase()] + '"]')
                         opt.remove()
                         $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
-                    }                    
+                    }
                 }
-                
+
                 let selData = $oSel.select2("data");
                 selData.forEach(function(option) {
                     if (option.id == docId) {                                        
@@ -1059,7 +1059,7 @@ async function newAutocomplete(pId, pLabel, options){
                         option.element.innerHTML = doc[0][pOptions.textSource.toUpperCase()];
                     }
                 });                
-                
+
                 $oSel.select2("data", selData);
 
                 $oSel.trigger("change");
