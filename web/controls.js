@@ -961,7 +961,7 @@ async function newAutocomplete(pId, pLabel, options){
         }
     }  
 
-    $oSel[0]._xml = function (pText) {        
+    $oSel[0]._xml = function (pText) {
         if(!pOptions.xmlField)
             return;
 
@@ -1149,8 +1149,9 @@ async function newAutocomplete(pId, pLabel, options){
             cache: true
         },
         escapeMarkup: function(markup) {
-            if(markup == "No results found" && pOptions.addUrl !=''){              
-                markup = $(`<a title="Crear elemento" href="${pOptions.addUrl}" target="_blank" id="${pId}">
+            if(markup == "No results found" && pOptions.addUrl !=''){
+                let addUrl = `${pOptions.addUrl}&callbackfunction=reloadAutocomplete_${$oSel[0].id}`
+                markup = $(`<a title="Crear elemento" onclick="window.open('${addUrl}', '_blank');return false;" target="_blank" id="${pId}">
                     <b class="text-primary">Crear documento</b>              
                 </a>`);
             }
@@ -1258,8 +1259,7 @@ async function newAutocomplete(pId, pLabel, options){
         if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
             return sText;
 
-        let editUrl = `${pOptions.editUrl}&callbackfunction=reloadAutocomplete_${$oSel[0].id}&doc_id=${option.id}`
-        //let editUrl = pOptions.editUrl + "&callBackFunction=reloadAutocomplete&doc_id=" + option.id
+        let editUrl = `${pOptions.editUrl}&callbackfunction=reloadAutocomplete_${$oSel[0].id}&doc_id=${option.id}`       
         let $itemObj = $(`<a title="Editar elemento" onclick="window.open('${editUrl}', '_blank');return false;" target="_blank" id="${pId}">       
             <b class="text-primary">${sText}</b>
         </a>`);
