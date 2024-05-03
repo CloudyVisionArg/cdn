@@ -1043,8 +1043,7 @@ async function newAutocomplete(pId, pLabel, options){
                         $oSel.val(selectedValues).trigger("change");
                     }else{
                         $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
-                    }
-                    $oSel.trigger("change");
+                    }                    
                 }
                 
                 let selData = $oSel.select2("data");
@@ -1055,6 +1054,7 @@ async function newAutocomplete(pId, pLabel, options){
                             option[field] = doc[0][field];
                         });
                         option.text = doc[0][pOptions.textSource.toUpperCase()];
+                        option.element.innerHTML = doc[0][pOptions.textSource.toUpperCase()];
                     }
                 });                
                 
