@@ -1039,12 +1039,12 @@ async function newAutocomplete(pId, pLabel, options){
                     $oSel.append(option);
                     if($oSel.attr("multiple")){
                         let selectedValues = $oSel.val();
-                        selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
+                        selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
                         $oSel.val(selectedValues);
                     }else{
-                        $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]);
+                        $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
                     }
-                    $oSel.trigger("change");
+                    //$oSel.trigger("change");
                 }
                 
                 let selData = $oSel.select2("data");
@@ -1052,7 +1052,7 @@ async function newAutocomplete(pId, pLabel, options){
                     if (option.id == docId) {                                        
                         sFieldsArr.forEach(field => {
                             field = field.toUpperCase();                                                        
-                            ption[field] = doc[0][field];
+                            option[field] = doc[0][field];
                         });
                         option.text = doc[0][pOptions.textSource.toUpperCase()];
                     }
