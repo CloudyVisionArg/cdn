@@ -1042,6 +1042,8 @@ async function newAutocomplete(pId, pLabel, options){
                         selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
                         $oSel.val(selectedValues).trigger("change");
                     }else{
+                        let opt = $("#autocomplete_new").find("option").not('[value="' + doc[0][pOptions.valueSource.toUpperCase()] + '"]')
+                        opt.remove()
                         $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
                     }                    
                 }
