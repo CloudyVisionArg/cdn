@@ -966,8 +966,16 @@ async function newAutocomplete(pId, pLabel, options){
             return;
 
         let domXmlField = $oSel[0]._stringToXml(pText);
-        debugger;
-
+        let selData = $oSel.select2("data");
+        for(let idx=0; idx < domXmlField.documentElement.childNodes.length; idx++){
+            let item = domXmlField.documentElement.childNodes[idx];
+            sFieldsArr.forEach(field => {                
+                selData[idx][field] = item.getAttribute(field);
+            });            
+        }
+        // $oSel.trigger("change");
+        // $oSel[0]._setXmlVal($oSel[0]);
+        $oSel.select2("data", selData);
     }
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
