@@ -1044,7 +1044,7 @@ async function newAutocomplete(pId, pLabel, options){
                     }else{
                         $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
                     }
-                    //$oSel.trigger("change");
+                    $oSel.trigger("change");
                 }
                 
                 let selData = $oSel.select2("data");
