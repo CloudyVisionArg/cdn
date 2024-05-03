@@ -1316,7 +1316,7 @@ function JSONtoXML(objetosJSON) {
     objetosJSON.forEach(objeto => {
         xmlString += '<item ';
         for (let key in objeto) {
-            xmlString += `${key.toLowerCase()}="${objeto[key]}" `;
+            xmlString += `${key.toLowerCase()}="${(objeto[key] !=null)? objeto[key] : ""}" `;
         }
         xmlString += '/>';
     });
