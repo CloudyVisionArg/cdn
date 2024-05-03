@@ -1026,11 +1026,13 @@ async function newAutocomplete(pId, pLabel, options){
         if(!docId)return false;
         
         DoorsAPI.folderSearch(fldAc.id, sFieldsArr.toString(),"doc_id="+ docId).then(
-            function (oDoc) {                
+            function (oDoc) {
+                let found= false;
                 let selData = $oSel.select2("data");
                 let doc = oDoc
                 selData.forEach(function(option) {
-                    if (option.id == docId) {                       
+                    if (option.id == docId) {
+                        found = true;                    
                         sFieldsArr.forEach(field => {
                             field = field.toUpperCase();
                             if(field && field != 'DOC_ID' && field != 'FLD_ID'){                               
@@ -1040,6 +1042,17 @@ async function newAutocomplete(pId, pLabel, options){
                         option.text = doc[0][pOptions.textSource.toUpperCase()];
                     }
                 });
+
+                if(!found){
+                    //AddUrl, debo agregarlo al select
+                    debugger;
+                    let option = new Option("algo", 5454, false, false);
+                    $oSel.append(option);
+
+                    // sFieldsArr.forEach(field => {                
+                    //     selData[idx][field.toUpperCase()] = item.getAttribute(field);
+                    // });  
+                }
                 
                 $oSel.select2("data", selData);
 
