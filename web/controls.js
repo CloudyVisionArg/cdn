@@ -1039,8 +1039,8 @@ async function newAutocomplete(pId, pLabel, options){
                     $oSel.append(option);
                     if($oSel.attr("multiple")){
                         let selectedValues = $oSel.val();
-                        selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
-                        $oSel.val(selectedValues);
+                        selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
+                        $oSel.val(selectedValues).trigger("change");
                     }else{
                         $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
                     }
