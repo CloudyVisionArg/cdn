@@ -1037,14 +1037,14 @@ async function newAutocomplete(pId, pLabel, options){
                     //AddUrl, debo agregarlo al select                    
                     let option = new Option(doc[0][pOptions.textSource.toUpperCase()], doc[0][pOptions.valueSource.toUpperCase()]);                    
                     $oSel.append(option);
-                    
                     if($oSel.attr("multiple")){
                         let selectedValues = $oSel.val();
                         selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
-                        $oSel.val(selectedValues).trigger("change");
+                        $oSel.val(selectedValues);
                     }else{
-                        $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
-                    }                  
+                        $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]);
+                    }
+                    $oSel.trigger("change");
                 }
                 
                 let selData = $oSel.select2("data");
