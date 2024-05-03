@@ -1046,15 +1046,23 @@ async function newAutocomplete(pId, pLabel, options){
                 if(!found){
                     //AddUrl, debo agregarlo al select
                     debugger;
-                    let option = new Option("algo", 5454, false, false);
+                    let option = new Option(doc[0][pOptions.textSource], doc[0][pOptions.valueSource]);
+                    $(option).prop('selected', true);
                     $oSel.append(option);
-                    let seletctedValues = $oSel.val();
-                    seletctedValues.push(5454)
-                    $oSel.val(seletctedValues).trigger("change");
+                    // let selectedValues = $oSel.val();
+                    // selectedValues.push(doc[0][pOptions.valueSource]);
+                    // $oSel.val(selectedValues).trigger("change");                    
+                    $oSel.trigger("change");
                     
-                    //sFieldsArr.forEach(field => {                
-                    //     selData[idx][field.toUpperCase()] = item.getAttribute(field);
-                    //});
+                    selData.forEach(function(option) {
+                        if (option.id == docId) {                                         
+                            sFieldsArr.forEach(field => {
+                                field = field.toUpperCase();                                                        
+                                    option[field] = doc[0][field];                                                          
+                            });
+                            option.text = doc[0][pOptions.textSource.toUpperCase()];
+                        }
+                    });
                 }
                 
                 $oSel.select2("data", selData);
