@@ -961,8 +961,13 @@ async function newAutocomplete(pId, pLabel, options){
         }
     }  
 
-    $oSel[0]._xml = function (pText) {
+    $oSel[0]._xml = function (pText) {        
+        if(!pOptions.xmlField)
+            return;
+
+        let domXmlField = $oSel[0]._stringToXml(pText);
         debugger;
+
     }
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
@@ -1041,95 +1046,35 @@ async function newAutocomplete(pId, pLabel, options){
                 debugger;
             }
         )
-
-        /**
-         * Codigo de referencia:
-         * 
-        var current = this;
-        var param = this.fSAParameter;
-        var folderParameters = param.getFolderSearchParam();
-        var returnValue;
-        var fields = 'doc_id';
-        var excludeFieldsString = "";
-        var mustBeFields = [];
-        var fieldsArr = [];
-        fieldsArr.push("doc_id");
-        if (param.returnFields != '') {
-            fields += ',' + param.returnFields.toLowerCase();
-            mustBeFields = fields.split(",");
-            fieldsArr.push.apply(fieldsArr, param.returnFields.split(","));
-        }
-        else {
-            fields += ',' + param.searchFields.toLowerCase();
-            mustBeFields = fields.split(",");
-            fieldsArr.push.apply(fieldsArr, param.searchFields.split(","));
-        }
-        if (param.valueSource != '') {
-            if (fields.indexOf(param.valueSource) < 0) {
-                fields += ',' + param.valueSource;
-                excludeFieldsString += ',' + param.valueSource;
-                fieldsArr.push(param.valueSource);
-            }
-        }
-        if (param.textSource != '') {
-            if (fields.indexOf(param.textSource) < 0) {
-                fields += ',' + param.textSource;
-                excludeFieldsString += ',' + param.textSource;
-                fieldsArr.push(param.textSource);
-            }
-        }
-        var domExcludeFields = excludeFieldsString.toLowerCase().split(',').filter(function (item, i, all) {
-            return i == all.indexOf(item) && !mustBeFields.contains(item.toLowerCase().toString().trim());
-        });
-
-
-        var uniqueList = fields.toLowerCase().split(',').filter(function (item, i, allItems) {
-            return i == allItems.indexOf(item);
-        }).join(',');
-
-        uniqueList = fieldsArr.unique().join(',');
-
-        folderParameters.Fields = uniqueList;
-
-        if (id) {
-            var finalFilter = 'DOC_ID = ' + id;
-            folderParameters.Formula = finalFilter;
-            restCallOptions = {
-                serverUrl: current.serverUrl,
-                authToken: current.token
-            };
-            Gestar.REST.call('FolderSearchNewObj', 'POST', folderParameters, 'folderSearchParam',
-                function (result) {
-                    var dom = _XML('<root/>');
-                    var itemToAdd = null;
-                    itemToAdd = dom.createElement('item');
-                    for (var prop in result[0]) {
-                        var exclude = false;
-                        for (var f = 0; f < domExcludeFields.length; f++) {
-                            if (domExcludeFields[f].toLowerCase().trim() == prop.toLowerCase()) {
-                                exclude = true;
-                                break;
-                            }
-                        }
-                        if (exclude)
-                            continue;
-                        var val = result[0][prop];
-                        if (val == null)
-                            val = "";
-                        itemToAdd.setAttribute(prop.toLowerCase(), val);
-                    }
-                    dom.documentElement.appendChild(itemToAdd);
-                    current.setExtraValues(result[0]);
-                    returnValue = dom;
-                },
-                function (err) {
-                    alert(err.Message);
-                }
-            );
-        }
-        return returnValue;
-         */
     }
+
+    $oSel[0]._stringToXml = function(xmlString) {
+        var oDom = null;
+        //if (document.implementation.createDocument)
+        // -->  Esta era la evaluacion que haciamos antes de IE9, ya que IE9 tiene document.implementation.createDocument
+        //		pero no DOMParser y por lo tanto debemos si o si crear un objeto ActiveX para poder efectuar busquedas con XPATH
+        //		por lo que ahora evaluamos el metodo document.evaluate que no esta disponible en IE9, IE8 o IE7
+
+        if (document.evaluate) {
+            var parser = new DOMParser();
+            if (xmlString != '' && xmlString != undefined) {
+                oDom = parser.parseFromString(xmlString, "text/xml");
+            } else {
+                oDom = document.implementation.createDocument("", "", null);
+            }
+        } else if (window.ActiveXObject || "ActiveXObject" in window) {
+            oDom = new ActiveXObject("Microsoft.XMLDOM");
+            if (xmlString != "" && xmlString != undefined) {
+                oDom.async = "false";
+                oDom.loadXML(xmlString);
+            }
+        }
+        if (xmlString == "" || xmlString == undefined) {
+            var xmlRoot = oDom.createElement('root');
+            oDom.appendChild(xmlRoot);
+        }
+        return oDom;
+    };
 
     var fldAc = await dSession.folder(opt.folder, folder.rootFolderId);
     let sURL = pOptions.url ? pOptions.url : "";
