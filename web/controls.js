@@ -1046,14 +1046,14 @@ async function newAutocomplete(pId, pLabel, options){
                 if(!found){
                     //AddUrl, debo agregarlo al select
                     debugger;
-                    let option = new Option(doc[0][pOptions.textSource], doc[0][pOptions.valueSource]);
+                    let option = new Option(doc[0][pOptions.textSource.toUpperCase()], doc[0][pOptions.valueSource.toUpperCase()]);
                     $(option).prop('selected', true);
                     $oSel.append(option);
                     // let selectedValues = $oSel.val();
-                    // selectedValues.push(doc[0][pOptions.valueSource]);
+                    // selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
                     // $oSel.val(selectedValues).trigger("change");                    
                     $oSel.trigger("change");
-                    
+
                     selData.forEach(function(option) {
                         if (option.id == docId) {                                         
                             sFieldsArr.forEach(field => {
