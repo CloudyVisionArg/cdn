@@ -1035,25 +1035,33 @@ async function newAutocomplete(pId, pLabel, options){
                 let doc = oDoc
                 if(!found){
                     //AddUrl, debo agregarlo al select                    
-                    let option = new Option(doc[0][pOptions.textSource.toUpperCase()], doc[0][pOptions.valueSource.toUpperCase()]);
-                    $(option).prop('selected', true);
-                    $oSel.append(option);                       
-                    $oSel.trigger("change");
+                    let option = new Option(doc[0][pOptions.textSource.toUpperCase()], doc[0][pOptions.valueSource.toUpperCase()]);                    
+                    $oSel.append(option);
+                    
+                    if($oSel.attr("multiple")){
+                        let selectedValues = $oSel.val();
+                        selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
+                        $oSel.val(selectedValues).trigger("change");
+                    }else{
+                        $oSel.val(doc[0][pOptions.valueSource.toUpperCase()]).trigger("change");
+                    }                  
                 }
                 
                 let selData = $oSel.select2("data");
                 selData.forEach(function(option) {
                     if (option.id == docId) {                                        
                         sFieldsArr.forEach(field => {
-                            field = field.toUpperCase();                                                  
-                            option[field] = doc[0][field];                                                     
+                            field = field.toUpperCase();                                                        
+                            ption[field] = doc[0][field];
                         });
                         option.text = doc[0][pOptions.textSource.toUpperCase()];
                     }
                 });                
                 
                 $oSel.select2("data", selData);
+
                 $oSel.trigger("change");
+
                 $oSel[0]._setXmlVal($oSel[0]);
             },
             function (err) {
