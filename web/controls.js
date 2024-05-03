@@ -1027,27 +1027,12 @@ async function newAutocomplete(pId, pLabel, options){
         
         DoorsAPI.folderSearch(fldAc.id, sFieldsArr.toString(),"doc_id="+ docId).then(
             function (oDoc) {
-                let found= false;
 
-                let selData = $oSel.select2("data");
-                debugger;
-                let found2 = selData.filter(function(item) {
-                    return item.id === docId;
-                });
+                let found =  $oSel.select2("data").filter(function(item) {
+                    return item.id == docId;
+                }).length > 0;
+
                 let doc = oDoc
-                selData.forEach(function(option) {
-                    if (option.id == docId) {
-                        found = true;                    
-                        sFieldsArr.forEach(field => {
-                            field = field.toUpperCase();
-                            if(field && field != 'DOC_ID' && field != 'FLD_ID'){                               
-                                option[field] = doc[0][field];
-                            }                            
-                        });
-                        option.text = doc[0][pOptions.textSource.toUpperCase()];
-                    }
-                });
-
                 if(!found){
                     //AddUrl, debo agregarlo al select
                     debugger;
@@ -1058,18 +1043,31 @@ async function newAutocomplete(pId, pLabel, options){
                     // selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
                     // $oSel.val(selectedValues).trigger("change");                    
                     $oSel.trigger("change");
-                    let selData = $oSel.select2("data");
+                    //let selData = $oSel.select2("data");
 
-                    selData.forEach(function(option) {
-                        if (option.id == docId) {                                         
-                            sFieldsArr.forEach(field => {
-                                field = field.toUpperCase();                                                        
-                                    option[field] = doc[0][field];                                                          
-                            });
-                            option.text = doc[0][pOptions.textSource.toUpperCase()];
-                        }
-                    });
+                    // selData.forEach(function(option) {
+                    //     if (option.id == docId) {                                         
+                    //         sFieldsArr.forEach(field => {
+                    //             field = field.toUpperCase();                                                        
+                    //                 option[field] = doc[0][field];                                                          
+                    //         });
+                    //         option.text = doc[0][pOptions.textSource.toUpperCase()];
+                    //     }
+                    // });
                 }
+                
+                let selData = $oSel.select2("data");
+                selData.forEach(function(option) {
+                    if (option.id == docId) {                                        
+                        sFieldsArr.forEach(field => {
+                            field = field.toUpperCase();
+                            //if(field && field != 'DOC_ID' && field != 'FLD_ID'){                               
+                                option[field] = doc[0][field];
+                            //}                            
+                        });
+                        option.text = doc[0][pOptions.textSource.toUpperCase()];
+                    }
+                });                
                 
                 $oSel.select2("data", selData);
 
