@@ -935,7 +935,7 @@ async function newAutocomplete(pId, pLabel, options){
                 $oSel[0]._selectInitialValue(null, arrValues[idx], idx);
             }
 
-            $oSel.val(arrValues).trigger("change");            
+            $oSel.val(arrValues).trigger("change");
         }
     }
     
@@ -1048,10 +1048,13 @@ async function newAutocomplete(pId, pLabel, options){
                     debugger;
                     let option = new Option("algo", 5454, false, false);
                     $oSel.append(option);
-
-                    // sFieldsArr.forEach(field => {                
+                    let seletctedValues = $oSel.val();
+                    seletctedValues.push(5454)
+                    $oSel.val(seletctedValues).trigger("change");
+                    
+                    //sFieldsArr.forEach(field => {                
                     //     selData[idx][field.toUpperCase()] = item.getAttribute(field);
-                    // });  
+                    //});
                 }
                 
                 $oSel.select2("data", selData);
