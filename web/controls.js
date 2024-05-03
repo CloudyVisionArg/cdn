@@ -972,9 +972,7 @@ async function newAutocomplete(pId, pLabel, options){
             sFieldsArr.forEach(field => {                
                 selData[idx][field.toUpperCase()] = item.getAttribute(field);
             });            
-        }
-        // $oSel.trigger("change");
-        // $oSel[0]._setXmlVal($oSel[0]);
+        }        
         $oSel.select2("data", selData);
     }
 
