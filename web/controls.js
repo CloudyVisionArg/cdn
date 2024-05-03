@@ -1028,7 +1028,12 @@ async function newAutocomplete(pId, pLabel, options){
         DoorsAPI.folderSearch(fldAc.id, sFieldsArr.toString(),"doc_id="+ docId).then(
             function (oDoc) {
                 let found= false;
+
                 let selData = $oSel.select2("data");
+                debugger;
+                let found2 = selData.filter(function(item) {
+                    return item.id === docId;
+                });
                 let doc = oDoc
                 selData.forEach(function(option) {
                     if (option.id == docId) {
@@ -1053,6 +1058,7 @@ async function newAutocomplete(pId, pLabel, options){
                     // selectedValues.push(doc[0][pOptions.valueSource.toUpperCase()]);
                     // $oSel.val(selectedValues).trigger("change");                    
                     $oSel.trigger("change");
+                    let selData = $oSel.select2("data");
 
                     selData.forEach(function(option) {
                         if (option.id == docId) {                                         
