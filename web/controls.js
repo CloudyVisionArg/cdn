@@ -970,7 +970,7 @@ async function newAutocomplete(pId, pLabel, options){
         for(let idx=0; idx < domXmlField.documentElement.childNodes.length; idx++){
             let item = domXmlField.documentElement.childNodes[idx];
             sFieldsArr.forEach(field => {                
-                selData[idx][field] = item.getAttribute(field);
+                selData[idx][field.toUpperCase()] = item.getAttribute(field);
             });            
         }
         // $oSel.trigger("change");
