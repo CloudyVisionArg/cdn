@@ -514,7 +514,7 @@ async function webRenderPage() {
 
         $tab = $cont.find('#tabHist');
         $row = undefined;
-        newDocLog('docLog').addClass('mt-3').appendTo($tab);
+        modControls.newDocLog('docLog').addClass('mt-3').appendTo($tab);
 
     } else {
 
