@@ -390,7 +390,7 @@ async function appRenderPage() {
         }
     }
 
-    resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
+    resolveRoute({ resolve: resolve, pageEl: $page, pageInit: appPageInit });
 }
 
 async function appPageInit(e, page) {
