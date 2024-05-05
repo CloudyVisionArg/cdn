@@ -492,7 +492,7 @@ async function webRenderPage() {
             class: 'col-12 form-group',
         }).appendTo($row);
 
-        mocControl.newAttachments('attachments', 'Adjuntos').addClass('mt-3').appendTo($col);
+        modControl.newAttachments('attachments', 'Adjuntos').addClass('mt-3').appendTo($col);
 
         // tabHeader
 
