@@ -171,7 +171,7 @@ var app = {
                         Esto es para poder enviar file.js!_fresh=1 y que se lea como file.js?_fresh=1
                         Si lo pasas con ? se rompe
                         */
-                        url = url.replaceAll('!', '?');
+                        url = url.replace('!', '?');
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
                     }
                 },
@@ -181,7 +181,7 @@ var app = {
                         var context = getRouterContext(arguments);
                         let params = context.to.params;
                         let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
-                        url = url.replaceAll('!', '?');
+                        url = url.replace('!', '?');
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
                     }
                 },

@@ -6,6 +6,8 @@ generic del APP7
 Documentacion:
 Cordova: https://cordova.apache.org/docs/en/latest/
 Framework7: https://framework7.io/docs/
+MD Icons: https://fonts.google.com/icons?icon.platform=web&icon.set=Material+Icons (abrir en Chrome)
+F7 Icons: https://w3.cloudycrm.net/c/app7/lib/framework7/css/cheatsheet.htm
 */
 
 var fld_id, doc_id, cacheDir;

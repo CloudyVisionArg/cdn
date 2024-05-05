@@ -7,7 +7,7 @@ var utils, urlParams, preldr, modControls;
 var controls, controlsFolder, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 
-var inApp = typeof app7 == 'object';
+var inApp = typeof window.app7 == 'object';
 
 var propControls = 'App7_controls';
 
@@ -81,6 +81,7 @@ var propControls = 'App7_controls';
                 modControls.setContext({ dSession, folder, doc });
                     
                 loadControls();
+                
             } else {
                 errMgr(new Error('La carpeta ' + fld_id + ' no es una carpeta de documentos'));
             }
@@ -88,9 +89,9 @@ var propControls = 'App7_controls';
         } catch (err) {
             errMgr(err)
         }
+
     } else {
         errMgr(new Error('Se requiere fld_id'));
-
     }
 })();
 
@@ -219,6 +220,179 @@ async function renderPageApp() {
 
     // Page Content
     var $pageCont = $page.find('.page-content');
+
+    if (!controls) {
+
+        // SIN CONTROLES
+
+        var $tabMain, $tabHeader, $tabHist, $div, $ul, $ctl;
+
+        // TABBAR
+
+        $tabbar = $('<div/>', {
+            class: 'toolbar tabbar toolbar-top',
+            style: 'top: 0;',
+        }).appendTo($pageCont);
+
+        $tabbarInner = $('<div/>', {
+            class: 'toolbar-inner',
+        }).appendTo($tabbar);
+
+        $('<a/>', {
+            class: 'tab-link tab-link-active',
+            href: '#' + $page.attr('id') + ' #tabMain',
+        }).append('Datos').appendTo($tabbarInner);
+
+        $('<a/>', {
+            class: 'tab-link',
+            href: '#' + $page.attr('id') + ' #tabHeader',
+        }).append('Header').appendTo($tabbarInner);
+
+        $('<a/>', {
+            class: 'tab-link',
+            href: '#' + $page.attr('id') + ' #tabHist',
+        }).append('Historial').appendTo($tabbarInner);
+
+
+        // TABS
+
+        $tabs = $('<div/>', {
+            class: 'tabs',
+        }).appendTo($pageCont);
+
+
+        // tabMain
+
+        $tabMain = $('<div/>', {
+            class: 'tab tab-active',
+            id: 'tabMain',
+        }).appendTo($tabs);
+
+        $div = $('<div/>', {
+            class: 'list no-hairlines-md',
+            style: 'margin-top: 0;',
+        }).appendTo($tabMain);
+
+        $ul = $('<ul/>').appendTo($div);
+
+        for (let [key, field] of doc.fields()) {
+            if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
+                getDefaultControl(field).appendTo($ul);
+            }
+        }
+
+        $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
+        $ctl.find('.list').on('click', 'a', downloadAtt);
+        $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
+        $ctl.find('div.row').on('click', 'button', addAtt);
+
+
+        // tabHeader
+
+        $tabHeader = $('<div/>', {
+            class: 'tab',
+            id: 'tabHeader',
+        }).appendTo($tabs);
+
+        $div = $('<div/>', {
+            class: 'list no-hairlines-md',
+            style: 'margin-top: 0;',
+        }).appendTo($tabHeader);
+
+        $ul = $('<ul/>').appendTo($div);
+
+        for (let [key, field] of doc.fields()) {
+            if (!field.custom && field.headerTable) {
+                getDefaultControl(field).appendTo($ul);
+            }
+        }
+
+        // tabHist
+
+        $tabHist = $('<div/>', {
+            class: 'tab',
+            id: 'tabHist',
+        }).appendTo($tabs);
+
+        $('<div/>', {
+            'data-doclog': 1,
+        }).append('Cargando...').appendTo($tabHist);
+
+    } else {
+
+        // CON CONTROLES
+
+        try {
+            // Control Event BeforeRender
+            var ev = getEvent('BeforeRender');
+            if (ev) await evalCode(ev);
+
+        } catch(err) {
+            console.error(err);
+            toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+        }
+
+        // Membrete
+
+        $ul = $('<ul/>')
+        await renderControls($ul, '[NULL]');
+
+        if ($ul.html()) {
+            $('<div/>', {
+                class: 'list no-hairlines-md',
+                style: 'margin-top: 0;',
+            }).append($ul).appendTo($pageCont);
+        }
+
+        // TABS
+
+        var tabs = controls.filter(function (el) {
+            return el['CONTROL'].toUpperCase() == 'TAB' && el['DONOTRENDER'] != 1 &&
+                el['R'] != '0' && el['HIDEINAPP'] != '1'
+        });
+
+        if (tabs.length > 0) {
+            $tabbar = $('<div/>', {
+                class: 'toolbar tabbar toolbar-top',
+                style: 'top: 0;',
+            }).appendTo($pageCont);
+
+            $tabbarInner = $('<div/>', {
+                class: 'toolbar-inner',
+            }).appendTo($tabbar);
+
+            $tabs = $('<div/>', {
+                class: 'tabs',
+            }).appendTo($pageCont);
+
+            var tab, label, $tab, $ul;
+            for (var i = 0; i < tabs.length; i++) {
+                tab = tabs[i];
+                label = tab['DESCRIPTION'] ? tab['DESCRIPTION'] : tab['NAME'];
+                $('<a/>', {
+                    class: 'tab-link' + (i == 0 ? ' tab-link-active' : ''),
+                    href: '#' + $page.attr('id') + ' #' + tab['NAME'],
+                }).append(label).appendTo($tabbarInner);
+
+                $tab = $('<div/>', {
+                    class: 'tab' + (i == 0 ? ' tab-active' : ''),
+                    id: tab['NAME'],
+                }).appendTo($tabs);
+
+                $ul = $('<ul/>')
+                await renderControls($ul, tab['NAME']);
+
+                if ($ul.html()) {
+                    $('<div/>', {
+                        class: 'list no-hairlines-md',
+                        style: 'margin-top: 0;',
+                    }).append($ul).appendTo($tab);
+                }
+            }
+        }
+    }
+
+    resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
 async function renderPageWeb() {
