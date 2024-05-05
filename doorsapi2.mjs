@@ -4809,6 +4809,7 @@ export class Utilities {
             } else {
                 return val;
             }
+            //todo: Falta Buffer de node
         });
     }
 
