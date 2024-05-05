@@ -81,7 +81,7 @@ var propControls = 'App7_controls';
                 modControls.setContext({ dSession, folder, doc });
                     
                 loadControls();
-                
+
             } else {
                 errMgr(new Error('La carpeta ' + fld_id + ' no es una carpeta de documentos'));
             }
@@ -176,12 +176,10 @@ function getControlsRights(pControls) {
 
 
 async function renderPage() {
-    debugger;
-    toast('render');
-    inApp ? renderPageApp() : renderPageWeb();
+    inApp ? appRenderPage() : webRenderPage();
 }
 
-async function renderPageApp() {
+async function appRenderPage() {
     // page
     $page = getPage({
         id: 'generic6_' + getGuid(),
@@ -395,7 +393,7 @@ async function renderPageApp() {
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
-async function renderPageWeb() {
+async function webRenderPage() {
     var $body = $('body');
     var $d = $(document);
 
@@ -480,7 +478,7 @@ async function renderPageWeb() {
 
         doc.fields().forEach(field => {
             if (!field.headerTable && field.name != 'DOC_ID') {
-                $row = getRow($row, $tab);
+                $row = webGetRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
@@ -489,7 +487,7 @@ async function renderPageWeb() {
             }
         });
 
-        $row = getRow(undefined, $tab);
+        $row = webGetRow(undefined, $tab);
         $col = $('<div/>', {
             class: 'col-12 form-group',
         }).appendTo($row);
@@ -503,7 +501,7 @@ async function renderPageWeb() {
 
         doc.fields().forEach(field => {
             if (field.headerTable) {
-                $row = getRow($row, $tab);
+                $row = webGetRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
@@ -611,6 +609,8 @@ async function renderPageWeb() {
         }
     });
 
+    /*
+
     // Llena controles Select
     $('[data-fill]').each(function (ix, el) {
         var $el = $(el);
@@ -703,4 +703,37 @@ async function renderPageWeb() {
             preloader.hide();
         }
     }, 0);
+
+    */
+}
+
+function webGetRow(pRow, pCont, pCol) {
+    var $row;
+
+    if (pCol == undefined) {
+        if (pRow && pRow.children().length < 2) {
+            return pRow;
+        } else {
+            return $('<div/>', {
+                class: 'row',
+            }).appendTo(pCont);
+        }
+
+    } else {
+        if (pCol == '2' && pRow && pRow[0].lastCol == '1') {
+            $row = pRow;
+        } else {
+            $row = $('<div/>', {
+                class: 'row',
+            }).appendTo(pCont);
+            if (pCol == 2) {
+                $('<div/>', {
+                    class: 'col-12 col-md-6 form-group',
+                }).appendTo($row);
+            }
+            $row[0].lastCol = pCol;
+        };
+        
+        return $row;
+    }
 }
