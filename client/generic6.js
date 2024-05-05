@@ -393,6 +393,133 @@ async function appRenderPage() {
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 }
 
+async function appPageInit(e, page) {
+    f7Page = page;
+    pageEl = page.pageEl;
+    pageEl.crm = {};
+
+    preldr.hide();
+
+    return;
+
+    f7Page.view.on('swipebackMove', (ev) => {
+        explorerRefresh();
+    })
+
+    // En ios el navbar esta fuera del page
+    $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
+
+    // Validacion de numero
+    $get('[data-numeral]').change(function (e) {
+        var $this = $(this);
+        if ($this.val() != '') {
+            var n = numeral($this.val());
+            if (n.value() || n.value() == 0) {
+                setInputVal($this, n.format($this.attr('data-numeral')));
+            } else {
+                setInputVal($this, '');
+                toast('Ingrese un numero valido');
+            }
+        }
+    });
+
+    // Llena controles Select
+    $get('[data-fill]').each(function (ix, el) {
+        var $el = $(el);
+        $el.removeAttr('data-fill');
+        $el.attr('data-filling', '1');
+        var fld = $el.attr('data-fill-folder');
+
+        if (fld == 'accounts') {
+            fillSelect($el,
+                accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
+                $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
+                function (res) {
+                    $el.find('option').each(function (ix, el) {
+                        var $e = $(el);
+                        var type = $e.attr('data-field-type');
+                        if (type == '1') {
+                            $e.attr('data-option-icon-ios', 'f7:person');
+                            $e.attr('data-option-icon-md', 'material:person_outline');
+                        } else if (type == '2') {
+                            $e.attr('data-option-icon-ios', 'f7:person_2_fill');
+                            $e.attr('data-option-icon-md', 'material:group');
+                        }
+                    })
+                }
+            );
+
+        } else {
+            folder.app.folder($el.attr('data-fill-folder')).then(
+                function (fld) {
+                    var arrFields, textField, valueField, dataFields;
+
+                    var arrFields = $el.attr('data-fill-fields').split(',');
+                    if (arrFields.length > 0) textField = arrFields.shift().trim();
+                    if (arrFields.length > 0) valueField = arrFields.shift().trim();
+                    if (arrFields.length > 0) dataFields = arrFields.join(',');
+
+                    fillSelect($el,
+                        fld.search({ fields: $el.attr('data-fill-fields'),
+                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
+                        }),
+                        $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
+                    );
+                },
+                function (err) {
+                    console.log(err);
+                }
+            )
+        }
+    });
+
+    // Bug de fecha read-only de Safari
+    // https://stackoverflow.com/questions/25928605/in-ios8-safari-readonly-inputs-are-handled-incorrectly
+    if (device.platform == 'iOS') {
+        $get('input[type=\'date\'][readonly], input[type=\'time\'][readonly], input[type=\'datetime-local\'][readonly]')
+            .focus(function (e) {
+                $(this).trigger('blur');
+            }
+        );
+    }
+
+    // Espera que se terminen de llenar todos los controles antes de hacer el fill
+    var wt = 0;
+    setTimeout(async function waiting() {
+        if ($page.find('[data-filling]').length > 0) {
+            wt += 100;
+            if (wt == 3000) {
+                console.log('data-filling esta demorando demasiado');
+                debugger; // Para poder ver q corno pasa
+            }
+            setTimeout(waiting, 100);
+
+        } else {
+            // Evento afterRender
+            let context = {};
+            $page[0].dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
+
+            // Deprecado, usar el anterior
+            $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
+
+            // Control Event AfterRender, ver si se lo puede traer desde afterFillControls
+            //var ev = getEvent('AfterRender');
+            //if (ev) await evalCode(ev);
+
+            await fillControls();
+            app7.preloader.hide();
+        }
+    }, 0);
+
+    if (!pageEl.crm) pageEl.crm = {};
+    Object.assign(pageEl.crm, {
+        fillControls, saveDoc, fld_id, folder, folderJson, 
+        doc_id, doc, docJson, $navbar, f7Page, goBack,
+    });
+}
+
+
 async function webRenderPage() {
     var $body = $('body');
     var $d = $(document);
@@ -705,6 +832,7 @@ async function webRenderPage() {
     }, 0);
 
     */
+    preldr.hide();
 }
 
 function webGetRow(pRow, pCont, pCol) {
