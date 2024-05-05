@@ -203,9 +203,9 @@ async function appRenderPage() {
     });
 
     // Boton Guardar y salir
-    var $nbRight = $page.find('.navbar-inner .right');
+    let $nbRight = $page.find('.navbar-inner .right');
 
-    var $saveExitBtn = $('<a/>', {
+    let $saveExitBtn = $('<a/>', {
         href: '#',
         class: 'link icon-only',
         style: app7.theme == 'ios' ? 'margin-left: 8px;' : 'margin-right: 6px;',
@@ -217,22 +217,20 @@ async function appRenderPage() {
     });
 
     // Page Content
-    var $pageCont = $page.find('.page-content');
+    let $pageCont = $page.find('.page-content');
 
     if (!controls) {
 
         // SIN CONTROLES
 
-        var $tabMain, $tabHeader, $tabHist, $div, $ul, $ctl;
-
         // TABBAR
 
-        $tabbar = $('<div/>', {
+        let $tabbar = $('<div/>', {
             class: 'toolbar tabbar toolbar-top',
             style: 'top: 0;',
         }).appendTo($pageCont);
 
-        $tabbarInner = $('<div/>', {
+        let $tabbarInner = $('<div/>', {
             class: 'toolbar-inner',
         }).appendTo($tabbar);
 
@@ -254,24 +252,24 @@ async function appRenderPage() {
 
         // TABS
 
-        $tabs = $('<div/>', {
+        let $tabs = $('<div/>', {
             class: 'tabs',
         }).appendTo($pageCont);
 
 
         // tabMain
 
-        $tabMain = $('<div/>', {
+        let $tabMain = $('<div/>', {
             class: 'tab tab-active',
             id: 'tabMain',
         }).appendTo($tabs);
 
-        $div = $('<div/>', {
+        let $div = $('<div/>', {
             class: 'list no-hairlines-md',
             style: 'margin-top: 0;',
         }).appendTo($tabMain);
 
-        $ul = $('<ul/>').appendTo($div);
+        let $ul = $('<ul/>').appendTo($div);
 
         for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
@@ -279,7 +277,7 @@ async function appRenderPage() {
             }
         }
 
-        $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
+        let $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
         $ctl.find('.list').on('click', 'a', downloadAtt);
         $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
         $ctl.find('div.row').on('click', 'button', addAtt);
@@ -287,7 +285,7 @@ async function appRenderPage() {
 
         // tabHeader
 
-        $tabHeader = $('<div/>', {
+        let $tabHeader = $('<div/>', {
             class: 'tab',
             id: 'tabHeader',
         }).appendTo($tabs);
@@ -307,7 +305,7 @@ async function appRenderPage() {
 
         // tabHist
 
-        $tabHist = $('<div/>', {
+        let $tabHist = $('<div/>', {
             class: 'tab',
             id: 'tabHist',
         }).appendTo($tabs);
