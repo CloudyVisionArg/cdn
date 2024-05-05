@@ -312,9 +312,7 @@ async function appRenderPage() {
             id: 'tabHist',
         }).appendTo($tabs);
 
-        $('<div/>', {
-            'data-doclog': 1,
-        }).append('Cargando...').appendTo($tabHist);
+        modControls.newDocLog().appendTo($tabHist);
 
     } else {
 
