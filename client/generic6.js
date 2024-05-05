@@ -277,10 +277,12 @@ async function appRenderPage() {
             }
         }
 
-        let $ctl = getAttachments('attachments', 'Adjuntos').appendTo($ul);
+        let $ctl = modControls.newAttachments('attachments', 'Adjuntos').appendTo($ul);
+        /* todo: pasar al control
         $ctl.find('.list').on('click', 'a', downloadAtt);
         $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
         $ctl.find('div.row').on('click', 'button', addAtt);
+        */
 
 
         // tabHeader
