@@ -40,7 +40,7 @@ var propControls = 'App7_controls';
         }
 
         await include([
-            // { id: 'web-controls' },
+            { id: 'lib-moment' },
             { id: 'tempus-dominus', depends: ['jquery', 'lib-moment'], src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js' },
             { id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' },
             { id: 'bootstrap-select', depends: ['jquery', 'bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js' },
@@ -80,7 +80,7 @@ var propControls = 'App7_controls';
                 modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls.mjs', url: true, fresh: true }));
                 modControls.setContext({ dSession, folder, doc });
                     
-                loadControls();
+                await loadControls();
 
             } else {
                 errMgr(new Error('La carpeta ' + fld_id + ' no es una carpeta de documentos'));
@@ -133,7 +133,7 @@ async function loadControls() {
         }
     }
 
-    renderPage();    
+    inApp ? await appRenderPage() : await webRenderPage();
 }
 
 function getControlsRights(pControls) {
@@ -174,10 +174,6 @@ function getControlsRights(pControls) {
 	})
 }
 
-
-async function renderPage() {
-    inApp ? appRenderPage() : webRenderPage();
-}
 
 async function appRenderPage() {
     // page
