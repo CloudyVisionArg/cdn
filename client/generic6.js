@@ -501,8 +501,8 @@ async function appPageInit(e, page) {
 
     if (!pageEl.crm) pageEl.crm = {};
     Object.assign(pageEl.crm, {
-        fillControls, saveDoc, fld_id, folder, folderJson, 
-        doc_id, doc, docJson, $navbar, f7Page, goBack,
+        fillControls, saveDoc, fld_id, folder, 
+        doc_id, doc, $navbar, f7Page, goBack,
     });
 }
 
