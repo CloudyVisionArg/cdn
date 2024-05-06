@@ -38,6 +38,7 @@ var propControls = 'App7_controls';
                 return;
             }
         }
+        await dSession.runSyncEventsOnClient(false);
 
         await include([
             { id: 'lib-moment' },
@@ -57,8 +58,6 @@ var propControls = 'App7_controls';
             { id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' },
             { id: 'lib-filesaver' },
         ]);
-
-        await dSession.runSyncEventsOnClient(false);
         
         urlParams = new URLSearchParams(window.location.search);
         fld_id = urlParams.get('fld_id');
@@ -97,6 +96,7 @@ var propControls = 'App7_controls';
     }
 })();
 
+
 function errMgr(pErr) {
     if (inApp) {
         console.error(pErr);
@@ -109,6 +109,7 @@ function errMgr(pErr) {
         preloader.hide();
     }
 }
+
 
 async function loadControls() {
     var controlsProp;
@@ -137,6 +138,7 @@ async function loadControls() {
 
     inApp ? await appRenderPage() : await webRenderPage();
 }
+
 
 function getControlsRights(pControls) {
 	var cr = objPropCI(doc.tags, 'controlsRights');
@@ -388,6 +390,7 @@ async function appRenderPage() {
 
     resolveRoute({ resolve: resolve, pageEl: $page, pageInit: appPageInit });
 }
+
 
 async function appPageInit(e, page) {
     f7Page = page;
@@ -784,19 +787,6 @@ async function webRenderPage() {
         }
     });
 
-    // Validacion de numero
-    $('[data-numeral]').change(function (e) {
-        var $this = $(this);
-        if ($this.val() != '') {
-            var n = numeral($this.val());
-            if (n.value() || n.value() == 0) {
-                $this.val(n.format($this.attr('data-numeral')));
-            } else {
-                $this.val('');
-                toast('Ingrese un numero valido');
-            }
-        }
-    });
 
     // Tooltips
     $('[data-bs-toggle="tooltip"]').each(function (ix) {
@@ -830,8 +820,10 @@ async function webRenderPage() {
     }, 0);
 
     */
+    await fillControls();
     preldr.hide();
 }
+
 
 function webGetRow(pRow, pCont, pCol) {
     var $row;
@@ -862,4 +854,38 @@ function webGetRow(pRow, pCont, pCol) {
         
         return $row;
     }
+}
+
+async function fillControls() {
+    let form = await folder.form
+    let formDesc = form.description ? form.description : form.name;
+
+    let title;
+    if (doc.isNew) {
+        title = 'Nuevo ' + formDesc;
+
+        if (!inApp) $('#deleteDoc').hide();
+
+    } else {
+        title = doc.fields('subject').value;
+        if (title) {
+            if (!inApp) title += ' - ' + formDesc;
+        } else {
+            title = formDesc + ' #' + doc.id;
+        };
+
+        $('#deleteDoc').show();
+    }
+
+    if (inApp) {
+        $navbar.find('.title').html(title);
+        app7.navbar.size($navbar); // Para que se ajuste bien el titulo
+
+    } else {
+        document.title = title;
+        $('#title').html(title);
+    }
+
+
+
 }
