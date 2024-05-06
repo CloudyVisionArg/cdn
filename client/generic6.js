@@ -397,30 +397,14 @@ async function appPageInit(e, page) {
     pageEl = page.pageEl;
     pageEl.crm = {};
 
-    preldr.hide();
+    // En ios el navbar esta fuera del page
+    $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
 
-    return;
-
+    /*
     f7Page.view.on('swipebackMove', (ev) => {
         explorerRefresh();
     })
 
-    // En ios el navbar esta fuera del page
-    $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
-
-    // Validacion de numero
-    $get('[data-numeral]').change(function (e) {
-        var $this = $(this);
-        if ($this.val() != '') {
-            var n = numeral($this.val());
-            if (n.value() || n.value() == 0) {
-                setInputVal($this, n.format($this.attr('data-numeral')));
-            } else {
-                setInputVal($this, '');
-                toast('Ingrese un numero valido');
-            }
-        }
-    });
 
     // Llena controles Select
     $get('[data-fill]').each(function (ix, el) {
@@ -510,6 +494,10 @@ async function appPageInit(e, page) {
             app7.preloader.hide();
         }
     }, 0);
+    */
+
+    await fillControls();
+    preldr.hide();
 
     if (!pageEl.crm) pageEl.crm = {};
     Object.assign(pageEl.crm, {
