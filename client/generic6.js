@@ -400,10 +400,21 @@ async function appPageInit(e, page) {
     // En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
 
-    /*
     f7Page.view.on('swipebackMove', (ev) => {
-        explorerRefresh();
+        exitForm();
     })
+
+    // Bug de fecha read-only de Safari
+    // https://stackoverflow.com/questions/25928605/in-ios8-safari-readonly-inputs-are-handled-incorrectly
+    if (device.platform == 'iOS') {
+        $get('input[type=\'date\'][readonly], input[type=\'time\'][readonly], input[type=\'datetime-local\'][readonly]')
+            .focus(function (e) {
+                $(this).trigger('blur');
+            }
+        );
+    }
+
+    /*
 
 
     // Llena controles Select
@@ -455,16 +466,6 @@ async function appPageInit(e, page) {
             )
         }
     });
-
-    // Bug de fecha read-only de Safari
-    // https://stackoverflow.com/questions/25928605/in-ios8-safari-readonly-inputs-are-handled-incorrectly
-    if (device.platform == 'iOS') {
-        $get('input[type=\'date\'][readonly], input[type=\'time\'][readonly], input[type=\'datetime-local\'][readonly]')
-            .focus(function (e) {
-                $(this).trigger('blur');
-            }
-        );
-    }
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
@@ -876,4 +877,67 @@ async function fillControls() {
 
 
 
+}
+
+function exitForm() {
+    // APP
+    /*
+    explorerRefresh();
+    f7Page.view.router.back();
+    */
+
+    // WEB
+    /*
+function exitFormv1() {
+    if (window.top == window.self) {
+        window.close();
+    } else {
+        history.back();
+    }
+}
+function exitForm(triggerCallback) {
+    let callbackFn = urlParams.get('callbackfunction');
+    let closeonexit = urlParams.get('closeonexit');
+    if(callbackFn){
+        if (triggerCallback) {
+            if (window.opener) {
+                eval("window.opener." + callbackFn + "(" + doc.id + ")");
+            }
+            if (window.parent) {
+                try {
+                    let existsInParent = eval("window.parent." + callbackFn);
+                    if (existsInParent) {
+                        eval("window.parent." + callbackFn + "(" + doc.id + ")");
+                    } else {
+                        eval("window.parent.exFrameDer.contentWindow." + callbackFn + "(" + doc.id + ")");
+                    }
+                } catch(ee){
+
+                }
+            }
+        }
+    }
+    if(closeonexit == "1"){
+        try{
+            if (window.top == window.self) {
+                window.close();
+            }
+            document.write('Se guardaron los cambios, debe cerrar la pagina manualmente');
+        } catch(ex){
+            document.write('Se guardaron correctamente los cambios, debe cerrar la pagina manualmente');
+        }
+    } else {
+        let contentUrl = "/c/content.asp?fld_id=" + fld_id;
+        if (top.navigate) {
+            window.location = contentUrl;
+        }
+        else {
+            document.location.href = contentUrl;
+        }
+    }
+    //TODO: sBackToFld
+}    */
+}
+
+async function saveDoc(exitOnSuccess) {
 }
