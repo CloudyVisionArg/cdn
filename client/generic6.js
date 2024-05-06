@@ -604,7 +604,8 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                modControls.newDefaultControl(field).appendTo($col);
+                let $ctl = modControls.newDefaultControl(field);
+                $ctl.addClass('mt-3').appendTo($col);
             }
         });
 
@@ -627,7 +628,8 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                modControls.newDefaultControl(field).appendTo($col);
+                let $ctl = modControls.newDefaultControl(field);
+                $ctl.addClass('mt-3').appendTo($col);
             }
         })
 
