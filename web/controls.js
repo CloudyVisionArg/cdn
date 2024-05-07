@@ -942,7 +942,7 @@ async function newAutocomplete(pId, pLabel, options){
     $oSel[0]._text = function (pText) {
         var $self = $(this);
 
-        if (pText == undefined) {
+        if (pText === undefined) {
             let res = [];
             if($self.select2('data').length > 0){
                 let fName = pOptions.textSource.toUpperCase();
@@ -954,7 +954,7 @@ async function newAutocomplete(pId, pLabel, options){
             // si es mas de uno devuelve un array sino el texto
             return (res.length > 1) ? res : res[0] ;
         } else {
-
+            pText = pText ? pText : "";
             let arrText = pText.toString().split(";")
             for(let idx=0;idx<arrText.length;idx++){
                 $oSel[0]._selectInitialValue(arrText[idx], null,idx );
