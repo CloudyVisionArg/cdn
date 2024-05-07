@@ -980,7 +980,7 @@ async function newAutocomplete(pId, pLabel, options){
 
     $oSel[0]._selectInitialValue = function (text, value,selectedIndex){
 
-        if(text){            
+        if(text != null){            
             if($oSel.find("option").filter(function () { return $(this).html() == text }).length == 0){
                 let option = new Option(text, text, false, false);
                 $oSel.append(option);
