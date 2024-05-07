@@ -945,8 +945,9 @@ async function newAutocomplete(pId, pLabel, options){
         if (pText == undefined) {
             let res = [];
             if($self.select2('data').length > 0){
+                let fName = pOptions.textSource.toUpperCase();
                 for (let index = 0; index < $self.select2('data').length; index++) {
-                    res.push($self.select2('data')[index].text);
+                    res.push($self.select2('data')[index][fName]);
                 }
             }
             // si es mas de uno devuelve un array sino el texto
