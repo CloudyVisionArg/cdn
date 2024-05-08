@@ -899,16 +899,16 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (textField && el._text) {
-            el._text(text);
+        if (textField && el.drs && el.drs.text) {
+            el.drs.text(text);
             textField = undefined;
         }
-        if (valueField && el._value) {
-            el._value(value);
+        if (valueField && el.drs && el.drs.value) {
+            el.drs.value(value);
             valueField = undefined;
         }
-        if (xmlField && el._xml) {
-            el._xml(xml);
+        if (xmlField && el.drs && el.drs.xml) {
+            el.drs.xml(xml);
             xmlField = undefined;
         }
         
