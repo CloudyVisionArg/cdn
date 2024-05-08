@@ -271,9 +271,22 @@ async function appRenderPage() {
 
         let $ul = $('<ul/>').appendTo($div);
 
+
+
+        let ctl = modControl.newFieldset('fs');
+        ctl.control.appendTo($ul);
+        let $div2 = $('<div/>', {
+            class: 'list no-hairlines-md',
+            style: 'margin-top: 0;',
+        }).appendTo($tabMain);
+        let $ul2 = $('<ul/>').appendTo($div2);
+
+
+
+
         for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
-                modControls.newDefaultControl(field).control.appendTo($ul);
+                modControls.newDefaultControl(field).control.appendTo($ul2);
             }
         }
 
