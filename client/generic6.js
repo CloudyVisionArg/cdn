@@ -588,8 +588,8 @@ async function webRenderPage() {
         $col = $('<div/>', {
             class: 'col-12 form-group',
         }).appendTo($row);
-        let $fs = modControls.newFieldset('fs').content;
-        $fs.appendTo($col)
+        let ctl = modControls.newFieldset('fs');
+        ctl.control.appendTo($col)
 
 
 
@@ -597,7 +597,7 @@ async function webRenderPage() {
         doc.fields().forEach(field => {
             if (!field.headerTable && field.name != 'DOC_ID') {
                 //$row = webGetRow($row, $tab);
-                $row = webGetRow($row, $fs);
+                $row = webGetRow($row, ctl.content);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
