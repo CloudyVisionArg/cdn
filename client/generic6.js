@@ -273,7 +273,7 @@ async function appRenderPage() {
 
         for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
-                modControls.newDefaultControl(field).appendTo($ul);
+                modControls.newDefaultControl(field).control.appendTo($ul);
             }
         }
 
@@ -301,7 +301,7 @@ async function appRenderPage() {
 
         for (let [key, field] of doc.fields()) {
             if (!field.custom && field.headerTable) {
-                modControls.newDefaultControl(field).appendTo($ul);
+                modControls.newDefaultControl(field).control.appendTo($ul);
             }
         }
 
@@ -598,7 +598,7 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                let $ctl = modControls.newDefaultControl(field);
+                let $ctl = modControls.newDefaultControl(field).control;
                 $ctl.addClass('mt-3').appendTo($col);
             }
         });
@@ -622,7 +622,7 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                let $ctl = modControls.newDefaultControl(field);
+                let $ctl = modControls.newDefaultControl(field).control;
                 $ctl.addClass('mt-3').appendTo($col);
             }
         })
