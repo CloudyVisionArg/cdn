@@ -1065,10 +1065,9 @@ async function newAutocomplete(pId, pLabel, options){
                 });                
 
                 $oSel.select2("data", selData);
-
                 $oSel.trigger("change");
-
                 $oSel[0]._setXmlVal($oSel[0]);
+                $oSel[0].dispatchEvent(new CustomEvent('acChange',{ detail: $oSel.select2("data")}));
             },
             function (err) {
                 console.error(err);
