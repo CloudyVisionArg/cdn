@@ -588,7 +588,7 @@ async function webRenderPage() {
         $col = $('<div/>', {
             class: 'col-12 form-group',
         }).appendTo($row);
-        let $fs = modControls.newFieldset('fs').control;
+        let $fs = modControls.newFieldset('fs').content;
         $fs.appendTo($col)
 
 
