@@ -273,7 +273,7 @@ async function appRenderPage() {
 
 
 
-        let ctl = modControl.newFieldset('fs');
+        let ctl = modControls.newFieldset('fs');
         ctl.control.appendTo($ul);
         let $div2 = $('<div/>', {
             class: 'list no-hairlines-md',
