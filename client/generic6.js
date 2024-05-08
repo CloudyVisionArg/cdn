@@ -875,6 +875,106 @@ async function fillControls() {
         $('#title').html(title);
     }
 
+    $('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
+        let tf, textField, text;
+        let vf, valueField, value;
+        let xf, xmlField, xml;
+        let $el = $(el);
+
+        tf = $el.attr('data-textfield');
+        if (tf && tf != '[NULL]') {
+            textField = doc.fields(tf);
+            text = textField ? textField.value : null;
+        };
+
+        vf = $el.attr('data-valuefield');
+        if (vf && vf != '[NULL]') {
+            valueField = doc.fields(vf);
+            value = valueField ? valueField.value : null;
+        };
+
+        xf = $el.attr('data-xmlfield');
+        if (xf && xf != '[NULL]') {
+            xmlField = doc.fields(xf);
+            xml = xmlField ? xmlField.value : null;
+        };
+
+        if (textField && el._text) {
+            el._text(text);
+            textField = undefined;
+        }
+        if (valueField && el._value) {
+            el._value(value);
+            valueField = undefined;
+        }
+        if (xmlField && el._xml) {
+            el._xml(xml);
+            xmlField = undefined;
+        }
+        
+        if (textField || valueField || xmlField) {
+            let f, v;
+            if (textField) {
+                f = textField; v = text;
+            } else if (valueField) {
+                f = valueField; v = value;
+            } else if (xmlField) {
+                f = xmlField; v = xml;
+            }
+
+            if (el.tagName == 'INPUT') {
+                let type = $el.attr('type').toLowerCase();
+
+                if (type == 'text' || type == 'email' || type == 'password') {
+                    let format = $el.attr('data-numeral');
+                    if (f.type == 3 || format) {
+                        // Input numeric
+                        let n = numeral(v);
+                        if (n.value() != null) {
+                            $el.val(n.format(format));
+                        } else {
+                            $el.val('');
+                        }
+
+                    } else if (f.type == 2) {
+                        let dt = dSession.utils.cDate(v);
+                        if (dt) {
+                            $el.val(new moment(dt).format('L LT'));
+                        } else {
+                            $el.val('');
+                        }
+
+                    } else {
+                        $el.val(v);
+                    }
+
+                } else if (type == 'checkbox') {
+                    el.checked = (v && v.toString() == '1');
+
+                } else if (type == 'hidden') {
+                    $el.val(v);
+                }
+
+            } else if (el.tagName == 'TEXTAREA') {
+                if (el.ckeditor) {
+                    el.ckeditor.setData(v);
+                } else {
+                    $el.val(v);
+                }
+
+            } else if (el.tagName == 'SELECT') {
+                if ($el.attr('multiple')) {
+                    let t = text ? text.split(';') : null;
+                    let v = value ? value.split(';') : null;
+                    setSelectVal($el, t, v);
+                } else {
+                    setSelectVal($el, text, value);
+                }
+
+            }
+        }
+    });
+
 
 
 }
