@@ -4496,15 +4496,16 @@ export class Utilities {
     Convierte a Date
     @returns {Date}
     */
-    cDate(date) {
+    cDate(date, format) {
         var dt;
         if (date == null || date == undefined) return null;
 
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
         } else {
-            dt = _moment(date, 'L LTS').toDate(); // moment con locale
-            if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin locale
+            let f = format ? format : 'L LTS'; // moment con locale
+            dt = _moment(date, f).toDate();
+            if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin format
             if (isNaN(dt.getTime())) dt = new Date(date); // nativo
         }
         if(!isNaN(dt.getTime())) {
