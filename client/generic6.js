@@ -584,7 +584,7 @@ async function webRenderPage() {
 
 
 
-        $row = webGetRow($row, $fs);
+        $row = webGetRow($row, $tab);
         $col = $('<div/>', {
             class: 'col-12 form-group',
         }).appendTo($row);
