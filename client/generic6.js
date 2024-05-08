@@ -278,7 +278,7 @@ async function appRenderPage() {
         let $div2 = $('<div/>', {
             class: 'list no-hairlines-md',
             style: 'margin-top: 0;',
-        }).appendTo($tabMain);
+        }).appendTo(ctl.content);
         let $ul2 = $('<ul/>').appendTo($div2);
 
 
