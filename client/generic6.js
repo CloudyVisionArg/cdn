@@ -581,8 +581,17 @@ async function webRenderPage() {
         $tab = $cont.find('#tabMain');
         $row = undefined;
 
-        let $fs = modControls.newFieldset('fs', {}).control;
-        $fs.appendTo($tab)
+
+
+
+        $row = webGetRow($row, $fs);
+        $col = $('<div/>', {
+            class: 'col-12 col-md-6 form-group',
+        }).appendTo($row);
+        let $fs = modControls.newFieldset('fs').control;
+        $fs.appendTo($$col)
+
+
 
 
         doc.fields().forEach(field => {
