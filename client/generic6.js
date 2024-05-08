@@ -589,7 +589,7 @@ async function webRenderPage() {
             class: 'col-12 form-group',
         }).appendTo($row);
         let $fs = modControls.newFieldset('fs').control;
-        $fs.appendTo($$col)
+        $fs.appendTo($col)
 
 
 
