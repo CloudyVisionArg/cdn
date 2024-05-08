@@ -404,16 +404,6 @@ async function appPageInit(e, page) {
         exitForm();
     })
 
-    // Bug de fecha read-only de Safari
-    // https://stackoverflow.com/questions/25928605/in-ios8-safari-readonly-inputs-are-handled-incorrectly
-    if (device.platform == 'iOS') {
-        $get('input[type=\'date\'][readonly], input[type=\'time\'][readonly], input[type=\'datetime-local\'][readonly]')
-            .focus(function (e) {
-                $(this).trigger('blur');
-            }
-        );
-    }
-
     /*
 
 
