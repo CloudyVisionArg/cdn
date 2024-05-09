@@ -271,22 +271,9 @@ async function appRenderPage() {
 
         let $ul = $('<ul/>').appendTo($div);
 
-
-
-        let ctl = modControls.newFieldset('fs');
-        ctl.control.appendTo($ul);
-        let $div2 = $('<div/>', {
-            class: 'list no-hairlines-md',
-            style: 'margin-top: 0;',
-        }).appendTo(ctl.content);
-        let $ul2 = $('<ul/>').appendTo($div2);
-
-
-
-
         for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
-                modControls.newDefaultControl(field).control.appendTo($ul2);
+                modControls.newDefaultControl(field).control.appendTo($ul);
             }
         }
 
@@ -594,23 +581,9 @@ async function webRenderPage() {
         $tab = $cont.find('#tabMain');
         $row = undefined;
 
-
-
-
-        $row = webGetRow($row, $tab);
-        $col = $('<div/>', {
-            class: 'col-12 form-group',
-        }).appendTo($row);
-        let ctl = modControls.newFieldset('fs', {  });
-        ctl.control.appendTo($col)
-
-
-
-
         doc.fields().forEach(field => {
             if (!field.headerTable && field.name != 'DOC_ID') {
-                //$row = webGetRow($row, $tab);
-                $row = webGetRow($row, ctl.content);
+                $row = webGetRow($row, $tab);
                 $col = $('<div/>', {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
@@ -862,6 +835,29 @@ function webGetRow(pRow, pCont, pCol) {
     }
 }
 
+function renderControls() {
+    /*
+    fieldset
+
+    web
+        $row = webGetRow($row, $tab);
+        $col = $('<div/>', {
+            class: 'col-12 form-group',
+        }).appendTo($row);
+        let ctl = modControls.newFieldset('fs', {  });
+        ctl.control.appendTo($col)
+    
+    app
+        let ctl = modControls.newFieldset('fs');
+        ctl.control.appendTo($ul);
+        let $div2 = $('<div/>', {
+            class: 'list no-hairlines-md',
+            style: 'margin-top: 0;',
+        }).appendTo(ctl.content);
+        let $ul2 = $('<ul/>').appendTo($div2);
+
+    */
+}
 async function fillControls() {
     let form = await folder.form
     let formDesc = form.description ? form.description : form.name;
