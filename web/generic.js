@@ -545,7 +545,7 @@ function exitForm() {
     // v1
     if (window.top == window.self) {
         window.close();
-            debugger;
+        if (!window.closed) toast('Debe cerrar esta ventana manualmente');
     } else {
         history.back();
     }
