@@ -279,8 +279,8 @@ async function appRenderPage() {
 
         let $ctl = modControls.newAttachments('attachments', {
             label: 'Adjuntos'
-        }).control.appendTo($ul);
-        debugger;
+        }).control;
+        $ctl.appendTo($ul);
         /* todo: pasar al control
         $ctl.find('.list').on('click', 'a', downloadAtt);
         $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
@@ -601,7 +601,16 @@ async function webRenderPage() {
             class: 'col-12 form-group',
         }).appendTo($row);
 
-        modControls.newAttachments('attachments', 'Adjuntos').addClass('mt-3').appendTo($col);
+        /*
+        let $ctl = modControls.newAttachments('attachments', {
+            label: 'Adjuntos'
+        }).control;
+        $ctl.addClass('mt-3').appendTo($col);
+*/
+        let $ctl = modControls.newAttachments('attachments', {
+            label: 'Adjuntos'
+        }).control.addClass('mt-3').appendTo($col);
+        debugger;
 
         // tabHeader
 
