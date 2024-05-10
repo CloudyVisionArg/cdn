@@ -544,7 +544,11 @@ function exitForm() {
 
     // v1
     if (window.top == window.self) {
-        window.close();
+        try {
+            window.close();
+        } catch(err) {
+            debugger;
+        }
     } else {
         history.back();
     }
