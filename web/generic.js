@@ -550,8 +550,10 @@ function exitForm() {
     }
 
     /*
-    v2
+    todo: ver como debe quedar el closeOnExit
 
+    v2
+    
     if(closeonexit == "1"){
         try{
             if (window.top == window.self) {
