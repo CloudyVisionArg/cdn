@@ -545,8 +545,8 @@ function exitForm() {
     // v1
     if (window.top == window.self) {
         try {
+            let ret = window.close();
             debugger;
-            window.close();
         } catch(err) {
             debugger;
         }
