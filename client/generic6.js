@@ -277,7 +277,10 @@ async function appRenderPage() {
             }
         }
 
-        let $ctl = modControls.newAttachments('attachments', 'Adjuntos').appendTo($ul);
+        let $ctl = modControls.newAttachments('attachments', {
+            label: 'Adjuntos'
+        }).control.appendTo($ul);
+        debugger;
         /* todo: pasar al control
         $ctl.find('.list').on('click', 'a', downloadAtt);
         $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
