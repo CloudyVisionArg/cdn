@@ -20,7 +20,7 @@ var doorsapi2, dSession;
 var urlParams, fld_id, folder, doc_id, doc;
 var folderJson, docJson;
 var controlsFolder, controls, controlsRights;
-var saving, saved, cache, lsScripts;
+var saving, saved;
 
 // Includes para mostrar el preloader
 var arrScriptsPre = [];
@@ -553,7 +553,7 @@ function exitForm() {
     todo: ver como debe quedar el closeOnExit
 
     v2
-    
+
     if(closeonexit == "1"){
         try{
             if (window.top == window.self) {
