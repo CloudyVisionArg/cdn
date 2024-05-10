@@ -277,10 +277,11 @@ async function appRenderPage() {
             }
         }
 
-        let $ctl = modControls.newAttachments('attachments', {
-            label: 'Adjuntos'
-        }).control;
-        $ctl.appendTo($ul);
+        let ctl = modControls.newAttachments('attachments', {
+            label: 'Adjuntos',
+        });
+        ctl.control.appendTo($ul);
+        
         /* todo: pasar al control
         $ctl.find('.list').on('click', 'a', downloadAtt);
         $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
@@ -601,16 +602,10 @@ async function webRenderPage() {
             class: 'col-12 form-group',
         }).appendTo($row);
 
-        /*
-        let $ctl = modControls.newAttachments('attachments', {
-            label: 'Adjuntos'
-        }).control;
-        $ctl.addClass('mt-3').appendTo($col);
-*/
-        let $ctl = modControls.newAttachments('attachments', {
-            label: 'Adjuntos'
-        }).control.addClass('mt-3').appendTo($col);
-        debugger;
+        let ctl = modControls.newAttachments('attachments', {
+            label: 'Adjuntos',
+        });
+        ctl.control.addClass('mt-3').appendTo($col);
 
         // tabHeader
 
