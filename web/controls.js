@@ -1386,6 +1386,8 @@ function enableAutocomplete(pSelect) {
 //Limpia los valores de un autocomplete
 function clearAutocomplete(pSelect){
     pSelect.val(null).trigger('change');
+    pSelect[0]._setXmlVal(pSelect[0]);
+    pSelect[0].dispatchEvent(new CustomEvent('acChange',{ detail: pSelect.select2("data")}));
 }
 
 //Como atacharse a eventos , Ej:
