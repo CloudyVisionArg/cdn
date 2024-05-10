@@ -1340,7 +1340,8 @@ function JSONtoXML(objetosJSON) {
  */
 function setAutocompleteVal(pSelect, pText, pValue) {
     if (!pValue && !pText) {
-        console.log("Debe ingresar un value y/o un text");
+        //console.log("Debe ingresar un value y/o un text");
+        clearAutocomplete(pSelect);
         return false;
     }
 
@@ -1357,11 +1358,13 @@ function setAutocompleteVal(pSelect, pText, pValue) {
         pSelect.val(allOptValues).trigger("change");
 
         pSelect.trigger({
-        type: "select2:select",
-        params: {
-            data: { id: optValue },
-        },
+            type: "select2:select",
+            params: {
+                data: { id: optValue },
+            },
         });
+        pSelect[0]._setXmlVal(pSelect[0]);
+        pSelect[0].dispatchEvent(new CustomEvent('acChange',{ detail: pSelect.select2("data")}));
     }
 }
 
