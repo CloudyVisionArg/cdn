@@ -988,6 +988,10 @@ async function fillControls() {
         }
     });
 
+    $('[data-attachments]').each(function (ix, el) {
+        this.drs.value(doc);
+    });
+
 
 
 }
