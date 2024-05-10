@@ -1339,6 +1339,7 @@ function JSONtoXML(objetosJSON) {
  * @param {*} pValue - The value associated with the text. 
  */
 function setAutocompleteVal(pSelect, pText, pValue) {
+    //TODO: Buscar todos los campos de sFieldsArr para que cuando dispare el acChange en select2:select tenga los valores necesarios en el $oSel.select2("data");
     if (!pValue && !pText) {
         //console.log("Debe ingresar un value y/o un text");
         clearAutocomplete(pSelect);
@@ -1353,7 +1354,7 @@ function setAutocompleteVal(pSelect, pText, pValue) {
         pSelect.append(option);
 
         const allOptValues = pSelect.find("option").map(function () {
-        return $(this).val();
+            return $(this).val();
         }).get();
         pSelect.val(allOptValues).trigger("change");
 
@@ -1363,8 +1364,6 @@ function setAutocompleteVal(pSelect, pText, pValue) {
                 data: { id: optValue },
             },
         });
-        pSelect[0]._setXmlVal(pSelect[0]);
-        pSelect[0].dispatchEvent(new CustomEvent('acChange',{ detail: pSelect.select2("data")}));
     }
 }
 
@@ -1386,6 +1385,9 @@ function enableAutocomplete(pSelect) {
 //Limpia los valores de un autocomplete
 function clearAutocomplete(pSelect){
     pSelect.val(null).trigger('change');
+    pSelect.trigger({
+        type: 'select2:clear'
+    });
 }
 
 //Como atacharse a eventos , Ej:
