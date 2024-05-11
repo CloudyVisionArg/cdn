@@ -1777,7 +1777,7 @@ function getAttachment(pAttach, pReadonly) {
 
     $('<div/>', {
         class: 'item-title',
-        style: 'white-space: normal !important; font-weight: var(--f7-list-item-subtitle-font-weight);',
+        style: 'white-space: normal; font-weight: var(--f7-list-item-subtitle-font-weight);',
     }).append(htmlEncode(att.Name)).appendTo($itemTitleRow);
 
     $('<div/>', {
