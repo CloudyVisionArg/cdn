@@ -64,6 +64,9 @@ function conversationStatusBar(options) {
 			if (typeof(cordova) != 'object') {
 				$(options.selector + ' select.conversation-providers-select').selectpicker('refresh');
 			}
+			else{
+
+			}
 		}
 		//me.selectedProvider
 		//#b5b5b5
@@ -172,6 +175,17 @@ function conversationStatusBar(options) {
 			$(options.selector + ' select.conversation-providers-select').on('changed.bs.select', onChangeAccount);
 		}
 		else{
+			app7.smartSelect.create({
+				el: $(options.selector + ' select.conversation-providers-select').parent()[0],
+				openIn: 'sheet',
+				scrollToSelectedItem: true,
+				closeOnSelect: true,
+				sheetCloseLinkText: 'Cerrar',
+				searchbarPlaceholder: 'Buscar',
+				popupCloseLinkText: 'Cerrar',
+				appendSearchbarNotFound: 'Sin resultados',
+				searchbarDisableText: 'Cancelar',
+			});
 			$(options.selector + ' select.conversation-providers-select').on('change', onChangeAccount);
 		}
 
@@ -204,8 +218,13 @@ function conversationStatusBar(options) {
 		return contentRender;
 	};
 	var getAccountsHtml = function (providers) {
-		var html = "<select class='conversation-providers-select'>";
+		var html = "";
+		if (typeof(cordova) == 'object') {
+			html += `<li><a href="#" class="item-link smart-select">`;
+		}
+		html += "<select class='conversation-providers-select'>";
 		let provIndx = 0;
+		let selectedAccountText = "";
 		providers.forEach(function (provider) {
 			let accounts = provider.accounts.filter(options.accountsFilter);
 			if(accounts.length == 0){
@@ -225,6 +244,7 @@ function conversationStatusBar(options) {
 				if(account.selected){
 					me.selectedProvider = provider;
 					me.selectedAccount = account;
+					selectedAccountText = account.name;
 				}
 				let optionHtml = `<option value="${account.id}" ${selected} data-content="${contentRender}" data-provider-indx="${provIndx}">${account.name}</option>`;
 				html += optionHtml;
@@ -233,6 +253,18 @@ function conversationStatusBar(options) {
 			provIndx++;
 		});
 		html += "</select>";
+		if (typeof(cordova) == 'object') {
+			html += `<div class="item-content">
+						<div class="item-inner">
+							<div class="item-title">
+							${selectedAccountText}
+							</div>
+							<div class="item-after">
+							</div>
+						</div>
+					</div>
+				</a></li>`;
+		}
 		return html;
 	};
 
