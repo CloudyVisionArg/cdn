@@ -412,8 +412,14 @@ span.msg-operator {
 .conv-account.stop {
     background-color: #F44336;
 }
+i.fa.stop {
+    color: #F44336;
+}
 .conv-account.go {
     background-color: #37e13e;
+}
+i.fa.go {
+    color:#37e13e;
 }
 .wapp-outbound {
     min-width: 110px;
