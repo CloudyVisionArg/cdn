@@ -246,7 +246,7 @@ function conversationStatusBar(options) {
 					me.selectedAccount = account;
 					selectedAccountText = account.name;
 				}
-				let optionHtml = `<option value="${account.id}" ${selected} data-content="${contentRender}" data-provider-indx="${provIndx}">${account.name}</option>`;
+				let optionHtml = `<option value="${account.id}" ${selected} data-content="${contentRender}" data-provider-indx="${provIndx}" data-option-icon="fa ${account.icon}">${account.name}</option>`;
 				html += optionHtml;
 			});
 			//html += "</optgroup>";
@@ -257,9 +257,9 @@ function conversationStatusBar(options) {
 			html += `<div class="item-content">
 						<div class="item-inner">
 							<div class="item-title">
-							${selectedAccountText}
 							</div>
 							<div class="item-after">
+								${selectedAccountText}
 							</div>
 						</div>
 					</div>
