@@ -71,13 +71,16 @@ var propControls = 'App7_controls';
             folder = await dSession.folder(fld_id);
             folder.form; // Para q vaya cargando el form
 
-            $(document).on('afterRender', async (ev) => {
-                debugger;
-                await folder.search();
-                console.log('ev mgr');
+            $(document).on('afterRender', ev => {
+                return new Promise(async (resolve, reject) => {
+                    await folder.search();
+                    console.log('ev mgr');
+                    resolve()
+                });
             });
 
             await $.when($(document).trigger('afterRender'));
+            //parar
             console.log('after');
 
             if (folder.type == 1) {
