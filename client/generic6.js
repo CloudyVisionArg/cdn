@@ -72,6 +72,7 @@ var propControls = 'App7_controls';
             folder.form; // Para q vaya cargando el form
 
             document.addEventListener('afterRender', async (ev) => {
+                debugger;
                 await folder.search();
                 console.log('ev mgr');
             });
