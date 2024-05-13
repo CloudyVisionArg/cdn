@@ -1297,6 +1297,7 @@ async function fillAttachments(pEl) {
         noAttachs();
     }
     await $.when(pEl.trigger('afterFillAttachment'));
+    
     function noAttachs() {
         // Agrega la leyenda Sin adjuntos
         var $li = $('<li/>').appendTo($ul);

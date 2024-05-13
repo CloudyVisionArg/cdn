@@ -71,6 +71,14 @@ var propControls = 'App7_controls';
             folder = await dSession.folder(fld_id);
             folder.form; // Para q vaya cargando el form
 
+            document.addEventListener(afterRender, async (ev) => {
+                await folder.search();
+                console.log('ev mgr');
+            });
+
+            document.dispatchEvent(new CustomEvent('afterRender'));
+            console.log('after');
+
             if (folder.type == 1) {
                 if (doc_id) {
                     doc = await folder.documents(doc_id);
@@ -281,12 +289,6 @@ async function appRenderPage() {
             label: 'Adjuntos',
         });
         ctl.control.appendTo($ul);
-        
-        /* todo: pasar al control
-        $ctl.find('.list').on('click', 'a', downloadAtt);
-        $ctl.on('swipeout:deleted', 'li.swipeout', deleteAtt);
-        $ctl.find('div.row').on('click', 'button', addAtt);
-        */
 
 
         // tabHeader
