@@ -76,7 +76,7 @@ var propControls = 'App7_controls';
                 console.log('ev mgr');
             });
 
-            document.dispatchEvent(new CustomEvent('afterRender'));
+            await $.when(document.dispatchEvent(new CustomEvent('afterRender')));
             console.log('after');
 
             if (folder.type == 1) {
