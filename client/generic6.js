@@ -71,7 +71,7 @@ var propControls = 'App7_controls';
             folder = await dSession.folder(fld_id);
             folder.form; // Para q vaya cargando el form
 
-            document.addEventListener(afterRender, async (ev) => {
+            document.addEventListener('afterRender', async (ev) => {
                 await folder.search();
                 console.log('ev mgr');
             });
