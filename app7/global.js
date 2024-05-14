@@ -136,47 +136,57 @@ window.deviceServices = {
         return (res[permission] == 'granted' || res[permission] == 'limited');
     },
 
-    pickImages: async function (opts) {
+    pickFromPhotoLib: async function (opts) {
         let me = this;
         var files = [];
 
         if (_isCapacitor()) {
             let options = {};
             if (opts) { options = opts; }
-            const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
-            if(hasPermission){
+            const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Photos);
+            if (hasPermission) {
                 const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
                 debugger;
-                for(let idx=0; idx < selectedPhotos.photos.length; idx++){
+                for (let idx = 0; idx < selectedPhotos.photos.length; idx++) {
                     const file = selectedPhotos.photos[idx];
                     file.filename = file.path.replace(/^.*[\\\/]/, '');
-                    files.push({ uri : file.path, name : file.filename, size : file.size });
+                    files.push({
+                        uri: file.path,
+                        name: file.filename,
+                        size: file.size
+                    });
                     //const fileInCache = await writeFileInCachePath(item.path);
                     //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
                 }
                 return files;
+
+            } else {
+                throw new Error('Se necesita permiso de acceso a im&aacutegenes');
             }
-            throw new Error('Se necesita permiso de acceso a im&aacutegenes');
         }
     
         else {
-            return new Promise((resolve, reject)=>{
-            navigator.camera.getPicture(
-                function (fileURL) {
-                    getFile(fileURL).then(
-                        (file)=> {
-                            files.push({ uri : file.localURL, name : file.name, size : file.size });
-                            resolve(files)
-                        },
-                        (err)=>{
-                            reject(err);
-                        }
-                    );
-                },
-                function (err){
-                    reject(err);
-                },
-                    cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+            return new Promise((resolve, reject) => {
+                navigator.camera.getPicture(
+                    function (fileURL) {
+                        getFile(fileURL).then(
+                            (file) => {
+                                files.push({
+                                    uri: file.localURL,
+                                    name: file.name,
+                                    size: file.size
+                                });
+                                resolve(files)
+                            },
+                            (err) => {
+                                reject(err);
+                            }
+                        );
+                    },
+                    function (err){
+                        reject(err);
+                    },
+                    me.cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
                 );
             });
         }
