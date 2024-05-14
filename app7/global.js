@@ -51,6 +51,88 @@ getFile(pFileURL)
 	});
 })();
 
+
+window.deviceServices = {
+    takePhoto: async function () {
+        let me = this;
+        var files = [];
+
+        if (_isCapacitor()) {
+            const opts = me.cameraOptions(CameraSource.Camera);
+            opts.resultType = CameraResultType.Uri;
+            const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+            if (hasPermission) {
+                var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
+                file.filename = file.path.replace(/^.*[\\\/]/, '');
+                files.push({
+                    uri: file.path,
+                    name: file.filename,
+                    size: file.size,
+                });
+                return files;
+
+            } else {
+                throw new Error('Se necesita permiso de acceso a la c&aacutemara');
+            }
+
+        } else {
+            return new Promise((resolve, reject) => {
+                navigator.camera.getPicture(
+                    function (fileURL) {
+                        getFile(fileURL).then(
+                            (file) => {
+                                files.push({
+                                    uri: file.localURL,
+                                    name: file.name,
+                                    size : file.size,
+                                });
+                                resolve(files)
+                            },
+                            (err)=>{
+                                reject(err);
+                            }
+                        )
+                    },
+                    function (err){
+                        reject(err);
+                    },
+                    me.cameraOptions(Camera.PictureSourceType.CAMERA)
+                )
+            });
+        }
+    },
+
+    cameraOptions: function (source) {
+        if (_isCapacitor()) {
+            return {
+                quality: 50,
+                saveToGallery: true,    
+                source: source,
+                //encodingType: Camera.EncodingType.JPEG,
+                //mediaType: Camera.MediaType.ALLMEDIA,
+                //allowEdit: (device.platform == 'iOS'),
+                correctOrientation: true, // Corrects Android orientation quirks
+                resultType: CameraResultType.DataUrl,
+                //targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+                //targetHeight: 
+                //saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+                //cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+            }
+
+        } else {
+            return {
+                quality: 50,
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourceType: source,
+                encodingType: Camera.EncodingType.JPEG,
+                mediaType: Camera.MediaType.ALLMEDIA,
+                correctOrientation: true, // Corrects Android orientation quirks
+            };
+        };
+    }
+};
+
+
 // Devuelve el route en funcion del UrlRaw del Form
 function formUrlRoute(url) {
     if (url.indexOf('_id=generic6') >= 0) {
