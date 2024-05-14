@@ -3841,6 +3841,7 @@ export class Node {
     exec(options) {
         var me = this;
         var jsonStringify = me.session.utils.jsonStringify;
+        var jsonParse = me.session.utils.jsonParse;
 
         return new Promise(async (resolve, reject) => {
             let data = {
@@ -3873,7 +3874,7 @@ export class Node {
                 if (res.ok) {
                     let buf = new SimpleBuffer(await res.arrayBuffer());
                     try {
-                        let json = JSON.parse(buf.toString());
+                        let json = jsonParse(buf.toString());
                         if (json.__type__) {
                             resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
                         } else {
