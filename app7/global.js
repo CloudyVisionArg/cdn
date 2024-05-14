@@ -142,7 +142,7 @@ window.deviceServices = {
 
         if (_isCapacitor()) {
             let options = {};
-            if (opts) { options = opts; }
+            if (opts) options = opts; // todo: default opts?
             const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Photos);
             if (hasPermission) {
                 const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
@@ -190,7 +190,52 @@ window.deviceServices = {
                 );
             });
         }
+    },
+
+    pickFiles: async function (opts) {
+        let me = this;
+        var files = [];
+
+        if (_isCapacitor()) {
+            let options = { multiple: true };
+            if (opts) options = opts; // todo: Default opts?
+            const res = await Capacitor.Plugins.FilePicker.pickFiles(options);
+            for(let idx = 0; idx < res.files.length; idx++) {
+                const file = res.files[idx];
+                files.push({
+                    uri: file.path,
+                    name: file.name,
+                    size: file.size
+                });
+            }
+            return files;
+        }
+        else {
+            return new Promise((resolve, reject) => {
+                chooser.getFileMetadata().then(
+                    function (res) {
+                        getFile(res.uri).then(
+                            (file) => {
+                                files.push({
+                                    uri: file.localURL,
+                                    name: file.name,
+                                    size: file.size
+                                });
+                                resolve(files)
+                            },
+                            (err)=>{
+                                reject(err);
+                            }
+                        )
+                    },
+                    function (err){
+                        reject(err);
+                    }
+                )
+            });
+        }
     }
+    
 };
 
 
