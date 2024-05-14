@@ -72,7 +72,7 @@ window.deviceServices = {
                 return files;
 
             } else {
-                throw new Error('Se necesita permiso de acceso a la c&aacutemara');
+                throw new Error('Se necesita permiso de acceso a la camara');
             }
 
         } else {
@@ -161,7 +161,7 @@ window.deviceServices = {
                 return files;
 
             } else {
-                throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+                throw new Error('Se necesita permiso de acceso a imagenes');
             }
         }
     
