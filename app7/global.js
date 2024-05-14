@@ -60,7 +60,7 @@ window.deviceServices = {
         if (_isCapacitor()) {
             const opts = me.cameraOptions(CameraSource.Camera);
             opts.resultType = CameraResultType.Uri;
-            const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
+            const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Camera);
             if (hasPermission) {
                 var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
                 file.filename = file.path.replace(/^.*[\\\/]/, '');
@@ -129,6 +129,57 @@ window.deviceServices = {
                 correctOrientation: true, // Corrects Android orientation quirks
             };
         };
+    },
+
+    requestCameraPermissions: async function (permission) {
+        let res = await Capacitor.Plugins.Camera.requestPermissions({ permissions: permission });
+        return (res[permission] == 'granted' || res[permission] == 'limited');
+    },
+
+    pickImages: async function (opts) {
+        let me = this;
+        var files = [];
+
+        if (_isCapacitor()) {
+            let options = {};
+            if (opts) { options = opts; }
+            const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
+            if(hasPermission){
+                const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
+                debugger;
+                for(let idx=0; idx < selectedPhotos.photos.length; idx++){
+                    const file = selectedPhotos.photos[idx];
+                    file.filename = file.path.replace(/^.*[\\\/]/, '');
+                    files.push({ uri : file.path, name : file.filename, size : file.size });
+                    //const fileInCache = await writeFileInCachePath(item.path);
+                    //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
+                }
+                return files;
+            }
+            throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+        }
+    
+        else {
+            return new Promise((resolve, reject)=>{
+            navigator.camera.getPicture(
+                function (fileURL) {
+                    getFile(fileURL).then(
+                        (file)=> {
+                            files.push({ uri : file.localURL, name : file.name, size : file.size });
+                            resolve(files)
+                        },
+                        (err)=>{
+                            reject(err);
+                        }
+                    );
+                },
+                function (err){
+                    reject(err);
+                },
+                    cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
+                );
+            });
+        }
     }
 };
 
