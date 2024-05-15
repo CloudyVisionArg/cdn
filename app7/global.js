@@ -237,9 +237,11 @@ window.deviceServices = {
     },
 
     recordAudio: function (pCallback, pErrorCallback) {
+        /*
         $btn.click(record);
         $btn.click(cancelAudio);
         $btn.click(saveAudio);
+        */
 
         var $sheet = $(`<div class="sheet-modal">
             <div class="swipe-handler"></div>
