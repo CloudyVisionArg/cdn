@@ -97,10 +97,10 @@ args[2]
 @example
 
 await include('emojis');
-// emojis loaded
+// emojis loaded with Promise await
 
 include('emojis', function () {
-    // emojis loaded
+    // emojis loaded with callback
 });
 	
 // Puedo especificar la version (tag del commit)
