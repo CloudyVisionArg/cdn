@@ -624,7 +624,7 @@ function getDefaultControl(pField) {
             $ret.addClass('mt-3');
             $input = $ret.find('textarea');
         }
-        if (!pField.updatable) $input.closest().attr({ 'readonly': 'readonly' });
+        if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
 
     } else if (pField.type == 2) {
         $ret = newDTPicker(pField.name, label, 'datetime-local');
