@@ -268,6 +268,7 @@ window.deviceServices = {
             ? recordCapacitor() 
             : recordCordova()
         }
+    }
     
 };
 
