@@ -624,20 +624,22 @@ function getDefaultControl(pField) {
             $ret.addClass('mt-3');
             $input = $ret.find('textarea');
         }
+        if (!pField.updatable) $input.closest().attr({ 'readonly': 'readonly' });
 
     } else if (pField.type == 2) {
         $ret = newDTPicker(pField.name, label, 'datetime-local');
         $ret.addClass('mt-3');
         $input = $ret.find('input');
+        if (!pField.updatable) $input.closest('.input-group').datetimepicker('disable');
 
     } else if (pField.type == 3) {
         $ret = newInputText(pField.name, label);
         $ret.addClass('mt-3');
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
+        if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
     };
 
-    if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
     $input.attr('data-textfield', pField.name.toLowerCase())
 
     return $ret;
@@ -758,7 +760,8 @@ async function renderControls(pCont, pParent) {
             bsctl = $this.find('div.input-group');
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr({ 'readonly': 'readonly' });
+                $input.closest('.input-group').datetimepicker('disable');
+                //$input.attr({ 'readonly': 'readonly' });
             }
 
 

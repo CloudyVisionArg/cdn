@@ -237,38 +237,41 @@ window.deviceServices = {
     },
 
     recordAudio: function (pCallback, pErrorCallback) {
-        /*
-        $btn.click(record);
-        $btn.click(cancelAudio);
-        $btn.click(saveAudio);
-        */
-
-        var $sheet = $(`<div class="sheet-modal">
+        let $sheet = $(`<div class="sheet-modal">
             <div class="swipe-handler"></div>
             <div class="block">
-                <div class="text-align-center" 
+                <div data-role="timer" class="text-align-center" 
                 style="font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%">0:00</div>
         
-                <div class="row">
-                    <button class="col button button-large button-round button-fill color-pink">Grabar</button>
+                <div data-role="rec-row" class="row">
+                    <button data-role="record" class="col button button-large button-round button-fill color-pink">Grabar</button>
                 </div>
-                <div class="row" style="display: none;">
-                    <button class="col button button-large button-round button-outline">Cancelar</button>
-                    <button class="col button button-large button-round button-fill">Guardar</button>
+                <div data-role="save-row" class="row" style="display: none;">
+                    <button data-role="cancel" class="col button button-large button-round button-outline">Cancelar</button>
+                    <button data-role="save" class="col button button-large button-round button-fill">Guardar</button>
                 </div>
             </div>
         </div>`);
-        
+
+        $sheet.find('button[data-role="record"]').click(recordAudio);
+        $sheet.find('button[data-role="save"]').click(saveAudio);
+        $sheet.find('button[data-role="cancel"]').click(cancelAudio);
+        let $timer = $sheet.find('div[data-role="timer"]');
+        let $recRow = $sheet.find('div[data-role="rec-row"]');
+        let $saveRow = $sheet.find('div[data-role="save-row"]');
+
         // Abre el sheet
-        var sheet = app7.sheet.create({
+        let sheet = app7.sheet.create({
             swipeToClose: true,
             content: $sheet[0],
         }).open();
     
-        function record() {
-            (_isCapacitor())
-            ? recordCapacitor() 
-            : recordCordova()
+        function recordAudio() {
+            if (_isCapacitor()) {
+
+            } else {
+
+            }
         }
     }
     
