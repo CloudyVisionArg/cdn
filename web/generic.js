@@ -760,6 +760,7 @@ async function renderControls(pCont, pParent) {
             bsctl = $this.find('div.input-group');
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                debugger;
                 $input.closest('.input-group').datetimepicker('disable');
                 //$input.attr({ 'readonly': 'readonly' });
             }
