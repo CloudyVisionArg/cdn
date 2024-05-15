@@ -252,7 +252,7 @@ window.deviceServices = {
                 <div class="row">
                     <button class="col button button-large button-round button-fill color-pink">Grabar</button>
                 </div>
-                <div class="row">
+                <div class="row" style="display: none;">
                     <button class="col button button-large button-round button-outline">Cancelar</button>
                     <button class="col button button-large button-round button-fill">Guardar</button>
                 </div>
