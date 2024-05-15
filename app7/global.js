@@ -234,7 +234,40 @@ window.deviceServices = {
                 )
             });
         }
-    }
+    },
+
+    recordAudio: function (pCallback, pErrorCallback) {
+        $btn.click(record);
+        $btn.click(cancelAudio);
+        $btn.click(saveAudio);
+
+        var $sheet = $(`<div class="sheet-modal">
+            <div class="swipe-handler"></div>
+            <div class="block">
+                <div class="text-align-center" 
+                style="font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%">0:00</div>
+        
+                <div class="row">
+                    <button class="col button button-large button-round button-fill color-pink">Grabar</button>
+                </div>
+                <div class="row">
+                    <button class="col button button-large button-round button-outline">Cancelar</button>
+                    <button class="col button button-large button-round button-fill">Guardar</button>
+                </div>
+            </div>
+        </div>`);
+        
+        // Abre el sheet
+        var sheet = app7.sheet.create({
+            swipeToClose: true,
+            content: $sheet[0],
+        }).open();
+    
+        function record() {
+            (_isCapacitor())
+            ? recordCapacitor() 
+            : recordCordova()
+        }
     
 };
 
