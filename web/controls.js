@@ -1121,7 +1121,8 @@ async function newAutocomplete(pId, pLabel, options){
         templateResult: pOptions.templateResult,
         templateSelection: pOptions.templateSelection,
         allowClear: true,
-        multiple : pOptions.multiple || false,        
+        multiple : pOptions.multiple || false,       
+        disabled: pOptions.disabled, 
         ajax: {
             url: sURL,
             dataType: 'json',
