@@ -372,7 +372,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
             }).prop('selected', true);
         };
 
-        if (pSelect[0].selectedIndex < 0) {
+        if (pSelect[0].selectedIndex <= 0) {
             if (notFound == 1 && (pValue || pText)) {
                 var option = $('<option/>', {
                     value: pValue,
@@ -381,7 +381,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
                 option.html(pText);
                 option.appendTo(pSelect);
 
-            } else if (notFound == 0) {
+            } else if (notFound == 0 && pSelect[0].options.length > 0) {
                 pSelect[0].selectedIndex = 0;
             }
         }
