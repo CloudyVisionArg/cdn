@@ -875,7 +875,8 @@ async function newAutocomplete(pId, pLabel, options){
         placeholder: "Buscar...",
         multiple: false,
         editUrl:'',
-        addUrl:''
+        addUrl:'',
+        disabled: false
     }    
     opt = Object.assign(opt, options);
 
@@ -920,6 +921,7 @@ async function newAutocomplete(pId, pLabel, options){
     if (opt.width) {
         $oSel.attr("data-width", opt.width);
     }
+
     $oSel[0]._value = function(pValue){
         
         var $self = $(this);
@@ -1022,7 +1024,6 @@ async function newAutocomplete(pId, pLabel, options){
         $("#" + el.id + "_xml").val(strXml);
     }
 
-    
     $oSel[0]._getDom = function(docId){
         
         if(!docId)return false;
@@ -1120,7 +1121,8 @@ async function newAutocomplete(pId, pLabel, options){
         templateResult: pOptions.templateResult,
         templateSelection: pOptions.templateSelection,
         allowClear: true,
-        multiple : pOptions.multiple || false,        
+        multiple : pOptions.multiple || false,       
+        disabled: pOptions.disabled, 
         ajax: {
             url: sURL,
             dataType: 'json',
@@ -1181,8 +1183,8 @@ async function newAutocomplete(pId, pLabel, options){
             return markup;
         }
     }
-    if (pOptions.selectedElements) {
 
+    if (pOptions.selectedElements) {
         let data = pOptions.selectedElements;
         if (Array.isArray(data)) {
             data.map(el => {
