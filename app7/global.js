@@ -412,7 +412,7 @@ window.deviceServices = {
                 $saveRow.hide();        
             }
         }
-        
+
         function addDuration(pFileSystem, pFileEntry, pMediaRec, pCallback) {
             // Agrega la duracion al nombre del archivo, usa moveTo para renombrar
             if (pMediaRec.getDuration() == -1) {
@@ -460,7 +460,7 @@ window.deviceServices = {
                     pFileEntry.file(pCallback); // Pasa el que venia nomas
                 }
             }
-    
+        }
     }
 };
 
