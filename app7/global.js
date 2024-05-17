@@ -237,6 +237,8 @@ window.deviceServices = {
     },
 
     recordAudio: function (pCallback, pErrorCallback) {
+        let mediaRec, interv, timer, save;
+
         let $sheet = $(`<div class="sheet-modal">
             <div class="swipe-handler"></div>
             <div class="block">
@@ -253,9 +255,9 @@ window.deviceServices = {
             </div>
         </div>`);
 
-        $sheet.find('button[data-role="record"]').click(recordAudio);
-        $sheet.find('button[data-role="save"]').click(saveAudio);
-        $sheet.find('button[data-role="cancel"]').click(cancelAudio);
+        $sheet.find('button[data-role="record"]').click(recordClick);
+        $sheet.find('button[data-role="save"]').click(saveClick);
+        $sheet.find('button[data-role="cancel"]').click(cancelClick);
         let $timer = $sheet.find('div[data-role="timer"]');
         let $recRow = $sheet.find('div[data-role="rec-row"]');
         let $saveRow = $sheet.find('div[data-role="save-row"]');
@@ -266,15 +268,200 @@ window.deviceServices = {
             content: $sheet[0],
         }).open();
     
-        function recordAudio() {
+        async function recordClick() {
             if (_isCapacitor()) {
+                //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+                //Evaluar mejor los permisos 
+                const perm = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+                if (perm.value) {
+                    save = false;
+                    
+                    const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                    if (stat.status != 'NONE'){
+                        const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                    }
+                    const startRes = await Capacitor.Plugins.VoiceRecorder.startRecording();
+                    updControls(true);
+                }
 
             } else {
-
+                save = false;
+                var now = new Date();
+                var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
+                if (device.platform == 'iOS') {
+                    src += '.m4a';
+                } else {
+                    src += '.aac';
+                }
+            
+                mediaRec = new Media('cdvfile://localhost/temporary/' + src,
+                    // success callback
+                    function() {
+                        if (save) {
+                            window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
+                                function (fileSystem) {
+                                    fileSystem.root.getFile(src, { create: false, exclusive: false	},
+                                        function (fileEntry) {
+                                            addDuration(fileSystem, fileEntry, mediaRec, function (file) {
+                                                if (pCallback) {
+                                                    pCallback(file);
+                                                };
+                                                sheet.close();
+                                            });
+        
+                                        },
+                                        function (err) {
+                                            logAndToast('getFile error: ' + err.code);
+                                            if (pErrorCallback) {
+                                                pErrorCallback('getFile error: ' + err.code);
+                                            }
+                                        }
+                                    );
+                                }
+                            );
+                        };
+                    },
+                    // error callback
+                    function (err) {
+                        logAndToast('Media error: ' + err.code);
+                    }
+                );
+                
+                mediaRec.startRecord();
+                updControls(true);
             }
         }
-    }
+
+        async function saveClick() {
+            if (_isCapacitor()) {
+                const recData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                var now = new Date();
+                let millis = recData.value.msDuration;
+                let minutes = Math.floor(millis / 60000);
+                let seconds = ((millis % 60000) / 1000).toFixed(0);
+                let durationString = (seconds == 60) ?
+                    (minutes + 1) + ':00' :
+                    minutes + ':' + (seconds < 10 ? '0' : '') + seconds
+                let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+
+                writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
+                    res => {
+                        Capacitor.Plugins.Filesystem.stat({ path: res.uri }).then(
+                            file => {
+                                file.localURL = file.uri;
+                                file.name = fileName;
+                                pCallback(file);
+                            },
+                            err => {
+                                console.error('Error obteniendo el audio.', errMsg(err))
+                            }
+                        );
+                    },
+                    err => {
+                        console.error('Error escribiendo el audio.', errMsg(err))
+                    }
+                );
+                clearInterval(interv);
+                sheet.close();
+
+            } else {
+                save = true;
+                clearInterval(interv);
+                mediaRec.stopRecord();
+                mediaRec.release();
+            }    
+        }
+
+        async function cancelClick() {
+            clearInterval(interv);
+            updControls(false);
+
+            if (_isCapacitor()) {
+                const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                console.log('VoiceRecorder.getCurrentStatus: ' + stat.status);
+                if (stat.status != 'NONE') {
+                    const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                    console.log('VoiceRecorder.stopRecording: ' + stopRes.value);
+                    //Evaluar el resultado para logearlo
+                }
+
+            } else {
+                mediaRec.stopRecord();
+                mediaRec.release();
+            }
+        }
+
+        function updControls(recording) {
+            if (recording) {
+                $recRow.hide();
+                $saveRow.show();
+                $timer.css('opacity', '100%');
+                
+                timer = new Date();
+                interv = setInterval(function () {
+                    var secs = Math.trunc((new Date() - timer) / 1000);
+                    var mins = Math.trunc(secs / 60);
+                    secs = secs - mins * 60;
+                    $timer.html(mins + ':' + leadingZeros(secs, 2));
+                }, 200);
+
+            } else {
+                $timer.html('0:00');
+                $timer.css('opacity', '20%');
+                $recRow.show();
+                $saveRow.hide();        
+            }
+        }
+        
+        function addDuration(pFileSystem, pFileEntry, pMediaRec, pCallback) {
+            // Agrega la duracion al nombre del archivo, usa moveTo para renombrar
+            if (pMediaRec.getDuration() == -1) {
+                // El play/stop lo arregla en Android, para iOs hay que meter este fix:
+                // https://github.com/apache/cordova-plugin-media/issues/177?_pjax=%23js-repo-pjax-container#issuecomment-487823086
+                
+                save = false;
+                pMediaRec.play();
+                pMediaRec.stop();
+                pMediaRec.release();
     
+                // Espera 2 segs a getDuration
+                var counter = 0;
+                var timerDur = setInterval(function() {
+                    counter = counter + 100;
+                    if (counter > 2000) {
+                        clearInterval(timerDur);
+                        resume();
+                    }
+                    if (pMediaRec.getDuration() > 0) {
+                        clearInterval(timerDur);
+                        resume();
+                    }
+                }, 100);
+    
+            } else {
+                resume();
+            }
+    
+            function resume() {
+                if (pMediaRec.getDuration() > -1) {
+                    var dur = pMediaRec.getDuration();
+                    var min = Math.trunc(dur / 60);
+                    var fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + pFileEntry.name;
+                    pFileEntry.moveTo(pFileSystem.root, fileName,
+                            function (fileEntry) {
+                            fileEntry.file(pCallback);
+                        },
+                        function (err) {
+                            console.error('moveTo error: ' + err.code);
+                            pFileEntry.file(pCallback); // Pasa el que venia nomas
+                        }
+                    )
+                } else {
+                    pFileEntry.file(pCallback); // Pasa el que venia nomas
+                }
+            }
+    
+    }
 };
 
 
