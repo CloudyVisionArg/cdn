@@ -586,8 +586,8 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                let $ctl = modControls.newDefaultControl(field).control;
-                $ctl.addClass('mt-3').appendTo($col);
+                let ctl = modControls.newDefaultControl(field);
+                ctl.control.addClass('mt-3').appendTo($col);
             }
         });
 
@@ -599,7 +599,6 @@ async function webRenderPage() {
         let ctl = modControls.newAttachments('attachments', {
             label: 'Adjuntos',
         });
-        debugger;
         ctl.control.addClass('mt-3').appendTo($col);
 
         // tabHeader
@@ -614,8 +613,8 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                let $ctl = modControls.newDefaultControl(field).control;
-                $ctl.addClass('mt-3').appendTo($col);
+                let ctl = modControls.newDefaultControl(field);
+                ctl.control.addClass('mt-3').appendTo($col);
             }
         })
 
@@ -623,7 +622,8 @@ async function webRenderPage() {
 
         $tab = $cont.find('#tabHist');
         $row = undefined;
-        modControls.newDocLog('docLog').control.addClass('mt-3').appendTo($tab);
+        ctl = modControls.newDocLog('docLog');
+        ctl.control.addClass('mt-3').appendTo($tab);
 
     } else {
 
