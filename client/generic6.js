@@ -599,6 +599,7 @@ async function webRenderPage() {
         let ctl = modControls.newAttachments('attachments', {
             label: 'Adjuntos',
         });
+        debugger;
         ctl.control.addClass('mt-3').appendTo($col);
 
         // tabHeader
@@ -622,7 +623,7 @@ async function webRenderPage() {
 
         $tab = $cont.find('#tabHist');
         $row = undefined;
-        modControls.newDocLog('docLog').addClass('mt-3').appendTo($tab);
+        modControls.newDocLog('docLog').control.addClass('mt-3').appendTo($tab);
 
     } else {
 
