@@ -57,78 +57,39 @@ window.deviceServices = {
         let me = this;
         var files = [];
 
-        if (_isCapacitor()) {
-            const opts = me.cameraOptions(CameraSource.Camera);
-            opts.resultType = CameraResultType.Uri;
-            const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Camera);
-            if (hasPermission) {
-                var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
-                file.filename = file.path.replace(/^.*[\\\/]/, '');
-                files.push({
-                    uri: file.path,
-                    name: file.filename,
-                    size: file.size,
-                });
-                return files;
-
-            } else {
-                throw new Error('Se necesita permiso de acceso a la camara');
-            }
+        const opts = me.cameraOptions(CameraSource.Camera);
+        opts.resultType = CameraResultType.Uri;
+        const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Camera);
+        if (hasPermission) {
+            var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
+            file.filename = file.path.replace(/^.*[\\\/]/, '');
+            files.push({
+                uri: file.path,
+                name: file.filename,
+                size: file.size,
+            });
+            return files;
 
         } else {
-            return new Promise((resolve, reject) => {
-                navigator.camera.getPicture(
-                    function (fileURL) {
-                        getFile(fileURL).then(
-                            (file) => {
-                                files.push({
-                                    uri: file.localURL,
-                                    name: file.name,
-                                    size : file.size,
-                                });
-                                resolve(files)
-                            },
-                            (err)=>{
-                                reject(err);
-                            }
-                        )
-                    },
-                    function (err){
-                        reject(err);
-                    },
-                    me.cameraOptions(Camera.PictureSourceType.CAMERA)
-                )
-            });
+            throw new Error('Se necesita permiso de acceso a la camara');
         }
     },
 
     cameraOptions: function (source) {
-        if (_isCapacitor()) {
-            return {
-                quality: 50,
-                saveToGallery: true,    
-                source: source,
-                //encodingType: Camera.EncodingType.JPEG,
-                //mediaType: Camera.MediaType.ALLMEDIA,
-                //allowEdit: (device.platform == 'iOS'),
-                correctOrientation: true, // Corrects Android orientation quirks
-                resultType: CameraResultType.DataUrl,
-                //targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
-                //targetHeight: 
-                //saveToPhotoAlbum: Save the image to the photo album on the device after capture.
-                //cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
-            }
-
-        } else {
-            return {
-                quality: 50,
-                destinationType: Camera.DestinationType.FILE_URI,
-                sourceType: source,
-                encodingType: Camera.EncodingType.JPEG,
-                mediaType: Camera.MediaType.ALLMEDIA,
-                correctOrientation: true, // Corrects Android orientation quirks
-            };
-        };
+        return {
+            quality: 50,
+            saveToGallery: true,    
+            source: source,
+            //encodingType: Camera.EncodingType.JPEG,
+            //mediaType: Camera.MediaType.ALLMEDIA,
+            //allowEdit: (device.platform == 'iOS'),
+            correctOrientation: true, // Corrects Android orientation quirks
+            resultType: CameraResultType.DataUrl,
+            //targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+            //targetHeight: 
+            //saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+            //cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+        }
     },
 
     requestCameraPermissions: async function (permission) {
@@ -140,55 +101,27 @@ window.deviceServices = {
         let me = this;
         var files = [];
 
-        if (_isCapacitor()) {
-            let options = {};
-            if (opts) options = opts; // todo: default opts?
-            const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Photos);
-            if (hasPermission) {
-                const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
-                debugger;
-                for (let idx = 0; idx < selectedPhotos.photos.length; idx++) {
-                    const file = selectedPhotos.photos[idx];
-                    file.filename = file.path.replace(/^.*[\\\/]/, '');
-                    files.push({
-                        uri: file.path,
-                        name: file.filename,
-                        size: file.size
-                    });
-                    //const fileInCache = await writeFileInCachePath(item.path);
-                    //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
-                }
-                return files;
-
-            } else {
-                throw new Error('Se necesita permiso de acceso a imagenes');
+        let options = {};
+        if (opts) options = opts; // todo: default opts?
+        const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Photos);
+        if (hasPermission) {
+            const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
+            debugger;
+            for (let idx = 0; idx < selectedPhotos.photos.length; idx++) {
+                const file = selectedPhotos.photos[idx];
+                file.filename = file.path.replace(/^.*[\\\/]/, '');
+                files.push({
+                    uri: file.path,
+                    name: file.filename,
+                    size: file.size
+                });
+                //const fileInCache = await writeFileInCachePath(item.path);
+                //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
             }
-        }
-    
-        else {
-            return new Promise((resolve, reject) => {
-                navigator.camera.getPicture(
-                    function (fileURL) {
-                        getFile(fileURL).then(
-                            (file) => {
-                                files.push({
-                                    uri: file.localURL,
-                                    name: file.name,
-                                    size: file.size
-                                });
-                                resolve(files)
-                            },
-                            (err) => {
-                                reject(err);
-                            }
-                        );
-                    },
-                    function (err){
-                        reject(err);
-                    },
-                    me.cameraOptions(Camera.PictureSourceType.PHOTOLIBRARY)
-                );
-            });
+            return files;
+
+        } else {
+            throw new Error('Se necesita permiso de acceso a imagenes');
         }
     },
 
@@ -196,44 +129,18 @@ window.deviceServices = {
         let me = this;
         var files = [];
 
-        if (_isCapacitor()) {
-            let options = { multiple: true };
-            if (opts) options = opts; // todo: Default opts?
-            const res = await Capacitor.Plugins.FilePicker.pickFiles(options);
-            for(let idx = 0; idx < res.files.length; idx++) {
-                const file = res.files[idx];
-                files.push({
-                    uri: file.path,
-                    name: file.name,
-                    size: file.size
-                });
-            }
-            return files;
-        }
-        else {
-            return new Promise((resolve, reject) => {
-                chooser.getFileMetadata().then(
-                    function (res) {
-                        getFile(res.uri).then(
-                            (file) => {
-                                files.push({
-                                    uri: file.localURL,
-                                    name: file.name,
-                                    size: file.size
-                                });
-                                resolve(files)
-                            },
-                            (err)=>{
-                                reject(err);
-                            }
-                        )
-                    },
-                    function (err){
-                        reject(err);
-                    }
-                )
+        let options = { multiple: true };
+        if (opts) options = opts; // todo: Default opts?
+        const res = await Capacitor.Plugins.FilePicker.pickFiles(options);
+        for(let idx = 0; idx < res.files.length; idx++) {
+            const file = res.files[idx];
+            files.push({
+                uri: file.path,
+                name: file.name,
+                size: file.size
             });
         }
+        return files;
     },
 
     recordAudio: function () {
@@ -270,121 +177,63 @@ window.deviceServices = {
             }).open();
         
             async function recordClick() {
-                if (_isCapacitor()) {
-                    //TODO: https://github.com/tchvu3/capacitor-voice-recorder
-                    //Evaluar mejor los permisos 
-                    const perm = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
-                    if (perm.value) {
-                        save = false;
-                        
-                        const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
-                        if (stat.status != 'NONE'){
-                            const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-                        }
-                        const startRes = await Capacitor.Plugins.VoiceRecorder.startRecording();
-                        updControls(true);
-                    }
-
-                } else {
+                //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+                //Evaluar mejor los permisos 
+                const perm = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+                if (perm.value) {
                     save = false;
-                    var now = new Date();
-                    var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
-                    if (device.platform == 'iOS') {
-                        src += '.m4a';
-                    } else {
-                        src += '.aac';
-                    }
-                
-                    mediaRec = new Media('cdvfile://localhost/temporary/' + src,
-                        // success callback
-                        function() {
-                            if (save) {
-                                window.requestFileSystem(LocalFileSystem.TEMPORARY, 0,
-                                    function (fileSystem) {
-                                        fileSystem.root.getFile(src, { create: false, exclusive: false	},
-                                            function (fileEntry) {
-                                                addDuration(fileSystem, fileEntry, mediaRec, function (file) {
-                                                    sheet.close();
-                                                    resolve(file);
-                                                });
-            
-                                            },
-                                            function (err) {
-                                                logAndToast('getFile error: ' + err.code);
-                                                reject(err);
-                                            }
-                                        );
-                                    }
-                                );
-                            };
-                        },
-                        // error callback
-                        function (err) {
-                            logAndToast('Media error: ' + err.code);
-                        }
-                    );
                     
-                    mediaRec.startRecord();
+                    const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                    if (stat.status != 'NONE'){
+                        const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                    }
+                    const startRes = await Capacitor.Plugins.VoiceRecorder.startRecording();
                     updControls(true);
                 }
             }
 
             async function saveClick() {
-                if (_isCapacitor()) {
-                    const recData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-                    var now = new Date();
-                    let millis = recData.value.msDuration;
-                    let minutes = Math.floor(millis / 60000);
-                    let seconds = ((millis % 60000) / 1000).toFixed(0);
-                    let durationString = (seconds == 60) ?
-                        (minutes + 1) + ':00' :
-                        minutes + ':' + (seconds < 10 ? '0' : '') + seconds
-                    let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
+                const recData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                var now = new Date();
+                let millis = recData.value.msDuration;
+                let minutes = Math.floor(millis / 60000);
+                let seconds = ((millis % 60000) / 1000).toFixed(0);
+                let durationString = (seconds == 60) ?
+                    (minutes + 1) + ':00' :
+                    minutes + ':' + (seconds < 10 ? '0' : '') + seconds
+                let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
 
-                    writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
-                        res => {
-                            Capacitor.Plugins.Filesystem.stat({ path: res.uri }).then(
-                                file => {
-                                    file.localURL = file.uri;
-                                    file.name = fileName;
-                                    resolve(file);
-                                },
-                                err => {
-                                    reject(err);
-                                }
-                            );
-                        },
-                        err => {
-                            reject(err)
-                        }
-                    );
-                    clearInterval(interv);
-                    sheet.close();
-
-                } else {
-                    save = true;
-                    clearInterval(interv);
-                    mediaRec.stopRecord();
-                    mediaRec.release();
-                }    
+                writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
+                    res => {
+                        Capacitor.Plugins.Filesystem.stat({ path: res.uri }).then(
+                            file => {
+                                file.localURL = file.uri;
+                                file.name = fileName;
+                                resolve(file);
+                            },
+                            err => {
+                                reject(err);
+                            }
+                        );
+                    },
+                    err => {
+                        reject(err)
+                    }
+                );
+                clearInterval(interv);
+                sheet.close();
             }
 
             async function cancelClick() {
                 clearInterval(interv);
                 updControls(false);
 
-                if (_isCapacitor()) {
-                    const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
-                    console.log('VoiceRecorder.getCurrentStatus: ' + stat.status);
-                    if (stat.status != 'NONE') {
-                        const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-                        console.log('VoiceRecorder.stopRecording: ' + stopRes.value);
-                        //Evaluar el resultado para logearlo
-                    }
-
-                } else {
-                    mediaRec.stopRecord();
-                    mediaRec.release();
+                const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                console.log('VoiceRecorder.getCurrentStatus: ' + stat.status);
+                if (stat.status != 'NONE') {
+                    const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                    console.log('VoiceRecorder.stopRecording: ' + stopRes.value);
+                    //Evaluar el resultado para logearlo
                 }
             }
 
@@ -409,99 +258,11 @@ window.deviceServices = {
                     $saveRow.hide();        
                 }
             }
-
-            function addDuration(pFileSystem, pFileEntry, pMediaRec, pCallback) {
-                // Agrega la duracion al nombre del archivo, usa moveTo para renombrar
-                if (pMediaRec.getDuration() == -1) {
-                    // El play/stop lo arregla en Android, para iOs hay que meter este fix:
-                    // https://github.com/apache/cordova-plugin-media/issues/177?_pjax=%23js-repo-pjax-container#issuecomment-487823086
-                    
-                    save = false;
-                    pMediaRec.play();
-                    pMediaRec.stop();
-                    pMediaRec.release();
-        
-                    // Espera 2 segs a getDuration
-                    var counter = 0;
-                    var timerDur = setInterval(function() {
-                        counter = counter + 100;
-                        if (counter > 2000) {
-                            clearInterval(timerDur);
-                            resume();
-                        }
-                        if (pMediaRec.getDuration() > 0) {
-                            clearInterval(timerDur);
-                            resume();
-                        }
-                    }, 100);
-        
-                } else {
-                    resume();
-                }
-        
-                function resume() {
-                    if (pMediaRec.getDuration() > -1) {
-                        var dur = pMediaRec.getDuration();
-                        var min = Math.trunc(dur / 60);
-                        var fileName = min + '-' + ('0' + Math.trunc(dur - min * 60)).slice(-2) + '_min_' + pFileEntry.name;
-                        pFileEntry.moveTo(pFileSystem.root, fileName,
-                                function (fileEntry) {
-                                fileEntry.file(pCallback);
-                            },
-                            function (err) {
-                                console.error('moveTo error: ' + err.code);
-                                pFileEntry.file(pCallback); // Pasa el que venia nomas
-                            }
-                        )
-                    } else {
-                        pFileEntry.file(pCallback); // Pasa el que venia nomas
-                    }
-                }
-            }
         })
     },
 
     openFile: function (URL) {
-        if (_isCapacitor()) {
-            open(URL);
-    
-        } else {
-            if (URL.substring(0, 10) == 'cdvfile://' || URL.includes("__cdvfile_")) {
-                window.resolveLocalFileSystemURL(URL,
-                    function (fileEntry) {
-                        openF(fileEntry.nativeURL);
-                    },
-                    function (err) {
-                        logAndToast('resolveLocalFileSystemURL error: ' + errMsg(err));
-                    }
-                )
-            } else {
-                openF(pURL);
-            }
-        }
-    
-        function openF(pFile) {
-            if (_isCapacitor()) {
-                Capacitor.Plugins.FileOpener.open({filePath : pFile}).then(
-                    () => {
-                        console.log('File opened');
-                    },
-                    (err) => {
-                        logAndToast('Capacitor.Plugins.FileOpener error: ' + err.message);
-                    }, 
-                );
-            } else {
-                // Abre el archivo con fileOpener2
-                cordova.plugins.fileOpener2.open(pFile, undefined, {
-                    success: function () {
-                        console.log('File opened');
-                    },
-                    error: function (err) {
-                        logAndToast('fileOpener2 error: ' + err.message);
-                    },
-                });
-            }
-        }
+        open(URL);
     }
 };
 
@@ -724,30 +485,20 @@ async function showConsole(allowClose) {
                 body: 'Por favor describanos su problema',
             }
 
-            if (_isCapacitor()) {
-                mail.to = ['soporte@cloudycrm.net'];
-                mail.attachments = [
-                    {
-                        type: 'base64',
-                        path: window.btoa(localStorage.getItem('consoleLog')),
-                        name: "console.txt"
-                    },
-                    {
-                        type: 'base64',
-                        path: localStorageBase64(),
-                        name: "localStorage.txt"
-                    }
-                ]
-                Capacitor.Plugins.EmailComposer.open(mail);
-
-            } else {
-                mail.to = 'soporte@cloudycrm.net';
-                mail.attachments = [
-                    'base64:console.txt//' + window.btoa(localStorage.getItem('consoleLog')),
-                    'base64:localStorage.txt//' + localStorageBase64(),
-                ];
-                cordova.plugins.email.open(mail);
-            }
+            mail.to = ['soporte@cloudycrm.net'];
+            mail.attachments = [
+                {
+                    type: 'base64',
+                    path: window.btoa(localStorage.getItem('consoleLog')),
+                    name: "console.txt"
+                },
+                {
+                    type: 'base64',
+                    path: localStorageBase64(),
+                    name: "localStorage.txt"
+                }
+            ]
+            Capacitor.Plugins.EmailComposer.open(mail);
                 
             function localStorageBase64() {
                 var arr = new Array();
@@ -1958,6 +1709,7 @@ function getCodelib(pCode) {
 function _isCapacitor(){
     return (typeof(Capacitor) != 'undefined');
 }
+
 function statusBar(pShow) {
     var refStatusBarPLugin; 
     if (_isCapacitor()) {
