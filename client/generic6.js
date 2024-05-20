@@ -993,7 +993,9 @@ async function fillControls() {
         this.drs.value(doc);
     });
 
-
+    $('[data-doc-log]').each(function (ix, el) {
+        this.drs.value(doc);
+    });
 
 }
 
