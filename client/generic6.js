@@ -622,7 +622,10 @@ async function webRenderPage() {
 
         $tab = $cont.find('#tabHist');
         $row = undefined;
-        ctl = modControls.newDocLog('docLog');
+        ctl = modControls.newDocLog('docLog', {
+            label: 'Cambios de datos',
+            collapse: false,
+        });
         ctl.control.addClass('mt-3').appendTo($tab);
 
     } else {
