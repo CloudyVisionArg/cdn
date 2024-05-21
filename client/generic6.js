@@ -625,6 +625,7 @@ async function webRenderPage() {
         ctl = modControls.newDocLog('docLog', {
             label: 'Cambios de datos',
             collapse: false,
+            compact: true,
         });
         ctl.control.addClass('mt-3').appendTo($tab);
 
