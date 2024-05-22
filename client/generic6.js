@@ -622,11 +622,18 @@ async function webRenderPage() {
 
         $tab = $cont.find('#tabHist');
         $row = undefined;
+
+        $row = webGetRow($row, $tab);
+        $col = $('<div/>', {
+            class: 'col-12 col-md-6 form-group',
+        }).appendTo($row);
+
+
         ctl = modControls.newDocLog('docLog', {
             label: 'Cambios de datos',
             collapse: false,
         });
-        ctl.control.addClass('mt-3').appendTo($tab);
+        ctl.control.addClass('mt-3').appendTo($col);
 
     } else {
 
