@@ -310,11 +310,18 @@ async function appRenderPage() {
             id: 'tabHist',
         }).appendTo($tabs);
 
+        $div = $('<div/>', {
+            class: 'list no-hairlines-md',
+            style: 'margin-top: 0;',
+        }).appendTo($tabHeader);
+
+        $ul = $('<ul/>').appendTo($div);
+
         ctl = modControls.newDocLog('docLog', {
             label: 'Cambios de datos',
             collapse: false,
         });
-        ctl.control.appendTo($tabHist);
+        ctl.control.appendTo($ul);
 
     } else {
 
