@@ -313,7 +313,7 @@ async function appRenderPage() {
         $div = $('<div/>', {
             class: 'list no-hairlines-md',
             style: 'margin-top: 0;',
-        }).appendTo($tabHeader);
+        }).appendTo($tabHist);
 
         $ul = $('<ul/>').appendTo($div);
 
