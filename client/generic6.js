@@ -625,9 +625,8 @@ async function webRenderPage() {
 
         $row = webGetRow($row, $tab);
         $col = $('<div/>', {
-            class: 'col-12 col-md-6 form-group',
+            class: 'col-12 form-group',
         }).appendTo($row);
-
 
         ctl = modControls.newDocLog('docLog', {
             label: 'Cambios de datos',
