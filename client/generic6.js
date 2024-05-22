@@ -320,7 +320,6 @@ async function appRenderPage() {
 
         ctl = modControls.newDocLog('docLog', {
             label: 'Cambios de datos',
-            collapse: false,
         });
         ctl.control.appendTo($ul);
 
@@ -642,7 +641,6 @@ async function webRenderPage() {
 
         ctl = modControls.newDocLog('docLog', {
             label: 'Cambios de datos',
-            collapse: false,
         });
         ctl.control.addClass('mt-3').appendTo($col);
 
