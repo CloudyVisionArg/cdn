@@ -310,7 +310,11 @@ async function appRenderPage() {
             id: 'tabHist',
         }).appendTo($tabs);
 
-        modControls.newDocLog().appendTo($tabHist);
+        ctl = modControls.newDocLog('docLog', {
+            label: 'Cambios de datos',
+            collapse: false,
+        });
+        ctl.control.appendTo($tabHist);
 
     } else {
 
