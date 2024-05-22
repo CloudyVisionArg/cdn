@@ -279,6 +279,7 @@ async function appRenderPage() {
 
         let ctl = modControls.newAttachments('attachments', {
             label: 'Adjuntos',
+            collapse: false,
         });
         ctl.control.appendTo($ul);
 
