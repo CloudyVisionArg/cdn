@@ -195,7 +195,7 @@ async function appRenderPage() {
             f7Page.view.router.back();
         }
         */
-        goBack();
+        exitForm();
     });
 
     $page.find('.navbar-inner .right .link').on('click', function (e) {
@@ -411,7 +411,7 @@ async function appPageInit(e, page) {
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
 
     f7Page.view.on('swipebackMove', (ev) => {
-        exitForm();
+        appExplorerRefresh();
     })
 
     /*
@@ -1022,63 +1022,49 @@ async function fillControls() {
 }
 
 function exitForm() {
-    // APP
-    /*
-    explorerRefresh();
-    f7Page.view.router.back();
-    */
+    if (inApp) { // APP
+        appExplorerRefresh();
+        f7Page.view.router.back();
+    
+    } else { // WEB
+    // Callback
+        try {
+            let cbfn = urlParams.get('callbackfunction');
 
-    // WEB
-    /*
-function exitFormv1() {
-    if (window.top == window.self) {
-        window.close();
-    } else {
-        history.back();
-    }
-}
-function exitForm(triggerCallback) {
-    let callbackFn = urlParams.get('callbackfunction');
-    let closeonexit = urlParams.get('closeonexit');
-    if(callbackFn){
-        if (triggerCallback) {
-            if (window.opener) {
-                eval("window.opener." + callbackFn + "(" + doc.id + ")");
-            }
-            if (window.parent) {
-                try {
-                    let existsInParent = eval("window.parent." + callbackFn);
-                    if (existsInParent) {
-                        eval("window.parent." + callbackFn + "(" + doc.id + ")");
-                    } else {
-                        eval("window.parent.exFrameDer.contentWindow." + callbackFn + "(" + doc.id + ")");
-                    }
-                } catch(ee){
-
+            if (cbfn && saved) {
+                if (window.opener && window.opener[cbfn]) {
+                    window.opener[cbfn](doc.id);
+                } else if (window.parent && window.parent[cbfn]) {
+                    window.parent[cbfn](doc.id);
+                } else {
+                    window.parent.exFrameDer.contentWindow[cbfn](doc.id);
                 }
             }
+
+        } catch(err) {
+            console.error(err);
+            debugger;
+        }
+
+        // v1
+        if (window.top == window.self) {
+            window.close();
+            if (!window.closed) toast('Debe cerrar esta ventana manualmente');
+        } else {
+            history.back();
         }
     }
-    if(closeonexit == "1"){
-        try{
-            if (window.top == window.self) {
-                window.close();
-            }
-            document.write('Se guardaron los cambios, debe cerrar la pagina manualmente');
-        } catch(ex){
-            document.write('Se guardaron correctamente los cambios, debe cerrar la pagina manualmente');
-        }
-    } else {
-        let contentUrl = "/c/content.asp?fld_id=" + fld_id;
-        if (top.navigate) {
-            window.location = contentUrl;
-        }
-        else {
-            document.location.href = contentUrl;
-        }
-    }
+
     //TODO: sBackToFld
-}    */
+}
+
+function appExplorerRefresh() {
+    if (!pageEl.crm.saved) {
+        // Si nunca guarde evito el refresh del explorer
+        $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
+            $(el).removeClass('refresh-on-focus');
+        })
+    }
 }
 
 async function saveDoc(exitOnSuccess) {
