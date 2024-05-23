@@ -911,7 +911,7 @@ async function fillControls() {
         $('#title').html(title);
     }
 
-    $('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
+    $get('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
         let tf, textField, text;
         let vf, valueField, value;
         let xf, xmlField, xml;
@@ -1011,11 +1011,11 @@ async function fillControls() {
         }
     });
 
-    $('[data-attachments]').each(function (ix, el) {
+    $get('[data-attachments]').each(function (ix, el) {
         this.drs.value(doc);
     });
 
-    $('[data-doc-log]').each(function (ix, el) {
+    $get('[data-doc-log]').each(function (ix, el) {
         this.drs.value(doc);
     });
 
@@ -1068,4 +1068,187 @@ function appExplorerRefresh() {
 }
 
 async function saveDoc(exitOnSuccess) {
+    if (saving) return;
+    saving = true;
+
+    if (inApp) {
+        $navbar.find('.right .button').addClass('disabled');
+    } else {
+        //todo: deshabilitar botones
+    }
+    preldr.show();
+
+    try {
+        $get('[data-textfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-textfield'));
+
+            if (field && field.updatable) {
+                if (el.drs && el.drs.text) {
+                    let aux = el.drs.text();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                
+                } else if (el.tagName == 'INPUT') {
+                    var type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden' || type == 'email' || type == 'password') {
+                        if ($el.attr('data-numeral')) {
+                            field.value = numeral($el.val()).value();
+                        } else {
+                            field.value = $el.val();
+                        };
+
+                    } else if (type == 'checkbox') {
+                        field.value = el.checked ? 1 : 0;
+                    }
+
+                } else if (el.tagName == 'SELECT') {
+                    let aux = getSelectText($el);
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'TEXTAREA') {
+                    if (el.ckeditor) {
+                        field.value = el.ckeditor.getData();
+                    } else {
+                        field.value = $el.val();
+                    }
+
+                } else if (el.tagName == 'DIV') {
+                    if ($el.hasClass('text-editor')) {
+                        field.value = app7.textEditor.get($el[0]).getValue();
+                    }
+
+                } else if (el.tagName == 'A') {
+                    if ($el.attr('data-autocomplete')) {
+                        field.value = $el.find('.item-after').html();
+                    }
+                }
+            }
+        });
+
+        $get('[data-valuefield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-valuefield'));
+
+            if (field && field.updatable) {
+                if (el.drs && el.drs.value) {
+                    let aux = el.drs.value();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'SELECT') {
+                    let aux = $el.val();
+                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+
+                } else if (el.tagName == 'INPUT') {
+                    field.value = $el.val();
+                }
+            }
+        });
+
+        $get('[data-xmlfield]').each(function (ix, el) {
+            var $el = $(el);
+            var field = doc.fields($el.attr('data-xmlfield'));
+
+            if (field && field.updatable) {
+                if (el.tagName == 'INPUT') {
+                    let type = $el.attr('type').toLowerCase();
+                    if (type == 'text' || type == 'hidden') {
+                        field.value = $el.val();
+                    }
+                }
+            }
+        });
+
+        let evSrc = inApp ? $page[0] : document;
+
+        //Parametros para disponibilizar en los eventos
+        let context = { exitOnSuccess };
+
+        // Evento beforeSave
+        evSrc.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        if (context.return && typeof context.return.then == 'function') await context.return;
+
+        // Control Event BeforeSave
+        var ev = getEvent('BeforeSave');
+        if (ev) await evalCode(ev, context);
+
+        await doc.save();
+
+        docJson = doc.toJSON();
+        doc_id = doc.id;
+
+        if (inApp) {
+            pageEl.crm.doc = doc;
+            pageEl.crm.doc_id = doc.id;
+            pageEl.crm.saved = true;    
+        } else {
+            saved = true;
+        }
+
+        try {
+            await saveAtt();
+            doc.attachmentsReset();
+
+        } catch(err) {
+            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            console.log(attErr);
+            console.error(err);
+        }
+
+        try {
+            // Evento afterSave
+            evSrc.dispatchEvent(new CustomEvent('afterSave', { detail : context }));
+            if (context.return && typeof context.return.then == 'function') await context.return;
+
+            // Control Event AfterSave
+            var ev = getEvent('AfterSave');
+            if (ev) await evalCode(ev, context);
+
+        } catch (err) {
+            var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
+            console.error(err);
+        }
+
+        saving = false;
+        preldr.hide();
+
+        if (inApp) {
+            $navbar.find('.right .button').removeClass('disabled');
+        } else {
+            // todo: habilitar botones
+        }
+
+        if (attErr || asErr) {
+            if (attErr) toast(attErr);
+            if (asErr) toast(asErr);
+
+        } else {
+            toast('Cambios guardados');
+            if (exitOnSuccess) {
+                setTimeout(exitForm, inApp ? 0 : 2000);
+            } else {
+                fillControls();
+            }
+        }
+
+    } catch(err) {
+        errMgr(err);
+    }
+
+    function errMgr(err) {
+        saving = false;
+        preldr.hide();
+        toast(dSession.utils.errMsg(err));
+        console.error(err);
+    }
+
+}
+
+function $get(pSelector) {
+    if (inApp) {
+        // Usar solo despues del pageInit
+        debugger;
+        return $(pSelector, f7Page.pageEl);
+    } else {
+        return $(pSelector);
+    }
 }
