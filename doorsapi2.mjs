@@ -1377,6 +1377,7 @@ export class Attachment {
     }
     set fileStream(value) {
         if (!this.isNew) throw new Error('Read-only property');
+        debugger;
         this.#json.File = value;
     }
 
@@ -1523,6 +1524,10 @@ export class Attachment {
     */
     get size() {
         return this.#json.Size;
+    }
+    set size(value) {
+        if (!this.isNew) throw new Error('Read-only property');
+        this.#json.Size = value;
     }
 
     /**
@@ -2356,6 +2361,7 @@ export class Document {
     todo: Esto deberia ser parte del save (issue #261)
     */
     async saveAttachments() {
+        //todo: asyncLoop?
         for (var [key, value] of await this.attachments()) {
             if (value.toRemove) {
                 await value.remove();
