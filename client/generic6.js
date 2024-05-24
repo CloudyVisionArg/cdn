@@ -1195,6 +1195,7 @@ async function saveDoc(exitOnSuccess) {
         }
         debugger;
 
+        let asErr;
         try {
             // Evento afterSave
             evSrc.dispatchEvent(new CustomEvent('afterSave', { detail : context }));
@@ -1205,7 +1206,7 @@ async function saveDoc(exitOnSuccess) {
             if (ev) await evalCode(ev, context);
 
         } catch (err) {
-            var asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
+            asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
             console.error(err);
         }
 
