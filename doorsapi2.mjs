@@ -2370,19 +2370,29 @@ export class Document {
         for (var [key, value] of await this.attachments()) {
             if (value.toRemove) {
                 let prom = value.remove();
-                prom._att = value;
+                prom._attachment = attInfo(value);
                 proms.push(prom);
             }
         }
         for (var [key, value] of await this.attachments()) {
             if (value.isNew) {
                 let prom = value.save();
-                prom._att = value;
+                prom._attachment = attInfo(value);
                 proms.push(prom);
             }
         }
-        let ret = await Promise.allSettled(proms);
+        await Promise.allSettled(proms);
         debugger;
+        return proms;
+
+        function attInfo(att) {
+            return {
+                id: att.id,
+                name: att.name,
+                ownerName: att.ownerName,
+                isNew: att.isNew,
+            }
+        }
     }
 
     /**
