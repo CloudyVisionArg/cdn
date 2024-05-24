@@ -1183,7 +1183,7 @@ async function saveDoc(exitOnSuccess) {
         }
 
         try {
-            await saveAtt();
+            await doc.saveAttachments();
             doc.attachmentsReset();
 
         } catch(err) {
