@@ -2404,7 +2404,7 @@ export class Document {
                     attachment: attInfo(att),
                 }
                 try {
-                    await att.save();
+                    await att.savee();
                     res.result = 'OK';
                 } catch (err) {
                     res.result = err;
