@@ -2371,9 +2371,10 @@ export class Document {
         let ret = [];
 
         // 1ro borrar
-        let atts = Array.from((await this.attachments()).keys());
-        await utils.asyncLoop(atts.length, async loop => {
-            let att = atts.get(atts[loop.iteration()]);
+        let atts = await this.attachments();
+        let keys = Array.from(atts.keys());
+        await utils.asyncLoop(keys.length, async loop => {
+            let att = atts.get(keys[loop.iteration()]);
             if (att.toDelete) {
                 let res = {
                     action: 'delete',
@@ -2392,7 +2393,7 @@ export class Document {
         });
 
         // 2do agregar
-        atts = Array.from((await this.attachments()).keys());
+        debugger;
         await utils.asyncLoop(atts.length, async loop => {
             let att = atts.get(atts[loop.iteration()]);
             if (att.isNew) {
