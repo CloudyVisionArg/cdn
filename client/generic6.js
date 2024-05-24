@@ -5,7 +5,7 @@
 var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr, modControls;
 var controls, controlsFolder, controlsRights;
-var $page, $navbar, f7Page, pageEl, saving;
+var $page, $navbar, f7Page, pageEl, saving, saved;
 
 var inApp = typeof window.app7 == 'object';
 
@@ -1059,7 +1059,7 @@ function exitForm() {
 }
 
 function appExplorerRefresh() {
-    if (!pageEl.drs.saved && f7Page.pageFrom) {
+    if (!saved && f7Page.pageFrom) {
         // Si nunca guarde evito el refresh del explorer
         $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
             $(el).removeClass('refresh-on-focus');
@@ -1172,14 +1172,13 @@ async function saveDoc(exitOnSuccess) {
         if (ev) await evalCode(ev, context);
 
         await doc.save();
+        saved = true;
         doc_id = doc.id;
 
         if (inApp) {
             pageEl.drs.doc = doc;
             pageEl.drs.doc_id = doc.id;
-            pageEl.drs.saved = true;    
-        } else {
-            saved = true;
+            pageEl.drs.saved = saved;    
         }
 
         try {
