@@ -2366,7 +2366,6 @@ export class Document {
     todo: Esto deberia ser parte del save (issue #261)
     */
     async saveAttachments() {
-        debugger;
         let me = this;
         let utils = me.session.utils;
         let atts = await this.attachments();
