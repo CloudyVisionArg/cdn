@@ -2364,40 +2364,51 @@ export class Document {
     todo: Esto deberia ser parte del save (issue #261)
     */
     async saveAttachments() {
-        //todo: asyncLoop?
         debugger;
         let me = this;
         let utils = me.session.utils;
         let atts = await this.attachments();
+        let ret = [];
+
+        // 1ro borrar
         await utils.asyncLoop(atts.length, async loop => {
             let att = atts.get(loop.iteration());
-            debugger;
+            if (att.toDelete) {
+                let res = {
+                    action: 'delete',
+                    attachment: attInfo(att),
+                }
+                try {
+                    await att.delete();
+                    res.result = 'OK';
+                } catch (err) {
+                    res.result = err;
+                } finally {
+                    ret.push(res);
+                    loop.next();
+                }
+            }
+        });
 
-
-        })
+        // Despues agregar
         await utils.asyncLoop(atts.length, async loop => {
             let att = atts.get(loop.iteration());
-
+            if (att.isNew) {
+                let res = {
+                    action: 'add',
+                    attachment: attInfo(att),
+                }
+                try {
+                    await att.save();
+                    res.result = 'OK';
+                } catch (err) {
+                    res.result = err;
+                } finally {
+                    ret.push(res);
+                    loop.next();
+                }
+            }
         })
-
-/*
-        for (var [key, value] of ) {
-            if (value.toRemove) {
-                let prom = await value.remove();
-                prom._attachment = attInfo(value);
-                proms.push(prom);
-            }
-        }
-        for (var [key, value] of await this.attachments()) {
-            if (value.isNew) {
-                let prom = await value.save();
-                prom._attachment = attInfo(value);
-                proms.push(prom);
-            }
-        }
-        await Promise.allSettled(proms);
-        debugger;
-        return proms;
 
         function attInfo(att) {
             return {
@@ -2407,7 +2418,9 @@ export class Document {
                 isNew: att.isNew,
             }
         }
-        */
+
+        debugger;
+        return ret;
     }
 
     /**
