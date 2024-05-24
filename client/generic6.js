@@ -1172,8 +1172,6 @@ async function saveDoc(exitOnSuccess) {
         if (ev) await evalCode(ev, context);
 
         await doc.save();
-
-        docJson = doc.toJSON();
         doc_id = doc.id;
 
         if (inApp) {
