@@ -2366,13 +2366,16 @@ export class Document {
     async saveAttachments() {
         //todo: asyncLoop?
         debugger;
+        let proms = [];
         for (var [key, value] of await this.attachments()) {
             if (value.toRemove) {
-                await value.remove();
+                proms.push(value.remove());
             } else if (value.isNew) {
-                await value.save();
+                proms.push(value.save());
             }
         }
+        let ret = await Promise.allSettled(proms);
+        debugger;
     }
 
     /**
