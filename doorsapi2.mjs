@@ -2031,13 +2031,14 @@ export class Document {
             IsNew: true,
         }, this);
 
+        /* todo: no esta andando, resolver de otra forma, sin async
         this.session.currentUser.then(
             res => {
-                debugger;
                 att.AccId = res.id;
                 att.AccName = res.name;
             }
         )
+        */
 
         this.#attachmentsMap.set(name, att);
         return att;
@@ -2420,7 +2421,7 @@ export class Document {
             return {
                 id: att.id,
                 name: att.name,
-                ownerName: att.ownerName,
+                size: att.size,
                 isNew: att.isNew,
             }
         }
