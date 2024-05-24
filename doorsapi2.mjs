@@ -2393,7 +2393,6 @@ export class Document {
         });
 
         // 2do agregar
-        debugger;
         await utils.asyncLoop(atts.length, async loop => {
             let att = atts.get(loop.iteration());
             if (att.isNew) {
