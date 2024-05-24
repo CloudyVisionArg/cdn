@@ -2426,7 +2426,6 @@ export class Document {
             }
         }
 
-        debugger;
         return ret;
     }
 

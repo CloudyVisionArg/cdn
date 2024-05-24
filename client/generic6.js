@@ -1182,15 +1182,18 @@ async function saveDoc(exitOnSuccess) {
             pageEl.drs.saved = saved;    
         }
 
-        try {
-            await doc.saveAttachments();
-            doc.attachmentsReset();
+        let attErr;
+        let res = await doc.saveAttachments();
 
-        } catch(err) {
-            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
-            console.log(attErr);
-            console.error(err);
+        if (res.find(el => el.result != 'OK')) {
+            attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+            console.error(attErr);
+            console.log(err);
+
+        } else {
+            doc.attachmentsReset();
         }
+        debugger;
 
         try {
             // Evento afterSave
