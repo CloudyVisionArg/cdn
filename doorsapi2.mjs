@@ -2365,6 +2365,7 @@ export class Document {
     */
     async saveAttachments() {
         //todo: asyncLoop?
+        debugger;
         for (var [key, value] of await this.attachments()) {
             if (value.toRemove) {
                 await value.remove();
