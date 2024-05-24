@@ -1377,8 +1377,15 @@ export class Attachment {
     }
     set fileStream(value) {
         if (!this.isNew) throw new Error('Read-only property');
-        debugger;
         this.#json.File = value;
+
+        if (value instanceof Blob) {
+            this.size = value.size;
+        } else if (value instanceof ArrayBuffer) {
+            this.size = value.byteLength;
+        } else if (value instanceof Uint8Array) {
+            this.size = value.length;
+        } 
     }
 
     /**
