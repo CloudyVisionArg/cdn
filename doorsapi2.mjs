@@ -1458,8 +1458,6 @@ export class Attachment {
     @returns {string}
     */
     get ownerName() {
-        let j = this.#json;
-        debugger;
         return this.#json.AccName
     }
 
@@ -2035,6 +2033,7 @@ export class Document {
 
         this.session.currentUser.then(
             res => {
+                debugger;
                 att.AccId = res.id;
                 att.AccName = res.name;
             }
