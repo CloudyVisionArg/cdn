@@ -2406,8 +2406,8 @@ export class Document {
                 } finally {
                     ret.push(res);
                 }
-            loop.next();
             }
+            loop.next();
         })
 
         function attInfo(att) {
