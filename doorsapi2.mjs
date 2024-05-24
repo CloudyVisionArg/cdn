@@ -2371,7 +2371,8 @@ export class Document {
         let ret = [];
 
         // 1ro borrar
-        let atts = await this.attachments();
+        let atts = (await this.attachments()).keys();
+        debugger;
         await utils.asyncLoop(undefined, async loop => {
             if (loop.iteration() >= atts.length) {
                 loop.break();
