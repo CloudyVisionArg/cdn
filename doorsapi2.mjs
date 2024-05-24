@@ -1458,6 +1458,7 @@ export class Attachment {
     @returns {string}
     */
     get ownerName() {
+        let j = this.#json;
         debugger;
         return this.#json.AccName
     }
