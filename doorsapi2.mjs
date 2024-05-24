@@ -1380,11 +1380,11 @@ export class Attachment {
         this.#json.File = value;
 
         if (value instanceof Blob) {
-            this.size = value.size;
+            this.#json.Size = value.size;
         } else if (value instanceof ArrayBuffer) {
-            this.size = value.byteLength;
+            this.#json.Size = value.byteLength;
         } else if (value instanceof Uint8Array) {
-            this.size = value.length;
+            this.#json.Size = value.length;
         } 
     }
 
@@ -1531,10 +1531,6 @@ export class Attachment {
     */
     get size() {
         return this.#json.Size;
-    }
-    set size(value) {
-        if (!this.isNew) throw new Error('Read-only property');
-        this.#json.Size = value;
     }
 
     /**
