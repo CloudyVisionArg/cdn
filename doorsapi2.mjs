@@ -2369,14 +2369,14 @@ export class Document {
         let proms = [];
         for (var [key, value] of await this.attachments()) {
             if (value.toRemove) {
-                let prom = value.remove();
+                let prom = await value.remove();
                 prom._attachment = attInfo(value);
                 proms.push(prom);
             }
         }
         for (var [key, value] of await this.attachments()) {
             if (value.isNew) {
-                let prom = value.save();
+                let prom = await value.save();
                 prom._attachment = attInfo(value);
                 proms.push(prom);
             }
