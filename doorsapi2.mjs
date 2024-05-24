@@ -2385,9 +2385,9 @@ export class Document {
                     res.result = err;
                 } finally {
                     ret.push(res);
-                    loop.next();
                 }
             }
+            loop.next();
         });
 
         // Despues agregar
@@ -2405,8 +2405,8 @@ export class Document {
                     res.result = err;
                 } finally {
                     ret.push(res);
-                    loop.next();
                 }
+            loop.next();
             }
         })
 
