@@ -2379,6 +2379,7 @@ export class Document {
                 let prom = value.save();
                 prom._att = value;
                 proms.push(prom);
+            }
         }
         let ret = await Promise.allSettled(proms);
         debugger;
