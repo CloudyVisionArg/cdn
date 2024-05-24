@@ -2371,7 +2371,12 @@ export class Document {
         let ret = [];
 
         // 1ro borrar
-        await utils.asyncLoop(atts.length, async loop => {
+        await utils.asyncLoop(undefined, async loop => {
+            if (loop.iteration() >= atts.length) {
+                loop.break();
+                return;
+            }
+
             let att = atts.get(loop.iteration());
             if (att.toDelete) {
                 let res = {
