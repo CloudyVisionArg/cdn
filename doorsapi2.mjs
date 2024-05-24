@@ -2396,7 +2396,7 @@ export class Document {
             loop.next();
         });
 
-        // Despues agregar
+        // 2do agregar
         await utils.asyncLoop(atts.length, async loop => {
             let att = atts.get(loop.iteration());
             if (att.isNew) {
