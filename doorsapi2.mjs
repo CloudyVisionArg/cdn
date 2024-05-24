@@ -2372,15 +2372,9 @@ export class Document {
 
         // 1ro borrar
         let atts = Array.from((await this.attachments()).keys());
-        debugger;
-        await utils.asyncLoop(undefined, async loop => {
-            if (loop.iteration() >= atts.length) {
-                loop.break();
-                return;
-            }
-            let att = atts.get(loop.iteration());
+        await utils.asyncLoop(atts.length, async loop => {
+            let att = atts.get(atts[loop.iteration()]);
             if (att.toDelete) {
-                debugger
                 let res = {
                     action: 'delete',
                     attachment: attInfo(att),
@@ -2398,11 +2392,10 @@ export class Document {
         });
 
         // 2do agregar
-        atts = await this.attachments();
+        atts = Array.from((await this.attachments()).keys());
         await utils.asyncLoop(atts.length, async loop => {
-            let att = atts.get(loop.iteration());
+            let att = atts.get(atts[loop.iteration()]);
             if (att.isNew) {
-                debugger;
                 let res = {
                     action: 'add',
                     attachment: attInfo(att),
