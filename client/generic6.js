@@ -1059,6 +1059,7 @@ function exitForm() {
 }
 
 function appExplorerRefresh() {
+    debugger; // saved?
     if (!saved && f7Page.pageFrom) {
         // Si nunca guarde evito el refresh del explorer
         $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
