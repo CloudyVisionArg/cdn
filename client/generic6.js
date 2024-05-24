@@ -405,7 +405,7 @@ async function appRenderPage() {
 async function appPageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
-    pageEl.crm = {};
+    pageEl.drs = {};
 
     // En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'))
@@ -500,8 +500,8 @@ async function appPageInit(e, page) {
     await fillControls();
     preldr.hide();
 
-    if (!pageEl.crm) pageEl.crm = {};
-    Object.assign(pageEl.crm, {
+    if (!pageEl.drs) pageEl.drs = {};
+    Object.assign(pageEl.drs, {
         fillControls, saveDoc, fld_id, folder, 
         doc_id, doc, $navbar, f7Page, exitForm,
     });
@@ -1059,7 +1059,7 @@ function exitForm() {
 }
 
 function appExplorerRefresh() {
-    if (!pageEl.crm.saved && f7Page.pageFrom) {
+    if (!pageEl.drs.saved && f7Page.pageFrom) {
         // Si nunca guarde evito el refresh del explorer
         $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
             $(el).removeClass('refresh-on-focus');
@@ -1175,9 +1175,9 @@ async function saveDoc(exitOnSuccess) {
         doc_id = doc.id;
 
         if (inApp) {
-            pageEl.crm.doc = doc;
-            pageEl.crm.doc_id = doc.id;
-            pageEl.crm.saved = true;    
+            pageEl.drs.doc = doc;
+            pageEl.drs.doc_id = doc.id;
+            pageEl.drs.saved = true;    
         } else {
             saved = true;
         }
