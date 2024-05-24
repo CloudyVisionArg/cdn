@@ -1994,6 +1994,7 @@ export class Document {
                                 // Saca los repetidos
                                 ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
                                 // Levanta los accounts y completa el nombre
+                                debugger;
                                 me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
                                     accs => {
                                         res.forEach(el => {
