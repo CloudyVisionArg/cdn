@@ -1193,7 +1193,6 @@ async function saveDoc(exitOnSuccess) {
         } else {
             doc.attachmentsReset();
         }
-        debugger;
 
         let asErr;
         try {
