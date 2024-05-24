@@ -2368,10 +2368,17 @@ export class Document {
         debugger;
         let proms = [];
         for (var [key, value] of await this.attachments()) {
-            if (value.toRemove) proms.push(value.remove());
+            if (value.toRemove) {
+                let prom = value.remove();
+                prom._att = value;
+                proms.push(prom);
+            }
         }
         for (var [key, value] of await this.attachments()) {
-            if (value.isNew) proms.push(value.save());
+            if (value.isNew) {
+                let prom = value.save();
+                prom._att = value;
+                proms.push(prom);
         }
         let ret = await Promise.allSettled(proms);
         debugger;
