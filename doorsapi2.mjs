@@ -2366,8 +2366,22 @@ export class Document {
     async saveAttachments() {
         //todo: asyncLoop?
         debugger;
-        let proms = [];
-        for (var [key, value] of await this.attachments()) {
+        let me = this;
+        let utils = me.session.utils;
+        let atts = await this.attachments();
+        await utils.asyncLoop(atts.length, async loop => {
+            let att = atts.get(loop.iteration());
+            debugger;
+
+
+        })
+        await utils.asyncLoop(atts.length, async loop => {
+            let att = atts.get(loop.iteration());
+
+        })
+
+/*
+        for (var [key, value] of ) {
             if (value.toRemove) {
                 let prom = await value.remove();
                 prom._attachment = attInfo(value);
@@ -2393,6 +2407,7 @@ export class Document {
                 isNew: att.isNew,
             }
         }
+        */
     }
 
     /**
