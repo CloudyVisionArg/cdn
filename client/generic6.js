@@ -1246,7 +1246,6 @@ async function saveDoc(exitOnSuccess) {
 
 function $get(pSelector) {
     if (inApp) {
-        debugger;
         return $(pSelector, $page[0]);
     } else {
         return $(pSelector);
