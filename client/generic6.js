@@ -1246,9 +1246,8 @@ async function saveDoc(exitOnSuccess) {
 
 function $get(pSelector) {
     if (inApp) {
-        // Usar solo despues del pageInit
         debugger;
-        return $(pSelector, f7Page.pageEl);
+        return $(pSelector, $page[0]);
     } else {
         return $(pSelector);
     }
