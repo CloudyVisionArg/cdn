@@ -57,9 +57,9 @@ window.deviceServices = {
         let me = this;
         var files = [];
 
-        const opts = me.cameraOptions(CameraSource.Camera);
-        opts.resultType = CameraResultType.Uri;
-        const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Camera);
+        const opts = me.cameraOptions('CAMERA'); // PROMPT, CAMERA, PHOTOS
+        opts.resultType = 'uri'; // uri, base64, dataUrl
+        const hasPermission = await me.requestCameraPermissions('camera'); // camera, photos
         if (hasPermission) {
             var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
             file.filename = file.path.replace(/^.*[\\\/]/, '');
