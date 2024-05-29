@@ -58,7 +58,6 @@ window.deviceServices = {
         var files = [];
 
         const opts = me.cameraOptions('CAMERA'); // PROMPT, CAMERA, PHOTOS
-        opts.resultType = 'uri'; // uri, base64, dataUrl
         const hasPermission = await me.requestCameraPermissions('camera'); // camera, photos
         if (hasPermission) {
             var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
@@ -84,7 +83,7 @@ window.deviceServices = {
             //mediaType: Camera.MediaType.ALLMEDIA,
             //allowEdit: (device.platform == 'iOS'),
             correctOrientation: true, // Corrects Android orientation quirks
-            resultType: CameraResultType.DataUrl,
+            resultType: 'uri', // uri, base64, dataUrl
             //targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
             //targetHeight: 
             //saveToPhotoAlbum: Save the image to the photo album on the device after capture.
