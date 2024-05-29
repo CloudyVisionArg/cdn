@@ -102,7 +102,7 @@ window.deviceServices = {
 
         let options = {};
         if (opts) options = opts; // todo: default opts?
-        const hasPermission = await me.requestCameraPermissions(CameraPermissionType.Photos);
+        const hasPermission = await me.requestCameraPermissions('photos');
         if (hasPermission) {
             const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
             debugger;
