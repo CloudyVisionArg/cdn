@@ -96,7 +96,7 @@ window.deviceServices = {
         return (res[permission] == 'granted' || res[permission] == 'limited');
     },
 
-    pickPhoto: async function (opts) {
+    pickPhotos: async function (opts) {
         let me = this;
         var files = [];
 
@@ -1654,6 +1654,7 @@ function executeCode(pCode, pSuccess, pFailure) {
     getCodelib(pCode).then(
         function (res) {
             if (device.platform == 'browser') {
+                // En el browser va sin try catch para detectarlo mas facil
                 eval(res);
                 console.log('exec ' + pCode + ' ok');
                 if (pSuccess) pSuccess();
