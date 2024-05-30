@@ -96,7 +96,7 @@ window.deviceServices = {
         return (res[permission] == 'granted' || res[permission] == 'limited');
     },
 
-    pickPhotos: async function (opts) {
+    pickImages: async function (opts) {
         let me = this;
         var files = [];
 
