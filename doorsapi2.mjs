@@ -4827,7 +4827,7 @@ export class Utilities {
                 } else {
                     // todo: falta probar
                     debugger;
-                    return me.newSimpleBuffer(atob(val.substring(prefix.length)));
+                    return me.base64ToBuffer(val.substring(prefix.length));
                 }
             } else {
                 return val;
