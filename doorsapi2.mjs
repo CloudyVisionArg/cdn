@@ -4528,7 +4528,7 @@ export class Utilities {
     }
 
     base64ToBuffer(value) {
-        let bin = UintArray8.from(atob(fd.data));
+        let bin = Uint8Array.from(atob(fd.data));
         debugger;
         //let buf = dSession.utils.newSimpleBuffer(atob(fd.data).split(''));
     }
