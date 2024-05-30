@@ -96,7 +96,7 @@ window.deviceServices = {
         return (res[permission] == 'granted' || res[permission] == 'limited');
     },
 
-    pickFromPhotoLib: async function (opts) {
+    pickPhoto: async function (opts) {
         let me = this;
         var files = [];
 
@@ -105,9 +105,7 @@ window.deviceServices = {
         const hasPermission = await me.requestCameraPermissions('photos');
         if (hasPermission) {
             const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
-            debugger;
-            for (let idx = 0; idx < selectedPhotos.photos.length; idx++) {
-                const file = selectedPhotos.photos[idx];
+            selectedPhotos.photos.forEach(file => {
                 file.filename = file.path.replace(/^.*[\\\/]/, '');
                 files.push({
                     uri: file.path,
@@ -116,7 +114,8 @@ window.deviceServices = {
                 });
                 //const fileInCache = await writeFileInCachePath(item.path);
                 //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
-            }
+
+            });
             return files;
 
         } else {
