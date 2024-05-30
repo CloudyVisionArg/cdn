@@ -259,8 +259,13 @@ window.deviceServices = {
         })
     },
 
-    openFile: function (URL) {
-        open(URL);
+    openFile: function (uri) {
+        Capacitor.Plugins.FileOpener.open({filePath : uri}).then(
+            () => { },
+            (err) => {
+                logAndToast('FileOpener error: ' + dSession.utils.errMsg(err));
+            }, 
+        );
     }
 };
 
