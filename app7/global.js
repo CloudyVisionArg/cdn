@@ -98,14 +98,14 @@ window.deviceServices = {
 
     pickImages: async function (opts) {
         let me = this;
-        var files = [];
+        let files = [];
 
         let options = {};
         if (opts) options = opts; // todo: default opts?
-        const hasPermission = await me.requestCameraPermissions('photos');
+        let hasPermission = await me.requestCameraPermissions('photos');
         if (hasPermission) {
-            let ret = await Capacitor.Plugins.Camera.pickImages(options);
-            ret.photos.forEach(file => {
+            let res = await Capacitor.Plugins.Camera.pickImages(options);
+            res.photos.forEach(file => {
                 file.name = file.path.replace(/^.*[\\\/]/, '');
                 files.push(file);
             });
@@ -122,15 +122,8 @@ window.deviceServices = {
 
         let options = { multiple: true };
         if (opts) options = opts; // todo: Default opts?
-        const res = await Capacitor.Plugins.FilePicker.pickFiles(options);
-        for(let idx = 0; idx < res.files.length; idx++) {
-            const file = res.files[idx];
-            files.push({
-                uri: file.path,
-                name: file.name,
-                size: file.size
-            });
-        }
+        let res = await Capacitor.Plugins.FilePicker.pickFiles(options);
+        debugger;
         return files;
     },
 
