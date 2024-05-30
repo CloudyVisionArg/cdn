@@ -4527,6 +4527,12 @@ export class Utilities {
         });
     }
 
+    base64ToBuffer(value) {
+        let bin = UintArray8.from(atob(fd.data));
+        debugger;
+        //let buf = dSession.utils.newSimpleBuffer(atob(fd.data).split(''));
+    }
+
     /**
     Cache de uso gral. El cache se almacena en la instancia del objeto Session,
     y solo trabaja en el ambito de la misma.
@@ -4821,6 +4827,8 @@ export class Utilities {
                 if (me.session.node.inNode) {
                     return Buffer.from(atob(val.substring(prefix.length)), 'binary');
                 } else {
+                    // todo: falta probar
+                    debugger;
                     return me.newSimpleBuffer(atob(val.substring(prefix.length)));
                 }
             } else {
@@ -4868,9 +4876,10 @@ export class Utilities {
                 return prefix + dSession.utils.newSimpleBuffer(val).toString('base64');
 
             } else {
+                //todo: Falta Buffer de node
+                debugger;
                 return val;
             }
-            //todo: Falta Buffer de node
         });
     }
 
