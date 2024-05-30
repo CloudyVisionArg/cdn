@@ -106,15 +106,13 @@ window.deviceServices = {
         if (hasPermission) {
             let ret = await Capacitor.Plugins.Camera.pickImages(options);
             ret.photos.forEach(file => {
+                debugger;
                 file.filename = file.path.replace(/^.*[\\\/]/, '');
                 files.push({
                     uri: file.path,
                     name: file.filename,
                     size: file.size
                 });
-                //const fileInCache = await writeFileInCachePath(item.path);
-                //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
-
             });
             return files;
 
