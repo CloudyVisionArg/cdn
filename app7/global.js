@@ -55,19 +55,13 @@ getFile(pFileURL)
 window.deviceServices = {
     takePhoto: async function () {
         let me = this;
-        var files = [];
 
-        const opts = me.cameraOptions('CAMERA'); // PROMPT, CAMERA, PHOTOS
-        const hasPermission = await me.requestCameraPermissions('camera'); // camera, photos
-        if (hasPermission) {
-            var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
-            file.filename = file.path.replace(/^.*[\\\/]/, '');
-            files.push({
-                uri: file.path,
-                name: file.filename,
-                size: file.size,
-            });
-            return files;
+        let opts = me.cameraOptions('CAMERA'); // PROMPT, CAMERA, PHOTOS
+        let perm = await me.requestCameraPermissions('camera'); // camera, photos
+        if (perm) {
+            let file = await Capacitor.Plugins.Camera.getPhoto(opts);
+            file.name = file.path.replace(/^.*[\\\/]/, '');
+            return [file];
 
         } else {
             throw new Error('Se necesita permiso de acceso a la camara');
@@ -213,14 +207,14 @@ window.deviceServices = {
             }
 
             async function cancelClick() {
-                clearInterval(interv);
-                updControls(false);
-
                 let stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
                 console.log('VoiceRecorder status: ' + stat.status);
                 if (stat.status != 'NONE') {
                     await Capacitor.Plugins.VoiceRecorder.stopRecording();
                 }
+                
+                clearInterval(interv);
+                updControls(false);
             }
 
             function updControls(recording) {
