@@ -5,7 +5,7 @@
 var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr, modControls;
 var controls, controlsFolder, controlsRights;
-var $page, $navbar, f7Page, pageEl, saving, saved;
+var $page, $navbar, f7Page, pageEl, evSrc, saving, saved;
 
 var inApp = typeof window.app7 == 'object';
 
@@ -101,11 +101,11 @@ function errMgr(pErr) {
     if (inApp) {
         console.error(pErr);
         app7.preloader.hide();
-        resolve({ content: errPage(dSession.utils.errMsg(pErr)) });
+        resolve({ content: errPage(utils.errMsg(pErr)) });
 
     } else {
         console.error(pErr);
-        toast(dSession.utils.errMsg(pErr), { delay: 10000 });
+        toast(utils.errMsg(pErr), { delay: 10000 });
         preloader.hide();
     }
 }
@@ -187,6 +187,8 @@ async function appRenderPage() {
         leftbutton: 'exit',
         rightbutton: 'save',
     });
+
+    evSrc = $page[0];
 
     $page.find('.navbar-inner .left .link').on('click', function (e) {
         // todo: ver si se puede detectar si hubo cambios
@@ -333,7 +335,7 @@ async function appRenderPage() {
 
         } catch (err) {
             console.error(err);
-            toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+            toast('BeforeRender error: ' + utils.errMsg(err));
         }
 
         // Membrete
@@ -350,7 +352,7 @@ async function appRenderPage() {
 
         // TABS
 
-        var tabs = controls.filter(function (el) {
+        let tabs = controls.filter(function (el) {
             return el['CONTROL'].toUpperCase() == 'TAB' && el['DONOTRENDER'] != 1 &&
                 el['R'] != '0' && el['HIDEINAPP'] != '1'
         });
@@ -369,8 +371,8 @@ async function appRenderPage() {
                 class: 'tabs',
             }).appendTo($pageCont);
 
-            var tab, label, $tab, $ul;
-            for (var i = 0; i < tabs.length; i++) {
+            let tab, label, $tab, $ul;
+            for (let i = 0; i < tabs.length; i++) {
                 tab = tabs[i];
                 label = tab['DESCRIPTION'] ? tab['DESCRIPTION'] : tab['NAME'];
                 $('<a/>', {
@@ -509,6 +511,7 @@ async function appPageInit(e, page) {
 async function webRenderPage() {
     var $body = $('body');
     var $d = $(document);
+    evSrc = document;
 
     $d.ready(function () {
         // Key shortcuts
@@ -655,7 +658,7 @@ async function webRenderPage() {
 
         } catch (err) {
             console.error(err);
-            toast('BeforeRender error: ' + dSession.utils.errMsg(err));
+            toast('BeforeRender error: ' + utils.errMsg(err));
         }
 
         // Membrete
@@ -669,16 +672,16 @@ async function webRenderPage() {
         });
 
         if (tabs.length > 0) {
-            var $navTabs = $('<ul/>', {
+            let $navTabs = $('<ul/>', {
                 class: 'nav nav-tabs mt-3',
             }).appendTo($cont);
 
-            var $tabCont = $('<div/>', {
+            let $tabCont = $('<div/>', {
                 class: 'tab-content',
             }).appendTo($cont);
 
-            var tab, label, $tab, $li;
-            for (var i = 0; i < tabs.length; i++) {
+            let tab, label, $tab, $li;
+            for (let i = 0; i < tabs.length; i++) {
                 tab = tabs[i];
                 label = tab['DESCRIPTION'] ? tab['DESCRIPTION'] : tab['NAME'];
 
@@ -708,7 +711,7 @@ async function webRenderPage() {
     $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a></span>');
 
     // Boton Borrar
-    var $delBtn = $('<button/>', {
+    let $delBtn = $('<button/>', {
         type: 'button',
         id: 'deleteDoc',
         class: 'btn btn-outline-danger',
@@ -856,29 +859,171 @@ function webGetRow(pRow, pCont, pCol) {
     }
 }
 
-function renderControls() {
-    /*
-    fieldset
+async function renderControls(container, parent) {
+    let subset = controls.filter(el => {
+        return el['PARENT'] == parent && el['CONTROL'].toUpperCase() != 'TAB' &&
+            el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
+            el['R'] != '0' && (inApp ? el['HIDEINAPP'] != '1' : true);
+    });
 
-    web
-        $row = webGetRow($row, $tab);
-        $col = $('<div/>', {
-            class: 'col-12 form-group',
-        }).appendTo($row);
-        let ctl = modControls.newFieldset('fs', {  });
-        ctl.control.appendTo($col)
-    
-    app
-        let ctl = modControls.newFieldset('fs');
-        ctl.control.appendTo($ul);
-        let $div2 = $('<div/>', {
-            class: 'list no-hairlines-md',
-            style: 'margin-top: 0;',
-        }).appendTo(ctl.content);
-        let $ul2 = $('<ul/>').appendTo($div2);
+    let $row;
 
-    */
+    utils.asyncLoop(subset.length, async loop => {
+        let ctl = subset[loop.iteration()];
+        let type = ctl['CONTROL'].toUpperCase();
+        if (ctl['XMLATTRIBUTES']) {
+            try {
+                ctl.domAttr = $.parseXML(ctl['XMLATTRIBUTES']);
+            } catch (err) {
+                console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
+            }
+        };
+        ctl.attr = function (attribute) {
+            if (this.domAttr) return this.domAttr.documentElement.getAttribute(attribute);
+        };
+
+        let label = ctl['DESCRIPTION'] ? ctl['DESCRIPTION'] : ctl['NAME'];
+        
+        let $this, $input, bsctl, tf, textField, vf, valueField;
+
+        tf = ctl.attr('textfield');
+        if (tf && tf != '[NULL]') {
+            textField = doc.fields(tf);
+        };
+
+        vf = ctl.attr('valuefield');
+        if (vf && vf != '[NULL]') {
+            valueField = doc.fields(vf);
+        };
+
+        let $cont;
+
+        if (inApp) {
+            $cont = $(container);
+        } else {
+            $row = getRow($row, container, ctl['COLUMN']);
+            $cont = $('<div/>', {
+                class: 'col-12 col-md-' + (ctl['COLUMN'] == '0' ? '12': '6') + ' form-group',
+            }).appendTo($row);
+        }
+
+
+        // -- Textbox --
+
+        if (type == 'TEXTBOX') {
+            if (ctl.attr('mode') == '2') { // Multiline
+                $this = newTextarea(ctl['NAME'], label);
+                $this.addClass('mt-3');
+                $input = $this.find('textarea');
+                if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
+
+            } else {
+                $this = newInputText(ctl['NAME'], label);
+                $this.addClass('mt-3')
+                $input = $this.find('input');
+                if (ctl.attr('mode') == '3') $input.attr('type', 'password');
+                if (ctl.attr('isnumber') == '1') $input.attr('data-numeral', numeral.options.defaultFormat);
+            }
+
+            $input.attr('data-textfield', tf);
+
+            if (ctl.attr('maxlength')) {
+                $input.attr('maxlength', ctl.attr('maxlength'));
+            } else if (textField && textField.type == 1 && textField.length > 0) {
+                $input.attr('maxlength', textField.length);
+            }
+
+            if (textField && textField.type == 3) {
+                $input.attr('data-numeral', numeral.options.defaultFormat)
+            }
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $input.attr({ 'readonly': 'readonly' });
+            }
+
+            if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
+                inputDataList($input, {
+                    folder: fld_id,
+                    field: tf,
+                });
+            }
+
+            let buttons = ctl.attr('buttons');
+            if (buttons) {
+                if (buttons.indexOf('email') >= 0) addEmailButton($this);
+                if (buttons.indexOf('phone') >= 0) addPhoneButton($this);
+                if (buttons.indexOf('whatsapp') >= 0) addWappButton($this);
+            }
+
+
+        // -- DTPicker --
+
+        } else if (type == 'DTPICKER') {
+            let mode = 'date';
+            if (ctl.attr('mode') == '2') {
+                mode = 'datetime-local';
+            } else if (ctl.attr('mode') == '3') {
+                mode = 'time';
+            }
+            $this = newDTPicker(ctl['NAME'], label, mode)
+            $this.addClass('mt-3');
+            $input = $this.find('input');
+            bsctl = $this.find('div.input-group');
+            $input.attr('data-textfield', tf);
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $input.closest('.input-group').datetimepicker('disable');
+                //$input.attr({ 'readonly': 'readonly' });
+            }
+        }
+        if ($this) $this.appendTo(pCont);
+
+        try {
+            var context = {
+                ctl, $this, $input, f7ctl, bsctl, textField, valueField, label
+            };
+
+            // Evento renderControl
+            evSrc.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+            if (context.return && typeof context.return.then == 'function') await context.return;
+
+            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
+
+        } catch (err) {
+            console.error(err);
+            toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
+        }
+        /*
+        Objetos disponibles en este script:
+            doc: El objeto Document que se esta abriendo
+            folder: La carpeta actual
+            controlsFolder: La carpeta de controles
+            controls: El search a la carpeta de controles completo
+            ctl: El row del control que se esta dibujando
+            ctl.attr: Function que devuelve un atributo de XMLATTRIBUTES
+            $this: El control completo JQuery (inluido el <li>)
+            $input: El input, textarea, select, etc, dentro del control
+                (puede ser undefined en caso de los raw y otros)
+            f7ctl: El control Framework7 (depende del control)
+            textField: El objeto Field bindeado con textField (depende del control)
+            valueField: El objeto Field bindeado con valueField (depende del control)
+        */
+
+        // evalCode con context de renderControls
+        // todo: cdo se pase todo el codigo a ctx.etc sacarlo
+        async function evalCode(code, ctx) {
+            try {
+                var pipe = {};
+                eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+                return await pipe.fn(ctx);
+        
+            } catch(err) {
+                console.error(err);
+                throw err; // todo: se deberia mostrar un toast y dejar cargar igual
+            }
+        }    
+    })
 }
+
 async function fillControls() {
     let form = await folder.form
     let formDesc = form.description ? form.description : form.name;
@@ -971,7 +1116,7 @@ async function fillControls() {
                         }
 
                     } else if (f.type == 2) {
-                        let dt = dSession.utils.cDate(v);
+                        let dt = utils.cDate(v);
                         if (dt) {
                             $el.val(new moment(dt).format('L LT'));
                         } else {
@@ -1156,8 +1301,6 @@ async function saveDoc(exitOnSuccess) {
             }
         });
 
-        let evSrc = inApp ? $page[0] : document;
-
         //Parametros para disponibilizar en los eventos
         let context = { exitOnSuccess };
 
@@ -1202,7 +1345,7 @@ async function saveDoc(exitOnSuccess) {
             if (ev) await evalCode(ev, context);
 
         } catch (err) {
-            asErr = 'AfterSave error: ' + dSession.utils.errMsg(err);
+            asErr = 'AfterSave error: ' + utils.errMsg(err);
             console.error(err);
         }
 
@@ -1235,7 +1378,7 @@ async function saveDoc(exitOnSuccess) {
     function errMgr(err) {
         saving = false;
         preldr.hide();
-        toast(dSession.utils.errMsg(err));
+        toast(utils.errMsg(err));
         console.error(err);
     }
 

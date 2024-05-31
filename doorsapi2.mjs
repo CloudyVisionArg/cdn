@@ -3899,8 +3899,7 @@ export class Node {
     */
     exec(options) {
         var me = this;
-        var jsonStringify = me.session.utils.jsonStringify;
-        var jsonParse = me.session.utils.jsonParse;
+        var utils = me.session.utils;
 
         return new Promise(async (resolve, reject) => {
             let data = {
@@ -3918,7 +3917,7 @@ export class Node {
 
             if (options.url) {
                 var url = await me.server + '/exec';
-                url += '?msg=' + encodeURIComponent(jsonStringify(data));
+                url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
                 resolve(url);
 
             } else {
@@ -3927,13 +3926,13 @@ export class Node {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: jsonStringify(data),
+                    body: utils.jsonStringify(data),
                 });
 
                 if (res.ok) {
                     let buf = new SimpleBuffer(await res.arrayBuffer());
                     try {
-                        let json = jsonParse(buf.toString());
+                        let json = utils.jsonParse(buf.toString());
                         if (json.__type__) {
                             resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
                         } else {
@@ -3949,7 +3948,7 @@ export class Node {
                     try {
                         let txt = await res.text();
                         let json = JSON.parse(txt);
-                        err = me.session.utils.deserializeError(json);
+                        err = utils.deserializeError(json);
                 
                     } catch(e) {
                         err = new Error(res.status + ' (' + res.statusText + ')');
