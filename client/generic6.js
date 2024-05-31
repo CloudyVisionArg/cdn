@@ -912,13 +912,13 @@ async function renderControls(container, parent) {
 
         if (type == 'TEXTBOX') {
             if (ctl.attr('mode') == '2') { // Multiline
-                $this = newTextarea(ctl['NAME'], label);
+                $this = modControls.newTextarea(ctl['NAME'], label);
                 $this.addClass('mt-3');
                 $input = $this.find('textarea');
                 if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
 
             } else {
-                $this = newInputText(ctl['NAME'], label);
+                $this = modControls.newTextbox(ctl['NAME'], label);
                 $this.addClass('mt-3')
                 $input = $this.find('input');
                 if (ctl.attr('mode') == '3') $input.attr('type', 'password');
