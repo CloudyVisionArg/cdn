@@ -198,34 +198,15 @@ window.deviceServices = {
                     data : recData.value.recordDataBase64,
                     directory: 'CACHE',
                 });
+                // let res2 = await Capacitor.Plugins.Filesystem.stat({ path: res.uri });
 
-                let res2 = await Capacitor.Plugins.Filesystem.stat({ path: res.uri });
-                
-                debugger;
-
-                /*
-            
-                writeFileInCache(fileName, recData.value.recordDataBase64).then(
-                    res => {
-                        Capacitor.Plugins.Filesystem.stat({ path: res.uri }).then(
-                            file => {
-                                file.localURL = file.uri;
-                                file.name = fileName;
-                                resolve(file);
-                            },
-                            err => {
-                                reject(err);
-                            }
-                        );
-                    },
-                    err => {
-                        reject(err)
-                    }
-                );
-                */
+                res.path = res.uri;
+                res.name = res.path.replace(/^.*[\\\/]/, '');
 
                 clearInterval(interv);
                 sheet.close();
+
+                resolve([res]);
             }
 
             async function cancelClick() {
