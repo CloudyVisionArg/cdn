@@ -184,15 +184,13 @@ window.deviceServices = {
 
             async function saveClick() {
                 let recData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-                let millis = recData.value.msDuration;
-                let minutes = Math.floor(millis / 60000);
-                let seconds = ((millis % 60000) / 1000).toFixed(0);
-                let durationString = (seconds == 60) ?
-                    (minutes + 1) + ':00' :
-                    minutes + ':' + (seconds < 10 ? '0' : '') + seconds
-                let fileName = 'audio_' + durationString.replaceAll(':', '-') + '_min.aac';
+                let ms = recData.value.msDuration;
+                let min = Math.floor(ms / 60000);
+                let sec = ((ms % 60000) / 1000).toFixed(0);
+                let duration = (sec == 60) ? (min + 1) + ':00' :
+                    min + '-' + (sec < 10 ? '0' : '') + sec
+                let fileName = 'audio_' + duration + '_min.aac';
 
-                debugger;
                 let res = await Capacitor.Plugins.Filesystem.writeFile({
                     path : fileName,
                     data : recData.value.recordDataBase64,
