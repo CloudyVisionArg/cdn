@@ -1158,7 +1158,7 @@ async function fillControls() {
         this.drs.value(doc);
     });
 
-    $get('[data-role="doc-log"]').each(function (ix, el) {
+    $get('[data-role*="doc-log"]').each(function (ix, el) {
         this.drs.value(doc);
     });
 
