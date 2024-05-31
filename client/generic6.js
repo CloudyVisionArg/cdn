@@ -975,7 +975,7 @@ async function renderControls(container, parent) {
                 //$input.attr({ 'readonly': 'readonly' });
             }
         }
-        if ($this) $this.appendTo(pCont);
+        if ($this) $this.appendTo($cont);
 
         try {
             var context = {
