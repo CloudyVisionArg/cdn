@@ -198,6 +198,9 @@ window.deviceServices = {
                     data : recData.value.recordDataBase64,
                     directory: 'CACHE',
                 });
+
+                let res2 = await Capacitor.Plugins.Filesystem.stat({ path: res.uri });
+                
                 debugger;
 
                 /*
@@ -220,7 +223,7 @@ window.deviceServices = {
                     }
                 );
                 */
-               
+
                 clearInterval(interv);
                 sheet.close();
             }
