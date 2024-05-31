@@ -194,7 +194,7 @@ window.deviceServices = {
                 let sec = ((ms % 60000) / 1000).toFixed(0);
                 let duration = (sec == 60) ? (min + 1) + ':00' :
                     min + '-' + (sec < 10 ? '0' : '') + sec
-                let fileName = 'audio_' + duration + '_min.aac';
+                let fileName = 'audio_' + duration + '.aac';
 
                 let res = await Capacitor.Plugins.Filesystem.writeFile({
                     path : fileName,
