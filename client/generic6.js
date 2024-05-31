@@ -340,7 +340,7 @@ async function appRenderPage() {
 
         // Membrete
 
-        $ul = $('<ul/>')
+        let $ul = $('<ul/>')
         await renderControls($ul, '[NULL]');
 
         if ($ul.html()) {
