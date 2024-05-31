@@ -612,7 +612,7 @@ async function webRenderPage() {
         let ctl = modControls.newAttachments('attachments', {
             label: 'Adjuntos',
         });
-        ctl.control.addClass('mt-3').appendTo($col);
+        ctl.$root.addClass('mt-3').appendTo($col);
 
         // tabHeader
 
@@ -627,7 +627,7 @@ async function webRenderPage() {
                 }).appendTo($row);
 
                 let ctl = modControls.newDefaultControl(field);
-                ctl.control.addClass('mt-3').appendTo($col);
+                ctl.$root.addClass('mt-3').appendTo($col);
             }
         })
 
