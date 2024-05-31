@@ -884,7 +884,7 @@ async function renderControls(container, parent) {
 
         let label = ctl['DESCRIPTION'] ? ctl['DESCRIPTION'] : ctl['NAME'];
         
-        let $this, $input, bsctl, tf, textField, vf, valueField;
+        let control, options, $this, $input, bsctl, tf, textField, vf, valueField;
 
         tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
@@ -911,22 +911,51 @@ async function renderControls(container, parent) {
         // -- Textbox --
 
         if (type == 'TEXTBOX') {
-            if (ctl.attr('mode') == '2') { // Multiline
-                $this = modControls.newTextarea(ctl['NAME'], label);
-                $this.addClass('mt-3');
-                $input = $this.find('textarea');
-                if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
+            /*
+            {
+                label: 'Etiqueta',
+                value: 'Valor inicial',
+                type: 'password', // text (def), email, password, hidden
+                textField: 'micampo', // Nombre del field enlazado
+                readOnly: true, // Def false
+                containerTag: 'span', // tagName del container. Def web: div, app: li
+            }
+            
+            Control:
+            {
+                $input,
+                $root,
+                readonly(),
+                text(),
+                value(),
+            }
+            */
 
+            options = {
+                label: label,
+                textField: tf,
+            }
+            if (ctl.attr('mode') == '3') opt.type = 'password';
+
+            //if (ctl.attr('isnumber') == '1') $input.attr('data-numeral', numeral.options.defaultFormat);
+
+            if (ctl.attr('mode') == '2') { // Multiline
+                control = modControls.newTextarea(ctl['NAME'], options);
             } else {
-                $this = modControls.newTextbox(ctl['NAME'], label);
-                $this.addClass('mt-3')
-                $input = $this.find('input');
-                if (ctl.attr('mode') == '3') $input.attr('type', 'password');
-                if (ctl.attr('isnumber') == '1') $input.attr('data-numeral', numeral.options.defaultFormat);
+                control = modControls.newInputText(ctl['NAME'], options);
             }
 
-            $input.attr('data-textfield', tf);
+            $this = control.$root;
+            $input = control.$input;
 
+            if (inApp) {
+            } else {
+                control.$root.addClass('mt-3');
+                if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
+            }
+
+
+            /*
             if (ctl.attr('maxlength')) {
                 $input.attr('maxlength', ctl.attr('maxlength'));
             } else if (textField && textField.type == 1 && textField.length > 0) {
@@ -954,6 +983,7 @@ async function renderControls(container, parent) {
                 if (buttons.indexOf('phone') >= 0) addPhoneButton($this);
                 if (buttons.indexOf('whatsapp') >= 0) addWappButton($this);
             }
+            */
 
 
         // -- DTPicker --
@@ -975,7 +1005,9 @@ async function renderControls(container, parent) {
                 //$input.attr({ 'readonly': 'readonly' });
             }
         }
-        if ($this) $this.appendTo($cont);
+
+
+        if (control.$root) control.$root.appendTo($cont);
 
         try {
             var context = {
