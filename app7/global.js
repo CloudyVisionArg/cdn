@@ -169,21 +169,21 @@ window.deviceServices = {
             async function recordClick() {
                 //TODO: https://github.com/tchvu3/capacitor-voice-recorder
                 //Evaluar mejor los permisos 
-                const perm = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+                let perm = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
                 if (perm.value) {
                     save = false;
                     
-                    const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                    let stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
                     if (stat.status != 'NONE'){
-                        const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                        let stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
                     }
-                    const startRes = await Capacitor.Plugins.VoiceRecorder.startRecording();
+                    let startRes = await Capacitor.Plugins.VoiceRecorder.startRecording();
                     updControls(true);
                 }
             }
 
             async function saveClick() {
-                const recData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                let recData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
                 var now = new Date();
                 let millis = recData.value.msDuration;
                 let minutes = Math.floor(millis / 60000);
@@ -193,7 +193,16 @@ window.deviceServices = {
                     minutes + ':' + (seconds < 10 ? '0' : '') + seconds
                 let fileName = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-') + '_min_' + durationString.replaceAll(':', '-') + '.aac';
 
-                writeFileInCache(fileName, recordingData.value.recordDataBase64).then(
+                let res = await Capacitor.Plugins.Filesystem.writeFile({
+                    path : fileName,
+                    data : recData.value.recordDataBase64,
+                    directory: 'CACHE',
+                });
+                debugger;
+
+                /*
+            
+                writeFileInCache(fileName, recData.value.recordDataBase64).then(
                     res => {
                         Capacitor.Plugins.Filesystem.stat({ path: res.uri }).then(
                             file => {
@@ -210,6 +219,8 @@ window.deviceServices = {
                         reject(err)
                     }
                 );
+                */
+               
                 clearInterval(interv);
                 sheet.close();
             }
