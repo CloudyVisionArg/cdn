@@ -179,7 +179,7 @@ window.deviceServices = {
                     }
                     let res = await Capacitor.Plugins.VoiceRecorder.startRecording();
 
-                    if (!res.value) {
+                    if (res.value) {
                         updControls(true);
                     } else {
                         toast('No se pudo iniciar la grabacion');
