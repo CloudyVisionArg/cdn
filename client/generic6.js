@@ -1011,7 +1011,6 @@ async function fillControls() {
         }
     });
 
-    debugger;
     $get('[data-attachments]').each(function (ix, el) {
         this.drs.value(doc);
     });
