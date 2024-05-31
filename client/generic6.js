@@ -274,7 +274,7 @@ async function appRenderPage() {
 
         for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
-                modControls.newDefaultControl(field).control.appendTo($ul);
+                modControls.newDefaultControl(field).$root.appendTo($ul);
             }
         }
 
@@ -282,7 +282,7 @@ async function appRenderPage() {
             label: 'Adjuntos',
             collapse: false,
         });
-        ctl.control.appendTo($ul);
+        ctl.$root.appendTo($ul);
 
         // tabHeader
 
@@ -300,7 +300,7 @@ async function appRenderPage() {
 
         for (let [key, field] of doc.fields()) {
             if (!field.custom && field.headerTable) {
-                modControls.newDefaultControl(field).control.appendTo($ul);
+                modControls.newDefaultControl(field).$root.appendTo($ul);
             }
         }
 
@@ -322,7 +322,7 @@ async function appRenderPage() {
             label: 'Cambios de datos',
             collapse: false,
         });
-        ctl.control.appendTo($ul);
+        ctl.$root.appendTo($ul);
 
     } else {
 
@@ -600,7 +600,7 @@ async function webRenderPage() {
                 }).appendTo($row);
 
                 let ctl = modControls.newDefaultControl(field);
-                ctl.control.addClass('mt-3').appendTo($col);
+                ctl.$root.addClass('mt-3').appendTo($col);
             }
         });
 
@@ -645,7 +645,7 @@ async function webRenderPage() {
             label: 'Cambios de datos',
             collapse: false,
         });
-        ctl.control.addClass('mt-3').appendTo($col);
+        ctl.$root.addClass('mt-3').appendTo($col);
 
     } else {
 
@@ -1158,7 +1158,7 @@ async function fillControls() {
         this.drs.value(doc);
     });
 
-    $get('[data-doc-log]').each(function (ix, el) {
+    $get('[data-role="doc-log"]').each(function (ix, el) {
         this.drs.value(doc);
     });
 
