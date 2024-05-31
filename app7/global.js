@@ -96,15 +96,19 @@ window.deviceServices = {
         return (res[permission] == 'granted' || res[permission] == 'limited');
     },
 
-    pickImages: async function (opts) {
+    // Options: https://capacitorjs.com/docs/apis/camera#galleryimageoptions
+    pickImages: async function (options) {
         let me = this;
         let files = [];
 
-        let options = {};
-        if (opts) options = opts; // todo: default opts?
-        let hasPermission = await me.requestCameraPermissions('photos');
-        if (hasPermission) {
-            let res = await Capacitor.Plugins.Camera.pickImages(options);
+        let opt = {
+			//quality: 50,
+        }
+		Object.assign(opt, options);
+
+        let perm = await me.requestCameraPermissions('photos');
+        if (perm) {
+            let res = await Capacitor.Plugins.Camera.pickImages(opt);
             res.photos.forEach(file => {
                 file.name = file.path.replace(/^.*[\\\/]/, '');
                 files.push(file);
@@ -116,15 +120,17 @@ window.deviceServices = {
         }
     },
 
-    pickFiles: async function (opts) {
+    // Options: https://capawesome.io/plugins/file-picker/#pickfilesoptions
+    pickFiles: async function (options) {
         let me = this;
-        var files = [];
 
-        let options = { multiple: true };
-        if (opts) options = opts; // todo: Default opts?
+        let opt = {
+			//limit: 1,
+        }
+		Object.assign(opt, options);
+
         let res = await Capacitor.Plugins.FilePicker.pickFiles(options);
-        debugger;
-        return files;
+        return res.files;
     },
 
     recordAudio: function () {
