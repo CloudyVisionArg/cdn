@@ -192,6 +192,7 @@ window.deviceServices = {
                     minutes + ':' + (seconds < 10 ? '0' : '') + seconds
                 let fileName = 'audio ' + durationString.replaceAll(':', '-') + ' min.aac';
 
+                debugger;
                 let res = await Capacitor.Plugins.Filesystem.writeFile({
                     path : fileName,
                     data : recData.value.recordDataBase64,
