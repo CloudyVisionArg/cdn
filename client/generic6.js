@@ -256,7 +256,6 @@ async function appRenderPage() {
             class: 'tabs',
         }).appendTo($pageCont);
 
-
         // tabMain
 
         let $tabMain = $('<div/>', {
@@ -282,7 +281,6 @@ async function appRenderPage() {
             collapse: false,
         });
         ctl.control.appendTo($ul);
-
 
         // tabHeader
 
@@ -330,10 +328,10 @@ async function appRenderPage() {
 
         try {
             // Control Event BeforeRender
-            var ev = getEvent('BeforeRender');
+            let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
 
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             toast('BeforeRender error: ' + dSession.utils.errMsg(err));
         }
@@ -652,10 +650,10 @@ async function webRenderPage() {
 
         try {
             // Control Event BeforeRender
-            var ev = getEvent('BeforeRender');
+            let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
 
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             toast('BeforeRender error: ' + dSession.utils.errMsg(err));
         }
@@ -666,7 +664,7 @@ async function webRenderPage() {
 
         // TABS
 
-        var tabs = controls.filter(function (el) {
+        let tabs = controls.filter(function (el) {
             return el['CONTROL'].toUpperCase() == 'TAB' && el['DONOTRENDER'] != 1 && el['R'] != '0'
         });
 
