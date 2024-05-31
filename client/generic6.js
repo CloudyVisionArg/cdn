@@ -884,7 +884,7 @@ async function renderControls(container, parent) {
 
         let label = ctl['DESCRIPTION'] ? ctl['DESCRIPTION'] : ctl['NAME'];
         
-        let control, options, $this, $input, bsctl, tf, textField, vf, valueField;
+        let control, options, $this, $input, bsctl, f7ctl, tf, textField, vf, valueField;
 
         tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
