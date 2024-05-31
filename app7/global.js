@@ -174,10 +174,11 @@ window.deviceServices = {
                     save = false;
                     
                     let stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
-                    if (stat.status != 'NONE'){
-                        let stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                    if (stat.status != 'NONE') {
+                        await Capacitor.Plugins.VoiceRecorder.stopRecording();
                     }
                     let startRes = await Capacitor.Plugins.VoiceRecorder.startRecording();
+                    debugger;
                     updControls(true);
                 }
             }
@@ -211,12 +212,10 @@ window.deviceServices = {
                 clearInterval(interv);
                 updControls(false);
 
-                const stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
-                console.log('VoiceRecorder.getCurrentStatus: ' + stat.status);
+                let stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                console.log('VoiceRecorder status: ' + stat.status);
                 if (stat.status != 'NONE') {
-                    const stopRes = await Capacitor.Plugins.VoiceRecorder.stopRecording();
-                    console.log('VoiceRecorder.stopRecording: ' + stopRes.value);
-                    //Evaluar el resultado para logearlo
+                    await Capacitor.Plugins.VoiceRecorder.stopRecording();
                 }
             }
 
