@@ -901,7 +901,7 @@ async function renderControls(container, parent) {
         if (inApp) {
             $cont = $(container);
         } else {
-            $row = getRow($row, container, ctl['COLUMN']);
+            $row = webGetRow($row, container, ctl['COLUMN']);
             $cont = $('<div/>', {
                 class: 'col-12 col-md-' + (ctl['COLUMN'] == '0' ? '12': '6') + ' form-group',
             }).appendTo($row);
