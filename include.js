@@ -451,7 +451,7 @@ class SimpleBuffer2 extends Uint8Array {
 function ghCodeUrl(code) {
     let url = code.server ? code.server : 'https://cdn.cloudycrm.net';
     let exec = code.exec ? 'x' : '';
-    url += '/' + (code.owner != undefined ? 'gh' + exec + '/' + code.owner : 'ghcv' + exec);
+    url += '/' + (code.owner != undefined ? 'gh' + exec + '/' + code.owner : 'gh' + exec + 'cv');
     url += '/' + (code.repo != undefined ? code.repo : 'cdn');
     url += code.ref != undefined ? '@' + code.ref : '';
     while(code.path.substring(0, 1) == '/') code.path = code.path.slice(1);
