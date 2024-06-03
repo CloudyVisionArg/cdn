@@ -358,16 +358,16 @@ async function appRenderPage() {
         });
 
         if (tabs.length > 0) {
-            $tabbar = $('<div/>', {
+            let $tabbar = $('<div/>', {
                 class: 'toolbar tabbar toolbar-top',
                 style: 'top: 0;',
             }).appendTo($pageCont);
 
-            $tabbarInner = $('<div/>', {
+            let $tabbarInner = $('<div/>', {
                 class: 'toolbar-inner',
             }).appendTo($tabbar);
 
-            $tabs = $('<div/>', {
+            let $tabs = $('<div/>', {
                 class: 'tabs',
             }).appendTo($pageCont);
 
