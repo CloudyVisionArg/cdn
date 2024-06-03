@@ -1040,10 +1040,10 @@ async function renderControls(container, parent) {
                 label: label,
             }
 
+            control = modControls.newAttachments(ctl['NAME'], options);
+
             $this = control.$root;
             $input = control.$content;
-
-            control = modControls.newAttachments(ctl['NAME'], options);
 
             if (inApp) {
             } else {
