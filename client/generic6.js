@@ -1131,7 +1131,9 @@ async function renderControls(container, parent) {
                 console.error(err);
                 throw err; // todo: se deberia mostrar un toast y dejar cargar igual
             }
-        }    
+        }
+        
+        loop.next();
     })
 }
 
