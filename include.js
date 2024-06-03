@@ -397,13 +397,7 @@ function gitCdn(options) {
         };
     }
 
-    var url = options.server ? options.server : 'https://cdn.cloudycrm.net';
-    url += '/' + (options.owner != undefined ? 'gh/' + options.owner : 'ghcv');
-    url += '/' + (options.repo != undefined ? options.repo : 'cdn');
-    url += options.ref != undefined ? '@' + options.ref : '';
-    while(options.path.substring(0, 1) == '/') options.path = options.path.slice(1);
-    url += '/' + options.path;
-    if (options.fresh == true || options.fresh == 1) url += '?_fresh=1';
+    var url = ghCodeUrl(options);
 
     if (options.url) {
         return url;
@@ -452,4 +446,16 @@ class SimpleBuffer2 extends Uint8Array {
         var td = new TextDecoder();
         return td.decode(this);
     }   
+}
+
+function ghCodeUrl(code) {
+    let url = code.server ? code.server : 'https://cdn.cloudycrm.net';
+    let exec = code.exec ? 'x' : '';
+    url += '/' + (code.owner != undefined ? 'gh' + exec + '/' + code.owner : 'ghcv' + exec);
+    url += '/' + (code.repo != undefined ? code.repo : 'cdn');
+    url += code.ref != undefined ? '@' + code.ref : '';
+    while(code.path.substring(0, 1) == '/') code.path = code.path.slice(1);
+    url += '/' + code.path;
+    if (code.fresh == true || code.fresh == 1) url += '?_fresh=1';
+    return url;
 }
