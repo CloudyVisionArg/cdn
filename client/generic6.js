@@ -989,6 +989,7 @@ async function renderControls(container, parent) {
         // -- DTPicker --
 
         } else if (type == 'DTPICKER') {
+            /*
             let mode = 'date';
             if (ctl.attr('mode') == '2') {
                 mode = 'datetime-local';
@@ -1004,14 +1005,82 @@ async function renderControls(container, parent) {
                 $input.closest('.input-group').datetimepicker('disable');
                 //$input.attr({ 'readonly': 'readonly' });
             }
+            */
+        
+        
+        // -- Attachments --
+
+        } else if (type == 'ATTACHMENTS') {
+            /*
+            Options:
+            {
+                label: 'myAtt',
+                tag: 'myTag', // Def all
+                readOnly: true, // Def false
+                addOnly: true, // Def false
+                containerTag: 'span', // tagName del container. Def web: div, app: li
+                collapse: true, // Solo app. Lo crea cerrado. Def false
+            }
+            
+            Control:
+            {
+                $content,
+                $label,
+                $root,
+                addOnly(),
+                collapse(), // Solo app
+                label(),
+                readOnly(),
+                refresh(),
+                tag(),
+                value(),
+            }
+            */
+            options = {
+                label: label,
+            }
+
+            control = modControls.newAttachments(ctl['NAME'], options);
+
+            /*
+            $this = newAttachments(ctl['NAME'], label);
+            $this.addClass('mt-3');
+            $input = $this.find('div[data-attachments]');
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $input[0]._readonly(true);
+            }
+
+            $this = getAttachments(ctl['NAME'], label);
+            $this.find('.list').on('click', 'a.item-content', downloadAtt);
+            $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
+            $this.find('.list').on('change', 'a.item-content', downloadAtt);
+            $this.find('div.row').on('click', 'button', addAtt);
+            
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.attr('readonly', true);
+                $this.find('div.row').hide();
+            }
+            */
+
+            // El TAG se setea en el APP7_SCRIPT asi:
+            // $this.attr('data-attachments', 'miTag');
+
+            /*
+            El TAG se setea en el SBR asi:
+                ctx.$input.attr('data-attachments', 'miTag');
+
+            El addonly:
+                ctx.$input[0]._addonly(true);
+            */
         }
 
 
-        if (control.$root) control.$root.appendTo($cont);
+        if (control && control.$root) control.$root.appendTo($cont);
 
         try {
             var context = {
-                ctl, $this, $input, f7ctl, bsctl, textField, valueField, label
+                control, ctl, $this, $input, f7ctl, bsctl, textField, valueField, label
             };
 
             // Evento renderControl
