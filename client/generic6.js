@@ -1040,7 +1040,16 @@ async function renderControls(container, parent) {
                 label: label,
             }
 
+            $this = control.$root;
+            $input = control.$content;
+
             control = modControls.newAttachments(ctl['NAME'], options);
+
+            if (inApp) {
+            } else {
+                control.$root.addClass('mt-3');
+                if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
+            }
 
             /*
             $this = newAttachments(ctl['NAME'], label);
