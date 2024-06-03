@@ -3905,7 +3905,7 @@ export class Node {
         return new Promise(async (resolve, reject) => {
             let data = {
                 serverUrl: this.session.serverUrl,
-                events: await me.codeOptions(options.code),
+                //events: await me.codeOptions(options.code),
                 doc: options.doc,
                 payload: options.payload,
             }
@@ -3916,19 +3916,19 @@ export class Node {
                 data.authToken = this.session.authToken;
             }
 
+            let code = await me.codeOptions(structuredClone(options.code));
+            code.exec = true;
+            let srv = await me.server;
+            if (srv) code.server = srv;
+            let url = ghCodeUrl(code);
+
             if (options.url) {
-                let code = structuredClone(options.code);
-                code.exec = true;
-                let srv = await me.server;
-                if (srv) code.server = srv;
-                let url = ghCodeUrl(code);
-                delete data.events;
                 url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
                 resolve(url);
 
             } else {
                 debugger;
-                let res = await fetch(await me.server + '/exec', {
+                let res = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
