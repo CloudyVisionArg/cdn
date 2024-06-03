@@ -3927,7 +3927,6 @@ export class Node {
                 resolve(url);
 
             } else {
-                debugger;
                 let res = await fetch(url, {
                     method: 'POST',
                     headers: {
