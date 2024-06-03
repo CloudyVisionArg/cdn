@@ -3918,6 +3918,7 @@ export class Node {
 
             if (options.url) {
                 let code = structuredClone(options.code);
+                code.exec = true;
                 let srv = await me.server;
                 if (srv) code.server = srv;
                 let url = ghCodeUrl(code);
