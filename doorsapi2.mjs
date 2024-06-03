@@ -41,6 +41,7 @@ async function loadUtils() {
                 ${code}
                 window.include = include;
                 window.scriptSrc = scriptSrc;
+                window.ghCodeUrl = ghCodeUrl;
             `);
         }
     }
@@ -3916,7 +3917,11 @@ export class Node {
             }
 
             if (options.url) {
-                var url = await me.server + '/exec';
+                let code = structuredClone(options.code);
+                let srv = await me.server;
+                if (srv) code.server = srv;
+                let url = ghCodeUrl(code);
+                delete data.events;
                 url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
                 resolve(url);
 
