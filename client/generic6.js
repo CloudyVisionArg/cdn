@@ -1435,6 +1435,7 @@ async function saveDoc(exitOnSuccess) {
             pageEl.drs.saved = saved;    
         }
 
+        debugger;
         let attErr;
         let res = await doc.saveAttachments();
 
