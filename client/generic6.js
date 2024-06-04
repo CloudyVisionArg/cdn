@@ -1528,5 +1528,7 @@ async function evalCode(code, ctx) {
 }
 
 function copyFunction(fn) {
-    return eval(fn.toString());
+    var pipe = {};
+    eval('pipe.fn = ' + fn.toString());
+    return pipe.fn;
 }
