@@ -1097,6 +1097,23 @@ async function renderControls(container, parent) {
             if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['SCRIPTBEFORERENDER']) {
+                /*
+                Objetos disponibles en este script:
+                doc: El objeto Document que se esta abriendo
+                folder: La carpeta actual
+                controlsFolder: La carpeta de controles
+                controls: El search a la carpeta de controles completo
+                ctl: El row del control que se esta dibujando
+                ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
+                $this: El control completo JQuery (inluido el <li>)
+                $input: El input, textarea, select, etc, dentro del control
+                    (puede ser undefined en caso de los raw y otros)
+                bsctl: El control Bootstrap (depende del control)
+                f7ctl: El control Framework7 (depende del control)
+                textField: El objeto Field bindeado con textField (depende del control)
+                valueField: El objeto Field bindeado con valueField (depende del control)
+                */
+
                 // Copia la funcion evalCode para que se ejecute en este contexto
                 let pipe = {}
                 eval('pipe.fn = ' + evalCode.toString());
@@ -1107,36 +1124,7 @@ async function renderControls(container, parent) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
         }
-        /*
-        Objetos disponibles en este script:
-            doc: El objeto Document que se esta abriendo
-            folder: La carpeta actual
-            controlsFolder: La carpeta de controles
-            controls: El search a la carpeta de controles completo
-            ctl: El row del control que se esta dibujando
-            ctl.attr: Function que devuelve un atributo de XMLATTRIBUTES
-            $this: El control completo JQuery (inluido el <li>)
-            $input: El input, textarea, select, etc, dentro del control
-                (puede ser undefined en caso de los raw y otros)
-            f7ctl: El control Framework7 (depende del control)
-            textField: El objeto Field bindeado con textField (depende del control)
-            valueField: El objeto Field bindeado con valueField (depende del control)
-        */
 
-        // evalCode con context de renderControls
-        // todo: cdo se pase todo el codigo a ctx.etc sacarlo
-        async function evalCode(code, ctx) {
-            try {
-                var pipe = {};
-                eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
-                return await pipe.fn(ctx);
-        
-            } catch(err) {
-                console.error(err);
-                throw err; // todo: se deberia mostrar un toast y dejar cargar igual
-            }
-        }
-        
         loop.next();
     })
 }
@@ -1519,7 +1507,7 @@ function getEvent(pEvent) {
 async function evalCode(code, ctx) {
     try {
         var pipe = {};
-        eval(`pipe.fn = async (ctx) => {\n${code}\n};`);
+        eval(`pipe.fn = async (ctx) => {${code}\n};`);
         return await pipe.fn(ctx);
 
     } catch(err) {
