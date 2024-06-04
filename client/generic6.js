@@ -330,6 +330,7 @@ async function appRenderPage() {
 
         try {
             // Control Event BeforeRender
+            debugger;
             let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
 
