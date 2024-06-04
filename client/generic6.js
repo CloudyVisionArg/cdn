@@ -1096,7 +1096,11 @@ async function renderControls(container, parent) {
             evSrc.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
             if (context.return && typeof context.return.then == 'function') await context.return;
 
-            if (ctl['SCRIPTBEFORERENDER']) await evalCode(ctl['SCRIPTBEFORERENDER'], context);
+            if (ctl['SCRIPTBEFORERENDER']) {
+                debugger;
+                let myEval = copyFunction(evalCode);
+                await myEval(ctl['SCRIPTBEFORERENDER'], context);
+            }
 
         } catch (err) {
             console.error(err);
@@ -1521,4 +1525,8 @@ async function evalCode(code, ctx) {
         console.error(err);
         throw err;
     }
+}
+
+function copyFunction(fn) {
+
 }
