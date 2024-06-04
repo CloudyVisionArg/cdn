@@ -1985,11 +1985,14 @@ export class Document {
                     if (me.#attachmentsMap._loading == true) {
                         let wait = 0;
                         let interv = setInterval(() => {
-                            if (wait += 100 > 0) reject(new Error('Attachments loading is taking too long'));
-
                             if (me.#attachmentsMap._loaded) {
                                 clearInterval(interv);
                                 resolve(me.#attachmentsMap);
+                            } else {
+                                if (wait += 100 > 5000) {
+                                    clearInterval(interv);
+                                    reject(new Error('Attachments loading is taking too long'));
+                                }
                             }
                         }, 100);
 
