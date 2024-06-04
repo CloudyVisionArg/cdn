@@ -713,10 +713,10 @@ async function webRenderPage() {
         <span style="padding-bottom: 25px;">
             Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a>
         </span>
-        <button type="button" class="btn" title="Modo oscuro">Modo noche</button>
+        <button type="button" class="btn" title="Modo oscuro">
+            <i class="bi bi-trash" aria-hidden="true"></i>
+        </button>
     `);
-
-
 
     // Boton Borrar
     let $delBtn = $('<button/>', {
