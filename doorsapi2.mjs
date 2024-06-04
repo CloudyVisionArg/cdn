@@ -1982,37 +1982,50 @@ export class Document {
             } else {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap._loaded) {
-                    debugger;
-                    var url = 'documents/' + me.id + '/attachments';
-                    me.session.restClient.fetch(url, 'GET', '', '').then(
-                        res => {
-                            if (res.length > 0) {
-                                // Ordena descendente
-                                res.sort(function (a, b) {
-                                    return a.AttId >= b.AttId ? -1 : 1;
-                                });
-                                // Arma un array de AccId
-                                var ids = res.map(att => att.AccId);
-                                // Saca los repetidos
-                                ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                                // Levanta los accounts y completa el nombre
-                                me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                                    accs => {
-                                        res.forEach(el => {
-                                            el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                            me.#attachmentsMap.set(el.Name, new Attachment(el, me));
-                                        });
-                                        me.#attachmentsMap._loaded = true;
-                                        resolve(me.#attachmentsMap);
-            
-                                    }, reject
-                                )
-                            } else {
-                                me.#attachmentsMap._loaded = true;
+                    if (me.#attachmentsMap._loading == true) {
+                        let interv = setInterval(() => {
+                            debugger;
+                            if (me.#attachmentsMap._loaded) {
+                                clearInterval(interv);
                                 resolve(me.#attachmentsMap);
                             }
-                        }, reject
-                    );
+                        }, 100);
+
+                    } else {
+                        debugger;
+                        me.#attachmentsMap._loading = true;
+                        var url = 'documents/' + me.id + '/attachments';
+                        me.session.restClient.fetch(url, 'GET', '', '').then(
+                            res => {
+                                if (res.length > 0) {
+                                    // Ordena descendente
+                                    res.sort(function (a, b) {
+                                        return a.AttId >= b.AttId ? -1 : 1;
+                                    });
+                                    // Arma un array de AccId
+                                    var ids = res.map(att => att.AccId);
+                                    // Saca los repetidos
+                                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                                    // Levanta los accounts y completa el nombre
+                                    me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                                        accs => {
+                                            res.forEach(el => {
+                                                el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                                                me.#attachmentsMap.set(el.Name, new Attachment(el, me));
+                                            });
+                                            me.#attachmentsMap._loaded = true;
+                                            me.#attachmentsMap._loading = false;
+                                            resolve(me.#attachmentsMap);
+                
+                                        }, reject
+                                    )
+                                } else {
+                                    me.#attachmentsMap._loaded = true;
+                                    resolve(me.#attachmentsMap);
+                                }
+                            }, reject
+                        );
+                    }
 
                 } else {
                     resolve(me.#attachmentsMap);
