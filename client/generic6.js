@@ -12,14 +12,14 @@ var inApp = typeof window.app7 == 'object';
 var propControls = 'App7_controls';
 
 (async () => {
-    if (inApp) {
+    if (inApp) { // APP
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
     
         preldr = app7.preloader;
         preldr.show();
         
-    } else {
+    } else { // WEB
         await include([
             { id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' },
             { id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' },
@@ -720,6 +720,18 @@ async function webRenderPage() {
     }).appendTo($cont);
 
     $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
+
+    // Boton Borrar
+    $delBtn = $('<button/>', {
+        type: 'button',
+        id: 'deleteDoc',
+        class: 'btn btn-outline-danger',
+        title: 'Enviar a la papelera',
+        style: 'float: right;',
+    }).appendTo($cont);
+
+    $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
+
     $delBtn.click(function () {
         if (confirm('ATENCION!! Esta a punto de enviar este documento a la papelera, desea continuar?')) {
             doc.delete().then(
