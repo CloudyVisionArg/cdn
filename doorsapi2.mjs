@@ -1983,6 +1983,7 @@ export class Document {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap._loaded) {
                     if (me.#attachmentsMap._loading == true) {
+                        // Evita la doble carga cdo piden varios en simultaneo
                         let wait = 0;
                         let interv = setInterval(() => {
                             if (me.#attachmentsMap._loaded) {
