@@ -1982,6 +1982,7 @@ export class Document {
             } else {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap._loaded) {
+                    debugger;
                     var url = 'documents/' + me.id + '/attachments';
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
