@@ -1507,7 +1507,7 @@ function getEvent(pEvent) {
 async function evalCode(code, ctx) {
     try {
         var pipe = {};
-        eval(`pipe.fn = async (ctx) => {${code}\n};`);
+        eval(`pipe.fn = async (ctx) => {\n${code}\n};`);
         return await pipe.fn(ctx);
 
     } catch(err) {
