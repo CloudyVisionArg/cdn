@@ -1040,7 +1040,6 @@ async function renderControls(container, parent) {
                 label: label,
             }
 
-            debugger;
             control = modControls.newAttachments(ctl['NAME'], options);
 
             $this = control.$root;
