@@ -1511,3 +1511,15 @@ function getEvent(pEvent) {
         if (ev) return ev['SCRIPTBEFORERENDER'];
     }
 }
+
+async function evalCode(code, ctx) {
+    try {
+        var pipe = {};
+        eval(`pipe.fn = async (ctx) => {\n\n${code}\n};`);
+        return await pipe.fn(ctx);
+
+    } catch(err) {
+        console.error(err);
+        throw err;
+    }
+}
