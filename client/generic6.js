@@ -708,21 +708,20 @@ async function webRenderPage() {
 
     // Footer
     $('<hr/>').appendTo($cont);
-    $cont.append('<span style="padding-bottom: 25px;">Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a></span>');
+
+    $cont.append(`
+        <span style="padding-bottom: 25px;">
+            Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a>
+        </span>
+        <button type="button" class="btn" title="Modo oscuro">
+            Modo noche
+        </button>
+    `);
+
+
 
     // Boton Borrar
     let $delBtn = $('<button/>', {
-        type: 'button',
-        id: 'deleteDoc',
-        class: 'btn btn-outline-danger',
-        title: 'Enviar a la papelera',
-        style: 'float: right;',
-    }).appendTo($cont);
-
-    $delBtn.append('<i class="bi bi-trash" aria-hidden="true"></i>');
-
-    // Boton Borrar
-    $delBtn = $('<button/>', {
         type: 'button',
         id: 'deleteDoc',
         class: 'btn btn-outline-danger',
