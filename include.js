@@ -448,6 +448,19 @@ class SimpleBuffer2 extends Uint8Array {
     }   
 }
 
+/**
+Devuelve la url de los endpoint ghx
+
+@example
+ghCodeUrl({
+    owner // def CloudyVisionArg
+    repo // def cdn
+    path // Ruta al archivo, no poner el slash inicial
+    ref // Branch / tag
+    fresh // Actualiza el cache
+    server // Opcional, def https://cdn.cloudycrm.net
+}
+*/
 function ghCodeUrl(code) {
     let url = code.server ? code.server : 'https://cdn.cloudycrm.net';
     let exec = code.exec ? 'x' : '';
