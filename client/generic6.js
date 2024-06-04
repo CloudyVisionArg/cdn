@@ -1098,8 +1098,9 @@ async function renderControls(container, parent) {
 
             if (ctl['SCRIPTBEFORERENDER']) {
                 debugger;
-                let myEval = copyFunction(evalCode);
-                await myEval(ctl['SCRIPTBEFORERENDER'], context);
+                let pipe = {}
+                eval('pipe.fn = ' + evalCode.toString());
+                await pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
             }
 
         } catch (err) {
