@@ -1097,11 +1097,10 @@ async function renderControls(container, parent) {
             if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['SCRIPTBEFORERENDER']) {
-                debugger;
-                //let pipe = {}
-                //eval('pipe.fn = ' + evalCode.toString());
-                let pipe = eval(evalCode.toString());
-                await pipe(ctl['SCRIPTBEFORERENDER'], context);
+                // Copia la funcion evalCode para que se ejecute en este contexto
+                let pipe = {}
+                eval('pipe.fn = ' + evalCode.toString());
+                await pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
             }
 
         } catch (err) {
@@ -1527,10 +1526,4 @@ async function evalCode(code, ctx) {
         console.error(err);
         throw err;
     }
-}
-
-function copyFunction(fn) {
-    var pipe = {};
-    eval('pipe.fn = ' + fn.toString());
-    return pipe.fn;
 }
