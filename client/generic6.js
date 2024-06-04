@@ -1528,5 +1528,5 @@ async function evalCode(code, ctx) {
 }
 
 function copyFunction(fn) {
-
+    return evalCode;
 }
