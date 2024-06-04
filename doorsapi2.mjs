@@ -1983,8 +1983,10 @@ export class Document {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap._loaded) {
                     if (me.#attachmentsMap._loading == true) {
+                        let wait = 0;
                         let interv = setInterval(() => {
-                            debugger;
+                            if (wait += 100 > 0) reject(new Error('Attachments loading is taking too long'));
+
                             if (me.#attachmentsMap._loaded) {
                                 clearInterval(interv);
                                 resolve(me.#attachmentsMap);
@@ -1992,7 +1994,6 @@ export class Document {
                         }, 100);
 
                     } else {
-                        debugger;
                         me.#attachmentsMap._loading = true;
                         var url = 'documents/' + me.id + '/attachments';
                         me.session.restClient.fetch(url, 'GET', '', '').then(
