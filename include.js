@@ -449,7 +449,9 @@ class SimpleBuffer2 extends Uint8Array {
 }
 
 /**
-Devuelve la url de los endpoint ghx
+Devuelve la url de los endpoint gh y ghx
+gh -> Leer el contenido del archivo
+ghx -> Ejecutar el js
 
 @example
 ghCodeUrl({
@@ -458,6 +460,7 @@ ghCodeUrl({
     path // Ruta al archivo, no poner el slash inicial
     ref // Branch / tag
     fresh // Actualiza el cache
+    exec // Boolean, indica si es para ejecutar (ghx)
     server // Opcional, def https://cdn.cloudycrm.net
 }
 */

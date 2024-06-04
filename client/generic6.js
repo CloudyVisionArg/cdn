@@ -1099,23 +1099,23 @@ async function renderControls(container, parent) {
             if (ctl['SCRIPTBEFORERENDER']) {
                 /*
                 Objetos disponibles en este script:
-                doc: El objeto Document que se esta abriendo
-                folder: La carpeta actual
-                controlsFolder: La carpeta de controles
-                controls: El search a la carpeta de controles completo
-                ctl: El row del control que se esta dibujando
-                ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
-                $this: El control completo JQuery (inluido el <li>)
-                $input: El input, textarea, select, etc, dentro del control
+                - doc: El objeto Document que se esta abriendo
+                - folder: La carpeta actual
+                - controlsFolder: La carpeta de controles
+                - controls: El search a la carpeta de controles completo
+                - ctl: El row del control que se esta dibujando
+                - ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
+                - $this: El control completo JQuery (inluido el <li>)
+                - $input: El input, textarea, select, etc, dentro del control
                     (puede ser undefined en caso de los raw y otros)
-                bsctl: El control Bootstrap (depende del control)
-                f7ctl: El control Framework7 (depende del control)
-                textField: El objeto Field bindeado con textField (depende del control)
-                valueField: El objeto Field bindeado con valueField (depende del control)
+                - bsctl: El control Bootstrap (depende del control)
+                - f7ctl: El control Framework7 (depende del control)
+                - textField: El objeto Field bindeado con textField (depende del control)
+                - valueField: El objeto Field bindeado con valueField (depende del control)
                 */
 
-                // Copia la funcion evalCode para que se ejecute en este contexto
-                let pipe = {}
+                // Copio la funcion evalCode para que se ejecute en este contexto
+                let pipe = {};
                 eval('pipe.fn = ' + evalCode.toString());
                 await pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
             }
