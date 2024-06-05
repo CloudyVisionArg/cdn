@@ -858,6 +858,18 @@ async function webRenderPage() {
     preldr.hide();
 }
 
+function webPrintForm() {
+    debugger; // Utilizar este boton para activar el debugger
+
+	var frm = top.window.frames['frameDer'];
+	if (!frm) frm = window;
+	if (!frm) {
+		toast('No se pudo imprimir el formulario');
+		return;
+	}
+	frm.focus();
+	frm.window ? frm.window.print() : frm.print();
+}
 
 function webGetRow(pRow, pCont, pCol) {
     var $row;
