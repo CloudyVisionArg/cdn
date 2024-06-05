@@ -733,6 +733,7 @@ async function webRenderPage() {
 
     // Seteo inicial
     let dm = localStorage.getItem('dark-mode');
+    debugger;
     $('html').attr('data-bs-theme', dm == '1' ? 'dark' : 'light');
 
     // Boton Borrar
