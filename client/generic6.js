@@ -942,25 +942,6 @@ async function renderControls(container, parent) {
         // -- Textbox --
 
         if (type == 'TEXTBOX') {
-            /*
-            {
-                label: 'Etiqueta',
-                value: 'Valor inicial',
-                type: 'password', // text (def), email, password, hidden
-                textField: 'micampo', // Nombre del field enlazado
-                readOnly: true, // Def false
-                containerTag: 'span', // tagName del container. Def web: div, app: li
-            }
-            
-            Control:
-            {
-                $input,
-                $root,
-                readonly(),
-                text(),
-                value(),
-            }
-            */
 
             options = {
                 label: label,
@@ -995,7 +976,6 @@ async function renderControls(container, parent) {
                 if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
             }
 
-
             /*
             if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
                 inputDataList($input, {
@@ -1016,6 +996,20 @@ async function renderControls(container, parent) {
         // -- DTPicker --
 
         } else if (type == 'DTPICKER') {
+
+            options = {
+                label: label,
+                textField: tf,
+            }
+
+            control = modControls.newDTPicker(options);
+            $this = control.$root;
+            $input = control.$input;
+
+            if (!inApp) {
+                control.$root.addClass('mt-3');
+            }
+
             /*
             let mode = 'date';
             if (ctl.attr('mode') == '2') {
