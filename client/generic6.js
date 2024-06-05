@@ -659,7 +659,6 @@ async function webRenderPage() {
 
         try {
             // BeforeRender del hub
-            debugger;
             if (controls.beforeRender) await evalCode(controls.beforeRender);
 
             // Control Event BeforeRender
