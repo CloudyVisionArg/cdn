@@ -1063,33 +1063,38 @@ async function renderControls(container, parent) {
                 control, ctl, $this, $input, f7ctl, bsctl, textField, valueField, label
             };
 
+            /*
+            Objetos disponibles en este script:
+            - control: El control Doors
+            - doc: El objeto Document que se esta abriendo
+            - folder: La carpeta actual
+            - controlsFolder: La carpeta de controles
+            - controls: El search a la carpeta de controles completo
+            - ctl: El row del control que se esta dibujando
+            - ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
+            - $this: El $root JQuery del control
+            - $input: El input, textarea, select, etc, dentro del control
+                (puede ser undefined en caso de los raw y otros)
+            - bsctl: El control Bootstrap (depende del control)
+            - f7ctl: El control Framework7 (depende del control)
+            - textField: El objeto Field bindeado con textField (depende del control)
+            - valueField: El objeto Field bindeado con valueField (depende del control)
+            */
+
+            /*
+            todo: Ver si hace falta await, lo ideal seria que no, para que
+            la pantalla se dibuje mas rapido.
+            */
+
             // Evento renderControl
             evSrc.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
-            if (context.return && typeof context.return.then == 'function') await context.return;
+            //if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['SCRIPTBEFORERENDER']) {
-                /*
-                Objetos disponibles en este script:
-                - control: El control Doors
-                - doc: El objeto Document que se esta abriendo
-                - folder: La carpeta actual
-                - controlsFolder: La carpeta de controles
-                - controls: El search a la carpeta de controles completo
-                - ctl: El row del control que se esta dibujando
-                - ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
-                - $this: El $root JQuery del control
-                - $input: El input, textarea, select, etc, dentro del control
-                    (puede ser undefined en caso de los raw y otros)
-                - bsctl: El control Bootstrap (depende del control)
-                - f7ctl: El control Framework7 (depende del control)
-                - textField: El objeto Field bindeado con textField (depende del control)
-                - valueField: El objeto Field bindeado con valueField (depende del control)
-                */
-
                 // Copio la funcion evalCode para que se ejecute en este contexto
                 let pipe = {};
                 eval('pipe.fn = ' + evalCode.toString());
-                pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
+                /* await */ pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
             }
 
         } catch (err) {
