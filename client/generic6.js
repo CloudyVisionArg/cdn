@@ -1060,6 +1060,7 @@ async function renderControls(container, parent) {
 
         } else if (type == 'DOCUMENTLOG') {
             control = modControls.newDocLog(ctl['NAME']);
+            if (!inApp) control.$root.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
 
             //$this.addClass('mt-3');
             //$this.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
