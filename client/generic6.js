@@ -27,11 +27,11 @@ var propControls = 'App7_controls';
             { id: 'web-javascript', depends: ['jquery', 'bootstrap'] },
         ]);
 
-        preldr = preloader;
-        preldr.show();
-
         // dark-mode
         $('html').attr('data-bs-theme', localStorage.getItem('dark-mode') == '1' ? 'dark' : 'light');
+
+        preldr = preloader;
+        preldr.show();
 
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
         if (!window.dSession) {
