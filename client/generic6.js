@@ -713,12 +713,12 @@ async function webRenderPage() {
     $('<hr/>').appendTo($cont);
 
     $cont.append(`
-        <span style="padding-bottom: 25px;">
+        <span style="margin-top: 5px; margin-bottom: 25px;">
             Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a>
         </span>
     `);
 
-    let $btn = $(`<button type="button" class="btn" title="Modo oscuro" style="margin-right: 5px;">
+    let $btn = $(`<button type="button" class="btn" title="Modo oscuro">
         <i class="bi bi-cloud-moon" aria-hidden="true"></i>
     </button>`).appendTo($cont);
 
