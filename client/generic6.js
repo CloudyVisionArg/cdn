@@ -536,7 +536,7 @@ async function webRenderPage() {
     // Barra de botones
     $cont.append(`
         <div id="mainButtons" class="btn-group" role="group" aria-label="..." style="position:fixed; top:10px; right:10px; z-index:1000;">
-            <button type="button" id="print" class="btn btn-primary" onclick="printForm();">
+            <button type="button" id="print" class="btn btn-primary" onclick="webPrintForm();">
                 <i class="bi bi-printer-fill"></i>
                 <span class="d-none d-md-inline-block"> Imprimir</span>
             </button>
