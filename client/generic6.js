@@ -709,14 +709,15 @@ async function webRenderPage() {
     // Footer
     $('<hr/>').appendTo($cont);
 
-    $cont.append(`
+    let $btn = $cont.append(`
         <span style="padding-bottom: 25px;">
             Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a>
         </span>
         <button type="button" class="btn" title="Modo oscuro" style="margin-right: 5px;">
             <i class="bi bi-cloud-moon" aria-hidden="true"></i>
         </button>
-    `);
+    `).find('button');
+    debugger;
 
     // Boton Borrar
     let $delBtn = $('<button/>', {
