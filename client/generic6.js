@@ -967,8 +967,14 @@ async function renderControls(container, parent) {
                 textField: tf,
             }
             if (ctl.attr('mode') == '3') options.type = 'password';
-            if (ctl.attr('isnumber') == '1') options.numeral = true;
 
+            if (ctl.attr('isnumber') == '1' || (textField && textField.type == 3))
+                options.numeral = true;
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                options.readOnly = true;
+            }
+    
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
             } else {
@@ -992,13 +998,7 @@ async function renderControls(container, parent) {
                 $input.attr('maxlength', textField.length);
             }
 
-            if (textField && textField.type == 3) {
-                $input.attr('data-numeral', numeral.options.defaultFormat)
-            }
 
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr({ 'readonly': 'readonly' });
-            }
 
             if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
                 inputDataList($input, {
