@@ -333,7 +333,6 @@ async function appRenderPage() {
 
         try {
             // BeforeRender del hub
-            debugger;
             if (controls.beforeRender) await evalCode(controls.beforeRender);
 
             // Control Event BeforeRender
@@ -659,6 +658,10 @@ async function webRenderPage() {
         // CON CONTROLES
 
         try {
+            // BeforeRender del hub
+            debugger;
+            if (controls.beforeRender) await evalCode(controls.beforeRender);
+
             // Control Event BeforeRender
             let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
