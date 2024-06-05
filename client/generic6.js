@@ -1060,16 +1060,14 @@ async function renderControls(container, parent) {
 
         } else if (type == 'DOCUMENTLOG') {
 
-            options = {
-                label,
-            }
-
+            options = { label }
             control = modControls.newDocLog(ctl['NAME'], options);
             if (!inApp) control.$root.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
 
-            //$this.addClass('mt-3');
-            //$this.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
-        
+            /*
+            El docLog se muestra por defecto cerrado. Para mostrarlo abierto:
+                ctx.control.collapse(false);
+            */
         }
 
         if (control && control.$root) control.$root.appendTo($cont);
@@ -1310,14 +1308,7 @@ function appExplorerRefresh() {
 
 async function saveDoc(exitOnSuccess) {
     if (saving) return;
-    saving = true;
-
-    if (inApp) {
-        $navbar.find('.right .button').addClass('disabled');
-    } else {
-        //todo: deshabilitar botones
-    }
-    preldr.show();
+    toggleSaving(true);
 
     try {
         $get('[data-textfield]').each(function (ix, el) {
@@ -1447,14 +1438,7 @@ async function saveDoc(exitOnSuccess) {
             console.error(err);
         }
 
-        saving = false;
-        preldr.hide();
-
-        if (inApp) {
-            $navbar.find('.right .button').removeClass('disabled');
-        } else {
-            // todo: habilitar botones
-        }
+        toggleSaving(false);
 
         if (attErr || asErr) {
             if (attErr) toast(attErr);
@@ -1474,10 +1458,32 @@ async function saveDoc(exitOnSuccess) {
     }
 
     function errMgr(err) {
-        saving = false;
-        preldr.hide();
+        toggleSaving(false);
         toast(utils.errMsg(err));
         console.error(err);
+    }
+
+    function toggleSaving(value) {
+        if (value) {
+            saving = true;
+
+            if (inApp) {
+                $navbar.find('.right .button').addClass('disabled');
+            } else {
+                $('#mainButtons button').attr('disabled','disabled');
+            }
+            preldr.show();
+        
+        } else {
+            saving = false;
+
+            if (inApp) {
+                $navbar.find('.right .button').removeClass('disabled');
+            } else {
+                $('#mainButtons button').removeAttr('disabled','disabled');
+            }
+            preldr.hide();
+        }
     }
 
 }
