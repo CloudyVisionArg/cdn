@@ -718,6 +718,8 @@ async function webRenderPage() {
     let $btn = $(`<button type="button" class="btn" title="Modo oscuro" style="margin-right: 5px;">
         <i class="bi bi-cloud-moon" aria-hidden="true"></i>
     </button>`).appendTo($cont);
+
+    // Boton dark-mode
     $btn.click(() => {
         let dm = localStorage.getItem('dark-mode');
         if (dm == '1') {
@@ -728,6 +730,10 @@ async function webRenderPage() {
             localStorage.setItem('dark-mode', 1);
         }
     });
+
+    // Seteo inicial
+    let dm = localStorage.getItem('dark-mode');
+    $('html').attr('data-bs-theme', dm == '1' ? 'dark' : 'light');
 
     // Boton Borrar
     let $delBtn = $('<button/>', {
