@@ -732,9 +732,7 @@ async function webRenderPage() {
     });
 
     // Seteo inicial
-    let dm = localStorage.getItem('dark-mode');
-    debugger;
-    $('html').attr('data-bs-theme', dm == '1' ? 'dark' : 'light');
+    $('html').attr('data-bs-theme', localStorage.getItem('dark-mode') == '1' ? 'dark' : 'light');
 
     // Boton Borrar
     let $delBtn = $('<button/>', {
