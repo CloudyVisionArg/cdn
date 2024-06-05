@@ -1059,7 +1059,7 @@ async function renderControls(container, parent) {
         // -- DocumentLog --
 
         } else if (type == 'DOCUMENTLOG') {
-            control = newDocLog(ctl['NAME']);
+            control = modControls.newDocLog(ctl['NAME']);
 
             //$this.addClass('mt-3');
             //$this.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
