@@ -1002,7 +1002,7 @@ async function renderControls(container, parent) {
                 textField: tf,
             }
 
-            control = modControls.newDTPicker(options);
+            control = modControls.newDTPicker(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$input;
 
