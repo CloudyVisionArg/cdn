@@ -1054,6 +1054,16 @@ async function renderControls(container, parent) {
             Para mostrarlo abierto (solo app):
                 ctx.control.collapse(false);
             */
+            
+
+        // -- DocumentLog --
+
+        } else if (type == 'DOCUMENTLOG') {
+            control = newDocLog(ctl['NAME']);
+
+            //$this.addClass('mt-3');
+            //$this.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
+        
         }
 
         if (control && control.$root) control.$root.appendTo($cont);
