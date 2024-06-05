@@ -2729,7 +2729,6 @@ export class Folder {
     #owner;
 
     constructor(folder, session, parent) {
-        debugger;
         this.#json = folder;
         this.#session = session;
         if (parent) this.#parent = parent;
@@ -2896,20 +2895,16 @@ export class Folder {
     }
     */
 
-    /*
     get description() {
-        //todo
+        return this.#json.Description;
     }
-    */
 
-    /*
     get descriptionRaw() {
-        //todo
+        return this.#json.DescriptionRaw;
     }
     set descriptionRaw(value) {
-        //todo
+        this.#json.DescriptionRaw = value;
     }
-    */
 
     /**
     Alias de documents.
