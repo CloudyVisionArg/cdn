@@ -974,6 +974,12 @@ async function renderControls(container, parent) {
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 options.readOnly = true;
             }
+
+            if (ctl.attr('maxlength')) {
+                options.maxLength = ctl.attr('maxlength');
+            } else if (textField && textField.type == 1 && textField.length > 0) {
+                options.maxLength = textField.length;
+            }
     
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
@@ -984,22 +990,13 @@ async function renderControls(container, parent) {
             $this = control.$root;
             $input = control.$input;
 
-            if (inApp) {
-            } else {
+            if (!inApp) {
                 control.$root.addClass('mt-3');
                 if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
             }
 
 
             /*
-            if (ctl.attr('maxlength')) {
-                $input.attr('maxlength', ctl.attr('maxlength'));
-            } else if (textField && textField.type == 1 && textField.length > 0) {
-                $input.attr('maxlength', textField.length);
-            }
-
-
-
             if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
                 inputDataList($input, {
                     folder: fld_id,
