@@ -944,7 +944,7 @@ async function renderControls(container, parent) {
         if (type == 'TEXTBOX') {
 
             options = {
-                label: label,
+                label,
                 textField: tf,
             }
             if (ctl.attr('mode') == '3') options.type = 'password';
@@ -997,8 +997,16 @@ async function renderControls(container, parent) {
 
         } else if (type == 'DTPICKER') {
 
+            let type = 'date';
+            if (ctl.attr('mode') == '2') {
+                type = 'datetime-local';
+            } else if (ctl.attr('mode') == '3') {
+                type = 'time';
+            }
+
             options = {
-                label: label,
+                label,
+                type,
                 textField: tf,
             }
 
@@ -1011,12 +1019,6 @@ async function renderControls(container, parent) {
             }
 
             /*
-            let mode = 'date';
-            if (ctl.attr('mode') == '2') {
-                mode = 'datetime-local';
-            } else if (ctl.attr('mode') == '3') {
-                mode = 'time';
-            }
             $this = newDTPicker(ctl['NAME'], label, mode)
             $this.addClass('mt-3');
             $input = $this.find('input');
