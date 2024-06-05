@@ -713,7 +713,7 @@ async function webRenderPage() {
         <span style="padding-bottom: 25px;">
             Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a>
         </span>
-        <button type="button" class="btn btn-outline-dark" title="Modo oscuro">
+        <button type="button" class="btn" title="Modo oscuro" style="margin-right: 5px;">
             <i class="bi bi-cloud-moon" aria-hidden="true"></i>
         </button>
     `);
