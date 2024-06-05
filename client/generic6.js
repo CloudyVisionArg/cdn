@@ -1025,33 +1025,13 @@ async function renderControls(container, parent) {
         // -- Attachments --
 
         } else if (type == 'ATTACHMENTS') {
-            /*
-            Options:
-            {
-                label: 'myAtt',
-                tag: 'myTag', // Def all
-                readOnly: true, // Def false
-                addOnly: true, // Def false
-                containerTag: 'span', // tagName del container. Def web: div, app: li
-                collapse: true, // Solo app. Lo crea cerrado. Def false
-            }
-            
-            Control:
-            {
-                $content,
-                $label,
-                $root,
-                addOnly(),
-                collapse(), // Solo app
-                label(),
-                readOnly(),
-                refresh(),
-                tag(),
-                value(),
-            }
-            */
+
             options = {
                 label: label,
+            }
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                options.readOnly = true;
             }
 
             control = modControls.newAttachments(ctl['NAME'], options);
@@ -1059,42 +1039,17 @@ async function renderControls(container, parent) {
             $this = control.$root;
             $input = control.$content;
 
-            if (inApp) {
-            } else {
+            if (!inApp) {
                 control.$root.addClass('mt-3');
                 if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
             }
 
             /*
-            $this = newAttachments(ctl['NAME'], label);
-            $this.addClass('mt-3');
-            $input = $this.find('div[data-attachments]');
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input[0]._readonly(true);
-            }
-
-            $this = getAttachments(ctl['NAME'], label);
-            $this.find('.list').on('click', 'a.item-content', downloadAtt);
-            $this.on('swipeout:deleted', 'li.swipeout', deleteAtt);
-            $this.find('.list').on('change', 'a.item-content', downloadAtt);
-            $this.find('div.row').on('click', 'button', addAtt);
-            
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $this.attr('readonly', true);
-                $this.find('div.row').hide();
-            }
-            */
-
-            // El TAG se setea en el APP7_SCRIPT asi:
-            // $this.attr('data-attachments', 'miTag');
-
-            /*
             El TAG se setea en el SBR asi:
-                ctx.$input.attr('data-attachments', 'miTag');
+                ctx.control.tag('miTag');
 
             El addonly:
-                ctx.$input[0]._addonly(true);
+                ctx.control.addOnly(true);
             */
         }
 
