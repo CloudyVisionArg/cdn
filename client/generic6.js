@@ -33,7 +33,6 @@ var propControls = 'App7_controls';
         // dark-mode
         $('html').attr('data-bs-theme', localStorage.getItem('dark-mode') == '1' ? 'dark' : 'light');
 
-
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
         if (!window.dSession) {
             window.dSession = new doorsapi2.Session();
