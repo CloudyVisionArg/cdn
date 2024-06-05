@@ -967,8 +967,7 @@ async function renderControls(container, parent) {
                 textField: tf,
             }
             if (ctl.attr('mode') == '3') opt.type = 'password';
-
-            //if (ctl.attr('isnumber') == '1') $input.attr('data-numeral', numeral.options.defaultFormat);
+            if (ctl.attr('isnumber') == '1') opt.numeral = true;
 
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
