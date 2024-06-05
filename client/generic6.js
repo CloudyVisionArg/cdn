@@ -1048,11 +1048,13 @@ async function renderControls(container, parent) {
             El TAG se setea en el SBR asi:
                 ctx.control.tag('miTag');
 
-            El addonly:
+            El addOnly:
                 ctx.control.addOnly(true);
+            
+            Para mostrarlo abierto (solo app):
+                ctx.control.collapse(false);
             */
         }
-
 
         if (control && control.$root) control.$root.appendTo($cont);
 
@@ -1068,13 +1070,14 @@ async function renderControls(container, parent) {
             if (ctl['SCRIPTBEFORERENDER']) {
                 /*
                 Objetos disponibles en este script:
+                - control: El control Doors
                 - doc: El objeto Document que se esta abriendo
                 - folder: La carpeta actual
                 - controlsFolder: La carpeta de controles
                 - controls: El search a la carpeta de controles completo
                 - ctl: El row del control que se esta dibujando
                 - ctl.attr(): Function que devuelve un atributo de XMLATTRIBUTES
-                - $this: El control completo JQuery (inluido el <li>)
+                - $this: El $root JQuery del control
                 - $input: El input, textarea, select, etc, dentro del control
                     (puede ser undefined en caso de los raw y otros)
                 - bsctl: El control Bootstrap (depende del control)
@@ -1086,7 +1089,7 @@ async function renderControls(container, parent) {
                 // Copio la funcion evalCode para que se ejecute en este contexto
                 let pipe = {};
                 eval('pipe.fn = ' + evalCode.toString());
-                await pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
+                pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
             }
 
         } catch (err) {
