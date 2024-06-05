@@ -1005,9 +1005,12 @@ async function renderControls(container, parent) {
             }
 
             options = {
-                label,
-                type,
+                label, type,
                 textField: tf,
+            }
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                options.readOnly = true;
             }
 
             control = modControls.newDTPicker(ctl['NAME'], options);
@@ -1018,18 +1021,6 @@ async function renderControls(container, parent) {
                 control.$root.addClass('mt-3');
             }
 
-            /*
-            $this = newDTPicker(ctl['NAME'], label, mode)
-            $this.addClass('mt-3');
-            $input = $this.find('input');
-            bsctl = $this.find('div.input-group');
-            $input.attr('data-textfield', tf);
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.closest('.input-group').datetimepicker('disable');
-                //$input.attr({ 'readonly': 'readonly' });
-            }
-            */
-        
         
         // -- Attachments --
 
