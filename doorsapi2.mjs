@@ -2729,6 +2729,7 @@ export class Folder {
     #owner;
 
     constructor(folder, session, parent) {
+        debugger;
         this.#json = folder;
         this.#session = session;
         if (parent) this.#parent = parent;

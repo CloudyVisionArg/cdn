@@ -401,6 +401,7 @@ function gitCdn(options) {
 
     if (options.url) {
         return url;
+        
     } else {
         return new Promise((resolve, reject) => {
             fetch(url).then(

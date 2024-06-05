@@ -713,7 +713,7 @@ async function webRenderPage() {
     $('<hr/>').appendTo($cont);
 
     $cont.append(`
-        <span style="padding-top: 30px; padding-bottom: 25px;">
+        <span style="padding-bottom: 25px;">
             Powered by <a href="https://cloudy.ar" target="_blank">CloudyVision</a>
         </span>
     `);
