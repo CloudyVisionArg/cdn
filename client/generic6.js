@@ -719,7 +719,14 @@ async function webRenderPage() {
         <i class="bi bi-cloud-moon" aria-hidden="true"></i>
     </button>`).appendTo($cont);
     $btn.click(() => {
-        $('html').attr('data-bs-theme', 'dark');
+        let dm = localStorage.getItem('dark-mode');
+        if (dm == '1') {
+            $('html').attr('data-bs-theme', 'light');
+            localStorage.setItem('dark-mode', 0);
+        } else {
+            $('html').attr('data-bs-theme', 'dark');
+            localStorage.setItem('dark-mode', 1);
+        }
     });
 
     // Boton Borrar
