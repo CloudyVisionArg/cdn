@@ -966,8 +966,8 @@ async function renderControls(container, parent) {
                 label: label,
                 textField: tf,
             }
-            if (ctl.attr('mode') == '3') opt.type = 'password';
-            if (ctl.attr('isnumber') == '1') opt.numeral = true;
+            if (ctl.attr('mode') == '3') options.type = 'password';
+            if (ctl.attr('isnumber') == '1') options.numeral = true;
 
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
