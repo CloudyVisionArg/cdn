@@ -6,6 +6,7 @@ var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr, modControls;
 var controls, controlsFolder, controlsRights;
 var $page, $navbar, f7Page, pageEl, evSrc, saving, saved;
+var generic = 'generic6';
 
 var inApp = typeof window.app7 == 'object';
 
