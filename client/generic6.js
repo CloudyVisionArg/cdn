@@ -1080,6 +1080,14 @@ async function renderControls(container, parent) {
             El docLog se muestra por defecto cerrado. Para mostrarlo abierto:
                 ctx.control.collapse(false);
             */
+        
+        
+        // -- HtmlRaw --
+
+        } else if (type == 'HTMLRAW') {
+            control = {
+                $root: inApp ? $('<li/>') : $('<div/>', { class: 'mt-3' }),
+            };
         }
 
         if (control && control.$root) control.$root.appendTo($cont);
