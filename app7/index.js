@@ -385,7 +385,7 @@ var app = {
                         sync.sync(false);
                         if (window.refreshNotifications) window.refreshNotifications();
                         executeCode('onResume');
-                        //sessionMsg();
+                        sessionMsg();
                     },
                     function (err) {
                         console.error(errMsg(err));
@@ -407,15 +407,18 @@ var app = {
 function sessionMsg() {
     dSession.tags().then(
         res => {
-            debugger;
             if (res.message) {
-                app7.toast.create({
-                    text: res.message,
-                    closeTimeout: 15000,
-                    position: 'center',
-                    closeButton: false,
-                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
-                }).open();
+                let last = (new Date(localStorage.getItem('lastMessageTime')));
+                // Cada 1 hr vuelve a mostrar
+                if (isNaN(last.getTime()) || new Date() - last > (60 * 60 * 1000)) {
+                    app7.toast.create({
+                        text: res.message,
+                        closeTimeout: 15000,
+                        position: 'center',
+                        closeButton: false,
+                        icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+                    }).open();
+                }
             }
         }
     )
