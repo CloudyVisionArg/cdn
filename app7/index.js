@@ -407,6 +407,7 @@ var app = {
 function sessionMsg() {
     dSession.tags().then(
         res => {
+            debugger;
             if (res.message) {
                 let last = (new Date(localStorage.getItem('lastMessageTime')));
                 // Cada 1 hr vuelve a mostrar
@@ -418,7 +419,7 @@ function sessionMsg() {
                         closeButton: false,
                         icon: '<i class="f7-icons">exclamationmark_triangle</i>',
                     }).open();
-                    
+
                     localStorage.setItem('lastMessageTime', (new Date()).toJSON());
                 }
             }
