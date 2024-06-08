@@ -407,6 +407,7 @@ var app = {
 function sessionMsg() {
     dSession.tags().then(
         res => {
+            debugger;
             if (res.message) {
                 app7.toast.create({
                     text: res.message,
