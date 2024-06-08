@@ -408,14 +408,14 @@ function sessionMsg() {
     dSession.tags().then(
         res => {
             debugger;
-            if (res.service_paused == '1') {
+            if (res.service_paused == '1' && dSession.loggedUser()['AccId'] != 0) {
                 app7.dialog.alert(res.message,
                     function () {
                         location.href = 'index.html';
                     }
                 );
             }
-            
+
             if (res.message) {
                 let last = (new Date(localStorage.getItem('lastMessageTime')));
                 // Cada 1 hr vuelve a mostrar
