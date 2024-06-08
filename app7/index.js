@@ -408,7 +408,7 @@ function sessionMsg() {
     dSession.tags().then(
         res => {
             debugger;
-            if (res.service_paused == '1' && dSession.loggedUser()['AccId'] != 0) {
+            if (res.service_paused == '1' && dSession.loggedUser()['AccId'] == 0) {
                 app7.dialog.alert(res.message, () => {
                     location.href = 'index.html';
                 });
