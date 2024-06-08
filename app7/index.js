@@ -418,6 +418,8 @@ function sessionMsg() {
                         closeButton: false,
                         icon: '<i class="f7-icons">exclamationmark_triangle</i>',
                     }).open();
+                    
+                    localStorage.setItem('lastMessageTime', (new Date()).toJSON());
                 }
             }
         }
