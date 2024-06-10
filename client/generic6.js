@@ -978,7 +978,7 @@ async function renderControls(container, parent) {
             if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
                 options.dataList = {
                     folder,
-                    field: textField,
+                    field: tf,
                 }
             }
 
