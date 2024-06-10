@@ -975,6 +975,13 @@ async function renderControls(container, parent) {
                 options.maxLength = textField.length;
             }
     
+            if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
+                options.dataList = {
+                    folder,
+                    field: textField,
+                }
+            }
+
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
             } else {
