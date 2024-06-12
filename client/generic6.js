@@ -1042,6 +1042,36 @@ async function renderControls(container, parent) {
             control = newSelect(ctl['NAME']);
 
 
+        // -- Fieldset --
+
+        } else if (type == 'FIELDSET') {
+            options = { label };
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                options.readOnly = true;
+            }
+
+            control = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
+            debugger;
+
+            let $coll = $this.find('.collapse');
+            if ($coll.length) { // Si no tiene .collapse es invisible
+                $this.addClass('mt-3');
+                $this.find('.card-body').css('padding-top', '0');
+                bsctl = $this.find('.collapse')[0].bscollapse;
+            }
+
+            await renderControls($this.find('fieldset'), ctl['NAME']);
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $this.find('fieldset').attr('disabled', 'disabled');
+            }
+
+            /*
+            bsctl.show() // Abre el collapse
+            bsctl.hide() // Cierra el collapse
+            */
+
         // -- Attachments --
 
         } else if (type == 'ATTACHMENTS') {
