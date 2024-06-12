@@ -1059,15 +1059,8 @@ async function renderControls(container, parent) {
             control = modControls.newFieldset(ctl['NAME'], options);
 
             if (!inApp) {
-                let $coll = control.$root.find('.collapse');
-                if ($coll.length) { // Si no tiene .collapse es invisible
-                    control.$root.addClass('mt-3');
-                    //$this.find('.card-body').css('padding-top', '0');
-                    //bsctl = $this.find('.collapse')[0].bscollapse;
-                }
+                if (!options.noBorders) control.$root.addClass('mt-3');
             }
-            /*
-            */
 
             renderControls(control.$content, ctl['NAME']);
 
