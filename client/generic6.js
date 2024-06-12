@@ -1051,7 +1051,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            control = newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
+            control = modControls.newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
             debugger;
 
             let $coll = $this.find('.collapse');
