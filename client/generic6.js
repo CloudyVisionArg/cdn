@@ -1057,7 +1057,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            control = modControls.newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
+            control = modControls.newFieldset(ctl['NAME'], options);
 
             if (!inApp) {
                 let $coll = control.$root.find('.collapse');
