@@ -1049,6 +1049,7 @@ async function renderControls(container, parent) {
         // -- Fieldset --
 
         } else if (type == 'FIELDSET') {
+            debugger;
             options = label ? { label } : { noBorders: true };
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
