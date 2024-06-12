@@ -997,13 +997,6 @@ async function renderControls(container, parent) {
             }
 
             /*
-            if (ctl.attr('datalist') == '1' && ctl.attr('mode') == '1' && textField) {
-                inputDataList($input, {
-                    folder: fld_id,
-                    field: tf,
-                });
-            }
-
             let buttons = ctl.attr('buttons');
             if (buttons) {
                 if (buttons.indexOf('email') >= 0) addEmailButton($this);
@@ -1041,7 +1034,13 @@ async function renderControls(container, parent) {
                 control.$root.addClass('mt-3');
             }
 
-        
+
+        // -- SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
+
+        } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
+            controls = newSelect(ctl['NAME']);
+
+
         // -- Attachments --
 
         } else if (type == 'ATTACHMENTS') {
