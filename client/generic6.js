@@ -1038,6 +1038,7 @@ async function renderControls(container, parent) {
         // -- SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
 
         } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
+            debugger;
             control = newSelect(ctl['NAME']);
 
 
