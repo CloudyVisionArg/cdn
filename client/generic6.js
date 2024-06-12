@@ -1039,7 +1039,7 @@ async function renderControls(container, parent) {
 
         } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
             debugger;
-            control = newSelect(ctl['NAME']);
+            control = modControls.newSelect(ctl['NAME']);
 
 
         // -- Fieldset --
