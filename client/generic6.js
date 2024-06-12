@@ -1056,13 +1056,18 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            control = modControls.newFieldset(ctl['NAME'], options);
-
-            if (!inApp) {
+            if (inApp) {
+                if (options.noborders) {
+                    renderControls(control.$content, parent);
+                } else {
+                    control = modControls.newFieldset(ctl['NAME'], options);
+                    renderControls(control.$content, ctl['NAME']);
+                }
+            } else {
+                control = modControls.newFieldset(ctl['NAME'], options);
                 if (!options.noBorders) control.$root.addClass('mt-3');
+                renderControls(control.$content, ctl['NAME']);
             }
-
-            renderControls(control.$content, ctl['NAME']);
 
 
         // -- Attachments --
