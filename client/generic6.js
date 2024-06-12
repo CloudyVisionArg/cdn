@@ -1038,7 +1038,7 @@ async function renderControls(container, parent) {
         // -- SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
 
         } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
-            debugger;
+
             control = modControls.newSelect(ctl['NAME']);
 
             if (!inApp) {
@@ -1056,7 +1056,6 @@ async function renderControls(container, parent) {
             }
 
             control = modControls.newFieldset(ctl['NAME'], ctl['DESCRIPTION']);
-            debugger;
 
             if (!inApp) {
                 let $coll = control.$root.find('.collapse');
