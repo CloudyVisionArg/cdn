@@ -1056,6 +1056,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
+            debugger;
             if (inApp) {
                 if (options.noborders) {
                     renderControls(control.$content, parent);
