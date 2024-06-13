@@ -1060,6 +1060,7 @@ async function renderControls(container, parent) {
             }
 
             control = modControls.newSwitch(ctl['NAME'], options);
+            debugger;
 
             $input = control.$input
             $this = control.$root;
