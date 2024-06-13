@@ -1046,6 +1046,29 @@ async function renderControls(container, parent) {
             }
 
 
+        // -- Checkbox --
+
+        } else if (type == 'CHECKBOX') {
+
+            options = {
+                label,
+                textField: tf,
+            };
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                options.readOnly = true;
+            }
+
+            control = modControls.newSwitch(ctl['NAME'], options);
+
+            $input = control.$input
+            $this = control.$root;
+
+            if (!inApp) {
+                control.$root.addClass('mt-3');
+            }
+
+
         // -- Fieldset --
 
         } else if (type == 'FIELDSET') {
