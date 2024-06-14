@@ -1793,9 +1793,17 @@ export class Directory {
     @returns {Promise<Object[]>}
     */
     accountsSearch(filter, order) {
-        let url = '/accounts/search?filter=' + this.session.utils.encUriC(filter) + 
-            '&order=' + this.session.utils.encUriC(order);
-        return this.session.restClient.fetch(url, 'GET', '', '');
+        debugger;
+        let utils = this.session.utils;
+        let key = 'accountsSearch|' + filter + '|' + order;
+        let cache = this.utils.cache(key);
+        if (cache == undefined) {
+            let url = '/accounts/search?filter=' + utils.encUriC(filter) + 
+                '&order=' + utils.encUriC(order);
+            cache = this.session.restClient.fetch(url, 'GET', '', '');
+            utils.cache(key, cache, 60); // Cachea por 60 segundos
+        }
+        return cache;
     }
 
     /**
