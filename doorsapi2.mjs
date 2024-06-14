@@ -1793,7 +1793,6 @@ export class Directory {
     @returns {Promise<Object[]>}
     */
     accountsSearch(filter, order) {
-        debugger;
         let utils = this.session.utils;
         let key = 'accountsSearch|' + filter + '|' + order;
         let cache = utils.cache(key);
