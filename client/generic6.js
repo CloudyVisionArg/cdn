@@ -1041,6 +1041,8 @@ async function renderControls(container, parent) {
 
             control = modControls.newSelect(ctl['NAME']);
 
+            control.fill();
+
             if (!inApp) {
                 control.$root.addClass('mt-3');
             }
