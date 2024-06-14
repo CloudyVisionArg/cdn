@@ -1796,7 +1796,7 @@ export class Directory {
         debugger;
         let utils = this.session.utils;
         let key = 'accountsSearch|' + filter + '|' + order;
-        let cache = this.utils.cache(key);
+        let cache = utils.cache(key);
         if (cache == undefined) {
             let url = '/accounts/search?filter=' + utils.encUriC(filter) + 
                 '&order=' + utils.encUriC(order);
