@@ -1052,12 +1052,12 @@ async function renderControls(container, parent) {
             } else if (type == 'SELECTFOLDER' || type == 'SELECTMULTIPLEFOLDER') {
 
             } else if (type == 'LOOKUPBOXACCOUNTS') {
-                options.fill({
+                options.fill = {
                     source: 'accounts',
                     formula: '(disabled = 0 or disabled is null) and system = 0',
                     order: 'name',
                     withoutNothing: ctl.attr('withoutnull') == '1' || ctl.attr('mode') == '2',
-                });
+                };
                 if (ctl.attr('formula')) {
                     options.fill.formula += ' and (' + ctl.attr('formula') + ')';
                 }
