@@ -929,7 +929,7 @@ async function renderControls(container, parent) {
 
         let label = ctl['DESCRIPTION'] ? ctl['DESCRIPTION'] : ctl['NAME'];
         
-        let control, options, $this, $input, bsctl, f7ctl, tf, textField, vf, valueField;
+        let control, options, $this, $input, bsctl, f7ctl, tf, textField, vf, valueField, context;
 
         tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
@@ -952,6 +952,23 @@ async function renderControls(container, parent) {
             }).appendTo($row);
         }
 
+        try {
+            context = {
+                options, ctl, textField, valueField, label
+            };
+
+            /*
+                todo: Ver si hace falta await, lo ideal seria que no, para que
+                la pantalla se dibuje mas rapido.
+            */
+            // Evento beforeRenderControl
+            evSrc.dispatchEvent(new CustomEvent('beforeRenderControl', { detail : context}));
+            //if (context.return && typeof context.return.then == 'function') await context.return;
+
+        } catch (err) {
+            console.error(err);
+            toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
+        }
 
         // -- Textbox --
 
@@ -1173,7 +1190,7 @@ async function renderControls(container, parent) {
         if (control && control.$root) control.$root.appendTo($cont);
 
         try {
-            var context = {
+            context = {
                 control, ctl, $this, $input, f7ctl, bsctl, textField, valueField, label
             };
 
