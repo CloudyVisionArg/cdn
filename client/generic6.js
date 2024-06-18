@@ -983,6 +983,7 @@ async function renderControls(container, parent) {
                 }
             }
 
+            eventBRC(options);
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
             } else {
@@ -1027,6 +1028,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
+            eventBRC(options);
             control = modControls.newDTPicker(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$input;
@@ -1085,6 +1087,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
+            eventBRC(options);
             control = modControls.newSwitch(ctl['NAME'], options);
 
             $input = control.$input
@@ -1105,6 +1108,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
+            eventBRC(options);
             control = modControls.newFieldset(ctl['NAME'], options);
 
             if (!inApp) {
@@ -1126,6 +1130,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
+            eventBRC(options);
             control = modControls.newAttachments(ctl['NAME'], options);
 
             $this = control.$root;
@@ -1153,6 +1158,7 @@ async function renderControls(container, parent) {
         } else if (type == 'DOCUMENTLOG') {
 
             options = { label }
+            eventBRC(options);
             control = modControls.newDocLog(ctl['NAME'], options);
             if (!inApp) control.$root.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
 
