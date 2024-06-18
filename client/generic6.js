@@ -969,6 +969,7 @@ async function renderControls(container, parent) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
         }
+        if (ctl['NAME'] == 'responsible') debugger;
 
         // -- Textbox --
 
