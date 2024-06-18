@@ -1041,7 +1041,7 @@ async function renderControls(container, parent) {
 
             options = {
                 multiple: ctl.attr('mode') == '2' || type == 'SELECTMULTIPLEFOLDER',
-                readOnly: true, //ctl['W'] == 0 || ctl.attr('readonly') == '1',
+                readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
                 search: (ctl.attr('searchbar') == '1' || type == 'LOOKUPBOXACCOUNTS'),
                 textField: tf,
                 valueField: vf,
