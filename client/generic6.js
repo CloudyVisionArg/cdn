@@ -953,6 +953,7 @@ async function renderControls(container, parent) {
         }
 
         try {
+            options = {};
             context = {
                 options, ctl, textField, valueField, label
             };
