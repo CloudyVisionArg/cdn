@@ -952,25 +952,6 @@ async function renderControls(container, parent) {
             }).appendTo($row);
         }
 
-        try {
-            options = {};
-            context = {
-                options, ctl, textField, valueField, label
-            };
-
-            /*
-                todo: Ver si hace falta await, lo ideal seria que no, para que
-                la pantalla se dibuje mas rapido.
-            */
-            // Evento beforeRenderControl
-            evSrc.dispatchEvent(new CustomEvent('beforeRenderControl', { detail : context}));
-            //if (context.return && typeof context.return.then == 'function') await context.return;
-
-        } catch (err) {
-            console.error(err);
-            toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
-        }
-        if (ctl['NAME'] == 'responsible') debugger;
 
         // -- Textbox --
 
@@ -1083,6 +1064,9 @@ async function renderControls(container, parent) {
                 }
             }
 
+            eventBRC(options)
+            
+    
             control = modControls.newSelect(ctl['NAME'], options);
 
 
@@ -1233,6 +1217,19 @@ async function renderControls(container, parent) {
         } catch (err) {
             console.error(err);
             toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
+        }
+
+        function eventBRC(options) {
+            try {
+                context = { options, ctl, textField, valueField, label };
+                // Evento beforeRenderControl
+                evSrc.dispatchEvent(new CustomEvent('beforeRenderControl', { detail : context}));
+                //if (context.return && typeof context.return.then == 'function') await context.return;
+    
+            } catch (err) {
+                console.error(err);
+                toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
+            }
         }
 
         loop.next();
