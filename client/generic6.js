@@ -1064,11 +1064,8 @@ async function renderControls(container, parent) {
                 }
             }
 
-            eventBRC(options)
-            
-    
+            eventBRC(options);
             control = modControls.newSelect(ctl['NAME'], options);
-
 
             if (!inApp) {
                 control.$root.addClass('mt-3');
@@ -1219,10 +1216,10 @@ async function renderControls(container, parent) {
             toast(ctl['NAME'] + ' error: ' + utils.errMsg(err));
         }
 
+        // Evento beforeRenderControl
         function eventBRC(options) {
             try {
                 context = { options, ctl, textField, valueField, label };
-                // Evento beforeRenderControl
                 evSrc.dispatchEvent(new CustomEvent('beforeRenderControl', { detail : context}));
                 //if (context.return && typeof context.return.then == 'function') await context.return;
     
