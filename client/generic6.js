@@ -1294,7 +1294,9 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (textField && el.drs && el.drs.text) {
+        if (textField && valueField) {
+            debugger;
+        } else if (textField && el.drs && el.drs.text) {
             el.drs.text(text);
             textField = undefined;
         }
