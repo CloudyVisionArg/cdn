@@ -1295,17 +1295,13 @@ async function fillControls() {
         };
 
         if (textField && valueField && el.tagName == 'SELECT' && el.drs) {
-            debugger;
             if ($el.attr('multiple')) {
-                //revisar
-                let t = text ? text.split(';') : null;
-                let v = value ? value.split(';') : null;
-                setSelectVal($el, t, v);
+                el.drs.value(value ? value.split(';') : null);
             } else {
                 el.drs.value({ value, text });
-                textField == undefined;
-                valueField == undefined;
             }
+            textField == undefined;
+            valueField == undefined;
 
         } else if (textField && el.drs && el.drs.text) {
             el.drs.text(text);
