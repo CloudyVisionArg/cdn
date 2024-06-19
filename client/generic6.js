@@ -14,6 +14,7 @@ var propControls = 'App7_controls';
 
 (async () => {
     if (inApp) { // APP
+        utils = dSession.utils;
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
     
@@ -37,6 +38,8 @@ var propControls = 'App7_controls';
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
         if (!window.dSession) {
             window.dSession = new doorsapi2.Session();
+            utils = dSession.utils;
+
             if (!await dSession.webSession() || !await dSession.isLogged) {
                 errMgr(new Error('La sesion no ha sido iniciada'));
                 return;
@@ -68,8 +71,6 @@ var propControls = 'App7_controls';
         fld_id = urlParams.get('fld_id');
         doc_id = urlParams.get('doc_id');
     }
-
-    utils = dSession.utils;
 
     if (fld_id) {
         try {
