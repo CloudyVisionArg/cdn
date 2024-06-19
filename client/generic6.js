@@ -1052,6 +1052,15 @@ async function renderControls(container, parent) {
             };
 
             if (type == 'SELECTKEYWORDS') {
+                debugger;
+                options.fill = {
+                    source: await folder.app.folder(ctl.attr('folder')),
+                    fields: 'description, id',
+                    formula: 'type = ' + dSession.db.sqlEncode(ctl.attr('keywordtype'), 1) +
+                        ' and (disabled = 0 OR disabled is null)',
+                    order: ctl.attr('order') ? ctl.attr('order') : 'description',
+                    withoutNothing: options.multiple,
+                };
 
             } else if (type == 'SELECTFOLDER' || type == 'SELECTMULTIPLEFOLDER') {
 
@@ -1060,7 +1069,7 @@ async function renderControls(container, parent) {
                     source: 'accounts',
                     formula: '(disabled = 0 or disabled is null) and system = 0',
                     order: 'name',
-                    withoutNothing: ctl.attr('withoutnull') == '1' || ctl.attr('mode') == '2',
+                    withoutNothing: options.multiple,
                 };
                 if (ctl.attr('formula')) {
                     options.fill.formula += ' and (' + ctl.attr('formula') + ')';
