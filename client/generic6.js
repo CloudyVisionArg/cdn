@@ -1309,8 +1309,8 @@ async function fillControls() {
             } else {
                 el.drs.value({ value, text });
             }
-            textField == undefined;
-            valueField == undefined;
+            textField = undefined;
+            valueField = undefined;
 
         } else if (textField && el.drs && el.drs.text) {
             el.drs.text(text);
