@@ -1379,8 +1379,10 @@ async function fillControls() {
                 if ($el.attr('multiple')) {
                     let t = text ? text.split(';') : null;
                     let v = value ? value.split(';') : null;
+                    debugger;
                     setSelectVal($el, t, v);
                 } else {
+                    debugger
                     setSelectVal($el, text, value);
                 }
 
