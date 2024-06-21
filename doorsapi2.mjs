@@ -4815,7 +4815,7 @@ export class Utilities {
 
     /** Retorna true si value es un objeto puro {} */
     isObject(value) {
-        return Object.prototype.toString.call(value) === '[object Object]';
+        return (value && value.constructor && value.constructor.name == 'Object');
     }
 
     /** Devuelve la fecha en formato YYYY-MM-DD */
