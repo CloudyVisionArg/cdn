@@ -1480,9 +1480,13 @@ async function saveDoc(exitOnSuccess) {
 
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
-                    if (field.name == 'TASK_RESPONSIBLE') debugger;
-                    let aux = el.drs.text();
-                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                    if (el.tagName == 'SELECT') {
+                        let aux = el.drs.text();
+                        debugger;
+                    } else {
+                        let aux = el.drs.text();
+                        field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                    }
                 
                 } else if (el.tagName == 'INPUT') {
                     var type = $el.attr('type').toLowerCase();
