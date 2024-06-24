@@ -350,7 +350,7 @@ async function appRenderPage() {
         // Membrete
 
         let $ul = $('<ul/>')
-        renderControls($ul, '[NULL]');
+        await renderControls($ul, '[NULL]');
 
         if ($ul.html()) {
             $('<div/>', {
@@ -395,7 +395,7 @@ async function appRenderPage() {
                 }).appendTo($tabs);
 
                 $ul = $('<ul/>')
-                renderControls($ul, tab['NAME']);
+                await renderControls($ul, tab['NAME']);
 
                 if ($ul.html()) {
                     $('<div/>', {
@@ -675,7 +675,7 @@ async function webRenderPage() {
 
         // Membrete
 
-        renderControls($cont, '[NULL]');
+        await renderControls($cont, '[NULL]');
 
         // TABS
 
@@ -713,7 +713,7 @@ async function webRenderPage() {
                     id: tab['NAME'],
                 }).appendTo($tabCont);
 
-                renderControls($tab, tab['NAME']);
+                await renderControls($tab, tab['NAME']);
             }
         }
     };
@@ -905,7 +905,7 @@ function webGetRow(pRow, pCont, pCol) {
     }
 }
 
-function renderControls(container, parent) {
+async function renderControls(container, parent) {
     let subset = controls.filter(el => {
         return el['PARENT'] == parent && el['CONTROL'].toUpperCase() != 'TAB' &&
             el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
@@ -914,7 +914,7 @@ function renderControls(container, parent) {
 
     let $row;
 
-    utils.asyncLoop(subset.length, async loop => {
+    await utils.asyncLoop(subset.length, async loop => {
         let ctl = subset[loop.iteration()];
         let type = ctl['CONTROL'].toUpperCase();
         if (ctl['XMLATTRIBUTES']) {
@@ -1124,7 +1124,7 @@ function renderControls(container, parent) {
                 if (!options.noBorders) control.$root.addClass('mt-3');
             }
 
-            renderControls(control.$content, ctl['NAME']);
+            await renderControls(control.$content, ctl['NAME']);
 
 
         // -- Attachments --
