@@ -1058,7 +1058,7 @@ async function renderControls(container, parent) {
             $this = control.$root;
 
             if (!inApp) {
-                control.$root.addClass('mt-3');
+                control.$root.addClass('mt-5');
             }
 
 
