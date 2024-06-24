@@ -355,7 +355,7 @@ async function appRenderPage() {
         if ($ul.html()) {
             $('<div/>', {
                 class: 'list no-hairlines-md',
-                style: 'margin-top: 0; margin-bottom: 0;',
+                style: 'margin-top: 0; margin-bottom: 5px;',
             }).append($ul).appendTo($pageCont);
         }
 
@@ -1058,7 +1058,7 @@ async function renderControls(container, parent) {
             $this = control.$root;
 
             if (!inApp) {
-                control.$root.addClass('mt-5');
+                control.$root.addClass('mt-4');
             }
 
 
