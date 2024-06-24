@@ -3662,6 +3662,7 @@ export class Form {
 
     get id() {
         debugger;
+        console.log(this.#json);
         return this.#json.Id;
     }
 
