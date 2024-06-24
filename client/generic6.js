@@ -1058,7 +1058,8 @@ async function renderControls(container, parent) {
             $this = control.$root;
 
             if (!inApp) {
-                control.$root.addClass('mt-4');
+                //control.$root.addClass('mt-4');
+                control.$root.css('margin-top', '2rem');
             }
 
 
