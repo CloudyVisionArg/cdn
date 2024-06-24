@@ -1427,7 +1427,6 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
                     if (el.tagName == 'SELECT') {
-                        debugger;
                         let aux = el.drs.text();
                         if (aux.length == 0) {
                             field.value = null;
@@ -1485,7 +1484,6 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.value) {
                     if (el.tagName == 'SELECT') {
-                        debugger;
                         let aux = el.drs.value();
                         if (aux.length == 0) {
                             field.value = null;
