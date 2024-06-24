@@ -1477,11 +1477,10 @@ async function saveDoc(exitOnSuccess) {
         $get('[data-textfield]').each(function (ix, el) {
             var $el = $(el);
             var field = doc.fields($el.attr('data-textfield'));
-            debugger;
 
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
-                    if (field == 'task_responsible') debugger;
+                    if (field.name == 'TASK_RESPONSIBLE') debugger;
                     let aux = el.drs.text();
                     field.value = Array.isArray(aux) ? aux.join(';') : aux;
                 
