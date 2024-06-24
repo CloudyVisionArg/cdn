@@ -989,9 +989,10 @@ async function renderControls(container, parent) {
             }
 
 
-        // -- SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
+        // -- Select / SelectMultiple / SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
 
-        } else if (type == 'SELECTFOLDER' || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
+        } else if (type == 'SELECT' || type == 'SELECTMULTIPLE' || type == 'SELECTFOLDER' 
+            || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
 
             options = {
                 multiple: ctl.attr('mode') == '2' || type == 'SELECTMULTIPLEFOLDER',
