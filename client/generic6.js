@@ -1185,6 +1185,7 @@ function renderControls(container, parent) {
             };
         }
 
+        if (tf == 'task_state') debugger;
         if (control && control.$root) control.$root.appendTo($cont);
 
         try {
