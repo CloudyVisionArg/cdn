@@ -1482,7 +1482,14 @@ async function saveDoc(exitOnSuccess) {
                 if (el.drs && el.drs.text) {
                     if (el.tagName == 'SELECT') {
                         let aux = el.drs.text();
-                        debugger;
+                        if (aux.length == 0) {
+                            field.value = null;
+                        } else if (aux.length == 1) {
+                            field.value = aux[0].text;
+                        } else {
+                            debugger;
+                            field.value = aux.map(el => el.text).join(';');
+                        }
                     } else {
                         let aux = el.drs.text();
                         field.value = Array.isArray(aux) ? aux.join(';') : aux;
@@ -1531,8 +1538,20 @@ async function saveDoc(exitOnSuccess) {
 
             if (field && field.updatable) {
                 if (el.drs && el.drs.value) {
-                    let aux = el.drs.value();
-                    field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                    if (el.tagName == 'SELECT') {
+                        let aux = el.drs.value();
+                        if (aux.length == 0) {
+                            field.value = null;
+                        } else if (aux.length == 1) {
+                            field.value = aux[0].value;
+                        } else {
+                            debugger;
+                            field.value = aux.map(el => el.value).join(';');
+                        }
+                    } else {
+                        let aux = el.drs.value();
+                        field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                    }
 
                 } else if (el.tagName == 'SELECT') {
                     let aux = $el.val();
