@@ -1477,6 +1477,7 @@ async function saveDoc(exitOnSuccess) {
         $get('[data-textfield]').each(function (ix, el) {
             var $el = $(el);
             var field = doc.fields($el.attr('data-textfield'));
+            debugger;
 
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
