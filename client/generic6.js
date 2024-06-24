@@ -1487,7 +1487,6 @@ async function saveDoc(exitOnSuccess) {
                         } else if (aux.length == 1) {
                             field.value = aux[0].text;
                         } else {
-                            debugger;
                             field.value = aux.map(el => el.text).join(';');
                         }
                     } else {
@@ -1545,7 +1544,6 @@ async function saveDoc(exitOnSuccess) {
                         } else if (aux.length == 1) {
                             field.value = aux[0].value;
                         } else {
-                            debugger;
                             field.value = aux.map(el => el.value).join(';');
                         }
                     } else {
