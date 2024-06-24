@@ -1303,11 +1303,35 @@ async function fillControls() {
         };
 
         if ((textField || valueField) && el.tagName == 'SELECT' && el.drs) {
+            let val = [];
             if ($el.attr('multiple')) {
-                el.drs.value(value ? value.split(';') : null);
+                if (valueField) {
+                    if (value || value == 0) {
+                        let arr = value.split(';');
+                        arr.forEach(el => { val.push({ value: el }) })
+                    }
+                }
+                if (textField) {
+                    if (text || text == 0) {
+                        let arr = text.split(';');
+                        arr.forEach((el, ix) => {
+                            if (val.length > ix) {
+                                val[ix].text = el;
+                            } else {
+                                val.push({ text: el });
+                            }
+                        });
+                    }
+                }
+
             } else {
-                el.drs.value({ value, text });
+                let v = {};
+                if (value != undefined) v.value = value;
+                if (text != undefined) v.text = text;
+                val.push(v);
             }
+            
+            el.drs.value(val);
             textField = undefined;
             valueField = undefined;
 
