@@ -3660,11 +3660,10 @@ export class Form {
     }
     */
 
-    /*
     get id() {
-        //todo
+        debugger;
+        return this.#json.Id;
     }
-    */
 
     /*
     get isNew() {
