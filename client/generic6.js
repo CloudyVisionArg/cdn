@@ -775,56 +775,6 @@ async function webRenderPage() {
     });
 
     /*
-
-    // Llena controles Select
-    $('[data-fill]').each(function (ix, el) {
-        var $el = $(el);
-        $el.removeAttr('data-fill');
-        $el.attr('data-filling', '1');
-        var fld = $el.attr('data-fill-folder');
-
-        if (fld == 'accounts') {
-            fillSelect($el,
-                accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
-                $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
-                function (res) {
-                    $el.find('option').each(function (ix, el) {
-                        var $e = $(el);
-                        var type = $e.attr('data-field-type');
-                        if (type == '1') {
-                            $e.attr('data-icon', 'bi bi-person');
-                        } else if (type == '2') {
-                            $e.attr('data-icon', 'bi bi-people-fill');
-                        }
-                    })
-                }
-            );
-
-        } else {
-            folder.app.folder($el.attr('data-fill-folder')).then(
-                function (fld) {
-                    var arrFields, textField, valueField, dataFields;
-
-                    var arrFields = $el.attr('data-fill-fields').split(',');
-                    if (arrFields.length > 0) textField = arrFields.shift().trim();
-                    if (arrFields.length > 0) valueField = arrFields.shift().trim();
-                    if (arrFields.length > 0) dataFields = arrFields.join(',');
-
-                    fillSelect($el,
-                        fld.search({ fields: $el.attr('data-fill-fields'),
-                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
-                        }),
-                        $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
-                    );
-                },
-                function (err) {
-                    console.log(err);
-                }
-            )
-        }
-    });
-
-
     // Tooltips
     $('[data-bs-toggle="tooltip"]').each(function (ix) {
         new bootstrap.Tooltip(this);
@@ -1065,8 +1015,6 @@ async function renderControls(container, parent) {
             } else if (type == 'LOOKUPBOXACCOUNTS') {
                 options.fill = {
                     source: 'accounts',
-                    formula: '(disabled = 0 or disabled is null) and system = 0',
-                    order: 'name',
                 };
                 if (ctl.attr('formula')) {
                     options.fill.formula += ' and (' + ctl.attr('formula') + ')';
