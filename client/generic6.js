@@ -1303,6 +1303,7 @@ async function fillControls() {
         };
 
         if ((textField || valueField) && el.tagName == 'SELECT' && el.drs) {
+            debugger;
             let val = [];
             if ($el.attr('multiple')) {
                 if (valueField) {
