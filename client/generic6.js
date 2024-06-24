@@ -1326,8 +1326,8 @@ async function fillControls() {
 
             } else {
                 let v = {};
-                if (value != undefined) v.value = value;
-                if (text != undefined) v.text = text;
+                if (value !== undefined) v.value = value;
+                if (text !== undefined) v.text = text;
                 val.push(v);
             }
 
