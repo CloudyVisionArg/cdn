@@ -3504,6 +3504,37 @@ export class Folder {
     }
 };
 
+/*
+todo: terminar
+
+AccId: 462
+AclInfo: null
+AclInherits: false
+Actions: [] (0)
+Application: ""
+AssemblyMetaData: {IsEnabled: false, IsNet: false, Items: []}
+Created: "2024-04-25T15:29:45.02Z"
+Description: ""
+DescriptionRaw: ""
+EntityId: 0
+Events: [Object, Object, Object, Object, Object, Object, Object, Object, Object] (9)
+Fields: [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, …] (33)
+FrmId: 504
+Guid: "0a69e91e-3f94-4fa8-8a43-db3d2ffb4db1"
+Icon: ""
+IconRaw: ""
+IsNew: false
+Modified: "2024-06-06T15:49:51.29Z"
+Name: "gen6"
+Owner: null
+Properties: [] (0)
+ReadOnly: false
+StyleScriptDefinition: {Override: false, Inherits: false, Code: "", InheritedCode: null, Fields: [], …}
+Tags: null
+Url: "/c/form.htm?_id=generic6"
+UrlRaw: "[APPVIRTUALROOT]/form.htm?_id=generic6"
+UserProperties: [] (0)
+*/
 
 export class Form {
     static objectType = 1;
@@ -3661,9 +3692,7 @@ export class Form {
     */
 
     get id() {
-        debugger;
-        console.log(this.#json);
-        return this.#json.Id;
+        return this.#json.FrmId;
     }
 
     /*
