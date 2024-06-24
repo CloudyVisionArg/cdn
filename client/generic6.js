@@ -1052,7 +1052,6 @@ async function renderControls(container, parent) {
             };
 
             if (type == 'SELECTKEYWORDS') {
-                debugger;
                 options.fill = {
                     source: await folder.app.folder(ctl.attr('folder')),
                     fields: 'description, id',
