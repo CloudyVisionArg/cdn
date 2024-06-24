@@ -1480,7 +1480,7 @@ async function saveDoc(exitOnSuccess) {
 
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
-                    debugger;
+                    if (field == 'task_responsible') debugger;
                     let aux = el.drs.text();
                     field.value = Array.isArray(aux) ? aux.join(';') : aux;
                 
