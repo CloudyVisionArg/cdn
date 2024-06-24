@@ -1185,7 +1185,6 @@ async function renderControls(container, parent) {
             };
         }
 
-        if (tf == 'task_state') debugger;
         if (control && control.$root) control.$root.appendTo($cont);
 
         try {
@@ -1304,7 +1303,6 @@ async function fillControls() {
         };
 
         if ((textField || valueField) && el.tagName == 'SELECT' && el.drs) {
-            debugger;
             let val = [];
             if ($el.attr('multiple')) {
                 if (valueField) {
@@ -1483,6 +1481,7 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
                     if (el.tagName == 'SELECT') {
+                        debugger;
                         let aux = el.drs.text();
                         if (aux.length == 0) {
                             field.value = null;
@@ -1540,6 +1539,7 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.value) {
                     if (el.tagName == 'SELECT') {
+                        debugger;
                         let aux = el.drs.value();
                         if (aux.length == 0) {
                             field.value = null;
