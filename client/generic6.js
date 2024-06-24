@@ -350,7 +350,7 @@ async function appRenderPage() {
         // Membrete
 
         let $ul = $('<ul/>')
-        await renderControls($ul, '[NULL]');
+        renderControls($ul, '[NULL]');
 
         if ($ul.html()) {
             $('<div/>', {
@@ -395,7 +395,7 @@ async function appRenderPage() {
                 }).appendTo($tabs);
 
                 $ul = $('<ul/>')
-                await renderControls($ul, tab['NAME']);
+                renderControls($ul, tab['NAME']);
 
                 if ($ul.html()) {
                     $('<div/>', {
@@ -675,7 +675,7 @@ async function webRenderPage() {
 
         // Membrete
 
-        await renderControls($cont, '[NULL]');
+        renderControls($cont, '[NULL]');
 
         // TABS
 
@@ -713,7 +713,7 @@ async function webRenderPage() {
                     id: tab['NAME'],
                 }).appendTo($tabCont);
 
-                await renderControls($tab, tab['NAME']);
+                renderControls($tab, tab['NAME']);
             }
         }
     };
@@ -905,7 +905,7 @@ function webGetRow(pRow, pCont, pCol) {
     }
 }
 
-async function renderControls(container, parent) {
+function renderControls(container, parent) {
     let subset = controls.filter(el => {
         return el['PARENT'] == parent && el['CONTROL'].toUpperCase() != 'TAB' &&
             el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
