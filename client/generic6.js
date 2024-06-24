@@ -75,8 +75,8 @@ var propControls = 'App7_controls';
     if (fld_id) {
         try {
             folder = await dSession.folder(fld_id);
-            await folder.form; // Para q vaya cargando el form
-            a = folder.form.id
+            let f = await folder.form; // Para q vaya cargando el form
+            console.log(f.id);
             debugger;
 
             if (folder.type == 1) {
