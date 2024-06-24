@@ -355,7 +355,7 @@ async function appRenderPage() {
         if ($ul.html()) {
             $('<div/>', {
                 class: 'list no-hairlines-md',
-                style: 'margin-top: 0;',
+                style: 'margin-top: 0; margin-bottom: 0;',
             }).append($ul).appendTo($pageCont);
         }
 
