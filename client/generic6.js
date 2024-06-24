@@ -84,7 +84,7 @@ var propControls = 'App7_controls';
                     doc = await folder.documentsNew();
                 }
 
-                modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls.mjs', url: true, fresh: true }));
+                modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
                 modControls.setContext({ dSession, folder, doc });
                     
                 await loadControls();
@@ -1302,7 +1302,7 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (textField && valueField && el.tagName == 'SELECT' && el.drs) {
+        if ((textField || valueField) && el.tagName == 'SELECT' && el.drs) {
             if ($el.attr('multiple')) {
                 el.drs.value(value ? value.split(';') : null);
             } else {
