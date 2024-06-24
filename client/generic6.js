@@ -1006,15 +1006,22 @@ async function renderControls(container, parent) {
                     source: await folder.app.folder(ctl.attr('folder')),
                     fields: 'description, id',
                     formula: 'type = ' + dSession.db.sqlEncode(ctl.attr('keywordtype'), 1) +
-                        ' and (disabled = 0 OR disabled is null)',
+                        ' and (disabled = 0 or disabled is null)',
                     order: ctl.attr('order') ? ctl.attr('order') : 'description',
                 };
 
             } else if (type == 'SELECTFOLDER' || type == 'SELECTMULTIPLEFOLDER') {
+                options.fill = {
+                    source: await folder.app.folder(ctl.attr('searchfolder')),
+                    fields: ctl.attr('fieldlist'),
+                    formula: ctl.attr('searchfilter'),
+                    order: ctl.attr('searchorder'),
+                };
 
             } else if (type == 'LOOKUPBOXACCOUNTS') {
                 options.fill = {
                     source: 'accounts',
+                    formula: '(disabled = 0 or disabled is null) and system = 0',
                 };
                 if (ctl.attr('formula')) {
                     options.fill.formula += ' and (' + ctl.attr('formula') + ')';
@@ -1023,6 +1030,8 @@ async function renderControls(container, parent) {
 
             eventBRC(options);
             control = modControls.newSelect(ctl['NAME'], options);
+            $this = control.$root;
+            $input = control.$select;
 
             if (!inApp) {
                 control.$root.addClass('mt-3');
@@ -1616,7 +1625,6 @@ async function saveDoc(exitOnSuccess) {
             preldr.hide();
         }
     }
-
 }
 
 function $get(pSelector) {
