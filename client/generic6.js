@@ -1093,6 +1093,8 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
+            options.mdicon = "material-icons-outlined"
+            
             if (!inApp) {
                 let aux = parseInt(ctl.attr('height'));
                 if (!isNaN(aux)) options.editor.height = aux;
@@ -1350,11 +1352,7 @@ async function fillControls() {
                 }
 
             } else if (el.tagName == 'TEXTAREA') {
-                if (el.ckeditor) {
-                    el.ckeditor.setData(v);
-                } else {
-                    $el.val(v);
-                }
+                $el.val(v);
 
             } else if (el.tagName == 'SELECT') {
                 if ($el.attr('multiple')) {
