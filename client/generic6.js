@@ -2,6 +2,27 @@
 
 // Fresh: https://cdn.cloudycrm.net/ghcv/cdn/client/generic6.js?_fresh=1
 
+/*
+Documentacion de componentes
+
+APP
+˜˜˜
+Framework7: https://framework7.io/docs/
+MD Icons (abrir en chrome): https://fonts.google.com/icons?icon.platform=web&icon.set=Material+Icons (abrir en Chrome)
+F7 Icons: https://w3.cloudycrm.net/c/app7/lib/framework7/css/cheatsheet.htm
+
+WEB
+˜˜˜
+Bootstrap: https://getbootstrap.com/docs/5.3/getting-started/introduction/
+Iconos: https://icons.getbootstrap.com / https://fontawesome.com/v4/icons/
+DTPicker: https://getdatepicker.com/5-4/
+bootstrap-select: https://developer.snapappointments.com/bootstrap-select/
+jQuery: https://api.jquery.com
+Numeral: http://numeraljs.com
+Moment: https://momentjs.com
+CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
+*/
+
 var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr, modControls;
 var controls, controlsFolder, controlsRights;
@@ -424,6 +445,7 @@ async function appPageInit(e, page) {
     })
 
     /*
+    todo:
 
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
@@ -721,12 +743,13 @@ async function webRenderPage() {
         }
     });
 
-    /*
     // Tooltips
     $('[data-bs-toggle="tooltip"]').each(function (ix) {
         new bootstrap.Tooltip(this);
     });
-
+    
+    /*
+    todo:
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
     setTimeout(async function waiting() {
@@ -897,6 +920,7 @@ async function renderControls(container, parent) {
             }
 
             /*
+            todo:
             let buttons = ctl.attr('buttons');
             if (buttons) {
                 if (buttons.indexOf('email') >= 0) addEmailButton($this);
@@ -931,9 +955,7 @@ async function renderControls(container, parent) {
             $this = control.$root;
             $input = control.$input;
 
-            if (!inApp) {
-                control.$root.addClass('mt-3');
-            }
+            if (!inApp) control.$root.addClass('mt-3');
 
 
         // -- Select / SelectMultiple / SelectFolder / SelectKeywords / SelectMultipleFolder / LookupboxAccounts --
@@ -981,9 +1003,7 @@ async function renderControls(container, parent) {
             $this = control.$root;
             $input = control.$select;
 
-            if (!inApp) {
-                control.$root.addClass('mt-3');
-            }
+            if (!inApp) control.$root.addClass('mt-3');
 
 
         // -- Checkbox --
@@ -1005,9 +1025,7 @@ async function renderControls(container, parent) {
             $input = control.$input
             $this = control.$root;
 
-            if (!inApp) {
-                control.$root.css('margin-top', '2rem');
-            }
+            if (!inApp) control.$root.css('margin-top', '2rem');
 
 
         // -- Fieldset --
@@ -1023,9 +1041,7 @@ async function renderControls(container, parent) {
             eventBRC(options);
             control = modControls.newFieldset(ctl['NAME'], options);
 
-            if (!inApp) {
-                if (!options.noBorders) control.$root.addClass('mt-3');
-            }
+            if (!inApp && !options.noBorders) control.$root.addClass('mt-3');
 
             await renderControls(control.$content, ctl['NAME']);
 
@@ -1105,34 +1121,96 @@ async function renderControls(container, parent) {
             $this = control.$root;
             $input = control.$input;
 
-            if (!inApp) {
-                control.$root.addClass('mt-3');
+            if (!inApp) control.$root.addClass('mt-3');
+        
+
+        // -- Autocomplete --
+
+        } else if (type == 'AUTOCOMPLETE') {
+            control = {
+                $root: inApp ? $('<li/>') : $('<div/>', { class: 'mt-3' }),
+            };
+
+            /*
+            // todo: faltan editurl y addurl
+
+            $this = getAutocomplete(ctl['NAME'], label, {
+                folder: ctl.attr('searchfolder'),
+                rootFolder: folder.rootFolderId,
+                searchFields: ctl.attr('searchfields'),
+                extraFields: ctl.attr('returnfields'),
+                formula: ctl.attr('searchfilter'),
+                order: ctl.attr('searchorder'),
+            }, ctl.attr('mode') == '1');
+
+            $input = $this.find('[data-autocomplete]');
+            f7ctl = app7.autocomplete.get($input[0]);
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                if ($input[0].tagName == 'INPUT') {
+                    inputReadonly($input, true);
+                } else {
+                    $input.addClass('disabled');
+                }
             }
 
-            /*
+            $input.attr('data-textfield', tf)
+            f7ctl.params.textSource = ctl.attr('textsource');
 
-            ///web
-            let aux = parseInt(ctl.attr('height'));
-            $this = newCKEditor(ctl['NAME'], label, {
-                readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
-                height: !isNaN(aux) ? aux : 150,
-                customConfig: ctl.attr('mode') == 'basic' ? 'configbasic.js' : 'config.js',
-            });
-            $this.addClass('mt-3');
-            $input = $this.find('textarea');
-            $input.attr('data-textfield', tf);
-            $input.attr('data-ckeditor', true);
-            */
-    
-            /*
-            Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
-            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckReady:
+            $('<input/>', {
+                type: 'hidden',
+                'data-valuefield': vf,
+            }).appendTo($this);
+            f7ctl.params.valueSource = ctl.attr('valuesource');
 
-            ctx.$input[0].addEventListener('doors.ckReady', (ev) => {
-                ev.target.ckeditor.setReadOnly(true);
+            $('<input/>', {
+                type: 'hidden',
+                'data-xmlfield': ctl.attr('xmlfield'),
+            }).appendTo($this);
+
+            f7ctl.on('change', function (value) {
+                var self = this;
+
+                if (self.inputEl) {
+                    // Dropdown (simple)
+                    var $li = $(self.inputEl).closest('li')
+                } else {
+                    // Popup (multiple)
+                    var $li = $(self.openerEl).closest('li')
+                    var $t = $(self.openerEl).find('.item-after');
+                    var ts = self.params.textSource.toUpperCase();
+                    var ta = [];
+                }
+                var $v = $li.find('[data-valuefield]');
+                var vs = self.params.valueSource.toUpperCase();
+                var va = [];
+
+                var $x = $li.find('[data-xmlfield]');
+                var dom = $.parseXML('<root/>');
+
+                if (value.length > 0) {
+                    var $it;
+                    value.forEach(el => {
+                        va.push(el[vs]);
+                        if ($t) ta.push(el[ts]);
+                        var $it = $('<item/>', dom);
+                        Object.keys(el).forEach(prop => {
+                            $it.attr(prop.toLowerCase(), el[prop]);
+                        });
+                        $it.appendTo(dom.documentElement);
+                    })
+                    $v.val(va.join(';'));
+                    if ($t) $t.html(ta.join(';'));
+                    $x.val((new XMLSerializer()).serializeToString(dom));
+
+                } else {
+                    $v.val('');
+                    $x.val('');
+                    if ($t) $t.empty();
+                };
             });
             */
-        
+
 
         // -- HtmlRaw --
 
