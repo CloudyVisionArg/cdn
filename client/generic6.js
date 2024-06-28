@@ -1093,8 +1093,6 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            options.mdicon = "material-icons-outlined"
-            
             if (!inApp) {
                 let aux = parseInt(ctl.attr('height'));
                 if (!isNaN(aux)) options.editor.height = aux;
