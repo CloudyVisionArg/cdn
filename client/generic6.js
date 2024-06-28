@@ -1087,10 +1087,17 @@ async function renderControls(container, parent) {
             options = {
                 label,
                 textField: tf,
+                editor: {},
             }
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 options.readOnly = true;
             }
+
+            if (!inApp) {
+                let aux = parseInt(ctl.attr('height'));
+                if (!isNaN(aux)) options.editor.height = aux;
+                options.editor.customConfig = ctl.attr('mode') == 'basic' ? 'configbasic.js' : 'config.js';
+            };
 
             eventBRC(options);
             control = modControls.newHtmlEditor(ctl['NAME'], options);
@@ -1100,19 +1107,9 @@ async function renderControls(container, parent) {
 
             if (!inApp) {
                 control.$root.addClass('mt-3');
-                //if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
             }
 
             /*
-            //app
-            $this = getTextEditor(ctl['NAME'], label);
-            $input = $this.find('.text-editor');
-
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.addClass('disabled');
-            }
-
-            $input.attr('data-textfield', tf);
 
             ///web
             let aux = parseInt(ctl.attr('height'));
