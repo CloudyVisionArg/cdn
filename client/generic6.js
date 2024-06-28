@@ -1083,6 +1083,27 @@ async function renderControls(container, parent) {
         // -- HtmlArea --
 
         } else if (type == 'HTMLAREA') {
+
+            options = {
+                label,
+                textField: tf,
+            }
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                options.readOnly = true;
+            }
+
+            eventBRC(options);
+            control = modControls.newHtmlEditor(ctl['NAME'], options);
+
+            $this = control.$root;
+            $input = control.$input;
+
+            if (!inApp) {
+                control.$root.addClass('mt-3');
+                //if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
+            }
+
+            /*
             //app
             $this = getTextEditor(ctl['NAME'], label);
             $input = $this.find('.text-editor');
@@ -1104,17 +1125,18 @@ async function renderControls(container, parent) {
             $input = $this.find('textarea');
             $input.attr('data-textfield', tf);
             $input.attr('data-ckeditor', true);
+            */
     
             /*
             Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
             inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckReady:
 
-            ctx.$input.on('ckReady', (ev) => {
+            ctx.$input[0].addEventListener('doors.ckReady', (ev) => {
                 ev.target.ckeditor.setReadOnly(true);
             });
             */
         
-            
+
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {
