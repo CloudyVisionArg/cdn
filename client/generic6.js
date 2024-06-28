@@ -425,57 +425,6 @@ async function appPageInit(e, page) {
 
     /*
 
-
-    // Llena controles Select
-    $get('[data-fill]').each(function (ix, el) {
-        var $el = $(el);
-        $el.removeAttr('data-fill');
-        $el.attr('data-filling', '1');
-        var fld = $el.attr('data-fill-folder');
-
-        if (fld == 'accounts') {
-            fillSelect($el,
-                accountsSearch($el.attr('data-fill-formula'), $el.attr('data-fill-order')),
-                $el.attr('data-fill-withoutnothing') == '1', 'name', 'accid', 'type').then(
-                function (res) {
-                    $el.find('option').each(function (ix, el) {
-                        var $e = $(el);
-                        var type = $e.attr('data-field-type');
-                        if (type == '1') {
-                            $e.attr('data-option-icon-ios', 'f7:person');
-                            $e.attr('data-option-icon-md', 'material:person_outline');
-                        } else if (type == '2') {
-                            $e.attr('data-option-icon-ios', 'f7:person_2_fill');
-                            $e.attr('data-option-icon-md', 'material:group');
-                        }
-                    })
-                }
-            );
-
-        } else {
-            folder.app.folder($el.attr('data-fill-folder')).then(
-                function (fld) {
-                    var arrFields, textField, valueField, dataFields;
-
-                    var arrFields = $el.attr('data-fill-fields').split(',');
-                    if (arrFields.length > 0) textField = arrFields.shift().trim();
-                    if (arrFields.length > 0) valueField = arrFields.shift().trim();
-                    if (arrFields.length > 0) dataFields = arrFields.join(',');
-
-                    fillSelect($el,
-                        fld.search({ fields: $el.attr('data-fill-fields'),
-                            formula: $el.attr('data-fill-formula'), order: $el.attr('data-fill-order')
-                        }),
-                        $el.attr('data-fill-withoutnothing') == '1', textField, valueField, dataFields
-                    );
-                },
-                function (err) {
-                    console.log(err);
-                }
-            )
-        }
-    });
-
     // Espera que se terminen de llenar todos los controles antes de hacer el fill
     var wt = 0;
     setTimeout(async function waiting() {
@@ -500,8 +449,6 @@ async function appPageInit(e, page) {
             //var ev = getEvent('AfterRender');
             //if (ev) await evalCode(ev);
 
-            await fillControls();
-            app7.preloader.hide();
         }
     }, 0);
     */
@@ -1132,15 +1079,51 @@ async function renderControls(container, parent) {
                 ctx.control.collapse(false);
             */
         
+
+        // -- HtmlArea --
+
+        } else if (type == 'HTMLAREA') {
+            //app
+            $this = getTextEditor(ctl['NAME'], label);
+            $input = $this.find('.text-editor');
+
+            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
+                $input.addClass('disabled');
+            }
+
+            $input.attr('data-textfield', tf);
+
+            ///web
+            let aux = parseInt(ctl.attr('height'));
+            $this = newCKEditor(ctl['NAME'], label, {
+                readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
+                height: !isNaN(aux) ? aux : 150,
+                customConfig: ctl.attr('mode') == 'basic' ? 'configbasic.js' : 'config.js',
+            });
+            $this.addClass('mt-3');
+            $input = $this.find('textarea');
+            $input.attr('data-textfield', tf);
+            $input.attr('data-ckeditor', true);
+    
+            /*
+            Tener en cuenta que el CKEditor no estara inicializado en el SBR porque la 
+            inicializacion es asincrona. Para customizar el editor en el SBR usar su evento ckReady:
+
+            ctx.$input.on('ckReady', (ev) => {
+                ev.target.ckeditor.setReadOnly(true);
+            });
+            */
         
+            
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {
             control = {
                 $root: inApp ? $('<li/>') : $('<div/>', { class: 'mt-3' }),
             };
-        }
 
+        }
+    
         if (control && control.$root) control.$root.appendTo($cont);
 
         try {
