@@ -24,7 +24,7 @@ function registeredScripts() {
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 366 });
     scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 364 });
     scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 0 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 0 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: "monaco" });
     /*
     Por si hay que volver atras
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 359 });
