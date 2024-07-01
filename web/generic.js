@@ -68,30 +68,30 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
     await include(arrScriptsPre);
     preloader.show();
     await include(arrScripts);
-    debugger;
-    document.getElementById("script_monaco-editor-css").setAttribute("data-name","vs/editor/editor.main");
-    //document.getElementById("monaco-editor-css").attr("data-name","vs/editor/editor.main");
-    //
+    // debugger;
+    // document.getElementById("script_monaco-editor-css").setAttribute("data-name","vs/editor/editor.main");
+    // //document.getElementById("monaco-editor-css").attr("data-name","vs/editor/editor.main");
+    // //
 
-    var arrScriptTemp = [];
-    arrScriptTemp.push({id: 'monaco-editor-loader',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/loader.js' });
-    arrScriptTemp.push({id: 'monaco-editor', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
-    arrScriptTemp.push({id: 'monaco-editor-nls',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
+    // var arrScriptTemp = [];
+    // arrScriptTemp.push({id: 'monaco-editor-loader',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/loader.js' });
+    // arrScriptTemp.push({id: 'monaco-editor', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
+    // arrScriptTemp.push({id: 'monaco-editor-nls',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
     
-    await include(arrScriptTemp);
+    // await include(arrScriptTemp);
 
-    var monacoEditorContainer = document.createElement("div");
-    monacoEditorContainer.id = "monaco-editor-cont";
-    monacoEditorContainer.height = "400px";
-    document.querySelector("body").prepend(monacoEditorContainer)
-    var editor = monaco.editor.create(monacoEditorContainer, {
-        value: [
-            'function x() {',
-            '\tconsole.log("Hello world!");',
-            '}'
-        ].join('\n'),
-        language: 'javascript'
-    });
+    // var monacoEditorContainer = document.createElement("div");
+    // monacoEditorContainer.id = "monaco-editor-cont";
+    // monacoEditorContainer.height = "400px";
+    // document.querySelector("body").prepend(monacoEditorContainer)
+    // var editor = monaco.editor.create(monacoEditorContainer, {
+    //     value: [
+    //         'function x() {',
+    //         '\tconsole.log("Hello world!");',
+    //         '}'
+    //     ].join('\n'),
+    //     language: 'javascript'
+    // });
     
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
