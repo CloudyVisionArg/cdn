@@ -1128,7 +1128,6 @@ async function renderControls(container, parent) {
 
         } else if (type == 'AUTOCOMPLETE') {
             control = modControls.newAutocomplete(ctl['NAME'], options);
-            debugger;
 
             /*
             // todo: faltan editurl y addurl
