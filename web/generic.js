@@ -47,8 +47,14 @@ arrScripts.push({ id: 'bootstrap-select-lang', depends: ['bootstrap-select'], sr
 var arrScriptsPos = [];
 arrScriptsPos.push({ id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' });
 arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
+
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
+
+arrScriptsPos.push({id: 'monaco-editor', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/editor/editor.main.min.js' });
+arrScriptsPos.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/editor/editor.main.min.css' });
+
+
 
 (async () => {
     await include(arrScriptsPre);
