@@ -73,6 +73,14 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
     //document.getElementById("monaco-editor-css").attr("data-name","vs/editor/editor.main");
     //
 
+    var arrScriptTemp = [];
+    arrScriptTemp.push({id: 'monaco-editor',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
+    //arrScriptTemp.push({id: 'monaco-editor-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
+    //arrScriptTemp.push({id: 'monaco-editor-ts', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/language/typescript/tsMode.js' });
+    //arrScriptTemp.push({id: 'monaco-editor-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/basic-languages/javascript/javascript.js' });
+
+    await include(arrScriptTemp);
+
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
 
