@@ -78,10 +78,20 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
     arrScriptTemp.push({id: 'monaco-editor',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
     arrScriptTemp.push({id: 'monaco-editor-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
     
-
-
     await include(arrScriptTemp);
-    debugger;
+
+    var monacoEditorContainer = document.createElement("div");
+    monacoEditorContainer.id = "monaco-editor-cont";
+    document.querySelector("body").append(monacoEditorContainer)
+    var editor = monaco.editor.create(monacoEditorContainer, {
+        value: [
+            'function x() {',
+            '\tconsole.log("Hello world!");',
+            '}'
+        ].join('\n'),
+        language: 'javascript'
+    });
+    
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
 
