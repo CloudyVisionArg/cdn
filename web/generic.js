@@ -50,7 +50,8 @@ arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/f
 
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
-arrScriptsPos.push({id: 'monaco-editor-css', "data-name":"vs/editor/editor.main", src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.0/min/vs/editor/editor.main.min.css' });
+
+arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.0/min/vs/editor/editor.main.min.css' });
 
 //arrScriptsPos.push({id: 'monaco-editor',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
 //arrScriptsPos.push({id: 'monaco-editor-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
@@ -68,7 +69,7 @@ arrScriptsPos.push({id: 'monaco-editor-css', "data-name":"vs/editor/editor.main"
     preloader.show();
     await include(arrScripts);
     debugger;
-    document.getElementById("monaco-editor-css").attr("data-name","vs/editor/editor.main");
+    //document.getElementById("monaco-editor-css").attr("data-name","vs/editor/editor.main");
     //
 
     doorsapi2 = await import(scriptSrc('doorsapi2'));
