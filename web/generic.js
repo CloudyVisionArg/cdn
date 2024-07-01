@@ -69,7 +69,7 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
     preloader.show();
     await include(arrScripts);
     debugger;
-    document.getElementById("script_monaco-editor-css").attr("data-name","vs/editor/editor.main");
+    document.getElementById("script_monaco-editor-css").setAttribute("data-name","vs/editor/editor.main");
     //document.getElementById("monaco-editor-css").attr("data-name","vs/editor/editor.main");
     //
 
