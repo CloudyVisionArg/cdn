@@ -50,7 +50,7 @@ arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/f
 
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
-
+debugger;
 arrScriptsPos.push({id: 'monaco-editor', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/editor/editor.main.min.js' });
 arrScriptsPos.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/editor/editor.main.min.css' });
 
