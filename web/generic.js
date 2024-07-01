@@ -51,9 +51,9 @@ arrScriptsPos.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/f
 arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' });
 arrScriptsPos.push({ id: 'lib-filesaver' });
 debugger;
-//arrScriptsPos.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.0/min/vs/editor/editor.main.min.css' });
+arrScriptsPos.push({id: 'monaco-editor-css', "data-name":"vs/editor/editor.main", src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.0/min/vs/editor/editor.main.min.css' });
 
-arrScriptsPos.push({id: 'monaco-editor', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
+arrScriptsPos.push({id: 'monaco-editor',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
 //arrScriptsPos.push({id: 'monaco-editor-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
 //arrScriptsPos.push({id: 'monaco-editor-ts', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/language/typescript/tsMode.js' });
 //arrScriptsPos.push({id: 'monaco-editor-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/basic-languages/javascript/javascript.js' });
