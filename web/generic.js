@@ -80,6 +80,18 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
     
     await include(arrScriptTemp);
 
+    var monacoEditorContainer = document.createElement("div");
+    monacoEditorContainer.id = "monaco-editor-cont";
+    monacoEditorContainer.height = "400px";
+    document.querySelector("body").prepend(monacoEditorContainer)
+    var editor = monaco.editor.create(monacoEditorContainer, {
+        value: [
+            'function x() {',
+            '\tconsole.log("Hello world!");',
+            '}'
+        ].join('\n'),
+        language: 'javascript'
+    });
     
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
@@ -120,18 +132,7 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
                 docJson = doc.toJSON();
                 loadControls().then((r)=>{
 
-            var monacoEditorContainer = document.createElement("div");
-            monacoEditorContainer.id = "monaco-editor-cont";
-            monacoEditorContainer.height = "400px";
-            document.querySelector("body").prepend(monacoEditorContainer)
-            var editor = monaco.editor.create(monacoEditorContainer, {
-                value: [
-                    'function x() {',
-                    '\tconsole.log("Hello world!");',
-                    '}'
-                ].join('\n'),
-                language: 'javascript'
-            });
+      
                 });
 
             } else {
