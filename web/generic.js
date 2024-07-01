@@ -120,17 +120,18 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
                 docJson = doc.toJSON();
                 loadControls().then((r)=>{
 
-    var monacoEditorContainer = document.createElement("div");
-    monacoEditorContainer.id = "monaco-editor-cont";
-    document.querySelector("body").append(monacoEditorContainer)
-    var editor = monaco.editor.create(monacoEditorContainer, {
-        value: [
-            'function x() {',
-            '\tconsole.log("Hello world!");',
-            '}'
-        ].join('\n'),
-        language: 'javascript'
-    });
+            var monacoEditorContainer = document.createElement("div");
+            monacoEditorContainer.id = "monaco-editor-cont";
+            monacoEditorContainer.height = "400px";
+            document.querySelector("body").append(monacoEditorContainer)
+            var editor = monaco.editor.create(monacoEditorContainer, {
+                value: [
+                    'function x() {',
+                    '\tconsole.log("Hello world!");',
+                    '}'
+                ].join('\n'),
+                language: 'javascript'
+            });
                 });
 
             } else {
