@@ -54,7 +54,7 @@ debugger;
 arrScriptsPos.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.0/min/vs/editor/editor.main.min.css' });
 
 arrScriptsPos.push({id: 'monaco-editor', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
-arrScriptsPos.push({id: 'monaco-editor-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
+//arrScriptsPos.push({id: 'monaco-editor-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
 //arrScriptsPos.push({id: 'monaco-editor-ts', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/language/typescript/tsMode.js' });
 //arrScriptsPos.push({id: 'monaco-editor-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/basic-languages/javascript/javascript.js' });
 
