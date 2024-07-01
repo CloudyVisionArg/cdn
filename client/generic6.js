@@ -1127,9 +1127,7 @@ async function renderControls(container, parent) {
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
-            control = {
-                $root: inApp ? $('<li/>') : $('<div/>', { class: 'mt-3' }),
-            };
+            control = modControls.newAutocomplete(ctl['NAME'], options);
 
             /*
             // todo: faltan editurl y addurl
