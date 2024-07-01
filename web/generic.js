@@ -52,7 +52,10 @@ arrScriptsPos.push({ id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' 
 arrScriptsPos.push({ id: 'lib-filesaver' });
 debugger;
 arrScriptsPos.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.0/min/vs/editor/editor.main.min.css' });
-
+let root_path = chrome.runtime.getURL("")
+require.config({
+    paths: { vs: root_path + 'monaco-editor/min/vs' }
+})
 arrScriptsPos.push({id: 'monaco-editor', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.js' });
 arrScriptsPos.push({id: 'monaco-editor-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/editor/editor.main.nls.js' });
 arrScriptsPos.push({id: 'monaco-editor-ts', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/language/typescript/tsMode.js' });
