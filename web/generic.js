@@ -123,7 +123,7 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
             var monacoEditorContainer = document.createElement("div");
             monacoEditorContainer.id = "monaco-editor-cont";
             monacoEditorContainer.height = "400px";
-            document.querySelector("body").append(monacoEditorContainer)
+            document.querySelector("body").prepend(monacoEditorContainer)
             var editor = monaco.editor.create(monacoEditorContainer, {
                 value: [
                     'function x() {',
