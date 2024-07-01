@@ -80,7 +80,7 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
     arrScriptTemp.push({id: 'monaco-editor-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/basic-languages/javascript/javascript.js' });
 
     await include(arrScriptTemp);
-
+    debugger;
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
 
