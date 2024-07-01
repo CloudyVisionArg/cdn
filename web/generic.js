@@ -80,17 +80,6 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
     
     await include(arrScriptTemp);
 
-    var monacoEditorContainer = document.createElement("div");
-    monacoEditorContainer.id = "monaco-editor-cont";
-    document.querySelector("body").append(monacoEditorContainer)
-    var editor = monaco.editor.create(monacoEditorContainer, {
-        value: [
-            'function x() {',
-            '\tconsole.log("Hello world!");',
-            '}'
-        ].join('\n'),
-        language: 'javascript'
-    });
     
     doorsapi2 = await import(scriptSrc('doorsapi2'));
     dSession = new doorsapi2.Session();
@@ -129,7 +118,20 @@ arrScripts.push({id: 'monaco-editor-css', src: 'https://cdn.jsdelivr.net/npm/mon
                     doc = await folder.documentsNew();
                 }
                 docJson = doc.toJSON();
-                loadControls();
+                loadControls().then((r)=>{
+
+    var monacoEditorContainer = document.createElement("div");
+    monacoEditorContainer.id = "monaco-editor-cont";
+    document.querySelector("body").append(monacoEditorContainer)
+    var editor = monaco.editor.create(monacoEditorContainer, {
+        value: [
+            'function x() {',
+            '\tconsole.log("Hello world!");',
+            '}'
+        ].join('\n'),
+        language: 'javascript'
+    });
+                });
 
             } else {
                 end('La carpeta ' + fld_id + ' no es una carpeta de documentos');
