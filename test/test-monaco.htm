@@ -23,7 +23,7 @@
         <script>
         // CREATE AN EDITOR
         var h_div = document.getElementById('monaco_editor');
-        var editor = monaco.editor.create(h_div, {
+        var currentEditor = monaco.editor.create(h_div, {
             value: [
                 'function x() {',
                 '\tconsole.log("Hello world!");',
@@ -31,6 +31,24 @@
             ].join('\n'),
             language: 'javascript'
         });
+
+		currentEditor.addAction({
+			id: "change-language-to-javascript",
+			label: " Change language to Javascript",
+			contextMenuOrder: 1,
+			contextMenuGroupId: 'languages',
+			keybindings: [
+				//monaco.KeyMod.CtrlCmd | monaco.KeyCode.F10,
+				// chord
+				monaco.KeyMod.chord(
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL,
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyJ
+				)
+			],
+			run: function (e) {
+				monaco.editor.setModelLanguage(currentEditor.getModel(), "javascript")
+			},
+		});
         </script>
     </body>
 </html>
