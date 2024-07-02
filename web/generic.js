@@ -91,7 +91,7 @@ debugger;
     Doors.RESTFULL.AuthToken = dSession.authToken;
 
     
-    var monacoEditorCss = document.createElement('script');
+    var monacoEditorCss = document.createElement('link');
     monacoEditorCss.setAttribute('data-name','vs/editor/editor.main');
     monacoEditorCss.setAttribute('href', 'https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/editor/editor.main.min.css');
     monacoEditorCss.setAttribute('rel','stylesheet');
