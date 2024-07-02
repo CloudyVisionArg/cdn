@@ -26,7 +26,7 @@
         var currentEditor = monaco.editor.create(h_div, {
             value: [
                 'function x() {',
-                '\tconsole.log("Hello world!");',
+                '\tconsole.log("Hello world!"); test();',
                 '}'
             ].join('\n'),
             language: 'javascript'
@@ -113,6 +113,7 @@
 				monaco.editor.setModelLanguage(currentEditor.getModel(), "xml")
 			}
 		});
+		currentEditor.getAction('editor.action.formatDocument').run();
 
 
         </script>
