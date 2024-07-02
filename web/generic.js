@@ -53,7 +53,7 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 
 
 //Monaco includes
-arrScriptsPos.push({id: 'monaco-editor-main-css', src: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.30.0/min/vs/editor/editor.main.min.css' });
+
 arrScriptsPos.push({id: 'monaco-editor-loader',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/loader.js' });
 arrScriptsPos.push({id: 'monaco-editor-main-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/editor/editor.main.nls.js' });
 arrScriptsPos.push({id: 'monaco-editor-main-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/editor/editor.main.js' });
@@ -89,9 +89,16 @@ debugger;
 
     Doors.RESTFULL.ServerUrl = dSession.serverUrl;
     Doors.RESTFULL.AuthToken = dSession.authToken;
+
+    
+    var monacoEditorCss = document.createElement('script');
+    monacoEditorCss.setAttribute('data-name','vs/editor/editor.main');
+    monacoEditorCss.setAttribute('href', 'https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/editor/editor.main.min.css');
+    document.head.appendChild(monacoEditorCss);
     var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs' } };
+    
     include(arrScriptsPos).then(()=>{
-        document.getElementById("script_monaco-editor-main-css").setAttribute("data-name","vs/editor/editor.main");
+        //document.getElementById("script_monaco-editor-main-css").setAttribute("data-name","vs/editor/editor.main");
         //var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs' } };
         var monacoEditorContainer = document.createElement("div");
         monacoEditorContainer.id = "monaco-editor-cont";
