@@ -9,7 +9,7 @@
     </head>
 
     <body >
-        <h1>monaco editor</h1>
+        
         <div id="monaco_editor" style="height:400px">
         </div>
 
@@ -30,9 +30,10 @@
                 '}'
             ].join('\n'),
             language: 'javascript',
-			"autoIndent": true,
-			"formatOnPaste": true,
-			"formatOnType": true
+			automaticLayout: true,
+			autoIndent: 'full',
+			formatOnPaste: true,
+			formatOnType: true
         });
 
 		currentEditor.addAction({
@@ -114,8 +115,11 @@
 				monaco.editor.setModelLanguage(currentEditor.getModel(), "xml")
 			}
 		});
-		currentEditor.getAction('editor.action.formatDocument').run();
+		
 
+		setTimeout(() => {
+			currentEditor.getAction('editor.action.formatDocument').run();
+      	}, 100);
 
         </script>
     </body>
