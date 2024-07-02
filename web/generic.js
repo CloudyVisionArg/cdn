@@ -101,18 +101,18 @@ debugger;
     include(arrScriptsPos).then(()=>{
         //document.getElementById("script_monaco-editor-main-css").setAttribute("data-name","vs/editor/editor.main");
         //var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs' } };
-        var monacoEditorContainer = document.createElement("div");
-        monacoEditorContainer.id = "monaco-editor-cont";
-        monacoEditorContainer.height = "400px";
-        document.querySelector("body").prepend(monacoEditorContainer)
-        var editor = monaco.editor.create(monacoEditorContainer, {
-            value: [
-                'function x() {',
-                '\tconsole.log("Hello world!");',
-                '}'
-            ].join('\n'),
-            language: 'javascript'
-        });
+        // var monacoEditorContainer = document.createElement("div");
+        // monacoEditorContainer.id = "monaco-editor-cont";
+        // monacoEditorContainer.height = "400px";
+        // document.querySelector("body").prepend(monacoEditorContainer)
+        // var editor = monaco.editor.create(monacoEditorContainer, {
+        //     value: [
+        //         'function x() {',
+        //         '\tconsole.log("Hello world!");',
+        //         '}'
+        //     ].join('\n'),
+        //     language: 'javascript'
+        // });
     });
 
     await dSession.runSyncEventsOnClient(false);
