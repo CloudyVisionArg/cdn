@@ -103,8 +103,8 @@ debugger;
         //var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs' } };
         var monacoEditorContainer = document.createElement("div");
         monacoEditorContainer.id = "monaco-editor-cont";
+        document.querySelector("body").append(monacoEditorContainer);
         document.querySelector("#monaco-editor-cont").style.height = "400px";
-        document.querySelector("body").append(monacoEditorContainer)
         // var editor = monaco.editor.create(monacoEditorContainer, {
         //     value: [
         //         'function x() {',
