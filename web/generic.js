@@ -68,9 +68,7 @@ arrScriptsPos.push({id: 'monaco-editor-main-js', src: 'https://cdnjs.cloudflare.
     await include(arrScriptsPre);
     preloader.show();
     await include(arrScripts);
-
-    // //document.getElementById("monaco-editor-css").attr("data-name","vs/editor/editor.main");
-    // //
+debugger;
 
     // var arrScriptTemp = [];
     // arrScriptTemp.push({id: 'monaco-editor-loader',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.0/min/vs/loader.js' });
