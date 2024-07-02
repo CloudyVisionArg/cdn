@@ -33,13 +33,27 @@
         });
 
 		currentEditor.addAction({
+			id: "change-language-to-css",
+			label: " Change language to CSS",
+			contextMenuOrder: 0,
+			contextMenuGroupId: 'languages',
+			keybindings: [
+				monaco.KeyMod.chord(
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL,
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC
+				)
+			],
+			run: function (e) {
+				monaco.editor.setModelLanguage(currentEditor.getModel(), "css")
+			},
+		});
+
+		currentEditor.addAction({
 			id: "change-language-to-javascript",
 			label: " Change language to Javascript",
 			contextMenuOrder: 1,
 			contextMenuGroupId: 'languages',
 			keybindings: [
-				//monaco.KeyMod.CtrlCmd | monaco.KeyCode.F10,
-				// chord
 				monaco.KeyMod.chord(
 					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL,
 					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyJ
@@ -47,8 +61,60 @@
 			],
 			run: function (e) {
 				monaco.editor.setModelLanguage(currentEditor.getModel(), "javascript")
+			}
+		});
+
+		currentEditor.addAction({
+			id: "change-language-to-json",
+			label: " Change language to JSON",
+			contextMenuOrder: 2,
+			contextMenuGroupId: 'languages',
+			keybindings: [
+				monaco.KeyMod.chord(
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL,
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS
+				)
+			],
+			run: function (e) {
+				monaco.editor.setModelLanguage(currentEditor.getModel(), "json")
+			}
+		});
+
+		currentEditor.addAction({
+			id: "change-language-to-vbscript",
+			label: " Change language to VBscript",
+			contextMenuOrder: 3,
+			contextMenuGroupId: 'languages',
+			keybindings: [
+			monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL,
+				// chord
+				monaco.KeyMod.chord(
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL,
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV
+				)
+			],
+			run: function (e) {
+				monaco.editor.setModelLanguage(currentEditor.getModel(), "vbscript")
 			},
 		});
+
+		currentEditor.addAction({
+			id: "change-language-to-xml",
+			label: " Change language to XML",
+			contextMenuOrder: 4,
+			contextMenuGroupId: 'languages',
+			keybindings: [
+				monaco.KeyMod.chord(
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyL,
+					monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyX
+				)
+			],
+			run: function (e) {
+				monaco.editor.setModelLanguage(currentEditor.getModel(), "xml")
+			}
+		});
+
+
         </script>
     </body>
 </html>
