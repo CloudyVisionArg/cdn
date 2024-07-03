@@ -1128,10 +1128,10 @@ async function renderControls(container, parent) {
 
         } else if (type == 'AUTOCOMPLETE') {
             /*
-            <root unitwidth="px" unitheight="px" editurl="" width="" textfield="task_customer" 
+            unitwidth="px" unitheight="px" editurl="" width="" textfield="task_customer" 
             textsource="subject" searchfolder="5121" searchfields="subject, email_cobranzas" 
             searchfilter="tipo = 1" searchorder="subject" addurl="" xmlfield="" 
-            valuefield="task_customerid" valuesource="" returnfields="origen, vendedor" height=""/>
+            valuefield="task_customerid" valuesource="" returnfields="origen, vendedor" height=""
             */
 "
             options = {
