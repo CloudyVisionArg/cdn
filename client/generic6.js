@@ -1127,9 +1127,15 @@ async function renderControls(container, parent) {
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
-            debugger;
+            /*
+            <root unitwidth="px" unitheight="px" editurl="" width="" textfield="task_customer" 
+            textsource="subject" searchfolder="5121" searchfields="subject, email_cobranzas" 
+            searchfilter="tipo = 1" searchorder="subject" addurl="" xmlfield="" 
+            valuefield="task_customerid" valuesource="" returnfields="origen, vendedor" height=""/>
+            */
+"
             options = {
-                folder: await folder.app.folder(ctl.attr('folder')),
+                folder: await folder.app.folder(ctl.attr('searchfolder')),
             }
             control = modControls.newAutocomplete(ctl['NAME'], options);
 
