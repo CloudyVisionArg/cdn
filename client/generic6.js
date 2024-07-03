@@ -1127,6 +1127,10 @@ async function renderControls(container, parent) {
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
+            debugger;
+            options = {
+                folder: await folder.app.folder(ctl.attr('folder')),
+            }
             control = modControls.newAutocomplete(ctl['NAME'], options);
 
             /*
