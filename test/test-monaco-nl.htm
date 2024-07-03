@@ -9,7 +9,20 @@
 	<script type="module">
 		import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/+esm';
 	  
-		monaco.editor.create(document.querySelector('.monaco'));
+		var h_div = document.querySelector('.monaco');
+        var currentEditor = monaco.editor.create(h_div, {
+            value: [
+                'function x() {',
+                '\tconsole.log("Hello world!"); test();',
+                '}'
+            ].join('\n'),
+            language: 'javascript',
+			automaticLayout: true,
+			autoIndent: 'full',
+			formatOnPaste: true,
+			formatOnType: true
+        });
+
 	  </script>
 	  <link href="https://cdn.jsdelivr.net/npm/vscode-codicons@0.0.17/dist/codicon.min.css" rel="stylesheet">
 	  <div class="monaco" style="min-height: 400px"></div>
