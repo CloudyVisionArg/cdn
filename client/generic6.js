@@ -1134,6 +1134,7 @@ async function renderControls(container, parent) {
             valuefield="task_customerid" valuesource="" returnfields="origen, vendedor" height=""
             */
 
+            debugger;
             options = {
                 folder: await folder.app.folder(ctl.attr('searchfolder')),
                 formula: ctl.attr('searchfilter'),
