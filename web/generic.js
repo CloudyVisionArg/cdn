@@ -54,11 +54,11 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
 
 //Monaco includes
 
-arrScriptsPos.push({id: 'monaco-editor-loader',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/loader.js' });
-arrScriptsPos.push({id: 'monaco-editor-main-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/editor/editor.main.nls.js' });
-//arrScriptsPos.push({id: 'monaco-editor-main-ts-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/language/typescript/tsMode.js' });
-//arrScriptsPos.push({id: 'monaco-editor-main-javascript-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/basic-languages/javascript/javascript.js' });
-arrScriptsPos.push({id: 'monaco-editor-main-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/editor/editor.main.js' });
+// arrScriptsPos.push({id: 'monaco-editor-loader',  src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/loader.js' });
+// arrScriptsPos.push({id: 'monaco-editor-main-nls', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/editor/editor.main.nls.js' });
+// //arrScriptsPos.push({id: 'monaco-editor-main-ts-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/language/typescript/tsMode.js' });
+// //arrScriptsPos.push({id: 'monaco-editor-main-javascript-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/basic-languages/javascript/javascript.js' });
+// arrScriptsPos.push({id: 'monaco-editor-main-js', src: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs/editor/editor.main.js' });
 
 
 
@@ -94,27 +94,39 @@ debugger;
     Doors.RESTFULL.AuthToken = dSession.authToken;
 
     
+    // var monacoEditorCss = document.createElement('link');
+    // monacoEditorCss.setAttribute('data-name','vs/editor/editor.main');
+    // monacoEditorCss.setAttribute('href', 'https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/editor/editor.main.min.css');
+    // monacoEditorCss.setAttribute('rel','stylesheet');
+    // document.head.appendChild(monacoEditorCss);
+    // var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs' } };
+    
+    var monaco = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
     var monacoEditorCss = document.createElement('link');
-    monacoEditorCss.setAttribute('data-name','vs/editor/editor.main');
-    monacoEditorCss.setAttribute('href', 'https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/editor/editor.main.min.css');
+    monacoEditorCss.setAttribute('href', 'https://cdn.jsdelivr.net/npm/vscode-codicons@0.0.17/dist/codicon.min.css');
     monacoEditorCss.setAttribute('rel','stylesheet');
     document.head.appendChild(monacoEditorCss);
-    var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs' } };
     
+
+    
+
     include(arrScriptsPos).then(()=>{
-        //document.getElementById("script_monaco-editor-main-css").setAttribute("data-name","vs/editor/editor.main");
-        //var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs' } };
+        debugger;
         var monacoEditorContainer = document.createElement("div");
         monacoEditorContainer.id = "monaco-editor-cont";
         document.querySelector("body").append(monacoEditorContainer);
         document.querySelector("#monaco-editor-cont").style.height = "400px";
-        var editor = monaco.editor.create(monacoEditorContainer, {
+        var currentEditor = monaco.editor.create(monacoEditorContainer, {
             value: [
                 'function x() {',
-                '\tconsole.log("Hello world!");',
+                '\tconsole.log("Hello world!"); test();',
                 '}'
             ].join('\n'),
-            language: 'javascript'
+            language: 'javascript',
+			automaticLayout: true,
+			autoIndent: 'full',
+			formatOnPaste: true,
+			formatOnType: true
         });
     });
 
