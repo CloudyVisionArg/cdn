@@ -1138,6 +1138,14 @@ async function renderControls(container, parent) {
                 multiple: ctl.attr('mode') == '1',
                 folder: await folder.app.folder(ctl.attr('searchfolder')),
                 formula: ctl.attr('searchfilter'),
+                order: ctl.attr('searchorder'),
+                searchFields: ctl.attr('searchfields'),
+                textField: ctl.attr('textfield'),
+                textSource: ctl.attr('textsource'),
+                valueField: ctl.attr('valuefield'),
+                valueSource: ctl.attr('valuesource'),
+                xmlField: ctl.attr('xmlfield'),
+                xmlSource: ctl.attr('returnfields'),
             }
             control = modControls.newAutocomplete(ctl['NAME'], options);
 
