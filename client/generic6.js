@@ -1133,9 +1133,10 @@ async function renderControls(container, parent) {
             searchfilter="tipo = 1" searchorder="subject" addurl="" xmlfield="" 
             valuefield="task_customerid" valuesource="" returnfields="origen, vendedor" height=""
             */
-           
+
             options = {
                 folder: await folder.app.folder(ctl.attr('searchfolder')),
+                formula: ctl.attr('searchfilter'),
             }
             control = modControls.newAutocomplete(ctl['NAME'], options);
 
