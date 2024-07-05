@@ -1357,35 +1357,8 @@ async function fillControls() {
         };
 
         if ((textField || valueField) && el.tagName == 'SELECT' && el.drs) {
-            let val = [];
-            if ($el.attr('multiple')) {
-                if (valueField) {
-                    if (value || value == 0) {
-                        let arr = value.split(';');
-                        arr.forEach(el => { val.push({ value: el }) })
-                    }
-                }
-                if (textField) {
-                    if (text || text == 0) {
-                        let arr = text.split(';');
-                        arr.forEach((el, ix) => {
-                            if (val.length > ix) {
-                                val[ix].text = el;
-                            } else {
-                                val.push({ text: el });
-                            }
-                        });
-                    }
-                }
-
-            } else {
-                let v = {};
-                if (value !== undefined) v.value = value;
-                if (text !== undefined) v.text = text;
-                val.push(v);
-            }
-
-            el.drs.value(val);
+            debugger;
+            el.drs.setValueFromFields(text, value);
             textField = undefined;
             valueField = undefined;
 
@@ -1531,14 +1504,8 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
                     if (el.tagName == 'SELECT') {
-                        let aux = el.drs.text();
-                        if (aux.length == 0) {
-                            field.value = null;
-                        } else if (aux.length == 1) {
-                            field.value = aux[0].text;
-                        } else {
-                            field.value = aux.map(el => el.text).join(';');
-                        }
+                        debugger;
+                        field.value = el.drs.getFieldValues().text;
                     } else {
                         let aux = el.drs.text();
                         field.value = Array.isArray(aux) ? aux.join(';') : aux;
@@ -1588,14 +1555,8 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.value) {
                     if (el.tagName == 'SELECT') {
-                        let aux = el.drs.value();
-                        if (aux.length == 0) {
-                            field.value = null;
-                        } else if (aux.length == 1) {
-                            field.value = aux[0].value;
-                        } else {
-                            field.value = aux.map(el => el.value).join(';');
-                        }
+                        debugger;
+                        field.value = el.drs.getFieldValues().value;
                     } else {
                         let aux = el.drs.value();
                         field.value = Array.isArray(aux) ? aux.join(';') : aux;
