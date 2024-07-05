@@ -1553,7 +1553,6 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.value) {
                     if (el.tagName == 'SELECT') {
-                        debugger;
                         field.value = el.drs.getFieldValues().value;
                     } else {
                         let aux = el.drs.value();
