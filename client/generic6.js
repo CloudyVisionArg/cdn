@@ -1357,7 +1357,6 @@ async function fillControls() {
         };
 
         if ((textField || valueField) && el.tagName == 'SELECT' && el.drs) {
-            debugger;
             el.drs.setValueFromFields(text, value);
             textField = undefined;
             valueField = undefined;
@@ -1504,7 +1503,6 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs && el.drs.text) {
                     if (el.tagName == 'SELECT') {
-                        debugger;
                         field.value = el.drs.getFieldValues().text;
                     } else {
                         let aux = el.drs.text();
