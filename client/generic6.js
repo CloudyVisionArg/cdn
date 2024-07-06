@@ -908,7 +908,7 @@ async function renderControls(container, parent) {
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
             } else {
-                control = modControls.newInputText(ctl['NAME'], options);
+                control = modControls.newInput(ctl['NAME'], options);
             }
 
             $this = control.$root;
@@ -1356,10 +1356,18 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if ((textField || valueField) && el.tagName == 'SELECT' && el.drs) {
+        if ((textField || valueField) && el.drs && el.drs.control == 'SELECT') {
+            debugger;
             el.drs.setValueFromFields(text, value);
             textField = undefined;
             valueField = undefined;
+
+        } else if ((textField || valueField || xmlField) && el.drs && el.drs.control == 'AUTOCOMPLETE') {
+            debugger;
+            el.drs.setValueFromFields(text, value, xml);
+            textField = undefined;
+            valueField = undefined;
+            xmlField = undefined;
 
         } else if (textField && el.drs && el.drs.text) {
             el.drs.text(text);
