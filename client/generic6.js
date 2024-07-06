@@ -1357,7 +1357,6 @@ async function fillControls() {
         };
 
         if ((textField || valueField) && el.drs && el.drs.control == 'SELECT') {
-            debugger;
             el.drs.setValueFromFields(text, value);
             textField = undefined;
             valueField = undefined;
@@ -1509,8 +1508,8 @@ async function saveDoc(exitOnSuccess) {
             var field = doc.fields($el.attr('data-textfield'));
 
             if (field && field.updatable) {
-                if (el.drs && el.drs.text) {
-                    if (el.tagName == 'SELECT') {
+                if (el.drs) {
+                    if (el.drs.control == 'SELECT' || el.drs.control == 'AUTOCOMPLETE') {
                         field.value = el.drs.getFieldValues().text;
                     } else {
                         let aux = el.drs.text();
@@ -1559,8 +1558,8 @@ async function saveDoc(exitOnSuccess) {
             var field = doc.fields($el.attr('data-valuefield'));
 
             if (field && field.updatable) {
-                if (el.drs && el.drs.value) {
-                    if (el.tagName == 'SELECT') {
+                if (el.drs) {
+                    if (el.drs.control == 'SELECT' || el.drs.control == 'AUTOCOMPLETE') {
                         field.value = el.drs.getFieldValues().value;
                     } else {
                         let aux = el.drs.value();
@@ -1582,6 +1581,15 @@ async function saveDoc(exitOnSuccess) {
             var field = doc.fields($el.attr('data-xmlfield'));
 
             if (field && field.updatable) {
+                if (el.drs) {
+                    if (el.drs.control == 'AUTOCOMPLETE') {
+                        field.value = el.drs.getFieldValues().xml;
+                    } else {
+                        let aux = el.drs.xml();
+                        field.value = Array.isArray(aux) ? aux.join(';') : aux;
+                    }
+                }
+
                 if (el.tagName == 'INPUT') {
                     let type = $el.attr('type').toLowerCase();
                     if (type == 'text' || type == 'hidden') {
