@@ -1362,7 +1362,6 @@ async function fillControls() {
             valueField = undefined;
 
         } else if ((textField || valueField || xmlField) && el.drs && el.drs.control == 'AUTOCOMPLETE') {
-            debugger;
             el.drs.setValueFromFields(text, value, xml);
             textField = undefined;
             valueField = undefined;
