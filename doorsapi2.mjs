@@ -2688,8 +2688,6 @@ export class Field {
         }
     }
     set value(value) {
-        if (this.name == 'ACXML') debugger;
-        
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         
