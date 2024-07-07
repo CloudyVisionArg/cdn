@@ -1583,6 +1583,7 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs) {
                     if (el.drs.control == 'AUTOCOMPLETE') {
+                        debugger;
                         field.value = el.drs.getFieldValues().xml;
                     } else {
                         let aux = el.drs.xml();
