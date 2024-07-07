@@ -1583,15 +1583,13 @@ async function saveDoc(exitOnSuccess) {
             if (field && field.updatable) {
                 if (el.drs) {
                     if (el.drs.control == 'AUTOCOMPLETE') {
-                        debugger;
                         field.value = el.drs.getFieldValues().xml;
                     } else {
                         let aux = el.drs.xml();
                         field.value = Array.isArray(aux) ? aux.join(';') : aux;
                     }
-                }
 
-                if (el.tagName == 'INPUT') {
+                } else if (el.tagName == 'INPUT') {
                     let type = $el.attr('type').toLowerCase();
                     if (type == 'text' || type == 'hidden') {
                         field.value = $el.val();
@@ -1611,7 +1609,6 @@ async function saveDoc(exitOnSuccess) {
         var ev = getEvent('BeforeSave');
         if (ev) await evalCode(ev, context);
 
-        debugger;
         await doc.save();
         saved = true;
         doc_id = doc.id;
