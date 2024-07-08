@@ -31,7 +31,7 @@ var generic = 'generic6';
 
 var inApp = typeof window.app7 == 'object';
 
-var propControls = 'App7_controls';
+var propControls = 'Controls';
 
 (async () => {
     if (inApp) { // APP
