@@ -446,36 +446,14 @@ async function appPageInit(e, page) {
         appExplorerRefresh();
     })
 
-    /*
-    todo:
+    // Evento afterRender
+    let context = {};
+    $page[0].dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+    if (context.return && typeof context.return.then == 'function') await context.return;
 
-    // Espera que se terminen de llenar todos los controles antes de hacer el fill
-    var wt = 0;
-    setTimeout(async function waiting() {
-        if ($page.find('[data-filling]').length > 0) {
-            wt += 100;
-            if (wt == 3000) {
-                console.log('data-filling esta demorando demasiado');
-                debugger; // Para poder ver q corno pasa
-            }
-            setTimeout(waiting, 100);
-
-        } else {
-            // Evento afterRender
-            let context = {};
-            $page[0].dispatchEvent(new CustomEvent('afterRender', { detail : context}));
-            if (context.return && typeof context.return.then == 'function') await context.return;
-
-            // Deprecado, usar el anterior
-            $page[0].dispatchEvent(new CustomEvent('afterPageInit'));
-
-            // Control Event AfterRender, ver si se lo puede traer desde afterFillControls
-            //var ev = getEvent('AfterRender');
-            //if (ev) await evalCode(ev);
-
-        }
-    }, 0);
-    */
+    // Control Event AfterRender
+    let ev = getEvent('AfterRender');
+    if (ev) await evalCode(ev);
 
     await fillControls();
     preldr.hide();
@@ -750,35 +728,15 @@ async function webRenderPage() {
         new bootstrap.Tooltip(this);
     });
     
-    /*
-    todo:
-    // Espera que se terminen de llenar todos los controles antes de hacer el fill
-    var wt = 0;
-    setTimeout(async function waiting() {
-        if ($('[data-filling]').length > 0) {
-            wt += 100;
-            if (wt == 3000) {
-                console.log('data-filling esta demorando demasiado');
-                debugger; // Para poder ver q corno pasa
-            }
-            setTimeout(waiting, 100);
+    // Evento afterRender
+    let context = {};
+    document.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+    if (context.return && typeof context.return.then == 'function') await context.return;
 
-        } else {
-            // Evento afterRender
-            let context = {};
-            document.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
-            if (context.return && typeof context.return.then == 'function') await context.return;
+    // Control Event AfterRender
+    let ev = getEvent('AfterRender');
+    if (ev) await evalCode(ev);
 
-            // Control Event AfterRender
-            let ev = getEvent('AfterRender');
-            if (ev) await evalCode(ev);
-
-            await fillControls();
-            preloader.hide();
-        }
-    }, 0);
-
-    */
     await fillControls();
     preldr.hide();
 }
@@ -906,7 +864,7 @@ async function renderControls(container, parent) {
                 }
             }
 
-            eventBRC(options);
+            await eventBRC(options);
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
             } else {
@@ -952,7 +910,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            eventBRC(options);
+            await eventBRC(options);
             control = modControls.newDTPicker(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$input;
@@ -1000,7 +958,7 @@ async function renderControls(container, parent) {
                 }
             }
 
-            eventBRC(options);
+            await eventBRC(options);
             control = modControls.newSelect(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$select;
@@ -1021,7 +979,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            eventBRC(options);
+            await eventBRC(options);
             control = modControls.newSwitch(ctl['NAME'], options);
 
             $input = control.$input
@@ -1040,7 +998,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            eventBRC(options);
+            await eventBRC(options);
             control = modControls.newFieldset(ctl['NAME'], options);
 
             if (!inApp && !options.noBorders) control.$root.addClass('mt-3');
@@ -1060,7 +1018,7 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            eventBRC(options);
+            await eventBRC(options);
             control = modControls.newAttachments(ctl['NAME'], options);
 
             $this = control.$root;
@@ -1088,7 +1046,7 @@ async function renderControls(container, parent) {
         } else if (type == 'DOCUMENTLOG') {
 
             options = { label }
-            eventBRC(options);
+            await eventBRC(options);
             control = modControls.newDocLog(ctl['NAME'], options);
             if (!inApp) control.$root.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
 
@@ -1117,7 +1075,7 @@ async function renderControls(container, parent) {
                 options.editor.customConfig = ctl.attr('mode') == 'basic' ? 'configbasic.js' : 'config.js';
             };
 
-            eventBRC(options);
+            await eventBRC(options);
             control = modControls.newHtmlEditor(ctl['NAME'], options);
 
             $this = control.$root;
@@ -1130,10 +1088,8 @@ async function renderControls(container, parent) {
 
         } else if (type == 'AUTOCOMPLETE') {
             /*
-            unitwidth="px" unitheight="px" editurl="" width="" textfield="task_customer" 
-            textsource="subject" searchfolder="5121" searchfields="subject, email_cobranzas" 
-            searchfilter="tipo = 1" searchorder="subject" addurl="" xmlfield="" 
-            valuefield="task_customerid" valuesource="" returnfields="origen, vendedor" height=""
+            todo: faltan:
+            editurl="" addurl=""
             */
 
             options = {
@@ -1152,20 +1108,6 @@ async function renderControls(container, parent) {
             control = modControls.newAutocomplete(ctl['NAME'], options);
 
             /*
-            // todo: faltan editurl y addurl
-
-            $this = getAutocomplete(ctl['NAME'], label, {
-                folder: ctl.attr('searchfolder'),
-                rootFolder: folder.rootFolderId,
-                searchFields: ctl.attr('searchfields'),
-                extraFields: ctl.attr('returnfields'),
-                formula: ctl.attr('searchfilter'),
-                order: ctl.attr('searchorder'),
-            }, ctl.attr('mode') == '1');
-
-            $input = $this.find('[data-autocomplete]');
-            f7ctl = app7.autocomplete.get($input[0]);
-
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 if ($input[0].tagName == 'INPUT') {
                     inputReadonly($input, true);
@@ -1173,62 +1115,6 @@ async function renderControls(container, parent) {
                     $input.addClass('disabled');
                 }
             }
-
-            $input.attr('data-textfield', tf)
-            f7ctl.params.textSource = ctl.attr('textsource');
-
-            $('<input/>', {
-                type: 'hidden',
-                'data-valuefield': vf,
-            }).appendTo($this);
-            f7ctl.params.valueSource = ctl.attr('valuesource');
-
-            $('<input/>', {
-                type: 'hidden',
-                'data-xmlfield': ctl.attr('xmlfield'),
-            }).appendTo($this);
-
-            f7ctl.on('change', function (value) {
-                var self = this;
-
-                if (self.inputEl) {
-                    // Dropdown (simple)
-                    var $li = $(self.inputEl).closest('li')
-                } else {
-                    // Popup (multiple)
-                    var $li = $(self.openerEl).closest('li')
-                    var $t = $(self.openerEl).find('.item-after');
-                    var ts = self.params.textSource.toUpperCase();
-                    var ta = [];
-                }
-                var $v = $li.find('[data-valuefield]');
-                var vs = self.params.valueSource.toUpperCase();
-                var va = [];
-
-                var $x = $li.find('[data-xmlfield]');
-                var dom = $.parseXML('<root/>');
-
-                if (value.length > 0) {
-                    var $it;
-                    value.forEach(el => {
-                        va.push(el[vs]);
-                        if ($t) ta.push(el[ts]);
-                        var $it = $('<item/>', dom);
-                        Object.keys(el).forEach(prop => {
-                            $it.attr(prop.toLowerCase(), el[prop]);
-                        });
-                        $it.appendTo(dom.documentElement);
-                    })
-                    $v.val(va.join(';'));
-                    if ($t) $t.html(ta.join(';'));
-                    $x.val((new XMLSerializer()).serializeToString(dom));
-
-                } else {
-                    $v.val('');
-                    $x.val('');
-                    if ($t) $t.empty();
-                };
-            });
             */
 
 
@@ -1288,11 +1174,11 @@ async function renderControls(container, parent) {
         }
 
         // Evento beforeRenderControl
-        function eventBRC(options) {
+        async function eventBRC(options) {
             try {
                 context = { options, ctl, textField, valueField, label };
                 evSrc.dispatchEvent(new CustomEvent('beforeRenderControl', { detail : context}));
-                //if (context.return && typeof context.return.then == 'function') await context.return;
+                if (context.return && typeof context.return.then == 'function') await context.return;
     
             } catch (err) {
                 console.error(err);
@@ -1451,6 +1337,44 @@ async function fillControls() {
         this.drs.value(doc);
     });
 
+    // Inicializa los chats de Whatsapp
+    let $wappChats = $get('div.wapp-chat');
+    if ($wappChats.length > 0) {
+        include('whatsapp', function () {
+            wapp.ready(function () {
+                $wappChats.each(function () {
+                    let $this = $(this);
+                    setFieldAttr($this, 'data-internal-name');
+                    setFieldAttr($this, 'data-internal-number');
+                    setFieldAttr($this, 'data-external-name');
+                    setFieldAttr($this, 'data-external-number');
+                    wapp.init($this);
+
+                    function setFieldAttr(pCont, pAttr) {
+                        let field = pCont.attr(pAttr + '-field');
+                        if (field) {
+                            pCont.attr(pAttr, doc.fields(field).value);
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    try {
+        // Evento afterFillControls
+        let context = {};
+        document.dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
+        if (context.return && typeof context.return.then == 'function') await context.return;
+
+        // Control Event AfterFillControls
+        let ev = getEvent('AfterFillControls');
+        if (ev) await evalCode(ev);
+
+    } catch (err) {
+        console.error(err);
+        toast('afterFillControls error: ' + dSession.utils.errMsg(err));
+    };
 }
 
 function exitForm() {
