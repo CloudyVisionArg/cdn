@@ -144,6 +144,7 @@ async function loadControls() {
         catch(err) { console.error(err) };
     
     if (controlsProp && controlsProp.viaHub) {
+        debugger;
         controls = await modControls.controlsHub(folder, {
             fresh: controlsProp.fresh,
         });
