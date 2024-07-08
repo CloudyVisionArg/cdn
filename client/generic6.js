@@ -1110,7 +1110,12 @@ async function renderControls(container, parent) {
             await eventBRC(options);
             control = modControls.newAutocomplete(ctl['NAME'], options);
 
+            $this = control.$root;
+            $input = control.$input;
 
+            if (!inApp) control.$root.addClass('mt-3');
+
+            
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {
