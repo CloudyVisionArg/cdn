@@ -1106,6 +1106,8 @@ async function renderControls(container, parent) {
                 xmlSource: ctl.attr('returnfields'),
                 readoOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
             }
+
+            await eventBRC(options);
             control = modControls.newAutocomplete(ctl['NAME'], options);
 
 
