@@ -145,7 +145,6 @@ async function loadControls() {
     
     if (controlsProp && controlsProp.viaHub) {
         controls = await modControls.controlsHub(folder);
-        debugger;
 
     } else {
         var cf = objPropCI(doc.tags, 'controlsFolder');
@@ -357,6 +356,7 @@ async function appRenderPage() {
         // CON CONTROLES
 
         try {
+            debugger;
             // BeforeRender del hub
             if (controls.beforeRender) await evalCode(controls.beforeRender);
 
