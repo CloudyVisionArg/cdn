@@ -1357,12 +1357,12 @@ async function fillControls() {
         };
 
         if ((textField || valueField) && el.drs && el.drs.control == 'SELECT') {
-            el.drs.setValueFromFields(text, value);
+            el.drs.setFieldValues(text, value);
             textField = undefined;
             valueField = undefined;
 
         } else if ((textField || valueField || xmlField) && el.drs && el.drs.control == 'AUTOCOMPLETE') {
-            el.drs.setValueFromFields(text, value, xml);
+            el.drs.setFieldValues(text, value, xml);
             textField = undefined;
             valueField = undefined;
             xmlField = undefined;
