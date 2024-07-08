@@ -1104,18 +1104,9 @@ async function renderControls(container, parent) {
                 valueSource: ctl.attr('valuesource'),
                 xmlField: ctl.attr('xmlfield'),
                 xmlSource: ctl.attr('returnfields'),
+                readoOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
             }
             control = modControls.newAutocomplete(ctl['NAME'], options);
-
-            /*
-            if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                if ($input[0].tagName == 'INPUT') {
-                    inputReadonly($input, true);
-                } else {
-                    $input.addClass('disabled');
-                }
-            }
-            */
 
 
         // -- HtmlRaw --
