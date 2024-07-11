@@ -139,7 +139,6 @@ function errMgr(pErr) {
 
 
 async function loadControls() {
-    debugger;
     var controlsProp;
     try { controlsProp = JSON.parse(await folder.properties(propControls)) }
         catch(err) { console.error(err) };
