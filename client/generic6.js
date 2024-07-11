@@ -139,6 +139,7 @@ function errMgr(pErr) {
 
 
 async function loadControls() {
+    debugger;
     var controlsProp;
     try { controlsProp = JSON.parse(await folder.properties(propControls)) }
         catch(err) { console.error(err) };
@@ -1115,7 +1116,7 @@ async function renderControls(container, parent) {
 
             if (!inApp) control.$root.addClass('mt-3');
 
-            
+
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {

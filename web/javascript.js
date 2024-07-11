@@ -264,7 +264,7 @@ function wappButtonClick(pButton) {
 function wappUrl() {
 	var ret = sessionStorage.getItem('WhatsappURL');
 	if (!ret) {
-		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
+		if (window.confirm('Tiene instalado Whatsapp desktop? (presione CANCELAR si usa Whatsapp Web)')) {
 			ret = 'whatsapp://';
 		} else {
 			ret = 'https://web.whatsapp.com/';
