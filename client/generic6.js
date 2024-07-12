@@ -866,7 +866,7 @@ async function renderControls(container, parent) {
 
             //todo:
             let buttons = ctl.attr('buttons');
-            if (buttons) {
+            if (buttons && buttons != '[NULL]') {
                 debugger;
                 if (buttons.indexOf('email') >= 0) addEmailButton($this);
                 if (buttons.indexOf('phone') >= 0) addPhoneButton($this);
