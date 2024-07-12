@@ -864,13 +864,13 @@ async function renderControls(container, parent) {
                 }
             }
 
-            //todo:
             let buttons = ctl.attr('buttons');
             if (buttons && buttons != '[NULL]') {
-                debugger;
-                if (buttons.indexOf('email') >= 0) addEmailButton($this);
-                if (buttons.indexOf('phone') >= 0) addPhoneButton($this);
-                if (buttons.indexOf('whatsapp') >= 0) addWappButton($this);
+                if (buttons == 'email') {
+                    options.buttons = 'email';
+                } else if (buttons == 'phone') {
+                    options.buttons = ['phone', 'whatsapp'];
+                }
             }
 
             await eventBRC(options);
