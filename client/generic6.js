@@ -864,6 +864,15 @@ async function renderControls(container, parent) {
                 }
             }
 
+            //todo:
+            let buttons = ctl.attr('buttons');
+            if (buttons) {
+                debugger;
+                if (buttons.indexOf('email') >= 0) addEmailButton($this);
+                if (buttons.indexOf('phone') >= 0) addPhoneButton($this);
+                if (buttons.indexOf('whatsapp') >= 0) addWappButton($this);
+            }
+
             await eventBRC(options);
             if (ctl.attr('mode') == '2') { // Multiline
                 control = modControls.newTextarea(ctl['NAME'], options);
@@ -878,16 +887,6 @@ async function renderControls(container, parent) {
                 control.$root.addClass('mt-3');
                 if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
             }
-
-            /*
-            todo:
-            let buttons = ctl.attr('buttons');
-            if (buttons) {
-                if (buttons.indexOf('email') >= 0) addEmailButton($this);
-                if (buttons.indexOf('phone') >= 0) addPhoneButton($this);
-                if (buttons.indexOf('whatsapp') >= 0) addWappButton($this);
-            }
-            */
 
 
         // -- DTPicker --
