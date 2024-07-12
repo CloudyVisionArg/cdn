@@ -82,7 +82,7 @@ var propControls = 'Controls';
         ]);
     
         include([
-            { id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' },
+            { id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' },
             { id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' },
             { id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' },
             { id: 'lib-filesaver' },
