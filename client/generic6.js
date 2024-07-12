@@ -5,10 +5,16 @@
 /*
 Documentacion de componentes
 
+COMUN
+˜˜˜˜˜
+jQuery: https://api.jquery.com
+Numeral: http://numeraljs.com
+Moment: https://momentjs.com
+
 APP
 ˜˜˜
 Framework7: https://framework7.io/docs/
-MD Icons (abrir en chrome): https://fonts.google.com/icons?icon.platform=web&icon.set=Material+Icons (abrir en Chrome)
+MD Icons (abrir en chrome): https://fonts.google.com/icons?icon.platform=web&icon.set=Material+Icons
 F7 Icons: https://w3.cloudycrm.net/c/app7/lib/framework7/css/cheatsheet.htm
 
 WEB
@@ -17,9 +23,7 @@ Bootstrap: https://getbootstrap.com/docs/5.3/getting-started/introduction/
 Iconos: https://icons.getbootstrap.com / https://fontawesome.com/v4/icons/
 DTPicker: https://getdatepicker.com/5-4/
 bootstrap-select: https://developer.snapappointments.com/bootstrap-select/
-jQuery: https://api.jquery.com
-Numeral: http://numeraljs.com
-Moment: https://momentjs.com
+Select2 (AutoComplete): https://select2.org
 CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 */
 
@@ -79,6 +83,10 @@ var propControls = 'Controls';
             { id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' },
             // todo: esto deberia ser segun el lng_id
             { id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' },
+            { id: 'select2', depends: ['jquery', 'bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' },
+            { id: 'select2-css', depends: ['select2'], src: 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js' },
+            { id: 'select2-es', depends: ['select2'], src: 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/es.js' },
+            { id: 'select2-bs5', depends: ['select2'], src: 'https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css' },
         ]);
     
         include([
