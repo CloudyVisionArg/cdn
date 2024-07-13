@@ -1094,10 +1094,6 @@ async function renderControls(container, parent) {
         // -- Autocomplete --
 
         } else if (type == 'AUTOCOMPLETE') {
-            /*
-            todo: faltan:
-            editurl="" addurl=""
-            */
 
             options = {
                 multiple: ctl.attr('mode') == '1',
