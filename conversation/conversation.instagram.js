@@ -390,7 +390,7 @@ function instagramDataProvider(opts){
     };
 
     var getMessageByActType = function(actDoc){
-        let msgIns = new messengerMsg();
+        let msgIns = new instaMessengerMsg();
 		msgIns.viewImage = me.viewImage;
         let actType = "Messenger Instagram";
         
