@@ -1536,8 +1536,8 @@ async function newMessengerChatControl(opts){
 		conversationOptions.quickMessageTypes = ["instaMessengerMsg"];
 		conversationOptions.defaultQuickMessageType = "instaMessengerMsg";
 		
-		let messengerProvider = getMessengerDataProvider(instaMssngerOpts);
-		let providers = [messengerProvider];
+		let instagramProvider = getInstagramDataProvider(instaMssngerOpts);
+		let providers = [instagramProvider];
 		
 		var dataProvider = new conversationDataProvider();
 		dataProvider.msgproviders = providers;
@@ -1545,7 +1545,7 @@ async function newMessengerChatControl(opts){
 		
 		conversationOptions.quickMessageChanged = function(newMessageType){
 			if(newMessageType == "instaMessengerMsg"){
-				messengerProvider.displayMessengerOptions($("div#instaMessengerChat .message-type-button"));
+				instagramProvider.displayMessengerOptions($("div#instaMessengerChat .message-type-button"));
 			}
 		};
 		
