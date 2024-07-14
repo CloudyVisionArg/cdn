@@ -168,12 +168,12 @@ function instagramDataProvider(opts){
 
 	var fillAccounts = function(){
 		me.allPages.forEach(function(page){
-			if(page["PAGE_ID"] == me.options.from){
+			if(page["INSTAGRAM_BUSINESS_ID"] == me.options.from){
 				me.accounts.push({
-					id: page["PAGE_ID"],
+					id: page["INSTAGRAM_BUSINESS_ID"],
 					name: page["PAGE_NAME"],
 					status: "stop",
-					selected: page["PAGE_ID"] == me.options.from,
+					selected: page["INSTAGRAM_BUSINESS_ID"] == me.options.from,
 					icon: "fa-facebook"
 				});
 			}
