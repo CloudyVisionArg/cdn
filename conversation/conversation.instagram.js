@@ -263,6 +263,12 @@ function instagramDataProvider(opts){
 					field: "DIRECTION",
 					value: "outbound"
 				},{
+					field: "STATE",
+					value: "Creado"
+				},{
+					field: "CREATEDTIME",
+					value: new Date()
+				},{
 					field: "TEXT",
 					value: msge.body
 				}];
