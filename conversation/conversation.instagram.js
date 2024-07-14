@@ -1480,8 +1480,8 @@ async function newMessengerChatControl(opts){
 				name = docs[0][nameField.toUpperCase()]
 			}
         }
-        if(pages.length > 0){
-            from = pages[0][pageIdField];
+        if(pageIdField){
+            from = docs[0][pageIdField];
         }
 
 		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${refDocId}" style="max-height: 100vh;"></div>`);
