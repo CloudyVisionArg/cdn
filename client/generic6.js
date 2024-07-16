@@ -60,9 +60,6 @@ var propControls = 'Controls';
         preldr = preloader;
         preldr.show();
 
-        modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
-        await modControls.init();
-
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
         if (!window.dSession) {
             window.dSession = new doorsapi2.Session();
@@ -92,6 +89,9 @@ var propControls = 'Controls';
                     doc = await folder.documentsNew();
                 }
                     
+                modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
+                await modControls.init();
+        
                 await loadControls();
 
             } else {
