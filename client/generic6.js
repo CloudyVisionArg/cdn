@@ -62,7 +62,7 @@ var propControls = 'Controls';
         preldr.show();
 
         modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
-        //modControls.setContext({ dSession, folder, doc });
+        await modControls.init();
         debugger;
 
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
