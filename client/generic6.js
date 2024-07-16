@@ -88,7 +88,7 @@ var propControls = 'Controls';
                 } else {
                     doc = await folder.documentsNew();
                 }
-                    
+                debugger;    
                 modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
                 await modControls.init();
         
