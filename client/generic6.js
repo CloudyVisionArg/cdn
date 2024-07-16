@@ -88,7 +88,7 @@ var propControls = 'Controls';
                 } else {
                     doc = await folder.documentsNew();
                 }
-                debugger;    
+
                 modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
                 await modControls.init();
         
@@ -123,6 +123,13 @@ function errMgr(pErr) {
 
 
 async function loadControls() {
+    /*
+    todo:
+    Volar la property del hub
+    1ro: tag
+    2do: carpeta hija
+    3ro: hub
+    */
     var controlsProp;
     try { controlsProp = JSON.parse(await folder.properties(propControls)) }
         catch(err) { console.error(err) };
