@@ -48,9 +48,9 @@ var propControls = 'Controls';
         
     } else { // WEB
         await include([
-            { id: 'jquery', src: 'https://code.jquery.com/jquery-3.7.1.min.js' },
             { id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' },
             { id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' },
+            // Include para bg compat con sbr viejos
             { id: 'web-javascript', depends: ['jquery', 'bootstrap'] },
         ]);
 
@@ -59,6 +59,10 @@ var propControls = 'Controls';
 
         preldr = preloader;
         preldr.show();
+
+        modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
+        modControls.setContext({ dSession, folder, doc });
+        debugger;
 
         if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
         if (!window.dSession) {
@@ -71,30 +75,6 @@ var propControls = 'Controls';
             }
         }
         await dSession.runSyncEventsOnClient(false);
-
-        await include([
-            { id: 'lib-moment' },
-            { id: 'lib-numeral' },
-            { id: 'lib-numeral-locales', depends: ['lib-numeral'] },
-            { id: 'web-controls' },
-            { id: 'tempus-dominus', depends: ['jquery', 'lib-moment'], src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js' },
-            { id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' },
-            { id: 'bootstrap-select', depends: ['jquery', 'bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js' },
-            { id: 'bootstrap-select-css', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css' },
-            // todo: esto deberia ser segun el lng_id
-            { id: 'bootstrap-select-lang', depends: ['bootstrap-select'], src: 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/i18n/defaults-es_ES.min.js' },
-            { id: 'select2', depends: ['jquery', 'bootstrap', 'bootstrap-css'], src: 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' },
-            { id: 'select2-css', depends: ['select2'], src: 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js' },
-            { id: 'select2-es', depends: ['select2'], src: 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/es.js' },
-            { id: 'select2-bs5', depends: ['select2'], src: 'https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css' },
-        ]);
-    
-        include([
-            { id: 'bootstrap-icons', src: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' },
-            { id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' },
-            { id: 'ckeditor', src: '/c/inc/ckeditor-nov2016/ckeditor.js' },
-            { id: 'lib-filesaver' },
-        ]);
         
         urlParams = new URLSearchParams(window.location.search);
         fld_id = urlParams.get('fld_id');
@@ -112,9 +92,6 @@ var propControls = 'Controls';
                 } else {
                     doc = await folder.documentsNew();
                 }
-
-                modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
-                modControls.setContext({ dSession, folder, doc });
                     
                 await loadControls();
 
