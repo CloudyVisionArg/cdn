@@ -51,8 +51,7 @@ var propControls = 'Controls';
             { id: 'jquery', src: 'https://code.jquery.com/jquery-3.7.1.min.js' },
             { id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' },
             { id: 'bootstrap-css', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' },
-            // Include para bg compat con sbr viejos
-            //{ id: 'web-javascript', depends: ['jquery', 'bootstrap'] },
+            { id: 'web-javascript', depends: ['jquery', 'bootstrap'] },
         ]);
 
         // dark-mode
