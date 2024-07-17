@@ -1008,7 +1008,6 @@ async function renderControls(container, parent) {
                 options.readOnly = true;
             }
 
-            debugger;
             await eventBRC(options);
             control = modControls.newAttachments(ctl['NAME'], options);
 
