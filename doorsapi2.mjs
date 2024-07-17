@@ -3025,7 +3025,6 @@ export class Folder {
             var url = 'folders/' + me.id;
             url += name ? '/children?foldername=' + me.session.utils.encUriC(name) : '/childrens';
             debugger;
-            if (name) url += 
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session, me));
