@@ -1089,7 +1089,7 @@ async function renderControls(container, parent) {
                 valueField: ctl.attr('valuefield'),
                 valueSource: ctl.attr('valuesource'),
                 xmlField: ctl.attr('xmlfield'),
-                xmlSource: ctl.attr('returnfields'),
+                extraFields: ctl.attr('returnfields'),
                 editUrl: ctl.attr('editurl'),
                 addUrl: ctl.attr('addurl'),
                 readoOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
