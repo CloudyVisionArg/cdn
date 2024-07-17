@@ -124,9 +124,11 @@ async function loadControls() {
     let cf = objPropCI(doc.tags, 'controlsFolder');
 
     try {
-        debugger
+        // Tag
         try { if (cf) controlsFolder = await folder.app.folders(cf) } catch(er) {};
+        // controls hija
         try { if (!controlsFolder) controlsFolder = await folder.folders('controls') } catch(er) {};
+        // Hub
         if (!controlsFolder) controlsFolder = await modControls.controlsHub(folder);
         
         controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
