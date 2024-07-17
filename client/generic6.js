@@ -136,7 +136,7 @@ async function loadControls() {
             controls = await modControls.controlsHub(folder);
         }
         
-        getControlsRights(controls);
+        if (controls) getControlsRights(controls);
 
     } catch(err) {
         console.error(err);
