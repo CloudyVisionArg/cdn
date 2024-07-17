@@ -3024,7 +3024,6 @@ export class Folder {
         return new Promise((resolve, reject) => {
             var url = 'folders/' + me.id;
             url += name ? '/children?foldername=' + me.session.utils.encUriC(name) : '/childrens';
-            debugger;
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session, me));
