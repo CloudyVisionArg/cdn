@@ -132,7 +132,7 @@ async function loadControls() {
         // controls hija
         try {
             if (!controlsFolder) {
-                subFlds = await folder.folders();
+                let subFlds = await folder.folders();
                 debugger;
                 controlsFolder = await folder.folders('controls');
             }
