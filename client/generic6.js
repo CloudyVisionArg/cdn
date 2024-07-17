@@ -35,8 +35,6 @@ var generic = 'generic6';
 
 var inApp = typeof window.app7 == 'object';
 
-var propControls = 'Controls';
-
 (async () => {
     if (inApp) { // APP
         utils = dSession.utils;
@@ -123,37 +121,19 @@ function errMgr(pErr) {
 
 
 async function loadControls() {
-    /*
-    todo:
-    Volar la property del hub
-    1ro: tag
-    2do: carpeta hija
-    3ro: hub
-    */
-    var controlsProp;
-    try { controlsProp = JSON.parse(await folder.properties(propControls)) }
-        catch(err) { console.error(err) };
-    
-    if (controlsProp && controlsProp.viaHub) {
-        controls = await modControls.controlsHub(folder, {
-            fresh: controlsProp.fresh,
-        });
+    let cf = objPropCI(doc.tags, 'controlsFolder');
 
-    } else {
-        var cf = objPropCI(doc.tags, 'controlsFolder');
+    try {
+        debugger
+        try { if (cf) controlsFolder = await folder.app.folders(cf) } catch(er) {};
+        try { if (!controlsFolder) controlsFolder = await folder.folders('controls') } catch(er) {};
+        if (!controlsFolder) controls = await modControls.controlsHub(folder);
+        
+        controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+        getControlsRights(controls);
 
-        try {
-            if (cf) {
-                controlsFolder = await folder.app.folders(cf);
-            } else {
-                controlsFolder = await folder.folders('controls');
-            }
-            controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
-            getControlsRights(controls);
-
-        } catch(err) {
-            console.error(err);
-        }
+    } catch(err) {
+        console.error(err);
     }
 
     inApp ? await appRenderPage() : await webRenderPage();
