@@ -127,7 +127,7 @@ async function loadControls() {
         debugger
         try { if (cf) controlsFolder = await folder.app.folders(cf) } catch(er) {};
         try { if (!controlsFolder) controlsFolder = await folder.folders('controls') } catch(er) {};
-        if (!controlsFolder) controls = await modControls.controlsHub(folder);
+        if (!controlsFolder) controlsFolder = await modControls.controlsHub(folder);
         
         controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         getControlsRights(controls);
