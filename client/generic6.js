@@ -125,9 +125,18 @@ async function loadControls() {
 
     try {
         // Tag
-        try { if (cf) controlsFolder = await folder.app.folders(cf) } catch(er) {};
+        try {
+            if (cf) controlsFolder = await folder.app.folders(cf);
+        } catch(er) {};
+
         // controls hija
-        try { if (!controlsFolder) controlsFolder = await folder.folders('controls') } catch(er) {};
+        try {
+            if (!controlsFolder) {
+                subFlds = await folder.folders();
+                debugger;
+                controlsFolder = await folder.folders('controls');
+            }
+        } catch(er) {};
 
         if (controlsFolder) {
             controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
