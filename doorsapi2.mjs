@@ -3022,7 +3022,8 @@ export class Folder {
         //todo: si no viene name devolver la lista
         var me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
+            var url = 'folders/' + me.id + '/children';
+            if (name) ulr += '?foldername=' + me.session.utils.encUriC(name);
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
                     resolve(new Folder(res, me.session, me));
