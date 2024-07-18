@@ -142,7 +142,7 @@ async function loadControls() {
             controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         } else {
             // Hub
-            controls = await modControls.controlsHub(folder);
+            controls = await modControls6.controlsHub(folder);
         }
         
         if (controls) getControlsRights(controls);
@@ -289,11 +289,11 @@ async function appRenderPage() {
 
         for (let [key, field] of doc.fields()) {
             if (field.custom && !field.headerTable && field.name != 'DOC_ID') {
-                modControls.newDefaultControl(field).$root.appendTo($ul);
+                modControls6.newDefaultControl(field).$root.appendTo($ul);
             }
         }
 
-        let ctl = modControls.newAttachments('attachments', {
+        let ctl = modControls6.newAttachments('attachments', {
             label: 'Adjuntos',
             collapse: false,
         });
@@ -315,7 +315,7 @@ async function appRenderPage() {
 
         for (let [key, field] of doc.fields()) {
             if (!field.custom && field.headerTable) {
-                modControls.newDefaultControl(field).$root.appendTo($ul);
+                modControls6.newDefaultControl(field).$root.appendTo($ul);
             }
         }
 
@@ -333,7 +333,7 @@ async function appRenderPage() {
 
         $ul = $('<ul/>').appendTo($div);
 
-        ctl = modControls.newDocLog('docLog', {
+        ctl = modControls6.newDocLog('docLog', {
             label: 'Cambios de datos',
             collapse: false,
         });
@@ -543,7 +543,7 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                let ctl = modControls.newDefaultControl(field);
+                let ctl = modControls6.newDefaultControl(field);
                 ctl.$root.addClass('mt-3').appendTo($col);
             }
         });
@@ -553,7 +553,7 @@ async function webRenderPage() {
             class: 'col-12 form-group',
         }).appendTo($row);
 
-        let ctl = modControls.newAttachments('attachments', {
+        let ctl = modControls6.newAttachments('attachments', {
             label: 'Adjuntos',
         });
         ctl.$root.addClass('mt-3').appendTo($col);
@@ -570,7 +570,7 @@ async function webRenderPage() {
                     class: 'col-12 col-md-6 form-group',
                 }).appendTo($row);
 
-                let ctl = modControls.newDefaultControl(field);
+                let ctl = modControls6.newDefaultControl(field);
                 ctl.$root.addClass('mt-3').appendTo($col);
             }
         })
@@ -585,7 +585,7 @@ async function webRenderPage() {
             class: 'col-12 form-group',
         }).appendTo($row);
 
-        ctl = modControls.newDocLog('docLog', {
+        ctl = modControls6.newDocLog('docLog', {
             label: 'Cambios de datos',
             collapse: false,
         });
@@ -861,9 +861,9 @@ async function renderControls(container, parent) {
 
             await eventBRC(options);
             if (ctl.attr('mode') == '2') { // Multiline
-                control = modControls.newTextarea(ctl['NAME'], options);
+                control = modControls6.newTextarea(ctl['NAME'], options);
             } else {
-                control = modControls.newInput(ctl['NAME'], options);
+                control = modControls6.newInput(ctl['NAME'], options);
             }
 
             $this = control.$root;
@@ -896,7 +896,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
-            control = modControls.newDTPicker(ctl['NAME'], options);
+            control = modControls6.newDTPicker(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$input;
 
@@ -944,7 +944,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
-            control = modControls.newSelect(ctl['NAME'], options);
+            control = modControls6.newSelect(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$select;
 
@@ -965,7 +965,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
-            control = modControls.newSwitch(ctl['NAME'], options);
+            control = modControls6.newSwitch(ctl['NAME'], options);
 
             $input = control.$input
             $this = control.$root;
@@ -984,7 +984,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
-            control = modControls.newFieldset(ctl['NAME'], options);
+            control = modControls6.newFieldset(ctl['NAME'], options);
 
             if (!inApp && !options.noBorders) control.$root.addClass('mt-3');
 
@@ -1004,7 +1004,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
-            control = modControls.newAttachments(ctl['NAME'], options);
+            control = modControls6.newAttachments(ctl['NAME'], options);
 
             $this = control.$root;
             $input = control.$content;
@@ -1032,7 +1032,7 @@ async function renderControls(container, parent) {
 
             options = { label }
             await eventBRC(options);
-            control = modControls.newDocLog(ctl['NAME'], options);
+            control = modControls6.newDocLog(ctl['NAME'], options);
             if (!inApp) control.$root.attr('style', 'margin-top: 2.2rem !important;'); // Para alinear mejor con los inputs
 
             /*
@@ -1061,7 +1061,7 @@ async function renderControls(container, parent) {
             };
 
             await eventBRC(options);
-            control = modControls.newHtmlEditor(ctl['NAME'], options);
+            control = modControls6.newHtmlEditor(ctl['NAME'], options);
 
             $this = control.$root;
             $input = control.$input;
@@ -1091,7 +1091,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
-            control = modControls.newAutocomplete(ctl['NAME'], options);
+            control = modControls6.newAutocomplete(ctl['NAME'], options);
 
             $this = control.$root;
             $input = control.$input;
