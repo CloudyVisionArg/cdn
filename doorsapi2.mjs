@@ -2122,7 +2122,7 @@ export class Document {
             // Devuelve un field
             var field = me.fields().get(name);
             if (field) {
-                if (value != undefined) field.value = value;
+                if (value !== undefined) field.value = value;
                 return field;
             } else {
                 if (name != '[NULL]') console.log('Field not found: ' + name);
@@ -2732,6 +2732,7 @@ export class Folder {
     #properties;
     #userProperties;
     #form;
+    #foldersMap;
     #viewsMap;
     #owner;
 
@@ -3019,18 +3020,37 @@ export class Folder {
     @returns {Promise<Folder>}
     */
     folder(name) {
-        //todo: si no viene name devolver la lista
-        var me = this;
+        let me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + me.id;
-            url += name ? '/children?foldername=' + me.session.utils.encUriC(name) : '/childrens';
-            me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    debugger;
-                    resolve(new Folder(res, me.session, me));
-                },
-                reject
-            )    
+            if (name !== undefined) {
+                me.folder().then(
+                    res => {
+                        if (res.has(name)) {
+                            resolve(res.get(name));
+                        } else {
+                            reject(new Error('Folder not found: ' + name));
+                        }
+                    },
+                    reject
+                )
+            } else {
+                // Devuelve la coleccion
+                if (!me.#foldersMap) {
+                    let url = 'folders/' + me.id + '/childrens';
+                    //url += name ? '/children?foldername=' + me.session.utils.encUriC(name) : '/childrens';
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
+                        res => {
+                            debugger;
+                            me.#foldersMap = new DoorsMap();
+                            for (let el of res) {
+                                me.#foldersMap.set(el.Name, new Folder(el, me.session, me));
+                            }
+                            resolve(me.#foldersMap);
+                        },
+                        reject
+                    )  
+                }
+            }
         });
     }
 
@@ -3650,6 +3670,7 @@ export class Form {
 
         if (field) {
             // Devuelve un field
+            // todo: aca deberia usar el q ya se creo en el map (ver folder.views)
             var field;
             field = me.#json.Fields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
             if (field) {
