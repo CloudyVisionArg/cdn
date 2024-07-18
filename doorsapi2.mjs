@@ -3023,6 +3023,10 @@ export class Folder {
         let me = this;
         return new Promise((resolve, reject) => {
             if (name !== undefined) {
+                /*
+                No la devuelvo de la coleccion xq a veces no vienen todas
+                calculo debe ser por el permiso read/view
+                */
                 let url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
