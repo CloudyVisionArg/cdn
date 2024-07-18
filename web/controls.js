@@ -94,7 +94,7 @@ function newDTPicker(pId, pLabel, pType) {
             return 'L LT';
         }
     }
-
+    
     $inp[0]._value = function (pValue) {
         debugger;
         var $self = $(this);
@@ -107,7 +107,7 @@ function newDTPicker(pId, pLabel, pType) {
 
         } else {
             // set
-            $dtp.datetimepicker('date', value);
+            $dtp.datetimepicker('date', pValue);
             return $self[0]._value();
         }
     }
