@@ -87,8 +87,8 @@ var inApp = typeof window.app7 == 'object';
                     doc = await folder.documentsNew();
                 }
 
-                if (!windows.modControls6) {
-                    windows.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
+                if (!window.modControls6) {
+                    window.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
                     await modControls6.init();
                 }
         
