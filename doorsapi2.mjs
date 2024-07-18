@@ -3023,16 +3023,14 @@ export class Folder {
         let me = this;
         return new Promise((resolve, reject) => {
             if (name !== undefined) {
-                me.folder().then(
+                let url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
+                me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
-                        if (res.has(name)) {
-                            resolve(res.get(name));
-                        } else {
-                            reject(new Error('Folder not found: ' + name));
-                        }
+                        debugger;
+                        resolve(new Folder(el, me.session, me));
                     },
                     reject
-                )
+                )  
             } else {
                 // Devuelve la coleccion
                 if (!me.#foldersMap) {
@@ -3040,7 +3038,6 @@ export class Folder {
                     //let url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
-                            debugger;
                             me.#foldersMap = new DoorsMap();
                             for (let el of res) {
                                 me.#foldersMap.set(el.Name, new Folder(el, me.session, me));
