@@ -56,6 +56,7 @@ var maps = {
             if (!inApp) { // En el app se inicializan de otra forma
                 // Crea los autocompletes
                 $('.maps-autocomplete').each(function () {
+                    debugger;
                     maps.initAc(this, function () {
                         // Setea el hidden como value
                         var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
