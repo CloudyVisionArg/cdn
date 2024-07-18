@@ -3026,7 +3026,6 @@ export class Folder {
                 let url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
-                        debugger;
                         resolve(new Folder(res, me.session, me));
                     },
                     reject
@@ -3035,7 +3034,6 @@ export class Folder {
                 // Devuelve la coleccion
                 if (!me.#foldersMap) {
                     let url = 'folders/' + me.id + '/childrens';
-                    //let url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         res => {
                             me.#foldersMap = new DoorsMap();
