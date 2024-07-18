@@ -78,7 +78,6 @@ var inApp = typeof window.app7 == 'object';
     if (fld_id) {
         try {
             folder = await dSession.folder(fld_id);
-            folder.form; // Para q vaya cargando el form
 
             if (folder.type == 1) {
                 if (doc_id) {
