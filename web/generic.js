@@ -1165,7 +1165,6 @@ async function fillControls() {
         var $el = $(el);
 
         tf = $el.attr('data-textfield');
-        if (tf.toUpperCase() == 'HORA_FIN_OPERARIOS') debugger;
         if (tf && tf != '[NULL]') {
             textField = doc.fields(tf);
             text = textField ? textField.value : null;
@@ -1183,6 +1182,7 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
+        if (tf.toUpperCase() == 'HORA_FIN_OPERARIOS') debugger;
         if (textField && el._text) {
             el._text(text);
             textField = undefined;
