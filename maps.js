@@ -246,7 +246,7 @@ var maps = {
                 zIndex: 20000,
             });
 
-            if (inApp) {
+            if (el.mapsAutocomplete) {
                 maps.pickerTarget = el;
             } else {
                 maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
