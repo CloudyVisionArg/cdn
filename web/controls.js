@@ -47,7 +47,6 @@ function newTextarea(pId, pLabel) {
 }
 
 function newDTPicker(pId, pLabel, pType) {
-    debugger;
     // pType: date, time, datetime-local
 
     var $div = $('<div/>');

@@ -1182,7 +1182,6 @@ async function fillControls() {
             xml = xmlField ? xmlField.value : null;
         };
 
-        if (tf.toUpperCase() == 'HORA_FIN_OPERARIOS') debugger;
         if (textField && el._text) {
             el._text(text);
             textField = undefined;
