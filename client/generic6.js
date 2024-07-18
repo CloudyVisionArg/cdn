@@ -136,6 +136,7 @@ async function loadControls() {
             }
         } catch(er) {};
 
+        debugger;
         if (controlsFolder) {
             controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         } else {
