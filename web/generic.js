@@ -1165,6 +1165,7 @@ async function fillControls() {
         var $el = $(el);
 
         tf = $el.attr('data-textfield');
+        if (tf == 'HORA_FIN_OPERARIOS') debugger;
         if (tf && tf != '[NULL]') {
             textField = doc.fields(tf);
             text = textField ? textField.value : null;
