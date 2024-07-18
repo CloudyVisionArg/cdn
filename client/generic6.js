@@ -132,7 +132,8 @@ async function loadControls() {
         // controls hija
         try {
             if (!controlsFolder) {
-                controlsFolder = (await folder.folders()).get('controls');
+                //controlsFolder = (await folder.folders()).get('controls');
+                controlsFolder = await folder.folders('controls');
             }
         } catch(er) {};
 
