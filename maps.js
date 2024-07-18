@@ -26,6 +26,7 @@ var maps = {
 	mapCentered: undefined,
 	
     init: function () {
+        debugger;
         $(document).ready(function () {
             // Crea el picker con el map
 			var $picker = $('<div/>', {
