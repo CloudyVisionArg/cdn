@@ -112,12 +112,7 @@ function newDTPicker(pId, pLabel, pType) {
         }
     }
 
-    $inp[0]._text = function (pValue) {
-        if (pValue != undefined) {
-            this._value(pValue);
-        }
-        return this.value;
-    }
+    $inp[0]._text = $inp[0]._value
 
     return $div;
 }
