@@ -33,7 +33,7 @@ async function loadUtils() {
     // include
 
     if (!inNode()) {
-        if (window.include == undefined) {
+        if (window.include === undefined) {
             // include
             var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
             var code = await res.text();
@@ -434,7 +434,7 @@ export class Session {
     get doorsVersion() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            if (me.#doorsVersion != undefined) {
+            if (me.#doorsVersion !== undefined) {
                 resolve(me.#doorsVersion);
 
             } else {
@@ -462,7 +462,7 @@ export class Session {
     folder(folder, curFolderId) {
         var key = 'folder|' + folder + '|' + curFolderId;
         var cache = this.utils.cache(key);
-        if (cache == undefined) {
+        if (cache === undefined) {
             if (!isNaN(parseInt(folder))) {
                 cache = this.foldersGetFromId(folder);
             } else {
@@ -673,7 +673,7 @@ export class Session {
     @returns {Promise}
     */
     runSyncEventsOnClient(value) {
-        if (value == undefined) {
+        if (value === undefined) {
             var url = 'session/syncevents/runOnClient';
             return this.restClient.fetch(url, 'GET', '', '');
         } else {
@@ -701,7 +701,7 @@ export class Session {
         var url = 'settings';
         var method, param, paramName;
 
-        if (value == undefined) {
+        if (value === undefined) {
             url += '/' + this.utils.encUriC(setting);
             method = 'GET';
             param = '';
@@ -726,12 +726,12 @@ export class Session {
     tags(key, value) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (value == undefined) {
+            if (value === undefined) {
                 // Devuelve
                 var url = 'session/tags';
                 me.restClient.fetch(url, 'GET', '', '').then(
                     res => {
-                        if (key == undefined) {
+                        if (key === undefined) {
                             resolve(res);
                         } else {
                             resolve(res[key]);
@@ -792,7 +792,7 @@ export class Session {
         var url = 'user/settings/' + this.utils.encUriC(setting);
         var method, param, paramName;
 
-        if (value == undefined) {
+        if (value === undefined) {
             method = 'GET';
             param = '';
             paramName = ''
@@ -943,7 +943,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     childAccounts(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ChildAccountsList', 'childAccounts');
         } else {
             return this._accountsGet('childAccounts', account);
@@ -969,7 +969,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     childAccountsRecursive(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
         } else {
             return this._accountsGet('childAccountsRecursive', account);
@@ -1081,7 +1081,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     parentAccounts(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ParentAccountsList', 'parentAccounts');
         } else {
             return this._accountsGet('parentAccounts', account);
@@ -1107,7 +1107,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     parentAccountsRecursive(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
         } else {
             return this._accountsGet('parentAccountsRecursive', account);
@@ -1147,7 +1147,7 @@ export class Account {
         return new Promise((resolve, reject) => {
             var type = me instanceof User ? 'user' : 'account';
             var url, method;
-            if (me.isNew || me.id == undefined) {
+            if (me.isNew || me.id === undefined) {
                 url = type + 's';
                 method = 'PUT';
             } else {
@@ -1796,7 +1796,7 @@ export class Directory {
         let utils = this.session.utils;
         let key = 'accountsSearch|' + filter + '|' + order;
         let cache = utils.cache(key);
-        if (cache == undefined) {
+        if (cache === undefined) {
             let url = '/accounts/search?filter=' + utils.encUriC(filter) + 
                 '&order=' + utils.encUriC(order);
             cache = this.session.restClient.fetch(url, 'GET', '', '');
@@ -1855,7 +1855,7 @@ export class Document {
     async _dispatchEvent(event) {
         // A partir de la version 7.4.38.1 los dispara el server
         try { var ver = await this.session.doorsVersion } catch(err) {};
-        if (ver == undefined || ver >= '007.004.038.001') return;
+        if (ver === undefined || ver >= '007.004.038.001') return;
 
         var me = this;
         var fld = await me.parent;
@@ -1912,7 +1912,7 @@ export class Document {
     @returns {Promise<boolean>}
     */
     aclInherits(value) {
-        if (value == undefined) {
+        if (value === undefined) {
             return (this.fields('inherits').value ? true : false);
         } else {
             var me = this;
@@ -1974,7 +1974,7 @@ export class Document {
     attachments(attachment) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (attachment != undefined) {
+            if (attachment !== undefined) {
                 me.attachments().then(
                     res => {
                         if (res.has(attachment)) {
@@ -2692,7 +2692,7 @@ export class Field {
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         
         if (this.type == 1) {
-            this.#json.Value = (value == undefined || value == null || value == '') ? null : value.toString();
+            this.#json.Value = (value === undefined || value == null || value == '') ? null : value.toString();
         } else if (this.type == 2) {
             var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
@@ -2714,7 +2714,7 @@ export class Field {
     @returns {boolean}
     */
     get valueEmpty() {
-        return (this.value == null || this.value == undefined || this.value == '');
+        return (this.value == null || this.value === undefined || this.value == '');
     }
 
     get valueOld() {
@@ -3458,7 +3458,7 @@ export class Folder {
     views(name) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (name != undefined) {
+            if (name !== undefined) {
                 me.views().then(
                     res => {
                         if (res.has(name)) {
@@ -3929,8 +3929,8 @@ export class Node {
                 let jsn = JSON.parse(setting);
                 try { target.server = origin(jsn.server) } catch(err) {};
                 try { target.debugServer = origin(jsn.debugServer) } catch(err) {};
-                if (jsn.repo != undefined) target.repo = jsn.repo;
-                if (jsn.ref != undefined) target.ref = jsn.ref;
+                if (jsn.repo !== undefined) target.repo = jsn.repo;
+                if (jsn.ref !== undefined) target.ref = jsn.ref;
 
             } catch(err) {};
         }
@@ -4185,10 +4185,10 @@ export class Properties extends DoorsMap {
     set(key, value) {
         var me = this;
 
-        if (key == undefined) {
+        if (key === undefined) {
             return this; // La coleccion
 
-        } else if (value == undefined) {
+        } else if (value === undefined) {
             // El value
             return new Promise((resolve, reject) => {
                 me.get(key).then(
@@ -4269,7 +4269,7 @@ export class Property {
     }
 
     value(value) {
-        if (value == undefined) {
+        if (value === undefined) {
             return this.#json.Value;
         } else {
             var me = this;
@@ -4547,7 +4547,7 @@ export class Utilities {
     solo si no esta definida.
     */
     assignDefined(target, source, property, override) {
-        if (source && source[property] != undefined && (target[property] == undefined || override)) {
+        if (source && source[property] !== undefined && (target[property] === undefined || override)) {
             target[property] = source[property];
         }
     }
@@ -4582,7 +4582,7 @@ export class Utilities {
                 next: function() {
                     if (done) return;
             
-                    if (iterations == undefined || index < iterations) {
+                    if (iterations === undefined || index < iterations) {
                         index++;
                         loopFunc(loop);
                     } else {
@@ -4619,7 +4619,7 @@ export class Utilities {
     cache('myKey', myValue); // Almacena por 300 segs (5 mins), valor por defecto de seconds.
     */
     cache(key, value, seconds) {
-        if (value == undefined) {
+        if (value === undefined) {
             // get
             if (this.#cache.has(key) && this.#cache.get(key).expires > Date.now()) {
                 //console.log('Cache hit: ' + key);
@@ -4641,7 +4641,7 @@ export class Utilities {
     */
     cDate(date, format) {
         var dt;
-        if (date == null || date == undefined) return null;
+        if (date == null || date === undefined) return null;
 
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
@@ -4714,7 +4714,7 @@ export class Utilities {
     @returns {string}
     */
     encUriC(value) {
-        return (value == null || value == undefined) ? '' : encodeURIComponent(value);
+        return (value == null || value === undefined) ? '' : encodeURIComponent(value);
     }
 
     /** Recibe un err, lo convierte a Error, loguea y dispara */
@@ -4753,7 +4753,7 @@ export class Utilities {
     get execapiAcao() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            if (me.#execapiAcao != undefined) {
+            if (me.#execapiAcao !== undefined) {
                 resolve(me.#execapiAcao);
 
             } else {
