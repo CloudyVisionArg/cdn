@@ -4,6 +4,7 @@ https://developers.google.com/maps/documentation/javascript/controls#maps_contro
 */
 (function () {
     var key;
+    debugger;
     if (typeof(cordova) == 'object') {
         /*
         todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
