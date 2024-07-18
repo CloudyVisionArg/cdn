@@ -28,7 +28,7 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 */
 
 var fld_id, folder, doc_id, doc;
-var utils, urlParams, preldr, modControls;
+var utils, urlParams, preldr;
 var controls, controlsFolder, controlsRights;
 var $page, $navbar, f7Page, pageEl, evSrc, saving, saved;
 var generic = 'generic6';
@@ -87,8 +87,10 @@ var inApp = typeof window.app7 == 'object';
                     doc = await folder.documentsNew();
                 }
 
-                modControls = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
-                await modControls.init();
+                if (!windows.modControls6) {
+                    windows.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
+                    await modControls6.init();
+                }
         
                 await loadControls();
 
