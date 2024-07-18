@@ -2,10 +2,12 @@
 todo: ver de ponerle un boton Cerrar al mapa
 https://developers.google.com/maps/documentation/javascript/controls#maps_control_simple-javascript
 */
+var inApp = typeof app7 == 'object';
+
 (function () {
     var key;
     debugger;
-    if (typeof(cordova) == 'object') {
+    if (inApp) {
         /*
         todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
         https://developers.google.com/maps/documentation/javascript/get-api-key
@@ -51,7 +53,7 @@ var maps = {
 		        maps.updateLocation();
 	        });
 
-            if (typeof(cordova) != 'object') { // En el app se inicializan de otra forma
+            if (!inApp) { // En el app se inicializan de otra forma
                 // Crea los autocompletes
                 $('.maps-autocomplete').each(function () {
                     maps.initAc(this, function () {
@@ -94,7 +96,7 @@ var maps = {
                     return self.value;
                 } else {
                     self.value = text;
-                    if (typeof(cordova) == 'object') app7.input.checkEmptyState(self);
+                    if (inApp) app7.input.checkEmptyState(self);
                     $(self).change();
                     return text;
                 }
@@ -145,7 +147,7 @@ var maps = {
         }
 
         $(el).attr('data-place', value);
-        if (typeof(cordova) == 'object') {
+        if (inApp) {
             // Cambia globo vacio/lleno
             $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
         } else {
@@ -244,7 +246,7 @@ var maps = {
                 zIndex: 20000,
             });
 
-            if (typeof(cordova) == 'object') {
+            if (inApp) {
                 maps.pickerTarget = el;
             } else {
                 maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
@@ -306,7 +308,7 @@ var maps = {
 		geocoder.geocode({ 'location': loc }, function(res, status) {
 			if (status === google.maps.GeocoderStatus.OK) {
 				if (res[0]) {
-                    if (typeof(cordova) == 'object') {
+                    if (inApp) {
                         setInputVal($(maps.pickerTarget), res[0].formatted_address);
                     } else {
                         $(maps.pickerTarget).val(res[0].formatted_address);
