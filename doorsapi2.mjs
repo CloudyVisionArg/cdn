@@ -3027,7 +3027,7 @@ export class Folder {
                 me.session.restClient.fetch(url, 'GET', '', '').then(
                     res => {
                         debugger;
-                        resolve(new Folder(el, me.session, me));
+                        resolve(new Folder(res, me.session, me));
                     },
                     reject
                 )  
