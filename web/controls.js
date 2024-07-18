@@ -96,7 +96,6 @@ function newDTPicker(pId, pLabel, pType) {
     }
     
     $inp[0]._value = function (pValue) {
-        debugger;
         var $self = $(this);
         let $dtp = $self.closest('div.input-group');
 
