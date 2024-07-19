@@ -1259,7 +1259,6 @@ async function fillControls() {
             xmlField = undefined;
 
         } else if ((textField || valueField) && el.drs && el.drs.control == 'MAPSAUTOCOMPLETE') {
-            debugger;
             el.drs.value({ text, value });
             textField = undefined;
             valueField = undefined;
@@ -1445,6 +1444,8 @@ async function saveDoc(exitOnSuccess) {
                 if (el.drs) {
                     if (el.drs.control == 'SELECT' || el.drs.control == 'AUTOCOMPLETE') {
                         field.value = el.drs.getFieldValues().text;
+                    } else if (el.drs.control == 'MAPSAUTOCOMPLETE') {
+                        field.value = el.drs.value().text;
                     } else {
                         let aux = el.drs.text();
                         field.value = Array.isArray(aux) ? aux.join(';') : aux;
@@ -1495,6 +1496,8 @@ async function saveDoc(exitOnSuccess) {
                 if (el.drs) {
                     if (el.drs.control == 'SELECT' || el.drs.control == 'AUTOCOMPLETE') {
                         field.value = el.drs.getFieldValues().value;
+                    } else if (el.drs.control == 'MAPSAUTOCOMPLETE') {
+                        field.value = el.drs.value().value;
                     } else {
                         let aux = el.drs.value();
                         field.value = Array.isArray(aux) ? aux.join(';') : aux;
