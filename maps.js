@@ -152,7 +152,9 @@ var maps = {
 
         $(el).attr('data-place', value);
         if (el.drs) {
-            debugger;
+            // Muestra/oculta el tilde verde
+            el.drs.$tick.css('display', place ? 'block' : 'none');
+
         } else {
             if (inApp) {
                 // Cambia globo vacio/lleno
