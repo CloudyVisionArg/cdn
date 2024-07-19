@@ -63,14 +63,7 @@ function newDTPicker(pId, pLabel, pType) {
         'data-target-input': 'nearest',
     }).appendTo($div);
 
-    var f, t = pType.toLowerCase();
-    if (t == 'date') {
-        f = 'L';
-    } else if (t == 'time') {
-        f = 'LT';
-    } else {
-        f = 'L LT';
-    }
+    var t = pType.toLowerCase();
 
     var $inp = $('<input/>', {
         type: 'text',
@@ -93,42 +86,36 @@ function newDTPicker(pId, pLabel, pType) {
         buttons: {
             showClose: true,
         },
-        format: f,
+        format: typeFormat(t),
     });
 
+    function typeFormat(type) {
+        if (type == 'date') {
+            return 'L';
+        } else if (type == 'time') {
+            return 'LT';
+        } else {
+            return 'L LT';
+        }
+    }
+    
     $inp[0]._value = function (pValue) {
         var $self = $(this);
+        let $dtp = $self.closest('div.input-group');
 
-        if (pValue == undefined) {
+        if (pValue === undefined) {
             // get
-            return dSession.utils.cDate($self.val());
+            let dt = $dtp.datetimepicker('date');
+            return dt instanceof moment ? dt.toDate() : dt;
 
         } else {
             // set
-            var val = dSession.utils.cDate(pValue);
-
-            var type = $self.attr('data-date-type');
-            if (val != null && val != '') {
-                if (type == 'date') {
-                    $self.val(moment(val).format('L'));
-                } else if (type == 'time') {
-                    $self.val(moment(val).format('LT'));
-                } else {
-                    $self.val(moment(val).format('L LT'));
-                }
-            } else {
-                $self.val('');
-            }
-            return val;
+            $dtp.datetimepicker('date', pValue);
+            return $self[0]._value();
         }
     }
 
-    $inp[0]._text = function (pValue) {
-        if (pValue != undefined) {
-            this._value(pValue);
-        }
-        return this.value;
-    }
+    $inp[0]._text = $inp[0]._value
 
     return $div;
 }
