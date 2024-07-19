@@ -26,7 +26,6 @@ var maps = {
 	mapCentered: undefined,
 	
     init: function () {
-        debugger;
         $(document).ready(function () {
             // Crea el picker con el map
 			var $picker = $('<div/>', {
@@ -54,17 +53,21 @@ var maps = {
 		        maps.updateLocation();
 	        });
 
-            if (!inApp) { // En el app se inicializan de otra forma
-                // Crea los autocompletes
+            /*
+            Esta rutina inicializa los ac no inicializados
+            por js, como los de generic3
+            */
+            if (!inApp) {
                 $('.maps-autocomplete').each(function () {
-                    debugger;
-                    maps.initAc(this, function () {
-                        // Setea el hidden como value
-                        var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
-                        if ($inputVal.val()) {
-                            this._value($inputVal.val());
-                        }
-                    });
+                    if (!this.mapsAutocomplete) {
+                        maps.initAc(this, function () {
+                            // Setea el hidden como value
+                            var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
+                            if ($inputVal.val()) {
+                                this._value($inputVal.val());
+                            }
+                        });
+                    }
                 });
             }
         })
