@@ -662,11 +662,11 @@ async function webRenderPage() {
         </span>
     `);
 
+    // Boton dark-mode
     let $btn = $(`<button type="button" class="btn" title="Modo oscuro">
         <i class="bi bi-cloud-moon" aria-hidden="true"></i>
     </button>`).appendTo($cont);
 
-    // Boton dark-mode
     $btn.click(() => {
         let dm = localStorage.getItem('dark-mode');
         if (dm == '1') {
@@ -676,6 +676,15 @@ async function webRenderPage() {
             $('html').attr('data-bs-theme', 'dark');
             localStorage.setItem('dark-mode', 1);
         }
+    });
+
+    // Boton Designer
+    $btn = $(`<button type="button" class="btn" title="Designer">
+        <i class="bi bi-cloud-moon" aria-hidden="true"></i>
+    </button>`).appendTo($cont);
+
+    $btn.click(() => {
+        debugger;
     });
 
     // Boton Borrar
