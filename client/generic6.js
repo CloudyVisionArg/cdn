@@ -946,7 +946,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
-            if (ctl['NAME'] == 'task_source') debugger;
+            if (ctl['NAME'] == 'task_source') console.log('chk1');
             control = modControls6.newSelect(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$select;
