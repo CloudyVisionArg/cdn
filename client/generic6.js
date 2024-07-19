@@ -915,6 +915,7 @@ async function renderControls(container, parent) {
                 search: (ctl.attr('searchbar') == '1' || type == 'LOOKUPBOXACCOUNTS'),
                 textField: tf,
                 valueField: vf,
+                fill: {},
             };
 
             if (type == 'SELECTKEYWORDS') {
