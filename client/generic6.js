@@ -88,6 +88,7 @@ var inApp = typeof window.app7 == 'object';
 
                 if (!window.modControls6) {
                     //todo: sacar fresh
+                    debugger;
                     window.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
                     await modControls6.init();
                 }
