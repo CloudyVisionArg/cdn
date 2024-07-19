@@ -691,7 +691,7 @@ async function webRenderPage() {
     let $delBtn = $('<button/>', {
         type: 'button',
         id: 'deleteDoc',
-        class: 'btn btn-outline-danger',
+        class: 'btn',
         title: 'Enviar a la papelera',
         style: 'float: right;',
     }).appendTo($cont);
