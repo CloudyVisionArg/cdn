@@ -208,7 +208,7 @@ async function appRenderPage() {
     $page.find('.navbar-inner .left .link').on('click', function (e) {
         // todo: ver si se puede detectar si hubo cambios
         /*
-        app7.dialog.confirm('Perdera los cambios relizados', (dialog) => {
+        app7.dialog.confirm('Perdera los cambios realizados', (dialog) => {
             f7Page.view.router.back();
         }
         */
@@ -909,6 +909,7 @@ async function renderControls(container, parent) {
             || type == 'SELECTKEYWORDS' || type == 'SELECTMULTIPLEFOLDER' || type == 'LOOKUPBOXACCOUNTS') {
 
             options = {
+                label,
                 multiple: ctl.attr('mode') == '2' || type == 'SELECTMULTIPLEFOLDER',
                 readOnly: ctl['W'] == 0 || ctl.attr('readonly') == '1',
                 search: (ctl.attr('searchbar') == '1' || type == 'LOOKUPBOXACCOUNTS'),
@@ -1386,12 +1387,13 @@ async function fillControls() {
 }
 
 function exitForm() {
-    if (inApp) { // APP
+    if (inApp) {
+        // APP
         appExplorerRefresh();
         f7Page.view.router.back();
     
-    } else { // WEB
-    // Callback
+    } else {
+        // WEB
         try {
             let cbfn = urlParams.get('callbackfunction');
 
@@ -1410,7 +1412,6 @@ function exitForm() {
             debugger;
         }
 
-        // v1
         if (window.top == window.self) {
             window.close();
             if (!window.closed) toast('Debe cerrar esta ventana manualmente');
