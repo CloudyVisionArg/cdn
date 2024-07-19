@@ -1183,6 +1183,7 @@ async function loading() {
             }
             setTimeout(waiting, 100);
         } else {
+            debugger;
             return true;
         }
     });
