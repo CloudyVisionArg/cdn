@@ -6,7 +6,6 @@ var inApp = typeof app7 == 'object';
 
 (function () {
     var key;
-    debugger;
     if (inApp) {
         /*
         todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
@@ -142,6 +141,7 @@ var maps = {
     },
 
     onPlaceChange: function () {
+        debugger;
         var place = this.getPlace();
         var el = this.inputEl;
 
@@ -310,7 +310,7 @@ var maps = {
 		var loc = maps.mapMarker.getPosition();
 		
 		var geocoder = new google.maps.Geocoder;
-		geocoder.geocode({ 'location': loc }, function(res, status) {
+		geocoder.geocode({ 'location': loc }, function (res, status) {
 			if (status === google.maps.GeocoderStatus.OK) {
 				if (res[0]) {
                     if (inApp) {
