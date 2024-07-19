@@ -1171,9 +1171,27 @@ async function renderControls(container, parent) {
     })
 }
 
+async function loading() {
+    let wt = 0;
+    setTimeout(function waiting() {
+        let $dl = $get('.doors-loading');
+        if ($dl.length > 0) {
+            wt += 100;
+            if (wt == 3000) {
+                console.log('Hay controles tardando demasiado en inicializarse', $dl);
+                debugger; // Para poder ver q corno pasa
+            }
+            setTimeout(waiting, 100);
+        } else {
+            return true;
+        }
+    });
+}
+
 async function fillControls() {
     let form = await folder.form
     let formDesc = form.description ? form.description : form.name;
+    await loading();
 
     let title;
     if (doc.isNew) {
