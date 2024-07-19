@@ -1177,13 +1177,14 @@ function loading() {
         setTimeout(function waiting() {
             let $dl = $get('.doors-loading');
             if ($dl.length > 0) {
-                wt += 100;
+                wt += 50;
                 if (wt == 3000) {
                     console.log('Hay controles tardando demasiado en inicializarse', $dl);
                     debugger; // Para poder ver q corno pasa
                     reject($dl);
                 }
-                setTimeout(waiting, 100);
+                setTimeout(waiting, 50);
+                
             } else {
                 resolve(true);
             }
