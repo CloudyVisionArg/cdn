@@ -946,6 +946,7 @@ async function renderControls(container, parent) {
             }
 
             await eventBRC(options);
+            debugger;
             control = modControls6.newSelect(ctl['NAME'], options);
             $this = control.$root;
             $input = control.$select;
