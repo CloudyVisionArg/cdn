@@ -680,7 +680,7 @@ async function webRenderPage() {
 
     // Boton Designer
     $btn = $(`<button type="button" class="btn" title="Designer">
-        <i class="bi bi-cloud-moon" aria-hidden="true"></i>
+        <i class="bi bi-tools" aria-hidden="true"></i>
     </button>`).appendTo($cont);
 
     $btn.click(() => {
