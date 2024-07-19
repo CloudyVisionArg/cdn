@@ -1184,7 +1184,7 @@ function loading() {
                     reject($dl);
                 }
                 setTimeout(waiting, 50);
-                
+
             } else {
                 resolve(true);
             }
@@ -1196,7 +1196,6 @@ async function fillControls() {
     let form = await folder.form
     let formDesc = form.description ? form.description : form.name;
     await loading();
-    debugger;
 
     let title;
     if (doc.isNew) {
