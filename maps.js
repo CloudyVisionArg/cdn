@@ -152,8 +152,13 @@ var maps = {
 
         $(el).attr('data-place', value);
         if (el.drs) {
-            // Muestra/oculta el tilde verde
-            el.drs.$tick.css('display', place ? 'block' : 'none');
+            if (inApp) {
+                debugger;
+            
+            } else {
+                // Muestra/oculta el tilde verde
+                el.drs.$tick.css('display', place ? 'block' : 'none');
+            }
 
         } else {
             if (inApp) {
