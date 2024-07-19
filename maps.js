@@ -151,15 +151,19 @@ var maps = {
         }
 
         $(el).attr('data-place', value);
-        if (inApp) {
-            // Cambia globo vacio/lleno
-            $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
+        if (el.drs) {
+            debugger;
         } else {
-            var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
-            $inputVal.val(value);
-            // Muestra/oculta el tilde verde
-            $(el).next('span').css('display', place ? 'block' : 'none');
-        };
+            if (inApp) {
+                // Cambia globo vacio/lleno
+                $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
+            } else {
+                var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
+                $inputVal.val(value);
+                // Muestra/oculta el tilde verde
+                $(el).next('span').css('display', place ? 'block' : 'none');
+            };
+        }
 
         if (!el.initializing) {
             var componentName = {
