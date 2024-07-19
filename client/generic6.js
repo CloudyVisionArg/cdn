@@ -996,9 +996,7 @@ async function renderControls(container, parent) {
 
         } else if (type == 'ATTACHMENTS') {
 
-            options = {
-                label: label,
-            }
+            options = { label };
 
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
                 options.readOnly = true;
@@ -1075,6 +1073,7 @@ async function renderControls(container, parent) {
         } else if (type == 'AUTOCOMPLETE') {
 
             options = {
+                label,
                 multiple: ctl.attr('mode') == '1',
                 folder: await folder.app.folder(ctl.attr('searchfolder')),
                 formula: ctl.attr('searchfilter'),
