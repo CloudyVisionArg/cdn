@@ -151,6 +151,7 @@ var maps = {
         }
 
         $(el).attr('data-place', value);
+        
         if (el.drs) {
             if (inApp) {
                 debugger;
