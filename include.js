@@ -20,6 +20,7 @@ function registeredScripts() {
     */
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
+    scripts.push({ id: 'maps', path: '/maps.js', version: 369 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 369 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 369, hasdep: true });
     scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 369 });
@@ -29,6 +30,7 @@ function registeredScripts() {
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 368, hasdep: true });
     /*
     Por si hay que volver atras
+    scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 351, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 367 });
@@ -62,7 +64,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
     scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
     scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
-    scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
     scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
     scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
     scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
