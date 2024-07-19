@@ -1133,20 +1133,19 @@ async function renderControls(container, parent) {
             - valueField: El objeto Field bindeado con valueField (depende del control)
             */
 
-            /*
-            todo: Ver si hace falta await, lo ideal seria que no, para que
-            la pantalla se dibuje mas rapido.
-            */
-
             // Evento renderControl
             evSrc.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
-            //if (context.return && typeof context.return.then == 'function') await context.return;
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['SCRIPTBEFORERENDER']) {
                 // Copio la funcion evalCode para que se ejecute en este contexto
                 let pipe = {};
                 eval('pipe.fn = ' + evalCode.toString());
                 /* await */ pipe.fn(ctl['SCRIPTBEFORERENDER'], context);
+                /*
+                    todo: Ver si hace falta await, lo ideal seria que no, para que
+                    la pantalla se dibuje mas rapido.
+                */
             }
 
         } catch (err) {
