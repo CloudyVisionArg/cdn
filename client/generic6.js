@@ -1171,21 +1171,23 @@ async function renderControls(container, parent) {
     })
 }
 
-async function loading() {
-    let wt = 0;
-    setTimeout(function waiting() {
-        let $dl = $get('.doors-loading');
-        if ($dl.length > 0) {
-            wt += 100;
-            if (wt == 3000) {
-                console.log('Hay controles tardando demasiado en inicializarse', $dl);
-                debugger; // Para poder ver q corno pasa
+function loading() {
+    return new Promise((resolve, reject) => {
+        let wt = 0;
+        setTimeout(function waiting() {
+            let $dl = $get('.doors-loading');
+            if ($dl.length > 0) {
+                wt += 100;
+                if (wt == 3000) {
+                    console.log('Hay controles tardando demasiado en inicializarse', $dl);
+                    debugger; // Para poder ver q corno pasa
+                    reject($dl);
+                }
+                setTimeout(waiting, 100);
+            } else {
+                resolve(true);
             }
-            setTimeout(waiting, 100);
-        } else {
-            debugger;
-            return true;
-        }
+        });    
     });
 }
 
