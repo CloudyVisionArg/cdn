@@ -710,7 +710,7 @@ async function webRenderPage() {
     });
 
     // Tooltips
-    $('[data-bs-toggle="tooltip"]').each(function (ix) {
+    $get('[data-bs-toggle="tooltip"]').each(function (ix) {
         new bootstrap.Tooltip(this);
     });
     
@@ -1197,7 +1197,7 @@ async function fillControls() {
     if (doc.isNew) {
         title = 'Nuevo ' + formDesc;
 
-        if (!inApp) $('#deleteDoc').hide();
+        if (!inApp) $get('#deleteDoc').hide();
 
     } else {
         title = doc.fields('subject').value;
@@ -1207,7 +1207,7 @@ async function fillControls() {
             title = formDesc + ' #' + doc.id;
         };
 
-        $('#deleteDoc').show();
+        if (!inApp) $get('#deleteDoc').show();
     }
 
     if (inApp) {
@@ -1216,7 +1216,7 @@ async function fillControls() {
 
     } else {
         document.title = title;
-        $('#title').html(title);
+        $get('#title').html(title);
     }
 
     $get('[data-textfield], [data-valuefield], [data-xmlfield]').each(function (ix, el) {
@@ -1602,7 +1602,7 @@ async function saveDoc(exitOnSuccess) {
             if (inApp) {
                 $navbar.find('.right .button').addClass('disabled');
             } else {
-                $('#mainButtons button').attr('disabled','disabled');
+                $get('#mainButtons button').attr('disabled','disabled');
             }
             preldr.show();
         
@@ -1612,7 +1612,7 @@ async function saveDoc(exitOnSuccess) {
             if (inApp) {
                 $navbar.find('.right .button').removeClass('disabled');
             } else {
-                $('#mainButtons button').removeAttr('disabled','disabled');
+                $get('#mainButtons button').removeAttr('disabled','disabled');
             }
             preldr.hide();
         }
