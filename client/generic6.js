@@ -1258,6 +1258,12 @@ async function fillControls() {
             valueField = undefined;
             xmlField = undefined;
 
+        } else if ((textField || valueField) && el.drs && el.drs.control == 'MAPSAUTOCOMPLETE') {
+            debugger;
+            el.drs.value({ text, value });
+            textField = undefined;
+            valueField = undefined;
+
         } else if (textField && el.drs && el.drs.text) {
             el.drs.text(text);
             textField = undefined;
