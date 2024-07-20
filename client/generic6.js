@@ -1684,28 +1684,26 @@ async function evalCode(code, ctx) {
 }
 
 function showDesigner() {
-    $(document).ready(() => {
-        let $h = $('html');
-        $h.attr('data-drs-mode', 'designer');
-        setTimeout(() => {
-            $('.doors-control-container').each((ix, el) => {
-                let $el = $(el);
-                let $lbl = $el.find('a.doors-container-label');
-                if ($lbl.length == 0) {
-                    $lbl = $('<a/>', {
-                        class: 'doors-container-label link-primary',
-                    }).append($el.attr('data-drs-id'));
-                    $el.prepend($lbl);
-                    $lbl.click(labelClick);
-                }
-                let pos = el.getBoundingClientRect();
-                $lbl.css({
-                    top: pos.top + window.scrollY - 10,
-                    left: pos.left + window.scrollX + 10,
-                })
-            });
-        }, 400);
-    });
+    let $h = $('html');
+    $h.attr('data-drs-mode', 'designer');
+    setTimeout(() => {
+        $('.doors-control-container').each((ix, el) => {
+            let $el = $(el);
+            let $lbl = $el.find('a.doors-container-label');
+            if ($lbl.length == 0) {
+                $lbl = $('<a/>', {
+                    class: 'doors-container-label link-primary',
+                }).append($el.attr('data-drs-id'));
+                $el.prepend($lbl);
+                $lbl.click(labelClick);
+            }
+            let pos = el.getBoundingClientRect();
+            $lbl.css({
+                top: pos.top + window.scrollY - 10,
+                left: pos.left + window.scrollX + 10,
+            })
+        });
+    }, 400);
 
     function labelClick() {
         let ctlName = this.text;
