@@ -818,27 +818,25 @@ async function renderControls(container, parent) {
     controls.forEach(el => {
         if (el['XMLATTRIBUTES']) {
             try {
-                let dom = $.parseXML(el['XMLATTRIBUTES']);
-                let dEl = dom.documentElement;
-
+                let dEl = $.parseXML(el['XMLATTRIBUTES']).documentElement;
                 let newAttr = {};
+
                 for (let i = 0; i < dEl.attributes.length; i++) {
                     let attr = dEl.attributes[i];
-                    if (attr.specified) {
+                    if (attr.specified && attr.value != '') {
                         newAttr[attr.name] = attr.value;
                     }
                 }
-                console.log(newAttr);
+                el['XMLATTRIBUTES'] = newAttr;
+
             } catch (err) {
                 console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
             }
         };
         
         el.attr = function (attribute) {
-            if (this.domAttr) return this.domAttr.documentElement.getAttribute(attribute);
+            if (this['XMLATTRIBUTES']) return this['XMLATTRIBUTES'][attribute];
         };
-    
-    
     });
 
 
