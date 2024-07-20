@@ -1749,16 +1749,8 @@ function showDesigner() {
         let ctlDoc = controls.find(el => el['NAME'] == ctlName);
 
         let first = true;
-        let body = '<pre>control = ' + JSON.stringify(ctlDoc, (key, value) => {
-            // Saca elemento nulos
-            if (first) {
-                // El 1ro es el mismo objeto
-                first = false;
-                return value;
-            } else {
-                if (value || value == 0) return value;
-            }
-        }, 2).replaceAll('\\n', '\n') + '</pre>';
+        let body = '<pre>control = ' + JSON.stringify(ctlDoc, getReplacer(), 2)
+            .replaceAll('\\n', '\n') + '</pre>';
 
         let ctl;
         let $cont = $me.closest('.doors-control-container');
@@ -1768,10 +1760,19 @@ function showDesigner() {
             ctl = $cont.find('.doors-control')[0];
         }
 
-        debugger;
         if (ctl && ctl.drs) {
-            first = true;
-            body += '<pre>options = ' + JSON.stringify(ctl.drs.options, (key, value) => {
+            body += '<pre>options = ' + JSON.stringify(ctl.drs.options, getReplacer(), 2)
+                .replaceAll('\\n', '\n') + '</pre>';
+        }
+
+        showModal({
+            title: ctlName,
+            body,
+        });
+
+        function getReplacer() {
+            let first = true;
+            return (key, value => {
                 // Saca elemento nulos
                 if (first) {
                     // El 1ro es el mismo objeto
@@ -1780,13 +1781,8 @@ function showDesigner() {
                 } else {
                     if (value || value == 0) return value;
                 }
-            }, 2).replaceAll('\\n', '\n') + '</pre>';
+            })
         }
-
-        showModal({
-            title: ctlName,
-            body,
-        });
     }
 }
 
