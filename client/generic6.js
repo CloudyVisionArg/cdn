@@ -1756,7 +1756,10 @@ function showModal(options) {
     $modal.find('.modal-title').html(options.title ? options.title : 'Data');
     let $body = $modal.find('.modal-body')
     $body.empty();
-    $body.append('<pre>' + JSON.stringify(options.data, (a,b,c,d) => {debugger}, null, 2).replaceAll('\\n', '\n') + '</pre>');
+    $body.append('<pre>' + JSON.stringify(options.data, (key, value) => {
+        console.log(key, value, this);
+        return value;
+    }, null, 2).replaceAll('\\n', '\n') + '</pre>');
     modal.show();
 
     /*
