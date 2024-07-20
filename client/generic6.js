@@ -1708,6 +1708,7 @@ function showDesigner() {
     });
 
     function labelClick() {
-        debugger;
+        let ctlName = this.text;
+        toast(ctlName);
     }
 }
