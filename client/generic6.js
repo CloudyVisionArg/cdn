@@ -1768,6 +1768,7 @@ function showDesigner() {
             ctl = $cont.find('.doors-control')[0];
         }
 
+        debugger;
         if (ctl && ctl.drs) {
             first = true;
             body += '<pre>options = ' + JSON.stringify(ctl.drs.options, (key, value) => {
