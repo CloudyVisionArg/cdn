@@ -1689,6 +1689,7 @@ function showDesigner() {
         window.scrollTo(0, document.body.scrollHeight);
         $('.doors-control-container').each((ix, el) => {
             let $el = $(el);
+            debugger;
             let $lnk = $('<a />', {
                 class: 'doors-container-label',
                 style: 'position: relative; top: -10px; left: 10px;'
