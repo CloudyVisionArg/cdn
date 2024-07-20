@@ -1687,9 +1687,12 @@ function showDesigner() {
     $(document).ready(() => {
         $('html').attr('data-drs-mode', 'designer');
         window.scrollTo(0, document.body.scrollHeight);
-        debugger;
-        $('.doors-control-container').each((a,b,c) => {
-            debugger;
+        $('.doors-control-container').each((ix, el) => {
+            let $el = $(el);
+            let $lnk = $('<a />', {
+                class: 'doors-container-label',
+            }).append($el.attr('data-drs-id'));
+            $e.prepend($lnk);
         })
     });
 }
