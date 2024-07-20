@@ -684,7 +684,7 @@ async function webRenderPage() {
     </button>`).appendTo($cont);
 
     $btn.click(() => {
-        debugger;
+        $('html').attr('data-drs-mode', 'designer');
     });
 
     // Boton Borrar
