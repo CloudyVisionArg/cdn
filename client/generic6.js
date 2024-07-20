@@ -818,7 +818,8 @@ async function renderControls(container, parent) {
     controls.forEach(el => {
         if (el['XMLATTRIBUTES']) {
             //try {
-                let dEl = $.parseXML(el['XMLATTRIBUTES']).documentElement;
+                let dom = $.parseXML(el['XMLATTRIBUTES']);
+                let dEl = dom.documentElement;
                 let newAttr = {};
 
                 for (let i = 0; i < dEl.attributes.length; i++) {
