@@ -30,7 +30,7 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr;
 var controls, controlsFolder, controlsRights;
-var $page, $navbar, f7Page, pageEl, evSrc, saving, saved;
+var $page, $navbar, f7Page, pageEl, evSrc, saving, saved, modal;
 var generic = 'generic6';
 
 var inApp = typeof window.app7 == 'object';
@@ -731,6 +731,28 @@ async function webRenderPage() {
         new bootstrap.Tooltip(this);
     });
     
+    // Modal
+    let $modal = $(`
+        <div class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Data</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                    ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    `);
+
+    modal = new bootstrap.Modal($modal);
+    debugger;
+
     // Evento afterRender
     let context = {};
     document.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
