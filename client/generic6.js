@@ -1688,6 +1688,7 @@ function showDesigner() {
         $('html').attr('data-drs-mode', 'designer');
         window.scrollTo(0, document.body.scrollHeight);
         setTimeout(() => {
+            debugger;
             $('.doors-control-container').each((ix, el) => {
                 let $el = $(el);
                 let pos = el.getBoundingClientRect();
