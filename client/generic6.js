@@ -1693,7 +1693,7 @@ function showDesigner() {
                 let pos = el.getBoundingClientRect();
                 let $lnk = $('<a />', {
                     class: 'doors-container-label',
-                    style: `position: absolute; top: ${ pos.top + window.scrollY - 15 }px; left: ${ pos.left + window.scrollX + 10 }px;`,
+                    style: `position: absolute; top: ${ pos.top + window.scrollY - 15 }px; left: ${ pos.left + window.scrollX + 5 }px;`,
                 }).append($el.attr('data-drs-id'));
                 $el.prepend($lnk);
             })
