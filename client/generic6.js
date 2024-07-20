@@ -1772,6 +1772,7 @@ function showDesigner() {
 
         function getReplacer() {
             let first = true;
+            
             return (key, value) => {
                 // Saca elemento nulos
                 if (first) {
