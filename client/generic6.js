@@ -819,6 +819,7 @@ async function renderControls(container, parent) {
         if (el['XMLATTRIBUTES']) {
             //try {
                 let dom = $.parseXML(el['XMLATTRIBUTES']);
+                if (!dom) debugger;
                 let dEl = dom.documentElement;
                 let newAttr = {};
 
