@@ -1687,19 +1687,23 @@ function showDesigner() {
     $(document).ready(() => {
         let $h = $('html');
         $h.attr('data-drs-mode', 'designer');
-        if ($h.attr('data-drs-designer') != 'ready') {
-            setTimeout(() => {
-                $('.doors-control-container').each((ix, el) => {
-                    let $el = $(el);
-                    let pos = el.getBoundingClientRect();
-                    let $lnk = $('<a />', {
+        setTimeout(() => {
+            debugger;
+            $('.doors-control-container').each((ix, el) => {
+                let $el = $(el);
+                let $lnk = $el.find('a.doors-container-label');
+                if ($lnk.length == 0) {
+                    $lnk = $('<a/>', {
                         class: 'doors-container-label link-primary',
-                        style: `top: ${ pos.top + window.scrollY - 10 }px; left: ${ pos.left + window.scrollX + 10 }px;`,
                     }).append($el.attr('data-drs-id'));
                     $el.prepend($lnk);
-                });
-                $h.attr('data-drs-designer', 'ready');
-            }, 400);
-        }
+                }
+                let pos = el.getBoundingClientRect();
+                $lnk.css({
+                    top: pos.top + window.scrollY - 10,
+                    left: pos.left + window.scrollX + 10,
+                })
+            });
+        }, 400);
     });
 }
