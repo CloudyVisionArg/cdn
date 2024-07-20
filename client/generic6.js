@@ -738,7 +738,7 @@ async function webRenderPage() {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <p>Modal body text goes here.</p>
@@ -815,6 +815,23 @@ function webGetRow(pRow, pCont, pCol) {
 }
 
 async function renderControls(container, parent) {
+    controls.forEach(el => {
+        if (el['XMLATTRIBUTES']) {
+            try {
+                let dom = $.parseXML(ctl['XMLATTRIBUTES']);
+                debugger;
+            } catch (err) {
+                console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
+            }
+        };
+        ctl.attr = function (attribute) {
+            if (this.domAttr) return this.domAttr.documentElement.getAttribute(attribute);
+        };
+    
+    });
+
+
+
     let subset = controls.filter(el => {
         return el['PARENT'] == parent && el['CONTROL'].toUpperCase() != 'TAB' &&
             el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
@@ -826,17 +843,6 @@ async function renderControls(container, parent) {
     await utils.asyncLoop(subset.length, async loop => {
         let ctl = subset[loop.iteration()];
         let type = ctl['CONTROL'].toUpperCase();
-        if (ctl['XMLATTRIBUTES']) {
-            try {
-                ctl.domAttr = $.parseXML(ctl['XMLATTRIBUTES']);
-            } catch (err) {
-                console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
-            }
-        };
-        ctl.attr = function (attribute) {
-            if (this.domAttr) return this.domAttr.documentElement.getAttribute(attribute);
-        };
-
         let label = ctl['DESCRIPTION'] ? ctl['DESCRIPTION'] : ctl['NAME'];
         
         let control, options, $this, $input, bsctl, f7ctl, tf, textField, vf, valueField, context;
@@ -1726,7 +1732,6 @@ function showDesigner() {
 
     function labelClick() {
         let ctlName = this.text;
-        toast(ctlName);
         let ctl = controls.find(el => el['NAME'] == ctlName);
         showModal({
             title: ctlName,
