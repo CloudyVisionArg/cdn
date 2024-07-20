@@ -1796,7 +1796,7 @@ function showDesigner() {
                         && (key != 'unitheight' || value != 'px'))
                     {
                         if (value.RootFolderPath) {
-                            return value.RootFolderPath;
+                            return value.RootFolderPath + ' (folder)';
                         } else {
                             return value;
                         }
