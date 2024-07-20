@@ -1690,7 +1690,6 @@ function showDesigner() {
         $('.doors-control-container').each((ix, el) => {
             let $el = $(el);
             let pos = el.getBoundingClientRect();
-            debugger;
             let $lnk = $('<a />', {
                 class: 'doors-container-label',
                 style: `position: relative; top: ${ pos.top }px; left: ${ pos.left }px;`,
