@@ -1685,18 +1685,23 @@ async function evalCode(code, ctx) {
 
 function showDesigner() {
     $(document).ready(() => {
-        $('html').attr('data-drs-mode', 'designer');
+        let $h = $('html');
+        $h.attr('data-drs-mode', 'designer');
         window.scrollTo(0, document.body.scrollHeight);
-        setTimeout(() => {
-            $('.doors-control-container').each((ix, el) => {
-                let $el = $(el);
-                let pos = el.getBoundingClientRect();
-                let $lnk = $('<a />', {
-                    class: 'doors-container-label link-primary',
-                    style: `top: ${ pos.top + window.scrollY - 10 }px; left: ${ pos.left + window.scrollX + 10 }px;`,
-                }).append($el.attr('data-drs-id'));
-                $el.prepend($lnk);
-            })
-        }, 500);
+        debugger;
+        if ($h.attr('data-drs-designer') != 'ready') {
+            setTimeout(() => {
+                $('.doors-control-container').each((ix, el) => {
+                    let $el = $(el);
+                    let pos = el.getBoundingClientRect();
+                    let $lnk = $('<a />', {
+                        class: 'doors-container-label link-primary',
+                        style: `top: ${ pos.top + window.scrollY - 10 }px; left: ${ pos.left + window.scrollX + 10 }px;`,
+                    }).append($el.attr('data-drs-id'));
+                    $el.prepend($lnk);
+                });
+                $h.attr('data-drs-designer', 'ready');
+            }, 400);
+        }
     });
 }
