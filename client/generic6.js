@@ -1699,7 +1699,7 @@ function showDesigner() {
                     $el.prepend($lnk);
                 });
                 $h.attr('data-drs-designer', 'ready');
-            }, 40);
+            }, 400);
         }
     });
 }
