@@ -1708,6 +1708,7 @@ function showDesigner() {
     function labelClick() {
         let ctlName = this.text;
         toast(ctlName);
+        let ctl = controls.find(el => el['NAME'] == ctlName);
         debugger;
     }
 }
