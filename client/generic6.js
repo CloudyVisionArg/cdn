@@ -1779,7 +1779,13 @@ function showDesigner() {
                     first = false;
                     return value;
                 } else {
-                    if (value || value == 0) return value;
+                    if (value || value == 0) {
+                        if (value.constructor && value.constructor.name == 'Folder') {
+                            return value.name + ' (folder)';
+                        } else {
+                            return value;
+                        }
+                    }
                 }
             }
         }
