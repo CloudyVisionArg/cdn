@@ -819,7 +819,16 @@ async function renderControls(container, parent) {
         if (el['XMLATTRIBUTES']) {
             try {
                 let dom = $.parseXML(el['XMLATTRIBUTES']);
-                debugger;
+                let dEl = dom.documentElement;
+
+                let newAttr = {};
+                for (let i = 0; i < dEl.attributes.length; i++) {
+                    let attr = dEl.attributes[i];
+                    if (attr.specified) {
+                        newAttr[attr.name] = attr.value;
+                    }
+                }
+                console.log(newAttr);
             } catch (err) {
                 console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
             }
