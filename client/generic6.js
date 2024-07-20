@@ -1691,6 +1691,7 @@ function showDesigner() {
             let $el = $(el);
             let $lnk = $('<a />', {
                 class: 'doors-container-label',
+                style: 'position: fixed; top: -10px; left: -10px;'
             }).append($el.attr('data-drs-id'));
             $el.prepend($lnk);
         })
