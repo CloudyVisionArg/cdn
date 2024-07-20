@@ -1766,9 +1766,15 @@ function showDesigner() {
                 .replaceAll('\\n', '\n') + '</pre>';
         }
 
+        let url = `/c/forms/designer.asp?doc_id=${ ctlDoc['DOC_ID'] }&action=open&closeonexit=1&fld_id=`;
+        if (hubControls) {
+            url = 'https://servicehub.cloudycrm.net' + url + hubControls.folder;
+        } else {
+            url += controlsFolder.id;
+        }
+
         showModal({
-            //https://servicehub.cloudycrm.net/c/forms/designer.asp?doc_id=130&fld_id=1007&backtofld=1007&action=open&closeonexit=1
-            title: ctlName,
+            title: `<a href="${ url }"target="_blank">${ ctlName }</a>`,
             body,
         });
 
