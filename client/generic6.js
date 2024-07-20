@@ -719,6 +719,7 @@ async function webRenderPage() {
         } else {
             localStorage.setItem('designer', '1');
             showDesigner();
+            window.scrollTo(0, document.body.scrollHeight);
         }
 
     });
