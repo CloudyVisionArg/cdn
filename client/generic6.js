@@ -170,10 +170,11 @@ async function loadControls() {
                     if (this['XMLATTRIBUTES']) return this['XMLATTRIBUTES'][attribute];
                 };
             });
+
+            // Levanta permisos
+            getControlsRights(controls);
         }
     
-        if (controls) getControlsRights(controls);
-
     } catch(err) {
         console.error(err);
     }
@@ -1755,7 +1756,7 @@ function showModal(options) {
     $modal.find('.modal-title').html(options.title ? options.title : 'Data');
     let $body = $modal.find('.modal-body')
     $body.empty();
-    $body.append('<pre>' + JSON.stringify(options.data, null, 2).replaceAll('\\n', '\n') + '</pre>');
+    $body.append('<pre>' + JSON.stringify(options.data, (a,b,c,d) => {debugger}, null, 2).replaceAll('\\n', '\n') + '</pre>');
     modal.show();
 
     /*
