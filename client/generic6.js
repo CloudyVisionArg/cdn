@@ -1772,6 +1772,7 @@ function showDesigner() {
 
         function getReplacer() {
             let first = true;
+            let exclude = ['DOC_ID', 'FRM_ID', 'FLD_ID', 'ACC_ID', 'CREATED', 'MODIFIED', 'ACCESSED', 'INHERITS', 'ATTACHMENTS'];
 
             return (key, value) => {
                 // Saca elemento nulos
@@ -1780,7 +1781,7 @@ function showDesigner() {
                     first = false;
                     return value;
                 } else {
-                    if (value || value == 0) {
+                    if (exclude.indexOf(key) < 0 && (value || value == 0)) {
                         if (value.RootFolderPath) {
                             return value.RootFolderPath;
                         } else {
