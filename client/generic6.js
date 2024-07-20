@@ -29,7 +29,7 @@ CKEditor: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html
 
 var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr;
-var controls, controlsFolder, controlsRights;
+var controls, controlsFolder, controlsRights, hubControls;
 var $page, $navbar, f7Page, pageEl, evSrc, saving, saved, modal;
 var generic = 'generic6';
 
@@ -142,7 +142,8 @@ async function loadControls() {
             controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
         } else {
             // Hub
-            controls = await modControls6.controlsHub(folder);
+            hubControls = await modControls6.controlsHub(folder);
+            if (hubControls) controls = hubControls.controls;
         }
         
         if (controls) {
@@ -373,7 +374,7 @@ async function appRenderPage() {
 
         try {
             // BeforeRender del hub
-            if (controls.beforeRender) await evalCode(controls.beforeRender);
+            if (hubControls && hubControls.beforeRender) await evalCode(hubControls.beforeRender);
 
             // Control Event BeforeRender
             let ev = getEvent('BeforeRender');
@@ -625,7 +626,7 @@ async function webRenderPage() {
 
         try {
             // BeforeRender del hub
-            if (controls.beforeRender) await evalCode(controls.beforeRender);
+            if (hubControls && hubControls.beforeRender) await evalCode(hubControls.beforeRender);
 
             // Control Event BeforeRender
             let ev = getEvent('BeforeRender');
