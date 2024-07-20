@@ -1772,7 +1772,7 @@ function showDesigner() {
 
         function getReplacer() {
             let first = true;
-            let exclude = ['DOC_ID', 'FRM_ID', 'FLD_ID', 'ACC_ID', 'CREATED', 'MODIFIED', 'ACCESSED', 'INHERITS', 'ATTACHMENTS'];
+            let exclude = ['FRM_ID', 'FLD_ID', 'ACC_ID', 'CREATED', 'ACCESSED', 'INHERITS', 'ATTACHMENTS'];
 
             return (key, value) => {
                 // Saca elemento nulos
