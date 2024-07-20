@@ -1734,14 +1734,13 @@ function showDesigner() {
             title: ctlName,
             data: ctl,
         });
-        toast(JSON.stringify(ctl, null, 2));
     }
 }
 
 function showModal(options) {
     let $modal = $(modal._element);
     $modal.find('.modal-title').html(options.title ? options.title : 'Data');
-    $body = $modal.find('.modal-body')
+    let $body = $modal.find('.modal-body')
     $body.empty();
     $body.append('<pre>' + JSON.stringify(options.data, null, 2).replaceAll('\\n', '\n') + '</pre>');
     modal.show();
