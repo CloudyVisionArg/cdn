@@ -1687,14 +1687,16 @@ function showDesigner() {
     $(document).ready(() => {
         $('html').attr('data-drs-mode', 'designer');
         window.scrollTo(0, document.body.scrollHeight);
-        $('.doors-control-container').each((ix, el) => {
-            let $el = $(el);
-            let pos = el.getBoundingClientRect();
-            let $lnk = $('<a />', {
-                class: 'doors-container-label',
-                style: `position: absolute; top: ${ pos.top + 30 }px; left: ${ pos.left }px;`,
-            }).append($el.attr('data-drs-id'));
-            $el.prepend($lnk);
-        })
+        setTimeout(() => {
+            $('.doors-control-container').each((ix, el) => {
+                let $el = $(el);
+                let pos = el.getBoundingClientRect();
+                let $lnk = $('<a />', {
+                    class: 'doors-container-label',
+                    style: `position: absolute; top: ${ pos.top + 30 }px; left: ${ pos.left }px;`,
+                }).append($el.attr('data-drs-id'));
+                $el.prepend($lnk);
+            })
+        }, 1000);
     });
 }
