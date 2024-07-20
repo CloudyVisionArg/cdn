@@ -55,6 +55,9 @@ var inApp = typeof window.app7 == 'object';
         // dark-mode
         $('html').attr('data-bs-theme', localStorage.getItem('dark-mode') == '1' ? 'dark' : 'light');
 
+        // designer
+        $('html').attr('data-drs-mode', localStorage.getItem('designer') == '1' ? 'designer' : 'runtime');
+
         preldr = preloader;
         preldr.show();
 
@@ -684,7 +687,15 @@ async function webRenderPage() {
     </button>`).appendTo($cont);
 
     $btn.click(() => {
-        $('html').attr('data-drs-mode', 'designer');
+        let ls = localStorage.getItem('designer');
+        if (ls == '1') {
+            $('html').attr('data-drs-mode', 'runtime');
+            localStorage.setItem('designer', 0);
+        } else {
+            $('html').attr('data-drs-mode', 'designer');
+            localStorage.setItem('designer', 1);
+        }
+
     });
 
     // Boton Borrar
