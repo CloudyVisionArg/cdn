@@ -1697,6 +1697,6 @@ function showDesigner() {
                 }).append($el.attr('data-drs-id'));
                 $el.prepend($lnk);
             })
-        }, 1000);
+        }, 0);
     });
 }
