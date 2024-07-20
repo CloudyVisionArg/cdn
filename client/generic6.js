@@ -1781,7 +1781,11 @@ function showDesigner() {
                     first = false;
                     return value;
                 } else {
-                    if (exclude.indexOf(key) < 0 && (value || value == 0)) {
+                    if (exclude.indexOf(key) < 0
+                        && (value || value == 0)
+                        && (key != 'unitwidth' || value != 'px')
+                        && (key != 'unitheight' || value != 'px'))
+                    {
                         if (value.RootFolderPath) {
                             return value.RootFolderPath;
                         } else {
