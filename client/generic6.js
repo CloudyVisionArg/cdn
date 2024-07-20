@@ -1760,6 +1760,7 @@ function showDesigner() {
             }
         }, 2).replaceAll('\\n', '\n') + '</pre>';
 
+        debugger;
         let ctl = $me.closest('.doors-control-container').find('doors-control')[0];
 
         if (ctl && ctl.drs) {
