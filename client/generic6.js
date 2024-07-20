@@ -1730,6 +1730,10 @@ function showDesigner() {
         let ctlName = this.text;
         toast(ctlName);
         let ctl = controls.find(el => el['NAME'] == ctlName);
+        showModal({
+            title: ctlName,
+            data: ctl,
+        });
         toast(JSON.stringify(ctl, null, 2));
     }
 }
