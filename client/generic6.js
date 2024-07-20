@@ -1709,6 +1709,6 @@ function showDesigner() {
         let ctlName = this.text;
         toast(ctlName);
         let ctl = controls.find(el => el['NAME'] == ctlName);
-        debugger;
+        toast(JSON.stringify(ctl, null, 2));
     }
 }
