@@ -791,7 +791,7 @@ async function webRenderPage() {
     if (ev) await evalCode(ev);
 
     // designer
-    if (localStorage.getItem('designer') == '1') {
+    if (controls && localStorage.getItem('designer') == '1') {
         showDesigner();
     } else {
         $('html').attr('data-drs-mode', 'runtime');
