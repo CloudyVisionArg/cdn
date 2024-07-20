@@ -707,23 +707,24 @@ async function webRenderPage() {
         }
     });
 
-    // Boton Designer
-    $btn = $(`<button type="button" class="btn" title="Designer">
-        <i class="bi bi-tools" aria-hidden="true"></i>
-    </button>`).appendTo($cont);
+    if (controls) {
+        // Boton Designer
+        $btn = $(`<button type="button" class="btn" title="Designer">
+            <i class="bi bi-tools" aria-hidden="true"></i>
+        </button>`).appendTo($cont);
 
-    $btn.click(() => {
-        let ls = localStorage.getItem('designer');
-        if (ls == '1') {
-            localStorage.setItem('designer', '0');
-            $('html').attr('data-drs-mode', 'runtime');
-        } else {
-            localStorage.setItem('designer', '1');
-            showDesigner();
-            window.scrollTo(0, document.body.scrollHeight);
-        }
-
-    });
+        $btn.click(() => {
+            let ls = localStorage.getItem('designer');
+            if (ls == '1') {
+                localStorage.setItem('designer', '0');
+                $('html').attr('data-drs-mode', 'runtime');
+            } else {
+                localStorage.setItem('designer', '1');
+                showDesigner();
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        });
+    }
 
     // Boton Borrar
     let $delBtn = $('<button/>', {
