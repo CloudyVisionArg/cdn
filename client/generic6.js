@@ -1687,7 +1687,6 @@ function showDesigner() {
     $(document).ready(() => {
         let $h = $('html');
         $h.attr('data-drs-mode', 'designer');
-        debugger;
         if ($h.attr('data-drs-designer') != 'ready') {
             setTimeout(() => {
                 $('.doors-control-container').each((ix, el) => {
@@ -1700,7 +1699,7 @@ function showDesigner() {
                     $el.prepend($lnk);
                 });
                 $h.attr('data-drs-designer', 'ready');
-            }, 400);
+            }, 40);
         }
     });
 }
