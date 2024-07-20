@@ -1780,7 +1780,6 @@ function showDesigner() {
                     first = false;
                     return value;
                 } else {
-                    if (key == 'source') debugger;
                     if (value || value == 0) {
                         if (value.RootFolderPath) {
                             return value.RootFolderPath;
