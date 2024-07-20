@@ -1781,7 +1781,7 @@ function showDesigner() {
                 } else {
                     if (value || value == 0) return value;
                 }
-            })
+            }
         }
     }
 }
