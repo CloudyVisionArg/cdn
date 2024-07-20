@@ -1688,7 +1688,6 @@ function showDesigner() {
         let $h = $('html');
         $h.attr('data-drs-mode', 'designer');
         setTimeout(() => {
-            debugger;
             $('.doors-control-container').each((ix, el) => {
                 let $el = $(el);
                 let $lnk = $el.find('a.doors-container-label');
