@@ -817,11 +817,8 @@ function webGetRow(pRow, pCont, pCol) {
 async function renderControls(container, parent) {
     controls.forEach(el => {
         if (el['XMLATTRIBUTES']) {
-            //try {
-                let dom = $.parseXML(el['XMLATTRIBUTES']);
-                if (!dom) debugger;
-                
-                let dEl = dom.documentElement;
+            try {
+                let dEl = $.parseXML(el['XMLATTRIBUTES']).documentElement;
                 let newAttr = {};
 
                 for (let i = 0; i < dEl.attributes.length; i++) {
@@ -832,9 +829,9 @@ async function renderControls(container, parent) {
                 }
                 el['XMLATTRIBUTES'] = newAttr;
 
-            //} catch (err) {
-            //    console.log('Error parsing ' + el['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
-            //}
+            } catch (err) {
+                console.log('Error parsing ' + el['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
+            }
         };
         
         el.attr = function (attribute) {
