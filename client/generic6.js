@@ -1772,7 +1772,7 @@ function showDesigner() {
 
         function getReplacer() {
             let first = true;
-            
+
             return (key, value) => {
                 // Saca elemento nulos
                 if (first) {
@@ -1780,6 +1780,7 @@ function showDesigner() {
                     first = false;
                     return value;
                 } else {
+                    if (key == 'source') debugger;
                     if (value || value == 0) {
                         if (value.constructor && value.constructor.name == 'Folder') {
                             return value.name + ' (folder)';
