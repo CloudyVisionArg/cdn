@@ -1782,8 +1782,8 @@ function showDesigner() {
                 } else {
                     if (key == 'source') debugger;
                     if (value || value == 0) {
-                        if (value.RootFolderId) {
-                            return value.name + ' (folder)';
+                        if (value.RootFolderPath) {
+                            return value.RootFolderPath;
                         } else {
                             return value;
                         }
