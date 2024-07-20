@@ -1708,5 +1708,6 @@ function showDesigner() {
     function labelClick() {
         let ctlName = this.text;
         toast(ctlName);
+        debugger;
     }
 }
