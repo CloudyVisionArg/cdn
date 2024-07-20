@@ -1687,7 +1687,6 @@ function showDesigner() {
     $(document).ready(() => {
         let $h = $('html');
         $h.attr('data-drs-mode', 'designer');
-        window.scrollTo(0, document.body.scrollHeight);
         debugger;
         if ($h.attr('data-drs-designer') != 'ready') {
             setTimeout(() => {
