@@ -1743,11 +1743,42 @@ function showDesigner() {
     }, 400);
 
     function labelClick() {
-        let ctlName = this.text;
-        let ctl = controls.find(el => el['NAME'] == ctlName);
+        let me = this;
+        let $me = $(me);
+        let ctlName = me.text;
+        let ctlDoc = controls.find(el => el['NAME'] == ctlName);
+
+        let first = true;
+        let body = '<pre>control = ' + JSON.stringify(ctlDoc, (key, value) => {
+            // Saca elemento nulos
+            if (first) {
+                // El 1ro es el mismo objeto
+                first = false;
+                return value;
+            } else {
+                if (value || value == 0) return value;
+            }
+        }, 2).replaceAll('\\n', '\n') + '</pre>';
+
+        let ctl = $me.closest('.doors-control-container').find('doors-control')[0];
+
+        if (ctl && ctl.drs) {
+            first = true;
+            body += '<pre>options = ' + JSON.stringify(ctl.drs.options, (key, value) => {
+                // Saca elemento nulos
+                if (first) {
+                    // El 1ro es el mismo objeto
+                    first = false;
+                    return value;
+                } else {
+                    if (value || value == 0) return value;
+                }
+            }, 2).replaceAll('\\n', '\n') + '</pre>';
+        }
+
         showModal({
             title: ctlName,
-            data: ctl,
+            body,
         });
     }
 }
@@ -1757,24 +1788,6 @@ function showModal(options) {
     $modal.find('.modal-title').html(options.title ? options.title : 'Data');
     let $body = $modal.find('.modal-body')
     $body.empty();
-    let first = true;
-    $body.append('<pre>' + JSON.stringify(options.data, (key, value) => {
-        // Saca elemento nulos
-        if (first) {
-            // El 1ro es el mismo objeto
-            first = false;
-            return value;
-        } else {
-            if (value || value == 0) return value;
-        }
-    }, 2).replaceAll('\\n', '\n') + '</pre>');
+    $body.append(options.body);
     modal.show();
-
-    /*
-    arrData.forEach(el => {
-        obj = undefined;
-        try { obj = JSON.parse(el); } catch(er) {};
-        $('.modal-body').append('<pre>' + (obj ? JSON.stringify(obj, null, 2).replaceAll('\\n', '\n') : he(el)) + '</pre>');
-    });
-    */
 }
