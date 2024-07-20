@@ -1782,7 +1782,7 @@ function showDesigner() {
                 } else {
                     if (key == 'source') debugger;
                     if (value || value == 0) {
-                        if (value.constructor && value.constructor.name == 'Folder') {
+                        if (value.RootFolderId) {
                             return value.name + ' (folder)';
                         } else {
                             return value;
