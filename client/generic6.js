@@ -1682,5 +1682,6 @@ async function evalCode(code, ctx) {
 }
 
 function showDesigner() {
+    debugger;
     $('html').attr('data-drs-mode', 'designer');
 }
