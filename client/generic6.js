@@ -1684,10 +1684,12 @@ async function evalCode(code, ctx) {
 }
 
 function showDesigner() {
-    $('html').attr('data-drs-mode', 'designer');
-    window.scrollTo(0, document.body.scrollHeight);
-    debugger;
-    $('.doors-control-container').each((a,b,c) => {
+    $(document).ready(() => {
+        $('html').attr('data-drs-mode', 'designer');
+        window.scrollTo(0, document.body.scrollHeight);
         debugger;
-    })
+        $('.doors-control-container').each((a,b,c) => {
+            debugger;
+        })
+    });
 }
