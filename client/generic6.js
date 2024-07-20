@@ -55,13 +55,6 @@ var inApp = typeof window.app7 == 'object';
         // dark-mode
         $('html').attr('data-bs-theme', localStorage.getItem('dark-mode') == '1' ? 'dark' : 'light');
 
-        // designer
-        if (localStorage.getItem('designer') == '1') {
-            showDesigner();
-        } else {
-            $('html').attr('data-drs-mode', 'runtime');
-        }
-
         preldr = preloader;
         preldr.show();
 
@@ -747,6 +740,13 @@ async function webRenderPage() {
     let ev = getEvent('AfterRender');
     if (ev) await evalCode(ev);
 
+    // designer
+    if (localStorage.getItem('designer') == '1') {
+        showDesigner();
+    } else {
+        $('html').attr('data-drs-mode', 'runtime');
+    }
+        
     await fillControls();
     preldr.hide();
 }
