@@ -1692,7 +1692,7 @@ function showDesigner() {
             let $lnk = $('<a />', {
                 class: 'doors-container-label',
             }).append($el.attr('data-drs-id'));
-            $e.prepend($lnk);
+            $el.prepend($lnk);
         })
     });
 }
