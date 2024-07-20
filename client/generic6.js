@@ -1689,10 +1689,11 @@ function showDesigner() {
         window.scrollTo(0, document.body.scrollHeight);
         $('.doors-control-container').each((ix, el) => {
             let $el = $(el);
+            let pos = el.getBoundingClientRect();
             debugger;
             let $lnk = $('<a />', {
                 class: 'doors-container-label',
-                style: 'position: relative; top: -10px; left: 10px;'
+                style: `position: relative; top: ${ pos.top }px; left: ${ pos.left }px;`,
             }).append($el.attr('data-drs-id'));
             $el.prepend($lnk);
         })
