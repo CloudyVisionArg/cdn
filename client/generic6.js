@@ -751,7 +751,6 @@ async function webRenderPage() {
     `);
 
     modal = new bootstrap.Modal($modal);
-    debugger;
 
     // Evento afterRender
     let context = {};
@@ -1733,4 +1732,21 @@ function showDesigner() {
         let ctl = controls.find(el => el['NAME'] == ctlName);
         toast(JSON.stringify(ctl, null, 2));
     }
+}
+
+function showModal(options) {
+    let $modal = $(modal._element);
+    $modal.find('.modal-title').html(options.title ? options.title : 'Data');
+    $body = $modal.find('.modal-body')
+    $body.empty();
+    $body.append('<pre>' + JSON.stringify(options.data, null, 2).replaceAll('\\n', '\n') + '</pre>');
+    modal.show();
+
+    /*
+    arrData.forEach(el => {
+        obj = undefined;
+        try { obj = JSON.parse(el); } catch(er) {};
+        $('.modal-body').append('<pre>' + (obj ? JSON.stringify(obj, null, 2).replaceAll('\\n', '\n') : he(el)) + '</pre>');
+    });
+    */
 }
