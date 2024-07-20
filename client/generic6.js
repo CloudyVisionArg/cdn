@@ -824,9 +824,11 @@ async function renderControls(container, parent) {
                 console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
             }
         };
-        ctl.attr = function (attribute) {
+        
+        el.attr = function (attribute) {
             if (this.domAttr) return this.domAttr.documentElement.getAttribute(attribute);
         };
+    
     
     });
 
