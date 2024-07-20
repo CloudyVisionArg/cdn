@@ -818,7 +818,7 @@ async function renderControls(container, parent) {
     controls.forEach(el => {
         if (el['XMLATTRIBUTES']) {
             try {
-                let dom = $.parseXML(ctl['XMLATTRIBUTES']);
+                let dom = $.parseXML(el['XMLATTRIBUTES']);
                 debugger;
             } catch (err) {
                 console.log('Error parsing ' + ctl['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
