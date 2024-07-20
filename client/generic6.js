@@ -693,8 +693,10 @@ async function webRenderPage() {
     $btn.click(() => {
         let ls = localStorage.getItem('designer');
         if (ls == '1') {
+            localStorage.setItem('designer', '0');
             $('html').attr('data-drs-mode', 'runtime');
         } else {
+            localStorage.setItem('designer', '1');
             showDesigner();
         }
 
@@ -1682,6 +1684,5 @@ async function evalCode(code, ctx) {
 }
 
 function showDesigner() {
-    debugger;
     $('html').attr('data-drs-mode', 'designer');
 }
