@@ -1772,7 +1772,7 @@ function showDesigner() {
 
         function getReplacer() {
             let first = true;
-            return (key, value => {
+            return (key, value) => {
                 // Saca elemento nulos
                 if (first) {
                     // El 1ro es el mismo objeto
