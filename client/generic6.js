@@ -1688,13 +1688,12 @@ function showDesigner() {
         $('html').attr('data-drs-mode', 'designer');
         window.scrollTo(0, document.body.scrollHeight);
         setTimeout(() => {
-            debugger;
             $('.doors-control-container').each((ix, el) => {
                 let $el = $(el);
                 let pos = el.getBoundingClientRect();
                 let $lnk = $('<a />', {
                     class: 'doors-container-label',
-                    style: `position: absolute; top: ${ pos.top + window.scrollY - 10 }px; left: ${ pos.left + window.scrollX }px;`,
+                    style: `position: absolute; top: ${ pos.top + window.scrollY - 15 }px; left: ${ pos.left + window.scrollX }px;`,
                 }).append($el.attr('data-drs-id'));
                 $el.prepend($lnk);
             })
