@@ -1756,10 +1756,17 @@ function showModal(options) {
     $modal.find('.modal-title').html(options.title ? options.title : 'Data');
     let $body = $modal.find('.modal-body')
     $body.empty();
+    let first = true;
     $body.append('<pre>' + JSON.stringify(options.data, (key, value) => {
-        console.log(key, value, this);
-        return value;
-    }, null, 2).replaceAll('\\n', '\n') + '</pre>');
+        // Saca elemento nulos
+        if (first) {
+            // El 1ro es el mismo objeto
+            first = false;
+            return value;
+        } else {
+            if (value || value == 0) return value;
+        }
+    }, 2).replaceAll('\\n', '\n') + '</pre>');
     modal.show();
 
     /*
