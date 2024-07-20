@@ -1774,7 +1774,7 @@ function showDesigner() {
         }
 
         showModal({
-            title: `<a href="${ url }"target="_blank">${ ctlName }</a>`,
+            title: `<a href="${ url }"target="_blank">${ ctlName } (${ ctlDoc['CONTROL'] })</a>`,
             body,
         });
 
