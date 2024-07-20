@@ -145,6 +145,33 @@ async function loadControls() {
             controls = await modControls6.controlsHub(folder);
         }
         
+        if (controls) {
+            // Parsea como objeto XMLATTRIBUTES
+            controls.forEach(el => {
+                if (el['XMLATTRIBUTES']) {
+                    try {
+                        let dEl = $.parseXML(el['XMLATTRIBUTES']).documentElement;
+                        let newAttr = {};
+        
+                        for (let i = 0; i < dEl.attributes.length; i++) {
+                            let attr = dEl.attributes[i];
+                            if (attr.specified && attr.value != '') {
+                                newAttr[attr.name] = attr.value;
+                            }
+                        }
+                        el['XMLATTRIBUTES'] = newAttr;
+        
+                    } catch (err) {
+                        console.log('Error parsing ' + el['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
+                    }
+                };
+                
+                el.attr = function (attribute) {
+                    if (this['XMLATTRIBUTES']) return this['XMLATTRIBUTES'][attribute];
+                };
+            });
+        }
+    
         if (controls) getControlsRights(controls);
 
     } catch(err) {
@@ -815,32 +842,6 @@ function webGetRow(pRow, pCont, pCol) {
 }
 
 async function renderControls(container, parent) {
-    controls.forEach(el => {
-        if (el['XMLATTRIBUTES']) {
-            try {
-                let dEl = $.parseXML(el['XMLATTRIBUTES']).documentElement;
-                let newAttr = {};
-
-                for (let i = 0; i < dEl.attributes.length; i++) {
-                    let attr = dEl.attributes[i];
-                    if (attr.specified && attr.value != '') {
-                        newAttr[attr.name] = attr.value;
-                    }
-                }
-                el['XMLATTRIBUTES'] = newAttr;
-
-            } catch (err) {
-                console.log('Error parsing ' + el['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
-            }
-        };
-        
-        el.attr = function (attribute) {
-            if (this['XMLATTRIBUTES']) return this['XMLATTRIBUTES'][attribute];
-        };
-    });
-
-
-
     let subset = controls.filter(el => {
         return el['PARENT'] == parent && el['CONTROL'].toUpperCase() != 'TAB' &&
             el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
