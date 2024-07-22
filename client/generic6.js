@@ -1781,7 +1781,7 @@ function showDesigner() {
 
         function getReplacer() {
             let first = true;
-            let exclude = ['FRM_ID', 'FLD_ID', 'ACC_ID', 'CREATED', 'ACCESSED', 'INHERITS', 'ATTACHMENTS'];
+            let exclude = ['FRM_ID', 'FLD_ID', 'ACC_ID', 'CREATED', 'ACCESSED', 'INHERITS', 'ATTACHMENTS', 'CONTROLTYPE'];
 
             return (key, value) => {
                 // Saca elemento nulos
@@ -1808,6 +1808,7 @@ function showDesigner() {
 }
 
 function showModal(options) {
+    //todo: app
     let $modal = $(modal._element);
     $modal.find('.modal-title').html(options.title ? options.title : 'Data');
     let $body = $modal.find('.modal-body')
