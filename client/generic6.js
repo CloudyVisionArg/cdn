@@ -76,7 +76,6 @@ var inApp = typeof window.app7 == 'object';
     }
 
     if (fld_id) {
-        debugger;
         try {
             folder = await dSession.folder(fld_id);
 
