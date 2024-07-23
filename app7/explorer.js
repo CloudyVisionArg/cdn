@@ -181,6 +181,7 @@ dSession.foldersGetFromId(fld_id).then(
                         var prop = findProp(folder.UserProperties, propEditPage);
                         if (prop == undefined) prop = findProp(folder.Properties, propEditPage);
                         if (prop == undefined) prop = findProp(folder.Form.Properties, propEditPage);
+                        debugger;
                         if (prop) {
                             prop += (prop.indexOf('?') >= 0 ? '&' : '?');
                             if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
