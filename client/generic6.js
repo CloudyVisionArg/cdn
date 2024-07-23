@@ -76,6 +76,7 @@ var inApp = typeof window.app7 == 'object';
     }
 
     if (fld_id) {
+        debugger;
         try {
             folder = await dSession.folder(fld_id);
 
@@ -1750,7 +1751,6 @@ function showDesigner() {
         let ctlName = me.text;
         let ctlDoc = controls.find(el => el['NAME'] == ctlName);
 
-        let first = true;
         let body = '<pre>control = ' + JSON.stringify(ctlDoc, getReplacer(), 2)
             .replaceAll('\\n', '\n') + '</pre>';
 
@@ -1784,7 +1784,7 @@ function showDesigner() {
             let exclude = ['FRM_ID', 'FLD_ID', 'ACC_ID', 'CREATED', 'ACCESSED', 'INHERITS', 'ATTACHMENTS', 'CONTROLTYPE'];
 
             return (key, value) => {
-                // Saca elemento nulos
+                // Saca elementos nulos
                 if (first) {
                     // El 1ro es el mismo objeto
                     first = false;

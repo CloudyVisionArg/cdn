@@ -3,6 +3,8 @@ todo:
 - Enviar media
 */
 
+var inApp = typeof app7 == 'object';
+
 (function () {
 	include('whatsapp-css');
 	include('jslib');
@@ -10,7 +12,7 @@ todo:
 
 	var root = document.documentElement;
 
-	if (typeof(cordova) == 'object') {
+	if (inApp) {
 		// App
 		root.style.setProperty('--wapp-chat-horizontal-margin', '20px');
 		root.style.setProperty('--wapp-chat-vertical-margin', '10px');
@@ -29,7 +31,7 @@ $(document).ready(function () {
 		function (res) {
 			wapp.rootFolder = res;
 			
-			if (typeof(cordova) == 'object') {
+			if (inApp) {
 				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
 			} else {
 				wapp.codelibUrl = '/c/codelibapi.asp';
@@ -39,7 +41,7 @@ $(document).ready(function () {
 				function (fld) {
 					wapp.messagesFolder = fld.FldId;
 	
-					if (typeof(cordova) != 'object') {
+					if (!inApp) {
 						// Carga inicial
 						$('div.wapp-chat').each(function () {
 							wapp.init($(this));
@@ -86,7 +88,7 @@ $(document).ready(function () {
 		}
 	);
 
-	if (typeof(cordova) != 'object') {
+	if (!inApp) {
 		// El DIV para mostrar imagenes fullScreen
 		$(document.body).append(`
 			<div class="modal fade" id="wappModal" tabindex="-1" role="dialog">
@@ -130,7 +132,7 @@ var wapp = {
 	s3: undefined,
 
 	cursorLoading: function(pLoading) {
-		if (typeof(cordova) == 'object') {
+		if (inApp) {
 			if (pLoading) {
 				app7.preloader.show();
 			} else {
@@ -153,7 +155,7 @@ var wapp = {
 	},
 
 	checkSession: function (pCallback) {
-		if (typeof(cordova) == 'object') {
+		if (inApp) {
 			if (app7.online) {
 				dSession.checkToken(pCallback);
 			}
@@ -163,7 +165,7 @@ var wapp = {
 	},
 
 	viewImage: function (e) {
-		if (typeof(cordova) == 'object') {
+		if (inApp) {
 			var popup = getPopup();
 			var $cont = popup.$el.find('.page-content .block');
 
@@ -250,8 +252,8 @@ var wapp = {
 			}).appendTo($reply);
 
 			var $media;
-			if (typeof(cordova) != 'object') {
-				// Web
+			if (!inApp) {
+				// WEB
 
 				var $dropup = $('<div/>', {
 					class: 'dropup',
@@ -318,7 +320,7 @@ var wapp = {
 				$('<a/>').append('Cancelar').appendTo($li);
 
 			} else {
-				// Cordova
+				// APP
 
 				$media = $('<i/>', {
 					class: 'f7-icons',
@@ -414,7 +416,7 @@ var wapp = {
 			}
 
 			// Boton Emoji
-			if (typeof(cordova) != 'object') {
+			if (!inApp) {
 				var $div = $('<div/>', {
 					class: 'wapp-button',
 					style: 'width: 10%',
@@ -434,7 +436,7 @@ var wapp = {
 			
 			// Input
 			var $div = $('<div/>', {
-				style: 'width: ' + (typeof(cordova) == 'object' ? '80%' : '70%') + 
+				style: 'width: ' + (inApp ? '80%' : '70%') + 
 					'; padding-left: 5px; padding-right: 5px;',
 			}).appendTo($reply);
 			
@@ -447,7 +449,7 @@ var wapp = {
 			$input.keydown(function (e) { wapp.inputKeyDown(this, e); });
 
 			// Emoji picker
-			if (typeof(cordova) != 'object') {
+			if (!inApp) {
 				$('#script_emojis')[0].loaded(function () {
 					emojis.createPicker({
 						el: $emoji,
@@ -463,7 +465,7 @@ var wapp = {
 			}).appendTo($reply);
 			
 			var $send;
-			if (typeof(cordova) != 'object') {
+			if (!inApp) {
 				$send = $('<i/>', {
 					class: 'fa fa-send',
 				}).appendTo($div);
@@ -678,7 +680,7 @@ var wapp = {
 				var $div = $('<div/>').appendTo($msgText);
 
 				var key;
-				if (typeof(cordova) == 'object') {
+				if (inApp) {
 					/*
 					todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
 					https://developers.google.com/maps/documentation/javascript/get-api-key
@@ -699,7 +701,7 @@ var wapp = {
 
 				$img.click(function () {
 					var url = 'https://www.google.com/maps/place/' + $(this).attr('data-lat') + ',' + $(this).attr('data-lng');
-					if (typeof(cordova) == 'object') {
+					if (inApp) {
 						cordova.InAppBrowser.open(url, '_system');
 					} else {
 						window.open(url);
@@ -788,19 +790,19 @@ var wapp = {
 		} else if (pStatus == 'sent') {
 			return '<span class="wapp-message-status">' + tick + '</span>';
 		} else if (pStatus == 'queued') {
-			if (typeof(cordova) == 'object') {
+			if (inApp) {
 				return '<i class="f7-icons" style="font-size: 13px;">clock</i>';
 			} else {
 				return '<i class="fa fa-clock-o" />';
 			}
 		} else if (pStatus == 'undelivered') {
-			if (typeof(cordova) == 'object') {
+			if (inApp) {
 				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>';
 			} else {
 				return '<i class="fa fa-exclamation-circle" />';
 			}
 		} else if (pStatus == 'failed') {
-			if (typeof(cordova) == 'object') {
+			if (inApp) {
 				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>';
 			} else {
 				return '<i class="fa fa-exclamation-triangle" />';
@@ -952,7 +954,7 @@ var wapp = {
 	// Enter manda, shift enter nueva linea
 	inputKeyDown: function (el, ev) {
 		var keyCode = ev.which || ev.keyCode;
-		if (keyCode == 13 && !ev.shiftKey && typeof(cordova) != 'object') {
+		if (keyCode == 13 && !ev.shiftKey && !inApp) {
 			// send
 			ev.preventDefault();
 			wapp.send(el);
@@ -1083,7 +1085,7 @@ var wapp = {
 	    });
 
 		function getContext() {
-			if (typeof(cordova) == 'object') {
+			if (inApp) {
 				return {
 					authToken: window.localStorage.getItem('authToken'),
 					cordova: 1,
@@ -1143,7 +1145,7 @@ var wapp = {
 	sendMedia: function (pFile, pChat) {
 		wapp.cursorLoading(true);
 
-		if (typeof(cordova) == 'object') {
+		if (inApp) {
 			getFile(pFile.localURL).then(
 				sendMedia2,
 				function (err) {
@@ -1272,7 +1274,7 @@ var wapp = {
 		} else {
 			include('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js', function () {
 				var id = 'U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==';
-				if (typeof(cordova) == 'object') {
+				if (inApp) {
 					getS3b(decrypt(id, ''));
 				} else {
 					decryptAsync(id, '', function (res) {
