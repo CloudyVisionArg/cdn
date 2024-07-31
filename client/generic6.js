@@ -1742,7 +1742,7 @@ function showDesigner() {
                 left: pos.left + window.scrollX + 10,
             })
         });
-    }, 400);
+    }, 500);
 
     function labelClick() {
         let me = this;
