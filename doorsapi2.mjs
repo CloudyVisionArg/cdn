@@ -4697,7 +4697,8 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
-        return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8)
+        let pwd = pPass === undefined ? '' : pPass;
+        return _CryptoJS.AES.decrypt(pString, pwd).toString(_CryptoJS.enc.Utf8)
 	}
 
     deserializeError(err) {
@@ -4705,7 +4706,8 @@ export class Utilities {
     }
 
     encrypt(pString, pPass) {
-        return _CryptoJS.AES.encrypt(pString, pPass).toString();
+        let pwd = pPass === undefined ? '' : pPass;
+        return _CryptoJS.AES.encrypt(pString, pwd).toString();
     }
 
     /**
