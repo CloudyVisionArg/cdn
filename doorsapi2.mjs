@@ -4754,6 +4754,7 @@ export class Utilities {
     Convierte a base64 un buffer binario
     */
     encodeBuffer(value) {
+        let me = this;
         let prefix = '__base64__=>';
         let cls = value && value.constructor ? value.constructor.name : undefined;
 
