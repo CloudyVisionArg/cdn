@@ -4768,7 +4768,7 @@ export class Utilities {
 
         } else {
             //todo: Falta Buffer de node
-            return val;
+            return value;
         }
     }
 
