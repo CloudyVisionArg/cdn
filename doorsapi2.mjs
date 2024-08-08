@@ -4919,21 +4919,49 @@ export class Utilities {
     }    
 
     /**
-    Parse con soporte para buffers en binarios en base64
+    Convierte un string Recorre el json y convierte a buffer los binarios en base64
+    */
+    decodeBuffer(str) {
+        let me = this;
+        let prefix = '__base64__=>';
+
+        if (typeof str == 'string' && str.substring(0, prefix.length) == prefix) {
+            if (me.session.node.inNode) {
+                return Buffer.from(atob(val.substring(prefix.length)), 'binary');
+            } else {
+                // todo: falta probar
+                debugger;
+                return me.base64ToBuffer(val.substring(prefix.length));
+            }
+        } else {
+            return str;
+        }
+    }
+
+    /**
+    Recorre el json y convierte a buffer los binarios en base64
+    */
+    jsonBuffers(json) {
+        var me = this;
+
+        for (var key in json) {
+            if (typeof json[key] == 'object' && json[key] !== null)
+                jsonBuffers(json[key]);
+            else if (typeof json[key] == 'string') {
+                json[key] = me.decodeBuffer(json[key]);
+            }
+        }
+    }
+
+    /**
+    Parse con soporte para buffers binarios en base64
     */
     jsonParse(value) {
         var me = this;
-        let prefix = '__base64__=>';
 
         return JSON.parse(value, (key, val) => {
-            if (typeof val == 'string' && val.substring(0, prefix.length) == prefix) {
-                if (me.session.node.inNode) {
-                    return Buffer.from(atob(val.substring(prefix.length)), 'binary');
-                } else {
-                    // todo: falta probar
-                    debugger;
-                    return me.base64ToBuffer(val.substring(prefix.length));
-                }
+            if (typeof val == 'string') {
+                return me.decodeBuffer(val);
             } else {
                 return val;
             }
