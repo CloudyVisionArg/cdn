@@ -4946,7 +4946,7 @@ export class Utilities {
 
         for (var key in json) {
             if (typeof json[key] == 'object' && json[key] !== null)
-                jsonBuffers(json[key]);
+                me.jsonBuffers(json[key]);
             else if (typeof json[key] == 'string') {
                 json[key] = me.decodeBuffer(json[key]);
             }
