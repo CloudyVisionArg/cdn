@@ -4696,7 +4696,7 @@ export class Utilities {
     }
 
     /** https://github.com/jshttp/content-disposition */
-    get contentDisposition {
+    get contentDisposition() {
         return _contentDisposition;
     }
     
