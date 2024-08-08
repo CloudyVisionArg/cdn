@@ -4927,11 +4927,11 @@ export class Utilities {
 
         if (typeof str == 'string' && str.substring(0, prefix.length) == prefix) {
             if (me.session.node.inNode) {
-                return Buffer.from(atob(val.substring(prefix.length)), 'binary');
+                return Buffer.from(atob(str.substring(prefix.length)), 'binary');
             } else {
                 // todo: falta probar
                 debugger;
-                return me.base64ToBuffer(val.substring(prefix.length));
+                return me.base64ToBuffer(str.substring(prefix.length));
             }
         } else {
             return str;
