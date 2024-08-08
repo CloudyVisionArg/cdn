@@ -110,7 +110,7 @@ async function loadUtils() {
             if (window.serializeError) {
                 _serializeError = window.serializeError;
             } else {
-                res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
+                res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs/+esm');
                 _serializeError = res.default;
                 window.serializeError = _serializeError;
             }
@@ -128,7 +128,7 @@ async function loadUtils() {
             if (window.fastXmlParser) {
                 _fastXmlParser = window.fastXmlParser;
             } else {
-                var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
+                var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser/+esm');
                 _fastXmlParser = res.default;
                 window.fastXmlParser = _fastXmlParser;
             }
@@ -3977,16 +3977,16 @@ export class Node {
 
         return new Promise(async (resolve, reject) => {
             let data = {
-                serverUrl: this.session.serverUrl,
+                serverUrl: me.session.serverUrl,
                 //events: await me.codeOptions(options.code),
                 doc: options.doc,
                 payload: options.payload,
             }
 
-            if (this.session.apiKey || options.apiKey) {
-                data.apiKey = options.apiKey ? options.apiKey : this.session.apiKey;
-            } else if (this.session.authToken) {
-                data.authToken = this.session.authToken;
+            if (me.session.apiKey || options.apiKey) {
+                data.apiKey = options.apiKey ? options.apiKey : me.session.apiKey;
+            } else if (me.session.authToken) {
+                data.authToken = me.session.authToken;
             }
 
             let code = await me.codeOptions(structuredClone(options.code));
@@ -4069,7 +4069,7 @@ export class Node {
         var me = this;
         return new Promise(async (resolve, reject) => {
             var cfg = await me.config;
-            resolve(this.debug ? cfg.debugServer : cfg.server);
+            resolve(me.debug ? cfg.debugServer : cfg.server);
         })
     }
 
@@ -4939,6 +4939,7 @@ export class Utilities {
     Stringify con soporte para buffers binarios (los pasa a base64)
     */
     jsonStringify(value) {
+        let me = this;
         let prefix = '__base64__=>';
 
         return JSON.stringify(value, (key, val) => {
@@ -4948,10 +4949,10 @@ export class Utilities {
                 return prefix + val.toString('base64');
 
             } else if (cls == 'Uint8Array') {
-                return prefix + dSession.utils.newSimpleBuffer(val.buffer).toString('base64');
+                return prefix + me.newSimpleBuffer(val.buffer).toString('base64');
 
             } else if (cls == 'ArrayBuffer') {
-                return prefix + dSession.utils.newSimpleBuffer(val).toString('base64');
+                return prefix + me.newSimpleBuffer(val).toString('base64');
 
             } else {
                 //todo: Falta Buffer de node
@@ -4997,6 +4998,23 @@ export class Utilities {
     /** http://numeraljs.com/ */
     get numeral() {
         return _numeral;
+    }
+
+    async parseContentDisposition(contentDisposition) {
+        let me = this;
+
+        debugger;
+        let cdMod;
+        if (me.session.node.inNode) {
+            cdMod = await import('content-disposition');
+        } else {
+            cdMod = await import('https://cdn.jsdelivr.net/npm/content-disposition/+esm');
+        }
+
+        let cd = contentDisposition;
+        // Si tiene ; al ult lo saco
+        if (cd.substring(cd.length - 1) == ';') cd = cd.slice(0, -1);
+        return cdMod.parse(cd);
     }
 
     /** https://github.com/sindresorhus/serialize-error */
