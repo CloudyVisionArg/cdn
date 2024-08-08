@@ -12,6 +12,7 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 export { _htmlEntities as htmlEntities }
+export { _contentDisposition as contentDisposition }
 
 //await loadUtils();
 
@@ -142,6 +143,24 @@ async function loadUtils() {
         if (inNode()) {
             var res = await import('html-entities');
             _htmlEntities = res.default;
+        }
+    }
+
+
+    // content-disposition - https://github.com/jshttp/content-disposition
+
+    if (typeof(_contentDisposition) == 'undefined') {
+        if (inNode()) {
+            var res = await import('content-disposition');
+            _contentDisposition = res.default;
+        } else {
+            if (window.contentDisposition) {
+                _contentDisposition = window.contentDisposition;
+            } else {
+                var res = await import('https://cdn.jsdelivr.net/npm/content-disposition/+esm');
+                _contentDisposition = res.default;
+                window.contentDisposition = _contentDisposition;
+            }
         }
     }
 
@@ -4676,6 +4695,11 @@ export class Utilities {
         return num;
     }
 
+    /** https://github.com/jshttp/content-disposition */
+    get contentDisposition {
+        return _contentDisposition;
+    }
+    
     /**
     Devuelve el valor de una cookie, solo para la web.
     */
@@ -5000,21 +5024,12 @@ export class Utilities {
         return _numeral;
     }
 
-    async parseContentDisposition(contentDisposition) {
+    parseContentDisposition(contentDisposition) {
         let me = this;
-
-        debugger;
-        let cdMod;
-        if (me.session.node.inNode) {
-            cdMod = await import('content-disposition');
-        } else {
-            cdMod = await import('https://cdn.jsdelivr.net/npm/content-disposition/+esm');
-        }
-
         let cd = contentDisposition;
         // Si tiene ; al ult lo saco
         if (cd.substring(cd.length - 1) == ';') cd = cd.slice(0, -1);
-        return cdMod.parse(cd);
+        return me.contentDisposition.parse(cd);
     }
 
     /** https://github.com/sindresorhus/serialize-error */
