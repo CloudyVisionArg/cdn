@@ -4721,6 +4721,26 @@ export class Utilities {
         return _CryptoJS;
     }
 
+    /**
+    Convierte a buffer un binario en base64
+    */
+    decodeBuffer(str) {
+        let me = this;
+        let prefix = '__base64__=>';
+
+        if (typeof str == 'string' && str.substring(0, prefix.length) == prefix) {
+            if (me.session.node.inNode) {
+                return Buffer.from(atob(str.substring(prefix.length)), 'binary');
+            } else {
+                // todo: falta probar
+                debugger;
+                return me.base64ToBuffer(str.substring(prefix.length));
+            }
+        } else {
+            return str;
+        }
+    }
+
     decrypt(pString, pPass) {
         let pwd = pPass === undefined ? '' : pPass;
         return _CryptoJS.AES.decrypt(pString, pwd).toString(_CryptoJS.enc.Utf8)
@@ -4728,6 +4748,28 @@ export class Utilities {
 
     deserializeError(err) {
         return _serializeError.deserializeError(err);
+    }
+
+    /**
+    Convierte a base64 un buffer binario
+    */
+    encodeBuffer(value) {
+        let prefix = '__base64__=>';
+        let cls = value && value.constructor ? value.constructor.name : undefined;
+
+        if (cls == 'SimpleBuffer') {
+            return prefix + value.toString('base64');
+
+        } else if (cls == 'Uint8Array') {
+            return prefix + me.newSimpleBuffer(value.buffer).toString('base64');
+
+        } else if (cls == 'ArrayBuffer') {
+            return prefix + me.newSimpleBuffer(value).toString('base64');
+
+        } else {
+            //todo: Falta Buffer de node
+            return val;
+        }
     }
 
     encrypt(pString, pPass) {
@@ -4919,26 +4961,6 @@ export class Utilities {
     }    
 
     /**
-    Convierte un string Recorre el json y convierte a buffer los binarios en base64
-    */
-    decodeBuffer(str) {
-        let me = this;
-        let prefix = '__base64__=>';
-
-        if (typeof str == 'string' && str.substring(0, prefix.length) == prefix) {
-            if (me.session.node.inNode) {
-                return Buffer.from(atob(str.substring(prefix.length)), 'binary');
-            } else {
-                // todo: falta probar
-                debugger;
-                return me.base64ToBuffer(str.substring(prefix.length));
-            }
-        } else {
-            return str;
-        }
-    }
-
-    /**
     Recorre el json y convierte a buffer los binarios en base64
     */
     jsonBuffers(json) {
@@ -4993,24 +5015,9 @@ export class Utilities {
     */
     jsonStringify(value) {
         let me = this;
-        let prefix = '__base64__=>';
 
         return JSON.stringify(value, (key, val) => {
-            let cls = val && val.constructor ? val.constructor.name : undefined;
-
-            if (cls == 'SimpleBuffer') {
-                return prefix + val.toString('base64');
-
-            } else if (cls == 'Uint8Array') {
-                return prefix + me.newSimpleBuffer(val.buffer).toString('base64');
-
-            } else if (cls == 'ArrayBuffer') {
-                return prefix + me.newSimpleBuffer(val).toString('base64');
-
-            } else {
-                //todo: Falta Buffer de node
-                return val;
-            }
+            return me.encodeBuffer(val);
         });
     }
 
