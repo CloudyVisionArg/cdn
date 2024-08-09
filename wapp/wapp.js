@@ -986,6 +986,7 @@ var wapp = {
 			}
 			
 			
+			//todo: deprecar xhr
 			wapp.xhr(sendObj).then(
 				function (res) {
 					var $dom = $($.parseXML(res.jqXHR.responseText));
@@ -1017,6 +1018,7 @@ var wapp = {
 
 	serverDate: function () {
 	    return new Promise(function (resolve, reject) {
+			//todo: deprecar xhr
 			wapp.xhr({ wappaction: 'getDate' }).then(
 				function (res) {
 					resolve(xmlDecodeDate(res.data));
@@ -1053,6 +1055,7 @@ var wapp = {
 	
 	msgMedia: function (pSid) {
 	    return new Promise(function (resolve, reject) {
+			//todo: deprecar xhr
 			wapp.xhr({
 				wappaction: 'msgMedia',
 				sid: pSid,
