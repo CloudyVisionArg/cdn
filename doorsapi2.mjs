@@ -56,7 +56,7 @@ async function loadUtils() {
             res = await import('moment');
             _moment = res.default;
         } else {
-            await include('lib-moment', 'https://cdn.jsdelivr.net/npm/moment/moment.min.js');
+            await include('lib-moment');
             _moment = moment;
         }
     } else {
