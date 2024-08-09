@@ -50,7 +50,6 @@ async function loadUtils() {
 
 
     // moment - https://momentjs.com/docs/
-    debugger;
 
     if (typeof(moment) == 'undefined') {
         if (inNode()) {
