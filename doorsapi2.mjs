@@ -56,7 +56,7 @@ async function loadUtils() {
             res = await import('moment');
             _moment = res.default;
         } else {
-            await include('lib-moment');
+            await include('lib-moment', 'https://cdn.jsdelivr.net/npm/moment/moment.min.js');
             _moment = moment;
         }
     } else {
@@ -4751,7 +4751,7 @@ export class Utilities {
     }
 
     /**
-    Convierte a base64 un buffer binario
+    Convierte un buffer binario a base64
     */
     encodeBuffer(value) {
         let me = this;
