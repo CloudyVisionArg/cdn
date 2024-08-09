@@ -20,7 +20,7 @@ function registeredScripts() {
     */
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
-    scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 376 });
+    scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 375 });
     scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 373 });
     scripts.push({ id: 'maps', path: '/maps.js', version: 370 });
