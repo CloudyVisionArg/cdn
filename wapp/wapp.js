@@ -24,6 +24,7 @@ var inApp = typeof app7 == 'object';
 
 $(document).ready(async () => {
 	debugger;
+	console.log('hola')
 	/*
 	if (typeof(dSession) === undefined) {
 		let doorsapi2 = await import(scriptSrc('doorsapi2'));
