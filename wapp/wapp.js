@@ -1023,9 +1023,10 @@ var wapp = {
 		}
 	},
 
-	serverDate: function () {
-	    return new Promise(function (resolve, reject) {
-			//todo: deprecar xhr
+	serverDate: async function () {
+		console.log(await wapp.modWapp.dbDate());
+
+		/*
 			wapp.xhr({ wappaction: 'getDate' }).then(
 				function (res) {
 					resolve(xmlDecodeDate(res.data));
@@ -1035,6 +1036,7 @@ var wapp = {
 				}
 			)
 		});
+		*/
 	},
 	
 	putTemplate: function (template, target) {
