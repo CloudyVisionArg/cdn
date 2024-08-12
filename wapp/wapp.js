@@ -6,7 +6,6 @@ todo:
 var inApp = typeof app7 == 'object';
 
 (function () {
-	debugger;
 	include('whatsapp-css');
 	include('jslib');
 	include('emojis');
@@ -29,6 +28,7 @@ var inApp = typeof app7 == 'object';
 
 $(document).ready(async () => {
 	debugger;
+	/*
 	if (typeof(dSession) === undefined) {
 		let doorsapi2 = await import(scriptSrc('doorsapi2'));
 		window.dSession = new doorsapi2.Session();
@@ -39,6 +39,7 @@ $(document).ready(async () => {
 		}
 	
 	}
+	*/
 
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
