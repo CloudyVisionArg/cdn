@@ -22,7 +22,7 @@ var inApp = typeof app7 == 'object';
 	};
 })();
 
-$(document).ready(() => {
+$(document).ready(async () => {
 	debugger;
 	/*
 	if (typeof(dSession) === undefined) {
