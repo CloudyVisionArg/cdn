@@ -37,6 +37,7 @@ $(document).ready(() => {
 				repo: 'Global',
 				path: 'wappcnn/wapp.mjs',
 				url: true,
+				fresh: true,
 			})).then(
 				res => {
 					wapp.modWapp = res;
