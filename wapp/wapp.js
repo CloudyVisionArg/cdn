@@ -21,7 +21,7 @@ var inApp = typeof app7 == 'object';
 	};
 })();
 
-$(async () => {
+$(() => {
 	debugger
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
