@@ -1,7 +1,3 @@
-/*
-todo:
-- Enviar media
-*/
 
 var inApp = typeof app7 == 'object';
 
@@ -26,7 +22,7 @@ var inApp = typeof app7 == 'object';
 	};
 })();
 
-$(document).ready(async () => {
+$(document).ready(() => {
 	debugger;
 	/*
 	if (typeof(dSession) === undefined) {
