@@ -1,4 +1,3 @@
-
 var inApp = typeof app7 == 'object';
 
 (function () {
@@ -22,7 +21,8 @@ var inApp = typeof app7 == 'object';
 	};
 })();
 
-$(document).ready(() => {
+$(async () => {
+	debugger
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
 			wapp.rootFolder = res;
