@@ -22,22 +22,7 @@ var inApp = typeof app7 == 'object';
 	};
 })();
 
-$(document).ready(async () => {
-	debugger;
-	console.log('hola')
-	/*
-	if (typeof(dSession) === undefined) {
-		let doorsapi2 = await import(scriptSrc('doorsapi2'));
-		window.dSession = new doorsapi2.Session();
-	
-		if (!await dSession.webSession() || !await dSession.isLogged) {
-			end('La sesion no ha sido iniciada');
-			return;
-		}
-	
-	}
-	*/
-
+$(document).ready(() => {
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
 			wapp.rootFolder = res;
@@ -56,7 +41,7 @@ $(document).ready(async () => {
 				res => {
 					debugger;
 					wapp.modWapp = res;
-					wapp.modWapp.setContext(dSession);
+					wapp.modWapp.setContext({ dSession });
 				}
 			);
 
