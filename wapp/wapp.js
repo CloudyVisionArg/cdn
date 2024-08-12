@@ -6,6 +6,7 @@ todo:
 var inApp = typeof app7 == 'object';
 
 (function () {
+	debugger;
 	include('whatsapp-css');
 	include('jslib');
 	include('emojis');
