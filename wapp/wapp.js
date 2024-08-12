@@ -1024,6 +1024,7 @@ var wapp = {
 	},
 
 	serverDate: async function () {
+		debugger;
 		console.log(await wapp.modWapp.dbDate());
 
 		/*
