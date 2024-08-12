@@ -39,7 +39,6 @@ $(document).ready(() => {
 				url: true,
 			})).then(
 				res => {
-					debugger;
 					wapp.modWapp = res;
 					wapp.modWapp.setContext({ dSession });
 				}
