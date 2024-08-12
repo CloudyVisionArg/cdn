@@ -47,7 +47,7 @@ $(document).ready(function () {
 					wapp.modWapp = res;
 					wapp.modWapp.setContext(dSession);
 				}
-			)};
+			);
 
 			DoorsAPI.foldersGetByName(res, 'messages').then(
 				function (fld) {
