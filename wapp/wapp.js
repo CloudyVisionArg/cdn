@@ -155,7 +155,7 @@ var wapp = {
 	// Llama al callback cdo termina de inicializarse
 	ready: function (pCallback) {
 		var interv = setInterval(function () {
-			if (wapp.messagesFolder) {
+			if (wapp.messagesFolder && wapp.modWapp) {
 				clearInterval(interv);
 				if (pCallback) pCallback();
 			}
