@@ -37,6 +37,18 @@ $(document).ready(function () {
 				wapp.codelibUrl = '/c/codelibapi.asp';
 			};
 		
+			import(gitCdn({
+				repo: 'Global',
+				path: 'wappcnn/wapp.mjs',
+				url: true,
+			})).then(
+				res => {
+					debugger;
+					wapp.modWapp = res;
+					wapp.modWapp.setContext(dSession);
+				}
+			)};
+
 			DoorsAPI.foldersGetByName(res, 'messages').then(
 				function (fld) {
 					wapp.messagesFolder = fld.FldId;
