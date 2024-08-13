@@ -1008,21 +1008,8 @@ var wapp = {
 		}
 	},
 
-	serverDate: async function () {
-		debugger;
-		console.log(await wapp.modWapp.dbDate());
-
-		/*
-			wapp.xhr({ wappaction: 'getDate' }).then(
-				function (res) {
-					resolve(xmlDecodeDate(res.data));
-				},
-				function (err) {
-					reject(err);
-				}
-			)
-		});
-		*/
+	serverDate: function () {
+		return wapp.modWapp.dbDate();
 	},
 	
 	putTemplate: function (template, target) {
