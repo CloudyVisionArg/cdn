@@ -4938,6 +4938,7 @@ export class Utilities {
         return this.session.node.inNode();
     }
 
+    /** Devuelve true si es un string con formato fecha ISO8601 valido */
     isIsoDate(str) {
         if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str) 
             && !/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/.test(str)) return false;
