@@ -860,63 +860,60 @@ var wapp = {
 				ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
 				// Levanta los accounts, completa el nombre y renderiza
 				//todo: dapi2
-				DoorsAPI.accountsSearch('acc_id in (' + ids.join(',') + ')', 'name').then(
-					function (accs) {
-						var $cont = pChat.find('div.wapp-messages');
-						var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
-						var sessionUpdated = false;
-						
-						res.forEach(row => {
-							row['ACC_NAME'] = accs.find(acc => acc['AccId'] == row['ACC_ID'])['Name'];
 
-							var msg = {};
-							msg.sid = row['MESSAGESID'];
-							if (row['FROM_NUMREV'].indexOf(extNumberRev) >= 0) {
-								msg.direction = 'inbound';
-								if (!sessionUpdated && !pOlders) {
-									wapp.refreshSession(pChat, row['CREATED']);
-									sessionUpdated = true;
-								};
-							} else {
-								msg.direction = 'outbound';
-								msg.operator = row['ACC_NAME'];
-								msg.status = row['STATUS'];
-							}
-							msg.body = row['BODY'];
-							msg.date = row['CREATED'];
-							msg.nummedia = row['NUMMEDIA'];
-							msg.media = row['MEDIA'];
-							msg.latitude = row['LATITUDE'];
-							msg.longitude = row['LONGITUDE'];
+				let accs = await dSession.directory.accountsSearch('acc_id in (' + ids.join(',') + ')', 'name');
 
-							wapp.insertMsg(pChat, msg);
-						});
+				var $cont = pChat.find('div.wapp-messages');
+				// Si estoy al fondo
+				var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
+				var sessionUpdated = false;
 						
-						if (pOlders && $older.length > 0) {
-							$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
-						} else {
-							if (incLoad) {
-								if (atBottom) {
-									if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
-										$cont.scrollTop($cont[0].scrollHeight);
-									}
-								}
-							} else {
-								setTimeout(function () {
-									debugger;
-									$cont.scrollTop($cont[0].scrollHeight);
-								}, 1500);
-							}
+				res.forEach(row => {
+					row['ACC_NAME'] = accs.find(acc => acc['AccId'] == row['ACC_ID'])['Name'];
+
+					var msg = {};
+					msg.sid = row['MESSAGESID'];
+					if (row['FROM_NUMREV'].indexOf(extNumberRev) >= 0) {
+						msg.direction = 'inbound';
+						if (!sessionUpdated && !pOlders) {
+							wapp.refreshSession(pChat, row['CREATED']);
+							sessionUpdated = true;
 						};
-
-						wapp.cursorLoading(false);
-					},
-					function (err) {
-						console.log(err);
-						wapp.cursorLoading(false);
-						debugger;
+					} else {
+						msg.direction = 'outbound';
+						msg.operator = row['ACC_NAME'];
+						msg.status = row['STATUS'];
 					}
-				);
+					msg.body = row['BODY'];
+					msg.date = row['CREATED'];
+					msg.nummedia = row['NUMMEDIA'];
+					msg.media = row['MEDIA'];
+					msg.latitude = row['LATITUDE'];
+					msg.longitude = row['LONGITUDE'];
+
+					wapp.insertMsg(pChat, msg);
+				});
+						
+				if (pOlders && $older.length > 0) {
+					$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
+				} else {
+					debugger;
+					if (incLoad) {
+						if (atBottom) {
+							if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
+								$cont.scrollTop($cont[0].scrollHeight);
+							}
+						}
+					} else {
+						setTimeout(function () {
+							debugger;
+							$cont.scrollTop($cont[0].scrollHeight);
+						}, 1500);
+					}
+				};
+
+				wapp.cursorLoading(false);
+
 			} else {
 				wapp.cursorLoading(false);
 			}
