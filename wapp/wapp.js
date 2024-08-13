@@ -804,122 +804,126 @@ var wapp = {
 	},
 
 	loadMessages: async function (pChat, pOlders) { //todo: la hago async
-		var msgLimit = 50;
-		
-		var extNumber = pChat.attr('data-external-number');
-		var intNumber = pChat.attr('data-internal-number');
+		try {
+			var msgLimit = 50;
+			
+			var extNumber = pChat.attr('data-external-number');
+			var intNumber = pChat.attr('data-internal-number');
 
-		if (!extNumber || !intNumber) {
-			pChat.find('div.wapp-loadmore a').hide();
-			wapp.cursorLoading(false);
-			return;
-		}
-
-		var extNumberRev = wapp.cleanNumber(extNumber);
-		var intNumberRev = wapp.cleanNumber(intNumber);
-
-		var incLoad = false;
-		var lastLoad = pChat.attr('data-last-load');
-		if (lastLoad) lastLoad = new Date(new Date(lastLoad) - 5000);
-		
-		var formula = '(from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + 
-			'%\') or (to_numrev like \'' + extNumberRev + '%\' and from_numrev like \'' + intNumberRev + '%\')';
-		
-		if (pOlders) {
-			var $older = pChat.find('div.wapp-message').first();
-			if ($older.length > 0) {
-				var dt = new Date($older.attr('data-date'));
-				formula = 'created < \'' + ISODate(dt) + ' ' + ISOTime(dt, true) + '\' and (' + formula + ')';
-			}
-		} else if (lastLoad) {
-			incLoad = true;
-			var dtEnc = '\'' + ISODate(lastLoad) + ' ' + ISOTime(lastLoad, true) + '\'';
-			formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
-		};
-		
-		pChat.attr('data-last-load', (await wapp.serverDate()).toJSON());
-		debugger
-		//wapp.serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
-		
-		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
-			function (res) {
-				var $loadMore = pChat.find('div.wapp-loadmore a');
-				if (res.length < msgLimit && !incLoad) {
-					$loadMore.hide();
-				}
-				
-				if (res.length > 0) {
-		            // Arma un array de AccId
-		            var ids = res.map(row => row['ACC_ID']);
-		            // Saca los repetidos
-		            ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-		            // Levanta los accounts, completa el nombre y renderiza
-		            DoorsAPI.accountsSearch('acc_id in (' + ids.join(',') + ')', 'name').then(
-		                function (accs) {
-							var $cont = pChat.find('div.wapp-messages');
-		                	var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
-		                	var sessionUpdated = false;
-		                	
-							res.forEach(row => {
-		                        row['ACC_NAME'] = accs.find(acc => acc['AccId'] == row['ACC_ID'])['Name'];
-		
-								var msg = {};
-								msg.sid = row['MESSAGESID'];
-								if (row['FROM_NUMREV'].indexOf(extNumberRev) >= 0) {
-									msg.direction = 'inbound';
-									if (!sessionUpdated && !pOlders) {
-										wapp.refreshSession(pChat, row['CREATED']);
-										sessionUpdated = true;
-									};
-								} else {
-									msg.direction = 'outbound';
-									msg.operator = row['ACC_NAME'];
-									msg.status = row['STATUS'];
-								}
-								msg.body = row['BODY'];
-								msg.date = row['CREATED'];
-								msg.nummedia = row['NUMMEDIA'];
-								msg.media = row['MEDIA'];
-								msg.latitude = row['LATITUDE'];
-								msg.longitude = row['LONGITUDE'];
-
-								wapp.insertMsg(pChat, msg);
-							});
-							
-							if (pOlders && $older.length > 0) {
-								$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
-							} else {
-								if (incLoad) {
-									if (atBottom) {
-										if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
-											$cont.scrollTop($cont[0].scrollHeight);
-										}
-									}
-								} else {
-									setTimeout(function () {
-										$cont.scrollTop($cont[0].scrollHeight);
-									}, 1500);
-								}
-							};
-
-							wapp.cursorLoading(false);
-		                },
-		                function (err) {
-							console.log(err);
-							wapp.cursorLoading(false);
-		                	debugger;
-		                }
-		            );
-	        	} else {
-					wapp.cursorLoading(false);
-				}
-			},
-			function (err) {
-				console.log(err);
+			if (!extNumber || !intNumber) {
+				pChat.find('div.wapp-loadmore a').hide();
 				wapp.cursorLoading(false);
-				debugger;
+				return;
 			}
-		)
+
+			var extNumberRev = wapp.cleanNumber(extNumber);
+			var intNumberRev = wapp.cleanNumber(intNumber);
+
+			var incLoad = false;
+			var lastLoad = pChat.attr('data-last-load');
+			if (lastLoad) lastLoad = new Date(new Date(lastLoad) - 5000);
+			
+			var formula = '(from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + 
+				'%\') or (to_numrev like \'' + extNumberRev + '%\' and from_numrev like \'' + intNumberRev + '%\')';
+			
+			if (pOlders) {
+				var $older = pChat.find('div.wapp-message').first();
+				if ($older.length > 0) {
+					var dt = new Date($older.attr('data-date'));
+					formula = 'created < \'' + ISODate(dt) + ' ' + ISOTime(dt, true) + '\' and (' + formula + ')';
+				}
+			} else if (lastLoad) {
+				incLoad = true;
+				var dtEnc = '\'' + ISODate(lastLoad) + ' ' + ISOTime(lastLoad, true) + '\'';
+				formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
+			};
+			
+			pChat.attr('data-last-load', (await wapp.serverDate()).toJSON());
+
+			let res = await wapp.messagesFolder.search({
+				fields: '*',
+				formula,
+				order: 'created desc',
+				maxDocs: msgLimit,
+				maxTextLen: 0,
+			});
+
+			var $loadMore = pChat.find('div.wapp-loadmore a');
+			if (res.length < msgLimit && !incLoad) {
+				$loadMore.hide();
+			}
+					
+			if (res.length > 0) {
+				// Arma un array de AccId
+				var ids = res.map(row => row['ACC_ID']);
+				// Saca los repetidos
+				ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+				// Levanta los accounts, completa el nombre y renderiza
+				DoorsAPI.accountsSearch('acc_id in (' + ids.join(',') + ')', 'name').then(
+					function (accs) {
+						var $cont = pChat.find('div.wapp-messages');
+						var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
+						var sessionUpdated = false;
+						
+						res.forEach(row => {
+							row['ACC_NAME'] = accs.find(acc => acc['AccId'] == row['ACC_ID'])['Name'];
+
+							var msg = {};
+							msg.sid = row['MESSAGESID'];
+							if (row['FROM_NUMREV'].indexOf(extNumberRev) >= 0) {
+								msg.direction = 'inbound';
+								if (!sessionUpdated && !pOlders) {
+									wapp.refreshSession(pChat, row['CREATED']);
+									sessionUpdated = true;
+								};
+							} else {
+								msg.direction = 'outbound';
+								msg.operator = row['ACC_NAME'];
+								msg.status = row['STATUS'];
+							}
+							msg.body = row['BODY'];
+							msg.date = row['CREATED'];
+							msg.nummedia = row['NUMMEDIA'];
+							msg.media = row['MEDIA'];
+							msg.latitude = row['LATITUDE'];
+							msg.longitude = row['LONGITUDE'];
+
+							wapp.insertMsg(pChat, msg);
+						});
+						
+						if (pOlders && $older.length > 0) {
+							$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
+						} else {
+							if (incLoad) {
+								if (atBottom) {
+									if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
+										$cont.scrollTop($cont[0].scrollHeight);
+									}
+								}
+							} else {
+								setTimeout(function () {
+									$cont.scrollTop($cont[0].scrollHeight);
+								}, 1500);
+							}
+						};
+
+						wapp.cursorLoading(false);
+					},
+					function (err) {
+						console.log(err);
+						wapp.cursorLoading(false);
+						debugger;
+					}
+				);
+			} else {
+				wapp.cursorLoading(false);
+			}
+
+		} catch(err) {
+			console.log(err);
+			wapp.cursorLoading(false);
+			debugger;
+		}
 	},
 
 	loadMore: function (el) {
