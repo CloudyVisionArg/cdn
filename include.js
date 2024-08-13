@@ -21,7 +21,7 @@ function registeredScripts() {
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     scripts.push({ id: 'lib-moment', path: '/lib/moment-with-locales.min.js', version: 377 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 375 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 378 });
     scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 373 });
     scripts.push({ id: 'maps', path: '/maps.js', version: 370 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 370 });
@@ -33,7 +33,7 @@ function registeredScripts() {
     /*
     Por si hay que volver atras
     scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 368 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 375 });
     scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 366 });
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
