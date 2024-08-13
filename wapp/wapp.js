@@ -89,6 +89,21 @@ var inApp = typeof app7 == 'object';
 				wapp.init($(this));
 			});
 		}
+
+
+		let options = {
+			root: document.documentElement,
+		};
+		  
+		let observer = new IntersectionObserver((entries, observer) => {
+			entries.forEach(entry => {
+				console.log(entry.intersectionRatio > 0);
+			});
+		}, options);
+		  
+		observer.observe($('#CV_chat .wapp-messages')[0]);
+	
+		
 		
 		// Carga mensajes nuevos cada 5 segs
 		setInterval(function () {
