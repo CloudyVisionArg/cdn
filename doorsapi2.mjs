@@ -4665,10 +4665,14 @@ export class Utilities {
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
         } else {
-            let f = format ? format : 'L LTS'; // moment con locale
-            dt = _moment(date, f).toDate();
-            if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin format
-            if (isNaN(dt.getTime())) dt = new Date(date); // nativo
+            if (this.isIsoDate(date)) {
+                dt = new Date(date);
+            } else {
+                let f = format ? format : 'L LTS'; // moment con locale
+                dt = _moment(date, f).toDate();
+                if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin format
+                if (isNaN(dt.getTime())) dt = new Date(date); // nativo
+            }
         }
         if(!isNaN(dt.getTime())) {
             return dt;
@@ -4932,6 +4936,12 @@ export class Utilities {
     inNode() {
         console.log('Metodo deprecado, usar dSession.node.inNode');
         return this.session.node.inNode();
+    }
+
+    isIsoDate(str) {
+        if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+        const d = new Date(str); 
+        return d instanceof Date && !isNaN(d.getTime()) && d.toISOString() === str; // valid date 
     }
 
     /** Retorna true si value es un objeto puro {} */
