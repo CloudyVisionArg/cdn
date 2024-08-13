@@ -83,6 +83,7 @@ var inApp = typeof app7 == 'object';
 	}
 
 	$(document).ready(() => {
+		debugger;
 		if (!inApp) {
 			// Carga inicial
 			$('div.wapp-chat').each(function () {
