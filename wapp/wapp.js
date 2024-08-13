@@ -42,8 +42,8 @@ var inApp = typeof app7 == 'object';
 
 	wapp.rootFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
 	wapp.rootFolder = await dSession.folder(wapp.rootFolderId);
-	wapp.messagesFolder = await wapp.rootFolder.folder('messages'); //todo: era id, cambio a obj
-	wapp.templatesFolder = await wapp.rootFolder.folder('templates'); //todo: era id, cambio a obj
+	wapp.messagesFolder = await wapp.rootFolder.folder('messages');
+	wapp.templatesFolder = await wapp.rootFolder.folder('templates');
 	wapp.templates = (await wapp.templatesFolder.search({
 		fields: 'name',
 		order: 'name',
@@ -859,6 +859,7 @@ var wapp = {
 				// Saca los repetidos
 				ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
 				// Levanta los accounts, completa el nombre y renderiza
+				//todo: dapi2
 				DoorsAPI.accountsSearch('acc_id in (' + ids.join(',') + ')', 'name').then(
 					function (accs) {
 						var $cont = pChat.find('div.wapp-messages');
@@ -902,6 +903,7 @@ var wapp = {
 								}
 							} else {
 								setTimeout(function () {
+									debugger;
 									$cont.scrollTop($cont[0].scrollHeight);
 								}, 1500);
 							}
@@ -1005,7 +1007,7 @@ var wapp = {
 	
 	putTemplate: function (template, target) {
 		wapp.cursorLoading(true);
-		DoorsAPI.folderSearch(wapp.templatesFolder, 'text,CONTENT_SID', 'name = \'' + template + '\'', '', 1, null, 0).then(
+		DoorsAPI.folderSearch(wapp.templatesFolder.id, 'text,CONTENT_SID', 'name = \'' + template + '\'', '', 1, null, 0).then(
 			function (res) {
 				wapp.cursorLoading(false);
 				let template = res[0];
