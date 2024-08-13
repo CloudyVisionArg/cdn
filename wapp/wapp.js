@@ -41,7 +41,7 @@ var inApp = typeof app7 == 'object';
 	wapp.modWapp.setContext({ dSession });
 
 	wapp.rootFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
-	wapp.rootFolder = await dSession.folder(wapp.rootFolderId); //todo: era id, cambio a obj
+	wapp.rootFolder = await dSession.folder(wapp.rootFolderId);
 	wapp.messagesFolder = await wapp.rootFolder.folder('messages'); //todo: era id, cambio a obj
 	wapp.templatesFolder = await wapp.rootFolder.folder('templates'); //todo: era id, cambio a obj
 	wapp.templates = (await wapp.templatesFolder.search({
@@ -486,8 +486,6 @@ var wapp = {
 
 			var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
 			
-			//seguir aca, nuevo search
-			debugger;
 			let res = await wapp.messagesFolder.search({
 				fields: 'created',
 				formula,
@@ -496,21 +494,6 @@ var wapp = {
 			});
 
 			render(res.length > 0 ? res[0]['CREATED'] : undefined);
-			/*
-			DoorsAPI.folderSearch(wapp.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
-				function (res) {
-					if (res.length > 0) {
-						render(res[0]['CREATED']);
-					} else {
-						render(undefined);
-					}
-				},
-				function (err) {
-					console.log(err);
-					debugger;
-				}
-			)
-			*/
 		};
 		
 		function render(pDate) {
@@ -820,7 +803,7 @@ var wapp = {
 		return pNumber.replace(/\D/g, '').reverse().substring(0, 10);
 	},
 
-	loadMessages: function (pChat, pOlders) {
+	loadMessages: async function (pChat, pOlders) { //todo: la hago async
 		var msgLimit = 50;
 		
 		var extNumber = pChat.attr('data-external-number');
@@ -854,7 +837,9 @@ var wapp = {
 			formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
 		};
 		
-		wapp.serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
+		pChat.attr('data-last-load', (await wapp.serverDate()).toJSON());
+		debugger
+		//wapp.serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
 		
 		DoorsAPI.folderSearch(wapp.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 			function (res) {
@@ -1008,8 +993,10 @@ var wapp = {
 		}
 	},
 
-	serverDate: function () {
-		return wapp.modWapp.dbDate();
+	serverDate: async function () {
+		let dbDt = wapp.modWapp.dbDate();
+		let clDt = new Date();
+		return dbDt < clDt ? dbDt : clDt;
 	},
 	
 	putTemplate: function (template, target) {
