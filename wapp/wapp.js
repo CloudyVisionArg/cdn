@@ -83,7 +83,6 @@ var inApp = typeof app7 == 'object';
 	}
 
 	$(document).ready(() => {
-		debugger;
 		if (!inApp) {
 			// Carga inicial
 			$('div.wapp-chat').each(function () {
@@ -134,22 +133,13 @@ var wapp = {
 		}
 	},
 
-	// Llama al callback cdo termina de inicializarse
-	ready: function (pCallback) {
-		var interv = setInterval(function () {
-			if (wapp.messagesFolder && wapp.modWapp) {
-				clearInterval(interv);
-				if (pCallback) pCallback();
-			}
-		}, 10)
-	},
-
 	checkSession: function (pCallback) {
 		if (inApp) {
 			if (app7.online) {
 				dSession.checkToken(pCallback);
 			}
 		} else {
+			//todo: chequear aca tb
 			if (pCallback) pCallback();
 		}
 	},
@@ -481,7 +471,7 @@ var wapp = {
 		wapp.refreshSession($cont);
 	},
 	
-	refreshSession: function (pChat, pDate) {
+	refreshSession: async function (pChat, pDate) { //todo: no era async
 		if (pDate) {
 			render(pDate);
 
@@ -496,6 +486,17 @@ var wapp = {
 
 			var formula = 'from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + '%\'';
 			
+			//seguir aca, nuevo search
+			debugger;
+			let res = await wapp.messagesFolder.search({
+				fields: 'created',
+				formula,
+				order: 'created desc',
+				maxDocs: 1,
+			});
+
+			render(res.length > 0 ? res[0]['CREATED'] : undefined);
+			/*
 			DoorsAPI.folderSearch(wapp.messagesFolder, 'created', formula, 'created desc', 1, null, 0).then(
 				function (res) {
 					if (res.length > 0) {
@@ -509,6 +510,7 @@ var wapp = {
 					debugger;
 				}
 			)
+			*/
 		};
 		
 		function render(pDate) {
