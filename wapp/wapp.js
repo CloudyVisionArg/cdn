@@ -1,11 +1,13 @@
-var inApp = typeof app7 == 'object';
+let inApp = typeof app7 == 'object';
 
-(function () {
-	include('whatsapp-css');
-	include('jslib');
-	include('emojis');
+(async function () {
+	await include([
+		{ id: 'whatsapp-css' },
+		{ id: 'jslib' },
+		{ id: 'emojis' },
+	]);
 
-	var root = document.documentElement;
+	let root = document.documentElement;
 
 	if (inApp) {
 		// App
@@ -19,6 +21,66 @@ var inApp = typeof app7 == 'object';
 		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
 		root.style.setProperty('--wapp-button-size', '25px');
 	};
+
+	if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
+	if (!window.dSession) {
+		window.dSession = new doorsapi2.Session();
+		utils = dSession.utils;
+
+		if (!await dSession.webSession() || !await dSession.isLogged) {
+			throw new Error('La sesion no ha sido iniciada');
+		}
+	}
+
+	wapp.modWapp = await import(gitCdn({
+		repo: 'Global',
+		path: 'wappcnn/wapp.mjs',
+		url: true,
+		fresh: true,
+	}))
+	wapp.modWapp.setContext({ dSession });
+
+	wapp.rootFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
+	wapp.rootFolder = await dSession.folder(wapp.rootFolderId); //todo: era id, cambio a obj
+	wapp.messagesFolder = await wapp.rootFolder.folder('messages'); //todo: era id, cambio a obj
+	wapp.templatesFolder = await wapp.rootFolder.folder('templates'); //todo: era id, cambio a obj
+	wapp.templates = (await wapp.templatesFolder.search({
+		fields: 'name',
+		order: 'name',
+	})).map(it => it['NAME']);
+
+	wapp.loggedUser = await dSession.currentUser;
+
+	debugger;
+
+
+	$(document).ready(() => {
+		if (!inApp) {
+			// Carga inicial
+			$('div.wapp-chat').each(function () {
+				wapp.init($(this));
+			});
+		}
+		
+		// Carga mensajes nuevos cada 5 segs
+		setInterval(function () {
+			wapp.checkSession(function () {
+				$('div.wapp-chat[data-rendered]').each(function () {
+					wapp.loadMessages($(this));
+				});
+			});
+		}, 5000);
+
+		// Actualiza el estado de la sesion cada 1'
+		setInterval(function () {
+			wapp.checkSession(function () {
+				$('div.wapp-chat[data-rendered]').each(function () {
+					wapp.refreshSession($(this));
+				});
+			});
+		}, 60000);
+	});
+
 })();
 
 $(document).ready(() => {
@@ -26,13 +88,7 @@ $(document).ready(() => {
 	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
 		function (res) {
 			wapp.rootFolder = res;
-			
-			if (inApp) {
-				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
-			} else {
-				wapp.codelibUrl = '/c/codelibapi.asp';
-			};
-		
+					
 			import(gitCdn({
 				repo: 'Global',
 				path: 'wappcnn/wapp.mjs',
