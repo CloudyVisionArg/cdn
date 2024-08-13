@@ -89,21 +89,6 @@ var inApp = typeof app7 == 'object';
 				wapp.init($(this));
 			});
 		}
-
-
-		let options = {
-			root: document.documentElement,
-		};
-		  
-		let observer = new IntersectionObserver((entries, observer) => {
-			entries.forEach(entry => {
-				console.log(entry.intersectionRatio);
-			});
-		}, options);
-		  
-		observer.observe($('#CV_chat .wapp-messages')[0]);
-	
-
 		
 		// Carga mensajes nuevos cada 5 segs
 		setInterval(function () {
@@ -229,6 +214,21 @@ var wapp = {
 			var $messages = $('<div/>', {
 				class: 'wapp-messages',
 			}).appendTo($cont);
+			
+			// Observer que salta cdo se pone visible el div
+			let options = {
+				root: document.documentElement,
+			};
+			let observer = new IntersectionObserver((entries, observer) => {
+				entries.forEach(entry => {
+					$messages[0].dispatchEvent(new CustomEvent('visibilityChange', {
+						detail : { visible: entry.intersectionRatio > 0 }
+					}));
+				});
+			}, options);
+			observer.observe($messages[0]);
+		
+			$message.on('visibilityChange', (ev) => {debugger});
 			
 			$messages.append(`      
 				<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
