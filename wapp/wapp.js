@@ -51,107 +51,6 @@ var inApp = typeof app7 == 'object';
 
 	wapp.loggedUser = await dSession.currentUser;
 
-	debugger;
-
-
-	$(document).ready(() => {
-		if (!inApp) {
-			// Carga inicial
-			$('div.wapp-chat').each(function () {
-				wapp.init($(this));
-			});
-		}
-		
-		// Carga mensajes nuevos cada 5 segs
-		setInterval(function () {
-			wapp.checkSession(function () {
-				$('div.wapp-chat[data-rendered]').each(function () {
-					wapp.loadMessages($(this));
-				});
-			});
-		}, 5000);
-
-		// Actualiza el estado de la sesion cada 1'
-		setInterval(function () {
-			wapp.checkSession(function () {
-				$('div.wapp-chat[data-rendered]').each(function () {
-					wapp.refreshSession($(this));
-				});
-			});
-		}, 60000);
-	});
-
-})();
-
-$(document).ready(() => {
-	debugger
-	DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
-		function (res) {
-			wapp.rootFolder = res;
-					
-			import(gitCdn({
-				repo: 'Global',
-				path: 'wappcnn/wapp.mjs',
-				url: true,
-				fresh: true,
-			})).then(
-				res => {
-					wapp.modWapp = res;
-					wapp.modWapp.setContext({ dSession });
-				}
-			);
-
-			DoorsAPI.foldersGetByName(res, 'messages').then(
-				function (fld) {
-					wapp.messagesFolder = fld.FldId;
-	
-					if (!inApp) {
-						// Carga inicial
-						$('div.wapp-chat').each(function () {
-							wapp.init($(this));
-						});
-					}
-					
-					// Carga mensajes nuevos cada 5 segs
-					setInterval(function () {
-						wapp.checkSession(function () {
-							$('div.wapp-chat[data-rendered]').each(function () {
-								wapp.loadMessages($(this));
-							});
-						});
-					}, 5000);
-	
-					// Actualiza el estado de la sesion cada 1'
-					setInterval(function () {
-						wapp.checkSession(function () {
-							$('div.wapp-chat[data-rendered]').each(function () {
-								wapp.refreshSession($(this));
-							});
-						});
-					}, 60000);
-				}
-			);
-	
-			DoorsAPI.foldersGetByName(res, 'templates').then(
-				function (fld) {
-					wapp.templatesFolder = fld.FldId;
-
-					DoorsAPI.folderSearch(wapp.templatesFolder, 'name', '', 'name').then(
-						function (res) {
-							wapp.templates = res.map(it => it['NAME']);
-						}
-					);
-				}
-			);
-		}
-	);
-
-	DoorsAPI.loggedUser().then(
-		function (res) {
-			wapp.loggedUser = res;
-		}
-	);
-
 	if (!inApp) {
 		// El DIV para mostrar imagenes fullScreen
 		$(document.body).append(`
@@ -181,10 +80,36 @@ $(document).ready(() => {
 				inp.value = '';
 			}
 		})
-
 	}
-});
 
+	$(document).ready(() => {
+		if (!inApp) {
+			// Carga inicial
+			$('div.wapp-chat').each(function () {
+				wapp.init($(this));
+			});
+		}
+		
+		// Carga mensajes nuevos cada 5 segs
+		setInterval(function () {
+			wapp.checkSession(function () {
+				$('div.wapp-chat[data-rendered]').each(function () {
+					wapp.loadMessages($(this));
+				});
+			});
+		}, 5000);
+
+		// Actualiza el estado de la sesion cada 1'
+		setInterval(function () {
+			wapp.checkSession(function () {
+				$('div.wapp-chat[data-rendered]').each(function () {
+					wapp.refreshSession($(this));
+				});
+			});
+		}, 60000);
+	});
+
+})();
 
 var wapp = {
 	rootFolder: undefined,
