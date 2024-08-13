@@ -228,7 +228,7 @@ var wapp = {
 			}, options);
 			observer.observe($messages[0]);
 		
-			$messages.on('visibilityChange', (ev) => {debugger});
+			$messages.on('visibilityChange', (ev) => { console.log(ev.detail.visible) });
 			
 			$messages.append(`      
 				<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
