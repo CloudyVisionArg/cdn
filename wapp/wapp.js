@@ -1,4 +1,4 @@
-let inApp = typeof app7 == 'object';
+var inApp = typeof app7 == 'object';
 
 (async function () {
 	await include([
