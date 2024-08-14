@@ -912,17 +912,30 @@ var wapp = {
 				if (pOlders && $older.length > 0) {
 					$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
 				} else {
-					debugger;
 					if (incLoad) {
 						if (atBottom) {
-							if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
-								$cont.scrollTop($cont[0].scrollHeight);
+							if ($cont[0].scrollHeight) { // Esta visible?
+								if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
+									$cont.scrollTop($cont[0].scrollHeight);
+								}
+							} else {
+								// Lo ejecuta cdo se hace visible
+								$cont.attr('data-scroll', `
+									if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
+										$cont.scrollTop($cont[0].scrollHeight);
+									}
+								`);
 							}
 						}
 					} else {
 						setTimeout(function () {
-							debugger;
-							$cont.scrollTop($cont[0].scrollHeight);
+							if ($cont[0].scrollHeight) {
+								$cont.scrollTop($cont[0].scrollHeight);
+							} else {
+								$cont.attr('data-scroll', `
+									$cont.scrollTop($cont[0].scrollHeight);
+								`);
+							}
 						}, 1500);
 					}
 				};
