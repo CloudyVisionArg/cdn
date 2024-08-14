@@ -5088,6 +5088,41 @@ export class Utilities {
     }
 
     /**
+    Devuelve la fecha del server
+    options:
+        'app': La fecha del servidor de aplicaciones
+        'db': La fecha del server de base de datos
+        'earliest' (def): La menor de las 2
+        'latest': La mayor de las 2
+    */
+    async serverDate(options) {
+        let me = this;
+        let appDate, dbDate;
+        let opt = options === undefined ? 'earliest' : options.toLowerCase();
+
+        if (opt != 'db') {
+            let appRes = await me.execVbs('Response.Write dSession.Xml.XmlEncode(Now, 2)');
+            appDate = me.xmlDec(await appRes.text(), 2);
+        }
+        if (opt != 'app') {
+            let dbRes = await me.session.db.openRecordset('select getdate() dt')
+            dbDate = me.cDate(dbRes[0]['dt']);
+        }
+
+        if (opt == 'app') {
+            return appDate;
+        } else if (opt == 'db') {
+            return dbDate;
+        } else id (opt == 'earliest') {
+            return appDate < dbDate ? appDate : dbDate;
+        } else id (opt == 'latest') {
+            return appDate > dbDate ? appDate : dbDate;
+        } else {
+            throw new Error('Unknown option: ' + opt);
+        }
+    }
+
+    /**
     @returns {Session}
     */
     get session() {
@@ -5152,7 +5187,7 @@ export class Utilities {
             return isNaN(val) ? null : value;
 
         } else {
-            throw 'Unknown type: ' + type;
+            throw new Error('Unknown type: ' + type);
         }
     }
 
@@ -5176,7 +5211,7 @@ export class Utilities {
             return val ? val.toString() : '';
 
         } else {
-            throw 'Unknown type: ' + type;
+             new Error('Unknown type: ' + type);
         }
     }
 

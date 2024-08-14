@@ -1016,6 +1016,30 @@ var wapp = {
 			let msg = await wapp.modWapp.send(sendObj);
 			debugger;
 
+			/*
+			ObjectaccountSid: "AC47a3e29520495dc61fe3a8c1fbb6a3e7"
+			apiVersion: "2010-04-01"
+			body: "eee"
+			dateCreated: "2024-08-14T13:19:16.000Z"
+			dateSent: null
+			dateUpdated: "2024-08-14T13:19:16.000Z"
+			direction: "outbound-api"
+			doorsCreated: "2024-08-14T13:19:14.963Z"
+			errorCode: null
+			errorMessage: null
+			from: "whatsapp:+15167152888"
+			messagingServiceSid: null
+			numMedia: "0"
+			numSegments: "1"
+			price: null
+			priceUnit: null
+			sid: "SMd89311e0556b25c68408a9d0b7f7127c"
+			status: "queued"
+			subresourceUris: {media: "/2010-04-01/Accounts/AC47a3e29520495dc61fe3a8c1fbb…ges/SMd89311e0556b25c68408a9d0b7f7127c/Media.json"}
+			to: "whatsapp:+543515284577"
+			uri: "/2010-04-01/Accounts/AC47a3e29520495dc61fe3a8c1fbb6a3e7/Messages/SMd89311e0556b25c68408a9d0b7f7127c.json"
+			*/
+			
 			wapp.xhr(sendObj).then(
 				function (res) {
 					var $dom = $($.parseXML(res.jqXHR.responseText));
