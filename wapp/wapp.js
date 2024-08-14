@@ -1011,10 +1011,8 @@ var wapp = {
 		}
 	},
 
-	serverDate: async function () {
-		let dbDt = wapp.modWapp.dbDate();
-		let clDt = new Date();
-		return dbDt < clDt ? dbDt : clDt;
+	serverDate: function () {
+		return wapp.modWapp.serverDate();
 	},
 	
 	putTemplate: function (template, target) {
