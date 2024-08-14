@@ -839,7 +839,7 @@ var wapp = {
 		return pNumber.replace(/\D/g, '').reverse().substring(0, 10);
 	},
 
-	loadMessages: async function (pChat, pOlders) { //todo: la hago async
+	loadMessages: async function (pChat, pOlders) {
 		try {
 			var msgLimit = 50;
 			
@@ -895,8 +895,6 @@ var wapp = {
 				// Saca los repetidos
 				ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
 				// Levanta los accounts, completa el nombre y renderiza
-				//todo: dapi2
-
 				let accs = await dSession.directory.accountsSearch('acc_id in (' + ids.join(',') + ')', 'name');
 
 				var $cont = pChat.find('div.wapp-messages');
@@ -1074,51 +1072,7 @@ var wapp = {
 	},
 	
 	msgMedia: function (pSid) {
-	    return new Promise(function (resolve, reject) {
-			//todo: deprecar xhr
-			wapp.xhr({
-				wappaction: 'msgMedia',
-				sid: pSid,
-			}).then(
-				function (res) {
-					resolve(res.data);
-				},
-				function (err) {
-					debugger;
-					reject(err.jqXHR);
-				}
-			)
-	    });
-	},
-
-	xhr: function(data) {
-	    return new Promise(function (resolve, reject) {
-			var dataExt = Object.assign(data, getContext());
-			$.ajax({
-				url: wapp.codelibUrl + '?codelib=WhatsappXHR',
-				method: 'POST',
-				data: dataExt,
-			})
-				.done(function (data, textStatus, jqXHR) {
-					resolve({ data: data, textStatus: textStatus, jqXHR: jqXHR });
-				})
-				.fail(function (jqXHR, textStatus, errorThrown) {
-					reject({ jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown });
-				});
-	    });
-
-		function getContext() {
-			if (inApp) {
-				return {
-					authToken: window.localStorage.getItem('authToken'),
-					cordova: 1,
-				}
-			} else {
-				return {
-					cordova: 0,
-				}
-			}
-		}
+		return wapp.modWapp.msgMedia(pSid);
 	},
 
 	sendAudio: function (pChat) {
