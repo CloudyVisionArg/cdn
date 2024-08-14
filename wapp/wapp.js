@@ -215,7 +215,7 @@ var wapp = {
 				class: 'wapp-messages',
 			}).appendTo($cont);
 			
-			// Observer que salta cdo se pone visible el div
+			// Observer que salta cdo se pone visible el div y dispara un evento
 			let options = {
 				root: document.documentElement,
 			};
@@ -228,6 +228,7 @@ var wapp = {
 			}, options);
 			observer.observe($messages[0]);
 		
+			// Cdo se pone visible hace el scroll, que se calcula al final del renderMess
 			$messages.on('visibilityChange', (ev) => {
 				if (ev.detail.visible) {
 					let scroll = $messages.attr('data-scroll');
@@ -923,27 +924,28 @@ var wapp = {
 				} else {
 					if (incLoad) {
 						if (atBottom) {
-							if ($cont[0].scrollHeight) { // Esta visible?
+							let scroll = `
 								if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
 									$cont.scrollTop($cont[0].scrollHeight);
 								}
+							`;
+							if ($cont[0].scrollHeight) { // Esta visible?
+								// Lo ejecuta ahora
+								eval(scroll);
 							} else {
 								// Lo ejecuta cdo se hace visible
-								$cont.attr('data-scroll', `
-									if ($cont[0].scrollHeight - ($cont.scrollTop() + $cont.innerHeight()) > 20) {
-										$cont.scrollTop($cont[0].scrollHeight);
-									}
-								`);
+								$cont.attr('data-scroll', scroll);
 							}
 						}
 					} else {
 						setTimeout(function () {
-							if ($cont[0].scrollHeight) {
+							let scroll = `
 								$cont.scrollTop($cont[0].scrollHeight);
+							`;
+							if ($cont[0].scrollHeight) {
+								eval(scroll);
 							} else {
-								$cont.attr('data-scroll', `
-									$cont.scrollTop($cont[0].scrollHeight);
-								`);
+								$cont.attr('data-scroll', scroll);
 							}
 						}, 1500);
 					}
