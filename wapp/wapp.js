@@ -2,7 +2,7 @@ var inApp = typeof app7 == 'object';
 
 (async function () {
 	await include([
-		{ id: 'whatsapp-css' },
+		{ id: 'whatsapp-css', version: 0 }, //todo: sacar fresh
 		{ id: 'jslib' },
 		{ id: 'emojis' },
 	]);
