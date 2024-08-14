@@ -7,6 +7,7 @@
     margin-right: var(--wapp-chat-horizontal-margin);
     margin-top: var(--wapp-chat-vertical-margin);
     margin-bottom: var(--wapp-chat-vertical-margin);
+    color: #333;
 }
 
 .wapp-header, .wapp-footer {
