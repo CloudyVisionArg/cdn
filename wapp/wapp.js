@@ -236,6 +236,7 @@ var wapp = {
 						let $cont = $messages;
 						eval(scroll);
 						$messages.removeAttr('data-scroll');
+						console.log('scroll done');
 					}
 				}
 			});
