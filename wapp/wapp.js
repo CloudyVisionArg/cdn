@@ -228,7 +228,16 @@ var wapp = {
 			}, options);
 			observer.observe($messages[0]);
 		
-			$messages.on('visibilityChange', (ev) => { console.log(ev.detail.visible) });
+			$messages.on('visibilityChange', (ev) => {
+				if (ev.detail.visible) {
+					let scroll = $messages.attr('data-scroll');
+					if (scroll) {
+						let $cont = $messages;
+						eval(scroll);
+						$messages.removeAttr('data-scroll');
+					}
+				}
+			});
 			
 			$messages.append(`      
 				<div class="wapp-loadmore" style="text-align: center; margin-bottom: 15px;">
