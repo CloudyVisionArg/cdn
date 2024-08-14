@@ -5091,7 +5091,7 @@ export class Utilities {
     Devuelve la fecha del server
     options:
         'app': La fecha del servidor de aplicaciones
-        'db': La fecha del server de base de datos
+        'db': La fecha del servidor de base de datos
         'earliest' (def): La menor de las 2
         'latest': La mayor de las 2
     */
@@ -5113,9 +5113,9 @@ export class Utilities {
             return appDate;
         } else if (opt == 'db') {
             return dbDate;
-        } else id (opt == 'earliest') {
+        } else if (opt == 'earliest') {
             return appDate < dbDate ? appDate : dbDate;
-        } else id (opt == 'latest') {
+        } else if (opt == 'latest') {
             return appDate > dbDate ? appDate : dbDate;
         } else {
             throw new Error('Unknown option: ' + opt);
