@@ -109,6 +109,7 @@ var inApp = typeof app7 == 'object';
 		}, 60000);
 	});
 
+	wapp.readyFlag = true;
 })();
 
 var wapp = {
@@ -119,6 +120,15 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 	s3: undefined,
+
+	ready: function (pCallback) {
+		var interv = setInterval(function () {
+			if (wapp.readyFlag) {
+				clearInterval(interv);
+				if (pCallback) pCallback();
+			}
+		}, 10)
+	},
 
 	cursorLoading: function(pLoading) {
 		if (inApp) {
@@ -228,7 +238,7 @@ var wapp = {
 			}, options);
 			observer.observe($messages[0]);
 		
-			// Cdo se pone visible hace el scroll, que se calcula al final del renderMess
+			// Cdo se pone visible hace el scroll, que se calcula al final del loadMessages
 			$messages.on('visibilityChange', (ev) => {
 				if (ev.detail.visible) {
 					let scroll = $messages.attr('data-scroll');
