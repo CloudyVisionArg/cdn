@@ -989,7 +989,7 @@ var wapp = {
 		}
 	},
 
-	send: function (el) {
+	send: async function (el) { //todo: lo hago async
 		var $chat = $(el).closest('div.wapp-chat');
 		var $inp = $chat.find('.wapp-reply');
 		if ($inp.val()) {
@@ -997,7 +997,6 @@ var wapp = {
 			var fromN = $chat.attr('data-internal-number');
 			var toN = $chat.attr('data-external-number');
 			let sendObj = {
-				wappaction: 'send',
 				from: fromN,
 				to: toN,
 				body: $inp.val(),
@@ -1006,15 +1005,17 @@ var wapp = {
 			let contentId = $inp.attr("data-content-sid");
 			let contentVariables = $inp.attr("data-content-variables");
 			
-			if(contentId !== undefined && contentId !== null && contentId !== ""){
+			if( contentId !== undefined && contentId !== null && contentId !== "") {
 				sendObj.contentSid = contentId;
 				sendObj.contentVariables = contentVariables || null;
 				let fromName = $chat.attr('data-internal-name');
 				sendObj.from = fromName;
 			}
 			
-			
 			//todo: deprecar xhr
+			let msg = await wapp.modWapp.send(sendObj);
+			debugger;
+
 			wapp.xhr(sendObj).then(
 				function (res) {
 					var $dom = $($.parseXML(res.jqXHR.responseText));
