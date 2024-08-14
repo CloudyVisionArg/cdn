@@ -874,7 +874,7 @@ var wapp = {
 				formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
 			};
 			
-			pChat.attr('data-last-load', (await wapp.serverDate()).toJSON());
+			pChat.attr('data-last-load', (await dSession.utils.serverDate()).toJSON());
 
 			let res = await wapp.messagesFolder.search({
 				fields: '*',
@@ -1069,10 +1069,6 @@ var wapp = {
 		}
 	},
 
-	serverDate: function () {
-		return wapp.modWapp.serverDate();
-	},
-	
 	putTemplate: function (template, target) {
 		wapp.cursorLoading(true);
 		DoorsAPI.folderSearch(wapp.templatesFolder.id, 'text,CONTENT_SID', 'name = \'' + template + '\'', '', 1, null, 0).then(
