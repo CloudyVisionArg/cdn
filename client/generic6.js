@@ -14,7 +14,7 @@ Moment: https://momentjs.com
 APP
 ˜˜˜
 Framework7: https://framework7.io/docs/
-MD Icons (abrir en chrome): https://fonts.google.com/icons?icon.platform=web&icon.set=Material+Icons
+MD Icons (abrir en chrome): https://fonts.google.com/icons?icon.platform=web&icon.set=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp
 F7 Icons: https://w3.cloudycrm.net/c/app7/lib/framework7/css/cheatsheet.htm
 
 WEB
@@ -88,7 +88,7 @@ var inApp = typeof window.app7 == 'object';
 
                 if (!window.modControls6) {
                     //todo: sacar fresh
-                    window.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true }));
+                    window.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true })); //todo: sacar fresh
                     await modControls6.init();
                 }
         
@@ -185,6 +185,12 @@ async function loadControls() {
 
 
 function getControlsRights(pControls) {
+    /*
+    <root>
+        <item control="text" w="0">
+        ...
+    </root>
+    */
 	var cr = objPropCI(doc.tags, 'controlsRights');
 	if (cr) {
 		try {
