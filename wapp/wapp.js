@@ -1188,15 +1188,17 @@ var wapp = {
 								};
 
 								let msg = await wapp.modWapp.send(sendObj);
-								debugger;
 
 								msg.operator = wapp.loggedUser.Name;
 								msg.date = msg.doorsCreated;
-										
+								msg.media = await wapp.modWapp.msgMedia(msg.sid);
+								debugger;
+								/*
 								msg.media = JSON.stringify([{
 									Url: data.Location,
 									ContentType: file2.type,
 								}]);
+								*/
 										
 								/*
 								msg.latitude = row['LATITUDE'];
