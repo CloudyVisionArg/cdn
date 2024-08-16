@@ -619,7 +619,7 @@ var wapp = {
 			var $row = $('<div/>', {
 				class: 'wapp-message',
 				'data-sid': pMsg.sid,
-				'data-date': pMsg.doorsCreated,
+				'data-date': pMsg.date,
 			});
 			
 			var $msg = $('<div/>', {
@@ -1015,6 +1015,7 @@ var wapp = {
 			//todo: deprecar xhr
 			let msg = await wapp.modWapp.send(sendObj);
 			msg.operator = wapp.loggedUser.Name;
+			msg.date = msg.doorsCreated;
 			/*
 			ObjectaccountSid: "AC47a3e29520495dc61fe3a8c1fbb6a3e7"
 			apiVersion: "2010-04-01"
