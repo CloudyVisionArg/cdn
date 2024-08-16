@@ -173,14 +173,14 @@ var wapp = {
 			var $modalDialog = $modal.find('.modal-dialog');
 			var $modalBody = $modal.find('.modal-body');
 			$modalBody.html('<div style="padding: 30px;">Cargando...</div>');
-			$modalDialog.css({marginTop: ($(window).height() - 150) / 2});
+			//$modalDialog.css({marginTop: ($(window).height() - 150) / 2});
 			$modal.modal('show');
 			var $img = $('<img/>');
 			$img.css({maxHeight: $(window).height() - 30, maxWidth: '100%'});
 			$img.attr('src', $(this).attr('src'));
 			$img.load(function () {
 				$modalBody.html($img);
-				$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
+				//$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
 			});
 		}
 	},
