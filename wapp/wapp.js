@@ -507,7 +507,7 @@ var wapp = {
 		wapp.refreshSession($cont);
 	},
 	
-	refreshSession: async function (pChat, pDate) { //todo: no era async
+	refreshSession: async function (pChat, pDate) {
 		if (pDate) {
 			render(pDate);
 
@@ -592,7 +592,7 @@ var wapp = {
 	
 	renderMsg: function (pMsg, pCallback) {
 		// Pide el media, si no esta
-		if (pMsg.nummedia > 0) {
+		if (pMsg.numMedia > 0) {
 			if (!pMsg.media) {
 				wapp.msgMedia(pMsg.sid).then(
 					function (res) {
@@ -619,11 +619,11 @@ var wapp = {
 			var $row = $('<div/>', {
 				class: 'wapp-message',
 				'data-sid': pMsg.sid,
-				'data-date': pMsg.date,
+				'data-date': pMsg.doorsCreated,
 			});
 			
 			var $msg = $('<div/>', {
-				class: 'wapp-' + pMsg.direction,
+				class: 'wapp-' + pMsg.direction.replaceAll('-api', ''),
 			}).appendTo($row);
 		
 			if (pMsg.operator) $msg.append(pMsg.operator);
@@ -632,7 +632,7 @@ var wapp = {
 				class: 'wapp-message-text',
 			}).appendTo($msg);
 		
-			if (pMsg.nummedia > 0 && pMsg.media) {
+			if (pMsg.numMedia > 0 && pMsg.media) {
 				var media = undefined;
 				try {
 					media = JSON.parse(pMsg.media);
@@ -672,10 +672,10 @@ var wapp = {
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
 							$('<a/>', {
-								 target: '_blank',
-								 href: it.Url,
-								 download: pMsg.body,
-								 style: 'font-weight: 500;',
+								target: '_blank',
+								href: it.Url,
+								download: pMsg.body,
+								style: 'font-weight: 500;',
 							}).append(pMsg.body).appendTo($div);
 							
 							appendBody = false;
@@ -1014,8 +1014,7 @@ var wapp = {
 			
 			//todo: deprecar xhr
 			let msg = await wapp.modWapp.send(sendObj);
-			debugger;
-
+			msg.operator = wapp.loggedUser.Name;
 			/*
 			ObjectaccountSid: "AC47a3e29520495dc61fe3a8c1fbb6a3e7"
 			apiVersion: "2010-04-01"
@@ -1040,29 +1039,14 @@ var wapp = {
 			uri: "/2010-04-01/Accounts/AC47a3e29520495dc61fe3a8c1fbb6a3e7/Messages/SMd89311e0556b25c68408a9d0b7f7127c.json"
 			*/
 			
-			wapp.xhr(sendObj).then(
-				function (res) {
-					var $dom = $($.parseXML(res.jqXHR.responseText));
-					msg = {};
-					msg.sid = $dom.find('Message Sid').html();
-					msg.direction = 'outbound';
-					msg.operator = wapp.loggedUser.Name;
-					msg.status = $dom.find('Message Status').html();
-					msg.body = $dom.find('Message Body').html();
-					msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
-					wapp.renderMsg(msg, function (msgRow) {
-						var $cont = $chat.find('div.wapp-messages');
-						$cont.append(msgRow);
-						$cont.scrollTop($cont[0].scrollHeight);
-						wapp.cursorLoading(false);
-					});
-					$inp.removeAttr("data-content-sid");
-				},
-				function (err) {
-					wapp.cursorLoading(false);
-					alert('Error: ' + err.jqXHR.responseText);
-				}
-			)
+			wapp.renderMsg(msg, function (msgRow) {
+				var $cont = $chat.find('div.wapp-messages');
+				$cont.append(msgRow);
+				$cont.scrollTop($cont[0].scrollHeight);
+				wapp.cursorLoading(false);
+			});
+
+			$inp.removeAttr("data-content-sid");
 
 			$inp.val('');
 			wapp.inputResize($inp[0]);
