@@ -1013,10 +1013,7 @@ var wapp = {
 				sendObj.from = fromName;
 			}
 			
-			//todo: deprecar xhr
 			let msg = await wapp.modWapp.send(sendObj);
-			msg.operator = wapp.loggedUser.Name;
-			msg.date = msg.doorsCreated;
 			/*
 			ObjectaccountSid: "AC47a3e29520495dc61fe3a8c1fbb6a3e7"
 			apiVersion: "2010-04-01"
@@ -1040,6 +1037,8 @@ var wapp = {
 			to: "whatsapp:+543515284577"
 			uri: "/2010-04-01/Accounts/AC47a3e29520495dc61fe3a8c1fbb6a3e7/Messages/SMd89311e0556b25c68408a9d0b7f7127c.json"
 			*/
+			msg.operator = wapp.loggedUser.Name;
+			msg.date = msg.doorsCreated;
 			
 			wapp.renderMsg(msg, function (msgRow) {
 				var $cont = $chat.find('div.wapp-messages');
@@ -1169,7 +1168,7 @@ var wapp = {
 							ACL: 'public-read',
 						},
 
-						function(err, data) {
+						async function(err, data) {
 							if (err) {
 								debugger;
 								wapp.cursorLoading(false);
@@ -1180,7 +1179,6 @@ var wapp = {
 								var fromN = $chat.attr('data-internal-number');
 								var toN = $chat.attr('data-external-number');
 
-								debugger;
 								let sendObj = {
 									wappaction: 'send',
 									from: fromN,
@@ -1189,42 +1187,28 @@ var wapp = {
 									mediaUrl: data.Location,
 								};
 
-								wapp.xhr(sendObj).then(
-									function (res) {
-										debugger;
-										var $dom = $($.parseXML(res.jqXHR.responseText));
-										msg = {};
-										msg.sid = $dom.find('Message Sid').html();
-										msg.direction = 'outbound';
-										msg.operator = wapp.loggedUser.Name;
-										msg.status = $dom.find('Message Status').html();
-										msg.body = $dom.find('Message Body').html();
-										msg.date = (xmlDecodeDate($dom.find('Message DoorsCreated').html())).toJSON();
-										msg.nummedia = $dom.find('Message NumMedia').html();;
+								let msg = await wapp.modWapp.send(sendObj);
+								debugger;
+
+								msg.operator = wapp.loggedUser.Name;
+								msg.date = msg.doorsCreated;
 										
-										msg.media = JSON.stringify([{
-											Url: data.Location,
-											ContentType: file2.type,
-										}]);
+								msg.media = JSON.stringify([{
+									Url: data.Location,
+									ContentType: file2.type,
+								}]);
 										
-										/*
-										msg.latitude = row['LATITUDE'];
-										msg.longitude = row['LONGITUDE'];
-										*/
-										
-										wapp.renderMsg(msg, function (msgRow) {
-											var $cont = $chat.find('div.wapp-messages');
-											$cont.append(msgRow);
-											$cont.scrollTop($cont[0].scrollHeight);
-											wapp.cursorLoading(false);
-										});
-									},
-									function (err) {
-										debugger;
-										wapp.cursorLoading(false);
-										alert('Error: ' + err.jqXHR.responseText);
-									}
-								);
+								/*
+								msg.latitude = row['LATITUDE'];
+								msg.longitude = row['LONGITUDE'];
+								*/
+								
+								wapp.renderMsg(msg, function (msgRow) {
+									var $cont = $chat.find('div.wapp-messages');
+									$cont.append(msgRow);
+									$cont.scrollTop($cont[0].scrollHeight);
+									wapp.cursorLoading(false);
+								});
 
 								/*
 								// Borra el archivo de S3 despues de un minuto
