@@ -1192,13 +1192,6 @@ var wapp = {
 								msg.operator = wapp.loggedUser.Name;
 								msg.date = msg.doorsCreated;
 								msg.media = JSON.stringify(await wapp.modWapp.msgMedia(msg.sid));
-								debugger;
-								/*
-								msg.media = JSON.stringify([{
-									Url: data.Location,
-									ContentType: file2.type,
-								}]);
-								*/
 										
 								/*
 								msg.latitude = row['LATITUDE'];
@@ -1212,7 +1205,6 @@ var wapp = {
 									wapp.cursorLoading(false);
 								});
 
-								/*
 								// Borra el archivo de S3 despues de un minuto
 								setTimeout(function () {
 									wapp.s3.deleteObject({ Key: s3Key }, function (err, data) {
@@ -1222,7 +1214,6 @@ var wapp = {
 										}
 									});
 								}, 60000)
-								*/
 							}
 						}
 	
