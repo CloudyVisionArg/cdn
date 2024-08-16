@@ -2,7 +2,7 @@ var inApp = typeof app7 == 'object';
 
 (async function () {
 	await include([
-		{ id: 'whatsapp-css', version: 0 }, //todo: sacar fresh
+		{ id: 'whatsapp-css' },
 		{ id: 'jslib' },
 		{ id: 'emojis' },
 	]);
@@ -36,7 +36,7 @@ var inApp = typeof app7 == 'object';
 		repo: 'Global',
 		path: 'wappcnn/wapp.mjs',
 		url: true,
-		fresh: true, //todo: sacar fresh
+		//fresh: true, //todo: sacar fresh
 	}))
 	wapp.modWapp.setContext({ dSession });
 
@@ -990,7 +990,7 @@ var wapp = {
 		}
 	},
 
-	send: async function (el) { //todo: lo hago async
+	send: async function (el) {
 		var $chat = $(el).closest('div.wapp-chat');
 		var $inp = $chat.find('.wapp-reply');
 		if ($inp.val()) {
