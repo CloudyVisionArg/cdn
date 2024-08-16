@@ -20,6 +20,7 @@ function registeredScripts() {
     */
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
+    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
     scripts.push({ id: 'lib-moment', path: '/lib/moment-with-locales.min.js', version: 377 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 379 });
     scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 373 });
@@ -32,6 +33,7 @@ function registeredScripts() {
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 368, hasdep: true });
     /*
     Por si hay que volver atras
+    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
     scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 375 });
     scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
@@ -71,7 +73,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
     scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
     scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
-    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
     scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
     scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 
