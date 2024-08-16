@@ -632,8 +632,6 @@ var wapp = {
 				class: 'wapp-message-text',
 			}).appendTo($msg);
 		
-			if (pMsg.sid == 'MM7fe90ba83246627aa31ea7d7872608ae') debugger;
-
 			if (pMsg.numMedia > 0 && pMsg.media) {
 				var media = undefined;
 				try {
