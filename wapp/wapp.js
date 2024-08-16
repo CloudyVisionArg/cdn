@@ -1191,7 +1191,7 @@ var wapp = {
 
 								msg.operator = wapp.loggedUser.Name;
 								msg.date = msg.doorsCreated;
-								msg.media = await wapp.modWapp.msgMedia(msg.sid);
+								msg.media = JSON.stringify(await wapp.modWapp.msgMedia(msg.sid));
 								debugger;
 								/*
 								msg.media = JSON.stringify([{
