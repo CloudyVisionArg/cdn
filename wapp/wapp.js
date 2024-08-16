@@ -632,6 +632,9 @@ var wapp = {
 				class: 'wapp-message-text',
 			}).appendTo($msg);
 		
+			debugger;
+			if (pMsg.sid == 'MM7fe90ba83246627aa31ea7d7872608ae') debugger;
+
 			if (pMsg.numMedia > 0 && pMsg.media) {
 				var media = undefined;
 				try {
@@ -641,7 +644,6 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
-					if (pMsg.sid == 'MM7fe90ba83246627aa31ea7d7872608ae') debugger;
 					
 					media.forEach(it => {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
