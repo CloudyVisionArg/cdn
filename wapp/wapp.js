@@ -1188,7 +1188,6 @@ var wapp = {
 								};
 
 								let msg = await wapp.modWapp.send(sendObj);
-
 								msg.operator = wapp.loggedUser.Name;
 								msg.date = msg.doorsCreated;
 								msg.media = JSON.stringify(await wapp.modWapp.msgMedia(msg.sid));
