@@ -923,7 +923,7 @@ var wapp = {
 					}
 					msg.body = row['BODY'];
 					msg.date = row['CREATED'];
-					msg.nummedia = row['NUMMEDIA'];
+					msg.numMedia = row['NUMMEDIA'];
 					msg.media = row['MEDIA'];
 					msg.latitude = row['LATITUDE'];
 					msg.longitude = row['LONGITUDE'];
