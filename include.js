@@ -20,6 +20,7 @@ function registeredScripts() {
     */
     
     // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
     scripts.push({ id: 'lib-moment', path: '/lib/moment-with-locales.min.js', version: 377 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 379 });
@@ -33,6 +34,7 @@ function registeredScripts() {
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 368, hasdep: true });
     /*
     Por si hay que volver atras
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
     scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 375 });
@@ -45,7 +47,6 @@ function registeredScripts() {
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 357, hasdep: true });
     */
 
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 344 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 325 });
