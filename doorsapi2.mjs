@@ -352,12 +352,11 @@ export class Session {
     }
 
     asyncEventsDisabled(value) {
-        let url = "session/asyncevents/disabled";
+        let url = 'session/asyncevents/disabled';
         if (value === undefined) {
             return this.restClient.fetch(url, 'GET', '', '');
-        }
-        else{
-            return this.restClient.fetch(url + (value ? "/true" : "/false"), 'POST', {}, '');
+        } else {
+            return this.restClient.fetch(url + (value ? '/true' : '/false'), 'POST', {}, '');
         }
     };
 
@@ -750,12 +749,11 @@ export class Session {
     }
 
     syncEventsDisabled(value) {
-        let url = "session/syncevents/disabled";
+        let url = 'session/syncevents/disabled';
         if (value === undefined) {
             return this.restClient.fetch(url, 'GET', '', '');
-        }
-        else{
-            return this.restClient.fetch(url + (value ? "/true" : "/false"), 'POST', {}, '');
+        } else {
+            return this.restClient.fetch(url + (value ? '/true' : '/false'), 'POST', {}, '');
         }
     };
 
