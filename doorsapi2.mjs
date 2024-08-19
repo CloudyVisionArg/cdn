@@ -351,6 +351,16 @@ export class Session {
         this.#apiKey = value;
     }
 
+    asyncEventsDisabled(value) {
+        let url = "session/asyncevents/disabled";
+        if (value === undefined) {
+            return this.restClient.fetch(url, 'GET', '', '');
+        }
+        else{
+            return this.restClient.fetch(url + (value ? "/true" : "/false"), 'POST', {}, '');
+        }
+    };
+
     /**
     @returns {string}
     */
@@ -702,30 +712,6 @@ export class Session {
         }
     }
     
-    syncEventsDisabled(value) {
-        if (value === undefined) {
-            let url = "session/syncevents/disabled";
-            return this.restClient.fetch(url, 'GET', '', '');
-        }
-        else{
-            let str = value === "true" || value === true || value === "1" ? "true" : "false";
-            let url = "session/syncevents/disabled/" + str;
-            return this.restClient.fetch(url, 'POST', {}, '');
-        }
-    };
-
-    asyncEventsDisabled(value) {
-        if (value === undefined) {
-            let url = "session/asyncevents/disabled";
-            return this.restClient.fetch(url, 'GET', '', '');
-        }
-        else{
-            let str = value === "true" || value === true || value === "1" ? "true" : "false";
-            let url = "session/asyncevents/disabled/" + str;
-            return this.restClient.fetch(url, 'POST', {}, '');
-        }
-    };
-
     /**
     @returns {string}
     */
@@ -762,6 +748,16 @@ export class Session {
 
         return this.restClient.fetch(url, method, param, paramName);
     }
+
+    syncEventsDisabled(value) {
+        let url = "session/syncevents/disabled";
+        if (value === undefined) {
+            return this.restClient.fetch(url, 'GET', '', '');
+        }
+        else{
+            return this.restClient.fetch(url + (value ? "/true" : "/false"), 'POST', {}, '');
+        }
+    };
 
     /**
     Devuelve o setea tags de session.
