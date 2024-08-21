@@ -644,10 +644,10 @@ var wapp = {
 					let msgType, mimeType, src;
 
 					if (pMsg.transport == 'Wab') {
-						debugger;
 						msgType = pMsg.type;
 						mimeType = media['mime_type'];
 						let att = await DoorsAPI.attachmentsGetByName(pMsg.docId, media['filename']);
+						debugger;
 
 					} else {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
