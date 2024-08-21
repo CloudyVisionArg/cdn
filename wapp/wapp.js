@@ -653,19 +653,21 @@ var wapp = {
 					} else {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
 						mimeType = media[0].ContentType;
+						msgType = mimeType.substring(0, mimeType.indexOf('/'));
+						if (msgType == 'application') msgType = 'document';
 						src = media[0].Url;
 					}
 						
 					var $div = $('<div/>').appendTo($msgText);
 					var $btn;
 						
-					if (mimeType.substr(0, 5) == 'image') {
+					if (msgType == 'image') {
 						$('<img/>', {
 							src: src,
 							style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 						}).click(wapp.viewImage).appendTo($div);
 							
-					} else if (mimeType(0, 5) == 'audio') {
+					} else if (msgType == 'audio') {
 						var $med = $('<audio/>', {
 							controls: true,
 							style: 'width: 230px;',
@@ -673,7 +675,7 @@ var wapp = {
 						
 						$med.append('<source src="' + src + '" type="' + mimeType + '">');
 
-					} else if (mimeType.substr(0, 5) == 'video') {
+					} else if (msgType == 'video') {
 						var $med = $('<video/>', {
 							controls: true,
 							style: 'width: 100%; object-fit: contain;',
@@ -681,7 +683,7 @@ var wapp = {
 						
 						$med.append('<source src="' + src + '" type="' + mimeType + '">');
 
-					} else if (mimeType.substr(0, 11) == 'application') {
+					} else if (msgType == 'document') {
 						// todo: no anda en cordova
 						$('<a/>', {
 							target: '_blank',
