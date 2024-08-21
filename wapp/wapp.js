@@ -613,7 +613,7 @@ var wapp = {
 		}
 		
 		// Renderiza
-		function render(pMsg, pCallback) {
+		async function render(pMsg, pCallback) { //todo: la hago async
 			var appendBody = true;
 			
 			var $row = $('<div/>', {
@@ -641,50 +641,56 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
+					let msgType, mimeType, src;
+
 					if (pMsg.transport == 'WAB') {
+						msgType = pMsg.type;
+						mimeType = media['mime_type'];
+						let att = await DoorsAPI.attachmentsGetByName(pMsg.docId, media['filename']);
 						debugger;
+
 					} else {
-					}
-					media.forEach(it => {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
+						mimeType = media[0].ContentType;
+						src = media[0].Url;
+					}
 						
-						var $div = $('<div/>').appendTo($msgText);
-						var $btn;
+					var $div = $('<div/>').appendTo($msgText);
+					var $btn;
 						
-						if (it.ContentType.substr(0, 5) == 'image') {
-							$('<img/>', {
-								src: it.Url,
-								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
-							}).click(wapp.viewImage).appendTo($div);
+					if (mimeType.substr(0, 5) == 'image') {
+						$('<img/>', {
+							src: src,
+							style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
+						}).click(wapp.viewImage).appendTo($div);
 							
-						} else if (it.ContentType.substr(0, 5) == 'audio') {
-							var $med = $('<audio/>', {
-								controls: true,
-								style: 'width: 230px;',
-							}).appendTo($div);
-							
-							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+					} else if (mimeType(0, 5) == 'audio') {
+						var $med = $('<audio/>', {
+							controls: true,
+							style: 'width: 230px;',
+						}).appendTo($div);
+						
+						$med.append('<source src="' + src + '" type="' + mimeType + '">');
 
-						} else if (it.ContentType.substr(0, 5) == 'video') {
-							var $med = $('<video/>', {
-								controls: true,
-								style: 'width: 100%; object-fit: contain;',
-							}).appendTo($div);
-							
-							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+					} else if (mimeType.substr(0, 5) == 'video') {
+						var $med = $('<video/>', {
+							controls: true,
+							style: 'width: 100%; object-fit: contain;',
+						}).appendTo($div);
+						
+						$med.append('<source src="' + src + '" type="' + mimeType + '">');
 
-						} else if (it.ContentType.substr(0, 11) == 'application') {
-							// todo: no anda en cordova
-							$('<a/>', {
-								target: '_blank',
-								href: it.Url,
-								download: pMsg.body,
-								style: 'font-weight: 500;',
-							}).append(pMsg.body).appendTo($div);
-							
-							appendBody = false;
-						}
-					});
+					} else if (mimeType.substr(0, 11) == 'application') {
+						// todo: no anda en cordova
+						$('<a/>', {
+							target: '_blank',
+							href: src,
+							download: pMsg.body,
+							style: 'font-weight: 500;',
+						}).append(pMsg.body).appendTo($div);
+						
+						appendBody = false;
+					}
 				}
 			}
 			
@@ -910,6 +916,7 @@ var wapp = {
 					row['ACC_NAME'] = accs.find(acc => acc['AccId'] == row['ACC_ID'])['Name'];
 
 					var msg = {};
+					msg.docId = row['DOC_ID'];
 					msg.sid = row['MESSAGESID'];
 					if (row['FROM_NUMREV'].indexOf(extNumberRev) >= 0) {
 						msg.direction = 'inbound';
