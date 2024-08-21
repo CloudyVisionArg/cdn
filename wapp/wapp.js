@@ -641,7 +641,7 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
-					
+					if (
 					media.forEach(it => {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
 						
@@ -925,6 +925,8 @@ var wapp = {
 					msg.media = row['MEDIA'];
 					msg.latitude = row['LATITUDE'];
 					msg.longitude = row['LONGITUDE'];
+					msg.transport = row['TRANSPORT'];
+					msg.type = row['TYPE'];
 
 					wapp.insertMsg(pChat, msg);
 				});
