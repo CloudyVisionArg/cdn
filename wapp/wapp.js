@@ -646,7 +646,9 @@ var wapp = {
 					if (pMsg.transport == 'Wab') {
 						msgType = pMsg.type;
 						mimeType = media['mime_type'];
-						let att = await DoorsAPI.attachmentsGetByName(pMsg.docId, media['filename']);
+						let buff = await DoorsAPI.attachmentsGetByName(pMsg.docId, media['filename']);
+						let blob = new Blob([buff]);
+						src = window.URL.createObjectURL(blob);
 						debugger;
 
 					} else {
