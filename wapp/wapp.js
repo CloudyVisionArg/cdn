@@ -649,7 +649,6 @@ var wapp = {
 						let buff = await DoorsAPI.attachmentsGetByName(pMsg.docId, media['filename']);
 						let blob = new Blob([buff]);
 						src = window.URL.createObjectURL(blob);
-						debugger;
 
 					} else {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
