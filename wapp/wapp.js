@@ -662,7 +662,7 @@ var wapp = {
 					var $btn;
 						
 					if (msgType == 'image' || msgType == 'sticker') {
-						debugger;
+						if (msgType == 'sticker') debugger;
 						$('<img/>', {
 							src: src,
 							style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
