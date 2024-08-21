@@ -641,7 +641,10 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
-					if (
+					if (pMsg.transport == 'WAB') {
+						debugger;
+					} else {
+					}
 					media.forEach(it => {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
 						
