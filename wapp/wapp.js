@@ -661,7 +661,7 @@ var wapp = {
 					var $div = $('<div/>').appendTo($msgText);
 					var $btn;
 						
-					if (msgType == 'image') {
+					if (msgType == 'image' || msgType == 'sticker') {
 						$('<img/>', {
 							src: src,
 							style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
