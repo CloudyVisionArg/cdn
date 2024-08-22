@@ -482,7 +482,7 @@ async function appPageInit(e, page) {
     if (!pageEl.drs) pageEl.drs = {};
     Object.assign(pageEl.drs, {
         fillControls, saveDoc, fld_id, folder, 
-        doc_id, doc, $navbar, f7Page, exitForm,
+        doc_id, doc, $navbar, f7Page, exitForm, $get,
     });
 }
 
@@ -1812,6 +1812,7 @@ function showDesigner() {
     }
 }
 
+//todo: documentar opciones
 function showModal(options) {
     //todo: app
     let $modal = $(modal._element);
