@@ -939,7 +939,7 @@ var wapp = {
 					msg.message = row['MESSAGE'];
 
 					await wapp.insertMsg(pChat, msg);
-					loopt.next();
+					loop.next();
 				});
 						
 				if (pOlders && $older.length > 0) {
