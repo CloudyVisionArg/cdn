@@ -623,6 +623,7 @@ var wapp = {
 		async function render(pMsg, pCallback) { //todo: la hago async
 			var appendBody = true;
 			
+			debugger;
 			var $row = $('<div/>', {
 				class: 'wapp-message',
 				'data-sid': pMsg.sid,
