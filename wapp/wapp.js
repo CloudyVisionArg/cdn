@@ -40,6 +40,13 @@ var inApp = typeof app7 == 'object';
 	}))
 	wapp.modWapp.setContext({ dSession });
 
+	wapp.modAtt = await import(gitCdn({
+		repo: 'Global',
+		path: 'attachments.mjs',
+		url: true,
+	}))
+	wapp.modWapp.setContext({ dSession });
+
 	wapp.rootFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
 	wapp.rootFolder = await dSession.folder(wapp.rootFolderId);
 	wapp.messagesFolder = await wapp.rootFolder.folder('messages');
@@ -646,9 +653,11 @@ var wapp = {
 					if (pMsg.transport == 'Wab') {
 						msgType = pMsg.type;
 						mimeType = media['mime_type'];
-						let buff = await DoorsAPI.attachmentsGetByName(pMsg.docId, media['filename']);
-						let blob = new Blob([buff]);
-						src = window.URL.createObjectURL(blob);
+						src = await modAtt.getAtt({
+							docId: pMsg.docId,
+							attName: media['filename'],
+							url: true,
+						});
 
 					} else {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
