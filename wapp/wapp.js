@@ -653,7 +653,7 @@ var wapp = {
 					if (pMsg.transport == 'Wab') {
 						msgType = pMsg.type;
 						mimeType = media['mime_type'];
-						src = await modAtt.getAtt({
+						src = await wapp.modAtt.getAtt({
 							docId: pMsg.docId,
 							attName: media['filename'],
 							url: true,
