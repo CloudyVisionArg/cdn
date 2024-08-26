@@ -662,6 +662,7 @@ var wapp = {
 					var $btn;
 						
 					if (msgType == 'image' || msgType == 'sticker') {
+						if (msgType == 'sticker') debugger;
 						$('<img/>', {
 							src: src,
 							style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
@@ -940,6 +941,7 @@ var wapp = {
 					msg.longitude = row['LONGITUDE'];
 					msg.transport = row['TRANSPORT'];
 					msg.type = row['TYPE'];
+					msg.message = row['MESSAGE'];
 
 					wapp.insertMsg(pChat, msg);
 				});
