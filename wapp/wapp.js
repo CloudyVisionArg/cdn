@@ -45,7 +45,7 @@ var inApp = typeof app7 == 'object';
 		path: 'attachments.mjs',
 		url: true,
 	}))
-	wapp.modWapp.setContext({ dSession });
+	wapp.modAtt.setContext({ dSession });
 
 	wapp.rootFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
 	wapp.rootFolder = await dSession.folder(wapp.rootFolderId);
