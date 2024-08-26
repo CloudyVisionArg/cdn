@@ -565,13 +565,12 @@ var wapp = {
 		}
 	},
 	
-	insertMsg: function (pChat, pMsg) {
+	insertMsg: async function (pChat, pMsg) {
 		var $cont = pChat.find('div.wapp-messages');
 		var $msgs = pChat.find('div.wapp-message');
 		if ($msgs.length == 0) {
-			wapp.renderMsg(pMsg, function (msgRow) {
-				$cont.append(msgRow);
-			});
+			let $msgRow = await wapp.renderMsg(pMsg);
+			$cont.append($msgRow);
 		} else {
 			var $msg = $msgs.filter('[data-sid="' + pMsg.sid + '"]');
 			if ($msg.length > 0) {
@@ -579,205 +578,185 @@ var wapp = {
 				$msg.find('.wapp-message-status-container').html(wapp.getTicks(pMsg.status));
 			} else {
 				$msg = $msgs.first();
-				wapp.renderMsg(pMsg, function (msgRow) {
-					if (pMsg.date <= $msg.attr('data-date')) {
-						$msg.before(msgRow);
+				let $msgRow = await wapp.renderMsg(pMsg);
+				if (pMsg.date <= $msg.attr('data-date')) {
+					$msg.before($msgRow);
+				} else {
+					$msg = $msgs.last();
+					while ($msg.attr('data-date') > pMsg.date) $msg = $msg.prev();
+					if ($msg) {
+						$msg.after($msgRow);
 					} else {
-						$msg = $msgs.last();
-						while ($msg.attr('data-date') > pMsg.date) $msg = $msg.prev();
-						if ($msg) {
-							$msg.after(msgRow);
-						} else {
-							// No deberia llegar aca, lo pongo al ultimo
-							$cont.append(msgRow);
-						}
+						// No deberia llegar aca, lo pongo al ultimo
+						$cont.append($msgRow);
 					}
-				});
+				}
 			}
 		}
 	},
 	
-	renderMsg: function (pMsg, pCallback) {
+	renderMsg: async function (pMsg) { //todo: la hago async
 		// Pide el media, si no esta
-		if (pMsg.numMedia > 0) {
-			if (!pMsg.media) {
-				wapp.msgMedia(pMsg.sid).then(
-					function (res) {
-						pMsg.media = res;
-						render(pMsg, pCallback);
-					},
-					function (err) {
-						debugger;
-						console.log(err.responseText);
-						render(pMsg, pCallback);
-					}
-				);
-			} else {
-				render(pMsg, pCallback);
-			}
-		} else {
-			render(pMsg, pCallback);
+		if (pMsg.numMedia > 0 && !pMsg.media) {
+			let res = await wapp.msgMedia(pMsg.sid);
+			pMsg.media = res;
 		}
 		
-		// Renderiza
-		async function render(pMsg, pCallback) { //todo: la hago async
-			var appendBody = true;
-			
-			debugger;
-			var $row = $('<div/>', {
-				class: 'wapp-message',
-				'data-sid': pMsg.sid,
-				'data-date': pMsg.date,
-			});
-			
-			var $msg = $('<div/>', {
-				class: 'wapp-' + pMsg.direction.replaceAll('-api', ''),
-			}).appendTo($row);
+		var appendBody = true;
 		
-			if (pMsg.operator) $msg.append(pMsg.operator);
+		var $row = $('<div/>', {
+			class: 'wapp-message',
+			'data-sid': pMsg.sid,
+			'data-date': pMsg.date,
+		});
 			
-			var $msgText = $('<div/>', {
-				class: 'wapp-message-text',
-			}).appendTo($msg);
+		var $msg = $('<div/>', {
+			class: 'wapp-' + pMsg.direction.replaceAll('-api', ''),
+		}).appendTo($row);
+	
+		if (pMsg.operator) $msg.append(pMsg.operator);
 		
-			if (pMsg.numMedia > 0 && pMsg.media) {
-				var media = undefined;
-				try {
-					media = JSON.parse(pMsg.media);
-				} catch (err) {
-					debugger;
-					console.log(err);
-				};
-				if (media) {
-					let msgType, mimeType, src;
-
-					if (pMsg.transport == 'Wab') {
-						msgType = pMsg.type;
-						mimeType = media['mime_type'];
-						src = await wapp.modAtt.getAtt({
-							docId: pMsg.docId,
-							attName: media['filename'] ? media['filename'] : 'File.webp',
-							url: true,
-						});
-
-					} else {
-						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
-						mimeType = media[0].ContentType;
-						msgType = mimeType.substring(0, mimeType.indexOf('/'));
-						if (msgType == 'application') msgType = 'document';
-						src = media[0].Url;
-					}
-						
-					var $div = $('<div/>').appendTo($msgText);
-					var $btn;
-						
-					if (msgType == 'image') {
-						$('<img/>', {
-							src: src,
-							style: 'cursor: pointer; max-width: 100%; max-height: 130px; object-fit: cover;',
-						}).click(wapp.viewImage).appendTo($div);
-							
-					} else if (msgType == 'sticker') {
-						$('<img/>', {
-							src: src,
-							style: 'width: 100px; object-fit: contain;',
-						}).click(wapp.viewImage).appendTo($div);
-
-					} else if (msgType == 'audio') {
-						var $med = $('<audio/>', {
-							controls: true,
-							style: 'width: 230px;',
-						}).appendTo($div);
-						
-						$med.append('<source src="' + src + '" type="' + mimeType + '">');
-
-					} else if (msgType == 'video') {
-						var $med = $('<video/>', {
-							controls: true,
-							style: 'max-width: 100%; object-fit: contain;',
-						}).appendTo($div);
-						
-						$med.append('<source src="' + src + '" type="' + mimeType + '">');
-
-					} else if (msgType == 'document') {
-						// todo: no anda en cordova
-						$('<a/>', {
-							target: '_blank',
-							href: src,
-							download: pMsg.body,
-							style: 'font-weight: 500;',
-						}).append(pMsg.body).appendTo($div);
-						
-						appendBody = false;
-					}
-				}
-			}
-			
-			if (pMsg.latitude || pMsg.longitude) {
-				var lat = pMsg.latitude;
-				var lng = pMsg.longitude;
-				
-				var $div = $('<div/>').appendTo($msgText);
-
-				var key;
-				if (inApp) {
-					/*
-					todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
-					https://developers.google.com/maps/documentation/javascript/get-api-key
-					*/
-					key = decrypt('U2FsdGVkX1980jboiLSByehdC4OHgstgnLMTIAR3jlMmshxjimk1mfzFVv2NcgRQkl+FEI8GtQM+DmvOb8Cymg==', '');
-				} else {
-					key = 'AIzaSyDZy47rgaX-Jz74' + 'vgsA_wTUlbAodzLvnYY';
-				}
-
-				var $img = $('<img/>', {
-					src: 'https://maps.google.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=color:red%7Csize:mid%7C' + 
-						lat + ',' + lng + '&zoom=15&size=260x130&key=' + key,
-					style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
-				}).appendTo($div);
-
-				$img.attr('data-lat', lat);
-				$img.attr('data-lng', lng);
-
-				$img.click(function () {
-					var url = 'https://www.google.com/maps/place/' + $(this).attr('data-lat') + ',' + $(this).attr('data-lng');
-					if (inApp) {
-						cordova.InAppBrowser.open(url, '_system');
-					} else {
-						window.open(url);
-					}
-				});
+		var $msgText = $('<div/>', {
+			class: 'wapp-message-text',
+		}).appendTo($msg);
+	
+		if (pMsg.numMedia > 0 && pMsg.media) {
+			var media = undefined;
+			try {
+				media = JSON.parse(pMsg.media);
+			} catch (err) {
+				debugger;
+				console.log(err);
 			};
+			if (media) {
+				let msgType, mimeType, src;
 
-			if (appendBody) {
-				var body = pMsg.body;
-				if (body) {
-					body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
+				if (pMsg.transport == 'Wab') {
+					msgType = pMsg.type;
+					mimeType = media['mime_type'];
+					src = await wapp.modAtt.getAtt({
+						docId: pMsg.docId,
+						attName: media['filename'] ? media['filename'] : 'File.webp',
+						url: true,
+					});
+
+				} else {
+					// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
+					mimeType = media[0].ContentType;
+					msgType = mimeType.substring(0, mimeType.indexOf('/'));
+					if (msgType == 'application') msgType = 'document';
+					src = media[0].Url;
+				}
 					
-					//todo: estos reemplazos deben trabajar con word boundary
-					// https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
-					body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
-					// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
-					//body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
-					body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los ~ con <del>
-				};
-				
-				$msgText.append(body);
+				var $div = $('<div/>').appendTo($msgText);
+				var $btn;
+					
+				if (msgType == 'image') {
+					$('<img/>', {
+						src: src,
+						style: 'cursor: pointer; max-width: 100%; max-height: 130px; object-fit: cover;',
+					}).click(wapp.viewImage).appendTo($div);
+						
+				} else if (msgType == 'sticker') {
+					$('<img/>', {
+						src: src,
+						style: 'width: 100px; object-fit: contain;',
+					}).click(wapp.viewImage).appendTo($div);
+
+				} else if (msgType == 'audio') {
+					var $med = $('<audio/>', {
+						controls: true,
+						style: 'width: 230px;',
+					}).appendTo($div);
+					
+					$med.append('<source src="' + src + '" type="' + mimeType + '">');
+
+				} else if (msgType == 'video') {
+					var $med = $('<video/>', {
+						controls: true,
+						style: 'max-width: 100%; object-fit: contain;',
+					}).appendTo($div);
+					
+					$med.append('<source src="' + src + '" type="' + mimeType + '">');
+
+				} else if (msgType == 'document') {
+					// todo: no anda en cordova
+					$('<a/>', {
+						target: '_blank',
+						href: src,
+						download: pMsg.body,
+						style: 'font-weight: 500;',
+					}).append(pMsg.body).appendTo($div);
+					
+					appendBody = false;
+				}
 			}
-			
-			var $msgTime = $('<div/>', {
-				class: 'wapp-message-time',
-			}).appendTo($msg);
-			
-			dt = new Date(pMsg.date);
-			$msgTime.append(wapp.formatDate(dt));
-			
-			if (pMsg.status) {
-				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status) + '</span>');
-			}
-			
-			if (pCallback) pCallback($row);
 		}
+		
+		if (pMsg.latitude || pMsg.longitude) {
+			var lat = pMsg.latitude;
+			var lng = pMsg.longitude;
+			
+			var $div = $('<div/>').appendTo($msgText);
+
+			var key;
+			if (inApp) {
+				/*
+				todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
+				https://developers.google.com/maps/documentation/javascript/get-api-key
+				*/
+				key = decrypt('U2FsdGVkX1980jboiLSByehdC4OHgstgnLMTIAR3jlMmshxjimk1mfzFVv2NcgRQkl+FEI8GtQM+DmvOb8Cymg==', '');
+			} else {
+				key = 'AIzaSyDZy47rgaX-Jz74' + 'vgsA_wTUlbAodzLvnYY';
+			}
+
+			var $img = $('<img/>', {
+				src: 'https://maps.google.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=color:red%7Csize:mid%7C' + 
+					lat + ',' + lng + '&zoom=15&size=260x130&key=' + key,
+				style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
+			}).appendTo($div);
+
+			$img.attr('data-lat', lat);
+			$img.attr('data-lng', lng);
+
+			$img.click(function () {
+				var url = 'https://www.google.com/maps/place/' + $(this).attr('data-lat') + ',' + $(this).attr('data-lng');
+				if (inApp) {
+					cordova.InAppBrowser.open(url, '_system');
+				} else {
+					window.open(url);
+				}
+			});
+		};
+
+		if (appendBody) {
+			var body = pMsg.body;
+			if (body) {
+				body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
+				
+				//todo: estos reemplazos deben trabajar con word boundary
+				// https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
+				body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
+				// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
+				//body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
+				body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los ~ con <del>
+			};
+			
+			$msgText.append(body);
+		}
+		
+		var $msgTime = $('<div/>', {
+			class: 'wapp-message-time',
+		}).appendTo($msg);
+		
+		dt = new Date(pMsg.date);
+		$msgTime.append(wapp.formatDate(dt));
+		
+		if (pMsg.status) {
+			$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status) + '</span>');
+		}
+		
+		return $row;
 	},
 	
 	// Deja crecer hasta 4 lineas, muestra los scrolls para mas
@@ -930,8 +909,9 @@ var wapp = {
 				// Si estoy al fondo
 				var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
 				var sessionUpdated = false;
-						
-				res.forEach(row => {
+					
+				await dSession.utils.asyncLoop(res.length, async (loop) => {
+					let row = res[loop.iteration()];
 					row['ACC_NAME'] = accs.find(acc => acc['AccId'] == row['ACC_ID'])['Name'];
 
 					var msg = {};
@@ -958,7 +938,8 @@ var wapp = {
 					msg.type = row['TYPE'];
 					msg.message = row['MESSAGE'];
 
-					wapp.insertMsg(pChat, msg);
+					await wapp.insertMsg(pChat, msg);
+					loopt.next();
 				});
 						
 				if (pOlders && $older.length > 0) {
@@ -1072,12 +1053,11 @@ var wapp = {
 			msg.operator = wapp.loggedUser.Name;
 			msg.date = msg.doorsCreated;
 			
-			wapp.renderMsg(msg, function (msgRow) {
-				var $cont = $chat.find('div.wapp-messages');
-				$cont.append(msgRow);
-				$cont.scrollTop($cont[0].scrollHeight);
-				wapp.cursorLoading(false);
-			});
+			let $msgRow = await wapp.renderMsg(msg);
+			var $cont = $chat.find('div.wapp-messages');
+			$cont.append($msgRow);
+			$cont.scrollTop($cont[0].scrollHeight);
+			wapp.cursorLoading(false);
 
 			$inp.removeAttr("data-content-sid");
 
@@ -1229,12 +1209,11 @@ var wapp = {
 								msg.longitude = row['LONGITUDE'];
 								*/
 								
-								wapp.renderMsg(msg, function (msgRow) {
-									var $cont = $chat.find('div.wapp-messages');
-									$cont.append(msgRow);
-									$cont.scrollTop($cont[0].scrollHeight);
-									wapp.cursorLoading(false);
-								});
+								let $msgRow = await wapp.renderMsg(msg);
+								var $cont = $chat.find('div.wapp-messages');
+								$cont.append($msgRow);
+								$cont.scrollTop($cont[0].scrollHeight);
+								wapp.cursorLoading(false);
 
 								// Borra el archivo de S3 despues de un minuto
 								setTimeout(function () {
