@@ -679,7 +679,7 @@ var wapp = {
 					} else if (msgType == 'sticker') {
 						$('<img/>', {
 							src: src,
-							style: 'width: 120; object-fit: contain;',
+							style: 'width: 100px; object-fit: contain;',
 						}).click(wapp.viewImage).appendTo($div);
 
 					} else if (msgType == 'audio') {
