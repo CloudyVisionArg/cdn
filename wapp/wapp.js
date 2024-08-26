@@ -673,7 +673,7 @@ var wapp = {
 					if (msgType == 'image') {
 						$('<img/>', {
 							src: src,
-							style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
+							style: 'cursor: pointer; max-width: 100%; max-height: 130px; object-fit: cover;',
 						}).click(wapp.viewImage).appendTo($div);
 							
 					} else if (msgType == 'sticker') {
@@ -693,7 +693,7 @@ var wapp = {
 					} else if (msgType == 'video') {
 						var $med = $('<video/>', {
 							controls: true,
-							style: 'width: 100%; object-fit: contain;',
+							style: 'max-width: 100%; object-fit: contain;',
 						}).appendTo($div);
 						
 						$med.append('<source src="' + src + '" type="' + mimeType + '">');
