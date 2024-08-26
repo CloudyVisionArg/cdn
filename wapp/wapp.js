@@ -655,7 +655,7 @@ var wapp = {
 						mimeType = media['mime_type'];
 						src = await wapp.modAtt.getAtt({
 							docId: pMsg.docId,
-							attName: media['filename'],
+							attName: media['filename'] ? media['filename'] : 'File.webp',
 							url: true,
 						});
 
