@@ -90,7 +90,7 @@ var inApp = typeof app7 == 'object';
 	}
 
 	$(document).ready(() => {
-		if (!inApp) {
+		if (!inApp) { // En el app se inicializan de otra forma
 			// Carga inicial
 			$('div.wapp-chat').each(function () {
 				wapp.init($(this));
@@ -595,31 +595,78 @@ var wapp = {
 		}
 	},
 	
-	renderMsg: async function (pMsg) { //todo: la hago async
-		// Pide el media, si no esta
-		if (pMsg.numMedia > 0 && !pMsg.media) {
-			let res = await wapp.msgMedia(pMsg.sid);
-			pMsg.media = res;
+	renderMsg: async function (pMsg) {
+		let lMsg = structuredClone(pMsg);
+
+		if (lMsg.numMedia > 0) {
+			try {
+				// Pide el media, si no esta
+				if (!lMsg.media) lMsg.media = await wapp.msgMedia(lMsg.sid);
+				// Parse
+				if (lMsg.media) lMsg.media = JSON.parse(lMsg.media);
+			} catch (err) {
+				console.log(err);
+				debugger;
+			}
 		}
 		
-		var appendBody = true;
+		if (lMsg.transport == 'Wab') {
+			// Whatsapp Business
+			let fn = lMsg.media['filename'];
+			lMsg.media.src = await wapp.modAtt.getAtt({
+				docId: lMsg.docId,
+				attName: fn ? fn : 'File.webp',
+				url: true,
+			});
+
+		} else {
+			// Twilio
+			if (lMsg.numMedia > 0) {
+				// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
+				lMsg.media = lMsg.media[0]
+				let mime = lMsg.media['mime_type'] = lMsg.media.ContentType;
+				let type = mime.substring(0, mime.indexOf('/'));
+				lMsg.type = type == 'application' ? type = 'document' : type;
+				lMsg.src = lMsg.media.Url;
+				//todo: aca traer el body como caption, etc (segun el type)
+			} else if (lMsg.latitude || lMsg.longitude) {
+				{
+					"from":"5493515284577",
+					"id":"wamid.HBgNNTQ5MzUxNTI4NDU3NxUCABIYFDNBQzhBQTUxMkQzM0M3NzA4QUFDAA==",
+					"timestamp":"1724765139",
+					"location":{
+						"address":"Ruta Provincial E 57 Km. 16, Mendiolaza, Córdoba X5107",
+						"latitude":-31.254945755005,
+						"longitude":-64.30891418457,
+						"name":"Barrio Privado Cuatro Hojas",
+						"url":"https://foursquare.com/v/4d80c6659d78a35d3d3c480f"
+					},
+					"type":"location"
+				}
+
+			}
+		}
 		
-		var $row = $('<div/>', {
+		let $row = $('<div/>', {
 			class: 'wapp-message',
-			'data-sid': pMsg.sid,
-			'data-date': pMsg.date,
+			'data-sid': lMsg.sid,
+			'data-date': lMsg.date,
 		});
 			
 		var $msg = $('<div/>', {
-			class: 'wapp-' + pMsg.direction.replaceAll('-api', ''),
+			class: 'wapp-' + lMsg.direction.replaceAll('-api', ''),
 		}).appendTo($row);
 	
-		if (pMsg.operator) $msg.append(pMsg.operator);
+		if (lMsg.operator) $msg.append(lMsg.operator);
 		
 		var $msgText = $('<div/>', {
 			class: 'wapp-message-text',
 		}).appendTo($msg);
 	
+		if (lMsg.type == 'text') {
+
+		}
+
 		if (pMsg.numMedia > 0 && pMsg.media) {
 			var media = undefined;
 			try {
@@ -1277,5 +1324,4 @@ var wapp = {
 		$file.prop('data-chat', pChat);
 		$file.click();
 	}
-
 }

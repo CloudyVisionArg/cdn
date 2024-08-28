@@ -1661,7 +1661,7 @@ async function saveDoc(exitOnSuccess) {
         } else {
             toast('Cambios guardados');
             if (exitOnSuccess) {
-                setTimeout(exitForm, inApp ? 0 : 800); // Le da tiempo para verlo antes de salir
+                exitForm();
             } else {
                 fillControls();
             }
