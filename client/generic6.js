@@ -940,7 +940,6 @@ async function renderControls(container, parent) {
 
             if (!inApp) {
                 control.$root.addClass('mt-3');
-                debugger;
                 if (ctl.attr('height')) $input.css('height', ctl.attr('height') + ctl.attr('unitheight'));
             }
 
