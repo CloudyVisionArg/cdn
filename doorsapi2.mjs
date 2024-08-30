@@ -48,7 +48,7 @@ async function loadUtils() {
             `);
         }
     } else {
-        incjs = {};
+        _incjs = {};
         let res = await fetch(incUrl);
         let code = await res.text();
         eval(`
