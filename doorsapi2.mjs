@@ -34,8 +34,8 @@ async function loadUtils() {
 
     // include
 
+    let incUrl = 'https://cdn.cloudycrm.net/ghcv/cdn/include.js';
     if (!inNode()) {
-        let incUrl = 'https://cdn.cloudycrm.net/ghcv/cdn/include.js';
         if (window.include === undefined) {
             // include
             var res = await fetch(incUrl);
