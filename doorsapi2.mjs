@@ -4031,7 +4031,8 @@ export class Node {
             code.exec = true;
             let srv = await me.server;
             if (srv) code.server = srv;
-            let url = ghCodeUrl(code);
+
+            let url = me.inNode() ? (await mainlib.incjs()).ghCodeUrl(code) : ghCodeUrl(code);
 
             if (options.url) {
                 url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
