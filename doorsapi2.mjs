@@ -48,6 +48,7 @@ async function loadUtils() {
             `);
         }
     } else {
+        debugger;
         let res = await fetch(incUrl);
         let code = await res.text();
         eval(`
