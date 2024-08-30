@@ -4033,7 +4033,7 @@ export class Node {
             if (srv) code.server = srv;
 
             debugger;
-            let url = me.inNode() ? (await mainlib.incjs()).ghCodeUrl(code) : ghCodeUrl(code);
+            let url = me.inNode ? (await mainlib.incjs()).ghCodeUrl(code) : ghCodeUrl(code);
 
             if (options.url) {
                 url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
