@@ -5,7 +5,7 @@ async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constr
 */
 
 var _moment, _numeral, _CryptoJS, _serializeError,
-    _fastXmlParser, _URL, _htmlEntities, _contentDisposition;
+    _fastXmlParser, _URL, _htmlEntities, _contentDisposition, _incjs;
 
 export { _moment as moment };
 export { _numeral as numeral };
@@ -35,9 +35,10 @@ async function loadUtils() {
     // include
 
     if (!inNode()) {
+        let incUrl = 'https://cdn.cloudycrm.net/ghcv/cdn/include.js';
         if (window.include === undefined) {
             // include
-            var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
+            var res = await fetch(incUrl);
             var code = await res.text();
             eval(`
                 ${code}
@@ -46,6 +47,15 @@ async function loadUtils() {
                 window.ghCodeUrl = ghCodeUrl;
             `);
         }
+    } else {
+        let res = await fetch(incUrl);
+        let code = await res.text();
+        eval(`
+            ${code}
+            _incjs.include = include;
+            _incjs.scriptSrc = scriptSrc;
+            _incjs.ghCodeUrl = ghCodeUrl;
+        `);
     }
 
 
@@ -4032,7 +4042,7 @@ export class Node {
             let srv = await me.server;
             if (srv) code.server = srv;
 
-            let url = me.inNode ? (await mainlib.incjs()).ghCodeUrl(code) : ghCodeUrl(code);
+            let url = me.inNode ? _incjs.ghCodeUrl(code) : ghCodeUrl(code);
 
             if (options.url) {
                 url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
