@@ -4032,7 +4032,6 @@ export class Node {
             let srv = await me.server;
             if (srv) code.server = srv;
 
-            debugger;
             let url = me.inNode ? (await mainlib.incjs()).ghCodeUrl(code) : ghCodeUrl(code);
 
             if (options.url) {
