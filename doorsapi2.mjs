@@ -37,7 +37,6 @@ async function loadUtils() {
     let incUrl = 'https://cdn.cloudycrm.net/ghcv/cdn/include.js';
     if (!inNode()) {
         if (window.include === undefined) {
-            // include
             var res = await fetch(incUrl);
             var code = await res.text();
             eval(`
@@ -2118,6 +2117,13 @@ export class Document {
 
         this.#attachmentsMap.set(name, att);
         return att;
+    }
+
+    /**
+    Alias de attachmentsAdd
+    */
+    attachmentsNew(name) {
+        return this.attachmentsAdd(name);
     }
 
     attachmentsReset() {

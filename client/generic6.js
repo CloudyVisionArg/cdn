@@ -87,8 +87,7 @@ var inApp = typeof window.app7 == 'object';
                 }
 
                 if (!window.modControls6) {
-                    //todo: sacar fresh
-                    window.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true, fresh: true })); //todo: sacar fresh
+                    window.modControls6 = await import(gitCdn({ repo: 'Global', path: '/client/controls6.mjs', url: true }));
                     await modControls6.init();
                 }
         
@@ -1178,6 +1177,8 @@ async function renderControls(container, parent) {
 
         }
     
+        // --------------------------------------
+
         if (control && control.$root) control.$root.appendTo($cont);
 
         try {
