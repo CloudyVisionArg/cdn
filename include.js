@@ -335,7 +335,10 @@ function scriptSrc(scriptId, version) {
                     var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
                     if (Array.isArray(lsScripts)) {
                         var scr = lsScripts.find(el => el.id == scriptId);
-                        if (scr) v = scr.version;
+                        if (scr) {
+                            v = scr.version;
+                            console.log('scriptSrc localStorage hit', scr)
+                        }
                     };
                 } catch (e) {
                     console.log(e);
@@ -394,6 +397,7 @@ function gitCdn(options) {
                 if (scr) {
                     options.ref = scr.ref;
                     options.fresh = scr.fresh;
+                    console.log('gitCdn localStorage hit', scr)
                 }
             };
         } catch (e) {
