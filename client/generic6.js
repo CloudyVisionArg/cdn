@@ -1174,6 +1174,7 @@ async function renderControls(container, parent) {
             control = {
                 $root: inApp ? $('<li/>') : $('<div/>', { class: 'mt-3' }),
             };
+            if (ctl.attr('html')) control.$root.append(ctl.attr('html'));
 
         }
     
