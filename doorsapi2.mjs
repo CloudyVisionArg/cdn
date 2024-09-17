@@ -47,6 +47,7 @@ async function loadUtils() {
             `);
         }
     } else {
+        /*
         _incjs = {};
         let res = await fetch(incUrl);
         let code = await res.text();
@@ -56,6 +57,7 @@ async function loadUtils() {
             _incjs.scriptSrc = scriptSrc;
             _incjs.ghCodeUrl = ghCodeUrl;
         `);
+        */
     }
 
 
