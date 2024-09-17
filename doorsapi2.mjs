@@ -4129,6 +4129,22 @@ export class Node {
         })
     }
 
+    async dispatchServerEvent(type, data) {
+        let me = this;
+        return await fetch(await me.server + '/sse' , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ type, data }),
+        });
+    }
+
+    /**
+    Se suscribe a los eventos del servidor y devuelve la instancia de EventSource
+
+
+    */
     get serverEvents() {
         let me = this;
         if (typeof(EventSource) == 'function' && typeof(window) == 'object') {
