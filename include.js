@@ -24,7 +24,7 @@ function registeredScripts() {
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
     scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 391 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 388 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 392 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
     scripts.push({ id: 'lib-moment', path: '/lib/moment-with-locales.min.js', version: 377 });
