@@ -4007,6 +4007,21 @@ export class Node {
     }
 
     /**
+    Dispara un evento del servidor
+    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+    */
+    async dispatchServerEvent(type, data) {
+        let me = this;
+        return await fetch(await me.server + '/sse' , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ type, data }),
+        });
+    }
+
+    /**
     Ejecuta un codigo node en el servidor de eventos.
     Si se pasa doc, se simulara la ejecucion de un evento sincrono js,
     devolviendo el json del doc con los cambios que haya realizado el codigo.
@@ -4129,21 +4144,9 @@ export class Node {
         })
     }
 
-    async dispatchServerEvent(type, data) {
-        let me = this;
-        return await fetch(await me.server + '/sse' , {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ type, data }),
-        });
-    }
-
     /**
-    Se suscribe a los eventos del servidor y devuelve la instancia de EventSource
-
-
+    Devuelve un EventSource suscripto a los eventos del servidor
+    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
     */
     get serverEvents() {
         let me = this;
