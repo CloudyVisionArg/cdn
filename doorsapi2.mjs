@@ -4129,6 +4129,20 @@ export class Node {
         })
     }
 
+    get serverEvents() {
+        let me = this;
+        if (typeof(EventSource) == 'function' && typeof(window) == 'object') {
+            return new Promise(async (resolve, reject) => {
+                if (!window.drsServerEvents) {
+                    window.drsServerEventsconst = new EventSource(await me.server + '/sse');
+                }
+                resolve(window.drsServerEventsconst);
+            });
+        } else {
+            throw new Error('serverEvents runs only on client side');
+        }
+    }
+
     /**
     @returns {Session}
     */
