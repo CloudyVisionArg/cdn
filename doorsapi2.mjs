@@ -46,16 +46,14 @@ async function loadUtils() {
             `);
         }
     } else {
-        debugger;
         _incjs = {};
-        let code = await v8_mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
+        let code = await global.v8Mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
         eval(`
             ${code}
             _incjs.include = include;
             _incjs.scriptSrc = scriptSrc;
             _incjs.ghCodeUrl = ghCodeUrl;
         `);
-        
     }
 
 
