@@ -40,7 +40,7 @@ async function loadUtils() {
                 var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
                 var code = await res.text();
                 eval(`
-                    ${code}
+                    ${ code }
                     window.include = include;
                     window.scriptSrc = scriptSrc;
                     window.ghCodeUrl = ghCodeUrl;
@@ -50,7 +50,7 @@ async function loadUtils() {
             _incjs = {};
             let code = await global.drs.mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
             eval(`
-                ${code}
+                ${ code }
                 _incjs.include = include;
                 _incjs.scriptSrc = scriptSrc;
                 _incjs.ghCodeUrl = ghCodeUrl;
