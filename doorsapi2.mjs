@@ -2462,6 +2462,7 @@ export class Document {
             var tags = me.#json.Tags;
 
             if (me.session.doorsVersion >= '008.000.000.000') {
+                let js = me.#json;
                 debugger;
             }
 
