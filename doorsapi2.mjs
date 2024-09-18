@@ -4055,14 +4055,14 @@ export class Node {
     Dispara un evento del servidor
     https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
     */
-    async dispatchServerEvent(type, data) {
+    async dispatchServerEvent(options) {
         let me = this;
         return await fetch(await me.server + '/sse' , {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ type, data }),
+            body: JSON.stringify(options),
         });
     }
 
@@ -4193,15 +4193,13 @@ export class Node {
     Devuelve un EventSource suscripto a los eventos del servidor
     https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
     */
-    get serverEvents() {
+    async serverEvents(options) {
         let me = this;
         if (typeof(EventSource) == 'function' && typeof(window) == 'object') {
-            return new Promise(async (resolve, reject) => {
-                if (!window.drsServerEvents) {
-                    window.drsServerEventsconst = new EventSource(await me.server + '/sse');
-                }
-                resolve(window.drsServerEventsconst);
-            });
+            if (!window.drsServerEvents) {
+                window.drsServerEvents = new EventSource(await me.server + '/sse');
+            }
+            return window.drsServerEvents;
         } else {
             throw new Error('serverEvents runs only on client side');
         }
