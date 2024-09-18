@@ -16,8 +16,8 @@ export { _htmlEntities as htmlEntities }
 export { _contentDisposition as contentDisposition }
 
 //await loadUtils();
-
 var utilsPromise = loadUtils();
+
 /*
 todo: Safari soporta await at module top level recien en la v15
 https://caniuse.com/?search=top%20level%20await
@@ -34,146 +34,203 @@ async function loadUtils() {
 
     // include
 
-    if (!inNode()) {
-        if (window.include === undefined) {
-            var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
-            var code = await res.text();
+    try {
+        if (!inNode()) {
+            if (window.include === undefined) {
+                var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
+                var code = await res.text();
+                eval(`
+                    ${code}
+                    window.include = include;
+                    window.scriptSrc = scriptSrc;
+                    window.ghCodeUrl = ghCodeUrl;
+                `);
+            }
+        } else {
+            _incjs = {};
+            let code = await global.drs.mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
             eval(`
                 ${code}
-                window.include = include;
-                window.scriptSrc = scriptSrc;
-                window.ghCodeUrl = ghCodeUrl;
+                _incjs.include = include;
+                _incjs.scriptSrc = scriptSrc;
+                _incjs.ghCodeUrl = ghCodeUrl;
             `);
         }
-    } else {
-        _incjs = {};
-        let code = await global.drs.mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
-        eval(`
-            ${code}
-            _incjs.include = include;
-            _incjs.scriptSrc = scriptSrc;
-            _incjs.ghCodeUrl = ghCodeUrl;
-        `);
+
+    } catch(err) {
+        console.error('Error loading include', err);
     }
 
 
     // moment - https://momentjs.com/docs/
 
-    if (typeof(moment) == 'undefined') {
-        if (inNode()) {
-            res = await import('moment');
-            _moment = res.default;
+    try {
+        if (typeof(moment) == 'undefined') {
+            if (inNode()) {
+                res = await import('moment');
+                _moment = res.default;
+            } else {
+                await include('lib-moment');
+                _moment = moment;
+            }
         } else {
-            await include('lib-moment');
             _moment = moment;
         }
-    } else {
-        _moment = moment;
+
+        _moment.locale('es'); // todo: setear a partir del lngId
+        
+    } catch(err) {
+        console.error('Error loading moment', err);
     }
 
-    _moment.locale('es'); // todo: setear a partir del lngId
-    
 
     // numeral - http://numeraljs.com/
 
-    if (typeof(numeral) == 'undefined') {
-        if (inNode()) {
-            res = await import('numeral');
-            await import('numeral/locales/es.js');
-            _numeral = res.default;
+    try {
+        if (typeof(numeral) == 'undefined') {
+            if (inNode()) {
+                res = await import('numeral');
+                await import('numeral/locales/es.js');
+                _numeral = res.default;
+            } else {
+                await include('lib-numeral');
+                await include('lib-numeral-locales');
+                _numeral = numeral;
+            }
         } else {
-            await include('lib-numeral');
-            await include('lib-numeral-locales');
             _numeral = numeral;
         }
-    } else {
-        _numeral = numeral;
-    }
 
-    // todo: setear a partir del lngId
-    _numeral.locale('es'); // es / en
-    _numeral.defaultFormat('0,0.[00]');
+        // todo: setear a partir del lngId
+        _numeral.locale('es'); // es / en
+        _numeral.defaultFormat('0,0.[00]');
+
+    } catch(err) {
+        console.error('Error loading numeral', err);
+    }
 
 
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
 
-    if (typeof(CryptoJS) == 'undefined') {
-        if (inNode()) {
-            res = await import('crypto-js');
-            _CryptoJS = res.default;
+    try {
+        if (typeof(CryptoJS) == 'undefined') {
+            if (inNode()) {
+                res = await import('crypto-js');
+                _CryptoJS = res.default;
+            } else {
+                await include('lib-cryptojs-aes');
+                _CryptoJS = CryptoJS;
+            }
         } else {
-            await include('lib-cryptojs-aes');
             _CryptoJS = CryptoJS;
         }
-    } else {
-        _CryptoJS = CryptoJS;
+
+    } catch(err) {
+        console.error('Error loading crypto-js', err);
     }
 
 
     // serialize-error - https://github.com/sindresorhus/serialize-error
 
-    if (typeof(_serializeError) == 'undefined') {
-        if (inNode()) {
-            res = await import('serialize-error');
-            _serializeError = res;
-        } else {
-            if (window.serializeError) {
-                _serializeError = window.serializeError;
+    try {
+        if (typeof(_serializeError) == 'undefined') {
+            if (inNode()) {
+                res = await import('serialize-error');
+                _serializeError = res;
             } else {
-                res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs/+esm');
-                _serializeError = res.default;
-                window.serializeError = _serializeError;
+                if (window.serializeError) {
+                    _serializeError = window.serializeError;
+                } else {
+                    res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs/+esm');
+                    _serializeError = res.default;
+                    window.serializeError = _serializeError;
+                }
             }
         }
+
+    } catch(err) {
+        console.error('Error loading serialize-error', err);
     }
 
 
     // fast-xml-parser - https://github.com/NaturalIntelligence/fast-xml-parser
 
-    if (typeof(_fastXmlParser) == 'undefined') {
-        if (inNode()) {
-            var res = await import('fast-xml-parser');
-            _fastXmlParser = res.default;
-        } else {
-            if (window.fastXmlParser) {
-                _fastXmlParser = window.fastXmlParser;
-            } else {
-                var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser/+esm');
+    try {
+        if (typeof(_fastXmlParser) == 'undefined') {
+            if (inNode()) {
+                var res = await import('fast-xml-parser');
                 _fastXmlParser = res.default;
-                window.fastXmlParser = _fastXmlParser;
+            } else {
+                if (window.fastXmlParser) {
+                    _fastXmlParser = window.fastXmlParser;
+                } else {
+                    var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser/+esm');
+                    _fastXmlParser = res.default;
+                    window.fastXmlParser = _fastXmlParser;
+                }
             }
         }
+
+    } catch(err) {
+        console.error('Error loading fast-xml-parser', err);
     }
 
 
     // html-entities - https://github.com/mdevils/html-entities
 
-    if (typeof(_htmlEntities) == 'undefined') {
-        if (inNode()) {
-            var res = await import('html-entities');
-            _htmlEntities = res.default;
+    try {
+        if (typeof(_htmlEntities) == 'undefined') {
+            if (inNode()) {
+                var res = await import('html-entities');
+                _htmlEntities = res.default;
+            }
         }
+
+    } catch(err) {
+        console.error('Error loading html-entities', err);
     }
 
 
     // content-disposition - https://github.com/jshttp/content-disposition
 
-    if (typeof(_contentDisposition) == 'undefined') {
-        if (inNode()) {
-            var res = await import('content-disposition');
-            _contentDisposition = res.default;
-        } else {
-            if (window.contentDisposition) {
-                _contentDisposition = window.contentDisposition;
-            } else {
-                var res = await import('https://cdn.jsdelivr.net/npm/content-disposition/+esm');
+    try {
+        if (typeof(_contentDisposition) == 'undefined') {
+            if (inNode()) {
+                var res = await import('content-disposition');
                 _contentDisposition = res.default;
-                window.contentDisposition = _contentDisposition;
+            } else {
+                if (window.contentDisposition) {
+                    _contentDisposition = window.contentDisposition;
+                } else {
+                    var res = await import('https://cdn.jsdelivr.net/npm/content-disposition/+esm');
+                    _contentDisposition = res.default;
+                    window.contentDisposition = _contentDisposition;
+                }
             }
         }
+
+    } catch(err) {
+        console.error('Error loading content-disposition', err);
     }
 
 
+    // URL
+
+    try {
+        if (typeof(_URL) == 'undefined') {
+            if (inNode()) {
+                var res = (await import('url'));
+                _URL = res.default.URL;
+            } else {
+                _URL = window.URL;
+            }
+        }
+
+    } catch(err) {
+        console.error('Error loading url', err);
+    }
+
+    
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
         String.prototype.reverse = function () {
@@ -197,16 +254,6 @@ async function loadUtils() {
             for (var i = 0; i < count; i++) ret += me;
             return ret;
         };
-    }
-
-    // URL
-    if (typeof(_URL) == 'undefined') {
-        if (inNode()) {
-            var res = (await import('url'));
-            _URL = res.default.URL;
-        } else {
-            _URL = window.URL;
-        }
     }
 
     return true;
