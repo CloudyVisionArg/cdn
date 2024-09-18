@@ -47,6 +47,7 @@ async function loadUtils() {
         }
     } else {
         debugger;
+        _incjs = {};
         let code = await v8_mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
         eval(`
             ${code}
