@@ -34,10 +34,9 @@ async function loadUtils() {
 
     // include
 
-    let incUrl = 'https://cdn.cloudycrm.net/ghcv/cdn/include.js';
     if (!inNode()) {
         if (window.include === undefined) {
-            var res = await fetch(incUrl);
+            var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
             var code = await res.text();
             eval(`
                 ${code}
@@ -48,10 +47,7 @@ async function loadUtils() {
         }
     } else {
         debugger;
-        let incUrl = 'https://nodedev.cloudycrm.net/ghcv/cdn/include.js';
-        _incjs = {};
-        let res = await fetch(incUrl);
-        let code = await res.text();
+        let code = await v8_mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
         eval(`
             ${code}
             _incjs.include = include;
