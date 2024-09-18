@@ -2461,6 +2461,10 @@ export class Document {
             }
             var tags = me.#json.Tags;
 
+            if (me.session.doorsVersion >= '008.000.000.000') {
+                debugger;
+            }
+
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
@@ -2497,58 +2501,63 @@ export class Document {
         let utils = me.session.utils;
         let ret = [];
 
-        // 1ro borrar
-        let atts = await this.attachments();
-        let keys = Array.from(atts.keys());
-        await utils.asyncLoop(keys.length, async loop => {
-            let att = atts.get(keys[loop.iteration()]);
-            if (att.toDelete) {
-                let res = {
-                    action: 'delete',
-                    attachment: attInfo(att),
-                }
-                try {
-                    await att.delete();
-                    res.result = 'OK';
-                } catch (err) {
-                    res.result = err;
-                } finally {
-                    ret.push(res);
-                }
-            }
-            loop.next();
-        });
+        if (await me.session.doorsVersion >= '008.000.000.000') {
+            console.warn('saveAttachments is deprecated since Doors 8');
 
-        // 2do agregar
-        await utils.asyncLoop(atts.length, async loop => {
-            let att = atts.get(loop.iteration());
-            if (att.isNew) {
-                let res = {
-                    action: 'add',
-                    attachment: attInfo(att),
+        } else {
+            // 1ro borrar
+            let atts = await this.attachments();
+            let keys = Array.from(atts.keys());
+            await utils.asyncLoop(keys.length, async loop => {
+                let att = atts.get(keys[loop.iteration()]);
+                if (att.toDelete) {
+                    let res = {
+                        action: 'delete',
+                        attachment: attInfo(att),
+                    }
+                    try {
+                        await att.delete();
+                        res.result = 'OK';
+                    } catch (err) {
+                        res.result = err;
+                    } finally {
+                        ret.push(res);
+                    }
                 }
-                try {
-                    await att.save();
-                    res.result = 'OK';
-                } catch (err) {
-                    res.result = err;
-                } finally {
-                    ret.push(res);
-                }
-            }
-            loop.next();
-        })
+                loop.next();
+            });
 
-        function attInfo(att) {
-            return {
-                id: att.id,
-                name: att.name,
-                size: att.size,
-                isNew: att.isNew,
+            // 2do agregar
+            await utils.asyncLoop(atts.length, async loop => {
+                let att = atts.get(loop.iteration());
+                if (att.isNew) {
+                    let res = {
+                        action: 'add',
+                        attachment: attInfo(att),
+                    }
+                    try {
+                        await att.save();
+                        res.result = 'OK';
+                    } catch (err) {
+                        res.result = err;
+                    } finally {
+                        ret.push(res);
+                    }
+                }
+                loop.next();
+            })
+
+            function attInfo(att) {
+                return {
+                    id: att.id,
+                    name: att.name,
+                    size: att.size,
+                    isNew: att.isNew,
+                }
             }
+
+            return ret;
         }
-
-        return ret;
     }
 
     /**
