@@ -2102,6 +2102,8 @@ export class Document {
                         var url = 'documents/' + me.id + '/attachments';
                         me.session.restClient.fetch(url, 'GET', '', '').then(
                             res => {
+                                debugger; //todo: sacar
+
                                 if (res.length > 0) {
                                     // Ordena descendente
                                     res.sort(function (a, b) {
