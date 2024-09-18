@@ -47,7 +47,8 @@ async function loadUtils() {
             `);
         }
     } else {
-        /*
+        
+        let incUrl = 'https://nodedev.cloudycrm.net/ghcv/cdn/include.js';
         _incjs = {};
         let res = await fetch(incUrl);
         let code = await res.text();
@@ -57,7 +58,7 @@ async function loadUtils() {
             _incjs.scriptSrc = scriptSrc;
             _incjs.ghCodeUrl = ghCodeUrl;
         `);
-        */
+        
     }
 
 
