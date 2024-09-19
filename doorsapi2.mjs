@@ -1406,6 +1406,7 @@ export class Attachment {
                 attMap.delete(me.name);
                 resolve(true);
             } else {
+                //todo: en v8 deberia marcar toDelete y nada mas
                 var url = 'documents/' + me.parent.id + '/attachments';
                 me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
                     res => {
@@ -1584,6 +1585,7 @@ export class Attachment {
     @returns {Promise}
     */
     save() {
+        //todo: deprecar para v8
         if (!this.isNew) throw new Error('I\'m not new');
 
         var me = this;
@@ -1594,7 +1596,6 @@ export class Attachment {
             formData.append('attachment', blob, me.name);
             if (me.description || me.description == 0) formData.append('description', me.description);
             if (me.group || me.group == 0) formData.append('group', me.group);
-            // todo: probar si graba description y group
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
@@ -2102,8 +2103,6 @@ export class Document {
                         var url = 'documents/' + me.id + '/attachments';
                         me.session.restClient.fetch(url, 'GET', '', '').then(
                             res => {
-                                debugger; //todo: sacar
-
                                 if (res.length > 0) {
                                     // Ordena descendente
                                     res.sort(function (a, b) {
@@ -2464,6 +2463,21 @@ export class Document {
             var tags = me.#json.Tags;
 
             if (me.session.doorsVersion >= '008.000.000.000') {
+                let atts = await me.attachments();
+
+                let keys = Array.from(atts.keys());
+                await utils.asyncLoop(keys.length, async loop => {
+                    let att = atts.get(keys[loop.iteration()]);
+                    if (att.toDelete) {
+                    }
+                    if (att.isNew) {
+                    }
+
+
+                    loop.next();
+                });
+
+
                 let js = me.#json;
                 debugger;
             }
@@ -2485,6 +2499,8 @@ export class Document {
                             }
 
                             me._reset();
+                            if (me.session.doorsVersion >= '008.000.000.000') me.attachmentsReset();
+
                             resolve(me);
                         },
                         reject
@@ -2506,6 +2522,7 @@ export class Document {
 
         if (await me.session.doorsVersion >= '008.000.000.000') {
             console.warn('saveAttachments is deprecated in Doors 8');
+            return ret;
 
         } else {
             // 1ro borrar
