@@ -2475,7 +2475,7 @@ export class Document {
                     if (att.isNew) {
                         me.#json.Attachments.push({
                             Name: att.name,
-                            File: new SimpleBuffer(att.fileStream).toString('base64');
+                            File: new SimpleBuffer(att.fileStream).toString('base64'),
 
                         });
                         debugger;
