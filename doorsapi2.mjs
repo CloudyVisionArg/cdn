@@ -2469,8 +2469,10 @@ export class Document {
                 await utils.asyncLoop(keys.length, async loop => {
                     let att = atts.get(keys[loop.iteration()]);
                     if (att.toDelete) {
+                        debugger;
                     }
                     if (att.isNew) {
+                        debugger;
                     }
 
 
