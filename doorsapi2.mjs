@@ -2463,6 +2463,7 @@ export class Document {
             var tags = me.#json.Tags;
 
             if (me.session.doorsVersion >= '008.000.000.000') {
+                let json = me.#json;
                 let atts = await me.attachments();
 
                 let keys = Array.from(atts.keys());
@@ -2479,9 +2480,6 @@ export class Document {
                     loop.next();
                 });
 
-
-                let js = me.#json;
-                debugger;
             }
 
             var url = 'documents';
