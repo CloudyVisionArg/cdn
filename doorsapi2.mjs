@@ -2473,7 +2473,7 @@ export class Document {
                         debugger;
                     }
                     if (att.isNew) {
-                        let f = await (await att.fileStream).arrayBuffer();
+                        let f = new SimpleBuffer(await (await att.fileStream).arrayBuffer()).toString('base64');
                         debugger
                         me.#json.Attachments.push({
                             Name: att.name,
