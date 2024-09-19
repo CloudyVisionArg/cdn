@@ -2473,7 +2473,7 @@ export class Document {
                         debugger;
                     }
                     if (att.isNew) {
-                        let f = (await att.fileStream).arrayBuffer();
+                        let f = await (await att.fileStream).arrayBuffer();
                         debugger
                         me.#json.Attachments.push({
                             Name: att.name,
