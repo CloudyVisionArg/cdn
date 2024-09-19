@@ -2466,7 +2466,7 @@ export class Document {
                 let atts = await me.attachments();
 
                 let keys = Array.from(atts.keys());
-                await utils.asyncLoop(keys.length, async loop => {
+                await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = atts.get(keys[loop.iteration()]);
                     if (att.toDelete) {
                         debugger;
