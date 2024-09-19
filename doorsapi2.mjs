@@ -2473,12 +2473,13 @@ export class Document {
                         debugger;
                     }
                     if (att.isNew) {
+                        let f = (await att.fileStream).arrayBuffer();
+                        debugger
                         me.#json.Attachments.push({
                             Name: att.name,
                             File: new SimpleBuffer(await att.fileStream).toString('base64'),
 
                         });
-                        debugger;
                     }
 
 
