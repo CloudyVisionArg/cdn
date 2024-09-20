@@ -2529,7 +2529,7 @@ export class Document {
         let ret = [];
 
         if (await me.session.doorsVersion >= '008.000.000.000') {
-            console.warn('saveAttachments is deprecated in Doors 8');
+            console.warn('saveAttachments is deprecated since Doors 8');
             return ret;
 
         } else {
