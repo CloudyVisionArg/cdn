@@ -2478,6 +2478,9 @@ export class Document {
                         let buf = await (await att.fileStream).arrayBuffer();
                         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
                         newAtt.Description = att.description;
+                        let ix = att.name.lastIndexOf('.');
+                        if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
+                        debugger;
                         newAtt.File = new SimpleBuffer(buf).toString('base64');
                         newAtt.Group = att.group;
                         newAtt.Name = att.name;
