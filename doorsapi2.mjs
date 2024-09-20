@@ -2473,13 +2473,15 @@ export class Document {
                         debugger;
                     }
                     if (att.isNew) {
-                        let f = new SimpleBuffer(await (await att.fileStream).arrayBuffer()).toString('base64');
-                        debugger
+                        let fileBuf = await (await att.fileStream).arrayBuffer();
+                        let res = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
+                        debugger;
                         me.#json.Attachments.push({
                             Name: att.name,
-                            File: new SimpleBuffer(await att.fileStream).toString('base64'),
+                            File: new SimpleBuffer(fileBuf).toString('base64'),
 
                         });
+                        debugger
                     }
 
 
@@ -4873,7 +4875,7 @@ export class Utilities {
     }
 
     /**
-    Convierte a buffer un binario en base64
+    Convierte a buffer un binario en base64 con prefijo
     */
     decodeBuffer(str) {
         let me = this;
@@ -4902,7 +4904,7 @@ export class Utilities {
     }
 
     /**
-    Convierte un buffer binario a base64
+    Convierte un buffer binario a base64 con prefijo
     */
     encodeBuffer(value) {
         let me = this;
