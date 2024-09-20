@@ -2473,17 +2473,14 @@ export class Document {
                         debugger;
                     }
                     if (att.isNew) {
-                        let fileBuf = await (await att.fileStream).arrayBuffer();
-                        let res = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
-                        debugger;
-                        me.#json.Attachments.push({
-                            Name: att.name,
-                            File: new SimpleBuffer(fileBuf).toString('base64'),
-
-                        });
-                        debugger
+                        let buf = await (await att.fileStream).arrayBuffer();
+                        let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
+                        newAtt.Description = att.description;
+                        newAtt.File = new SimpleBuffer(buf).toString('base64');
+                        newAtt.Group = att.group;
+                        newAtt.Name = att.name
+                        me.#json.Attachments.push(newAtt);
                     }
-
 
                     loop.next();
                 });
