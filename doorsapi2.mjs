@@ -2463,22 +2463,26 @@ export class Document {
             var tags = me.#json.Tags;
 
             if (me.session.doorsVersion >= '008.000.000.000') {
-                let json = me.#json;
-                let atts = await me.attachments();
-
-                let keys = Array.from(atts.keys());
+                let attsMap = await me.attachments();
+                let keys = Array.from(attsMap.keys());
+                let attsJson = me.#json.Attachments;
+                
                 await me.session.utils.asyncLoop(keys.length, async loop => {
-                    let att = atts.get(keys[loop.iteration()]);
+                    let att = attsMap.get(keys[loop.iteration()]);
+
                     if (att.toDelete) {
+                        let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
                         debugger;
-                    }
-                    if (att.isNew) {
+                        attsJson.splice(ix, 1);
+
+                    } else if (att.isNew) {
                         let buf = await (await att.fileStream).arrayBuffer();
                         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
                         newAtt.Description = att.description;
                         newAtt.File = new SimpleBuffer(buf).toString('base64');
                         newAtt.Group = att.group;
-                        newAtt.Name = att.name
+                        newAtt.Name = att.name;
+                        newAtt.Size = att.size;
                         me.#json.Attachments.push(newAtt);
                     }
 
