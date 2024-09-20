@@ -2449,7 +2449,6 @@ export class Document {
 
     /**
     Guarda el documento.
-    No guarda adjuntos, estos deben guardarse o borrarse individualmente.
     @returns {Promise<Document>}
     */
     save() {
@@ -2523,7 +2522,6 @@ export class Document {
 
     /**
     Guarda los adjuntos.
-    todo: Esto deberia ser parte del save (issue #261)
     */
     async saveAttachments() {
         let me = this;
