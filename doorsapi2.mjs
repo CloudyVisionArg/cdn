@@ -2466,14 +2466,13 @@ export class Document {
                 let attsMap = await me.attachments();
                 let keys = Array.from(attsMap.keys());
                 let attsJson = me.#json.Attachments;
-                
+
                 await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
 
                     if (att.toDelete) {
                         let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
-                        debugger;
-                        attsJson.splice(ix, 1);
+                        if (ix >= 0) attsJson.splice(ix, 1);
 
                     } else if (att.isNew) {
                         let buf = await (await att.fileStream).arrayBuffer();
