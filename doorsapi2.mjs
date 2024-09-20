@@ -2494,6 +2494,7 @@ export class Document {
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         async res => {
+                            debugger;
                             me.#json = res;
                             me.#json.Tags = tags; // Restauro los tags para el afterSave
 
