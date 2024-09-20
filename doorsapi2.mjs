@@ -2462,6 +2462,7 @@ export class Document {
             }
             var tags = me.#json.Tags;
 
+            // En Doors 8 los attachs se graban junto con el doc
             if (me.session.doorsVersion >= '008.000.000.000') {
                 let attsMap = await me.attachments();
                 let keys = Array.from(attsMap.keys());
@@ -2480,7 +2481,6 @@ export class Document {
                         newAtt.Description = att.description;
                         let ix = att.name.lastIndexOf('.');
                         if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
-                        debugger;
                         newAtt.File = new SimpleBuffer(buf).toString('base64');
                         newAtt.Group = att.group;
                         newAtt.Name = att.name;
@@ -2490,7 +2490,6 @@ export class Document {
 
                     loop.next();
                 });
-
             }
 
             var url = 'documents';
@@ -2500,7 +2499,6 @@ export class Document {
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         async res => {
-                            debugger;
                             me.#json = res;
                             me.#json.Tags = tags; // Restauro los tags para el afterSave
 
