@@ -1406,7 +1406,6 @@ export class Attachment {
                 attMap.delete(me.name);
                 resolve(true);
             } else {
-                //todo: en v8 deberia marcar toDelete y nada mas
                 var url = 'documents/' + me.parent.id + '/attachments';
                 me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
                     res => {
@@ -5223,6 +5222,20 @@ export class Utilities {
         return _numeral;
     }
 
+    /** Devuelve una property de un objeto (Case Insensitive) */
+    objPropCI(obj, prop) {
+        var keys = Object.keys(obj);
+        for (var i = 0; i < keys.length; i++) {
+            if (keys[i].toLowerCase() == prop.toLowerCase()) {
+                return obj[keys[i]];
+            }
+        }
+    }
+
+    /**
+    Parsea un header Content-Disposition 
+    https://github.com/jshttp/content-disposition
+    */
     parseContentDisposition(contentDisposition) {
         let me = this;
         let cd = contentDisposition;
