@@ -179,8 +179,8 @@ async function loadUtils() {
     // html-entities - https://github.com/mdevils/html-entities
 
     try {
-        if (typeof(_htmlEntities) == 'undefined') {
-            if (inNode()) {
+        if (inNode()) {
+            if (typeof(_htmlEntities) == 'undefined') {
                 var res = await import('html-entities');
                 _htmlEntities = res.default;
             }
@@ -264,7 +264,9 @@ export function inNode() {
     return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
 }
 
-
+/**
+Map Case Insensitive
+*/
 export class DoorsMap extends Map {
     _parseKey(key) {
         var k;
@@ -2537,6 +2539,7 @@ export class Document {
             let keys = Array.from(atts.keys());
             await utils.asyncLoop(keys.length, async loop => {
                 let att = atts.get(keys[loop.iteration()]);
+                debugger;
                 if (att.toDelete) {
                     let res = {
                         action: 'delete',
