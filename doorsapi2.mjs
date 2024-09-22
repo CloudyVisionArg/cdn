@@ -2470,6 +2470,7 @@ export class Document {
 
                 await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
+                    debugger;
 
                     if (att.toDelete) {
                         let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
@@ -2539,7 +2540,6 @@ export class Document {
             let keys = Array.from(atts.keys());
             await utils.asyncLoop(keys.length, async loop => {
                 let att = atts.get(keys[loop.iteration()]);
-                debugger;
                 if (att.toDelete) {
                     let res = {
                         action: 'delete',
