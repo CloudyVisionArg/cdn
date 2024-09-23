@@ -1978,7 +1978,7 @@ export class Document {
         let found = this.#attachmentsMap.find((value, key) => {
             value == att;
         });
-        found = this.#deletetedAttsMap.find((value, key) => {
+        found = this.#deletedAttsMap.find((value, key) => {
             value == att;
         });
         debugger;
