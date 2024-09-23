@@ -1975,13 +1975,9 @@ export class Document {
     Este metodo se usa desde att.delete para sacar el adjunto de los maps
     */
     _attRemove(att) {
-        let found = this.#attachmentsMap.find((value, key) => {
-            value == att;
-        });
-        found = this.#deletedAttsMap.find((value, key) => {
-            value == att;
-        });
         debugger;
+        let found = this.#attachmentsMap.find((value, key) => value == att);
+        found = this.#deletedAttsMap.find((value, key) => value == att);
 
     }
 
