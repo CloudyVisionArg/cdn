@@ -48,7 +48,9 @@ async function loadUtils() {
             }
         } else {
             _incjs = {};
-            let code = await global.drs.mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
+            debugger;
+            let mlib = await import('./mainlib.mjs');
+            let code = await mlib.gitCdn({ repo: 'cdn', path: 'include.js' });
             eval(`
                 ${ code }
                 _incjs.include = include;
