@@ -2171,7 +2171,6 @@ export class Document {
     @returns {Attachment}
     */
     attachmentsDelete(name) {
-        debugger;
         let me = this;
         let att = me.#attachmentsMap.get(name);
         if (att) {
