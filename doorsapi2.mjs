@@ -48,7 +48,6 @@ async function loadUtils() {
             }
         } else {
             _incjs = {};
-            debugger;
             let mlib = await import('../mainlib.mjs');
             let code = await mlib.gitCdn({ repo: 'cdn', path: 'include.js' });
             eval(`
