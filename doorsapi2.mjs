@@ -2494,7 +2494,7 @@ export class Document {
                 // Borrados
                 let attsMap = this.#deletedAttsMap
                 let keys = Array.from(attsMap.keys());
-                await utils.asyncLoop(keys.length, async loop => {
+                await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
                     let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
                     if (ix >= 0) attsJson.splice(ix, 1);
