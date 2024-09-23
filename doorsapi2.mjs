@@ -1403,19 +1403,16 @@ export class Attachment {
     delete() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            var attMap = await me.parent.attachments();
-            if (me.isNew) {
-                attMap.delete(me.name);
+            try {
+                if (!me.isNew) {
+                    let url = 'documents/' + me.parent.id + '/attachments';
+                    await me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId');
+                }
+                me.parent._attRemove(me);
                 resolve(true);
-            } else {
-                var url = 'documents/' + me.parent.id + '/attachments';
-                me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
-                    res => {
-                        if (res) attMap.delete(me.name);
-                        resolve(res);
-                    },
-                    reject
-                );
+
+            } catch(er) {
+                reject(err);
             }
         });
     }
@@ -1972,6 +1969,17 @@ export class Document {
 
             await me.nodeEvent(code, event);
         }
+    }
+
+    /**
+    Este metodo se usa desde att.delete para sacar el adjunto de los maps
+    */
+    _attRemove(att) {
+        let vals = this.#attachmentsMap.values;
+        vals = this.#deletedAttsMap.values;
+        debugger;
+
+
     }
 
     /**
