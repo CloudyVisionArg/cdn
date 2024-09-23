@@ -1408,7 +1408,7 @@ export class Attachment {
                     let url = 'documents/' + me.parent.id + '/attachments';
                     await me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId');
                 }
-                me.parent._attRemove(me);
+                me.parent._attMapRemove(me);
                 resolve(true);
 
             } catch(er) {
@@ -1974,8 +1974,7 @@ export class Document {
     /**
     Este metodo se usa desde att.delete para sacar el adjunto de los maps
     */
-    _attRemove(att) {
-        debugger;
+    _attMapRemove(att) {
         if (this.#deletedAttsMap.find((value, key) => value == att))
             this.#deletedAttsMap.delete(att.name);
         if (this.#attachmentsMap.find((value, key) => value == att))
