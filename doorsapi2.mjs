@@ -1642,6 +1642,7 @@ export class Attachment {
     }
     set toDelete(value) {
         this.#json.toDelete = value;
+        if (value) this.parent.attachmentsDelete(this.name);
     }
 
     /**
@@ -1916,14 +1917,12 @@ export class Document {
     #json;
     #fieldsMap;
     #attachmentsMap;
+    #deletedAttsMap;
     #properties;
     #userProperties;
     #owner;
     #form;
     #log;
-
-    // todo: como pasamos los attachs en memoria?
-    // https://gist.github.com/jonathanlurie/04fa6343e64f750d03072ac92584b5df
 
     constructor(document, session, folder) {
         this.#json = document;
@@ -1931,6 +1930,7 @@ export class Document {
         if (folder) this.#parent = folder;
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
+        this.#deletedAttsMap = new DoorsMap();
     }
 
     _reset() {
@@ -2167,6 +2167,23 @@ export class Document {
     }
 
     /**
+    Marca un adjunto para borrar cdo se haga el save
+    @returns {Attachment}
+    */
+    attachmentsDelete(name) {
+        debugger;
+        let me = this;
+        let att = me.#attachmentsMap.get(name);
+        if (att) {
+            if (!att.isNew) me.#deletedAttsMap.set(att.name, att);
+            me.#attachmentsMap.delete(att.name);
+            return att;
+        } else {
+            throw new Error('Not found');
+        }
+    }
+
+    /**
     Alias de attachmentsAdd
     */
     attachmentsNew(name) {
@@ -2176,6 +2193,7 @@ export class Document {
     attachmentsReset() {
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
+        this.#deletedAttsMap = new DoorsMap();
     }
 
     /** No implementado aun */
@@ -2464,19 +2482,24 @@ export class Document {
 
             // En Doors 8 los attachs se graban junto con el doc
             if (me.session.doorsVersion >= '008.000.000.000') {
-                let attsMap = await me.attachments();
-                let keys = Array.from(attsMap.keys());
+                debugger;
                 let attsJson = me.#json.Attachments;
+
+                let attsMap = this.#deletedAttsMap
+                let keys = Array.from(atts.keys());
+                await utils.asyncLoop(keys.length, async loop => {
+                    let att = attsMap.get(keys[loop.iteration()]);
+                    let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
+                    if (ix >= 0) attsJson.splice(ix, 1);
+                    loop.next();
+                });
+    
+                attsMap = await me.attachments();
+                keys = Array.from(attsMap.keys());
 
                 await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
-                    debugger;
-
-                    if (att.toDelete) {
-                        let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
-                        if (ix >= 0) attsJson.splice(ix, 1);
-
-                    } else if (att.isNew) {
+                    if (att.isNew) {
                         let buf = await (await att.fileStream).arrayBuffer();
                         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
                         newAtt.Description = att.description;
@@ -2488,7 +2511,6 @@ export class Document {
                         newAtt.Size = att.size;
                         me.#json.Attachments.push(newAtt);
                     }
-
                     loop.next();
                 });
             }
@@ -2536,30 +2558,30 @@ export class Document {
 
         } else {
             // 1ro borrar
-            let atts = await this.attachments();
+            let atts = this.#deletedAttsMap
             let keys = Array.from(atts.keys());
             await utils.asyncLoop(keys.length, async loop => {
                 let att = atts.get(keys[loop.iteration()]);
-                if (att.toDelete) {
-                    let res = {
-                        action: 'delete',
-                        attachment: attInfo(att),
-                    }
-                    try {
-                        await att.delete();
-                        res.result = 'OK';
-                    } catch (err) {
-                        res.result = err;
-                    } finally {
-                        ret.push(res);
-                    }
+                let res = {
+                    action: 'delete',
+                    attachment: attInfo(att),
+                }
+                try {
+                    await att.delete();
+                    res.result = 'OK';
+                } catch (err) {
+                    res.result = err;
+                } finally {
+                    ret.push(res);
                 }
                 loop.next();
             });
 
             // 2do agregar
-            await utils.asyncLoop(atts.length, async loop => {
-                let att = atts.get(loop.iteration());
+            atts = await this.attachments();
+            keys = Array.from(atts.keys());
+            await utils.asyncLoop(keys.length, async loop => {
+                let att = atts.get(keys[loop.iteration()]);
                 if (att.isNew) {
                     let res = {
                         action: 'add',
