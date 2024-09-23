@@ -2481,7 +2481,6 @@ export class Document {
 
             // En Doors 8 los attachs se graban junto con el doc
             if (me.session.doorsVersion >= '008.000.000.000') {
-                debugger;
                 let attsJson = me.#json.Attachments;
 
                 // Borrados
@@ -2557,6 +2556,8 @@ export class Document {
             return ret;
 
         } else {
+            debugger;
+            
             // 1ro borrar
             let atts = this.#deletedAttsMap
             let keys = Array.from(atts.keys());
