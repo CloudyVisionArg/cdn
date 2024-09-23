@@ -1409,7 +1409,7 @@ export class Attachment {
                     let url = 'documents/' + me.parent.id + '/attachments';
                     await me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId');
                 }
-                me.parent._attMapRemove(me);
+                me.parent._attMapsRemove(me);
                 resolve(true);
 
             } catch(er) {
@@ -1956,6 +1956,7 @@ export class Document {
         var prop = await fld.properties('NODE_CONFIG');
         try {
             let jsn = JSON.parse(prop);
+            //todo: ver nuevo esquema
             code.path = jsn[event];
         } catch(err) {}
 
@@ -1974,8 +1975,9 @@ export class Document {
 
     /**
     Este metodo se usa desde att.delete para sacar el adjunto de los maps
+    cdo se borra
     */
-    _attMapRemove(att) {
+    _attMapsRemove(att) {
         if (this.#deletedAttsMap.find((value, key) => value == att))
             this.#deletedAttsMap.delete(att.name);
         if (this.#attachmentsMap.find((value, key) => value == att))
@@ -4122,10 +4124,19 @@ export class Node {
     /**
     Dispara un evento del servidor
     https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+    
+    @example
+    dSession.node.dispatchServerEvent({
+        type: 'myEvnType',
+        data: 'text or object with info',
+    });
     */
     async dispatchServerEvent(options) {
         let me = this;
-        return await fetch(await me.server + '/sse' , {
+        let ins = (await me.session.instance).Name;
+        if (options.instance == undefined) options.instance = ins;
+        debugger
+        return await fetch(await me.server + '/ssevents' , {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -4260,12 +4271,30 @@ export class Node {
     /**
     Devuelve un EventSource suscripto a los eventos del servidor
     https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+
+    @example
+    const serverEvents = await dSession.node.serverEvents;
+
+    // Recibe eventos de un tipo especifico
+    serverEvents.addEventListener('event_type', (ev) => {
+        let data = ev.data;
+        // procesar ...
+    })
+
+    // Recibe eventos sin tipo
+    serverEvents.onmessage = (ev) => {
+        let data = ev.data;
+        // procesar ...
+    })
     */
-    async serverEvents(options) {
+    async serverEvents() {
         let me = this;
         if (typeof(EventSource) == 'function' && typeof(window) == 'object') {
+            let ins = (await me.session.instance).Name;
+            debugger;
             if (!window.drsServerEvents) {
-                window.drsServerEvents = new EventSource(await me.server + '/sse');
+                window.drsServerEvents = new EventSource(await me.server + 
+                    '/ssevents?ins=' + encodeURIComponent(ins));
             }
             return window.drsServerEvents;
         } else {
