@@ -1976,10 +1976,10 @@ export class Document {
     */
     _attRemove(att) {
         debugger;
-        let found;
-        found = this.#deletedAttsMap.find((value, key) => value == att);
-        found = this.#attachmentsMap.find((value, key) => value == att);
-
+        if (this.#deletedAttsMap.find((value, key) => value == att))
+            this.#deletedAttsMap.delete(att.name);
+        if (this.#attachmentsMap.find((value, key) => value == att))
+            this.#attachmentsMap.delete(att.name);
     }
 
     /**
