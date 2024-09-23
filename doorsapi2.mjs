@@ -1412,7 +1412,7 @@ export class Attachment {
                 resolve(true);
 
             } catch(er) {
-                reject(err);
+                reject(er);
             }
         });
     }
