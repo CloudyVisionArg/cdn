@@ -2564,8 +2564,6 @@ export class Document {
             return ret;
 
         } else {
-            debugger;
-
             // 1ro borrar
             let atts = this.#deletedAttsMap
             let keys = Array.from(atts.keys());
