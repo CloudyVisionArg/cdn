@@ -2485,8 +2485,9 @@ export class Document {
                 debugger;
                 let attsJson = me.#json.Attachments;
 
+                // Borrados
                 let attsMap = this.#deletedAttsMap
-                let keys = Array.from(atts.keys());
+                let keys = Array.from(attsMap.keys());
                 await utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
                     let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
@@ -2494,9 +2495,9 @@ export class Document {
                     loop.next();
                 });
     
+                // Nuevos
                 attsMap = await me.attachments();
                 keys = Array.from(attsMap.keys());
-
                 await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
                     if (att.isNew) {
