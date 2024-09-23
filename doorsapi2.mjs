@@ -2480,7 +2480,7 @@ export class Document {
             var tags = me.#json.Tags;
 
             // En Doors 8 los attachs se graban junto con el doc
-            if (me.session.doorsVersion >= '008.000.000.000') {
+            if (await me.session.doorsVersion >= '008.000.000.000') {
                 let attsJson = me.#json.Attachments;
 
                 // Borrados
@@ -2531,7 +2531,7 @@ export class Document {
                             }
 
                             me._reset();
-                            if (me.session.doorsVersion >= '008.000.000.000') me.attachmentsReset();
+                            if (await me.session.doorsVersion >= '008.000.000.000') me.attachmentsReset();
 
                             resolve(me);
                         },
@@ -2557,7 +2557,7 @@ export class Document {
 
         } else {
             debugger;
-            
+
             // 1ro borrar
             let atts = this.#deletedAttsMap
             let keys = Array.from(atts.keys());
