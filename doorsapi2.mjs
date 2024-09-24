@@ -4122,30 +4122,6 @@ export class Node {
     }
 
     /**
-    Dispara un evento del servidor
-    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
-    
-    @example
-    dSession.node.dispatchServerEvent({
-        type: 'myEvnType',
-        data: 'text or object with info',
-    });
-    */
-    async dispatchServerEvent(options) {
-        let me = this;
-        let ins = (await me.session.instance).Name;
-        if (options.instance == undefined) options.instance = ins;
-        debugger
-        return await fetch(await me.server + '/ssevents' , {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(options),
-        });
-    }
-
-    /**
     Ejecuta un codigo node en el servidor de eventos.
     Si se pasa doc, se simulara la ejecucion de un evento sincrono js,
     devolviendo el json del doc con los cambios que haya realizado el codigo.
@@ -4299,6 +4275,30 @@ export class Node {
         } else {
             throw new Error('serverEvents runs only on client side');
         }
+    }
+
+    /**
+    Dispara un evento del servidor
+    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+    
+    @example
+    dSession.node.serverEventsDispatch({
+        type: 'myEvnType',
+        data: 'text or object with info',
+    });
+    */
+    async serverEventsDispatch(options) {
+        let me = this;
+        let ins = (await me.session.instance).Name;
+        if (options.instance == undefined) options.instance = ins;
+        debugger
+        return await fetch(await me.server + '/ssevents' , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(options),
+        });
     }
 
     /**
