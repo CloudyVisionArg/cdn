@@ -4291,7 +4291,6 @@ export class Node {
         let me = this;
         let ins = (await me.session.instance).Name;
         if (options.instance == undefined) options.instance = ins;
-        debugger
         return await fetch(await me.server + '/ssevents' , {
             method: 'POST',
             headers: {
