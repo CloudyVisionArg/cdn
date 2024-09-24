@@ -4291,7 +4291,6 @@ export class Node {
         let me = this;
         if (typeof(EventSource) == 'function' && typeof(window) == 'object') {
             let ins = (await me.session.instance).Name;
-            debugger;
             if (!window.drsServerEvents) {
                 window.drsServerEvents = new EventSource(await me.server + 
                     '/ssevents?ins=' + encodeURIComponent(ins));
