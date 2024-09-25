@@ -4246,7 +4246,7 @@ export class Node {
 
     /**
     Devuelve un EventSource suscripto a los eventos del servidor
-    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 
     @example
     const serverEvents = await dSession.node.serverEvents;
@@ -4270,6 +4270,10 @@ export class Node {
             if (!window.drsServerEvents) {
                 window.drsServerEvents = new EventSource(await me.server + 
                     '/ssevents?ins=' + encodeURIComponent(ins));
+                    
+                window.drsServerEvents.onerror = ev => {
+                    debugger;
+                }
             }
             return window.drsServerEvents;
         } else {
@@ -4279,7 +4283,7 @@ export class Node {
 
     /**
     Dispara un evento del servidor
-    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
     
     @example
     dSession.node.serverEventsDispatch({
