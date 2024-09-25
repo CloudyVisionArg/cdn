@@ -4276,6 +4276,9 @@ export class Node {
                 es.onopen = ev => {
                     console.log('open', es.readyState);
                 }
+                es.addEventListener('open', (e) => {
+                    console.log('open2', es.readyState);
+                });
     
                 window.drsServerEvents = es;
             }
