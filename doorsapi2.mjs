@@ -4271,7 +4271,10 @@ export class Node {
                 let es = new EventSource(await me.server + 
                     '/ssevents?ins=' + encodeURIComponent(ins));
                 es.onerror = ev => {
-                    console.log(es.readyState);
+                    console.log('error', es.readyState);
+                }
+                es.onopen = ev => {
+                    console.log('open', es.readyState);
                 }
     
                 window.drsServerEvents = es;
