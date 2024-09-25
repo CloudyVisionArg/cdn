@@ -4270,19 +4270,20 @@ export class Node {
             if (!window.drsServerEvents) {
                 let es = new EventSource(await me.server + 
                     '/ssevents?ins=' + encodeURIComponent(ins));
+                /*
+                todo: mejorar la reconexion
+                https://www.npmjs.com/package/reconnecting-eventsource
+                
                 es.onerror = ev => {
                     console.log('error', es.readyState);
                 }
                 es.onopen = ev => {
                     console.log('open', es.readyState);
                 }
-                es.addEventListener('open', (e) => {
-                    console.log('open2', es.readyState);
-                });
-
                 setInterval(() => {
                     console.log('readyState', es.readyState);
                 }, 1000);
+                */
     
                 window.drsServerEvents = es;
             }
