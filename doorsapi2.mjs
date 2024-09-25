@@ -4288,6 +4288,7 @@ export class Node {
                 */
             }
             return window.drsServerEvents;
+
         } else {
             throw new Error('serverEvents runs only on client side');
         }
