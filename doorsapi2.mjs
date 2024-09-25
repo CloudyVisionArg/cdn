@@ -4279,6 +4279,10 @@ export class Node {
                 es.addEventListener('open', (e) => {
                     console.log('open2', es.readyState);
                 });
+
+                setInterval(() => {
+                    console.log('readyState', es.readyState);
+                }, 1000);
     
                 window.drsServerEvents = es;
             }
