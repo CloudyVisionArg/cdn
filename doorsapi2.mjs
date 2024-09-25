@@ -4268,12 +4268,13 @@ export class Node {
         if (typeof(EventSource) == 'function' && typeof(window) == 'object') {
             let ins = (await me.session.instance).Name;
             if (!window.drsServerEvents) {
-                window.drsServerEvents = new EventSource(await me.server + 
+                let es = new EventSource(await me.server + 
                     '/ssevents?ins=' + encodeURIComponent(ins));
-                    
-                window.drsServerEvents.onerror = ev => {
-                    debugger;
+                es.onerror = ev => {
+                    console.log(es.readyState);
                 }
+    
+                window.drsServerEvents = es;
             }
             return window.drsServerEvents;
         } else {
