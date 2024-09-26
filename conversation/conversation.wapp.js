@@ -1531,7 +1531,7 @@ function wappMsg(){
 								$('<a/>', {
 									 target: '_blank',
 									 href: it.Url,
-									 download: pMsg.body,
+									 download: pMsg.body || "Archivo",
 									 style: 'font-weight: 500;',
 								}).append(pMsg.body).appendTo($div);
 								
