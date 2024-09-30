@@ -4249,7 +4249,7 @@ export class Node {
     https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 
     @example
-    const serverEvents = await dSession.node.serverEvents;
+    const serverEvents = await dSession.node.serverEvents();
 
     // Recibe eventos de un tipo especifico
     serverEvents.addEventListener('event_type', (ev) => {

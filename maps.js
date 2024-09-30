@@ -153,6 +153,7 @@ var maps = {
         $(el).attr('data-place', value);
 
         if (el.drs) {
+            // controls6
             if (inApp) {
                 // Cambia globo vacio/lleno
                 el.drs.$picker.find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));            
@@ -162,6 +163,7 @@ var maps = {
             }
 
         } else {
+            // anteriores
             if (inApp) {
                 // Cambia globo vacio/lleno
                 $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));

@@ -819,6 +819,15 @@ function webPrintForm() {
 	frm.window ? frm.window.print() : frm.print();
 }
 
+/**
+Devuelve una fila (row) para agregar controles dentro de un container
+
+@param {JQuery} pRow - La ultima fila que usé (pasar undefined si es la 1ra)
+@param {JQuery} pCont - El container
+@param {number} pCol - Si quiero agregar a fila completa, izq o der (0, 1 o 2)
+
+@returns {JQuery} - La fila a usar
+*/
 function webGetRow(pRow, pCont, pCol) {
     var $row;
 
