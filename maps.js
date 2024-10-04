@@ -99,9 +99,9 @@ var maps = {
                 if (text == undefined) {
                     return self.value;
                 } else {
+                    self.initializing = true;
                     self.value = text;
                     if (inApp) app7.input.checkEmptyState(self);
-                    self.initializing = true;
                     $(self).change();
                     self.initializing = undefined;
                     return text;
