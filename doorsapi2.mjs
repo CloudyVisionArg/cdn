@@ -933,7 +933,7 @@ export class Session {
                 try {
                     let res = await fetch('/c/tkn.asp');
                     let txt = await res.text();
-                    if (txt.length < 70) {
+                    if (txt.length < 70) { // Cdo no hay sesion viene el chorizazo del error
                         me.authToken = txt;
                         resolve(true);
                     } else {
@@ -4301,7 +4301,7 @@ export class Node {
     @example
     dSession.node.serverEventsDispatch({
         type: 'myEvnType',
-        data: 'text or object with info',
+        data: 'string or object with event info',
     });
     */
     async serverEventsDispatch(options) {
