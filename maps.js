@@ -100,10 +100,8 @@ var maps = {
                     return self.value;
                 } else {
                     self.initializing = true;
-                    self.value = text;
                     if (inApp) app7.input.checkEmptyState(self);
-                    $(self).change();
-                    self.initializing = undefined;
+                    $(self).change(); // todo: no deberia dispararse si estoy asignando junto con el value
                     return text;
                 }
 
