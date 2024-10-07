@@ -92,6 +92,7 @@ var inApp = typeof window.app7 == 'object';
                 }
         
                 await loadControls();
+                inApp ? await appRenderPage() : await webRenderPage();
 
             } else {
                 errMgr(new Error('La carpeta ' + fld_id + ' no es una carpeta de documentos'));
@@ -178,8 +179,6 @@ async function loadControls() {
     } catch(err) {
         console.error(err);
     }
-
-    inApp ? await appRenderPage() : await webRenderPage();
 }
 
 
