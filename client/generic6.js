@@ -146,7 +146,6 @@ async function loadControls() {
             if (hubControls) controls = hubControls.controls;
         }
         
-        debugger;
         if (controls) {
             // Parsea como objeto XMLATTRIBUTES
             controls.forEach(el => {
@@ -865,6 +864,7 @@ async function renderControls(container, parent) {
             el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
             el['R'] != '0' && (inApp ? el['HIDEINAPP'] != '1' : true);
     });
+    debugger;
 
     let $row;
 
