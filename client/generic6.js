@@ -146,6 +146,7 @@ async function loadControls() {
             if (hubControls) controls = hubControls.controls;
         }
         
+        debugger;
         if (controls) {
             // Parsea como objeto XMLATTRIBUTES
             controls.forEach(el => {
