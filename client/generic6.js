@@ -864,7 +864,6 @@ async function renderControls(container, parent) {
             el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
             el['R'] != '0' && (inApp ? el['HIDEINAPP'] != '1' : true);
     });
-    debugger;
 
     let $row;
 
@@ -874,6 +873,9 @@ async function renderControls(container, parent) {
         let label = ctl['DESCRIPTION'] ? ctl['DESCRIPTION'] : ctl['NAME'];
         
         let control, options, $this, $input, bsctl, f7ctl, tf, textField, vf, valueField, context;
+
+        console.log(ctl['NAME']);
+        debugger;
 
         tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
