@@ -3,6 +3,15 @@
 // Fresh: https://cdn.cloudycrm.net/ghcv/cdn/client/generic6.js?_fresh=1
 
 /*
+
+Principales características:
+
+- Unifica generic y controls de la web y el app
+- Permite trabajar con controles fuera de la instancia (centralizados en el Service Hub)
+- Implementa Bootstrap 5.3
+- Implementa modo oscuro y modo diseño
+
+
 Documentacion de componentes
 
 COMUN

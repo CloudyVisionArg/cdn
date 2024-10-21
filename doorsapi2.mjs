@@ -4139,6 +4139,7 @@ export class Node {
         apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
         url // Pasar true para obtener la url, que ejecuta el job con GET
         doc // Opcional, el json de un documento
+        returnFetch // Opcional, def false. Devuelve el fetch en vez de la respuesta
     });
     */
     exec(options) {
@@ -4171,39 +4172,46 @@ export class Node {
                 resolve(url);
 
             } else {
-                let res = await fetch(url, {
+                let args = {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: utils.jsonStringify(data),
-                });
+                };
 
-                if (res.ok) {
-                    let buf = new SimpleBuffer(await res.arrayBuffer());
-                    try {
-                        let json = utils.jsonParse(buf.toString());
-                        if (json.__type__) {
-                            resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
-                        } else {
-                            resolve(json);
+                if (options.returnFetch) {
+                    resolve(fetch(url, args));
+                    
+                } else {
+                    let res = await fetch(url, args);
+
+                    if (res.ok) {
+                        let buf = new SimpleBuffer(await res.arrayBuffer());
+                        try {
+                            let json = utils.jsonParse(buf.toString());
+                            if (json.__type__) {
+                                resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
+                            } else {
+                                resolve(json);
+                            }
+
+                        } catch(err) {
+                            resolve(buf);
                         }
 
-                    } catch(err) {
-                        resolve(buf);
+                    } else {
+                        let err;
+                        try {
+                            let txt = await res.text();
+                            let json = JSON.parse(txt);
+                            err = utils.deserializeError(json);
+                    
+                        } catch(e) {
+                            err = new Error(res.status + ' (' + res.statusText + ')');
+                        }
+                        reject(err);
                     }
-
-                } else {
-                    let err;
-                    try {
-                        let txt = await res.text();
-                        let json = JSON.parse(txt);
-                        err = utils.deserializeError(json);
-                
-                    } catch(e) {
-                        err = new Error(res.status + ' (' + res.statusText + ')');
-                    }
-                    reject(err);
                 }
             }
         });
