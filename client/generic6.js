@@ -476,14 +476,13 @@ async function appPageInit(e, page) {
 
     // Evento afterRender
     let context = {};
-    $page[0].dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+    evSrc.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
     if (context.return && typeof context.return.then == 'function') await context.return;
 
     // Control Event AfterRender
     let ev = getEvent('AfterRender');
     if (ev) await evalCode(ev);
 
-    debugger;
     await fillControls();
     preldr.hide();
 
@@ -759,7 +758,7 @@ async function webRenderPage() {
 
                     // Evento afterDelete
                     let context = {};
-                    document.dispatchEvent(new CustomEvent('afterDelete', { detail : context }));
+                    evSrc.dispatchEvent(new CustomEvent('afterDelete', { detail : context }));
                     if (context.return && typeof context.return.then == 'function') await context.return;
 
                     exitForm();
@@ -797,7 +796,7 @@ async function webRenderPage() {
 
     // Evento afterRender
     let context = {};
-    document.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+    evSrc.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
     if (context.return && typeof context.return.then == 'function') await context.return;
 
     // Control Event AfterRender
@@ -1463,7 +1462,7 @@ async function fillControls() {
     try {
         // Evento afterFillControls
         let context = {};
-        document.dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
+        evSrc.dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
         if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event AfterFillControls
