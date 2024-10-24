@@ -483,6 +483,7 @@ async function appPageInit(e, page) {
     let ev = getEvent('AfterRender');
     if (ev) await evalCode(ev);
 
+    debugger;
     await fillControls();
     preldr.hide();
 
