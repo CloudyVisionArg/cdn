@@ -4896,6 +4896,8 @@ export class Utilities {
 
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
+        } else if (_moment.isMoment(date)) {
+            dt = date.toDate();
         } else {
             if (this.isIsoDate(date)) {
                 dt = new Date(date);
