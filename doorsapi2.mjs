@@ -4902,8 +4902,8 @@ export class Utilities {
             if (this.isIsoDate(date)) {
                 dt = new Date(date);
             } else {
-                let f = format ? format : 'L LTS'; // moment con locale
-                dt = _moment(date, f).toDate();
+                let f = format ? format : 'L LTS';
+                dt = _moment(date, f).toDate(); // moment con locale
                 if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin format
                 if (isNaN(dt.getTime())) dt = new Date(date); // nativo
             }
