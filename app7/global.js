@@ -52,6 +52,212 @@ getFile(pFileURL)
 })();
 
 
+window.deviceServices = {
+    takePhoto: async function () {
+        let me = this;
+
+        let opts = me.cameraOptions('CAMERA'); // PROMPT, CAMERA, PHOTOS
+        let perm = await me.requestCameraPermissions('camera'); // camera, photos
+        if (perm) {
+            let file = await Capacitor.Plugins.Camera.getPhoto(opts);
+            file.name = file.path.replace(/^.*[\\\/]/, '');
+            return [file];
+
+        } else {
+            throw new Error('Se necesita permiso de acceso a la camara');
+        }
+    },
+
+    cameraOptions: function (source) {
+        return {
+            quality: 50,
+            saveToGallery: true,    
+            source: source,
+            //encodingType: Camera.EncodingType.JPEG,
+            //mediaType: Camera.MediaType.ALLMEDIA,
+            //allowEdit: (device.platform == 'iOS'),
+            correctOrientation: true, // Corrects Android orientation quirks
+            resultType: 'uri', // uri, base64, dataUrl
+            //targetWidth: Width in pixels to scale image. Must be used with targetHeight. Aspect ratio remains constant.
+            //targetHeight: 
+            //saveToPhotoAlbum: Save the image to the photo album on the device after capture.
+            //cameraDirection: Choose the camera to use (front- or back-facing). Camera.Direction.BACK/FRONT
+        }
+    },
+
+    requestCameraPermissions: async function (permission) {
+        let res = await Capacitor.Plugins.Camera.requestPermissions({ permissions: permission });
+        return (res[permission] == 'granted' || res[permission] == 'limited');
+    },
+
+    // Options: https://capacitorjs.com/docs/apis/camera#galleryimageoptions
+    pickImages: async function (options) {
+        let me = this;
+        let files = [];
+
+        let opt = {
+			//quality: 50,
+        }
+		Object.assign(opt, options);
+
+        let perm = await me.requestCameraPermissions('photos');
+        if (perm) {
+            let res = await Capacitor.Plugins.Camera.pickImages(opt);
+            res.photos.forEach(file => {
+                file.name = file.path.replace(/^.*[\\\/]/, '');
+                files.push(file);
+            });
+            return files;
+
+        } else {
+            throw new Error('Se necesita permiso de acceso a imagenes');
+        }
+    },
+
+    // Options: https://capawesome.io/plugins/file-picker/#pickfilesoptions
+    pickFiles: async function (options) {
+        let me = this;
+
+        let opt = {
+			//limit: 1,
+        }
+		Object.assign(opt, options);
+
+        let res = await Capacitor.Plugins.FilePicker.pickFiles(options);
+        return res.files;
+    },
+
+    recordAudio: function () {
+        return new Promise((resolve, reject) => {
+            let mediaRec, interv, timer, save;
+
+            let $sheet = $(`<div class="sheet-modal">
+                <div class="swipe-handler"></div>
+                <div class="block">
+                    <div data-role="timer" class="text-align-center" 
+                    style="font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%">0:00</div>
+            
+                    <div data-role="rec-row" class="row">
+                        <button data-role="record" class="col button button-large button-round button-fill color-pink">Grabar</button>
+                    </div>
+                    <div data-role="save-row" class="row" style="display: none;">
+                        <button data-role="cancel" class="col button button-large button-round button-outline">Cancelar</button>
+                        <button data-role="save" class="col button button-large button-round button-fill">Guardar</button>
+                    </div>
+                </div>
+            </div>`);
+
+            $sheet.find('button[data-role="record"]').click(recordClick);
+            $sheet.find('button[data-role="save"]').click(saveClick);
+            $sheet.find('button[data-role="cancel"]').click(cancelClick);
+            let $timer = $sheet.find('div[data-role="timer"]');
+            let $recRow = $sheet.find('div[data-role="rec-row"]');
+            let $saveRow = $sheet.find('div[data-role="save-row"]');
+
+            // Abre el sheet
+            let sheet = app7.sheet.create({
+                swipeToClose: true,
+                content: $sheet[0],
+            }).open();
+        
+            async function recordClick() {
+                //TODO: https://github.com/tchvu3/capacitor-voice-recorder
+                //Evaluar mejor los permisos 
+                let perm = await Capacitor.Plugins.VoiceRecorder.requestAudioRecordingPermission();
+                if (perm.value) {
+                    save = false;
+                    
+                    let stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                    if (stat.status != 'NONE') {
+                        await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                    }
+                    let res = await Capacitor.Plugins.VoiceRecorder.startRecording();
+
+                    if (res.value) {
+                        updControls(true);
+                    } else {
+                        toast('No se pudo iniciar la grabacion');
+                    }
+                }
+            }
+
+            async function saveClick() {
+                let recData = await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                let sec = Math.round(recData.value.msDuration / 1000);
+                if (sec < 10) sec = '0' + sec;
+                let fileName = 'audio-' + sec + '-seg.aac';
+
+                let res = await Capacitor.Plugins.Filesystem.writeFile({
+                    path : fileName,
+                    data : recData.value.recordDataBase64,
+                    directory: 'CACHE',
+                });
+                // let res2 = await Capacitor.Plugins.Filesystem.stat({ path: res.uri });
+
+                res.path = res.uri;
+                res.name = res.path.replace(/^.*[\\\/]/, '');
+
+                clearInterval(interv);
+                sheet.close();
+
+                resolve([res]);
+            }
+
+            async function cancelClick() {
+                let stat = await Capacitor.Plugins.VoiceRecorder.getCurrentStatus();
+                console.log('VoiceRecorder status: ' + stat.status);
+                if (stat.status != 'NONE') {
+                    await Capacitor.Plugins.VoiceRecorder.stopRecording();
+                }
+                
+                clearInterval(interv);
+                updControls(false);
+            }
+
+            function updControls(recording) {
+                if (recording) {
+                    $recRow.hide();
+                    $saveRow.show();
+                    $timer.css('opacity', '100%');
+                    
+                    timer = new Date();
+                    interv = setInterval(function () {
+                        var secs = Math.trunc((new Date() - timer) / 1000);
+                        var mins = Math.trunc(secs / 60);
+                        secs = secs - mins * 60;
+                        $timer.html(mins + ':' + leadingZeros(secs, 2));
+                    }, 200);
+
+                } else {
+                    $timer.html('0:00');
+                    $timer.css('opacity', '20%');
+                    $recRow.show();
+                    $saveRow.hide();        
+                }
+            }
+        })
+    },
+
+    openFile: function (uri) {
+        Capacitor.Plugins.FileOpener.open({filePath : uri}).then(
+            () => { },
+            err => {
+                logAndToast('FileOpener error: ' + dSession.utils.errMsg(err));
+            }
+        );
+    }
+};
+
+
+// Devuelve el route en funcion del UrlRaw del Form
+function formUrlRoute(url) {
+    if (url.indexOf('_id=generic6') >= 0) {
+        return '/generic6/';
+    } else {
+        return '/generic/';
+    }
+}
+
 /*
 Utilizar esta funcion para resolver la Promise de una ruta
 Soporta las versiones 5 y 6 de F7
@@ -257,33 +463,24 @@ async function showConsole(allowClose) {
         function supportMail() {
             debugger;
             var mail = {
-                to: 'soporte@cloudycrm.net',
                 subject: 'Cloudy CRM - App issue',
                 body: 'Por favor describanos su problema',
             }
 
-            if (_isCapacitor()) {
-                mail.attachments = [
-                    {
-                        type: 'base64',
-                        path: window.btoa(localStorage.getItem('consoleLog')),
-                        name: "console.txt"
-                    },
-                    {
-                        type: 'base64',
-                        path: localStorageBase64(),
-                        name: "localStorage.txt"
-                    }
-                ]
-                Capacitor.Plugins.EmailComposer.open(mail);
-
-            } else {
-                mail.attachments = [
-                    'base64:console.txt//' + window.btoa(localStorage.getItem('consoleLog')),
-                    'base64:localStorage.txt//' + localStorageBase64(),
-                ];
-                cordova.plugins.email.open(mail);
-            }
+            mail.to = ['soporte@cloudycrm.net'];
+            mail.attachments = [
+                {
+                    type: 'base64',
+                    path: window.btoa(localStorage.getItem('consoleLog')),
+                    name: "console.txt"
+                },
+                {
+                    type: 'base64',
+                    path: localStorageBase64(),
+                    name: "localStorage.txt"
+                }
+            ]
+            Capacitor.Plugins.EmailComposer.open(mail);
                 
             function localStorageBase64() {
                 var arr = new Array();
@@ -1487,6 +1684,7 @@ function executeCode(pCode, pSuccess, pFailure) {
     getCodelib(pCode).then(
         function (res) {
             if (device.platform == 'browser') {
+                // En el browser va sin try catch para detectarlo mas facil
                 eval(res);
                 console.log('exec ' + pCode + ' ok');
                 if (pSuccess) pSuccess();
@@ -1547,15 +1745,10 @@ function _isCapacitor(){
 }
 
 function statusBar(pShow) {
-    let refStatusBarPLugin; 
-
+    var refStatusBarPLugin; 
     if (_isCapacitor()) {
-        refStatusBarPLugin = Capacitor.Plugins.StatusBar; //Capacitor
-        refStatusBarPLugin.overlaysWebView = refStatusBarPLugin.setOverlaysWebView;
-        //refStatusBarPLugin.styleLightContent = refStatusBarPLugin.setStyle({ style: Style.Light });
-        refStatusBarPLugin.styleDefault = refStatusBarPLugin.setStyle;
-        refStatusBarPLugin.backgroundColorByHexString = refStatusBarPLugin.setBackgroundColor;
-
+        Capacitor.Plugins.SplashScreen.hide();
+        refStatusBarPLugin = Capacitor.Plugins.StatusBar;
     } else {
         refStatusBarPLugin = StatusBar; //Cordova
     }
@@ -1563,16 +1756,17 @@ function statusBar(pShow) {
     if (pShow) {
         refStatusBarPLugin.show();
         if (device.platform == 'iOS') {
-            refStatusBarPLugin.styleDefault();
-            //refStatusBarPLugin.backgroundColorByHexString('12A0D8');
-            //refStatusBarPLugin.backgroundColorByHexString('2BA0DA');
-            //refStatusBarPLugin.overlaysWebView(false)
+            //refStatusBarPLugin.styleDefault();
         } else {
-            //refStatusBarPLugin.styleLightContent();
+            setTimeout(async () => {
+                await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
+                await refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
+                return;
+            }, 1000);
         }
 
     } else {
-        StatusBar.hide();
+        refStatusBarPLugin.hide();
     }
 }
 

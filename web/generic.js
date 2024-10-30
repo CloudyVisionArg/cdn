@@ -20,7 +20,7 @@ var doorsapi2, dSession;
 var urlParams, fld_id, folder, doc_id, doc;
 var folderJson, docJson;
 var controlsFolder, controls, controlsRights;
-var saving, cache, lsScripts;
+var saving, saved;
 
 // Includes para mostrar el preloader
 var arrScriptsPre = [];
@@ -522,35 +522,39 @@ function printForm() {
 	frm.window ? frm.window.print() : frm.print();
 }
 
-function exitFormv1() {
+function exitForm() {
+    // Callback
+    try {
+        let cbfn = urlParams.get('callbackfunction');
+
+        if (cbfn && saved) {
+            if (window.opener && window.opener[cbfn]) {
+                window.opener[cbfn](doc.id);
+            } else if (window.parent && window.parent[cbfn]) {
+                window.parent[cbfn](doc.id);
+            } else {
+                window.parent.exFrameDer.contentWindow[cbfn](doc.id);
+            }
+        }
+
+    } catch(err) {
+        console.error(err);
+        debugger;
+    }
+
+    // v1
     if (window.top == window.self) {
         window.close();
+        if (!window.closed) toast('Debe cerrar esta ventana manualmente');
     } else {
         history.back();
     }
-}
-function exitForm(triggerCallback) {
-    let callbackFn = urlParams.get('callbackfunction');
-    let closeonexit = urlParams.get('closeonexit');
-    if(callbackFn){
-        if (triggerCallback) {
-            if (window.opener) {
-                eval("window.opener." + callbackFn + "(" + doc.id + ")");
-            }
-            if (window.parent) {
-                try {
-                    let existsInParent = eval("window.parent." + callbackFn);
-                    if (existsInParent) {
-                        eval("window.parent." + callbackFn + "(" + doc.id + ")");
-                    } else {
-                        eval("window.parent.exFrameDer.contentWindow." + callbackFn + "(" + doc.id + ")");
-                    }
-                } catch(ee){
 
-                }
-            }
-        }
-    }
+    /*
+    todo: ver como debe quedar el closeOnExit
+
+    v2
+
     if(closeonexit == "1"){
         try{
             if (window.top == window.self) {
@@ -569,7 +573,39 @@ function exitForm(triggerCallback) {
             document.location.href = contentUrl;
         }
     }
-    //TODO: sBackToFld
+
+
+    generic3
+
+    If Request("closeonexit") & "" = "1" Then
+	    RWL "try{" 	
+        RWL "disposeDoc('" & doc_id & "','" & docguid & "');"
+        RWL "setTimeout(function(){"
+        RWL "   try{"
+        RWL "   window.close();"
+	    RWL "   document.write('Se guardaron los cambios, debe cerrar la pagina manualmente');"
+        RWL "   } catch(ex){"
+        RWL "       document.write('Se guardaron correctamente los cambios, debe cerrar la pagina manualmente');" 
+        RWL "   }"
+        RWL "},100);"
+        RWL "} catch(ex){"
+        RWL "document.write('Se guardaron correctamente los cambios, debe cerrar la pagina manualmente');" 
+        RWL "}" 	
+
+	ElseIf dSession.Tags("HOMEPAGE").Value <> "" Then
+	    'RWL "if (top.navigate) { " & VbCrLf
+        'RWL "	top.navigate(" & Folder.FolderType & ", 'frameDer', '" & ContentUrl & "', true);" & VbCrLf
+        'RWL "	window.location = '" & ContentUrl & "';" & VbCrLf
+        'RWL "} else {" & VbCrLf
+        RWL "	window.location = '" & contentUrl & "';" & VbCrLf
+        'RWL "}" & VbCrLf
+		'RWL "top.location.href = '" & dSession.Tags("HOMEPAGE").Value & "';" 'TODO: no vuelve a la carpeta
+	Else
+		RWL "document.location.href = '" & contentUrl & "';"
+	End If
+
+    'TODO: sBackToFld
+    */
 }
 
 
@@ -588,20 +624,22 @@ function getDefaultControl(pField) {
             $ret.addClass('mt-3');
             $input = $ret.find('textarea');
         }
+        if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
 
     } else if (pField.type == 2) {
         $ret = newDTPicker(pField.name, label, 'datetime-local');
         $ret.addClass('mt-3');
         $input = $ret.find('input');
+        if (!pField.updatable) $input.closest('.input-group').datetimepicker('disable');
 
     } else if (pField.type == 3) {
         $ret = newInputText(pField.name, label);
         $ret.addClass('mt-3');
         $input = $ret.find('input');
         $input.attr('data-numeral', numeral.options.defaultFormat);
+        if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
     };
 
-    if (!pField.updatable) $input.attr({ 'readonly': 'readonly' });
     $input.attr('data-textfield', pField.name.toLowerCase())
 
     return $ret;
@@ -722,7 +760,8 @@ async function renderControls(pCont, pParent) {
             bsctl = $this.find('div.input-group');
             $input.attr('data-textfield', tf);
             if (ctl['W'] == 0 || ctl.attr('readonly') == '1') {
-                $input.attr({ 'readonly': 'readonly' });
+                $input.closest('.input-group').datetimepicker('disable');
+                //$input.attr({ 'readonly': 'readonly' });
             }
 
 
@@ -1416,6 +1455,7 @@ async function saveDoc(exitOnSuccess) {
         await doc.save();
         docJson = doc.toJSON();
         doc_id = doc.id;
+        saved = true;
 
         try {
             await saveAtt();

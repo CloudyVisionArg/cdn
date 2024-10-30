@@ -2,6 +2,7 @@
 	typeahead: https://github.com/corejavascript/typeahead.js
 	Ejemplo: https://digitalfortress.tech/tutorial/smart-search-using-twitter-typeahead-bloodhound/
 	bootstrap-tagsinput: https://github.com/bootstrap-tagsinput/bootstrap-tagsinput
+	MDBootstrap (usd 300): https://mdbootstrap.com/docs/standard/components/chips/
 -->
 <!DOCTYPE html>
 <html>
@@ -28,78 +29,160 @@
 	</style>
 </head>
 <body>
-	<h1>Bootstrap Tags Input with Autocomplete</h1>
+	<h1>Autocomplete</h1>
 	<div class="bgcolor">
 	<div class="mb-3">
-		<label class="form-label">Pais</label>
-		<input type="text" value="" class="form-control" id="tags-input" data-role="tagsinput" />
+		<label class="form-label">Contratos tags-input</label>
+		<select multiple class="form-control" id="tags-input"></select>
 	</div>
 	<div class="mb-3">
-		<label class="form-label">Pais</label>
+		<label class="form-label">Contratos typeahead</label>
 		<input type="text" class="form-control" id="input" autocomplete="off" />
+	</div>
+	<div class="mb-3">
+		<label class="form-label">Pais typeahead</label>
+		<input type="text" class="form-control" id="input2" autocomplete="off" />
 	</div>
 	</div>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="typeahead.bundle.js"></script>
 <script src="tagsinput/bootstrap-tagsinput.js"></script>
+<script src="https://cdn.cloudycrm.net/ghcv/cdn/include.js"></script>
 <script>
-	var countries = new Bloodhound({
-		datumTokenizer: function (datum) {debugger}, //Bloodhound.tokenizers.obj.whitespace('name'),
-		queryTokenizer: Bloodhound.tokenizers.whitespace,
-		
-    	remote: {
-        	url: 'https://restcountries.com/v3.1/alpha/%QUERY',
-        	wildcard: '%QUERY',                    // %QUERY will be replace by users input in
-			transform: function (data) {          // we modify the prefetch response
-				debugger;
-				return data;
-				/*
-				var newData = [];                 // here to match the response format 
-				data.forEach(function (item) {    // of the remote endpoint
-					newData.push({'name': item});
-				});
-				return newData;
-				*/
-	        },
-			
-			prepare: function(query, settings) {
-				// En esta funcion se puede preparar la url
-				settings.url = settings.url.replace('%QUERY', query)
-				return settings;
+	var doorsapi, dSession, fldCon;
+
+	(async () => {
+		doorsapi = await import(scriptSrc('doorsapi2'));
+		dSession = new doorsapi.Session();
+		dSession.serverUrl = 'https://cloudyvision.cloudycrm.net/restful';
+		await dSession.logon('admin', 'ZXCewq321', 'cloudyvision');
+		fldCon = await dSession.folder(5049);
+
+		var bhContratos = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.whitespace,
+			//datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: {
+				url: '-',
+				cache: false,
+				prepare: function(query, settings) {
+					// El ej muestra el loader aca
+					//debugger;
+					settings.query = query;
+					return settings;
+				},
+				
+				filter: function (response) {  
+					// El ej oculta el loader aca
+					debugger;
+					return response;
+				},
+
+				transform: function (response) {
+					debugger;
+					return response;
+				},
+
+				transport: async function (options, onSuccess, onError) {
+					try {
+						//debugger;
+						var res = await fldCon.search({
+							fields: 'subject, tipo, estado',
+							formula: 'subject like ' + dSession.db.sqlEnc('%' + options.query + '%', 1),
+							order: 'subject',
+						});
+						onSuccess(res);
+
+					} catch (er) {
+						onError(er);
+					}
+				}
 			},
 			
-			filter: function (response) {   
-				debugger;   
-      			return response;
-			}
-    	},
-		 
-	});
-	countries.initialize();
+		});
 
-	/*
-	$('#tags-input').tagsinput({
-	  typeaheadjs: {
-		name: 'countries',
-		displayKey: 'name',
-		valueKey: 'name',
-		source: countries.ttAdapter()
-	  }
-	});
-	*/
-	
-	
-	$('#input').typeahead({
-  		hint: true,
-  		highlight: true,
-  		minLength: 1
-	},
-	{
-  		name: 'countries',
-		displayKey: 'cioc',
-  		source: countries   // Bloodhound instance is passed as the source
-	});
+		bhContratos.initialize();
+
+		
+		var bhCountries = new Bloodhound({
+			datumTokenizer: function (datum) {debugger}, //Bloodhound.tokenizers.obj.whitespace('name'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			
+			remote: {
+				url: 'https://restcountries.com/v3.1/alpha/%QUERY',
+				wildcard: '%QUERY',                    // %QUERY will be replace by users input in
+				transform: function (data) {          // we modify the prefetch response
+					debugger;
+					return data;
+					/*
+					var newData = [];                 // here to match the response format 
+					data.forEach(function (item) {    // of the remote endpoint
+						newData.push({'name': item});
+					});
+					return newData;
+					*/
+				},
+				
+				prepare: function(query, settings) {
+					// En esta funcion se puede preparar la url
+					debugger;
+					settings.url = settings.url.replace('%QUERY', query)
+					return settings;
+				},
+				
+				filter: function (response) {   
+					debugger;   
+					return response;
+				},
+
+				transport: function (options, onSuccess, onError) {
+					// Modify the options or replace the next line
+					debugger;
+					$.ajax(options)
+						.done(function(data, textStatus, request) { onSuccess(data); })
+						.fail(function(request, textStatus, errorThrown) { onError(errorThrown); });
+				}
+			},
+			
+		});
+		
+		bhCountries.initialize();
+
+		
+		$('#tags-input').tagsinput({
+		typeaheadjs: {
+			name: 'contratos',
+			displayKey: 'SUBJECT',
+			valueKey: 'SUBJECT',
+			source: bhContratos.ttAdapter()
+		}
+		});
+		
+		
+		
+		$('#input').typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 2
+		},
+		{
+			name: 'countries',
+			displayKey: 'SUBJECT',
+			source: bhContratos   // Bloodhound instance is passed as the source
+		});
+
+		$('#input2').typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 2
+		},
+		{
+			name: 'countries2',
+			displayKey: 'cioc',
+			source: bhCountries   // Bloodhound instance is passed as the source
+		});
+	})();
 	
 </script>
 </body>

@@ -59,14 +59,7 @@ function newDTPicker(pId, pLabel, pType) {
         'data-target-input': 'nearest',
     }).appendTo($div);
 
-    var f, t = pType.toLowerCase();
-    if (t == 'date') {
-        f = 'L';
-    } else if (t == 'time') {
-        f = 'LT';
-    } else {
-        f = 'L LT';
-    }
+    var t = pType.toLowerCase();
 
     var $inp = $('<input/>', {
         type: 'text',
@@ -89,42 +82,36 @@ function newDTPicker(pId, pLabel, pType) {
         buttons: {
             showClose: true,
         },
-        format: f,
+        format: typeFormat(t),
     });
 
+    function typeFormat(type) {
+        if (type == 'date') {
+            return 'L';
+        } else if (type == 'time') {
+            return 'LT';
+        } else {
+            return 'L LT';
+        }
+    }
+    
     $inp[0]._value = function (pValue) {
         var $self = $(this);
+        let $dtp = $self.closest('div.input-group');
 
-        if (pValue == undefined) {
+        if (pValue === undefined) {
             // get
-            return dSession.utils.cDate($self.val());
+            let dt = $dtp.datetimepicker('date');
+            return dt instanceof moment ? dt.toDate() : dt;
 
         } else {
             // set
-            var val = dSession.utils.cDate(pValue);
-
-            var type = $self.attr('data-date-type');
-            if (val != null && val != '') {
-                if (type == 'date') {
-                    $self.val(moment(val).format('L'));
-                } else if (type == 'time') {
-                    $self.val(moment(val).format('LT'));
-                } else {
-                    $self.val(moment(val).format('L LT'));
-                }
-            } else {
-                $self.val('');
-            }
-            return val;
+            $dtp.datetimepicker('date', pValue);
+            return $self[0]._value();
         }
     }
 
-    $inp[0]._text = function (pValue) {
-        if (pValue != undefined) {
-            this._value(pValue);
-        }
-        return this.value;
-    }
+    $inp[0]._text = $inp[0]._value
 
     return $div;
 }
@@ -372,7 +359,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
             }).prop('selected', true);
         };
 
-        if (pSelect[0].selectedIndex < 0) {
+        if (pSelect[0].selectedIndex <= 0) {
             if (notFound == 1 && (pValue || pText)) {
                 var option = $('<option/>', {
                     value: pValue,
@@ -381,7 +368,7 @@ function setSelectVal(pSelect, pText, pValue, pNotFoundAction) {
                 option.html(pText);
                 option.appendTo(pSelect);
 
-            } else if (notFound == 0) {
+            } else if (notFound == 0 && pSelect[0].options.length > 0) {
                 pSelect[0].selectedIndex = 0;
             }
         }
@@ -480,7 +467,8 @@ function newFieldset(pId, pLabel) {
 function newMapsAutocomplete(pId, pLabel) {
     var $ctl = newInputText(pId, pLabel);
     var $inp = $ctl.find('input');
-    $inp = addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
+    addInputButton($inp, 'bi bi-geo-alt-fill', 'maps.pickLocation(this, event)');
+    $inp = $ctl.find('input'); // Lo instancio de nuevo xq addInputButton lo clona
     $inp.addClass('maps-autocomplete');
     $inp.attr('placeholder', 'Calle nro, Localidad');
 
@@ -497,18 +485,7 @@ function newMapsAutocomplete(pId, pLabel) {
     });
 
     return $ctl;
-    /*
-    todo: readonly
-
-    $inp.on('placeChange', function (e) {
-        var addrComp = e.originalEvent.detail.addressComponents;
-        if (addrComp) {
-            $('#ciudad').val(addrComp['administrative_area_level_2'] + ' - ' + addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
-            $('#provincia').val(addrComp['administrative_area_level_1'] + ' - ' + addrComp['country']);
-            $('#pais').val(addrComp['country']);
-        }
-    })
-    */
+    // todo: readonly
 }
 
 function newDocLog(pId, pLabel) {

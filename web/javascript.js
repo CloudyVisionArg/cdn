@@ -2,8 +2,15 @@
 web-javascript
 Funciones varias de JavaScript para la web (para el APP usar app7-global).
 
+Changelog:
+2024-04-18: JP - Renombrado de openWindowWithPost a submitData
+2024-04-18: JP - Agrego downloadFile
+2024-04-16: JP - Agrego openWindowWithPost
+
 Inventario de metodos:
 
+downloadFile(buffer, fileName)
+submitData(options)
 logAndToast(pMsg, pToastOptions)
 preloader
 bootstrapVersion()
@@ -24,6 +31,61 @@ wappNumber(pPhone)
 		n._hasdep = false;
 	});
 })();
+
+/**
+Descarga un buffer como archivo
+@example
+downloadFile(buffer, 'logo.jpg');
+*/
+function downloadFile(buffer, fileName) {
+    var url = window.URL.createObjectURL(buffer);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();    
+    a.remove(); 
+}
+
+/**
+Crea un formulario, hace submit de los datos y lo borra
+Se puede usar para abrir una nueva ventana haciendo POST
+@example
+submitData({
+	url: 'http://my.url/path',
+	data: {
+		param1: 'value1',
+		param2: 'value2',
+	},
+	method: 'GET', // Opcional, default POST
+	target: '_self', // Opcional, default _blank
+});
+*/
+function submitData(options) {
+	var opt = {
+		method: 'POST',
+		target: '_blank',
+	}
+	Object.assign(opt, options);
+
+    var form = document.createElement('form');
+    form.target = opt.target;
+    form.method = opt.method;
+    form.action = opt.url;
+    form.style.display = 'none';
+
+    for (var key in opt.data) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = opt.data[key];
+        form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
 
 function logAndToast(pMsg, pToastOptions) {
     console.log(pMsg);
@@ -202,7 +264,7 @@ function wappButtonClick(pButton) {
 function wappUrl() {
 	var ret = sessionStorage.getItem('WhatsappURL');
 	if (!ret) {
-		if (window.confirm('Tiene instalado el cliente Whatsapp? (presione CANCELAR si usa Whatsapp Web)')) {
+		if (window.confirm('Tiene instalado Whatsapp desktop? (presione CANCELAR si usa Whatsapp Web)')) {
 			ret = 'whatsapp://';
 		} else {
 			ret = 'https://web.whatsapp.com/';

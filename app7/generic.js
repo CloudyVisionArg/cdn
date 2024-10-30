@@ -6,6 +6,8 @@ generic del APP7
 Documentacion:
 Cordova: https://cordova.apache.org/docs/en/latest/
 Framework7: https://framework7.io/docs/
+MD Icons: https://fonts.google.com/icons?icon.platform=web&icon.set=Material+Icons (abrir en Chrome)
+F7 Icons: https://w3.cloudycrm.net/c/app7/lib/framework7/css/cheatsheet.htm
 */
 
 var fld_id, doc_id, cacheDir;
@@ -124,6 +126,7 @@ function getControlsRights(pControls) {
 
     var ctl;
     if (controlsRights) {
+        // Mergea controlsRights en controls
         var $cr = $(controlsRights);
         var name, r, w;
         $cr.find('item').each(function (ix, el) {
@@ -158,6 +161,11 @@ function explorerRefresh() {
     }
 }
 
+function goBack() {
+    explorerRefresh();
+    f7Page.view.router.back();
+}
+
 async function renderPage() {
     var $tabbar, $tabbarInner, $tabs;
 
@@ -176,8 +184,7 @@ async function renderPage() {
             f7Page.view.router.back();
         }
         */
-        explorerRefresh();
-        f7Page.view.router.back();
+        goBack();
     });
 
     $page.find('.navbar-inner .right .link').on('click', function (e) {
@@ -486,7 +493,7 @@ async function renderControls(pCont, pParent) {
         // -- HtmlRaw --
 
         } else if (type == 'HTMLRAW') {
-            $this = $('<li/>')
+            $this = $('<li/>');
             $('<div/>', {
                 id: ctl['NAME'],
                 name: ctl['NAME'],
@@ -1244,7 +1251,6 @@ async function fillControls() {
         });
     }
 
-    debugger;
     const arrAtt = $get('[data-attachments]');
     $get('[data-attachments]').each(function (ix, el) {
         fillAttachments($(el));
@@ -1291,6 +1297,7 @@ async function fillAttachments(pEl) {
         noAttachs();
     }
     await $.when(pEl.trigger('afterFillAttachment'));
+    
     function noAttachs() {
         // Agrega la leyenda Sin adjuntos
         var $li = $('<li/>').appendTo($ul);
@@ -1537,7 +1544,6 @@ async function renameFileDialog(pFileName){
 }
 
 function addAtt() {
-    debugger;
     var $this = $(this);
     var action = $this.attr('id');
 
@@ -1783,7 +1789,7 @@ async function saveDoc(exitOnSuccess) {
         }
 
         if (exitOnSuccess) {
-            f7Page.view.router.back();
+            goBack();
         } else {
             await fillControls();
         }

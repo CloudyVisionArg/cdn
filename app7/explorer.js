@@ -186,7 +186,7 @@ dSession.foldersGetFromId(fld_id).then(
                             if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
                             f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
                         } else {
-                            f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
+                            f7Page.view.router.navigate(formUrlRoute(folder.Form.UrlRaw) + '?fld_id=' + fld_id + '&doc_id=' + doc_id);
                         }
                         $li.addClass('refresh-on-focus');
                         $list.removeAttr('clicked');
@@ -258,7 +258,7 @@ function newDoc(e) {
     if (prop) {
         f7Page.view.router.navigate(prop);
     } else {
-        f7Page.view.router.navigate('/generic/?fld_id=' + fld_id);
+        f7Page.view.router.navigate(formUrlRoute(folder.Form.UrlRaw) + '?fld_id=' + fld_id);
     };
     $viewDiv.addClass('refresh-on-focus');
 }

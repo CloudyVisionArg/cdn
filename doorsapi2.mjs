@@ -4,7 +4,8 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
-var _moment, _numeral, _CryptoJS, _serializeError, _fastXmlParser, _URL, _htmlEntities;
+var _moment, _numeral, _CryptoJS, _serializeError,
+    _fastXmlParser, _URL, _htmlEntities, _contentDisposition, _incjs;
 
 export { _moment as moment };
 export { _numeral as numeral };
@@ -12,10 +13,11 @@ export { _CryptoJS as CryptoJS };
 export { _serializeError as serializeError }
 export { _fastXmlParser as fastXmlParser }
 export { _htmlEntities as htmlEntities }
+export { _contentDisposition as contentDisposition }
 
 //await loadUtils();
-
 var utilsPromise = loadUtils();
+
 /*
 todo: Safari soporta await at module top level recien en la v15
 https://caniuse.com/?search=top%20level%20await
@@ -32,119 +34,204 @@ async function loadUtils() {
 
     // include
 
-    if (!inNode()) {
-        if (window.include == undefined) {
-            // include
-            var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
-            var code = await res.text();
+    try {
+        if (!inNode()) {
+            if (window.include === undefined) {
+                var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
+                var code = await res.text();
+                eval(`
+                    ${ code }
+                    window.include = include;
+                    window.scriptSrc = scriptSrc;
+                    window.ghCodeUrl = ghCodeUrl;
+                `);
+            }
+        } else {
+            _incjs = {};
+            let mlib = await import('../mainlib.mjs');
+            let code = await mlib.gitCdn({ repo: 'cdn', path: 'include.js' });
             eval(`
-                ${code}
-                window.include = include;
-                window.scriptSrc = scriptSrc;
+                ${ code }
+                _incjs.include = include;
+                _incjs.scriptSrc = scriptSrc;
+                _incjs.ghCodeUrl = ghCodeUrl;
             `);
         }
+
+    } catch(err) {
+        console.error('Error loading include', err);
     }
 
 
     // moment - https://momentjs.com/docs/
 
-    if (typeof(moment) == 'undefined') {
-        if (inNode()) {
-            res = await import('moment');
-            _moment = res.default;
+    try {
+        if (typeof(moment) == 'undefined') {
+            if (inNode()) {
+                res = await import('moment');
+                _moment = res.default;
+            } else {
+                await include('lib-moment');
+                _moment = moment;
+            }
         } else {
-            await include('lib-moment');
             _moment = moment;
         }
-    } else {
-        _moment = moment;
+
+        _moment.locale('es'); // todo: setear a partir del lngId
+        
+    } catch(err) {
+        console.error('Error loading moment', err);
     }
 
-    _moment.locale('es'); // todo: setear a partir del lngId
-    
 
     // numeral - http://numeraljs.com/
 
-    if (typeof(numeral) == 'undefined') {
-        if (inNode()) {
-            res = await import('numeral');
-            await import('numeral/locales/es.js');
-            _numeral = res.default;
+    try {
+        if (typeof(numeral) == 'undefined') {
+            if (inNode()) {
+                res = await import('numeral');
+                await import('numeral/locales/es.js');
+                _numeral = res.default;
+            } else {
+                await include('lib-numeral');
+                await include('lib-numeral-locales');
+                _numeral = numeral;
+            }
         } else {
-            await include('lib-numeral');
-            await include('lib-numeral-locales');
             _numeral = numeral;
         }
-    } else {
-        _numeral = numeral;
-    }
 
-    // todo: setear a partir del lngId
-    _numeral.locale('es'); // es / en
-    _numeral.defaultFormat('0,0.[00]');
+        // todo: setear a partir del lngId
+        _numeral.locale('es'); // es / en
+        _numeral.defaultFormat('0,0.[00]');
+
+    } catch(err) {
+        console.error('Error loading numeral', err);
+    }
 
 
     // CryptoJS - https://code.google.com/archive/p/crypto-js/
 
-    if (typeof(CryptoJS) == 'undefined') {
-        if (inNode()) {
-            res = await import('crypto-js');
-            _CryptoJS = res.default;
+    try {
+        if (typeof(CryptoJS) == 'undefined') {
+            if (inNode()) {
+                res = await import('crypto-js');
+                _CryptoJS = res.default;
+            } else {
+                await include('lib-cryptojs-aes');
+                _CryptoJS = CryptoJS;
+            }
         } else {
-            await include('lib-cryptojs-aes');
             _CryptoJS = CryptoJS;
         }
-    } else {
-        _CryptoJS = CryptoJS;
+
+    } catch(err) {
+        console.error('Error loading crypto-js', err);
     }
 
 
     // serialize-error - https://github.com/sindresorhus/serialize-error
 
-    if (typeof(_serializeError) == 'undefined') {
-        if (inNode()) {
-            res = await import('serialize-error');
-            _serializeError = res;
-        } else {
-            if (window.serializeError) {
-                _serializeError = window.serializeError;
+    try {
+        if (typeof(_serializeError) == 'undefined') {
+            if (inNode()) {
+                res = await import('serialize-error');
+                _serializeError = res;
             } else {
-                res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs@0.1.3/+esm');
-                _serializeError = res.default;
-                window.serializeError = _serializeError;
+                if (window.serializeError) {
+                    _serializeError = window.serializeError;
+                } else {
+                    res = await import('https://cdn.jsdelivr.net/npm/serialize-error-cjs/+esm');
+                    _serializeError = res.default;
+                    window.serializeError = _serializeError;
+                }
             }
         }
+
+    } catch(err) {
+        console.error('Error loading serialize-error', err);
     }
 
 
     // fast-xml-parser - https://github.com/NaturalIntelligence/fast-xml-parser
 
-    if (typeof(_fastXmlParser) == 'undefined') {
-        if (inNode()) {
-            var res = await import('fast-xml-parser');
-            _fastXmlParser = res.default;
-        } else {
-            if (window.fastXmlParser) {
-                _fastXmlParser = window.fastXmlParser;
-            } else {
-                var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser@4.1.3/+esm');
+    try {
+        if (typeof(_fastXmlParser) == 'undefined') {
+            if (inNode()) {
+                var res = await import('fast-xml-parser');
                 _fastXmlParser = res.default;
-                window.fastXmlParser = _fastXmlParser;
+            } else {
+                if (window.fastXmlParser) {
+                    _fastXmlParser = window.fastXmlParser;
+                } else {
+                    var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser/+esm');
+                    _fastXmlParser = res.default;
+                    window.fastXmlParser = _fastXmlParser;
+                }
             }
         }
+
+    } catch(err) {
+        console.error('Error loading fast-xml-parser', err);
     }
 
 
     // html-entities - https://github.com/mdevils/html-entities
 
-    if (typeof(_htmlEntities) == 'undefined') {
+    try {
         if (inNode()) {
-            var res = await import('html-entities');
-            _htmlEntities = res.default;
+            if (typeof(_htmlEntities) == 'undefined') {
+                var res = await import('html-entities');
+                _htmlEntities = res.default;
+            }
         }
+
+    } catch(err) {
+        console.error('Error loading html-entities', err);
     }
 
 
+    // content-disposition - https://github.com/jshttp/content-disposition
+
+    try {
+        if (typeof(_contentDisposition) == 'undefined') {
+            if (inNode()) {
+                var res = await import('content-disposition');
+                _contentDisposition = res.default;
+            } else {
+                if (window.contentDisposition) {
+                    _contentDisposition = window.contentDisposition;
+                } else {
+                    var res = await import('https://cdn.jsdelivr.net/npm/content-disposition/+esm');
+                    _contentDisposition = res.default;
+                    window.contentDisposition = _contentDisposition;
+                }
+            }
+        }
+
+    } catch(err) {
+        console.error('Error loading content-disposition', err);
+    }
+
+
+    // URL
+
+    try {
+        if (typeof(_URL) == 'undefined') {
+            if (inNode()) {
+                var res = (await import('url'));
+                _URL = res.default.URL;
+            } else {
+                _URL = window.URL;
+            }
+        }
+
+    } catch(err) {
+        console.error('Error loading url', err);
+    }
+
+    
     // string.reverse
     if (typeof String.prototype.reverse !== 'function') {
         String.prototype.reverse = function () {
@@ -170,16 +257,6 @@ async function loadUtils() {
         };
     }
 
-    // URL
-    if (typeof(_URL) == 'undefined') {
-        if (inNode()) {
-            var res = (await import('url'));
-            _URL = res.default.URL;
-        } else {
-            _URL = window.URL;
-        }
-    }
-
     return true;
 };
 
@@ -188,7 +265,9 @@ export function inNode() {
     return (typeof(window) == 'undefined' && typeof(process) != 'undefined');
 }
 
-
+/**
+Map Case Insensitive
+*/
 export class DoorsMap extends Map {
     _parseKey(key) {
         var k;
@@ -268,9 +347,24 @@ Si hace falta algo mas completo usar https://github.com/feross/buffer
     resolve(buffer.Buffer.from(await res.arrayBuffer()));
 */
 export class SimpleBuffer extends Uint8Array {
-    toString() {
-        var td = new TextDecoder();
-        return td.decode(this);
+    toString(encoding) {
+        /*
+        TODO: Hay que terminar de implementar los encodings, falta el start/end tb
+        https://nodejs.org/api/buffer.html#buftostringencoding-start-end
+        https://nodejs.org/api/buffer.html#buffers-and-character-encodings
+        utf8/utf-8, utf16le/utf-16le, latin1, base64, base64url, hex, ascii, binary/latin1, ucs2/ucs-2/utf16le
+        */
+        let enc = encoding ? encoding.toLowerCase() : encoding;
+
+        if (enc == 'base64') {
+            // Ver: https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
+            let bin = Array.from(this, (byte) => String.fromCodePoint(byte)).join('');
+            return btoa(bin);
+
+        } else {
+            let td = new TextDecoder('utf-8');
+            return td.decode(this);
+        }
     }   
 }
 
@@ -314,6 +408,15 @@ export class Session {
         this._reset();
         this.#apiKey = value;
     }
+
+    asyncEventsDisabled(value) {
+        let url = 'session/asyncevents/disabled';
+        if (value === undefined) {
+            return this.restClient.fetch(url, 'GET', '', '');
+        } else {
+            return this.restClient.fetch(url + (value ? '/true' : '/false'), 'POST', {}, '');
+        }
+    };
 
     /**
     @returns {string}
@@ -418,7 +521,7 @@ export class Session {
     get doorsVersion() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            if (me.#doorsVersion != undefined) {
+            if (me.#doorsVersion !== undefined) {
                 resolve(me.#doorsVersion);
 
             } else {
@@ -446,7 +549,7 @@ export class Session {
     folder(folder, curFolderId) {
         var key = 'folder|' + folder + '|' + curFolderId;
         var cache = this.utils.cache(key);
-        if (cache == undefined) {
+        if (cache === undefined) {
             if (!isNaN(parseInt(folder))) {
                 cache = this.foldersGetFromId(folder);
             } else {
@@ -682,7 +785,7 @@ export class Session {
     @returns {Promise}
     */
     runSyncEventsOnClient(value) {
-        if (value == undefined) {
+        if (value === undefined) {
             var url = 'session/syncevents/runOnClient';
             return this.restClient.fetch(url, 'GET', '', '');
         } else {
@@ -690,7 +793,7 @@ export class Session {
             return this.restClient.fetch(url, 'POST', {}, '');
         }
     }
-
+    
     /**
     @returns {string}
     */
@@ -710,7 +813,7 @@ export class Session {
         var url = 'settings';
         var method, param, paramName;
 
-        if (value == undefined) {
+        if (value === undefined) {
             url += '/' + this.utils.encUriC(setting);
             method = 'GET';
             param = '';
@@ -728,6 +831,15 @@ export class Session {
         return this.restClient.fetch(url, method, param, paramName);
     }
 
+    syncEventsDisabled(value) {
+        let url = 'session/syncevents/disabled';
+        if (value === undefined) {
+            return this.restClient.fetch(url, 'GET', '', '');
+        } else {
+            return this.restClient.fetch(url + (value ? '/true' : '/false'), 'POST', {}, '');
+        }
+    };
+
     /**
     Devuelve o setea tags de session.
     @returns {Promise<Object>}
@@ -735,12 +847,12 @@ export class Session {
     tags(key, value) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (value == undefined) {
+            if (value === undefined) {
                 // Devuelve
                 var url = 'session/tags';
                 me.restClient.fetch(url, 'GET', '', '').then(
                     res => {
-                        if (key == undefined) {
+                        if (key === undefined) {
                             resolve(res);
                         } else {
                             resolve(res[key]);
@@ -801,7 +913,7 @@ export class Session {
         var url = 'user/settings/' + this.utils.encUriC(setting);
         var method, param, paramName;
 
-        if (value == undefined) {
+        if (value === undefined) {
             method = 'GET';
             param = '';
             paramName = ''
@@ -846,7 +958,7 @@ export class Session {
                 try {
                     let res = await fetch('/c/tkn.asp');
                     let txt = await res.text();
-                    if (txt.length < 70) {
+                    if (txt.length < 70) { // Cdo no hay sesion viene el chorizazo del error
                         me.authToken = txt;
                         resolve(true);
                     } else {
@@ -952,7 +1064,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     childAccounts(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ChildAccountsList', 'childAccounts');
         } else {
             return this._accountsGet('childAccounts', account);
@@ -978,7 +1090,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     childAccountsRecursive(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ChildAccountsRecursive', 'childAccountsRecursive');
         } else {
             return this._accountsGet('childAccountsRecursive', account);
@@ -1090,7 +1202,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     parentAccounts(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ParentAccountsList', 'parentAccounts');
         } else {
             return this._accountsGet('parentAccounts', account);
@@ -1116,7 +1228,7 @@ export class Account {
     @returns {(Promise<Account>|Promise<DoorsMap>)}
     */
     parentAccountsRecursive(account) {
-        if (account == undefined) {
+        if (account === undefined) {
             return this._accountsList('ParentAccountsRecursive', 'parentAccountsRecursive');
         } else {
             return this._accountsGet('parentAccountsRecursive', account);
@@ -1156,7 +1268,7 @@ export class Account {
         return new Promise((resolve, reject) => {
             var type = me instanceof User ? 'user' : 'account';
             var url, method;
-            if (me.isNew || me.id == undefined) {
+            if (me.isNew || me.id === undefined) {
                 url = type + 's';
                 method = 'PUT';
             } else {
@@ -1317,19 +1429,16 @@ export class Attachment {
     delete() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            var attMap = await me.parent.attachments();
-            if (me.isNew) {
-                attMap.delete(me.name);
+            try {
+                if (!me.isNew) {
+                    let url = 'documents/' + me.parent.id + '/attachments';
+                    await me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId');
+                }
+                me.parent._attMapsRemove(me);
                 resolve(true);
-            } else {
-                var url = 'documents/' + me.parent.id + '/attachments';
-                me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId').then(
-                    res => {
-                        if (res) attMap.delete(me.name);
-                        resolve(res);
-                    },
-                    reject
-                );
+
+            } catch(er) {
+                reject(er);
             }
         });
     }
@@ -1388,6 +1497,14 @@ export class Attachment {
     set fileStream(value) {
         if (!this.isNew) throw new Error('Read-only property');
         this.#json.File = value;
+
+        if (value instanceof Blob) {
+            this.#json.Size = value.size;
+        } else if (value instanceof ArrayBuffer) {
+            this.#json.Size = value.byteLength;
+        } else if (value instanceof Uint8Array) {
+            this.#json.Size = value.length;
+        } 
     }
 
     /**
@@ -1492,6 +1609,7 @@ export class Attachment {
     @returns {Promise}
     */
     save() {
+        //todo: deprecar para v8
         if (!this.isNew) throw new Error('I\'m not new');
 
         var me = this;
@@ -1502,7 +1620,6 @@ export class Attachment {
             formData.append('attachment', blob, me.name);
             if (me.description || me.description == 0) formData.append('description', me.description);
             if (me.group || me.group == 0) formData.append('group', me.group);
-            // todo: probar si graba description y group
             var url = 'documents/' + me.parent.id + '/attachments';
             me.session.restClient.fetchRaw(url, 'POST', formData).then(
                 async res => {
@@ -1548,6 +1665,7 @@ export class Attachment {
     }
     set toDelete(value) {
         this.#json.toDelete = value;
+        if (value) this.parent.attachmentsDelete(this.name);
     }
 
     /**
@@ -1728,21 +1846,31 @@ export class Directory {
         var me = this;
         return new Promise((resolve, reject) => {
             var url;
-            if (isNaN(parseInt(account))) {
-                //url = 'accounts?accName=' + me.session.utils.encUriC(account);
-                url = 'accounts/name/' + me.session.utils.encUriC(account);
+            if (account || account == 0) {
+                if (isNaN(parseInt(account))) {
+                    url = 'accounts/name=' + me.session.utils.encUriC(account);
+                    //url = 'accounts/name/' + me.session.utils.encUriC(account);
+                } else {
+                    // todo: cambiar por /accounts/{accId}
+                    url = 'accounts?accIds=' + account;
+                }
+
             } else {
-                // todo: cambiar por /accounts/{accId}
-                url = 'accounts?accIds=' + account;
+                reject(new Error('Invalid account spec: ' + account));
             }
+
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 res => {
-                    if (res.length == 0) {
-                        reject(new Error('Account not found'));
-                    } else if (res.length > 1) {
-                        reject(new Error('Vague expression'));
+                    if (Array.isArray(res)) {
+                        if (res.length == 0) {
+                            reject(new Error('Account not found (' + account + ')'));
+                        } else if (res.length > 1) {
+                            reject(new Error('Vague expression (' + account + ')'));
+                        } else {
+                            resolve(new Account(res[0], me.session));
+                        }
                     } else {
-                        resolve(new Account(res[0], me.session));
+                        resolve(new Account(res, me.session));
                     }
                 },
                 reject
@@ -1784,9 +1912,16 @@ export class Directory {
     @returns {Promise<Object[]>}
     */
     accountsSearch(filter, order) {
-        let url = '/accounts/search?filter=' + this.session.utils.encUriC(filter) + 
-            '&order=' + this.session.utils.encUriC(order);
-        return this.session.restClient.fetch(url, 'GET', '', '');
+        let utils = this.session.utils;
+        let key = 'accountsSearch|' + filter + '|' + order;
+        let cache = utils.cache(key);
+        if (cache === undefined) {
+            let url = '/accounts/search?filter=' + utils.encUriC(filter) + 
+                '&order=' + utils.encUriC(order);
+            cache = this.session.restClient.fetch(url, 'GET', '', '');
+            utils.cache(key, cache, 60); // Cachea por 60 segundos
+        }
+        return cache;
     }
 
     /**
@@ -1805,14 +1940,12 @@ export class Document {
     #json;
     #fieldsMap;
     #attachmentsMap;
+    #deletedAttsMap;
     #properties;
     #userProperties;
     #owner;
     #form;
     #log;
-
-    // todo: como pasamos los attachs en memoria?
-    // https://gist.github.com/jonathanlurie/04fa6343e64f750d03072ac92584b5df
 
     constructor(document, session, folder) {
         this.#json = document;
@@ -1820,6 +1953,7 @@ export class Document {
         if (folder) this.#parent = folder;
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
+        this.#deletedAttsMap = new DoorsMap();
     }
 
     _reset() {
@@ -1839,7 +1973,7 @@ export class Document {
     async _dispatchEvent(event) {
         // A partir de la version 7.4.38.1 los dispara el server
         try { var ver = await this.session.doorsVersion } catch(err) {};
-        if (ver == undefined || ver >= '007.004.038.001') return;
+        if (ver === undefined || ver >= '007.004.038.001') return;
 
         var me = this;
         var fld = await me.parent;
@@ -1847,6 +1981,7 @@ export class Document {
         var prop = await fld.properties('NODE_CONFIG');
         try {
             let jsn = JSON.parse(prop);
+            //todo: ver nuevo esquema
             code.path = jsn[event];
         } catch(err) {}
 
@@ -1861,6 +1996,17 @@ export class Document {
 
             await me.nodeEvent(code, event);
         }
+    }
+
+    /**
+    Este metodo se usa desde att.delete para sacar el adjunto de los maps
+    cdo se borra
+    */
+    _attMapsRemove(att) {
+        if (this.#deletedAttsMap.find((value, key) => value == att))
+            this.#deletedAttsMap.delete(att.name);
+        if (this.#attachmentsMap.find((value, key) => value == att))
+            this.#attachmentsMap.delete(att.name);
     }
 
     /**
@@ -1896,7 +2042,7 @@ export class Document {
     @returns {Promise<boolean>}
     */
     aclInherits(value) {
-        if (value == undefined) {
+        if (value === undefined) {
             return (this.fields('inherits').value ? true : false);
         } else {
             var me = this;
@@ -1958,7 +2104,7 @@ export class Document {
     attachments(attachment) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (attachment != undefined) {
+            if (attachment !== undefined) {
                 me.attachments().then(
                     res => {
                         if (res.has(attachment)) {
@@ -1973,36 +2119,55 @@ export class Document {
             } else {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap._loaded) {
-                    var url = 'documents/' + me.id + '/attachments';
-                    me.session.restClient.fetch(url, 'GET', '', '').then(
-                        res => {
-                            if (res.length > 0) {
-                                // Ordena descendente
-                                res.sort(function (a, b) {
-                                    return a.AttId >= b.AttId ? -1 : 1;
-                                });
-                                // Arma un array de AccId
-                                var ids = res.map(att => att.AccId);
-                                // Saca los repetidos
-                                ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                                // Levanta los accounts y completa el nombre
-                                me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                                    accs => {
-                                        res.forEach(el => {
-                                            el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                            me.#attachmentsMap.set(el.Name, new Attachment(el, me));
-                                        });
-                                        me.#attachmentsMap._loaded = true;
-                                        resolve(me.#attachmentsMap);
-            
-                                    }, reject
-                                )
-                            } else {
-                                me.#attachmentsMap._loaded = true;
+                    if (me.#attachmentsMap._loading == true) {
+                        // Evita la doble carga cdo piden varios en simultaneo
+                        let wait = 0;
+                        let interv = setInterval(() => {
+                            if (me.#attachmentsMap._loaded) {
+                                clearInterval(interv);
                                 resolve(me.#attachmentsMap);
+                            } else {
+                                if (wait += 100 > 5000) {
+                                    clearInterval(interv);
+                                    reject(new Error('Attachments loading is taking too long'));
+                                }
                             }
-                        }, reject
-                    );
+                        }, 100);
+
+                    } else {
+                        me.#attachmentsMap._loading = true;
+                        var url = 'documents/' + me.id + '/attachments';
+                        me.session.restClient.fetch(url, 'GET', '', '').then(
+                            res => {
+                                if (res.length > 0) {
+                                    // Ordena descendente
+                                    res.sort(function (a, b) {
+                                        return a.AttId >= b.AttId ? -1 : 1;
+                                    });
+                                    // Arma un array de AccId
+                                    var ids = res.map(att => att.AccId);
+                                    // Saca los repetidos
+                                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                                    // Levanta los accounts y completa el nombre
+                                    me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                                        accs => {
+                                            res.forEach(el => {
+                                                el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                                                me.#attachmentsMap.set(el.Name, new Attachment(el, me));
+                                            });
+                                            me.#attachmentsMap._loaded = true;
+                                            me.#attachmentsMap._loading = false;
+                                            resolve(me.#attachmentsMap);
+                
+                                        }, reject
+                                    )
+                                } else {
+                                    me.#attachmentsMap._loaded = true;
+                                    resolve(me.#attachmentsMap);
+                                }
+                            }, reject
+                        );
+                    }
 
                 } else {
                     resolve(me.#attachmentsMap);
@@ -2023,20 +2188,46 @@ export class Document {
             IsNew: true,
         }, this);
 
+        /* todo: no esta andando, resolver de otra forma, sin async
         this.session.currentUser.then(
             res => {
                 att.AccId = res.id;
                 att.AccName = res.name;
             }
         )
+        */
 
         this.#attachmentsMap.set(name, att);
         return att;
     }
 
+    /**
+    Marca un adjunto para borrar cdo se haga el save
+    @returns {Attachment}
+    */
+    attachmentsDelete(name) {
+        let me = this;
+        let att = me.#attachmentsMap.get(name);
+        if (att) {
+            if (!att.isNew) me.#deletedAttsMap.set(att.name, att);
+            me.#attachmentsMap.delete(att.name);
+            return att;
+        } else {
+            throw new Error('Not found');
+        }
+    }
+
+    /**
+    Alias de attachmentsAdd
+    */
+    attachmentsNew(name) {
+        return this.attachmentsAdd(name);
+    }
+
     attachmentsReset() {
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
+        this.#deletedAttsMap = new DoorsMap();
     }
 
     /** No implementado aun */
@@ -2085,7 +2276,7 @@ export class Document {
             // Devuelve un field
             var field = me.fields().get(name);
             if (field) {
-                if (value != undefined) field.value = value;
+                if (value !== undefined) field.value = value;
                 return field;
             } else {
                 if (name != '[NULL]') console.log('Field not found: ' + name);
@@ -2311,7 +2502,6 @@ export class Document {
 
     /**
     Guarda el documento.
-    No guarda adjuntos, estos deben guardarse o borrarse individualmente.
     @returns {Promise<Document>}
     */
     save() {
@@ -2323,6 +2513,41 @@ export class Document {
                 reject(err);
             }
             var tags = me.#json.Tags;
+
+            // En Doors 8 los attachs se graban junto con el doc
+            if (await me.session.doorsVersion >= '008.000.000.000') {
+                let attsJson = me.#json.Attachments;
+
+                // Borrados
+                let attsMap = this.#deletedAttsMap
+                let keys = Array.from(attsMap.keys());
+                await me.session.utils.asyncLoop(keys.length, async loop => {
+                    let att = attsMap.get(keys[loop.iteration()]);
+                    let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
+                    if (ix >= 0) attsJson.splice(ix, 1);
+                    loop.next();
+                });
+    
+                // Nuevos
+                attsMap = await me.attachments();
+                keys = Array.from(attsMap.keys());
+                await me.session.utils.asyncLoop(keys.length, async loop => {
+                    let att = attsMap.get(keys[loop.iteration()]);
+                    if (att.isNew) {
+                        let buf = await (await att.fileStream).arrayBuffer();
+                        let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
+                        newAtt.Description = att.description;
+                        let ix = att.name.lastIndexOf('.');
+                        if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
+                        newAtt.File = new SimpleBuffer(buf).toString('base64');
+                        newAtt.Group = att.group;
+                        newAtt.Name = att.name;
+                        newAtt.Size = att.size;
+                        me.#json.Attachments.push(newAtt);
+                    }
+                    loop.next();
+                });
+            }
 
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
@@ -2341,6 +2566,8 @@ export class Document {
                             }
 
                             me._reset();
+                            if (await me.session.doorsVersion >= '008.000.000.000') me.attachmentsReset();
+
                             resolve(me);
                         },
                         reject
@@ -2353,15 +2580,69 @@ export class Document {
 
     /**
     Guarda los adjuntos.
-    todo: Esto deberia ser parte del save (issue #261)
     */
     async saveAttachments() {
-        for (var [key, value] of await this.attachments()) {
-            if (value.toRemove) {
-                await value.remove();
-            } else if (value.isNew) {
-                await value.save();
+        let me = this;
+        let utils = me.session.utils;
+        let ret = [];
+
+        if (await me.session.doorsVersion >= '008.000.000.000') {
+            console.warn('saveAttachments is deprecated since Doors 8');
+            return ret;
+
+        } else {
+            // 1ro borrar
+            let atts = this.#deletedAttsMap
+            let keys = Array.from(atts.keys());
+            await utils.asyncLoop(keys.length, async loop => {
+                let att = atts.get(keys[loop.iteration()]);
+                let res = {
+                    action: 'delete',
+                    attachment: attInfo(att),
+                }
+                try {
+                    await att.delete();
+                    res.result = 'OK';
+                } catch (err) {
+                    res.result = err;
+                } finally {
+                    ret.push(res);
+                }
+                loop.next();
+            });
+
+            // 2do agregar
+            atts = await this.attachments();
+            keys = Array.from(atts.keys());
+            await utils.asyncLoop(keys.length, async loop => {
+                let att = atts.get(keys[loop.iteration()]);
+                if (att.isNew) {
+                    let res = {
+                        action: 'add',
+                        attachment: attInfo(att),
+                    }
+                    try {
+                        await att.save();
+                        res.result = 'OK';
+                    } catch (err) {
+                        res.result = err;
+                    } finally {
+                        ret.push(res);
+                    }
+                }
+                loop.next();
+            })
+
+            function attInfo(att) {
+                return {
+                    id: att.id,
+                    name: att.name,
+                    size: att.size,
+                    isNew: att.isNew,
+                }
             }
+
+            return ret;
         }
     }
 
@@ -2606,7 +2887,7 @@ export class Field {
         if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         
         if (this.type == 1) {
-            this.#json.Value = (value == undefined || value == null || value == '') ? null : value.toString();
+            this.#json.Value = (value === undefined || value == null || value == '') ? null : value.toString();
         } else if (this.type == 2) {
             var dt = this.session.utils.cDate(value);
             this.#json.Value = dt ? dt.toJSON() : null;
@@ -2628,7 +2909,7 @@ export class Field {
     @returns {boolean}
     */
     get valueEmpty() {
-        return (this.value == null || this.value == undefined || this.value == '');
+        return (this.value == null || this.value === undefined || this.value == '');
     }
 
     get valueOld() {
@@ -2646,6 +2927,7 @@ export class Folder {
     #properties;
     #userProperties;
     #form;
+    #foldersMap;
     #viewsMap;
     #owner;
 
@@ -2816,20 +3098,16 @@ export class Folder {
     }
     */
 
-    /*
     get description() {
-        //todo
+        return this.#json.Description;
     }
-    */
 
-    /*
     get descriptionRaw() {
-        //todo
+        return this.#json.DescriptionRaw;
     }
     set descriptionRaw(value) {
-        //todo
+        this.#json.DescriptionRaw = value;
     }
-    */
 
     /**
     Alias de documents.
@@ -2852,9 +3130,9 @@ export class Folder {
                 var res = await me.search({ fields: 'doc_id', formula });
 
                 if (res.length == 0) {
-                    reject(new Error('Document not found'));
+                    reject(new Error('Document not found (' + formula + ')'));
                 } else if (res.length > 1) {
-                    reject(new Error('Vague expression'));
+                    reject(new Error('Vague expression (' + formula + ')'));
                 } else {
                     let docId = res[0]['DOC_ID'];
                     resolve(await me.session.doc(docId));
@@ -2937,16 +3215,36 @@ export class Folder {
     @returns {Promise<Folder>}
     */
     folder(name) {
-        //todo: si no viene name devolver la lista
-        var me = this;
+        let me = this;
         return new Promise((resolve, reject) => {
-            var url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
-            me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    resolve(new Folder(res, me.session, me));
-                },
-                reject
-            )    
+            if (name !== undefined) {
+                /*
+                No la devuelvo de la coleccion xq a veces no vienen todas
+                calculo debe ser por el permiso read/view
+                */
+                let url = 'folders/' + me.id + '/children?foldername=' + me.session.utils.encUriC(name);
+                me.session.restClient.fetch(url, 'GET', '', '').then(
+                    res => {
+                        resolve(new Folder(res, me.session, me));
+                    },
+                    reject
+                )  
+            } else {
+                // Devuelve la coleccion
+                if (!me.#foldersMap) {
+                    let url = 'folders/' + me.id + '/childrens';
+                    me.session.restClient.fetch(url, 'GET', '', '').then(
+                        res => {
+                            me.#foldersMap = new DoorsMap();
+                            for (let el of res) {
+                                me.#foldersMap.set(el.Name, new Folder(el, me.session, me));
+                            }
+                            resolve(me.#foldersMap);
+                        },
+                        reject
+                    )  
+                }
+            }
         });
     }
 
@@ -3354,7 +3652,7 @@ export class Folder {
     views(name) {
         var me = this;
         return new Promise((resolve, reject) => {
-            if (name != undefined) {
+            if (name !== undefined) {
                 me.views().then(
                     res => {
                         if (res.has(name)) {
@@ -3422,6 +3720,37 @@ export class Folder {
     }
 };
 
+/*
+todo: terminar
+
+AccId: 462
+AclInfo: null
+AclInherits: false
+Actions: [] (0)
+Application: ""
+AssemblyMetaData: {IsEnabled: false, IsNet: false, Items: []}
+Created: "2024-04-25T15:29:45.02Z"
+Description: ""
+DescriptionRaw: ""
+EntityId: 0
+Events: [Object, Object, Object, Object, Object, Object, Object, Object, Object] (9)
+Fields: [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, …] (33)
+FrmId: 504
+Guid: "0a69e91e-3f94-4fa8-8a43-db3d2ffb4db1"
+Icon: ""
+IconRaw: ""
+IsNew: false
+Modified: "2024-06-06T15:49:51.29Z"
+Name: "gen6"
+Owner: null
+Properties: [] (0)
+ReadOnly: false
+StyleScriptDefinition: {Override: false, Inherits: false, Code: "", InheritedCode: null, Fields: [], …}
+Tags: null
+Url: "/c/form.htm?_id=generic6"
+UrlRaw: "[APPVIRTUALROOT]/form.htm?_id=generic6"
+UserProperties: [] (0)
+*/
 
 export class Form {
     static objectType = 1;
@@ -3535,6 +3864,7 @@ export class Form {
 
         if (field) {
             // Devuelve un field
+            // todo: aca deberia usar el q ya se creo en el map (ver folder.views)
             var field;
             field = me.#json.Fields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
             if (field) {
@@ -3556,14 +3886,12 @@ export class Form {
         }
     }
 
-    /*
     get guid() {
-        //todo
+        return this.#json.Guid.replaceAll('-', '');
     }
     set guid(value) {
-        //todo
+        this.#json.Guid = value;
     }
-    */
 
     /*
     get icon() {
@@ -3580,11 +3908,9 @@ export class Form {
     }
     */
 
-    /*
     get id() {
-        //todo
+        return this.#json.FrmId;
     }
-    */
 
     /*
     get isNew() {
@@ -3797,8 +4123,8 @@ export class Node {
                 let jsn = JSON.parse(setting);
                 try { target.server = origin(jsn.server) } catch(err) {};
                 try { target.debugServer = origin(jsn.debugServer) } catch(err) {};
-                if (jsn.repo != undefined) target.repo = jsn.repo;
-                if (jsn.ref != undefined) target.ref = jsn.ref;
+                if (jsn.repo !== undefined) target.repo = jsn.repo;
+                if (jsn.ref !== undefined) target.ref = jsn.ref;
 
             } catch(err) {};
         }
@@ -3838,64 +4164,79 @@ export class Node {
         apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
         url // Pasar true para obtener la url, que ejecuta el job con GET
         doc // Opcional, el json de un documento
+        returnFetch // Opcional, def false. Devuelve el fetch en vez de la respuesta
     });
     */
     exec(options) {
         var me = this;
+        var utils = me.session.utils;
 
         return new Promise(async (resolve, reject) => {
             let data = {
-                serverUrl: this.session.serverUrl,
-                events: await me.codeOptions(options.code),
+                serverUrl: me.session.serverUrl,
+                //events: await me.codeOptions(options.code),
                 doc: options.doc,
                 payload: options.payload,
             }
 
-            if (this.session.apiKey || options.apiKey) {
-                data.apiKey = options.apiKey ? options.apiKey : this.session.apiKey;
-            } else if (this.session.authToken) {
-                data.authToken = this.session.authToken;
+            if (me.session.apiKey || options.apiKey) {
+                data.apiKey = options.apiKey ? options.apiKey : me.session.apiKey;
+            } else if (me.session.authToken) {
+                data.authToken = me.session.authToken;
             }
 
+            let code = await me.codeOptions(structuredClone(options.code));
+            code.exec = true;
+            let srv = await me.server;
+            if (srv) code.server = srv;
+
+            let url = me.inNode ? _incjs.ghCodeUrl(code) : ghCodeUrl(code);
+
             if (options.url) {
-                var url = await me.server + '/exec';
-                url += '?msg=' + encodeURIComponent(JSON.stringify(data));
+                url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
                 resolve(url);
 
             } else {
-                let res = await fetch(await me.server + '/exec', {
+                let args = {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data),
-                });
+                    body: utils.jsonStringify(data),
+                };
 
-                if (res.ok) {
-                    let buf = new SimpleBuffer(await res.arrayBuffer());
-                    try {
-                        let json = JSON.parse(buf.toString());
-                        if (json.__type__) {
-                            resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
-                        } else {
-                            resolve(json);
+                if (options.returnFetch) {
+                    resolve(fetch(url, args));
+                    
+                } else {
+                    let res = await fetch(url, args);
+
+                    if (res.ok) {
+                        let buf = new SimpleBuffer(await res.arrayBuffer());
+                        try {
+                            let json = utils.jsonParse(buf.toString());
+                            if (json.__type__) {
+                                resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
+                            } else {
+                                resolve(json);
+                            }
+
+                        } catch(err) {
+                            resolve(buf);
                         }
 
-                    } catch(err) {
-                        resolve(buf);
+                    } else {
+                        let err;
+                        try {
+                            let txt = await res.text();
+                            let json = JSON.parse(txt);
+                            err = utils.deserializeError(json);
+                    
+                        } catch(e) {
+                            err = new Error(res.status + ' (' + res.statusText + ')');
+                        }
+                        reject(err);
                     }
-
-                } else {
-                    let err;
-                    try {
-                        let txt = await res.text();
-                        let json = JSON.parse(txt);
-                        err = me.session.utils.deserializeError(json);
-                
-                    } catch(e) {
-                        err = new Error(res.status + ' (' + res.statusText + ')');
-                    }
-                    reject(err);
                 }
             }
         });
@@ -3921,6 +4262,7 @@ export class Node {
     });
     */
     async modCall(options) {
+        //todo: soporte para apiKey y url
         return await this.exec({
             code: { repo: 'Global', path: 'server/modproxy.js' },
             payload: options,
@@ -3931,8 +4273,81 @@ export class Node {
         var me = this;
         return new Promise(async (resolve, reject) => {
             var cfg = await me.config;
-            resolve(this.debug ? cfg.debugServer : cfg.server);
+            resolve(me.debug ? cfg.debugServer : cfg.server);
         })
+    }
+
+    /**
+    Devuelve un EventSource suscripto a los eventos del servidor
+    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+
+    @example
+    const serverEvents = await dSession.node.serverEvents();
+
+    // Recibe eventos de un tipo especifico
+    serverEvents.addEventListener('event_type', (ev) => {
+        let data = ev.data;
+        // procesar ...
+    })
+
+    // Recibe eventos sin tipo
+    serverEvents.onmessage = (ev) => {
+        let data = ev.data;
+        // procesar ...
+    })
+    */
+    async serverEvents() {
+        let me = this;
+        if (typeof(EventSource) == 'function' && typeof(window) == 'object') {
+            let ins = (await me.session.instance).Name;
+            if (!window.drsServerEvents) {
+                let es = new EventSource(await me.server + 
+                    '/ssevents?ins=' + encodeURIComponent(ins));
+                window.drsServerEvents = es;
+
+                /*
+                todo: mejorar la reconexion
+                https://www.npmjs.com/package/reconnecting-eventsource
+
+                es.onerror = ev => {
+                    console.log('error', es.readyState);
+                }
+                es.onopen = ev => {
+                    console.log('open', es.readyState);
+                }
+                setInterval(() => {
+                    console.log('readyState', es.readyState);
+                }, 1000);
+                */
+            }
+            return window.drsServerEvents;
+
+        } else {
+            throw new Error('serverEvents runs only on client side');
+        }
+    }
+
+    /**
+    Dispara un evento del servidor
+    https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+    
+    @example
+    dSession.node.serverEventsDispatch({
+        type: 'myEvnType',
+        data: 'string or object with event info',
+    });
+    */
+    async serverEventsDispatch(options) {
+        let me = this;
+        let ins = (await me.session.instance).Name;
+        if (options.instance == undefined) options.instance = ins;
+        return await fetch(await me.server + '/ssevents' , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(options),
+        });
     }
 
     /**
@@ -4046,10 +4461,10 @@ export class Properties extends DoorsMap {
     set(key, value) {
         var me = this;
 
-        if (key == undefined) {
+        if (key === undefined) {
             return this; // La coleccion
 
-        } else if (value == undefined) {
+        } else if (value === undefined) {
             // El value
             return new Promise((resolve, reject) => {
                 me.get(key).then(
@@ -4130,7 +4545,7 @@ export class Property {
     }
 
     value(value) {
-        if (value == undefined) {
+        if (value === undefined) {
             return this.#json.Value;
         } else {
             var me = this;
@@ -4408,7 +4823,7 @@ export class Utilities {
     solo si no esta definida.
     */
     assignDefined(target, source, property, override) {
-        if (source && source[property] != undefined && (target[property] == undefined || override)) {
+        if (source && source[property] !== undefined && (target[property] === undefined || override)) {
             target[property] = source[property];
         }
     }
@@ -4443,7 +4858,7 @@ export class Utilities {
                 next: function() {
                     if (done) return;
             
-                    if (iterations == undefined || index < iterations) {
+                    if (iterations === undefined || index < iterations) {
                         index++;
                         loopFunc(loop);
                     } else {
@@ -4467,6 +4882,10 @@ export class Utilities {
         });
     }
 
+    base64ToBuffer(value) {
+        return this.newSimpleBuffer(Array.from(atob(value), el => { return el.charCodeAt(0) }));
+    }
+
     /**
     Cache de uso gral. El cache se almacena en la instancia del objeto Session,
     y solo trabaja en el ambito de la misma.
@@ -4476,7 +4895,7 @@ export class Utilities {
     cache('myKey', myValue); // Almacena por 300 segs (5 mins), valor por defecto de seconds.
     */
     cache(key, value, seconds) {
-        if (value == undefined) {
+        if (value === undefined) {
             // get
             if (this.#cache.has(key) && this.#cache.get(key).expires > Date.now()) {
                 //console.log('Cache hit: ' + key);
@@ -4496,16 +4915,23 @@ export class Utilities {
     Convierte a Date
     @returns {Date}
     */
-    cDate(date) {
+    cDate(date, format) {
         var dt;
-        if (date == null || date == undefined) return null;
+        if (date == null || date === undefined) return null;
 
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
+        } else if (_moment.isMoment(date)) {
+            dt = date.toDate();
         } else {
-            dt = _moment(date, 'L LTS').toDate(); // moment con locale
-            if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin locale
-            if (isNaN(dt.getTime())) dt = new Date(date); // nativo
+            if (this.isIsoDate(date)) {
+                dt = new Date(date);
+            } else {
+                let f = format ? format : 'L LTS';
+                dt = _moment(date, f).toDate(); // moment con locale
+                if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin format
+                if (isNaN(dt.getTime())) dt = new Date(date); // nativo
+            }
         }
         if(!isNaN(dt.getTime())) {
             return dt;
@@ -4533,6 +4959,11 @@ export class Utilities {
         return num;
     }
 
+    /** https://github.com/jshttp/content-disposition */
+    get contentDisposition() {
+        return _contentDisposition;
+    }
+    
     /**
     Devuelve el valor de una cookie, solo para la web.
     */
@@ -4553,16 +4984,61 @@ export class Utilities {
         return _CryptoJS;
     }
 
+    /**
+    Convierte a buffer un binario en base64 con prefijo
+    */
+    decodeBuffer(str) {
+        let me = this;
+        let prefix = '__base64__=>';
+
+        if (typeof str == 'string' && str.substring(0, prefix.length) == prefix) {
+            if (me.session.node.inNode) {
+                return Buffer.from(atob(str.substring(prefix.length)), 'binary');
+            } else {
+                // todo: falta probar
+                debugger;
+                return me.base64ToBuffer(str.substring(prefix.length));
+            }
+        } else {
+            return str;
+        }
+    }
+
     decrypt(pString, pPass) {
-        return _CryptoJS.AES.decrypt(pString, pPass).toString(_CryptoJS.enc.Utf8)
+        let pwd = pPass === undefined ? '' : pPass;
+        return _CryptoJS.AES.decrypt(pString, pwd).toString(_CryptoJS.enc.Utf8)
 	}
 
     deserializeError(err) {
         return _serializeError.deserializeError(err);
     }
 
+    /**
+    Convierte un buffer binario a base64 con prefijo
+    */
+    encodeBuffer(value) {
+        let me = this;
+        let prefix = '__base64__=>';
+        let cls = value && value.constructor ? value.constructor.name : undefined;
+
+        if (cls == 'SimpleBuffer') {
+            return prefix + value.toString('base64');
+
+        } else if (cls == 'Uint8Array') {
+            return prefix + me.newSimpleBuffer(value.buffer).toString('base64');
+
+        } else if (cls == 'ArrayBuffer') {
+            return prefix + me.newSimpleBuffer(value).toString('base64');
+
+        } else {
+            //todo: Falta Buffer de node
+            return value;
+        }
+    }
+
     encrypt(pString, pPass) {
-        return _CryptoJS.AES.encrypt(pString, pPass).toString();
+        let pwd = pPass === undefined ? '' : pPass;
+        return _CryptoJS.AES.encrypt(pString, pwd).toString();
     }
 
     /**
@@ -4570,7 +5046,7 @@ export class Utilities {
     @returns {string}
     */
     encUriC(value) {
-        return (value == null || value == undefined) ? '' : encodeURIComponent(value);
+        return (value == null || value === undefined) ? '' : encodeURIComponent(value);
     }
 
     /** Recibe un err, lo convierte a Error, loguea y dispara */
@@ -4609,7 +5085,7 @@ export class Utilities {
     get execapiAcao() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            if (me.#execapiAcao != undefined) {
+            if (me.#execapiAcao !== undefined) {
                 resolve(me.#execapiAcao);
 
             } else {
@@ -4721,9 +5197,18 @@ export class Utilities {
         return this.session.node.inNode();
     }
 
+    /** Devuelve true si es un string con formato fecha ISO8601 valido */
+    isIsoDate(str) {
+        if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str) 
+            && !/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/.test(str)) return false;
+        const d = new Date(str); 
+        return d instanceof Date && !isNaN(d.getTime())
+            && d.toISOString().substring(0, 19) === str.substring(0, 19); // Corto los ms xq el search no los trae
+    }
+
     /** Retorna true si value es un objeto puro {} */
     isObject(value) {
-        return Object.prototype.toString.call(value) === '[object Object]';
+        return (value && value.constructor && value.constructor.name == 'Object');
     }
 
     /** Devuelve la fecha en formato YYYY-MM-DD */
@@ -4746,6 +5231,67 @@ export class Utilities {
         } else {
             return null;
         }
+    }    
+
+    /**
+    Recorre el json y convierte a buffer los binarios en base64
+    */
+    jsonBuffers(json) {
+        var me = this;
+
+        for (var key in json) {
+            if (typeof json[key] == 'object' && json[key] !== null)
+                me.jsonBuffers(json[key]);
+            else if (typeof json[key] == 'string') {
+                json[key] = me.decodeBuffer(json[key]);
+            }
+        }
+    }
+
+    /**
+    Parse con soporte para buffers binarios en base64
+    */
+    jsonParse(value) {
+        var me = this;
+
+        return JSON.parse(value, (key, val) => {
+            if (typeof val == 'string') {
+                return me.decodeBuffer(val);
+            } else {
+                return val;
+            }
+        });
+    }
+
+    /**
+    Replacer para JSON.stringify que incluye el path.
+    @example
+    // Incluye solo algunas propiedades raiz completas
+    JSON.stringify(myObject, dSession.utils.jsonReplacerWithPath(function (key, value, path) {
+        let rootProps = ['prop1', 'prop2', ...];
+        let root = path.split('.')[0];
+        if (path == '' || rootProps.indexOf(root) >= 0) return value;
+    }))
+    */
+    jsonReplacerWithPath(replacer) {
+        let m = new Map();
+      
+        return function(key, value) {
+            let path = m.get(this) + (Array.isArray(this) ? `[${key}]` : '.' + key); 
+            if (value === Object(value)) m.set(value, path);  
+            return replacer.call(this, key, value, path.replace(/undefined\.\.?/,''));
+        }
+    }
+    
+    /**
+    Stringify con soporte para buffers binarios (los pasa a base64)
+    */
+    jsonStringify(value) {
+        let me = this;
+
+        return JSON.stringify(value, (key, val) => {
+            return me.encodeBuffer(val);
+        });
     }
 
     /** Completa con ceros a la izquierda */
@@ -4775,14 +5321,78 @@ export class Utilities {
         return e;
     }
 
+    /**
+    @returns {SimpleBuffer}
+    */
+    newSimpleBuffer() {
+        return new SimpleBuffer(...arguments);
+    }
+
     /** http://numeraljs.com/ */
     get numeral() {
         return _numeral;
     }
 
+    /** Devuelve una property de un objeto (Case Insensitive) */
+    objPropCI(obj, prop) {
+        var keys = Object.keys(obj);
+        for (var i = 0; i < keys.length; i++) {
+            if (keys[i].toLowerCase() == prop.toLowerCase()) {
+                return obj[keys[i]];
+            }
+        }
+    }
+
+    /**
+    Parsea un header Content-Disposition 
+    https://github.com/jshttp/content-disposition
+    */
+    parseContentDisposition(contentDisposition) {
+        let me = this;
+        let cd = contentDisposition;
+        // Si tiene ; al ult lo saco
+        if (cd.substring(cd.length - 1) == ';') cd = cd.slice(0, -1);
+        return me.contentDisposition.parse(cd);
+    }
+
     /** https://github.com/sindresorhus/serialize-error */
     serializeError(err) {
         return _serializeError.serializeError(err);
+    }
+
+    /**
+    Devuelve la fecha del server
+    options:
+        'app': La fecha del servidor de aplicaciones
+        'db': La fecha del servidor de base de datos
+        'earliest' (def): La menor de las 2
+        'latest': La mayor de las 2
+    */
+    async serverDate(options) {
+        let me = this;
+        let appDate, dbDate;
+        let opt = options === undefined ? 'earliest' : options.toLowerCase();
+
+        if (opt != 'db') {
+            let appRes = await me.execVbs('Response.Write dSession.Xml.XmlEncode(Now, 2)');
+            appDate = me.xmlDec(await appRes.text(), 2);
+        }
+        if (opt != 'app') {
+            let dbRes = await me.session.db.openRecordset('select getdate() dt')
+            dbDate = me.cDate(dbRes[0]['dt']);
+        }
+
+        if (opt == 'app') {
+            return appDate;
+        } else if (opt == 'db') {
+            return dbDate;
+        } else if (opt == 'earliest') {
+            return appDate < dbDate ? appDate : dbDate;
+        } else if (opt == 'latest') {
+            return appDate > dbDate ? appDate : dbDate;
+        } else {
+            throw new Error('Unknown option: ' + opt);
+        }
     }
 
     /**
@@ -4850,7 +5460,7 @@ export class Utilities {
             return isNaN(val) ? null : value;
 
         } else {
-            throw 'Unknown type: ' + type;
+            throw new Error('Unknown type: ' + type);
         }
     }
 
@@ -4874,7 +5484,7 @@ export class Utilities {
             return val ? val.toString() : '';
 
         } else {
-            throw 'Unknown type: ' + type;
+             new Error('Unknown type: ' + type);
         }
     }
 
@@ -5210,8 +5820,8 @@ class RestClient {
                     try {
                         parsedJson = JSON.parse(textBody);
                     } catch(err) {
-                        console.warn('Cannot parse server response', textBody);
                         debugger;
+                        console.warn('Cannot parse server response', completeUrl, textBody);
                     }
                     if (response.ok) {
                         resolve(parsedJson.InternalObject);

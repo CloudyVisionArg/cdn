@@ -19,27 +19,34 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
-    // Dps de comitear freshear: https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
-
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 341 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 342 });
-    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 342 });
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 343, hasdep: true });
+    /* Dps de comitear freshear:
+        https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
+        https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
+    */
+    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 402 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 403 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
+    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
     /*
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 325, hasdep: true });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 336 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 339 });
-    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 337 });
+    Por si hay que volver atras
+    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 400 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 401 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
+    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
     */
 
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 335 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 334, hasdep: true });
+    scripts.push({ id: 'lib-moment', path: '/lib/moment-with-locales.min.js', version: 377 });
+    scripts.push({ id: 'maps', path: '/maps.js', version: 370 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 370 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 370 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 370, hasdep: true });
+    scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 369 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 368 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 368, hasdep: true });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 344 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 333 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 328 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 325 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 325 });
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 325 });        
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
     scripts.push({ id: 'app7-popovers.json', path: '/app7/popovers.json', version: 313 });
     scripts.push({ id: 'app7-login', path: '/app7/login.html', version: 318 });
@@ -59,13 +66,10 @@ function registeredScripts() {
     scripts.push({ id: 'app7-chpass', path: '/app7/chpass.html', version: 108 });
     scripts.push({ id: 'doorsapi', path: '/doorsapi.js', version: 102 });
     scripts.push({ id: 'lib-filesaver', path: '/lib/FileSaver.js', version: 98 });
-    scripts.push({ id: 'maps', path: '/maps.js', version: 96 });
     scripts.push({ id: 'lib-fireworks', path: '/lib/fireworks.js', version: 93 });
     scripts.push({ id: 'app7-console', path: '/app7/console.html', version: 73 });
-    scripts.push({ id: 'lib-moment', path: '/lib/moment.min.js', version: 66 });
     scripts.push({ id: 'lib-numeral', path: '/lib/numeral/numeral.min.js', version: 59 });
     scripts.push({ id: 'lib-numeral-locales', path: '/lib/numeral/locales.min.js', version: 59 });
-    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
     scripts.push({ id: 'lib-cryptojs-aes', path: '/lib/crypto-js/aes.js', version: 55 });
     scripts.push({ id: 'lib-qrcode', path: 'lib/qrcode.js', version: 55 });
 
@@ -97,10 +101,10 @@ args[2]
 @example
 
 await include('emojis');
-// emojis loaded
+// emojis loaded with Promise await
 
 include('emojis', function () {
-    // emojis loaded
+    // emojis loaded with callback
 });
 	
 // Puedo especificar la version (tag del commit)
@@ -330,7 +334,10 @@ function scriptSrc(scriptId, version) {
                     var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
                     if (Array.isArray(lsScripts)) {
                         var scr = lsScripts.find(el => el.id == scriptId);
-                        if (scr) v = scr.version;
+                        if (scr) {
+                            v = scr.version;
+                            console.log('scriptSrc localStorage hit', scr)
+                        }
                     };
                 } catch (e) {
                     console.log(e);
@@ -374,7 +381,7 @@ gitCdn({
     url // Devuelve la url en vez del buffer. Def false
     server // Opcional, def https://cdn.cloudycrm.net
 }
-@returns {string|Promise<SimpleBuffer>}
+@returns {string|Promise<SimpleBuffer2>}
 */
 function gitCdn(options) {
     if (options.repo && options.path) {
@@ -389,6 +396,7 @@ function gitCdn(options) {
                 if (scr) {
                     options.ref = scr.ref;
                     options.fresh = scr.fresh;
+                    console.log('gitCdn localStorage hit', scr)
                 }
             };
         } catch (e) {
@@ -396,22 +404,17 @@ function gitCdn(options) {
         };
     }
 
-    var url = options.server ? options.server : 'https://cdn.cloudycrm.net';
-    url += '/' + (options.owner != undefined ? 'gh/' + options.owner : 'ghcv');
-    url += '/' + (options.repo != undefined ? options.repo : 'cdn');
-    url += options.ref != undefined ? '@' + options.ref : '';
-    while(options.path.substring(0, 1) == '/') options.path = options.path.slice(1);
-    url += '/' + options.path;
-    if (options.fresh == true || options.fresh == 1) url += '?_fresh=1';
+    var url = ghCodeUrl(options);
 
     if (options.url) {
         return url;
+        
     } else {
         return new Promise((resolve, reject) => {
             fetch(url).then(
                 async res => {
                     if (res.ok) {
-                        resolve(new SimpleBuffer(await res.arrayBuffer()));
+                        resolve(new SimpleBuffer2(await res.arrayBuffer()));
 
                     } else {
                         try {
@@ -446,9 +449,37 @@ Si hace falta algo mas completo usar https://github.com/feross/buffer
     await include('buffer', 'https://bundle.run/buffer@6.0.3');
     resolve(buffer.Buffer.from(await res.arrayBuffer()));
 */
-class SimpleBuffer extends Uint8Array {
+class SimpleBuffer2 extends Uint8Array {
     toString() {
         var td = new TextDecoder();
         return td.decode(this);
     }   
+}
+
+/**
+Devuelve la url de los endpoint gh y ghx
+gh -> Leer el contenido del archivo
+ghx -> Ejecutar el js
+
+@example
+ghCodeUrl({
+    owner // def CloudyVisionArg
+    repo // def cdn
+    path // Ruta al archivo, no poner el slash inicial
+    ref // Branch / tag
+    fresh // Actualiza el cache
+    exec // Boolean, indica si es para ejecutar (ghx)
+    server // Opcional, def https://cdn.cloudycrm.net
+}
+*/
+function ghCodeUrl(code) {
+    let url = code.server ? code.server : 'https://cdn.cloudycrm.net';
+    let exec = code.exec ? 'x' : '';
+    url += '/' + (code.owner != undefined ? 'gh' + exec + '/' + code.owner : 'gh' + exec + 'cv');
+    url += '/' + (code.repo != undefined ? code.repo : 'cdn');
+    url += code.ref != undefined ? '@' + code.ref : '';
+    while(code.path.substring(0, 1) == '/') code.path = code.path.slice(1);
+    url += '/' + code.path;
+    if (code.fresh == true || code.fresh == 1) url += '?_fresh=1';
+    return url;
 }

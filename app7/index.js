@@ -135,32 +135,54 @@ var app = {
                 {
                     path: '/explorer/',
                     async: function () {
-                        var context = getRouterContext(arguments);
+                        let context = getRouterContext(arguments);
                         loadJS(scriptSrc('app7-explorer'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/generic/',
                     async: function () {
-                        var context = getRouterContext(arguments);
+                        let context = getRouterContext(arguments);
                         loadJS(scriptSrc('app7-generic'), context.to, context.from, context.resolve, context.reject);
+                    }
+                },
+                {
+                    path: '/generic6/',
+                    async: function () {
+                        let context = getRouterContext(arguments);
+                        loadJS(scriptSrc('generic6'), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
                     path: '/cdn/',
                     async: function () {
-                        var context = getRouterContext(arguments);
-                        var script = context.to.query.script;
+                        let context = getRouterContext(arguments);
+                        let script = context.to.query.script;
                         loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
-                    path: '/gh/',
+                    path: '/gh/:owner/:repo/:path+/',
                     async: function () {
-                        //todo: terminar
                         var context = getRouterContext(arguments);
-                        //repo, ref, path var script = context.to.query.script;
-                        //loadJS(scriptSrc(script), context.to, context.from, context.resolve, context.reject);
+                        let params = context.to.params;
+                        let url = 'https://cdn.cloudycrm.net/gh/' + params.owner + '/' + params.repo + '/' + params.path;
+                        /*
+                        Esto es para poder enviar file.js!_fresh=1 y que se lea como file.js?_fresh=1
+                        Si lo pasas con ? se rompe
+                        */
+                        url = url.replace('!', '?');
+                        loadJS(url, context.to, context.from, context.resolve, context.reject);
+                    }
+                },
+                {
+                    path: '/ghcv/:repo/:path+/',
+                    async: function () {
+                        var context = getRouterContext(arguments);
+                        let params = context.to.params;
+                        let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
+                        url = url.replace('!', '?');
+                        loadJS(url, context.to, context.from, context.resolve, context.reject);
                     }
                 },
                 {
@@ -203,29 +225,6 @@ var app = {
             ]
         });
 
-        /* Para que funcione el boton back "fisico" de android */
-        var onBackKeyDown = function() {
-            var leftp = app7.panel.left && app7.panel.left.opened;
-            var rightp = app7.panel.right && app7.panel.right.opened;
-            
-            if ($$('.modal-in').length > 0) {
-                app7.dialog.close();
-                app7.popup.close();
-                app7.popover.close();
-                return false;    
-            }else if ( leftp || rightp ) {
-                app7.panel.close();
-                return false; 
-            } else if (app7.view.current.history.length == 1) {        
-                navigator.app.exitApp();
-            } else {
-                app7.view.current.router.back();
-            }
-
-        }
-
-        document.addEventListener("backbutton", onBackKeyDown, false);
-
         function getRouterContext(pArgs) {
             if (pArgs.length == 1) {
                 // F7 v7
@@ -257,11 +256,34 @@ var app = {
                     }
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(url, jqXHR.responseText);
                 debugger;
             });
         }
 
         //showConsole();
+
+        /* Para que funcione el boton back "fisico" de android */
+        var onBackKeyDown = function() {
+            var leftp = app7.panel.left && app7.panel.left.opened;
+            var rightp = app7.panel.right && app7.panel.right.opened;
+            
+            if ($$('.modal-in').length > 0) {
+                app7.dialog.close();
+                app7.popup.close();
+                app7.popover.close();
+                return false;    
+            }else if ( leftp || rightp ) {
+                app7.panel.close();
+                return false; 
+            } else if (app7.view.current.history.length == 1) {        
+                navigator.app.exitApp();
+            } else {
+                app7.view.current.router.back();
+            }
+
+        }
+        document.addEventListener('backbutton', onBackKeyDown, false);
 
         var path = location.pathname;
         self.rootPath = path.substring(0, path.lastIndexOf('/'));
@@ -273,28 +295,24 @@ var app = {
             'device.version: ' + device.version + ' / ' +
             'device.uuid: ' + device.uuid);
 
-        /*
-        if (device.platform == 'browser'){
-            db = window.openDatabase(
-                'DbName', '', 'Db Display Name', 5*1024*1024,
-                function (db) { console.log('db created'); }
-            );
-        } else {
-        */
-            db = window.sqlitePlugin.openDatabase({
-                name: 'DbName',
-                location: 'default',
-                },
-                function(db) {
-                    console.log('openDatabase OK');
-                },
-                function(err) {
-                    console.error('openDatabase Err: ' + errMsg(err));        
-                }
-            );
+        // sqlite Db
+        db = window.sqlitePlugin.openDatabase({
+            name: 'DbName',
+            location: 'default',
+            },
+            function(db) {
+                console.log('openDatabase OK');
+            },
+            function(err) {
+                console.error('openDatabase Err: ' + errMsg(err));        
+            }
+        );
 
-            window.localStorage.setItem('syncing', '0');
-        //};
+        window.localStorage.setItem('syncing', '0');
+
+        if (typeof(Capacitor) != 'undefined') {
+            Capacitor.Plugins.SplashScreen.hide();
+        }
 
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
@@ -371,7 +389,7 @@ async function checkToken(){
             sync.sync(false);
             if (window.refreshNotifications) window.refreshNotifications();
             executeCode('onResume');
-            //sessionMsg();
+            sessionMsg();
         },
         function (err) {
             console.error(errMsg(err));
@@ -407,14 +425,26 @@ async function checkGoogleLoggedIn () {
 function sessionMsg() {
     dSession.tags().then(
         res => {
+            if (res.service_paused == '1' && dSession.loggedUser()['AccId'] != 0) {
+                app7.dialog.alert(res.message, () => {
+                    location.href = 'index.html';
+                });
+            }
+
             if (res.message) {
-                app7.toast.create({
-                    text: res.message,
-                    closeTimeout: 15000,
-                    position: 'center',
-                    closeButton: false,
-                    icon: '<i class="f7-icons">exclamationmark_triangle</i>',
-                }).open();
+                let last = (new Date(localStorage.getItem('lastMessageTime')));
+                // Cada 1 hr vuelve a mostrar
+                if (isNaN(last.getTime()) || new Date() - last > (60 * 60 * 1000)) {
+                    app7.toast.create({
+                        text: res.message,
+                        closeTimeout: 15000,
+                        position: 'center',
+                        closeButton: false,
+                        icon: '<i class="f7-icons">exclamationmark_triangle</i>',
+                    }).open();
+
+                    localStorage.setItem('lastMessageTime', (new Date()).toJSON());
+                }
             }
         }
     )

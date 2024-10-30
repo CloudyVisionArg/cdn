@@ -2,9 +2,11 @@
 todo: ver de ponerle un boton Cerrar al mapa
 https://developers.google.com/maps/documentation/javascript/controls#maps_control_simple-javascript
 */
+var inApp = typeof app7 == 'object';
+
 (function () {
     var key;
-    if (typeof(cordova) == 'object') {
+    if (inApp) {
         /*
         todo: falta restringir esta clave (no se puede ingresar la URL ionic://localhost)
         https://developers.google.com/maps/documentation/javascript/get-api-key
@@ -50,16 +52,21 @@ var maps = {
 		        maps.updateLocation();
 	        });
 
-            if (typeof(cordova) != 'object') { // En el app se inicializan de otra forma
-                // Crea los autocompletes
+            /*
+            Esta rutina inicializa los ac no inicializados
+            por js, como los de generic3
+            */
+            if (!inApp) {
                 $('.maps-autocomplete').each(function () {
-                    maps.initAc(this, function () {
-                        // Setea el hidden como value
-                        var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
-                        if ($inputVal.val()) {
-                            this._value($inputVal.val());
-                        }
-                    });
+                    if (!this.mapsAutocomplete) {
+                        maps.initAc(this, function () {
+                            // Setea el hidden como value
+                            var $inputVal = $(this).parent().nextAll('input[type="hidden"]');
+                            if ($inputVal.val()) {
+                                this._value($inputVal.val());
+                            }
+                        });
+                    }
                 });
             }
         })
@@ -92,9 +99,9 @@ var maps = {
                 if (text == undefined) {
                     return self.value;
                 } else {
-                    self.value = text;
-                    if (typeof(cordova) == 'object') app7.input.checkEmptyState(self);
-                    $(self).change();
+                    self.initializing = true;
+                    if (inApp) app7.input.checkEmptyState(self);
+                    $(self).change(); // todo: no deberia dispararse si estoy asignando junto con el value
                     return text;
                 }
 
@@ -144,15 +151,29 @@ var maps = {
         }
 
         $(el).attr('data-place', value);
-        if (typeof(cordova) == 'object') {
-            // Cambia globo vacio/lleno
-            $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
+
+        if (el.drs) {
+            // controls6
+            if (inApp) {
+                // Cambia globo vacio/lleno
+                el.drs.$picker.find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));            
+            } else {
+                // Muestra/oculta el tilde verde
+                el.drs.$tick.css('display', place ? 'block' : 'none');
+            }
+
         } else {
-            var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
-            $inputVal.val(value);
-            // Muestra/oculta el tilde verde
-            $(el).next('span').css('display', place ? 'block' : 'none');
-        };
+            // anteriores
+            if (inApp) {
+                // Cambia globo vacio/lleno
+                $(el).closest('.item-input').find('i.f7-icons').html('placemark' + (place ? '_fill' : ''));
+            } else {
+                var $inputVal = $(el).parent().nextAll('input[type="hidden"]');
+                $inputVal.val(value);
+                // Muestra/oculta el tilde verde
+                $(el).next('span').css('display', place ? 'block' : 'none');
+            };
+        }
 
         if (!el.initializing) {
             var componentName = {
@@ -243,7 +264,7 @@ var maps = {
                 zIndex: 20000,
             });
 
-            if (typeof(cordova) == 'object') {
+            if (el.mapsAutocomplete) {
                 maps.pickerTarget = el;
             } else {
                 maps.pickerTarget = $(el).prevAll('.maps-autocomplete')[0];
@@ -302,10 +323,10 @@ var maps = {
 		var loc = maps.mapMarker.getPosition();
 		
 		var geocoder = new google.maps.Geocoder;
-		geocoder.geocode({ 'location': loc }, function(res, status) {
+		geocoder.geocode({ 'location': loc }, function (res, status) {
 			if (status === google.maps.GeocoderStatus.OK) {
 				if (res[0]) {
-                    if (typeof(cordova) == 'object') {
+                    if (inApp) {
                         setInputVal($(maps.pickerTarget), res[0].formatted_address);
                     } else {
                         $(maps.pickerTarget).val(res[0].formatted_address);
