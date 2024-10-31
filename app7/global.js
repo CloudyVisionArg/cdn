@@ -785,6 +785,49 @@ async function showLogin() {
                 });
             }
 
+            function logonGoogle(accInfo){
+                disableInputs(true);
+                $get('#logon').closest('li').addClass('disabled');
+                $get('#logongoogle').closest('li').addClass('disabled');
+                $get('#signin').closest('li').addClass('disabled');
+                $get('#chpass').closest('li').hide();
+                $get('#resetpass').closest('li').addClass('disabled');
+
+                localStorage.setItem('instance', $get('#instance').val());
+                localStorage.setItem('endPoint', $get('#endpoint').val());
+                localStorage.setItem('appName', $get('#appname').val());
+                
+                localStorage.setItem('userName',  accInfo.email);
+                localStorage.setItem('idToken',  accInfo.idToken);
+                //localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
+                dSession.appLogonGoogle(function () {
+                    setMessage('Sincronizando datos... aguarde por favor', 'white');
+
+                    try {
+                        sync.sync(true, function() {
+                            location.href = 'index.html';
+                        })
+                    } catch(err) {
+                        setMessage(errMsg(err));
+                        console.error(errMsg(err));
+                        fillControls();
+                    }
+                }, function (err) {
+                    console.error(errMsg(err));
+                    setMessage(errMsg(err));
+                    if (err.doorsException && err.doorsException.ExceptionType == changePasswordException) {
+                        $get('#chpass').closest('li').show();
+                    }
+                    disableInputs(false);
+                    $get('#logon').closest('li').removeClass('disabled');
+                    $get('#logongoogle').closest('li').removeClass('disabled');
+                    $get('#signin').closest('li').removeClass('disabled');
+                    $get('#resetpass').closest('li').removeClass('disabled');
+                });
+            }
+
+            
+
             function logoff() {
                 pushUnreg();
                 cleanDb(function () {
