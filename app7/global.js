@@ -677,15 +677,6 @@ async function showLogin() {
                         scopes: ['profile','email']
                     }
                  });
-
-
-                // Capacitor.Plugins.GoogleAuth.signIn().then((accInfo)=>{
-                //     console.log("Google accInfo: " ,accInfo);
-                //     logonGoogle(accInfo)
-                // },(err)=>{
-                //     setMessage(errMsg(err));
-                //     console.log(err);
-                // });
             });
 
             $get('#logoff').click(function (e) {
