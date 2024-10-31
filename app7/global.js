@@ -43,7 +43,6 @@ clearTextSelection()
 getFile(pFileURL)
 */
 
-import { options } from "numeral";
 
 // Incluye jslib como dependencia
 (function () {
