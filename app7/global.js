@@ -43,6 +43,8 @@ clearTextSelection()
 getFile(pFileURL)
 */
 
+import { options } from "numeral";
+
 // Incluye jslib como dependencia
 (function () {
 	include('jslib', function () {
@@ -663,14 +665,27 @@ async function showLogin() {
                 logon();
             });
 
-            $get('#logongoogle').click(function (e) {
-                Capacitor.Plugins.GoogleAuth.signIn().then((accInfo)=>{
-                    console.log("Google accInfo: " ,accInfo);
-                    logonGoogle(accInfo)
-                },(err)=>{
-                    setMessage(errMsg(err));
-                    console.log(err);
+            $get('#logongoogle').click(async function (e) {
+                await Capacitor.Plugins.SocialLogin.initialize({
+                    google: {
+                        webClientId: '',
+                    },
                 });
+                debugger;
+                const res = await Capacitor.Plugins.SocialLogin.login({ provider: 'google',
+                    options: {
+                        scopes: ['profile','email']
+                    }
+                 });
+
+
+                // Capacitor.Plugins.GoogleAuth.signIn().then((accInfo)=>{
+                //     console.log("Google accInfo: " ,accInfo);
+                //     logonGoogle(accInfo)
+                // },(err)=>{
+                //     setMessage(errMsg(err));
+                //     console.log(err);
+                // });
             });
 
             $get('#logoff').click(function (e) {
