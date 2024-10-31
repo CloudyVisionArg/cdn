@@ -676,6 +676,7 @@ async function showLogin() {
                         scopes: ['profile','email']
                     }
                  });
+                 let a = res;
             });
 
             $get('#logoff').click(function (e) {
