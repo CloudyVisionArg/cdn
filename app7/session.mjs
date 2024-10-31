@@ -104,6 +104,57 @@ export class AppSession extends doorsapi2.Session {
         localStorage.removeItem('sync_table'); 
     }
 
+    appLogonGoogle(pSuccess, pFailure) {
+        var me = this;
+
+        var endPoint = window.localStorage.getItem('endPoint');
+        if (!endPoint) {
+            if (pFailure) pFailure('Falta el end point');
+            return;
+        };
+
+        var instance = window.localStorage.getItem('instance');
+        if (!instance) {
+            if (pFailure) pFailure('Falta la instancia');
+            return;
+        };
+
+        var userName = window.localStorage.getItem('userName');
+        if (!userName) {
+            if (pFailure) pFailure('Falta el usuario');
+            return;
+        };
+
+        var idToken = window.localStorage.getItem('idToken');
+        if (!idToken) {
+            if (pFailure) pFailure('Falta el idToken');
+            return;
+        };
+
+        me.serverUrl = endPoint;
+        Doors.RESTFULL.ServerUrl = endPoint;
+
+        super.logonGoogle(userName, instance, idToken, "", false).then(
+            function(token){
+                Doors.RESTFULL.AuthToken = token;
+                me.setToken(token);
+                DoorsAPI.loggedUser().then(function (user) {
+                    window.localStorage.setItem('loggedUser', JSON.stringify(user));
+                });
+                DoorsAPI.currentInstance().then(function (inst) {
+                    window.localStorage.setItem('instanceDesc', inst['Description']);
+                });
+                DoorsAPI.instanceSettingsGet('apps_folder').then(function (setting) {
+                    window.localStorage.setItem('appsFolder', setting ? setting : '');
+                    if (pSuccess) pSuccess();
+                });
+            },
+            function (err) {
+                console.log(err);
+                if (pFailure) pFailure(err);
+            });
+    }
+
     loggedUser() {
         return JSON.parse(window.localStorage.getItem('loggedUser'));
     }
