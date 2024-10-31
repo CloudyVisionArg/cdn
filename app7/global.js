@@ -663,6 +663,16 @@ async function showLogin() {
                 logon();
             });
 
+            $get('#logongoogle').click(function (e) {
+                Capacitor.Plugins.GoogleAuth.signIn().then((accInfo)=>{
+                    console.log("Google accInfo: " ,accInfo);
+                    logonGoogle(accInfo)
+                },(err)=>{
+                    setMessage(errMsg(err));
+                    console.log(err);
+                });
+            });
+
             $get('#logoff').click(function (e) {
                 logoff();
             });
