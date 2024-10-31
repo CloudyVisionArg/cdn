@@ -1758,11 +1758,11 @@ function statusBar(pShow) {
         if (device.platform == 'iOS') {
             //refStatusBarPLugin.styleDefault();
         } else {
-            setTimeout(async () => {
-                await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
-                await refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
-                return;
-            }, 1000);
+            // setTimeout(async () => {
+            //     await refStatusBarPLugin.setOverlaysWebView({ overlay: false });
+            //     await refStatusBarPLugin.setStyle({ style: 'DEFAULT' });
+            //     return;
+            // }, 1000);
         }
 
     } else {
