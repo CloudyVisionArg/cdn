@@ -664,7 +664,7 @@ async function showLogin() {
                 logon();
             });
 
-            $get('#logongoogle').click(async function (e) {
+            $get('#googlelogon').click(async function (e) {
                 await Capacitor.Plugins.SocialLogin.initialize({
                     google: {
                         webClientId: '',
