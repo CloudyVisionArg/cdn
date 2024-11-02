@@ -679,6 +679,8 @@ async function showLogin() {
                  });
                  let a = res;
                  const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
+
+                 let z = authCodeRes;
             });
 
             $get('#logoff').click(function (e) {
