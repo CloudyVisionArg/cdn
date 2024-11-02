@@ -673,7 +673,8 @@ async function showLogin() {
                 debugger;
                 const res = await Capacitor.Plugins.SocialLogin.login({ provider: 'google',
                     options: {
-                        scopes: ['profile','email']
+                        scopes: ['profile','email'],
+                        grantOfflineAccess: true,
                     }
                  });
                  let a = res;
