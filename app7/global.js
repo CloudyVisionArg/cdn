@@ -671,6 +671,8 @@ async function showLogin() {
                     },
                 });
                 debugger;
+                //https://github.com/Cap-go/capacitor-social-login/issues/35
+                //deberia devolver refreshtoken
                 const res = await Capacitor.Plugins.SocialLogin.login({ provider: 'google',
                     options: {
                         scopes: ['profile','email'],
