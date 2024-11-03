@@ -671,18 +671,21 @@ async function showLogin() {
                     },
                 });
                 debugger;
-                //https://github.com/Cap-go/capacitor-social-login/issues/35
-                //deberia devolver refreshtoken
-                const res = await Capacitor.Plugins.SocialLogin.login({ provider: 'google',
-                    options: {
-                        scopes: ['profile','email'],
-                        grantOfflineAccess: true,
-                    }
-                 });
-                 let a = res;
-                 const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
+                const isLoggedIn = await Capacitor.Plugins.SocialLogin.isLoggedIn({ provider: 'google' });
 
-                 let z = authCodeRes;
+                if (!isLoggedIn) {
+                    //https://github.com/Cap-go/capacitor-social-login/issues/35
+                    //deberia devolver refreshtoken
+                    const res = await Capacitor.Plugins.SocialLogin.login({ provider: 'google',
+                        options: {
+                            scopes: ['profile','email'],
+                            grantOfflineAccess: true,
+                        }
+                    });
+                    let a = res;
+                    const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
+                    let z = authCodeRes;
+                }
             });
 
             $get('#logoff').click(function (e) {
