@@ -873,6 +873,23 @@ async function renderControls(container, parent) {
             el['CONTROL'].toUpperCase() != 'EVENT' && el['DONOTRENDER'] != 1 &&
             el['R'] != '0' && (inApp ? el['HIDEINAPP'] != '1' : true);
     });
+    
+    // Ordeno por order, column (por si se insertaron controles)
+    subset.sort((a, b) => {
+        if (a['ORDER'] < b['ORDER']) {
+            return -1;
+        } else if (a['ORDER'] > b['ORDER']) {
+            return 1;
+        } else { // ORDER igual
+            if (a['COLUMN'] < b['COLUMN']) {
+                return -1;
+            } else if (a['COLUMN'] > b['COLUMN']) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    });
 
     let $row;
 
