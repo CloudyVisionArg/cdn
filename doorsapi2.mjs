@@ -719,6 +719,27 @@ export class Session {
         });
     };
 
+    logonGoogle(email, instanceName, idToken, openId, litemode) {
+        var me = this;
+        var url = 'session/googleLogon';
+        var data = {
+            email: email,
+            instanceName: instanceName,
+            idToken: idToken,
+            openId: openId,
+            litemode: litemode ? true : false,
+        };
+        return new Promise((resolve, reject) => {
+            me.restClient.fetch(url, 'POST', data, '').then(
+                token => {
+                    me.authToken = token;
+                    resolve(token);
+                },
+                reject
+            );
+        });
+    }
+
     /**
     Ejecucion de codigo en el servidor.
     @returns {Node}
