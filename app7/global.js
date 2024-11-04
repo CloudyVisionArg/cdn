@@ -665,14 +665,18 @@ async function showLogin() {
             });
 
             $get('#googlelogon').click(async function (e) {
+                var idToken = await getGoogleJwt();
+                logonGoogle(idToken);
+            });
+
+        
+            async function getGoogleJwt(idToken) {
                 await Capacitor.Plugins.SocialLogin.initialize({
                     google: {
                         webClientId: '897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com',
                     },
                 });
-                debugger;
                 const isLoggedIn = await Capacitor.Plugins.SocialLogin.isLoggedIn({ provider: 'google' });
-
                 if (!isLoggedIn) {
                     //https://github.com/Cap-go/capacitor-social-login/issues/35
                     //deberia devolver refreshtoken
@@ -682,11 +686,12 @@ async function showLogin() {
                             grantOfflineAccess: true,
                         }
                     });
-                    let a = res;
+                    //ver de manejar si cancela 
+                    //let a = res;
                 }
                 const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
-                    let z = authCodeRes;
-            });
+                return authCodeRes.jwt
+            }
 
             $get('#logoff').click(function (e) {
                 logoff();
@@ -800,7 +805,7 @@ async function showLogin() {
                 });
             }
 
-            function logonGoogle(accInfo){
+            function logonGoogle(jwt){
                 disableInputs(true);
                 $get('#logon').closest('li').addClass('disabled');
                 $get('#logongoogle').closest('li').addClass('disabled');
@@ -812,8 +817,10 @@ async function showLogin() {
                 localStorage.setItem('endPoint', $get('#endpoint').val());
                 localStorage.setItem('appName', $get('#appname').val());
                 
+                const accInfo = decodeJWT(jwt);
+                //se peude verificar el accInfo.emailVerified !
                 localStorage.setItem('userName',  accInfo.email);
-                localStorage.setItem('idToken',  accInfo.idToken);
+                localStorage.setItem('idToken',  idToken);
                 //localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
                 dSession.appLogonGoogle(function () {
                     setMessage('Sincronizando datos... aguarde por favor', 'white');
@@ -839,6 +846,12 @@ async function showLogin() {
                     $get('#signin').closest('li').removeClass('disabled');
                     $get('#resetpass').closest('li').removeClass('disabled');
                 });
+            }
+
+            function decodeJWT(idToken){
+                const parts = idToken.split('.');
+                const payload = JSON.parse(atob(parts[1]));
+                return payload;
             }
 
             
