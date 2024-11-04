@@ -670,7 +670,7 @@ async function showLogin() {
             });
 
         
-            async function getGoogleJwt(idToken) {
+            async function getGoogleJwt() {
                 await Capacitor.Plugins.SocialLogin.initialize({
                     google: {
                         webClientId: '897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com',

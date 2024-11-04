@@ -531,7 +531,8 @@ async function checkToken(pCallback, pFailure) {
     let idToken = window.localStorage.getItem('idToken');
     if (idToken) {
         try {
-            await checkGoogleLogin(idToken);
+            let jwt = await getGoogleJwt(idToken);
+            localStorage.setItem('idToken', jwt);
         } catch (err) {
             console.error(err);
         }
