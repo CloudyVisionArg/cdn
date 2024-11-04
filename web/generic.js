@@ -1514,6 +1514,9 @@ function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
 
+        let v8 = (await dSession.doorsVersion()) >= '008.000.000.000';
+        debugger;
+
         // Guarda los adjuntos que se puedan haber agregado por codigo
         try {
             await doc.saveAttachments();
