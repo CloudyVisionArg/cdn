@@ -17,7 +17,7 @@ export class AppSession extends doorsapi2.Session {
         //     minPasswordLen: 6,
         // }
         this.freeVersion = {
-            endpoint: 'https://monkeydev2.ddns.net/restful',
+            endpoint: 'http://monkeydev2.ddns.net/restful',
             login: 'anonimo',
             password: 'gTfy4#j0/x',
             instance: 'FREEVERSION',
