@@ -689,12 +689,14 @@ async function showLogin() {
                     //ver de manejar si cancela 
                     //let a = res;
                 }else{
-                    Capacitor.Plugins.SocialLogin.refresh({ provider: 'google',
+                    const x = await Capacitor.Plugins.SocialLogin.refresh({ provider: 'google',
                         options: {
                             scopes: ['profile','email'],
                             grantOfflineAccess: true,
                         }
                     });
+                    debugger;
+                    var a = x;
                 }
                 const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
                 return authCodeRes.jwt
