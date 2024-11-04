@@ -1519,15 +1519,17 @@ function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
 
-        // Guarda los adjuntos que se puedan haber agregado por codigo
-        try {
-            if (!doors8) await doc.saveAttachments();
+        if (!doors8) {
+            // Guarda los adjuntos que se puedan haber agregado por codigo
+            try {
+                await doc.saveAttachments();
 
-        } catch (err) {
-            errors.push({
-                action: 'saveAttachments',
-                error: dSession.utils.errMsg(err),
-            });
+            } catch (err) {
+                errors.push({
+                    action: 'saveAttachments',
+                    error: dSession.utils.errMsg(err),
+                });
+            }
         }
 
         // Guarda los adjuntos de los controles attachments
