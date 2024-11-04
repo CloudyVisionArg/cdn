@@ -671,6 +671,12 @@ async function showLogin() {
 
         
             async function getGoogleJwt() {
+                const loginOptions = { 
+                    provider: 'google',
+                    options: {
+                        scopes: ['profile','email']
+                    }
+                }
                 await Capacitor.Plugins.SocialLogin.initialize({
                     google: {
                         webClientId: '897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com',
@@ -680,21 +686,13 @@ async function showLogin() {
                 if (!isLoggedIn) {
                     //https://github.com/Cap-go/capacitor-social-login/issues/35
                     //deberia devolver refreshtoken
-                    const res = await Capacitor.Plugins.SocialLogin.login({ provider: 'google',
-                        options: {
-                            scopes: ['profile','email'],
-                            grantOfflineAccess: true,
-                        }
-                    });
+                    const res = await Capacitor.Plugins.SocialLogin.login(loginOptions);
                     //ver de manejar si cancela 
                     //let a = res;
-                }else{
-                    await Capacitor.Plugins.SocialLogin.refresh({ provider: 'google',
-                        options: {
-                            scopes: ['profile','email'],
-                            grantOfflineAccess: true,
-                        }
-                    });
+                }
+                else
+                {
+                    await Capacitor.Plugins.SocialLogin.refresh(loginOptions);
                 }
                 debugger;
                 const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
