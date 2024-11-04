@@ -727,7 +727,7 @@ export class Session {
             instanceName: instanceName,
             idToken: idToken,
             openId: openId,
-            litemode: litemode ? true : false,
+            liteMode: litemode ? true : false,
         };
         return new Promise((resolve, reject) => {
             me.restClient.fetch(url, 'POST', data, '').then(
