@@ -40,7 +40,7 @@ var fld_id, folder, doc_id, doc;
 var utils, urlParams, preldr;
 var controls, controlsFolder, controlsRights, hubControls;
 var $page, $navbar, f7Page, pageEl, evSrc, saving, saved, modal;
-var generic = 'generic6';
+var generic = 'generic6', doors8;
 
 var inApp = typeof window.app7 == 'object';
 
@@ -83,6 +83,8 @@ var inApp = typeof window.app7 == 'object';
         fld_id = urlParams.get('fld_id');
         doc_id = urlParams.get('doc_id');
     }
+
+    doors8 = (await dSession.doorsVersion) >= '008.000.000.000';
 
     if (fld_id) {
         try {
@@ -1664,15 +1666,17 @@ async function saveDoc(exitOnSuccess) {
         }
 
         let attErr;
-        let res = await doc.saveAttachments();
+        if (!doors8) {
+            let res = await doc.saveAttachments();
 
-        if (res.find(el => el.result != 'OK')) {
-            attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
-            console.error(attErr);
-            console.log(res);
+            if (res.find(el => el.result != 'OK')) {
+                attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+                console.error(attErr);
+                console.log(res);
 
-        } else {
-            doc.attachmentsReset();
+            } else {
+                doc.attachmentsReset();
+            }
         }
 
         let asErr;

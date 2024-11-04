@@ -20,7 +20,7 @@ var doorsapi2, dSession;
 var urlParams, fld_id, folder, doc_id, doc;
 var folderJson, docJson;
 var controlsFolder, controls, controlsRights;
-var saving, saved;
+var saving, saved, doors8;
 
 // Includes para mostrar el preloader
 var arrScriptsPre = [];
@@ -62,6 +62,8 @@ arrScriptsPos.push({ id: 'lib-filesaver' });
         end('La sesion no ha sido iniciada');
         return;
     }
+
+    doors8 = (await dSession.doorsVersion) >= '008.000.000.000';
 
     Doors.RESTFULL.ServerUrl = dSession.serverUrl;
     Doors.RESTFULL.AuthToken = dSession.authToken;
@@ -1452,19 +1454,22 @@ async function saveDoc(exitOnSuccess) {
         var ev = getEvent('BeforeSave');
         if (ev) await evalCode(ev, context);
 
+        if (doors8) await saveAtt();
         await doc.save();
         docJson = doc.toJSON();
         doc_id = doc.id;
         saved = true;
 
-        try {
-            await saveAtt();
-            doc.attachmentsReset();
+        if (!doors8) {
+            try {
+                await saveAtt();
+                doc.attachmentsReset();
 
-        } catch(err) {
-            var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
-            console.log(attErr);
-            console.error(err);
+            } catch(err) {
+                var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';
+                console.log(attErr);
+                console.error(err);
+            }
         }
 
         try {
@@ -1514,12 +1519,9 @@ function saveAtt() {
     return new Promise(async (resolve, reject) => {
         var errors = [];
 
-        let v8 = (await dSession.doorsVersion) >= '008.000.000.000';
-        debugger;
-
         // Guarda los adjuntos que se puedan haber agregado por codigo
         try {
-            await doc.saveAttachments();
+            if (!doors8) await doc.saveAttachments();
 
         } catch (err) {
             errors.push({
@@ -1550,7 +1552,7 @@ function saveAtt() {
                             att.description = tag;
                             att.group = tag;
                         }
-                        await att.save();
+                        if (!doors8) await att.save();
 
                     } catch (err) {
                         errors.push({
@@ -1567,7 +1569,7 @@ function saveAtt() {
                 var att = attMap.find(el => el.id == $this.attr('data-att-id'));
                 if (att) {
                     try {
-                        await att.delete();
+                        if (!doors8) await att.delete();
                     } catch (err) {
                         errors.push({
                             file: attName,

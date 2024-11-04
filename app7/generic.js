@@ -14,6 +14,7 @@ var fld_id, doc_id, cacheDir;
 var doc, docJson, folder, folderJson;
 var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
+var doors8;
 
 var pStuff = {}; // Deprecado, usar pageEl.crm
 
@@ -79,6 +80,8 @@ if (device.platform != 'browser') {
 
 (async () => {
     try {
+        doors8 = (await dSession.doorsVersion) >= '008.000.000.000';
+
         folder = await dSession.folder(fld_id);
         folderJson = folder.toJSON();
 
