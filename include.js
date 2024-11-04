@@ -23,14 +23,18 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
-    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 404 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 403 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 405 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
+    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 405 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 405 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
     /*
     Por si hay que volver atras
-    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 400 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 401 });
+    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 344 });
+    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 368 });
+    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 404 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 403 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
     */
@@ -41,9 +45,7 @@ function registeredScripts() {
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 370 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 370, hasdep: true });
     scripts.push({ id: 'web-controls', path: '/web/controls.js', version: 369 });
-    scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 368 });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 368, hasdep: true });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 344 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
     scripts.push({ id: 'app7-cloudy-index.css', path: '/app7/cloudy/index.css', version: 325 });
     scripts.push({ id: 'app7-sade-index.css', path: '/app7/sade/index.css', version: 325 });
