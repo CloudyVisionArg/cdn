@@ -1404,6 +1404,10 @@ export class Attachment {
     delete() {
         var me = this;
         return new Promise(async (resolve, reject) => {
+            if (await me.session.doorsVersion >= '008.000.000.000') {
+                throw new Error('attachment.delete is deprecated since Doors 8');
+            }
+
             try {
                 if (!me.isNew) {
                     let url = 'documents/' + me.parent.id + '/attachments';
@@ -1589,6 +1593,10 @@ export class Attachment {
 
         var me = this;
         return new Promise(async (resolve, reject) => {
+            if (await me.session.doorsVersion >= '008.000.000.000') {
+                throw new Error('attachment.delete is deprecated since Doors 8');
+            }
+
             var formData = new FormData();
             var fs = await me.fileStream;
             var blob = (fs instanceof Blob ? fs : new Blob([fs]));
@@ -2562,8 +2570,7 @@ export class Document {
         let ret = [];
 
         if (await me.session.doorsVersion >= '008.000.000.000') {
-            console.warn('saveAttachments is deprecated since Doors 8');
-            return ret;
+            throw new Error('saveAttachments is deprecated since Doors 8');
 
         } else {
             // 1ro borrar
