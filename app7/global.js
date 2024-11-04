@@ -682,8 +682,8 @@ async function showLogin() {
                         webClientId: '897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com',
                     },
                 });
-                const isLoggedIn = await Capacitor.Plugins.SocialLogin.isLoggedIn({ provider: 'google' });
-                if (!isLoggedIn) {
+                const result = await Capacitor.Plugins.SocialLogin.isLoggedIn({ provider: 'google' });
+                if (!result.isLoggedIn) {
                     //https://github.com/Cap-go/capacitor-social-login/issues/35
                     //deberia devolver refreshtoken
                     const res = await Capacitor.Plugins.SocialLogin.login(loginOptions);
