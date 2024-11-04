@@ -695,9 +695,8 @@ async function showLogin() {
                             grantOfflineAccess: true,
                         }
                     });
-                    debugger;
-                   
                 }
+                debugger;
                 const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
                 return authCodeRes.jwt
             }
