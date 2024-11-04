@@ -819,6 +819,7 @@ async function showLogin() {
                 $get('#chpass').closest('li').hide();
                 $get('#resetpass').closest('li').addClass('disabled');
 
+                
                 localStorage.setItem('instance', $get('#instance').val());
                 localStorage.setItem('endPoint', $get('#endpoint').val());
                 localStorage.setItem('appName', $get('#appname').val());
