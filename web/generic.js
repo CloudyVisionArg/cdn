@@ -1571,7 +1571,11 @@ function saveAtt() {
                 var att = attMap.find(el => el.id == $this.attr('data-att-id'));
                 if (att) {
                     try {
-                        if (!doors8) await att.delete();
+                        if (doors8) {
+                            att.toDelete = true;
+                        } else {
+                            await att.delete();
+                        }
                     } catch (err) {
                         errors.push({
                             file: attName,
