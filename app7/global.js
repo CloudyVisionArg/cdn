@@ -690,10 +690,10 @@ async function showLogin() {
                     //ver de manejar si cancela 
                     //let a = res;
                 }
-                else
-                {
-                    await Capacitor.Plugins.SocialLogin.refresh(loginOptions);
-                }
+                // else
+                // {
+                //     await Capacitor.Plugins.SocialLogin.refresh(loginOptions);
+                // }
                 debugger;
                 const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
                 return authCodeRes.jwt
@@ -819,7 +819,7 @@ async function showLogin() {
                 $get('#chpass').closest('li').hide();
                 $get('#resetpass').closest('li').addClass('disabled');
 
-                
+
                 localStorage.setItem('instance', $get('#instance').val());
                 localStorage.setItem('endPoint', $get('#endpoint').val());
                 localStorage.setItem('appName', $get('#appname').val());
