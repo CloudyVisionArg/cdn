@@ -1405,7 +1405,7 @@ export class Attachment {
         var me = this;
         return new Promise(async (resolve, reject) => {
             if (await me.session.doorsVersion >= '008.000.000.000') {
-                reject(new Error('attachment.delete is deprecated since Doors 8'));
+                console.warn('attachment.delete no dispara los eventos sincronos de documento, no deberia usarse a partir de Doors 8');
             }
 
             try {
@@ -1594,7 +1594,7 @@ export class Attachment {
         var me = this;
         return new Promise(async (resolve, reject) => {
             if (await me.session.doorsVersion >= '008.000.000.000') {
-                reject(new Error('attachment.save is deprecated since Doors 8'));
+                console.warn('attachment.save no dispara los eventos sincronos de documento, no deberia usarse a partir de Doors 8');
             }
 
             var formData = new FormData();
