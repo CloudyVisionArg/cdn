@@ -1588,7 +1588,6 @@ export class Attachment {
     @returns {Promise}
     */
     save() {
-        //todo: deprecar para v8
         if (!this.isNew) throw new Error('I\'m not new');
 
         var me = this;
@@ -2570,62 +2569,61 @@ export class Document {
         let ret = [];
 
         if (await me.session.doorsVersion >= '008.000.000.000') {
-            throw new Error('saveAttachments is deprecated since Doors 8');
+            console.warn('document.saveAttachments no dispara los eventos sincronos de documento, no deberia usarse a partir de Doors 8');
+        }
 
-        } else {
-            // 1ro borrar
-            let atts = this.#deletedAttsMap
-            let keys = Array.from(atts.keys());
-            await utils.asyncLoop(keys.length, async loop => {
-                let att = atts.get(keys[loop.iteration()]);
+        // 1ro borrar
+        let atts = this.#deletedAttsMap
+        let keys = Array.from(atts.keys());
+        await utils.asyncLoop(keys.length, async loop => {
+            let att = atts.get(keys[loop.iteration()]);
+            let res = {
+                action: 'delete',
+                attachment: attInfo(att),
+            }
+            try {
+                await att.delete();
+                res.result = 'OK';
+            } catch (err) {
+                res.result = err;
+            } finally {
+                ret.push(res);
+            }
+            loop.next();
+        });
+
+        // 2do agregar
+        atts = await this.attachments();
+        keys = Array.from(atts.keys());
+        await utils.asyncLoop(keys.length, async loop => {
+            let att = atts.get(keys[loop.iteration()]);
+            if (att.isNew) {
                 let res = {
-                    action: 'delete',
+                    action: 'add',
                     attachment: attInfo(att),
                 }
                 try {
-                    await att.delete();
+                    await att.save();
                     res.result = 'OK';
                 } catch (err) {
                     res.result = err;
                 } finally {
                     ret.push(res);
                 }
-                loop.next();
-            });
-
-            // 2do agregar
-            atts = await this.attachments();
-            keys = Array.from(atts.keys());
-            await utils.asyncLoop(keys.length, async loop => {
-                let att = atts.get(keys[loop.iteration()]);
-                if (att.isNew) {
-                    let res = {
-                        action: 'add',
-                        attachment: attInfo(att),
-                    }
-                    try {
-                        await att.save();
-                        res.result = 'OK';
-                    } catch (err) {
-                        res.result = err;
-                    } finally {
-                        ret.push(res);
-                    }
-                }
-                loop.next();
-            })
-
-            function attInfo(att) {
-                return {
-                    id: att.id,
-                    name: att.name,
-                    size: att.size,
-                    isNew: att.isNew,
-                }
             }
+            loop.next();
+        })
 
-            return ret;
+        function attInfo(att) {
+            return {
+                id: att.id,
+                name: att.name,
+                size: att.size,
+                isNew: att.isNew,
+            }
         }
+
+        return ret;
     }
 
     /**
