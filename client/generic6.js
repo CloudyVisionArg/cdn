@@ -1723,7 +1723,6 @@ async function saveDoc(exitOnSuccess) {
             exitOnSuccess,
         }
 
-        //todo: documentar este evento
         evSrc.dispatchEvent(new CustomEvent('saveError', { detail : context }));
         //if (context.return && typeof context.return.then == 'function') await context.return;
     }
