@@ -23,10 +23,10 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
+    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 408 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 407 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 405 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
-    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 405 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
     /*
