@@ -569,6 +569,7 @@ async function showConsole(allowClose) {
         };
     }
 }
+
 async function getGoogleJwt() {
     const loginOptions = { 
         provider: 'google',
@@ -596,6 +597,10 @@ async function getGoogleJwt() {
     debugger;
     const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
     return authCodeRes.jwt
+}
+
+async function googleLogoff(){
+    await Capacitor.Plugins.SocialLogin.logout({ provider: 'google' });
 }
 
 // Muestra la pantalla de Login como popup
@@ -864,6 +869,7 @@ async function showLogin() {
 
             function logoff() {
                 pushUnreg();
+                googleLogoff();
                 cleanDb(function () {
                     dSession.appLogoff();
                     app7.dialog.alert('Se ha cerrado la sesion y eliminado los datos locales',
