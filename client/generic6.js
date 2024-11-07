@@ -1717,6 +1717,10 @@ async function saveDoc(exitOnSuccess) {
         toggleSaving(false);
         toast(utils.errMsg(err));
         console.error(err);
+
+        context.error = err;
+        evSrc.dispatchEvent(new CustomEvent('saveError', { detail : context }));
+        //if (context.return && typeof context.return.then == 'function') await context.return;
     }
 
     function toggleSaving(value) {
