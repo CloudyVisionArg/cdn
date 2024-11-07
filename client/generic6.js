@@ -1718,7 +1718,12 @@ async function saveDoc(exitOnSuccess) {
         toast(utils.errMsg(err));
         console.error(err);
 
-        context.error = err;
+        let context = {
+            error: err,
+            exitOnSuccess,
+        }
+
+        //todo: documentar este evento
         evSrc.dispatchEvent(new CustomEvent('saveError', { detail : context }));
         //if (context.return && typeof context.return.then == 'function') await context.return;
     }
