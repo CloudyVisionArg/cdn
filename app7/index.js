@@ -406,6 +406,30 @@ var app = {
             Capacitor.Plugins.SplashScreen.hide();
         }
 
+        async function checkToken(pCallback, pFailure) {
+            let idToken = window.localStorage.getItem('idToken');
+            if (idToken) {
+                try {
+                    let jwt = await getGoogleJwt(idToken);
+                    localStorage.setItem('idToken', jwt);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+            dSession.checkToken(
+                function () {
+                    sync.sync(false);
+                    if (window.refreshNotifications) window.refreshNotifications();
+                    pCallback();
+                },
+                function (err) {
+                    console.error(errMsg(err));
+                    toast(errMsg(err), 5000);
+                    pFailure(err);
+                }
+            );
+        }
+
         // https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
         var val = window.localStorage.getItem('statusBar');
         statusBar(val != 'off');
