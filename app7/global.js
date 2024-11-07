@@ -569,6 +569,34 @@ async function showConsole(allowClose) {
         };
     }
 }
+async function getGoogleJwt() {
+    const loginOptions = { 
+        provider: 'google',
+        options: {
+            scopes: ['profile','email']
+        }
+    }
+    await Capacitor.Plugins.SocialLogin.initialize({
+        google: {
+            webClientId: '897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com',
+        },
+    });
+    const result = await Capacitor.Plugins.SocialLogin.isLoggedIn({ provider: 'google' });
+    if (!result.isLoggedIn) {
+        //https://github.com/Cap-go/capacitor-social-login/issues/35
+        //deberia devolver refreshtoken
+        const res = await Capacitor.Plugins.SocialLogin.login(loginOptions);
+        //ver de manejar si cancela 
+        //let a = res;
+    }
+    // else
+    // {
+    //     await Capacitor.Plugins.SocialLogin.refresh(loginOptions);
+    // }
+    debugger;
+    const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
+    return authCodeRes.jwt
+}
 
 // Muestra la pantalla de Login como popup
 async function showLogin() {
@@ -670,35 +698,6 @@ async function showLogin() {
             });
 
         
-            async function getGoogleJwt() {
-                const loginOptions = { 
-                    provider: 'google',
-                    options: {
-                        scopes: ['profile','email']
-                    }
-                }
-                await Capacitor.Plugins.SocialLogin.initialize({
-                    google: {
-                        webClientId: '897362933368-k74668vd6siocnps62s4lbgq83jddku7.apps.googleusercontent.com',
-                    },
-                });
-                const result = await Capacitor.Plugins.SocialLogin.isLoggedIn({ provider: 'google' });
-                if (!result.isLoggedIn) {
-                    //https://github.com/Cap-go/capacitor-social-login/issues/35
-                    //deberia devolver refreshtoken
-                    const res = await Capacitor.Plugins.SocialLogin.login(loginOptions);
-                    //ver de manejar si cancela 
-                    //let a = res;
-                }
-                // else
-                // {
-                //     await Capacitor.Plugins.SocialLogin.refresh(loginOptions);
-                // }
-                debugger;
-                const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
-                return authCodeRes.jwt
-            }
-
             $get('#logoff').click(function (e) {
                 logoff();
             });
