@@ -46,7 +46,6 @@ var inApp = typeof window.app7 == 'object';
 
 (async () => {
     if (inApp) { // APP
-        debugger;
         utils = dSession.utils;
         fld_id = routeTo.query.fld_id;
         doc_id = routeTo.query.doc_id;
