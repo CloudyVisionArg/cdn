@@ -458,24 +458,6 @@ var app = {
                         }
                     }
                 );
-                // dSession.checkToken(
-                //     () => {
-                //         execOnDeviceReady();
-                //         sessionMsg();
-                //     },
-                //     function (err) {
-                //         console.error(errMsg(err));
-                //         if (
-                //             err.doorsException &&
-                //             err.doorsException.ExceptionType ==
-                //                 changePasswordException
-                //         ) {
-                //             showLogin();
-                //         } else {
-                //             showConsole();
-                //         }
-                //     }
-                // );
             } else {
                 execOnDeviceReady();
             }

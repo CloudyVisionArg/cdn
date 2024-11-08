@@ -587,13 +587,7 @@ async function googleLogin() {
         //https://github.com/Cap-go/capacitor-social-login/issues/35
         //deberia devolver refreshtoken
         const res = await Capacitor.Plugins.SocialLogin.login(loginOptions);
-        //ver de manejar si cancela 
-        //let a = res;
     }
-    // else
-    // {
-    //     await Capacitor.Plugins.SocialLogin.refresh(loginOptions);
-    // }
     debugger;
     const authCodeRes = await Capacitor.Plugins.SocialLogin.getAuthorizationCode({ provider: 'google' });
     return authCodeRes.jwt
