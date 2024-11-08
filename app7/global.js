@@ -570,7 +570,7 @@ async function showConsole(allowClose) {
     }
 }
 
-async function getGoogleJwt() {
+async function googleLogin() {
     const loginOptions = { 
         provider: 'google',
         options: {
@@ -698,7 +698,7 @@ async function showLogin() {
             });
 
             $get('#googlelogon').click(async function (e) {
-                var idToken = await getGoogleJwt();
+                var idToken = await googleLogin();
                 logonGoogle(idToken);
             });
 
@@ -993,10 +993,11 @@ async function showLogin() {
         function signinInit(e, page) {
             $get('#signin').click(async function (e) {
                 $get('#signin').closest('li').addClass('disabled');
-
+                $get('#signupgoogle').closest('li').addClass('disabled');
                 disableInputs(true);
 
                 try {
+
                     var fv = dSession.freeVersion;
                     dSession.serverUrl = fv.endpoint;
                     await dSession.logon(fv.login, fv.password, fv.instance);
@@ -1022,7 +1023,42 @@ async function showLogin() {
                 }
 
             });
+            
+            $get('#signupgoogle').click(async function (e) {
+                $get('#signin').closest('li').addClass('disabled');
+                $get('#signupgoogle').closest('li').addClass('disabled');
+                disableInputs(true);
 
+                try {
+                    var fv = dSession.freeVersion;
+                    dSession.serverUrl = fv.endpoint;
+                    await dSession.logon(fv.login, fv.password, fv.instance);
+                    
+                    var fld = await dSession.foldersGetFromId(fv.signinFolder);
+                    var doc = await fld.documentsNew();
+                    doc.fields('empresa').value = $get('#empresa').val();
+                    var jwt = await googleLogin();
+                    const accInfo = decodeJWT(jwt);
+                    //se peude verificar el accInfo.emailVerified !
+                    //localStorage.setItem('userName',  accInfo.email);
+                    doc.fields('creator_email').value = accInfo.email;
+                    doc.fields('creator_nombre').value = accInfo.name;
+                    await doc.save();
+                    setMessage('Registro correcto!<br>Le enviaremos a su email las credenciales de acceso, recuerde checkear el correo no deseado.', 'white');
+                    await dSession.logoff();
+
+                } catch (err) {
+                    onError(err);
+                }
+
+                function onError(pErr) {
+                    setMessage(errMsg(pErr));
+                    disableInputs(false);
+                    $get('#signin').closest('li').removeClass('disabled');
+                    $get('#signupgoogle').closest('li').removeClass('disabled');
+                    dSession.logoff();
+                }
+            });
             $get('#cancel').click(function (e) {
                 page.router.back();
             });

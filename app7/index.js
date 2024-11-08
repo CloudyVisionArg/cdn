@@ -410,7 +410,7 @@ var app = {
             let idToken = window.localStorage.getItem('idToken');
             if (idToken) {
                 try {
-                    let jwt = await getGoogleJwt(idToken);
+                    let jwt = await googleLogin(idToken);
                     localStorage.setItem('idToken', jwt);
                 } catch (err) {
                     console.error(err);
@@ -555,7 +555,7 @@ async function checkToken(pCallback, pFailure) {
     let idToken = window.localStorage.getItem('idToken');
     if (idToken) {
         try {
-            let jwt = await getGoogleJwt(idToken);
+            let jwt = await googleLogin(idToken);
             localStorage.setItem('idToken', jwt);
         } catch (err) {
             console.error(err);
