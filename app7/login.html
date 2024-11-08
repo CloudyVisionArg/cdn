@@ -1,4 +1,3 @@
-
 <!-- 
     Settings para probar el inicio de sesion con google
    [
@@ -38,127 +37,130 @@
     <!-- Default view-page layout -->
     <div class="view">
         <div class="page">
-        <!-- page-content has additional login-screen content -->
-        <div class="page-content login-screen-content">
-            <div class="login-screen-title">Cloudy CRM</div>
-            <div class="login-screen-logo"><img /></div>
-            <!-- Login form -->
-            <div class="list">
-                <ul style="margin-bottom: 25px;">
-                    <li style="margin-top: 25px;">
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title">Version CORPORATE</div>
-                                <div class="item-after">
-                                    <label class="toggle color-white">
-                                        <input type="checkbox" id="corpversion">
-                                        <span class="toggle-icon"></span>
-                                    </label>
+            <!-- page-content has additional login-screen content -->
+            <div class="page-content login-screen-content">
+                <div class="login-screen-title">Cloudy CRM</div>
+                <div class="login-screen-logo"><img /></div>
+                <!-- Login form -->
+                <div class="list">
+                    <ul style="margin-bottom: 25px;">
+                        <li style="margin-top: 25px;">
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">Version CORPORATE</div>
+                                    <div class="item-after">
+                                        <label class="toggle color-white">
+                                            <input type="checkbox" id="corpversion">
+                                            <span class="toggle-icon"></span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-        
-                    <li class="item-content item-input corp-item">
-                        <div class="item-inner">
-                        <div class="item-title item-floating-label">Empresa</div>
-                        <div class="item-input-wrap">
-                            <input type="text" id="instance" placeholder="Empresa">
-                            <span class="input-clear-button"></span>
-                        </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="credentials-data">
-                    <li class="item-content item-input">
-                        <div class="item-inner">
-                        <div class="item-title item-floating-label">Usuario</div>
-                        <div class="item-input-wrap">
-                            <input type="text" id="username" placeholder="Usuario">
-                            <span class="input-clear-button"></span>
-                        </div>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="item-content item-input">
-                        <div class="item-inner">
-                        <div class="item-title item-floating-label">Contrase&ntilde;a</div>
-                        <div class="item-input-wrap">
-                            <input type="password" id="password" placeholder="Contrase&ntilde;a">
-                            <span class="input-clear-button"></span>
-                        </div>
-                        </div>
-                        <div class="item-media" style="min-width: 40px; align-self: flex-end;">
-                            <i id="showpwd" class="f7-icons">eye</i>
-                        </div>
-                    </li>
-                    <li class="item-content not-logged-item" style="display:none">
-                        <button id="logon" class="button button-raised">Iniciar sesi&oacute;n</button>
-                    </li>
-                    <li><div class="separator-or not-logged-item">Or</div></li>
-                    <li class="item-content not-logged-item">
-                        <button id="googlelogon" type="button" class="login-with-google-btn" >
-                            Sign in with Google
-                        </button>
-                        <!-- <button id="logongoogle" class="button button-raised">Iniciar con Google</button> -->
-                    </li>
-                    <li class="accordion-item corp-item" style="margin-top: 20px;">
-                        <a href="" class="item-link item-content">
+                        <li class="item-content item-input corp-item">
                             <div class="item-inner">
-                                <div class="item-title">Opciones</div>
+                                <div class="item-title item-floating-label">Empresa</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" id="instance" placeholder="Empresa">
+                                    <span class="input-clear-button"></span>
+                                </div>
                             </div>
-                        </a>
-                        <div class="accordion-item-content" style="padding-left: 8px;">
-                            <div class="list no-hairlines-md">
-                                <ul>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                        <div class="item-title item-floating-label">End point</div>
-                                        <div class="item-input-wrap">
-                                            <input type="text" id="endpoint" placeholder="End point">
-                                            <span class="input-clear-button"></span>
-                                        </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                        <div class="item-title item-floating-label">App</div>
-                                        <div class="item-input-wrap">
-                                            <input type="text" id="appname" placeholder="App">
-                                            <span class="input-clear-button"></span>
-                                        </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content" style="margin-top: 15px;">
-                                        <button id="console" class="button button-raised">Consola</button>
-                                    </li>
-                                </ul>
+                        </li>
+                    </ul>
+                    <ul class="credentials-data">
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-floating-label">Usuario</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" id="username" placeholder="Usuario">
+                                    <span class="input-clear-button"></span>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-floating-label">Contrase&ntilde;a</div>
+                                <div class="item-input-wrap">
+                                    <input type="password" id="password" placeholder="Contrase&ntilde;a">
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                            <div class="item-media" style="min-width: 40px; align-self: flex-end;">
+                                <i id="showpwd" class="f7-icons">eye</i>
+                            </div>
+                        </li>
+                        <li class="item-content not-logged-item" style="display:none">
+                            <button id="logon" class="button button-raised">Iniciar sesi&oacute;n</button>
+                        </li>
+                        <li>
+                            <div class="separator-or not-logged-item">Or</div>
+                        </li>
+                        <li class="item-content not-logged-item">
+                            <button id="googlelogon" type="button" class="login-with-google-btn">
+                                Sign in with Google
+                            </button>
+                            <!-- <button id="logongoogle" class="button button-raised">Iniciar con Google</button> -->
+                        </li>
+                        <li class="accordion-item corp-item" style="margin-top: 20px;">
+                            <a href="" class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">Opciones</div>
+                                </div>
+                            </a>
+                            <div class="accordion-item-content" style="padding-left: 8px;">
+                                <div class="list no-hairlines-md">
+                                    <ul>
+                                        <li class="item-content item-input">
+                                            <div class="item-inner">
+                                                <div class="item-title item-floating-label">End point</div>
+                                                <div class="item-input-wrap">
+                                                    <input type="text" id="endpoint" placeholder="End point">
+                                                    <span class="input-clear-button"></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="item-content item-input">
+                                            <div class="item-inner">
+                                                <div class="item-title item-floating-label">App</div>
+                                                <div class="item-input-wrap">
+                                                    <input type="text" id="appname" placeholder="App">
+                                                    <span class="input-clear-button"></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="item-content" style="margin-top: 15px;">
+                                            <button id="console" class="button button-raised">Consola</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="message" class="block block-footer inset"></div>
+                <div class="list">
+                    <ul>
+                        <li class="item-content logged-item">
+                            <button id="logoff" class="button button-raised">Cerrar sesi&oacute;n</button>
+                        </li>
+                        <li class="item-content logged-item logged-manual" style="display:none">
+                            <button id="chpass" class="button button-raised">Cambiar contrase&ntilde;a</button>
+                        </li>
+                        <li class="item-content not-logged-item free-item" style="display:none">
+                            <button id="signin" class="button button-raised">Registrarme</button>
+                        </li>
+                        <li class="item-content not-logged-item free-item" style="display:none">
+                            <button id="resetpass" class="button button-raised">Olvid&eacute; mi
+                                contrase&ntilde;a</button>
+                        </li>
+                        <li class="item-content logged-item">
+                            <button id="cancel" class="button button-raised">Volver</button>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div id="message" class="block block-footer inset"></div>
-            <div class="list">
-                <ul>
-                <li class="item-content logged-item">
-                    <button id="logoff" class="button button-raised">Cerrar sesi&oacute;n</button>
-                </li>
-                <li class="item-content logged-item logged-manual" style="display:none">
-                    <button id="chpass" class="button button-raised">Cambiar contrase&ntilde;a</button>
-                </li>
-                <li class="item-content not-logged-item free-item" style="display:none">
-                    <button id="signin" class="button button-raised">Registrarme</button>
-                </li>
-                <li class="item-content not-logged-item free-item" style="display:none">
-                    <button id="resetpass" class="button button-raised">Olvid&eacute; mi contrase&ntilde;a</button>
-                </li>
-                <li class="item-content logged-item" >
-                    <button id="cancel" class="button button-raised">Volver</button>
-                </li>
-                </ul>
-            </div>
-        </div>
         </div>
     </div>
 </div>
