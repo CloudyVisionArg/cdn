@@ -1781,19 +1781,17 @@ async function evalCode(code, ctx) {
 function showDesigner() {
     let $h = $('html');
     $h.attr('data-drs-mode', 'designer');
-    setTimeout(() => {
-        $('.doors-control-container').each((ix, el) => {
-            let $el = $(el);
-            let $lbl = $el.find('a.doors-container-label');
-            if ($lbl.length == 0) {
-                $lbl = $('<a/>', {
-                    class: 'doors-container-label link-primary',
-                }).append($el.attr('data-drs-id'));
-                $el.prepend($lbl);
-                $lbl.click(labelClick);
-            }
-        });
-    }, 500);
+    $('.doors-control-container').each((ix, el) => {
+        let $el = $(el);
+        let $lbl = $el.find('a.doors-container-label');
+        if ($lbl.length == 0) {
+            $lbl = $('<a/>', {
+                class: 'doors-container-label link-primary',
+            }).append($el.attr('data-drs-id'));
+            $el.prepend($lbl);
+            $lbl.click(labelClick);
+        }
+    });
 
     function labelClick() {
         let me = this;
