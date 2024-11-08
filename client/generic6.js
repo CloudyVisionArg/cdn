@@ -1792,11 +1792,6 @@ function showDesigner() {
                 $el.prepend($lbl);
                 $lbl.click(labelClick);
             }
-            let pos = el.getBoundingClientRect();
-            $lbl.css({
-                top: pos.top + window.scrollY - 10,
-                left: pos.left + window.scrollX + 10,
-            })
         });
     }, 500);
 
