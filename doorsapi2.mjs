@@ -2277,7 +2277,7 @@ export class Document {
                 if (value !== undefined) field.value = value;
                 return field;
             } else {
-                if (name != '[NULL]') console.log('Field not found: ' + name);
+                if (name.toUpperCase() != '[NULL]') console.log('Field not found: ' + name);
                 return undefined;
             }
 
