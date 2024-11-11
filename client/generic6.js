@@ -51,6 +51,16 @@ var inApp = typeof window.app7 == 'object';
     
         preldr = app7.preloader;
         preldr.show();
+
+        // page
+        $page = getPage({
+            id: 'generic6_' + getGuid(),
+            title: 'Cargando...',
+            leftbutton: 'exit',
+            rightbutton: 'save',
+        });
+
+        evSrc = $page[0];
         
     } else { // WEB
         await include([
@@ -81,6 +91,8 @@ var inApp = typeof window.app7 == 'object';
         urlParams = new URLSearchParams(window.location.search);
         fld_id = urlParams.get('fld_id');
         doc_id = urlParams.get('doc_id');
+        
+        evSrc = document;
     }
 
     doors8 = (await dSession.doorsVersion) >= '008.000.000.000';
@@ -134,7 +146,6 @@ function errMgr(pErr) {
 
 async function loadControls() {
     try {
-        evSrc = document;
         // CustomControls
         let cc = await folder.properties('CustomControls');
         if (cc) {
@@ -145,36 +156,36 @@ async function loadControls() {
                 console.error(err);
             }
         }
-        //todo: seguir aca
-        debugger;
 
-        let cf = objPropCI(doc.tags, 'controlsFolder');
+        if (!controls) {
+            let cf = objPropCI(doc.tags, 'controlsFolder');
 
-        // Tag
-        try {
-            if (cf) controlsFolder = await folder.app.folders(cf);
-        } catch(er) {};
+            // Tag
+            try {
+                if (cf) controlsFolder = await folder.app.folders(cf);
+            } catch(er) {};
 
-        // controls hija
-        try {
-            if (!controlsFolder) {
-                controlsFolder = await folder.folders('controls');
+            // controls hija
+            try {
+                if (!controlsFolder) {
+                    controlsFolder = await folder.folders('controls');
+                }
+            } catch(er) {};
+
+            if (controlsFolder && controlsFolder.type == 1) {
+                controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
+            } else {
+                // Hub
+                hubControls = await modControls6.controlsHub(folder);
+                if (hubControls) controls = hubControls.controls;
             }
-        } catch(er) {};
-
-        if (controlsFolder && controlsFolder.type == 1) {
-            controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
-        } else {
-            // Hub
-            hubControls = await modControls6.controlsHub(folder);
-            if (hubControls) controls = hubControls.controls;
-        }
-        
-        if (controls) {
-            // Parsea XmlAttributes
-            modControls6.parseXmlAttributes(controls);
-            // Levanta permisos
-            getControlsRights(controls);
+            
+            if (controls) {
+                // Parsea XmlAttributes
+                modControls6.parseXmlAttributes(controls);
+                // Levanta permisos
+                getControlsRights(controls);
+            }
         }
     
     } catch(err) {
@@ -229,16 +240,6 @@ function getControlsRights(pControls) {
 
 
 async function appRenderPage() {
-    // page
-    $page = getPage({
-        id: 'generic6_' + getGuid(),
-        title: 'Cargando...',
-        leftbutton: 'exit',
-        rightbutton: 'save',
-    });
-
-    evSrc = $page[0];
-
     $page.find('.navbar-inner .left .link').on('click', function (e) {
         // todo: ver si se puede detectar si hubo cambios
         /*
@@ -486,7 +487,6 @@ async function appPageInit(e, page) {
 async function webRenderPage() {
     var $body = $('body');
     var $d = $(document);
-    evSrc = document;
 
     $d.ready(function () {
         // Key shortcuts
