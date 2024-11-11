@@ -7,17 +7,8 @@ export class AppSession extends doorsapi2.Session {
         super(ep);
         Doors.RESTFULL.ServerUrl = ep;
 
-        // this.freeVersion = {
-        //     endpoint: 'https://freeversion.cloudycrm.net/restful',
-        //     login: 'anonimo',
-        //     password: 'gTfy4#j0/x',
-        //     instance: 'FREEVERSION',
-        //     signinFolder: 5217,
-        //     resetPassFolder: 5269,
-        //     minPasswordLen: 6,
-        // }
         this.freeVersion = {
-            endpoint: 'http://monkeydev2.ddns.net/restful',
+            endpoint: 'https://freeversion.cloudycrm.net/restful',
             login: 'anonimo',
             password: 'gTfy4#j0/x',
             instance: 'FREEVERSION',
@@ -25,6 +16,15 @@ export class AppSession extends doorsapi2.Session {
             resetPassFolder: 5269,
             minPasswordLen: 6,
         }
+        // this.freeVersion = {
+        //     endpoint: 'http://monkeydev2.ddns.net/restful',
+        //     login: 'anonimo',
+        //     password: 'gTfy4#j0/x',
+        //     instance: 'FREEVERSION',
+        //     signinFolder: 5217,
+        //     resetPassFolder: 5269,
+        //     minPasswordLen: 6,
+        // }
     }
 
     instanceDescription() {
