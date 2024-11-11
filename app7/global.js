@@ -825,8 +825,7 @@ async function showLogin() {
                 const accInfo = decodeJWT(jwt);
                 //se peude verificar el accInfo.emailVerified !
                 localStorage.setItem('userName',  accInfo.email);
-                localStorage.setItem('idToken',  jwt);
-                //localStorage.setItem('userPassword', dSession.encryptPass($get('#password').val()));
+                localStorage.setItem('idToken',  dSession.encryptPass(jwt));
                 dSession.appLogonGoogle(function () {
                     setMessage('Sincronizando datos... aguarde por favor', 'white');
 

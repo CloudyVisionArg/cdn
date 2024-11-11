@@ -34,9 +34,8 @@ export class AppSession extends doorsapi2.Session {
     checkToken(pSuccess, pFailure) {
         var me = this;
         var authToken = me.getToken();
-        debugger;
         if (!authToken) {
-            let idToken = window.localStorage.getItem('idToken');
+            let idToken = this.decryptPass(window.localStorage.getItem('idToken'));
             if (idToken) {
                 me.appLogonGoogle(pSuccess, pFailure);
             } else {
@@ -47,7 +46,7 @@ export class AppSession extends doorsapi2.Session {
             Doors.RESTFULL.AuthToken = authToken;
             me.isLogged.then(function (res) {
                 if (!res) {
-                    let idToken = window.localStorage.getItem('idToken');
+                    let idToken = this.decryptPass(window.localStorage.getItem('idToken'));
                     if (idToken) {
                         me.appLogonGoogle(pSuccess, pFailure);
                     } else {
