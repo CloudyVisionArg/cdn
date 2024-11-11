@@ -151,7 +151,7 @@ export class AppSession extends doorsapi2.Session {
 
         me.serverUrl = endPoint;
         Doors.RESTFULL.ServerUrl = endPoint;
-        let idTokenDpt = this.decryptPass(window.localStorage.getItem('userPassword'));
+        let idTokenDpt = this.decryptPass(idToken);
         super.logonGoogle(userName, instance, idTokenDpt, "", false).then(
             function(token){
                 Doors.RESTFULL.AuthToken = token;
