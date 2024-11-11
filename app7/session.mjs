@@ -215,7 +215,6 @@ export class AppSession extends doorsapi2.Session {
     }
 
     setToken(pToken) {
-        debugger;
         window.localStorage.setItem('authToken', pToken);
         window.localStorage.setItem('authTokenTime', (new Date).toJSON());
     }
