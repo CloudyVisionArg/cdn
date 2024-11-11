@@ -400,9 +400,6 @@ async function appRenderPage() {
         // CON CONTROLES
 
         try {
-            // BeforeRender del hub
-            if (hubControls && hubControls.beforeRender) await evalCode(hubControls.beforeRender);
-
             // Control Event BeforeRender
             let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
@@ -652,9 +649,6 @@ async function webRenderPage() {
         // CON CONTROLES
 
         try {
-            // BeforeRender del hub
-            if (hubControls && hubControls.beforeRender) await evalCode(hubControls.beforeRender);
-
             // Control Event BeforeRender
             let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
