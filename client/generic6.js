@@ -176,7 +176,8 @@ async function loadControls() {
                 controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
             } else {
                 // Hub
-                hubControls = await modControls6.controlsHub(folder);
+                let hc = await folder.properties('hubControls');
+                hubControls = await modControls6.controlsHub(hc ? hc : folder);
                 if (hubControls) controls = hubControls.controls;
             }
             
