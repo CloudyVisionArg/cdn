@@ -908,8 +908,6 @@ async function renderControls(container, parent) {
         
         let control, options, $this, $input, bsctl, f7ctl, tf, textField, vf, valueField, context;
 
-        console.log(ctl['NAME']);
-
         tf = ctl.attr('textfield');
         if (tf && tf != '[NULL]') {
             textField = doc.fields(tf);
