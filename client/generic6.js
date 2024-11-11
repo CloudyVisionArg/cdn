@@ -389,7 +389,8 @@ async function appRenderPage() {
         }
 
         try {
-            evSrc.dispatchEvent(new CustomEvent('afterBeforeRender'));
+            let context = {};
+            evSrc.dispatchEvent(new CustomEvent('afterBeforeRender'), { detail: context});
             if (context.return && typeof context.return.then == 'function') await context.return;
 
         } catch (err) {
@@ -476,7 +477,7 @@ async function appPageInit(e, page) {
 
     // Evento afterRender
     let context = {};
-    evSrc.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+    evSrc.dispatchEvent(new CustomEvent('afterRender', { detail: context}));
     if (context.return && typeof context.return.then == 'function') await context.return;
 
     // Control Event AfterRender
@@ -640,13 +641,15 @@ async function webRenderPage() {
             // Control Event BeforeRender
             let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
+
         } catch (err) {
             console.error(err);
             toast('BeforeRender error: ' + utils.errMsg(err));
         }
 
         try {
-            evSrc.dispatchEvent(new CustomEvent('afterBeforeRender'));
+            let context = {};
+            evSrc.dispatchEvent(new CustomEvent('afterBeforeRender'), { detail: context});
             if (context.return && typeof context.return.then == 'function') await context.return;
 
         } catch (err) {
@@ -763,7 +766,7 @@ async function webRenderPage() {
 
                     // Evento afterDelete
                     let context = {};
-                    evSrc.dispatchEvent(new CustomEvent('afterDelete', { detail : context }));
+                    evSrc.dispatchEvent(new CustomEvent('afterDelete', { detail: context }));
                     if (context.return && typeof context.return.then == 'function') await context.return;
 
                     exitForm();
@@ -801,7 +804,7 @@ async function webRenderPage() {
 
     // Evento afterRender
     let context = {};
-    evSrc.dispatchEvent(new CustomEvent('afterRender', { detail : context}));
+    evSrc.dispatchEvent(new CustomEvent('afterRender', { detail: context}));
     if (context.return && typeof context.return.then == 'function') await context.return;
 
     // Control Event AfterRender
@@ -1247,7 +1250,7 @@ async function renderControls(container, parent) {
             */
 
             // Evento renderControl
-            evSrc.dispatchEvent(new CustomEvent('renderControl', { detail : context}));
+            evSrc.dispatchEvent(new CustomEvent('renderControl', { detail: context}));
             if (context.return && typeof context.return.then == 'function') await context.return;
 
             if (ctl['SCRIPTBEFORERENDER']) {
@@ -1270,7 +1273,7 @@ async function renderControls(container, parent) {
         async function eventBRC(options) {
             try {
                 context = { options, ctl, textField, valueField, label };
-                evSrc.dispatchEvent(new CustomEvent('beforeRenderControl', { detail : context}));
+                evSrc.dispatchEvent(new CustomEvent('beforeRenderControl', { detail: context}));
                 if (context.return && typeof context.return.then == 'function') await context.return;
     
             } catch (err) {
@@ -1484,7 +1487,7 @@ async function fillControls() {
     try {
         // Evento afterFillControls
         let context = {};
-        evSrc.dispatchEvent(new CustomEvent('afterFillControls', { detail : context}));
+        evSrc.dispatchEvent(new CustomEvent('afterFillControls', { detail: context}));
         if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event AfterFillControls
@@ -1651,7 +1654,7 @@ async function saveDoc(exitOnSuccess) {
         let context = { exitOnSuccess };
 
         // Evento beforeSave
-        evSrc.dispatchEvent(new CustomEvent('beforeSave', { detail : context }));
+        evSrc.dispatchEvent(new CustomEvent('beforeSave', { detail: context }));
         if (context.return && typeof context.return.then == 'function') await context.return;
 
         // Control Event BeforeSave
@@ -1685,7 +1688,7 @@ async function saveDoc(exitOnSuccess) {
         let asErr;
         try {
             // Evento afterSave
-            evSrc.dispatchEvent(new CustomEvent('afterSave', { detail : context }));
+            evSrc.dispatchEvent(new CustomEvent('afterSave', { detail: context }));
             if (context.return && typeof context.return.then == 'function') await context.return;
 
             // Control Event AfterSave
@@ -1726,7 +1729,7 @@ async function saveDoc(exitOnSuccess) {
             exitOnSuccess,
         }
 
-        evSrc.dispatchEvent(new CustomEvent('saveError', { detail : context }));
+        evSrc.dispatchEvent(new CustomEvent('saveError', { detail: context }));
         //if (context.return && typeof context.return.then == 'function') await context.return;
     }
 
