@@ -383,6 +383,9 @@ async function appRenderPage() {
             let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
 
+            evSrc.dispatchEvent(new CustomEvent('afterBeforeRender'));
+            if (context.return && typeof context.return.then == 'function') await context.return;
+
         } catch (err) {
             console.error(err);
             toast('BeforeRender error: ' + utils.errMsg(err));
@@ -630,6 +633,9 @@ async function webRenderPage() {
             // Control Event BeforeRender
             let ev = getEvent('BeforeRender');
             if (ev) await evalCode(ev);
+
+            evSrc.dispatchEvent(new CustomEvent('afterBeforeRender'));
+            if (context.return && typeof context.return.then == 'function') await context.return;
 
         } catch (err) {
             console.error(err);
