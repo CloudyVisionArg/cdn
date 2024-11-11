@@ -1,4 +1,20 @@
 /*
+Object model
+
+Session
+    Folders
+        Documents
+            Fields
+            Attachments
+        Views
+        SubFolders
+    Forms
+        Fields
+    Directory
+        Accounts
+            Users
+
+
 swagger: http://w3.cloudycrm.net/apidocs
 types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c

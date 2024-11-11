@@ -3,7 +3,6 @@
 // Fresh: https://cdn.cloudycrm.net/ghcv/cdn/client/generic6.js?_fresh=1
 
 /*
-
 Principales características:
 
 - Unifica generic y controls de la web y el app
@@ -134,9 +133,22 @@ function errMgr(pErr) {
 
 
 async function loadControls() {
-    let cf = objPropCI(doc.tags, 'controlsFolder');
-
     try {
+        // CustomControls
+        let cc = await folder.properties('CustomControls');
+        if (cc) {
+            try {
+                let ccJson = JSON.parse(cc);
+                await evalCode(await gitCdn(ccJson), ccJson);
+            } catch(err) {
+                console.error(err);
+            }
+        }
+        //todo: seguir aca
+        debugger;
+
+        let cf = objPropCI(doc.tags, 'controlsFolder');
+
         // Tag
         try {
             if (cf) controlsFolder = await folder.app.folders(cf);
