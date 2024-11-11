@@ -383,6 +383,12 @@ function closeConsole() {
     if (popupConsole) popupConsole.close();
 }
 
+function decodeJWT(idToken){
+    const parts = idToken.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    return payload;
+}
+
 // Muestra la Consola como popup
 async function showConsole(allowClose) {
     var popup;
