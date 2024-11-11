@@ -134,6 +134,7 @@ function errMgr(pErr) {
 
 async function loadControls() {
     try {
+        evSrc = document;
         // CustomControls
         let cc = await folder.properties('CustomControls');
         if (cc) {
@@ -146,7 +147,6 @@ async function loadControls() {
         }
         //todo: seguir aca
         debugger;
-        evSrc = document;
 
         let cf = objPropCI(doc.tags, 'controlsFolder');
 
