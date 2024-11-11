@@ -146,6 +146,7 @@ async function loadControls() {
         }
         //todo: seguir aca
         debugger;
+        evSrc = document;
 
         let cf = objPropCI(doc.tags, 'controlsFolder');
 
@@ -170,31 +171,8 @@ async function loadControls() {
         }
         
         if (controls) {
-            // Parsea como objeto XMLATTRIBUTES
-            controls.forEach(el => {
-                if (el['XMLATTRIBUTES']) {
-                    try {
-                        let dEl = $.parseXML(el['XMLATTRIBUTES']).documentElement;
-                        let newAttr = {};
-        
-                        for (let i = 0; i < dEl.attributes.length; i++) {
-                            let attr = dEl.attributes[i];
-                            if (attr.specified && attr.value != '') {
-                                newAttr[attr.name] = attr.value;
-                            }
-                        }
-                        el['XMLATTRIBUTES'] = newAttr;
-        
-                    } catch (err) {
-                        console.log('Error parsing ' + el['NAME'] + '.XMLATTRIBUTES: ' + utils.errMsg(err));
-                    }
-                };
-                
-                el.attr = function (attribute) {
-                    if (this['XMLATTRIBUTES']) return this['XMLATTRIBUTES'][attribute];
-                };
-            });
-
+            // Parsea XmlAttributes
+            modControls6.parseXmlAttributes(controls);
             // Levanta permisos
             getControlsRights(controls);
         }
