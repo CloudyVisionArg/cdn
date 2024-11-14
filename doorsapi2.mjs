@@ -5321,7 +5321,7 @@ export class Utilities {
     @returns {Session}
     */
     newSession() {
-        return this.session.constructor(...arguments);
+        return new this.session.constructor(...arguments);
     }
 
     /**
