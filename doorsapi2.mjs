@@ -5321,6 +5321,7 @@ export class Utilities {
     @returns {Session}
     */
     newSession() {
+        debugger;
         return new this.session.constructor(...arguments);
     }
 
