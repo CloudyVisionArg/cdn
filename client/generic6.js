@@ -147,7 +147,7 @@ function errMgr(pErr) {
 async function loadControls() {
     try {
         // CustomControls
-        let cc = await folder.properties('CustomControls');
+        let cc = await folder.properties('customControls');
         if (cc) {
             try {
                 let ccJson = JSON.parse(cc);
@@ -176,7 +176,7 @@ async function loadControls() {
                 controls = await controlsFolder.search({ order: 'parent, order, column', maxTextLen: 0 });
             } else {
                 // Hub
-                let hc = await folder.properties('HubControls');
+                let hc = await folder.properties('hubControls');
                 hubControls = await modControls6.controlsHub(hc ? hc : folder);
                 if (hubControls) controls = hubControls.controls;
             }

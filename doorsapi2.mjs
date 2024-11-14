@@ -5318,6 +5318,13 @@ export class Utilities {
     }
 
     /**
+    @returns {Session}
+    */
+    newSession() {
+        return this.session.constructor(...arguments);
+    }
+
+    /**
     @returns {SimpleBuffer}
     */
     newSimpleBuffer() {
