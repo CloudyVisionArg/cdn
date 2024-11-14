@@ -5322,7 +5322,10 @@ export class Utilities {
     */
     newSession() {
         debugger;
-        return new this.session.constructor(...arguments);
+        let constructor = this.session.constructor.name == 'AppSession'
+            ? Object.getPrototypeOf(this.session.constructor)
+            : this.session.constructor;
+        return new constructor(...arguments);
     }
 
     /**
