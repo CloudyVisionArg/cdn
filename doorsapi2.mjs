@@ -5321,7 +5321,6 @@ export class Utilities {
     @returns {Session}
     */
     newSession() {
-        debugger;
         let constructor = this.session.constructor.name == 'AppSession'
             ? Object.getPrototypeOf(this.session.constructor)
             : this.session.constructor;
