@@ -5005,6 +5005,53 @@ export class Utilities {
         return _CryptoJS.AES.decrypt(pString, pwd).toString(_CryptoJS.enc.Utf8)
 	}
 
+    /**
+    Object.assign recursivo
+    https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+    */
+    deepAssign(target, ...sources) {
+        if (!sources.length) return target;
+        const source = sources.shift();
+      
+        if (isObject(target) && isObject(source)) {
+            for (const key in source) {
+                if (isObject(source[key])) {
+                    if (!target[key]) Object.assign(target, { [key]: {} });
+                    mergeDeep(target[key], source[key]);
+                } else {
+                    Object.assign(target, { [key]: source[key] });
+                }
+            }
+        }
+        return mergeDeep(target, ...sources);
+
+        function isObject(item) {
+            return (item && typeof item === 'object' && !Array.isArray(item));
+        }
+    }
+    /*
+export function isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+  }
+  
+  export function mergeDeep(target, ...sources) {
+    if (!sources.length) return target;
+    const source = sources.shift();
+  
+    if (isObject(target) && isObject(source)) {
+      for (const key in source) {
+        if (isObject(source[key])) {
+          if (!target[key]) Object.assign(target, { [key]: {} });
+          mergeDeep(target[key], source[key]);
+        } else {
+          Object.assign(target, { [key]: source[key] });
+        }
+      }
+    }
+  
+    return mergeDeep(target, ...sources);
+  }
+    */
     deserializeError(err) {
         return _serializeError.deserializeError(err);
     }

@@ -200,7 +200,7 @@ dSession.foldersGetFromId(fld_id).then(
                 // En Android tampoco funciona el taphold
                 $viewDiv.on('contextmenu', 'a', taphold);
              } else {                 
-                 $viewDiv.on('taphold', 'a', taphold);
+                $viewDiv.on('taphold', 'a', taphold);
              };
             
             // Fin Accordion Ajax
