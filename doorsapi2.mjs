@@ -5016,7 +5016,7 @@ export class Utilities {
       
         if (me.isObject(target) && me.isObject(source)) {
             for (const key in source) {
-                if (isObject(source[key])) {
+                if (me.isObject(source[key])) {
                     if (!target[key]) Object.assign(target, { [key]: {} });
                     me.deepAssign(target[key], source[key]);
                 } else {
@@ -5026,9 +5026,11 @@ export class Utilities {
         }
         return me.deepAssign(target, ...sources);
 
+        /*
         function isObject(item) {
             return (item && typeof item === 'object' && !Array.isArray(item));
         }
+        */
     }
     /*
 export function isObject(item) {
