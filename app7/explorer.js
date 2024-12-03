@@ -195,13 +195,13 @@ dSession.foldersGetFromId(fld_id).then(
             });
             
             // Evento taphold
-             if (device.platform == 'browser' || device.platform == 'Android') {
+            if (device.platform == 'browser' || device.platform == 'Android') {
                 // El taphold no anda en el browser
                 // En Android tampoco funciona el taphold
                 $viewDiv.on('contextmenu', 'a', taphold);
-             } else {                 
+            } else {                 
                 $viewDiv.on('taphold', 'a', taphold);
-             };
+            };
             
             // Fin Accordion Ajax
 
