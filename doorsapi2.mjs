@@ -5010,6 +5010,7 @@ export class Utilities {
     https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
     */
     deepAssign(target, ...sources) {
+        let me = this;
         if (!sources.length) return target;
         const source = sources.shift();
       
@@ -5017,13 +5018,13 @@ export class Utilities {
             for (const key in source) {
                 if (isObject(source[key])) {
                     if (!target[key]) Object.assign(target, { [key]: {} });
-                    deepAssign(target[key], source[key]);
+                    me.deepAssign(target[key], source[key]);
                 } else {
                     Object.assign(target, { [key]: source[key] });
                 }
             }
         }
-        return deepAssign(target, ...sources);
+        return me.deepAssign(target, ...sources);
 
         function isObject(item) {
             return (item && typeof item === 'object' && !Array.isArray(item));
