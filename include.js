@@ -348,7 +348,7 @@ function scriptSrc(scriptId, version) {
             };
 
             if (script.repo) {
-                src = gitCdn(script);
+                src = gitCdn(Object.assigns(script, { url: true }));
 
             } else if (!isNaN(parseInt(v))) {
                 // Master
