@@ -24,8 +24,8 @@ function registeredScripts() {
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
     scripts.push({ id: 'pivotable', repo: 'Global', path: 'client/pivotable.js' });
+    scripts.push({ id: 'generic6', repo: 'Global', path: '/client/generic6.js' });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 412 });
-    scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 410 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 405 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
