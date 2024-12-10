@@ -347,7 +347,10 @@ function scriptSrc(scriptId, version) {
                 };
             };
 
-            if (!isNaN(parseInt(v))) {
+            if (script.repo) {
+                src = gitCdn(script);
+
+            } else if (!isNaN(parseInt(v))) {
                 // Master
                 if (v == 0) {
                     //src = 'https://cloudycrm.net/c/gitcdn.asp?path=' + script.path;
