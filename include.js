@@ -349,7 +349,15 @@ function scriptSrc(scriptId, version) {
 
             if (script.repo) {
                 debugger;
-                src = gitCdn(Object.assign(script, { url: true }));
+                script.url = true;
+                if (v != undefined) {
+                    if (v == 0) {
+                        script.fresh = true;
+                    } else {
+                        script.ref = v;
+                    }
+                }
+                src = gitCdn(script);
 
             } else if (!isNaN(parseInt(v))) {
                 // Master
