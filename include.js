@@ -348,7 +348,6 @@ function scriptSrc(scriptId, version) {
             };
 
             if (script.repo) {
-                debugger;
                 script.url = true;
                 if (v != undefined) {
                     if (v == 0) {
