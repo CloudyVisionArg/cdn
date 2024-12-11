@@ -638,8 +638,12 @@ function whatsAppDataProvider(opts){
 				debugger;
 				var previewBlob = new Blob([new Uint8Array(e.target.result)],{type: file.type});
 				var previewURL = URL.createObjectURL(previewBlob)
-
+				
 				var $block = $(".modal-in").find(".block")
+				if(!_isCapacitor()){
+					$block = $("#wappModal").find(".modal-body");
+					$block.html("");
+				}
 
 				var $previewBtnRow = $('<div/>', {
 					class: 'row',
