@@ -1137,14 +1137,14 @@ function whatsAppDataProvider(opts){
 			}
 			if($menu.children().length > 0) return;
 
-			var $liAudio = $('<li/>').appendTo($menu);
+			/*var $liAudio = $('<li/>').appendTo($menu);
 			var $audioLink = $('<a/>').append('Audio');
 			$audioLink.appendTo($liAudio);
 			$audioLink.click(function (e) {
 				//me.sendFileWeb($cont[0]);
 				//TODO
 				me.sendAudio(container);
-			});
+			});*/
 
 			var $li = $('<li/>',{
 				class:"dropdown-item"
@@ -1303,7 +1303,8 @@ function whatsAppDataProvider(opts){
 				me.sendAudio.call(me);
 			}
 			else{
-				alert("En desarrollo");
+				//alert("En desarrollo");
+				me.sendAudio.call(me);
 			}
 		} else if (option.name == "camera") {
 			if(typeof(cordova) == "object"){
