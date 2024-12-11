@@ -275,14 +275,14 @@ function recorder(opts){
             var stream = null;
             navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
                 stream = _stream;
-                mediaRec = new MediaRecorder(stream, { mimeType: 'audio/aac' });
+                mediaRec = new MediaRecorder(stream);
                 var chunks = [];
                 mediaRec.ondataavailable = e => {
                     chunks.push(e.data);
                     if(mediaRec.state == 'inactive'){
                     var now = new Date();
                     var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
-                    let file = new File(chunks, `${src}.aac`,{ 'type' : 'audio/aac' })
+                    let file = new File(chunks, `${src}.ogg`,{ 'type' : 'audio/ogg; codecs=opus' })
                     //let blob = new Blob(chunks, {type: media.type })
                     url = URL.createObjectURL(file);
                     stream.getTracks().forEach( track => track.stop() );
@@ -291,10 +291,7 @@ function recorder(opts){
                 };
                 console.log('got media successfully');
                 mediaRec.start();
-            }).catch(()=>{
-                debugger;
-                reject();
-            });
+            }).catch(reject);
         });
     }
 }
