@@ -1,4 +1,7 @@
 /**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.media.js?_fresh=true
+ */
+/**
  * Clase para grabar audio tanto en Cordova como en la web.
  * Cordova: Usa plugin media
  * Web: Usa objeto nativo MediaRecorder 
@@ -288,7 +291,10 @@ function recorder(opts){
                 };
                 console.log('got media successfully');
                 mediaRec.start();
-            }).catch(reject);
+            }).catch(()=>{
+                debugger;
+                reject();
+            });
         });
     }
 }
