@@ -5276,7 +5276,14 @@ export class Utilities {
 
         return JSON.parse(value, (key, val) => {
             if (typeof val == 'string') {
-                return me.decodeBuffer(val);
+                if (str.substring(0, 14) == '__function__=>') {
+                    debugger;
+                    let fn;
+                    eval('fn = ' + str.substring(14));
+                    return fn;
+                } else {
+                    return me.decodeBuffer(val);
+                }
             } else {
                 return val;
             }
