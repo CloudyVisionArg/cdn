@@ -5277,7 +5277,7 @@ export class Utilities {
                 if (val.substring(0, 14) == '__function__=>') {
                     debugger;
                     let fn;
-                    eval('fn = ' + str.substring(14));
+                    eval('fn = ' + val.substring(14));
                     return fn;
                 } else {
                     return me.decodeBuffer(val);
