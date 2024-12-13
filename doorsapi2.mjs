@@ -5271,13 +5271,13 @@ export class Utilities {
     */
     jsonParse(value) {
         var me = this;
-        let fnPrefix = '__base64__=>';
+        let fnPrefix = '__function__=>';
 
         return JSON.parse(value, (key, val) => {
             if (typeof val == 'string') {
                 if (val.substring(0, fnPrefix.length) == fnPrefix) {
                     let fn;
-                    eval('fn = ' + val.substring(14));
+                    eval('fn = ' + val.substring(fnPrefix.length));
                     return fn;
                 } else {
                     return me.decodeBuffer(val);
@@ -5313,7 +5313,7 @@ export class Utilities {
     */
     jsonStringify(value) {
         let me = this;
-        let fnPrefix = '__base64__=>';
+        let fnPrefix = '__function__=>';
 
         return JSON.stringify(value, (key, val) => {
             if (typeof(val) == 'function') {
