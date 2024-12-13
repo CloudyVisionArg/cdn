@@ -5309,6 +5309,7 @@ export class Utilities {
 
         return JSON.stringify(value, (key, val) => {
             if (typeof(value) == 'function') {
+                debugger;
                 return value.toString();
             } else {
                 return me.encodeBuffer(val);
