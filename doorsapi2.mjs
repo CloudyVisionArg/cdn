@@ -5271,11 +5271,11 @@ export class Utilities {
     */
     jsonParse(value) {
         var me = this;
+        let fnPrefix = '__base64__=>';
 
         return JSON.parse(value, (key, val) => {
             if (typeof val == 'string') {
-                if (val.substring(0, 14) == '__function__=>') {
-                    debugger;
+                if (val.substring(0, fnPrefix.length) == fnPrefix) {
                     let fn;
                     eval('fn = ' + val.substring(14));
                     return fn;
@@ -5309,14 +5309,15 @@ export class Utilities {
     }
     
     /**
-    Stringify con soporte para buffers binarios (los pasa a base64)
+    Stringify con soporte para buffers binarios (los pasa a base64) y funciones
     */
     jsonStringify(value) {
         let me = this;
+        let fnPrefix = '__base64__=>';
 
         return JSON.stringify(value, (key, val) => {
             if (typeof(val) == 'function') {
-                return '__function__=>' + val.toString();
+                return fnPrefix + val.toString();
             } else {
                 return me.encodeBuffer(val);
             }
