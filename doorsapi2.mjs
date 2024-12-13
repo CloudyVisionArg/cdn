@@ -5267,7 +5267,7 @@ export class Utilities {
     }
 
     /**
-    Parse con soporte para buffers binarios en base64
+    Parse con soporte para buffers binarios en base64 y funciones
     */
     jsonParse(value) {
         var me = this;
@@ -5308,7 +5308,11 @@ export class Utilities {
         let me = this;
 
         return JSON.stringify(value, (key, val) => {
-            return me.encodeBuffer(val);
+            if (typeof(value) == 'function') {
+                return value.toString();
+            } else {
+                return me.encodeBuffer(val);
+            }
         });
     }
 
