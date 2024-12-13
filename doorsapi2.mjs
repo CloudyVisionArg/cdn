@@ -5316,7 +5316,7 @@ export class Utilities {
 
         return JSON.stringify(value, (key, val) => {
             if (typeof(val) == 'function') {
-                return '__function__=>' + value.toString();
+                return '__function__=>' + val.toString();
             } else {
                 return me.encodeBuffer(val);
             }
