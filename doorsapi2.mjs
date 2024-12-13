@@ -5272,6 +5272,7 @@ export class Utilities {
     jsonParse(value) {
         var me = this;
 
+        debugger;
         return JSON.parse(value, (key, val) => {
             if (typeof val == 'string') {
                 if (str.substring(0, 14) == '__function__=>') {
