@@ -5272,10 +5272,9 @@ export class Utilities {
     jsonParse(value) {
         var me = this;
 
-        debugger;
         return JSON.parse(value, (key, val) => {
             if (typeof val == 'string') {
-                if (str.substring(0, 14) == '__function__=>') {
+                if (val.substring(0, 14) == '__function__=>') {
                     debugger;
                     let fn;
                     eval('fn = ' + str.substring(14));
