@@ -5272,6 +5272,8 @@ export class Utilities {
     jsonParse(value) {
         var me = this;
 
+        debugger;
+
         return JSON.parse(value, (key, val) => {
             if (typeof val == 'string') {
                 return me.decodeBuffer(val);
@@ -5307,10 +5309,11 @@ export class Utilities {
     jsonStringify(value) {
         let me = this;
 
+        debugger;
+
         return JSON.stringify(value, (key, val) => {
             if (typeof(value) == 'function') {
-                debugger;
-                return value.toString();
+                return '__function__=>' + value.toString();
             } else {
                 return me.encodeBuffer(val);
             }
