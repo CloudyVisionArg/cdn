@@ -1629,7 +1629,7 @@ export class Attachment {
                     me.#json.AccName = (await me.session.currentUser).name;
                     me.#json.File = fs;
                     
-                    console.log(me.parent.#json);
+                    console.log(me.parent.toJSON());
 
                     resolve(me);
                 },
