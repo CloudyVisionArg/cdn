@@ -1628,6 +1628,7 @@ export class Attachment {
                     me.#json = newJson
                     me.#json.AccName = (await me.session.currentUser).name;
                     me.#json.File = fs;
+                    debugger;
 
                     resolve(me);
                 },
@@ -2535,7 +2536,6 @@ export class Document {
                         let fs = await att.fileStream;
                         let buf = fs.buffer ? fs.buffer : await fs.arrayBuffer();
                         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
-                        debugger;
                         newAtt.Description = att.description;
                         let ix = att.name.lastIndexOf('.');
                         if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
@@ -2544,12 +2544,6 @@ export class Document {
                         newAtt.Name = att.name;
                         newAtt.Size = att.size;
                         me.#json.Attachments.push(newAtt);
-
-                    } else {
-                        debugger;
-                        if (!me.#json.Attachments.find(el => el.AttId == att.id)) {
-                        }
-
                     }
                     loop.next();
                 });
