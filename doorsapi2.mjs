@@ -2542,6 +2542,9 @@ export class Document {
                         newAtt.Name = att.name;
                         newAtt.Size = att.size;
                         me.#json.Attachments.push(newAtt);
+                        
+                    } else {
+                        debugger;
                     }
                     loop.next();
                 });
