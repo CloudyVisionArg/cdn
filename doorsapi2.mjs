@@ -1628,10 +1628,7 @@ export class Attachment {
                     me.#json = newJson
                     me.#json.AccName = (await me.session.currentUser).name;
                     me.#json.File = fs;
-                    
-                    console.log(me.parent.toJSON());
-                    debugger;
-
+                    me.parent.toJSON().Attachments.push(newJson);
                     resolve(me);
                 },
                 reject
