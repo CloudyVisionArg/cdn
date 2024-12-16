@@ -1630,6 +1630,7 @@ export class Attachment {
                     me.#json.File = fs;
                     
                     console.log(me.parent.toJSON());
+                    debugger;
 
                     resolve(me);
                 },
