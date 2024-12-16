@@ -2532,8 +2532,10 @@ export class Document {
                 await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
                     if (att.isNew) {
-                        let buf = await (await att.fileStream).arrayBuffer();
+                        let fs = await att.fileStream;
+                        let buf = await fs.arrayBuffer();
                         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
+                        debugger;
                         newAtt.Description = att.description;
                         let ix = att.name.lastIndexOf('.');
                         if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
@@ -2542,9 +2544,12 @@ export class Document {
                         newAtt.Name = att.name;
                         newAtt.Size = att.size;
                         me.#json.Attachments.push(newAtt);
-                        
+
                     } else {
                         debugger;
+                        if (!me.#json.Attachments.find(el => el.AttId == att.id)) {
+                        }
+
                     }
                     loop.next();
                 });
