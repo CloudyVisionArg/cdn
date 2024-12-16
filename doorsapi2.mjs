@@ -1628,7 +1628,8 @@ export class Attachment {
                     me.#json = newJson
                     me.#json.AccName = (await me.session.currentUser).name;
                     me.#json.File = fs;
-                    debugger;
+                    
+                    console.log(me.parent.#json);
 
                     resolve(me);
                 },
