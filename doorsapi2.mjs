@@ -515,6 +515,16 @@ export class Session {
         return this.documentsGetFromId(docId);
     }
 
+    /** Alias de documentsGetFromId */
+    document(docId) {
+        return this.documentsGetFromId(docId);
+    }
+
+    /** Alias de documentsGetFromId */
+    documents(docId) {
+        return this.documentsGetFromId(docId);
+    }
+
     /**
     Obtiene un documento por su doc_id.
     @returns {Promise<Document>}
