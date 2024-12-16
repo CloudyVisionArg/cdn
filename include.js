@@ -25,7 +25,7 @@ function registeredScripts() {
     */
     scripts.push({ id: 'pivotable', repo: 'Global', path: 'client/pivotable.js' });
     scripts.push({ id: 'generic6', repo: 'Global', path: '/client/generic6.js' });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 412 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 413 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 405 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
@@ -35,7 +35,7 @@ function registeredScripts() {
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 344 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 368 });
     scripts.push({ id: 'generic6', path: '/client/generic6.js', version: 404 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 410 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 412 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 352 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 56 });
     */
