@@ -2533,7 +2533,7 @@ export class Document {
                     let att = attsMap.get(keys[loop.iteration()]);
                     if (att.isNew) {
                         let fs = await att.fileStream;
-                        let buf = await fs.arrayBuffer();
+                        let buf = fs.buffer ? fs.buffer : await fs.arrayBuffer();
                         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
                         debugger;
                         newAtt.Description = att.description;
