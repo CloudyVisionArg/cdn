@@ -646,7 +646,7 @@ function whatsAppDataProvider(opts){
 				}
 
 				var $previewBtnRow = $('<div/>', {
-					class: 'row',
+					class: '',
 					style: 'padding-top: 10%'
 				})
 				
@@ -666,20 +666,24 @@ function whatsAppDataProvider(opts){
 					//<source src=""" type="audio/ogg">
 							
 				var $btn = $('<button/>', {
-					class: 'col button button-large button-round button-outline',
+					class: 'col button button-large button-round button-outline btn btn-default',
 				}).append('Cancelar').appendTo($previewBtnRow);
 				
 				$btn.click(()=>{
 					URL.revokeObjectURL(previewURL);
-					app7.sheet.close(".modal-in");
-					let $modal = $('#wappModal');
-					if($modal.length > 0){
-						$modal.modal("hide");
+					if(app7){
+						app7.sheet.close(".modal-in");
+					}
+					else{
+						let $modal = $('#wappModal');
+						if($modal.length > 0){
+							$modal.modal("hide");
+						}
 					}
 				});
 				
 				var $btnEnviar = $('<button/>', {
-					class: 'col button button-large button-round button-fill',
+					class: 'col button button-large button-round button-fill btn btn-success',
 				}).append('Enviar').appendTo($previewBtnRow);
 				
 				$previewBtnRow.appendTo($block);				
@@ -687,10 +691,14 @@ function whatsAppDataProvider(opts){
 				$btnEnviar.on("click",()=>{
 					URL.revokeObjectURL(previewURL);
 					me.sendMediaFromFile(file);
-					app7.sheet.close(".modal-in");
-					let $modal = $('#wappModal');
-					if($modal.length > 0){
-						$modal.modal("hide");
+					if(app7){
+						app7.sheet.close(".modal-in");
+					}
+					else{
+						let $modal = $('#wappModal');
+						if($modal.length > 0){
+							$modal.modal("hide");
+						}
 					}
 				});
 			};
@@ -1368,23 +1376,23 @@ function whatsAppDataProvider(opts){
 		}).appendTo($block);
 		
 		var $btn = $('<button/>', {
-			class: 'col button button-large button-round button-fill color-pink',
+			class: 'col button button-large button-round button-fill color-pink btn btn-primary',
 		}).append('Grabar').appendTo($recBtnRow);
 		
 		$btn.click(record);
 		
 		var $saveBtnRow = $('<div/>', {
-			class: 'row',
+			class: '',
 		}).hide().appendTo($block);
 		
 		var $btn = $('<button/>', {
-			class: 'col button button-large button-round button-outline',
+			class: 'col button button-large button-round button-outline btn btn-default',
 		}).append('Cancelar').appendTo($saveBtnRow);
 		
 		$btn.click(cancel);
 		
 		var $btn = $('<button/>', {
-			class: 'col button button-large button-round button-fill',
+			class: 'col button button-large button-round button-fill btn btn-success',
 		}).append('Guardar').appendTo($saveBtnRow);
 		
 		$btn.click(saveAction);
@@ -1404,6 +1412,8 @@ function whatsAppDataProvider(opts){
 			var $modalBody = $modal.find('.modal-body');
 			$modalBody.html($sheet);
 			$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
+			$modalDialog.css("width","300px");
+			$modalDialog.css("height","170px");
 			$modal.modal('show');
 		}
 		
