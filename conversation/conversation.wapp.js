@@ -671,7 +671,7 @@ function whatsAppDataProvider(opts){
 				
 				$btn.click(()=>{
 					URL.revokeObjectURL(previewURL);
-					if(app7){
+					if (typeof(cordova) == 'object') {
 						app7.sheet.close(".modal-in");
 					}
 					else{
@@ -691,7 +691,7 @@ function whatsAppDataProvider(opts){
 				$btnEnviar.on("click",()=>{
 					URL.revokeObjectURL(previewURL);
 					me.sendMediaFromFile(file);
-					if(app7){
+					if (typeof(cordova) == 'object') {
 						app7.sheet.close(".modal-in");
 					}
 					else{
@@ -1368,7 +1368,7 @@ function whatsAppDataProvider(opts){
 		
 		var $timer = $('<div/>', {
 			class: 'text-align-center',
-			style: 'font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%',
+			style: 'font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%; text-align: center;',
 		}).append('0:00').appendTo($block);
 		
 		var $recBtnRow = $('<div/>', {
@@ -1377,6 +1377,7 @@ function whatsAppDataProvider(opts){
 		
 		var $btn = $('<button/>', {
 			class: 'col button button-large button-round button-fill color-pink btn btn-primary',
+			style: 'width: 100px'
 		}).append('Grabar').appendTo($recBtnRow);
 		
 		$btn.click(record);
