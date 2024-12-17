@@ -1307,8 +1307,8 @@ function whatsAppDataProvider(opts){
 				me.sendAudio.call(me);
 			}
 			else{
-				alert("En desarrollo");
-				//me.sendAudio.call(me);
+				//alert("En desarrollo");
+				me.sendAudio.call(me);
 			}
 		} else if (option.name == "camera") {
 			if(typeof(cordova) == "object"){
