@@ -363,6 +363,12 @@ Si hace falta algo mas completo usar https://github.com/feross/buffer
     resolve(buffer.Buffer.from(await res.arrayBuffer()));
 */
 export class SimpleBuffer extends Uint8Array {
+    arrayBuffer() {
+        return new Promise((resolve, reject) => {
+            resolve(this.buffer);
+        });
+    }
+
     toString(encoding) {
         /*
         TODO: Hay que terminar de implementar los encodings, falta el start/end tb
@@ -1500,7 +1506,7 @@ export class Attachment {
         });
     }
     set fileStream(value) {
-        if (!this.isNew) throw new Error('Read-only property');
+        if (!this.isNew) throw new Error('Readonly property');
         this.#json.File = value;
 
         if (value instanceof Blob) {
@@ -1519,7 +1525,7 @@ export class Attachment {
         return this.#json.group;
     }
     set group(value) {
-        if (!this.isNew) throw new Error('Read-only property');
+        if (!this.isNew) throw new Error('Readonly property');
         this.#json.group = value;
     }
 
@@ -1637,8 +1643,8 @@ export class Attachment {
                     if (me.name != newJson.Name) reject(new Error('Same name expected'));
                     me.#json = newJson
                     me.#json.AccName = (await me.session.currentUser).name;
-                    me.#json.File = fs;
-                    me.#json.File = undefined;
+                    debugger; //todo: testear
+                    //me.#json.File = fs;
                     me.parent.toJSON().Attachments.push(newJson);
                     resolve(me);
                 },
@@ -2544,7 +2550,14 @@ export class Document {
                     let att = attsMap.get(keys[loop.iteration()]);
                     if (att.isNew) {
                         let fs = await att.fileStream;
-                        let buf = fs.buffer ? fs.buffer : await fs.arrayBuffer();
+                        debugger; //todo: testear en node
+                        if (fs.arrayBuffer) {
+                            buf = await fs.arrayBuffer();
+                        } else if (fs.buffer) {
+                            buf = fs.buffer;
+                        } else {
+                            buf = fs;
+                        }
                         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
                         newAtt.Description = att.description;
                         let ix = att.name.lastIndexOf('.');
