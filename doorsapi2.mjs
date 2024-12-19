@@ -2549,7 +2549,7 @@ export class Document {
                 await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
                     if (att.isNew) {
-                        let fs = await att.fileStream;
+                        let buf, fs = await att.fileStream;
                         debugger; //todo: testear en node
                         if (fs.arrayBuffer) {
                             buf = await fs.arrayBuffer();
