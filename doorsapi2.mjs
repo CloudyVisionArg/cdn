@@ -3560,8 +3560,13 @@ export class Folder {
             let ret;
 
             if (opt.lang == 'js') {
-
-
+                let dSession = elvSession;
+                let folder = elvSession.folder(me.id);
+                let doc = opt.docId ? await folder.doc(opt.docId) : undefined;
+                
+                let pipe = {};
+                eval(`pipe.fn = async () => {\n${ code }\n};`);
+                ret = await pipe.fn(ctx);
 
             } else if (opt.lang == 'vbs') {
                 let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
@@ -3573,10 +3578,8 @@ export class Folder {
             return ret;
 
         } catch(err) {
-            debugger;
             throw err;
         } finally {
-            debugger;
             await elvSession.logoff();
         }
     }
