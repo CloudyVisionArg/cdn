@@ -3562,7 +3562,7 @@ export class Folder {
 
         } else if (opt.lang == 'vbs') {
             let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
-            if (opt.docId) code += 'Set Document = Folder.Documents(' + opt.docId + ')\n';
+            if (opt.docId) code += 'Set Document = Folder.Documents(' + opt.docId + ')\nSet Doc = Document\n';
             code += opt.code;
             return await elvSession.utils.execVbs(code);
         }
