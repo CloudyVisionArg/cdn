@@ -2518,18 +2518,19 @@ export class Document {
         return this.#properties.set(property, value);
     }
 
-        /**
-Ejecuta un codigo en un contexto elevado.
+    /**
+    Ejecuta un codigo en un contexto elevado.
 
-options = {
-	document, // Documento sobre el cual se ejecuta el codigo
-	code, // Codigo a ejecutar
-	lang, // Lenguaje del codigo (js, vbs) (def js)
-}
-*/
-async runElevated(options) {
-
-}
+    options = {
+        code, // Codigo a ejecutar
+        lang, // Lenguaje del codigo (js, vbs) (def js)
+    }
+    */
+    async runElevated(options) {
+        let me = this;
+        options.docId = me.id;
+        return (await me.parent).runElevated(options);
+    }
 
     /**
     Guarda el documento.
