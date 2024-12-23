@@ -332,7 +332,7 @@ function pageInit(e, page) {
             }
         }
 
-        if (!fldActions) fldActions = app7.actions.create({ buttons: stdFldActions });
+        if (!fldActions) fldActions = app7.actions.create({ buttons: stdFldActions, label:true });
 
         var prop = findProp(folder.Properties, propFldActions);
         if (!prop) prop = findProp(folder.Form.Properties, propFldActions);
@@ -340,7 +340,7 @@ function pageInit(e, page) {
             evalCode(prop).then(
                 function (res) {
                     if (Array.isArray(res)) {
-                        fldActions = app7.actions.create({ buttons: [res, stdFldActions] });
+                        fldActions = app7.actions.create({ buttons: [res, stdFldActions], label:true });
                     }
                 },
                 function (err) { console.error(err) }
