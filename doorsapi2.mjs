@@ -3561,7 +3561,7 @@ export class Folder {
 
             if (opt.lang == 'js') {
                 let dSession = elvSession;
-                let folder = elvSession.folder(me.id);
+                let folder = await elvSession.folder(me.id);
                 let doc = opt.docId ? await folder.doc(opt.docId) : undefined;
                 
                 let pipe = {};
