@@ -3572,7 +3572,7 @@ export class Folder {
         if (!evn) throw new Error('Async event not found: ' + opt.evnId);
 
         let elvSession = new Session(me.session.serverUrl);
-        await elvSession.logon(evn.Login, evn.Password);
+        await elvSession.logon(evn.Login, evn.Password, (await me.session.instance).Name);
         debugger;
 
         if (opt.lang == 'js') {
