@@ -2515,6 +2515,19 @@ export class Document {
         return this.#properties.set(property, value);
     }
 
+        /**
+Ejecuta un codigo en un contexto elevado.
+
+options = {
+	document, // Documento sobre el cual se ejecuta el codigo
+	code, // Codigo a ejecutar
+	lang, // Lenguaje del codigo (js, vbs) (def js)
+}
+*/
+async runElevated(options) {
+
+}
+
     /**
     Guarda el documento.
     @returns {Promise<Document>}
@@ -3059,11 +3072,19 @@ export class Folder {
         return this.#app;
     }
 
-    /*
     asyncEvents() {
         //todo
+        let me = this;
+        return new Promise((resolve, reject) => {
+            let url = 'folders/' + me.id + '/asyncevents';
+            me.session.restClient.fetch(url, 'GET', '', '').then(
+                res => {
+                    debugger;
+                },
+                reject
+            )  
+        });
     }
-    */
 
     /*
     asyncEventsList() {
@@ -3508,6 +3529,43 @@ export class Folder {
     */
     get rootFolderId() {
         return this.#json.RootFolderId;
+    }
+
+    /**
+    Ejecuta un codigo en un contexto elevado.
+
+    options = {
+        docId, // Documento sobre el cual se ejecuta el codigo
+        code, // Codigo a ejecutar
+        lang, // Lenguaje del codigo (js, vbs) (def js)
+        evnId, // Id del evento asincrono de la carpeta con las credenciales que se usaran
+    }
+    */
+    async runElevated(options) {
+        let me = this;
+
+        let opt = Object.assign({
+            lang: 'js',
+        }, options);
+        opt.lang = opt.lang.toLowerCase();
+
+        let aev = await me.asyncEvents();
+
+        let elvSession = new Session(me.session.serverUrl);
+        await elvSession.login('credenciales del async');
+
+        if (opt.lang == 'js') {
+
+
+
+        } else if (opt.lang == 'vbs') {
+            let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
+            if (opt.docId) code += 'Set Document = Folder.Documents(' + opt.docId + ')\n';
+            code += opt.code;
+            return await elvSession.utils.vbsExec(code);
+        }
+
+
     }
 
     /*
