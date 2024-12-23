@@ -674,7 +674,10 @@ export class Session {
     /**
     Retorna la instancia actual.
     @returns {Promise<Object>}
-    todo: especificar type: AdfsLogon, Description, Disabled, InsId, MaxConnections, Name, SupportedDomanis, Theme, WinLogon
+    { 
+        AdfsLogon, Description, Disabled, GoogleLogon, InsId, 
+        MaxConnections, Name, SupportedDomanis, Theme, WinLogon
+    }
     */
     get instance() {
         var me = this;
@@ -3077,31 +3080,9 @@ export class Folder {
 
     @returns {Promise<Object[]>}
     [{
-        Class,
-        Code,
-        CodeTimeOut,
-        CodeType,
-        Created,
-        Disabled,
-        EvnId,
-        FldId,
-        HasCode,
-        InsId,
-        IsCom,
-        IsNew,
-        Login,
-        Method,
-        Modified,
-        Password,
-        Recursive,
-        Tags,
-        TimerFrecuence,
-        TimerMode,
-        TimerNextRun,
-        TimerTime,
-        TriggerEvent,
-        TriggerPropertyName,
-        Type,
+        Class, Code, CodeTimeOut, CodeType, Created, Disabled, EvnId, FldId, HasCode, 
+        InsId, IsCom, IsNew, Login, Method, Modified, Password, Recursive, Tags, TimerFrecuence, 
+        TimerMode, TimerNextRun, TimerTime, TriggerEvent, TriggerPropertyName, Type
     }]
     */
     asyncEvents() {
@@ -3573,7 +3554,6 @@ export class Folder {
 
         let elvSession = new Session(me.session.serverUrl);
         await elvSession.logon(evn.Login, evn.Password, (await me.session.instance).Name);
-        debugger;
 
         if (opt.lang == 'js') {
 
@@ -3583,10 +3563,8 @@ export class Folder {
             let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
             if (opt.docId) code += 'Set Document = Folder.Documents(' + opt.docId + ')\n';
             code += opt.code;
-            return await elvSession.utils.vbsExec(code);
+            return await elvSession.utils.execVbs(code);
         }
-
-
     }
 
     /*
