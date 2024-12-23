@@ -3072,25 +3072,43 @@ export class Folder {
         return this.#app;
     }
 
-    asyncEvents() {
-        //todo
-        let me = this;
-        return new Promise((resolve, reject) => {
-            let url = 'folders/' + me.id + '/asyncevents';
-            me.session.restClient.fetch(url, 'GET', '', '').then(
-                res => {
-                    debugger;
-                },
-                reject
-            )  
-        });
-    }
+    /**
+    Retorna la lista de eventos asincronos
 
-    /*
-    asyncEventsList() {
-        //todo
-    }
+    @returns {Promise<Object[]>}
+    [{
+        Class,
+        Code,
+        CodeTimeOut,
+        CodeType,
+        Created,
+        Disabled,
+        EvnId,
+        FldId,
+        HasCode,
+        InsId,
+        IsCom,
+        IsNew,
+        Login,
+        Method,
+        Modified,
+        Password,
+        Recursive,
+        Tags,
+        TimerFrecuence,
+        TimerMode,
+        TimerNextRun,
+        TimerTime,
+        TriggerEvent,
+        TriggerPropertyName,
+        Type,
+    }]
     */
+    asyncEvents() {
+        let me = this;
+        let url = 'folders/' + me.id + '/asyncevents';        
+        return me.session.restClient.fetch(url, 'GET', '', '');
+    }
 
     /*
     get charData() {
@@ -3549,10 +3567,13 @@ export class Folder {
         }, options);
         opt.lang = opt.lang.toLowerCase();
 
-        let aev = await me.asyncEvents();
+        let evnList = await me.asyncEvents();
+        let evn = evnList.find(el => el.EvnId == opt.evnId);
+        if (!evn) throw new Error('Async event not found: ' + opt.evnId);
 
         let elvSession = new Session(me.session.serverUrl);
-        await elvSession.login('credenciales del async');
+        await elvSession.login(evn.Login, evn.Password);
+        debugger;
 
         if (opt.lang == 'js') {
 
