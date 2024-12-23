@@ -3565,9 +3565,8 @@ export class Folder {
                 let doc = opt.docId ? await folder.doc(opt.docId) : undefined;
                 
                 let pipe = {};
-                eval(`pipe.fn = async () => {\n${ opt.code }\n};`);
-                ret = await pipe.fn();
-                debugger;
+                eval(`pipe.fn = async (dSession, folder, doc) => {\n${ opt.code }\n};`);
+                ret = await pipe.fn(dSession, folder, doc);
 
             } else if (opt.lang == 'vbs') {
                 let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
