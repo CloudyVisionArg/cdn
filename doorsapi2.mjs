@@ -3556,15 +3556,28 @@ export class Folder {
         let elvSession = new Session(me.session.serverUrl);
         await elvSession.logon(evn.Login, evn.Password, (await me.session.instance).Name);
 
-        if (opt.lang == 'js') {
+        try {
+            let ret;
+
+            if (opt.lang == 'js') {
 
 
 
-        } else if (opt.lang == 'vbs') {
-            let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
-            if (opt.docId) code += 'Set Document = Folder.Documents(' + opt.docId + ')\nSet Doc = Document\n';
-            code += opt.code;
-            return await elvSession.utils.execVbs(code);
+            } else if (opt.lang == 'vbs') {
+                let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
+                if (opt.docId) code += 'Set Document = Folder.Documents(' + opt.docId + ')\nSet Doc = Document\n';
+                code += opt.code;
+                ret = await elvSession.utils.execVbs(code);
+            }
+
+            return ret;
+
+        } catch(err) {
+            debugger;
+            throw err;
+        } finally {
+            debugger;
+            await elvSession.logoff();
         }
     }
 
