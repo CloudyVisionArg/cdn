@@ -340,7 +340,7 @@ function pageInit(e, page) {
             evalCode(prop).then(
                 function (res) {
                     if (Array.isArray(res)) {
-                        fldActions = app7.actions.create({ buttons: [res, stdFldActions] ,forceToPopover:true});
+                        fldActions = app7.actions.create({ buttons: [res, stdFldActions] });
                     }
                 },
                 function (err) { console.error(err) }
