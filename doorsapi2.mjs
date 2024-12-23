@@ -3567,6 +3567,7 @@ export class Folder {
                 let pipe = {};
                 eval(`pipe.fn = async () => {\n${ opt.code }\n};`);
                 ret = await pipe.fn();
+                debugger;
 
             } else if (opt.lang == 'vbs') {
                 let code = 'Set Folder = dSession.FoldersGetFromId(' + me.id + ')\n';
