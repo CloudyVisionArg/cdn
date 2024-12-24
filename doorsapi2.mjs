@@ -2524,7 +2524,7 @@ export class Document {
     options = {
         code, // Codigo a ejecutar
         lang, // Lenguaje del codigo (js, vbs) (def js)
-        evnId, // Id del evento asincrono de la carpeta con las credenciales que se usaran
+        evnId, // Id del evento asincrono de la carpeta, con las credenciales que se usaran
     }
     */
     async runElevated(options) {
@@ -3539,7 +3539,7 @@ export class Folder {
         docId, // Opcional, documento sobre el cual se ejecuta el codigo
         code, // Codigo a ejecutar
         lang, // Lenguaje del codigo (js, vbs) (def js)
-        evnId, // Id del evento asincrono de la carpeta con las credenciales que se usaran
+        evnId, // Id del evento asincrono de la carpeta, con las credenciales que se usaran
     }
     */
     async runElevated(options) {
