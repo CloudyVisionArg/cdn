@@ -2567,7 +2567,6 @@ export class Document {
                     let att = attsMap.get(keys[loop.iteration()]);
                     if (att.isNew) {
                         let buf, fs = await att.fileStream;
-                        debugger; //todo: testear en node
                         if (fs.arrayBuffer) {
                             buf = await fs.arrayBuffer();
                         } else if (fs.buffer) {
