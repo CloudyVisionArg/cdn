@@ -1646,8 +1646,7 @@ export class Attachment {
                     if (me.name != newJson.Name) reject(new Error('Same name expected'));
                     me.#json = newJson
                     me.#json.AccName = (await me.session.currentUser).name;
-                    debugger; //todo: testear
-                    //me.#json.File = fs;
+                    //me.#json.File = fs; // Para que no se postee cdo grabe el doc
                     me.parent.toJSON().Attachments.push(newJson);
                     resolve(me);
                 },
