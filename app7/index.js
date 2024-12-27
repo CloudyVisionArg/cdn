@@ -257,6 +257,7 @@ var app = {
                     }
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
+                toast(url + '\n' + jqXHR.responseText);
                 console.log(url, jqXHR.responseText);
                 debugger;
             });
