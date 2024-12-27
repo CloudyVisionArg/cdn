@@ -19,7 +19,8 @@ function registeredScripts() {
     Incluye la dependencia y setea el _hasdep del nodo a false
     */
     
-    /* Dps de comitear freshear:
+    /*
+    Dps de comitear freshear:
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
