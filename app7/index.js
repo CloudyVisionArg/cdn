@@ -168,8 +168,9 @@ var app = {
                         let params = context.to.params;
                         let url = 'https://cdn.cloudycrm.net/gh/' + params.owner + '/' + params.repo + '/' + params.path;
                         /*
-                        Esto es para poder enviar file.js!_fresh=1 en el path y que se lea como file.js?_fresh=1
-                        Si lo pasas con ? se rompe
+                        Este replace es para poder enviar el fresh en el path, porque si lo 
+                        pasas con ? se rompe. Ej de llamada:
+                        f7Page.view.router.navigate('/gh/CloudyVisionArg/Global/client/pivotable.js!_fresh=1/?fld_id=' + fld_id);
                         */
                         url = url.replace('!', '?');
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
@@ -182,7 +183,6 @@ var app = {
                         let params = context.to.params;
                         let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
                         url = url.replace('!', '?');
-                        debugger;
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
                     }
                 },
