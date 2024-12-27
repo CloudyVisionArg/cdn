@@ -257,7 +257,7 @@ var app = {
                     }
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                toast(url + '\n' + jqXHR.responseText);
+                toast('Error loading ' + url + '<br>' + jqXHR.responseText);
                 console.log(url, jqXHR.responseText);
                 debugger;
             });
