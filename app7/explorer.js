@@ -266,7 +266,8 @@ function newDoc(e) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
-    pageEl.crm = {};
+    pageEl.drs = {};
+    pageEl.crm = pageEl.drs; // bg compat
 
 	// En ios el navbar esta fuera del page
     $navbar = (f7Page.navbarEl ? $(f7Page.navbarEl) : $(f7Page.pageEl).find('.navbar'));
@@ -408,11 +409,12 @@ function pageInit(e, page) {
         })
     }
 
-    if (!pageEl.crm) pageEl.crm = {};
-    Object.assign(pageEl.crm, {
+    if (!pageEl.drs) pageEl.drs = {};
+    Object.assign(pageEl.drs, {
         reloadView, toggleSelectionMode, refreshOnFocus,
         folder, $navbar, import: importProp, f7Page,
     });
+    pageEl.crm = pageEl.drs; // bg compat
 }
 
 function taphold(e) {

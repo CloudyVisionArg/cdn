@@ -625,9 +625,10 @@ async function showLogin() {
                 ],
             });
                 
-            popup.el.crm = {};
-            popup.el.crm.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
-            popup.el.crm.corpToggle.on('change', function () {
+            popup.el.drs = {};
+            popup.el.crm = popup.el.drs; // bg compat
+            popup.el.drs.corpToggle = app7.toggle.create({ el: $get('#corpversion').parent()[0] });
+            popup.el.drs.corpToggle.on('change', function () {
                 setCorpVersion(this.checked);
             });
 
@@ -713,8 +714,8 @@ async function showLogin() {
                 setInputVal($get('#endpoint'), endPoint);
                 setInputVal($get('#appname'), appName ? appName : 'default');
 
-                popup.el.crm.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
-                setCorpVersion(popup.el.crm.corpToggle.checked);
+                popup.el.drs.corpToggle.checked = (instance && instance.toLowerCase() != dSession.freeVersion.instance.toLowerCase());
+                setCorpVersion(popup.el.drs.corpToggle.checked);
             
                 if (userName && instance && endPoint) {
                     dSession.checkToken(function () {
@@ -1845,7 +1846,7 @@ function f7AppEvents() {
 
         // Ejecuto el metodo refresh del explorer
         if (pageId && pageId.substring(0, 9) == 'explorer_') {
-            page.pageEl.crm.refreshOnFocus();
+            page.pageEl.drs.refreshOnFocus();
         };
     })
 }

@@ -16,35 +16,35 @@ var controlsFolder, controls, controlsRights;
 var $page, $navbar, f7Page, pageEl, saving;
 var doors8;
 
-var pStuff = {}; // Deprecado, usar pageEl.crm
+var pStuff = {}; // Deprecado, usar pageEl.drs
 
 /*
-pageEl.crm sirve para guardar variables y funciones de UNA INSTANCIA de pagina.
+pageEl.drs sirve para guardar variables y funciones de UNA INSTANCIA de pagina.
 Al estar guardadas en el nodo de la pagina se pueden acceder desde otras paginas. Ej:
 
 En el BeforeRender:
 
-    pageEl.crm.myVar = 5;
-    pageEl.crm.myFunc = function () {
-        alert('myVar is ' + pageEl.crm.myVar.toString());
+    pageEl.drs.myVar = 5;
+    pageEl.drs.myFunc = function () {
+        alert('myVar is ' + pageEl.drs.myVar.toString());
     }
 
 Y luego en el app7_script de un textbox:
 
     $input.change(function () {
-        pageEl.crm.myVar = $(this).val()
-        pageEl.crm.myFunc();
+        pageEl.drs.myVar = $(this).val()
+        pageEl.drs.myFunc();
     });
 
 Y usar la misma function en el AfterRender (que se dispara al finalizar el abrir o guardar)
 
-    pageEl.crm.myFunc();
+    pageEl.drs.myFunc();
 
 Y tambien llamarla desde otra pagina de esta forma:
 
-    $('#view-myview .page[id*="generic_"]')[0].crm.myFunc()
+    $('#view-myview .page[id*="generic_"]')[0].drs.myFunc()
 
-pageEl.crm tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
+pageEl.drs tendra precargadas algunas variables y funciones de la pagina como el documento, folder, etc
 */
 
 // Parametros del query string
@@ -156,7 +156,7 @@ function getControlsRights(pControls) {
 }
 
 function explorerRefresh() {
-    if (!pageEl.crm.saved) {
+    if (!pageEl.drs.saved) {
         // Si nunca guarde evito el refresh del explorer
         $(f7Page.pageFrom.pageEl).find('.refresh-on-focus').each((ix, el) => {
             $(el).removeClass('refresh-on-focus');
@@ -928,7 +928,8 @@ function getDefaultControl(pField) {
 function pageInit(e, page) {
     f7Page = page;
     pageEl = page.pageEl;
-    pageEl.crm = {};
+    pageEl.drs = {};
+    pageEl.crm = pageEl.drs; // bg compat
 
     f7Page.view.on('swipebackMove', (ev) => {
         explorerRefresh();
@@ -1040,11 +1041,12 @@ function pageInit(e, page) {
         }
     }, 0);
 
-    if (!pageEl.crm) pageEl.crm = {};
-    Object.assign(pageEl.crm, {
+    if (!pageEl.drs) pageEl.drs = {};
+    Object.assign(pageEl.drs, {
         fillControls, saveDoc, fld_id, folder, folderJson, 
         doc_id, doc, docJson, $navbar, f7Page, goBack,
     });
+    pageEl.crm = pageEl.drs; // bg compat
 }
 
 // Usar solo despues del pageInit
@@ -1752,9 +1754,9 @@ async function saveDoc(exitOnSuccess) {
         docJson = doc.toJSON();
         doc_id = doc.id;
 
-        pageEl.crm.doc = doc;
-        pageEl.crm.doc_id = doc.id;
-        pageEl.crm.saved = true;
+        pageEl.drs.doc = doc;
+        pageEl.drs.doc_id = doc.id;
+        pageEl.drs.saved = true;
 
         if (!doors8) {
             try {

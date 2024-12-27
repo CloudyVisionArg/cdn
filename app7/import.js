@@ -17,7 +17,7 @@ var $page = getPage({
 });
 
 $page.find('.navbar-inner .left .link').on('click', function (e) {
-    if (refresh) f7Page.pageFrom.pageEl.crm.reloadView();
+    if (refresh) f7Page.pageFrom.pageEl.drs.reloadView();
     f7Page.view.router.back();
 });
 
@@ -155,7 +155,7 @@ async function loadXls(file) {
 
         // Lee los campos habilitados
         try {
-            let sett = f7Page.pageFrom.pageEl.crm.import.fields;
+            let sett = f7Page.pageFrom.pageEl.drs.import.fields;
             if (sett) {
                 var fieldsSett = sett.split(',');
                 fieldsSett.forEach((el, ix) => {
