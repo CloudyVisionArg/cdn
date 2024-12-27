@@ -178,6 +178,7 @@ var app = {
                 {
                     path: '/ghcv/:repo/:path+/',
                     async: function () {
+                        debugger;
                         var context = getRouterContext(arguments);
                         let params = context.to.params;
                         let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
