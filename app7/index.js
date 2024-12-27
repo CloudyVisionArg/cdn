@@ -35,7 +35,8 @@ initScripts.push({ id: 'app7-index.css' });
     app.initialize();    
 })();
 
-window.crm = {};
+window.drs = {};
+window.crm = window.drs; // bg compat
 
 var app = {
     self: undefined,
