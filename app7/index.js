@@ -259,7 +259,7 @@ var app = {
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 toast('Error loading ' + url + '<br>' + jqXHR.responseText, 0);
                 console.log(url, jqXHR.responseText);
-                //debugger;
+                debugger;
             });
         }
 
