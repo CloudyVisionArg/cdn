@@ -305,6 +305,12 @@ function pageInit(e, page) {
                 onClick: newDoc,
             },
             {
+                text: 'Pivotear',
+                onClick: () => {
+                    f7Page.view.router.navigate('/ghcv/Global/client/pivotable.js?_fresh=1&fld_id=' + fld_id);
+                },
+            },
+            {
                 text: 'Importar desde Excel',
                 onClick: () => {
                     f7Page.view.router.navigate('/cdn/?script=app7-import&fld_id=' + fld_id);
