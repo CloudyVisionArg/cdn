@@ -8,17 +8,30 @@
  * Doorsapi.js: Busqueda de datos
  */
 
+var branch = "unificacionControlesGlobalesChat";
 var wappRequiredScripts = [];
-wappRequiredScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
-wappRequiredScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
-wappRequiredScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+
+if(typeof(jQuery) === 'undefined'){
+	wappRequiredScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
+}
+if(typeof(bootstrapVersion) === 'undefined'){
+	if (typeof(cordova) != 'object') {
+		wappRequiredScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
+		wappRequiredScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+		bootstrapVersion = function(){ return [5,1,3]; };
+	}
+}
+
 wappRequiredScripts.push({ id: 'font-awesome', src: 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' });
 wappRequiredScripts.push({ id: 'lib-moment' });
 wappRequiredScripts.push({ id: 'emojis'});
-wappRequiredScripts.push({ id: 'doorsapi'});
-wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.js' });
-wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.css' });
-wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversation.media.js' });
+if(typeof(DoorsAPI) === 'undefined'){
+	wappRequiredScripts.push({ id: 'doorsapi'});
+}
+wappRequiredScripts.push({ id: 'conversationcontrol', depends: ['jquery','bootstrap','bootstrap-css','lib-moment','emojis','doorsapi'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.js' });
+wappRequiredScripts.push({ id: 'conversation-css', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversationcontrol.css' });
+wappRequiredScripts.push({ id: 'conversation-media', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.media.js' });
+wappRequiredScripts.push({ id: 'conversation-status', depends: ['conversationcontrol'], src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + branch + '/conversation/conversation.status.js' });
 
 var whatsAppProvider = null; //new whatsAppDataProvider(wappOpts);
 
@@ -57,6 +70,7 @@ function whatsAppDataProvider(opts){
     this.s3Key = opts.s3Key || null;
 	this.allAccounts = [];
 	this.messagesFolder = opts.messagesFolder || null;
+	this.forceSingleFrom = opts.forceSingleFrom || false;
 	this.numbers = [];
     let me = this;
 	var wappLib = opts.wappLib || null;
@@ -128,11 +142,12 @@ function whatsAppDataProvider(opts){
 
 	var fillAccounts = function(){
 		me.numbers.forEach(function(num){
+			let selected = me.forceSingleFrom ? num["NUMBER"] == from : num["DEFAULT"] == "1";
 			me.accounts.push({
 				id: num["NUMBER"],
 				name: num["NAME"],
 				status: "stop",
-				selected: num["DEFAULT"] == "1" ? true : false,
+				selected: selected,//num["DEFAULT"] == "1" ? true : false,
 				icon: "fa-whatsapp"
 			});
 		});
@@ -555,7 +570,6 @@ function whatsAppDataProvider(opts){
 				//$cont.html($img);
 				//$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
 			});
-
 			popup.open();
 
 		} else {
@@ -1670,37 +1684,84 @@ function wappMsg(){
 	};
 }
 
+/**
+ * Crea un chat de WhatsApp en un contenedor
+ * Compatible con generic3, generic5 y APP7
+ * @param {string} opts.container - Requerido - Selector del contenedor donde se creará el chat
+ * @param {string} opts.phoneField - Nombre del campo que contiene el número de teléfono externo. Opcional si se pasa opcion "to"
+ * @param {number} opts.docId - DocId del documento. Requerido si se envío phoneField/fromField/nameField
+ * @param {object} opts.doc - (opcional) Documento. Requerido si se envío phoneField/fromField/nameField y no se envió docId
+ * @param {number} opts.fldId - FldId del documento. Requerido si se envío phoneField/fromField/nameField
+ * @param {string} opts.to - Número de teléfono externo. Opcional si se pasa opcion "phoneField"
+ * @param {string} opts.s3Key - Clave de S3 para subir archivos
+ * @param {string} opts.nameField - (opcional) Nombre del campo que contiene el nombre del contacto
+ * @param {string} opts.fromField - (opcional) Nombre del campo que contiene el número de teléfono interno
+ * @param {string} opts.from - (opcional) Número de teléfono interno
+ * @param {boolean} opts.forceSingleFrom - (opcional) Si es true, filtra los mensajes solo por el from
+ * @param {object} opts.variables - (opcional) Variables a reemplazar en el mensaje
+ */
 async function newWhatsAppChatControl(opts){
 	let phoneField = opts.phoneField;
 	let fromField = opts.fromField;
 	let nameField = opts.nameField;
+	let to = opts.to;
 	let refDocId = opts.docId;
+	let refDoc = opts.doc;
 	let refFldId = opts.fldId;
 	let s3Key = opts.s3Key;
 	let container = opts.container;
-
+	let from = opts.from;
+	
 	await include(wappRequiredScripts);
+
+	if(!opts.wappLib){
+		opts.wappLib = await import(gitCdn({ repo: 'global', path: 'wappcnn/wapp.mjs', fresh: false, url: true }));
+		await opts.wappLib.setContext({ dSession });
+	}
 
 	let wappFolderId = await dSession.settings('WHATSAPP_CONNECTOR_FOLDER');
     if (!wappFolderId) alert('WHATSAPP_CONNECTOR_FOLDER setting missing');
 
-    let wappFolder = await dSession.folders(wappFolderId);
+	let wappFolder = await dSession.folders(wappFolderId);
     let fldMsg = await wappFolder.folder('messages');
     let fldNumbers = await wappFolder.folder('numbers');
-    let fld = await dSession.folders(parseInt(refFldId));
+    
+	let allProms = [];
+	
+	allProms.push(fldNumbers.search({
+		fields:"*",
+		formula:"default = 1"
+	}));
+	let fld = null;
+	if(phoneField || fromField || nameField){
+		if(!refFldId){
+			alert("El folder id es requerido para el control de chat de whatsapp");
+			return;
+		}
+		if(!refDocId && !refDoc){
+			alert("La opcion docId o doc del chat es requerido");
+			return;
+		}
+		if(!refDoc){
+			fld = await dSession.folders(parseInt(refFldId));
+		}
+		else{
+			fld = await refDoc.parent;
+		}
 
-    let allProms = [];
-    allProms.push(fldNumbers.search({
-        fields:"*",
-        formula:"default = 1"
-    }));
-    allProms.push(fld.search({
-        fields:"*",
-        formula:"doc_id = " + refDocId
-    }));
-	let variablesProp = await fld.properties("WAPP_VARIABLES");
-	if(variablesProp){
-		variablesProp = JSON.parse(variablesProp);
+		allProms.push(fld.search({
+			fields:"*",
+			formula:"doc_id = " + refDocId
+		}));
+	}
+
+	let variablesProp = opts.variables;
+
+	if(opts.variables === undefined || opts.variables === null){
+		variablesProp = await fld.properties("WAPP_VARIABLES");
+		if(variablesProp){
+			variablesProp = JSON.parse(variablesProp);
+		}
 	}
 	//debugger;
 	/*
@@ -1711,27 +1772,43 @@ async function newWhatsAppChatControl(opts){
 	]
 	*/
 
+	var wappProvider = null;
     Promise.allSettled(allProms).then(async proms=>{
         let numbers = proms[0].value;
         let docs = proms[1].value;
-        let mobilePhone = null;
-        let from = null;
+        let mobilePhone = to || null;
+        //let from = null;
 		let name = null;
-		if(numbers.length > 0){
-			from = numbers[0]["NUMBER"];
+		let forceSingleFrom = opts.forceSingleFrom || false;
+		let accountFilter = (a) => 0 == 0;
+
+		//Si no llega la opcion, la calculamos
+		if(opts.forceSingleFrom === undefined || opts.forceSingleFrom === null){
+			if(fromField || opts.from){
+				forceSingleFrom = true;
+			}
 		}
-        if(docs.length > 0){
-            mobilePhone = docs[0][phoneField.toUpperCase()];
+		if(docs.length > 0){
+			mobilePhone = docs[0][phoneField.toUpperCase()];
 			if(nameField){
 				name = docs[0][nameField.toUpperCase()]
 			}
 			if(fromField){
 				from = docs[0][fromField.toUpperCase()]
 			}
-        }
+		}
+		if(forceSingleFrom){
+			eval("accountFilter = (a) => a.id == '" + from + "'");
+		}
+		if(numbers.length > 0 && !from){
+			from = numbers[0]["NUMBER"];
+		}
+		let chatId = refDocId;
+		if(typeof(container) == "string"){
+			chatId += container.replace(/[^a-zA-Z0-9]/g, '');
 
-
-		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${refDocId}" style="max-height: 100vh;"></div>`);
+		}
+		$(container).append(`<div class="chat-container cust-chat" data-chat-id="${chatId}" style="max-height: 100vh;"></div>`);
 
 		mobilePhone = mobilePhone != null && mobilePhone.length == 10 ? "+549" + mobilePhone : mobilePhone + "";
         /*let opts = {
@@ -1757,8 +1834,8 @@ async function newWhatsAppChatControl(opts){
 		
 		let reversedNum = mobilePhone.slice(-8).split("").reverse().join("");
 		let finalFormula = "FROM_NUMREV LIKE '" + reversedNum + "%' OR TO_NUMREV LIKE '" + reversedNum + "%'";
-		//Si le pasó un from explícito por campo, buscamos solo los mensajes con ese from
-		if(fromField){
+		//Si le pasó un from explícito por campo o por opciones, buscamos solo los mensajes con ese from
+		if(forceSingleFrom){
 			finalFormula = "(FROM_NUMREV LIKE '" + reversedNum + "%' AND TO = 'whatsapp:" + from + "') OR (TO_NUMREV LIKE '" + reversedNum + "%' AND FROM = 'whatsapp:" + from + "')";
 		}
 
@@ -1766,8 +1843,9 @@ async function newWhatsAppChatControl(opts){
 			rootFldId: wappFolderId,
 			messagesFolder: fldMsg.id,
 			formula: finalFormula,
-			sessionStatusContainer: 'div.chat-container[data-chat-id=' + refDocId + '] .chat-header .whatsapp-status-container',
+			sessionStatusContainer: 'div.chat-container[data-chat-id=' + chatId + '] .chat-header .whatsapp-status-container',
 			from: from,
+			forceSingleFrom: forceSingleFrom,
 			to: mobilePhone,
 			loggedUser: userData,
 			googleMapsKey: null, //TODO
@@ -1778,7 +1856,7 @@ async function newWhatsAppChatControl(opts){
 			},
 			putTemplateRequested: function(txt, templateObj){
 				debugger;
-				let vars = variablesProp;
+				let vars = variablesProp || [];
 				/*[
 					{variable:"{{1}}","type":"field",value: "NAME"},
 					{variable:"{{2}}","type":"text",value: "Casa"},
@@ -1803,11 +1881,11 @@ async function newWhatsAppChatControl(opts){
 					txt = txt.replaceAll(varObj.variable, val);
 					varObj["value"] = val;
 				})
-				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + refDocId + '] .wapp-reply', txt, templateObj, vars);
+				onWhatsappPutTemplate('div.chat-container[data-chat-id=' + chatId + '] .wapp-reply', txt, templateObj, vars);
 			}
 		};
 		let providers = [];
-		var wappProvider = getWhatsAppDataProvider(wappOpts);
+		wappProvider = getWhatsAppDataProvider(wappOpts);
 		providers.push(wappProvider);
 		var dataProvider = new conversationDataProvider();
 		dataProvider.msgproviders = providers;
@@ -1836,9 +1914,9 @@ async function newWhatsAppChatControl(opts){
 				]
 			}
 		];
-		conversationOptions.headerHtml = getHeaderHtml(mobilePhone, name);
+		conversationOptions.headerHtml = ""; //getHeaderHtml(mobilePhone, name);
 		conversationOptions.subheaderHtml = "";
-		conversationOptions.selector = 'div.chat-container[data-chat-id=' + refDocId + ']';
+		conversationOptions.selector = 'div.chat-container[data-chat-id=' + chatId + ']';
 		conversationOptions.quickMessageTypes = quickMessageTypes;
 		conversationOptions.defaultQuickMessageType = "wappMsg";
 		conversationOptions.quickMessageChanged = function(newMessageType){
@@ -1846,34 +1924,25 @@ async function newWhatsAppChatControl(opts){
 				//TODO: What??
 				//$("div.chat-container[data-chat-id='" + refDocId + "'] .message-type-button ul.dropdown-menu li a i.fa-whatsapp").parent().parent().addClass("dropdown-submenu");
 				//$('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu').html("<li></li>");
-				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + refDocId + '] .message-type-button ul.dropdown-menu'));
+				wappProvider.displayWhatsAppOptions($('div.chat-container[data-chat-id=' + chatId + '] .message-type-button ul.dropdown-menu'));
 			}
 		};
 		let control = new conversationControl(conversationOptions);
+
+		setTimeout(async function(){
+            let statusCtrl = await newConversationStatusControl({
+				selector: 'div.chat-container[data-chat-id=' + chatId + '] .wapp-header',
+				customerData: {
+					name:name, 
+					mobilePhone: mobilePhone
+				},
+				accountsFilter: accountFilter,
+				providers: [wappProvider] 
+			});
+        },1000);
+
 		return control;
     });
-}
-
-function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
-    let input =  $(chatInputSelector);
-	if(templateObj){
-		$(input).attr("data-template", JSON.stringify(templateObj));
-	}
-	if(vars){
-		$(input).attr("data-template-vars", JSON.stringify(vars));
-	}
-    insertAtCaret(input[0], text);
-}
-
-/*
-todo:
-- Enviar media
-*/
-
-(function() {
-	include('whatsapp-css');
-	include('jslib');
-	include('emojis');
 
 	var root = document.documentElement;
 
@@ -1888,29 +1957,7 @@ todo:
 		root.style.setProperty('--wapp-chat-horizontal-margin', '0px');
 		root.style.setProperty('--wapp-chat-vertical-margin', '0px');
 		root.style.setProperty('--wapp-button-size', '25px');
-	};
-}());
-
-$(document).ready(function () {
-	/*DoorsAPI.instanceSettingsGet('WHATSAPP_CONNECTOR_FOLDER').then(
-		function (res) {
-			wapp.rootFolder = res;
-			
-			if (typeof(cordova) == 'object') {
-				wapp.codelibUrl = new URL(window.localStorage.getItem('endPoint')).origin + '/c/codelibapi.asp'
-			} else {
-				wapp.codelibUrl = '/c/codelibapi.asp';
-			};
-		
-			
-		}
-	);
-
-	DoorsAPI.loggedUser().then(
-		function (res) {
-			wapp.loggedUser = res;
-		}
-	);*/
+	}
 
 	if (typeof(cordova) != 'object') {
 		// El DIV para mostrar imagenes fullScreen
@@ -1937,24 +1984,20 @@ $(document).ready(function () {
 		$file.change(function (e) {
 			let inp = e.target;
 			if (inp.files.length > 0) {
-				whatsAppProvider.sendMedia(inp.files[0], $(inp).prop('data-chat'));
+				wappProvider.sendMedia(inp.files[0], $(inp).prop('data-chat'));
 				inp.value = '';
 			}
 		})
-
 	}
-});
 
-
-
-/*
-function newProxAccionControl(pId,pLabel,pOptions){
-	var arrScripts = [];
-	//Requiere JQuery, moment, Bootrap y bootstrap-datetimepicker
-	arrScripts.push({ id: 'jquery', src: 'https://code.jquery.com/jquery-3.6.0.min.js' });
-	arrScripts.push({ id: 'lib-moment' });
-	arrScripts.push({ id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
-	arrScripts.push({ id: 'bootstrap-css', depends: ['bootstrap'], src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
-	arrScripts.push({ id: 'tempus-dominus', depends: ['jquery', 'bootstrap-css', 'lib-moment'], src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js' });
-	arrScripts.push({ id: 'tempus-dominus-css', src: 'https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css' });
-}*/
+	function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
+		let input =  $(chatInputSelector);
+		if(templateObj){
+			$(input).attr("data-template", JSON.stringify(templateObj));
+		}
+		if(vars){
+			$(input).attr("data-template-vars", JSON.stringify(vars));
+		}
+		insertAtCaret(input[0], text);
+	}
+}

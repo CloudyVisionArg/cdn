@@ -239,7 +239,7 @@ function conversationDataProvider() {
  * @param {string} opt.selector - Selector CSS del elemento donde se renderizará el chat
  * @param {conversationDataProvider} opt.dataProvider: Instancia de conversationDataProvider para obtener mensajes
  * @param {string} opt.defaultQuickMessageType: Tipo de mensaje a seleccionar por defecto en el menu de mensajes rapidos de texto. En caso de no enviarlo se tomar el primer tipo de mensaje del primer proveedor enviado 
- * @param {string[]} opt.quickMessageTypes  - Tipos de mensaje para enviar por texto
+ * @param {string[] | object[]} opt.quickMessageTypes  - Tipos de mensaje para enviar por texto
  * @param {(string | Function)} [opt.header] - Html, function o promesa para barra de encabezado
  * @param {(string | Function)} [opt.subheader] - Html, function o promesa que devuelve HTML para la barra inferior al encabezado
  * @param {(string | Function)} [opt.moreOptions] - Html o promesa que devuelve opciones del menu izq inferior
@@ -604,7 +604,13 @@ function conversationControl(opt) {
 					"data-message-type": defaultMsgType,
 					"data-message-class": defaultMsgClass,
 				}).appendTo($div);
-				insertMobileMessageTypeOptionsMenu($dropup);
+
+				$media = $('<i/>', {
+					id: "",
+					class: 'fa ' + defaultIcon,
+				}).appendTo($div);
+
+				insertMobileMessageTypeOptionsMenu($dropup, $media);
 			}
 
 			// Boton Emoji
@@ -1049,49 +1055,99 @@ function conversationControl(opt) {
 		$mainContainer.find(".message-type-button > .dropdown-menu.show").removeClass("show")
 	};
 
-	var insertMobileMessageTypeOptionsMenu = function ($div) {
-		$media = $('<i/>', {
-			id: "",
-			class: 'fa fa fa-pencil-square-o',
-		}).appendTo($div);
-
+	var insertMobileMessageTypeOptionsMenu = function ($div, $media) {
 		var btns = [];
-		for (let index = 0; index < me.dataProvider.msgproviders.length; index++) {
-			const prov = me.dataProvider.msgproviders[index];
-			for (let p = 0; p < prov.supportedTypes.length; p++) {
-				const typeName = prov.supportedTypes[p];
-				if (me.options.quickMessageTypes.indexOf(typeName) == -1) continue;
-				let msgInst = null;
-				try {
-					eval("msgInst = new " + typeName + "();");
-					if (msgInst != null) {
-						var thisInstance = me;
-						btns.push({
-							text: '<i class="fa ' + msgInst.icon + '"></i> <span>' + msgInst.type + '</span>',
-							onClick: function () {
-								debugger;
-								$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $(this.text).attr("class"));
-								$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
-								$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
-								if (thisInstance.options.quickMessageChanged) {
-									thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+		
+		//Si es un solo provider, al hacer click en el icono de mensaje, se debe mostrar directamente las subopciones de ese provider
+		if(me.dataProvider.msgproviders.length == 1){
+			let prov = me.dataProvider.msgproviders[0];
+			if(prov.getQuickMessageOptions){
+				const typeName = prov.supportedTypes[0];
+				prov.getQuickMessageOptions(typeName).then(options=>{
+					for(let opIndx = 0; opIndx < options.length; opIndx++){
+						try {
+							const option = options[opIndx];
+							var thisInstance = me;
+							btns.push({
+								text: '<i class="f7-icons">' + option.icon + '</i> <span>' + option.text + '</span>',
+								onClick: function () {
+									debugger;
+									$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $(this.text).attr("class"));
+									$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', typeName);
+									$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', typeName);
+									if (thisInstance.options.quickMessageChanged) {
+										thisInstance.options.quickMessageChanged(typeName);
+									}
+									// if(prov.getQuickMessageOptions){
+									// 	prov.getQuickMessageOptions(typeName).then(subOptions=>{
+									// 		if(subOptions && subOptions.length > 0){
+									// 			tryToDisplayQuickMessageOptions(subOptions);
+									// 		}
+									// 	});
+									// }
+									
 								}
-								if(prov.getQuickMessageOptions){
-									prov.getQuickMessageOptions(typeName).then(subOptions=>{
-										if(subOptions && subOptions.length > 0){
-											tryToDisplayQuickMessageOptions(subOptions);
-										}
-									});
-								}
-								
-							}
-						})
-						
+							});
+						} catch (error) {
+							alert("whats");
+							console.error("Error al agregar opcion de mensaje rapido: ", error);
+						}
 					}
-				} catch (error) {
+				});
+			}
+		}
+		else{
+			for (let index = 0; index < me.dataProvider.msgproviders.length; index++) {
+				const prov = me.dataProvider.msgproviders[index];
+				for (let p = 0; p < prov.supportedTypes.length; p++) {
+					const typeName = prov.supportedTypes[p];
+					
+					var found = me.options.quickMessageTypes.find((element) =>{
+						if(typeof(element) == "string"){
+							return element == typeName;
+						}
+						if(typeof(element) == "object"){
+							return element.type == typeName;
+						}
+					})
+	
+					if (!found) continue;
+					let msgInst = null;
+					try {
+						eval("msgInst = new " + typeName + "();");
+						if (msgInst != null) {
+							var thisInstance = me;
+							btns.push({
+								text: '<i class="fa ' + msgInst.icon + '"></i> <span>' + msgInst.type + '</span>',
+								onClick: function () {
+									debugger;
+									$(thisInstance.options.selector + " .message-type-button > i").attr('class', "").attr("class", $(this.text).attr("class"));
+									$(thisInstance.options.selector + " .message-type-button").attr('data-message-type', msgInst.type);
+									$(thisInstance.options.selector + " .message-type-button").attr('data-message-class', msgInst.constructor.name);
+									if (thisInstance.options.quickMessageChanged) {
+										thisInstance.options.quickMessageChanged(msgInst.constructor.name);
+									}
+									if(prov.getQuickMessageOptions){
+										prov.getQuickMessageOptions(typeName).then(subOptions=>{
+											if(subOptions && subOptions.length > 0){
+												tryToDisplayQuickMessageOptions(subOptions);
+											}
+										});
+									}
+									
+								}
+							})
+							
+						}
+					} catch (error) {
+					}
 				}
 			}
 		}
+
+
+
+		
 
 		$media.click(function (e) {
 			//  Media options
