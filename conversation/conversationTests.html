@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--<base href="/ghcv/cdn@conversationUnifv2/conversation/">-->
+    <base href="/conversation/">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.cloudycrm.net/ghcv/cdn/include.js"></script>
+</head>
+<body>
+    
+
+    <script type="module">
+        import {Session} from "../doorsapi2.mjs";
+
+        let dSession = new Session();
+        dSession.serverUrl = "https://evi.cloudycrm.net/restful";
+        dSession.authToken = "A7BDA2F6C71957556227586849B836A98B2503B50FE60A6210DB335DE60E5CE1";
+
+
+        
+        import * as conv from "./conversation.mjs";
+        conv.setContext({dSession});
+
+        let doc = await dSession.doc(225508);
+        let loggedUser = await dSession.currentUser
+
+
+
+        let $div = $(`<div id="mainChat" class="chat-container cust-chat"></div>`).appendTo("body");
+
+        //TODO Setting
+        var s3Key = 'U2FsdGVkX18AIAicUb3TjJfTpVSW6asX7S0EKpgU6oTQtho5D9jPzAU1omLhg3oTwpqavxDtPc4Ugx/EWjLxVA==';
+        //debugger;
+        //Todas las configuraciones soportan el valor o el nombre del campo
+        var wappConfig = { 
+            phoneField: "CELULAR",
+            fromField: "WAPP_INT_PHONE",
+            nameField: "SUBJECT",
+            phone: null,
+            from: null,
+            name: null,
+            docId: null,
+            fldId: null,
+            s3Key: s3Key,
+            doc: doc
+        };
+        var fbConfig = {
+            msgnrIdField: "MESSENGER_ID",
+            pageIdField: "MESSENGER_PAGE_ID",
+            nameField: "SUBJECT",
+            s3Key: s3Key,
+            messengerId: null,
+            pageId: null,
+            name: null,
+            doc: doc
+        };
+        var customerData = {
+            mobilePhoneField: "CELULAR",
+            emailField: "EMAIL",
+            fullNameField: "SUBJECT",
+            nameField: "NOMBRE",
+            lastNameField: "APELLIDO",
+            mobilePhone:  null,
+            email: null,
+            fullName: null,
+            name: null,
+            lastName: null,
+            docId: null
+        };
+        var crmConfig = {
+            customerData: customerData,
+            nextAction: {
+                allowedActions: [
+                    {text:"Llamar", value:"Llamar", disabled:false, generatesActivity:true},
+                    {text:"Enviar WhatsApp", value:"Enviar WhatsApp", generatesActivity:true},
+                    {text:"Enviar Correo", value:"Enviar Correo", generatesActivity:true},
+                    {text:"Visita oficina", value:"Visita oficina", generatesActivity:true},
+                    {text:"Visita producto", value:"Visita producto", generatesActivity:true},
+                ],
+            },
+            fldIdActs: 1004,
+            formulaActs: "REFIERE_ID = " + doc.id + " AND TIPO NOT IN ('Enviar WhatsApp')",
+            supportedTypes: ["llamadaMsg","visitaMsg","emailMsg","smsMsg"],
+            notas: true,
+            doc: doc
+        };
+        
+        let basicConfig = {
+            selector: "#mainChat",
+            fldId: 1003,
+            wappConfig: wappConfig,
+            crmConfig: crmConfig,
+            fbConfig: fbConfig,
+            meliConfig: null,
+            loggedUser: loggedUser,
+            doc: doc
+        };
+        let ctrl = await conv.newConversationControl(basicConfig);
+        if(doc.fields("NOTAS").value != null){
+            let initialMessage = new msg();
+            initialMessage.body = doc.fields("NOTAS").value;
+            initialMessage.date = new Date(doc.fields("FECHACREACION").value); 
+            initialMessage.operator = "system"; 
+            initialMessage.classes = "initial-msg";
+            initialMessage.sid = crmConfig.doc.id + "_query";
+            ctrl.insertMsg(initialMessage);
+        }
+        
+
+
+
+        
+
+        setTimeout(async function(){
+            let statusCtrl = await conv.newConversationStatusControl({selector: "#mainChat .wapp-header", customerData, providers: ctrl.dataProvider.msgproviders});
+        },1000);
+    </script>
+</body>
+</html>
