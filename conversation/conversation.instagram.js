@@ -1,5 +1,5 @@
 /**
- * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionControlesGlobalesChat/conversation/conversation.instagram.js?_fresh=true
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.instagram.js?_fresh=true
  */
 /**
  * Libreria de mensajería a través de messenger para conversationcontrol.v2.js
@@ -8,7 +8,7 @@
  * Doorsapi.js: Busqueda de datos
  */
 
-var branch = "unificacionControlesGlobalesChat";
+var branch = "conversationUnifv2";
 var instagramRequiredScripts = [];
 
 if(typeof(jQuery) === 'undefined'){
