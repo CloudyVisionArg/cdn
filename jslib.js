@@ -4,6 +4,7 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+tabClick(ev)
 numbersOnly(pText)
 sheetFuncs (sheet)
 isObject(value)
@@ -39,12 +40,48 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
+const inApp = typeof app7 == 'object';
+
+/**
+Esta funcion se utiliza para seleccionar el tab correspondiente a
+un nav clickeado.
+Soporta tabs de Bootstrap 5.3 y Framework7 7.0.
+Tanto los navs como los tabs deben estar dentro de un contenedor 
+con la clase doors-control-container.
+La funcion activara el tab que se encuentra en el mismo order index
+que el nav clickeado.
+
+@example
+$tabs.find('.nav-link').on('click', tabClick); // Web
+$tabs.find('.tab-link').on('click', tabClick); // App
+*/
+function tabClick(ev) {
+    debugger;
+    if (inApp) {
+        let ix = $(ev.target).index();
+        let $root = control.$root;
+        $root.find('.tab-link-active').removeClass('tab-link-active');
+        $root.find('.tab-active').removeClass('tab-active');
+        $root.find('.tab-link').eq(ix).addClass('tab-link-active');
+        app7.toolbar.setHighlight($root.find('.toolbar')[0]);
+        $root.find('.tab').eq(ix).addClass('tab-active');
+
+    } else {
+        let ix = $(ev.target).parent().index();
+        let $root = control.$root;
+        $root.find('.active').removeClass('active');
+        $root.find('.nav-link').eq(ix).addClass('active');
+        $root.find('.tab-pane').eq(ix).addClass('active');
+    }
+};
+
 /**
  * Quita todos los caracteres que no sean numeros
  * @param {*} pText 
  * @returns 
  */
 function numbersOnly(pText) {
+    tabClick(
 	return pText.replace(/\D/g, '');
 }
 
@@ -575,6 +612,7 @@ function getDocField(pDoc, pFieldName) {
 }
 
 // Devuelve el mensaje de un objeto err
+// Deprecado, usar dSession.utils.errMsg
 function errMsg(pErr) {
     if (typeof(pErr) == 'string') {
         return pErr;
