@@ -81,7 +81,6 @@ function tabClick(ev) {
  * @returns 
  */
 function numbersOnly(pText) {
-    tabClick(
 	return pText.replace(/\D/g, '');
 }
 
