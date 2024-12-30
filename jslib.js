@@ -46,6 +46,7 @@ un nav clickeado.
 Soporta tabs de Bootstrap 5.3 y Framework7 7.0.
 Tanto los navs como los tabs deben estar dentro de un contenedor 
 con la clase doors-control-container.
+Evita el uso de IDs en los tabs.
 La funcion activara el tab que se encuentra en el mismo order index
 que el nav clickeado.
 
