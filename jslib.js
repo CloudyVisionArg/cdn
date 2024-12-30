@@ -40,8 +40,6 @@ getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
 
-const inApp = typeof app7 == 'object';
-
 /**
 Esta funcion se utiliza para seleccionar el tab correspondiente a
 un nav clickeado.
@@ -57,7 +55,7 @@ $tabs.find('.tab-link').on('click', tabClick); // App
 */
 function tabClick(ev) {
     debugger;
-    if (inApp) {
+    if (typeof app7 == 'object') { // App
         let ix = $(ev.target).index();
         let $root = control.$root;
         $root.find('.tab-link-active').removeClass('tab-link-active');
@@ -66,7 +64,7 @@ function tabClick(ev) {
         app7.toolbar.setHighlight($root.find('.toolbar')[0]);
         $root.find('.tab').eq(ix).addClass('tab-active');
 
-    } else {
+    } else { // Web
         let ix = $(ev.target).parent().index();
         let $root = control.$root;
         $root.find('.active').removeClass('active');
