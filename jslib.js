@@ -70,9 +70,8 @@ function tabClick(ev) {
         let ix = $this.parent().index();
         let $root = $this.closest('.doors-control-container');
         $root.find('.active').removeClass('active');
-        $root.find('.show').removeClass('show');
         $root.find('.nav-link').eq(ix).addClass('active');
-        $root.find('.tab-pane').eq(ix).addClass('active');
+        $root.find('.tab-pane').eq(ix).addClass('show active');
     }
 };
 
