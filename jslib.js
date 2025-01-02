@@ -55,7 +55,9 @@ $tabs.find('.nav-link').on('click', tabClick); // Web
 $tabs.find('.tab-link').on('click', tabClick); // App
 */
 function tabClick(ev) {
+    debugger;
     let $this = $(this);
+    
     if (typeof app7 == 'object') { // App
         let ix = $this.index();
         let $root = $this.closest('.doors-control-container');
