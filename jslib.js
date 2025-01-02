@@ -72,7 +72,7 @@ function tabClick(ev) {
         let $root = $this.closest('.doors-control-container');
         $root.find('.active').removeClass('active');
         $root.find('.nav-link').eq(ix).addClass('active');
-        $root.find('.tab-pane').eq(ix).addClass('active');
+        $root.find('.tab-pane').eq(ix).addClass('show active');
     }
 };
 
