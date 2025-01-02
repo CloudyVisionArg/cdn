@@ -55,7 +55,6 @@ $tabs.find('.nav-link').on('click', tabClick); // Web
 $tabs.find('.tab-link').on('click', tabClick); // App
 */
 function tabClick(ev) {
-    debugger;
     let $this = $(this);
     
     if (typeof app7 == 'object') { // App
@@ -68,6 +67,7 @@ function tabClick(ev) {
         $root.find('.tab').eq(ix).addClass('tab-active');
 
     } else { // Web
+        debugger;
         let ix = $this.parent().index();
         let $root = $this.closest('.doors-control-container');
         $root.find('.active').removeClass('active');
