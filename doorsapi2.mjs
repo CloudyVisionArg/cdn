@@ -3956,7 +3956,6 @@ export class Form {
         var me = this;
 
         if (field) {
-            debugger;
             return me.fields().get(field);
 
         } else {
