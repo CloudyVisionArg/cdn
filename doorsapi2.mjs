@@ -3956,15 +3956,8 @@ export class Form {
         var me = this;
 
         if (field) {
-            // Devuelve un field
-            // todo: aca deberia usar el q ya se creo en el map (ver folder.views)
-            var field;
-            field = me.#json.Fields.find(it => it['Name'].toLowerCase() == field.toLowerCase());
-            if (field) {
-                return new Field(field, me);
-            } else {
-                throw new Error('Field not found: ' + field);
-            }
+            debugger;
+            return me.fields().get(field);
 
         } else {
             // Devuelve la coleccion
