@@ -55,8 +55,7 @@ $tabs.find('.nav-link').on('click', tabClick); // Web
 $tabs.find('.tab-link').on('click', tabClick); // App
 */
 function tabClick(ev) {
-    debugger;
-    let $this = $(this);
+    let $this = $(ev.currentTarget);
     
     if (typeof app7 == 'object') { // App
         let ix = $this.index();
