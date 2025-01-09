@@ -308,7 +308,7 @@ function pageInit(e, page) {
             {
                 text: 'Pivotear',
                 onClick: () => {
-                    f7Page.view.router.navigate('/ghcv/Global/client/pivotable.js!_fresh=1/?fld_id=' + fld_id);
+                    f7Page.view.router.navigate('/ghcv/Global/client/pivotable.js/?fld_id=' + fld_id);
                 },
             },
             {
