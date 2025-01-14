@@ -618,7 +618,7 @@ function loadViewSection(pContainer, pCallback) {
                             try {
                                 eval(styleScript)
                             } catch (err) {
-                                console.log('Error in styleScript: ' + errMsg(err));
+                                console.error('Error in styleScript: ' + errMsg(err));
                             }
                         };
 
