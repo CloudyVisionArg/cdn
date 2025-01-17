@@ -1,5 +1,5 @@
 /**
- * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.wapp.js?_fresh=true
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionCOntrolesGlobalesChat/conversation/conversation.wapp.js?_fresh=true
  */
 /**
  * Libreria de mensajería a través de conector de Whatsapp utilizando como base conversationcontrol.js 
@@ -196,6 +196,9 @@ function whatsAppDataProvider(opts){
 
 			var formula = '(from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + 
 				'%\')';
+			if(me.forceSingleFrom == true){
+				formula = "(FROM_NUMREV LIKE '" + extNumberRev + "%' AND TO = 'whatsapp:" + from + "') OR (TO_NUMREV LIKE '" + extNumberRev + "%' AND FROM = 'whatsapp:" + from + "')";
+			}
 			
 			if (maxDate) {
 				let dt = maxDate;
