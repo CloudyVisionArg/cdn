@@ -1006,6 +1006,7 @@ function whatsAppDataProvider(opts){
 		var $file = $('#wappFile');
 		$file.prop('data-chat', "");
 		$file.click();
+		$("#wappFile").trigger("click");
 	};
 
 	this.sendFile = function(){
