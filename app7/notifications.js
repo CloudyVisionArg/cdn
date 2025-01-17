@@ -569,8 +569,8 @@ async function clickOnAnchor(ev) {
             searchNotifications()
             if(doc_id !== undefined && fld_id !== undefined){
                 f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
-                let folder = await DoorsAPI.foldersGetFromId(fld_id);
-                let finalUrl = formUrlRoute(folder.Form.UrlRaw);
+                let form = await DoorsAPI.formsGetByFolderId(fld_id);
+                let finalUrl = formUrlRoute(form.UrlRaw);
             }
         }
     }
