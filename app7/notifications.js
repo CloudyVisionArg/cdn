@@ -553,7 +553,7 @@ function clickOnEnvelope(ev) {
     } 
 }
 
-function clickOnAnchor(ev) {
+async function clickOnAnchor(ev) {
     if(ev.target.closest("a")){
         if(ev.target.closest("a").hasAttribute("extradata")){
             let ExtraData = JSON.parse(ev.target.closest("a").getAttribute("extradata"))
@@ -568,7 +568,8 @@ function clickOnAnchor(ev) {
             DoorsAPI.notificationsRead($(ev.target).closest("a").attr("id"));
             searchNotifications()
             if(doc_id !== undefined && fld_id !== undefined){
-                f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id); 
+                f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
+                let folder = await DoorsAPI.foldersGetFromId(fld_id);
                 let finalUrl = formUrlRoute(folder.Form.UrlRaw);
             }
         }
