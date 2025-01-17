@@ -1,5 +1,5 @@
 /**
- * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionCOntrolesGlobalesChat/conversation/conversation.wapp.js?_fresh=true
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionControlesGlobalesChat/conversation/conversation.wapp.js?_fresh=true
  */
 /**
  * Libreria de mensajería a través de conector de Whatsapp utilizando como base conversationcontrol.js 
@@ -208,7 +208,7 @@ function whatsAppDataProvider(opts){
 				//var dtEnc = '\'' + ISODate(lastLoad) + ' ' + ISOTime(lastLoad, true) + '\'';
 				//formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
 			};*/
-            DoorsAPI.folderSearch(me.messagesFolder, '*', msgsFormula, 'created desc', msgLimit, null, 0).then(
+            DoorsAPI.folderSearch(me.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 				function (res) {
 					let messages = [];
 					let mediaPromises = [];
