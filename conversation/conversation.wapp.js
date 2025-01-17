@@ -1,5 +1,5 @@
 /**
- * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionControlesGlobalesChat/conversation/conversation.wapp.js?_fresh=true
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.wapp.js?_fresh=true
  */
 /**
  * Libreria de mensajería a través de conector de Whatsapp utilizando como base conversationcontrol.js 
@@ -8,7 +8,7 @@
  * Doorsapi.js: Busqueda de datos
  */
 
-var branch = "unificacionControlesGlobalesChat";
+var branch = "conversationUnifv2";
 var wappRequiredScripts = [];
 
 if(typeof(jQuery) === 'undefined'){
@@ -652,11 +652,15 @@ function whatsAppDataProvider(opts){
 				debugger;
 				var previewBlob = new Blob([new Uint8Array(e.target.result)],{type: file.type});
 				var previewURL = URL.createObjectURL(previewBlob)
-
+				
 				var $block = $(".modal-in").find(".block")
+				if(!_isCapacitor()){
+					$block = $("#wappModal").find(".modal-body");
+					$block.html("");
+				}
 
 				var $previewBtnRow = $('<div/>', {
-					class: 'row',
+					class: '',
 					style: 'padding-top: 10%'
 				})
 				
@@ -676,20 +680,24 @@ function whatsAppDataProvider(opts){
 					//<source src=""" type="audio/ogg">
 							
 				var $btn = $('<button/>', {
-					class: 'col button button-large button-round button-outline',
+					class: 'col button button-large button-round button-outline btn btn-default',
 				}).append('Cancelar').appendTo($previewBtnRow);
 				
 				$btn.click(()=>{
 					URL.revokeObjectURL(previewURL);
-					app7.sheet.close(".modal-in");
-					let $modal = $('#wappModal');
-					if($modal.length > 0){
-						$modal.modal("hide");
+					if (typeof(cordova) == 'object') {
+						app7.sheet.close(".modal-in");
+					}
+					else{
+						let $modal = $('#wappModal');
+						if($modal.length > 0){
+							$modal.modal("hide");
+						}
 					}
 				});
 				
 				var $btnEnviar = $('<button/>', {
-					class: 'col button button-large button-round button-fill',
+					class: 'col button button-large button-round button-fill btn btn-success',
 				}).append('Enviar').appendTo($previewBtnRow);
 				
 				$previewBtnRow.appendTo($block);				
@@ -697,10 +705,14 @@ function whatsAppDataProvider(opts){
 				$btnEnviar.on("click",()=>{
 					URL.revokeObjectURL(previewURL);
 					me.sendMediaFromFile(file);
-					app7.sheet.close(".modal-in");
-					let $modal = $('#wappModal');
-					if($modal.length > 0){
-						$modal.modal("hide");
+					if (typeof(cordova) == 'object') {
+						app7.sheet.close(".modal-in");
+					}
+					else{
+						let $modal = $('#wappModal');
+						if($modal.length > 0){
+							$modal.modal("hide");
+						}
 					}
 				});
 			};
@@ -1317,7 +1329,8 @@ function whatsAppDataProvider(opts){
 				me.sendAudio.call(me);
 			}
 			else{
-				alert("En desarrollo");
+				//alert("En desarrollo");
+				me.sendAudio.call(me);
 			}
 		} else if (option.name == "camera") {
 			if(typeof(cordova) == "object"){
@@ -1369,7 +1382,7 @@ function whatsAppDataProvider(opts){
 		
 		var $timer = $('<div/>', {
 			class: 'text-align-center',
-			style: 'font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%',
+			style: 'font-size: 40px; font-weight: bold; padding: 30px; opacity: 20%; text-align: center;',
 		}).append('0:00').appendTo($block);
 		
 		var $recBtnRow = $('<div/>', {
@@ -1377,23 +1390,24 @@ function whatsAppDataProvider(opts){
 		}).appendTo($block);
 		
 		var $btn = $('<button/>', {
-			class: 'col button button-large button-round button-fill color-pink',
+			class: 'col button button-large button-round button-fill color-pink btn btn-primary',
+			style: 'width: 100px'
 		}).append('Grabar').appendTo($recBtnRow);
 		
 		$btn.click(record);
 		
 		var $saveBtnRow = $('<div/>', {
-			class: 'row',
+			class: '',
 		}).hide().appendTo($block);
 		
 		var $btn = $('<button/>', {
-			class: 'col button button-large button-round button-outline',
+			class: 'col button button-large button-round button-outline btn btn-default',
 		}).append('Cancelar').appendTo($saveBtnRow);
 		
 		$btn.click(cancel);
 		
 		var $btn = $('<button/>', {
-			class: 'col button button-large button-round button-fill',
+			class: 'col button button-large button-round button-fill btn btn-success',
 		}).append('Guardar').appendTo($saveBtnRow);
 		
 		$btn.click(saveAction);
@@ -1413,6 +1427,8 @@ function whatsAppDataProvider(opts){
 			var $modalBody = $modal.find('.modal-body');
 			$modalBody.html($sheet);
 			$modalDialog.css({marginTop: ($(window).height() - $modalBody.height() - 30) / 2});
+			$modalDialog.css("width","300px");
+			$modalDialog.css("height","170px");
 			$modal.modal('show');
 		}
 		
@@ -1545,9 +1561,9 @@ function wappMsg(){
 								$('<a/>', {
 									 target: '_blank',
 									 href: it.Url,
-									 download: pMsg.body,
+									 download: pMsg.body || "Archivo",
 									 style: 'font-weight: 500;',
-								}).append(pMsg.body).appendTo($div);
+								}).append(pMsg.body || "Archivo").appendTo($div);
 								
 								appendBody = false;
 							}
