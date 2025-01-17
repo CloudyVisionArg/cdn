@@ -568,9 +568,12 @@ async function clickOnAnchor(ev) {
             DoorsAPI.notificationsRead($(ev.target).closest("a").attr("id"));
             searchNotifications()
             if(doc_id !== undefined && fld_id !== undefined){
-                f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
+                //f7Page.view.router.navigate('/generic/?fld_id=' + fld_id + '&doc_id=' + doc_id);
+                //TODO Habría que hacer la busqueda de property de la carpeta para ver si tiene definida una URL custom
+                //O encapsular en una funcion lo que hace el explorer y llamarla desde acá
                 let form = await DoorsAPI.formsGetByFolderId(fld_id);
                 let finalUrl = formUrlRoute(form.UrlRaw);
+                f7Page.view.router.navigate(finalUrl + '?fld_id=' + fld_id + '&doc_id=' + doc_id);
             }
         }
     }
