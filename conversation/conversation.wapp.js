@@ -1,5 +1,5 @@
 /**
- * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionControlesGlobalesChat/conversation/conversation.wapp.js?_fresh=true
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.wapp.js?_fresh=true
  */
 /**
  * Libreria de mensajería a través de conector de Whatsapp utilizando como base conversationcontrol.js 

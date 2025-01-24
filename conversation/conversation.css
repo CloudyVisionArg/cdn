@@ -1,0 +1,156 @@
+@import 'conversationcontrol.css';
+
+.container > div.row,
+.container > hr{
+    display: none;
+}
+
+div#chat {
+    height: 80vh;
+    margin-top: 0px !important;
+}
+.tab-content {
+    margin-bottom: 20px;
+}
+div#mainChat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-right: solid 1px lightgray;
+    border-left: solid 1px lightgray;
+}
+div#mainChat .wapp-header {
+    box-shadow: none;
+}
+button.btn.dropdown-toggle.btn-light {
+    background-color: white;
+    border: 1px solid #ced4da;
+}
+.dropup.message-type-button .dropdown-submenu .dropdown-menu {
+    overflow: unset;
+}
+a.quick-message-item {
+    text-decoration: none;
+    color: #333333;
+    display: flex;
+    align-items: center;
+}
+a.quick-message-item i {
+    flex-basis: 20%;
+}
+li.dropdown-item a {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+li.dropdown-item a i {
+    min-width: 28px;
+}
+.conversation-providers-status-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 50px;
+}
+
+.conversation-customer-data {
+    flex-basis: 45%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: 10px;
+}
+
+.conversation-providers-accounts {
+    flex-basis: 45%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.conversation-status {
+    flex-basis: 10%;
+    display: flex;
+}
+
+.conversation-status-icon {
+    width: 100%;
+    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.conversation-status-icon svg {
+    max-height: 100%;
+}
+.conversation-customer-name {
+    flex-basis: 100%;
+}
+.conversation-customer-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.conversation-customer-email {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.conversation-customer-phone {
+    font-weight: 700;
+    font-size: 14px;
+}
+.conv-account-info {
+    display: flex;
+    flex-direction: column;
+}
+.conv-account-info .conv-account-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+.conv-account-info span:last-child {
+    font-size: 13px;
+    font-style: italic;
+}
+.conv-account {
+    width: 30px;
+    height: 30px;
+    
+    border-radius: 50%;
+    border: solid 1px lightgray;
+    box-shadow: 0px 0px 10px #00000040;
+}
+.conv-account-cont {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}
+.conv-account.stop {
+    background-color: #F44336;
+}
+.conv-account.go {
+    background-color: #37e13e;
+}
+.wapp-outbound {
+    min-width: 110px;
+}
+.conv-account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: white;
+}
+
+.conv-account-cont .conv-account i {
+    color: white;
+    opacity: .75;
+}
+
+.dropdown-submenu .dropdown-menu .dropdown-submenu .dropdown-menu {
+    left: 90%;
+    max-height: 350px!important;
+    overflow-y: auto!important;
+}

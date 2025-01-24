@@ -6,11 +6,14 @@ window._isCapacitor = function () {
 
 /**
  * Control para dibujar barra de estado de chat.
+ * En Generic3 - Funciona sin parametro doc. En basicConfig se debe enviar docId y fldId
+ * En Generic5, 6 y APP - Funciona con doc. En vez de enviar los valores de celular, messengerId, etc, se pueden enviar los nombres de los campos para que se busquen en el doc (ver config de cada provider)
  * @param {Object} options - Opciones de configuracion.
  * @param {string} options.selector - Selector del contendor. Opcional si se envia funcion render.
  * @param {Array} options.providers - The array de conversationDataProviders.
  * @param {Object} options.customerData - Informacion del cliente con el que se chatea.
  * @param {Function} options.render - Funcion de renderizado en caso de querer sobreescribir render.
+ * @param {Object} options.doc - Objeto documento de contexto que contiene la sesión.
  */
 function conversationStatusBar(options) {
 	var defaults = {
@@ -27,7 +30,7 @@ function conversationStatusBar(options) {
 	var currentInterval = null;
 
 	if(options.selector == null) {
-		throw "Selector option is required";
+		throw "conversationStatusBar - Selector es requerido";
 	}
 	var me = this;
 	
@@ -88,6 +91,17 @@ function conversationStatusBar(options) {
 		}
 		if(options.customerData.mobilePhone) {
 			phone = options.customerData.mobilePhone;
+		}
+		if(options.nameField && options.doc) {
+			name = options.doc.fields(options.nameField).value;
+		}
+		if(options.emailField && options.doc) {
+			//email = options.customerData.email;
+			email = options.doc.fields(options.emailField).value;
+		}
+		if(options.mobilePhoneField && options.doc) {
+			//phone = options.customerData.mobilePhone;
+			phone = options.doc.fields(options.mobilePhoneField).value;
 		}
 
 		$(options.selector).html(`

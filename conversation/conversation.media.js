@@ -1,4 +1,7 @@
 /**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.media.js?_fresh=true
+ */
+/**
  * Clase para grabar audio tanto en Cordova como en la web.
  * Cordova: Usa plugin media
  * Web: Usa objeto nativo MediaRecorder 
@@ -268,22 +271,43 @@ function recorder(opts){
     }
 
     this.recordFromWeb = function (){
-        return new Promise((resolve,reject)=>{
+        return new Promise(async (resolve,reject)=>{
+
+            await include('OpusMediaRecorder', 'https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/OpusMediaRecorder.umd.js');
+            await include('OpusMediaRecorderWorker', 'https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/encoderWorker.umd.js');
+
+            const workerOptions = {
+                OggOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/OggOpusEncoder.wasm',
+                WebMOpusEncoderWasmPath: 'https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/WebMOpusEncoder.wasm'
+            };
+
+            // Replace MediaRecorder
+            //window.MediaRecorder = OpusMediaRecorder;
+            // Check if MediaRecorder available.
+            if (!window.MediaRecorder) {
+                window.MediaRecorder = OpusMediaRecorder;
+            }
+            // Check if a target format (e.g. audio/ogg) is supported.
+            else if (!window.MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+                window.MediaRecorder = OpusMediaRecorder;
+            }
+
             var stream = null;
             navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
                 stream = _stream;
-                mediaRec = new MediaRecorder(stream);
+                let options = { mimeType: 'audio/ogg' };
+                mediaRec = new MediaRecorder(stream, options, workerOptions);
                 var chunks = [];
                 mediaRec.ondataavailable = e => {
                     chunks.push(e.data);
                     if(mediaRec.state == 'inactive'){
-                    var now = new Date();
-                    var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
-                    let file = new File(chunks, `${src}.ogg`,{ 'type' : 'audio/ogg' })
-                    //let blob = new Blob(chunks, {type: media.type })
-                    url = URL.createObjectURL(file);
-                    stream.getTracks().forEach( track => track.stop() );
-                    resolve(file);
+                        var now = new Date();
+                        var src = 'audio_' + ISODate(now) + '_' + ISOTime(now).replaceAll(':', '-');
+                        let file = new File(chunks, `${src}.ogg`,{ 'type' : 'audio/ogg' })
+                        //let blob = new Blob(chunks, {type: media.type })
+                        url = URL.createObjectURL(file);
+                        stream.getTracks().forEach( track => track.stop() );
+                        resolve(file);
                     }
                 };
                 console.log('got media successfully');
