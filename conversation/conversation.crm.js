@@ -1,3 +1,7 @@
+/**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.crm.js?_fresh=true
+ */
+
 var actsProvider = null; //new activitiesDataProvider(actsProvOpts);
 var notasProvider = null; //new notasDataProvider(notasOpts);
 //var whatsAppProvider = null; //new whatsAppDataProvider(wappOpts);
