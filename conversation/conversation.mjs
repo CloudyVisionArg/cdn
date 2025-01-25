@@ -497,7 +497,7 @@ async function setupCrmProvider(selector, crmConfig){
             fldId: crmConfig.doc ? 
                 (await (await crmConfig.doc.parent).folders("notas")).id : 
                 (await (await dSession.folder(crmConfig.fldId)).folders("notas")).id,
-            formula: "DOC_ID_PADRE = " + crmConfig.doc.id,
+            formula: "DOC_ID_PADRE = " + (crmConfig.doc ? crmConfig.doc.id : crmConfig.docId),
             leadData: leadData,
             supportedTypes: ["notaMsg"],
             userData: userData
