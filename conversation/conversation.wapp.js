@@ -194,7 +194,7 @@ function whatsAppDataProvider(opts){
 			var extNumberRev = me.cleanNumber(to);
 			var intNumberRev = me.cleanNumber(from);
 
-			var formula = '(from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + 
+			var formula = '(from_numrev like \'' + extNumberRev + '%\' or to_numrev like \'' + intNumberRev + 
 				'%\')';
 			if(me.forceSingleFrom == true){
 				formula = "(FROM_NUMREV LIKE '" + extNumberRev + "%' AND TO = 'whatsapp:" + from + "') OR (TO_NUMREV LIKE '" + extNumberRev + "%' AND FROM = 'whatsapp:" + from + "')";
