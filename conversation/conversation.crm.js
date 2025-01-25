@@ -477,6 +477,7 @@ function activitiesDataProvider(opts){
 	this.sendMessage = function(mssg){
 		let me = this;
 		return new Promise(function(resolve, reject){
+            me.conversationControl.cursorLoading(true);
 			DoorsAPI.documentsNew(actsFolder).then(function(doc){
                 
                 let msgType = mssg.constructor.name;
@@ -607,11 +608,14 @@ function activitiesDataProvider(opts){
 					let messageType = Gestar.Tools.getDocumentValue(doc,"TIPO");
 					let newMsg = me.getMessageByActType(messageType,res);
 					me.allMessages.push(newMsg);
+                    me.conversationControl.cursorLoading(false);
 					resolve(newMsg);
 				},function(err){
+                    me.conversationControl.cursorLoading(false);
 					reject(err);
 				});
 			},function(err){
+                me.conversationControl.cursorLoading(false);
 				reject(err);
 			});
 		});
@@ -651,12 +655,11 @@ function activitiesDataProvider(opts){
 				
 				let me = this;
 				this.sendMessage(message).then(function(obj){
-					
 					/*let convertedMsg = me.getMessageByActType(type, obj);*/
 					resolve(obj);
 					
 				},function(err){
-					console.error("err",err);
+                    console.error("err",err);
 					reject(err);
 					//errMgr(err);
 				});
