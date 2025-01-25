@@ -17,7 +17,7 @@
 
         let dSession = new Session();
         dSession.serverUrl = "https://evi.cloudycrm.net/restful";
-        dSession.authToken = "A7BDA2F6C71957556227586849B836A98B2503B50FE60A6210DB335DE60E5CE1";
+        dSession.authToken = "7FAED11A6EA773673A88F2F59AE439944593BC096438E0E1B0A5ED91FCEA4FB7";
 
 
         
@@ -25,7 +25,7 @@
         conv.setContext({dSession});
 
         let doc = await dSession.doc(225508);
-        let loggedUser = await dSession.currentUser
+        let loggedUser = await dSession.currentUser;
 
 
 

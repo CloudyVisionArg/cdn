@@ -1,3 +1,7 @@
+/**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.mjs?_fresh=true
+ */
+
 var ctx, dSession;
 var scriptsBranch = "conversationUnifv2";
 var loggedUser = null;
@@ -154,18 +158,23 @@ export async function newConversationControl(basicConfig){
             //TODO
             crmProviders.map((prov) => {
                 if(prov instanceof activitiesDataProvider){
-                    //TODO Loading
-                    let msg = new llamadaMsg();
-                    msg.date = new Date();
-                    msg.operator = loggedUser.name;
-                    msg.body = "Llamada";
-                    prov.sendMessage(msg).then((res) => {
+
+                    prov.call().then((res) => {
                         let inst = window.cloudy.conversation.getInstance(basicConfig.selector);
-                        inst.insertMsg(res);
-                        //TODO Loading
-                    },function(err){
-                        //TODO Loading
+                        inst.insertMsg(res);   
                     });
+                    // //TODO Loading
+                    // let msg = new llamadaMsg();
+                    // msg.date = new Date();
+                    // msg.operator = loggedUser.name;
+                    // msg.body = "Llamada";
+                    // prov.sendMessage(msg).then((res) => {
+                    //     let inst = window.cloudy.conversation.getInstance(basicConfig.selector);
+                    //     inst.insertMsg(res);
+                    //     //TODO Loading
+                    // },function(err){
+                    //     //TODO Loading
+                    // });
                 }
             })
         }
