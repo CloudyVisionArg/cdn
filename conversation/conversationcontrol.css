@@ -457,11 +457,11 @@ i.fa.go {
     font-size: 20pt;
 }
 
-.tooltip {
+.chat-tooltip {
     position:relative; /* making the .tooltip span a container for the tooltip text */
     border-bottom:1px dashed #000; /* little indicater to indicate it's hoverable */
 }
-.tooltip:after {
+.chat-tooltip:after {
     content: attr(title); /* here's the magic */
     position:absolute;
     
@@ -483,6 +483,6 @@ i.fa.go {
   
     display:none; /* hide by default */
 }
-.tooltip:hover:after {
+.chat-tooltip:hover:after {
     display:block;
 }
