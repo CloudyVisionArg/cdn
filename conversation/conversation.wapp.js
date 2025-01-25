@@ -596,7 +596,7 @@ function whatsAppDataProvider(opts){
     // Devuelve los ticks segun el status
     //TODO Mover a mensaje
     this.getTicks = function (pStatus, errorMessage) {
-		if(!errorMessage) errorMessage = "";
+		if(!errorMessage || errorMessage == "--") errorMessage = "";
 		var tick = '&#x2713;'
 		if (pStatus == 'read') {
 			return '<span class="wapp-message-status" style="color: #5FC4E8;">' + tick + tick + '</span>';
@@ -612,15 +612,15 @@ function whatsAppDataProvider(opts){
 			}
 		} else if (pStatus == 'undelivered') {
 			if (typeof(cordova) == 'object') {
-				return `<i class="f7-icons" title="${errorMessage}" style="font-size: 13px;">exclamationmark_circle_fill</i>`;
+				return `<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>`;
 			} else {
-				return `<i class="fa fa-exclamation-circle chat-tooltip" title="${errorMessage}" />`;
+				return `<i class="fa fa-exclamation-circle chat-tooltip" data-tt="${errorMessage}" />`;
 			}
 		} else if (pStatus == 'failed') {
 			if (typeof(cordova) == 'object') {
-				return `<i class="f7-icons" style="font-size: 13px;" title="${errorMessage}">exclamationmark_triangle_fill</i>`;
+				return `<i class="f7-icons" style="font-size: 13px;" >exclamationmark_triangle_fill</i>`;
 			} else {
-				return `<i class="fa fa-exclamation-triangle chat-tooltip" title="${errorMessage}" />`;
+				return `<i class="fa fa-exclamation-triangle chat-tooltip" data-tt="${errorMessage}" />`;
 			}
 		} else {
 			return '??';
@@ -1681,15 +1681,15 @@ function wappMsg(){
 			}
 		} else if (pStatus == 'undelivered') {
 			if (typeof(cordova) == 'object') {
-				return `<i class="f7-icons" title="${errorMessage}" style="font-size: 13px;">exclamationmark_circle_fill</i>`;
+				return `<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>`;
 			} else {
-				return `<i class="fa fa-exclamation-circle chat-tooltip" title="${errorMessage}" />`;
+				return `<i class="fa fa-exclamation-circle chat-tooltip" data-tt="${errorMessage}" />`;
 			}
 		} else if (pStatus == 'failed') {
 			if (typeof(cordova) == 'object') {
-				return `<i class="f7-icons" style="font-size: 13px;" title="${errorMessage}">exclamationmark_triangle_fill</i>`;
+				return `<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>`;
 			} else {
-				return `<i class="fa fa-exclamation-triangle chat-tooltip" title="${errorMessage}" />`;
+				return `<i class="fa fa-exclamation-triangle chat-tooltip" data-tt="${errorMessage}" />`;
 			}
 		} else {
 			return '??';

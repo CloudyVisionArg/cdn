@@ -460,11 +460,12 @@ i.fa.go {
 .chat-tooltip {
     position:relative; /* making the .tooltip span a container for the tooltip text */
     border-bottom:1px dashed #000; /* little indicater to indicate it's hoverable */
+    cursor: pointer;
 }
 .chat-tooltip:after {
-    content: attr(title); /* here's the magic */
+    content: attr(data-tt); /* here's the magic */
     position:absolute;
-    
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     /* vertically center */
     top:50%;
     transform:translateY(-50%);
