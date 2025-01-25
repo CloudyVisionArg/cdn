@@ -1633,7 +1633,7 @@ function wappMsg(){
 						// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
 						//body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
 						body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los ~ con <del>
-						me.parseBoldText(body);
+						body = me.parseBoldText(body);
 					};
 					
 					$msgText.append(body);
