@@ -456,3 +456,33 @@ i.fa.go {
     align-items: center;
     font-size: 20pt;
 }
+
+.tooltip {
+    position:relative; /* making the .tooltip span a container for the tooltip text */
+    border-bottom:1px dashed #000; /* little indicater to indicate it's hoverable */
+}
+.tooltip:before {
+    content: attr(title); /* here's the magic */
+    position:absolute;
+    
+    /* vertically center */
+    top:50%;
+    transform:translateY(-50%);
+    
+    /* move to left */
+    right:100%;
+    margin-right:15px; /* and add a small left margin */
+    
+    /* basic styles */
+    width:200px;
+    padding:10px;
+    border-radius:10px;
+    background:#000;
+    color: #fff;
+    text-align:center;
+  
+    display:none; /* hide by default */
+}
+.tooltip:hover:before {
+    display:block;
+}

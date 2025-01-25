@@ -1683,13 +1683,13 @@ function wappMsg(){
 			if (typeof(cordova) == 'object') {
 				return `<i class="f7-icons" title="${errorMessage}" style="font-size: 13px;">exclamationmark_circle_fill</i>`;
 			} else {
-				return `<i class="fa fa-exclamation-circle" title="${errorMessage}" />`;
+				return `<i class="fa fa-exclamation-circle tooltip" title="${errorMessage}" />`;
 			}
 		} else if (pStatus == 'failed') {
 			if (typeof(cordova) == 'object') {
 				return `<i class="f7-icons" style="font-size: 13px;" title="${errorMessage}">exclamationmark_triangle_fill</i>`;
 			} else {
-				return `<i class="fa fa-exclamation-triangle" title="${errorMessage}" />`;
+				return `<i class="fa fa-exclamation-triangle tooltip" title="${errorMessage}" />`;
 			}
 		} else {
 			return '??';
