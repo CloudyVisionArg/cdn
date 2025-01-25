@@ -751,7 +751,7 @@ function conversationControl(opt) {
 		var msgLimit = 50;
 		var maxDate = null;
 		serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
-		me.cursorLoading(true);
+		//me.cursorLoading(true);
 		me.dataProvider.getMessages(msgLimit, maxDate).then(
 			function (res) {
 				var $chat = pChat.find('div.wapp-chat');
