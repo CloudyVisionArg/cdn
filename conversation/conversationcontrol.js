@@ -1,5 +1,5 @@
 /**
- * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnif/conversation/conversationcontrol.js?_fresh=true
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversationcontrol.js?_fresh=true
  */
 window._isCapacitor = function () {
 	try { return (Capacitor != undefined); }
@@ -198,15 +198,24 @@ function conversationDataProvider() {
 	this.getMessage = function (id, callback) {
 	};
 	this.sendMessage = function (msg) {
+		let me = this;
 		return new Promise((resolve, reject) => {
+			me.cursorLoading(true);
 			let msgType = msg.constructor.name;
 			for (let i = 0; i < this.msgproviders.length; i++) {
 				let provider = this.msgproviders[i];
 				if (provider.supportedTypes.indexOf(msgType) > -1) {
-					provider.sendMessage(msg).then(resolve, reject);
+					provider.sendMessage(msg).then((arg)=>{
+						me.cursorLoading(false);
+						resolve(arg);
+					}, (argErr)=>{
+						me.cursorLoading(false);
+						reject(argErr);
+					});
 					return;
 				}
 			}
+			me.cursorLoading(false);
 			reject(null);
 		});
 	};
