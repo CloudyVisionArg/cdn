@@ -195,10 +195,12 @@ async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig
     
     let depends = [];
     //Para todo lo que no es cordova se usa bootstrap
-    if (typeof(cordova) != 'object') {
-        necessaryScripts.push({id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
-        necessaryScripts.push({id: "bootstrap-css", src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
-        depends.push("bootstrap");
+    if(typeof(bootstrapVersion) === 'undefined'){
+        if (typeof(cordova) != 'object') {
+            necessaryScripts.push({id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
+            necessaryScripts.push({id: "bootstrap-css", src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+            depends.push("bootstrap");
+        }
     }
 
     //En caso de que JQuery no esté cargado, lo cargamos y lo agregamos como dependencia de los demás
