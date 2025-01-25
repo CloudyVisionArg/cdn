@@ -428,10 +428,10 @@ async function setupCrmProvider(selector, crmConfig){
         email:loggedUser.email
     };
     var leadData = {
-        docId: crmConfig.doc.id,
-        frmId: crmConfig.doc.formId,
-        frmName: (await crmConfig.doc.parent).name,
-        subject: crmConfig.doc.fields("SUBJECT").value
+        docId: crmConfig.doc ? crmConfig.doc.id : crmConfig.docId,
+        frmId: crmConfig.doc ? crmConfig.doc.formId : crmConfig.formId,
+        frmName: crmConfig.doc ? (await crmConfig.doc.parent).name : crmConfig.formName,
+        subject: crmConfig.doc ? crmConfig.doc.fields("SUBJECT").value : crmConfig.subject,
     };
 
     if(!crmConfig.fldIdActs){
@@ -466,7 +466,7 @@ async function setupCrmProvider(selector, crmConfig){
     if(crmConfig.customerData.lastNameField){
         crmConfig.customerData.lastName = crmConfig.doc.fields(crmConfig.customerData.lastNameField).value;
     }
-    crmConfig.customerData.docId = crmConfig.doc.id;
+    crmConfig.customerData.docId = crmConfig.doc ? crmConfig.doc.id : crmConfig.docId;
 
     var crmConversationConfig = {
         leadData: leadData,
