@@ -196,6 +196,9 @@ function whatsAppDataProvider(opts){
 
 			var formula = '(from_numrev like \'' + extNumberRev + '%\' and to_numrev like \'' + intNumberRev + 
 				'%\')';
+			if(me.forceSingleFrom == true){
+				formula = "(FROM_NUMREV LIKE '" + extNumberRev + "%' AND TO = 'whatsapp:" + from + "') OR (TO_NUMREV LIKE '" + extNumberRev + "%' AND FROM = 'whatsapp:" + from + "')";
+			}
 			
 			if (maxDate) {
 				let dt = maxDate;
@@ -205,7 +208,7 @@ function whatsAppDataProvider(opts){
 				//var dtEnc = '\'' + ISODate(lastLoad) + ' ' + ISOTime(lastLoad, true) + '\'';
 				//formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
 			};*/
-            DoorsAPI.folderSearch(me.messagesFolder, '*', msgsFormula, 'created desc', msgLimit, null, 0).then(
+            DoorsAPI.folderSearch(me.messagesFolder, '*', formula, 'created desc', msgLimit, null, 0).then(
 				function (res) {
 					let messages = [];
 					let mediaPromises = [];
@@ -1003,6 +1006,7 @@ function whatsAppDataProvider(opts){
 		var $file = $('#wappFile');
 		$file.prop('data-chat', "");
 		$file.click();
+		$("#wappFile").trigger("click");
 	};
 
 	this.sendFile = function(){
