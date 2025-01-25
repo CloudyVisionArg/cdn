@@ -461,7 +461,7 @@ i.fa.go {
     position:relative; /* making the .tooltip span a container for the tooltip text */
     border-bottom:1px dashed #000; /* little indicater to indicate it's hoverable */
 }
-.tooltip:before {
+.tooltip:after {
     content: attr(title); /* here's the magic */
     position:absolute;
     
@@ -483,6 +483,6 @@ i.fa.go {
   
     display:none; /* hide by default */
 }
-.tooltip:hover:before {
+.tooltip:hover:after {
     display:block;
 }
