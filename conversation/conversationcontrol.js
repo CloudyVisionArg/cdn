@@ -311,12 +311,14 @@ function conversationControl(opt) {
 
 		} else {
 			if (pLoading) {
-				$mainContainer.append(`<div class="web-chat-loading">
-    				<span class="web-chat-loading-icon">
-						<i class="fa fa-refresh fa-spin"></i>
-					</span>
-					<span class="web-chat-loading-text">Cargando...</span>
-				</div>`)
+				if($mainContainer.find('.web-chat-loading').length == 0){
+					$mainContainer.append(`<div class="web-chat-loading">
+						<span class="web-chat-loading-icon">
+							<i class="fa fa-refresh fa-spin"></i>
+						</span>
+						<span class="web-chat-loading-text">Cargando...</span>
+					</div>`)
+				}
 			}
 			else{
 				$mainContainer.find('.web-chat-loading').remove();
