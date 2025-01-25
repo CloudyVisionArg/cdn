@@ -343,6 +343,7 @@ async function setupWappProvider(selector, wappConfig){
         /*sessionStatusContainer: "div.cust-chat[doc-id=" + wappConfig.doc.id + "] .chat-header .whatsapp-status-container",*/
         sessionStatusContainer: "",
         modalContainer: "",
+        forceSingleFrom: wappConfig.forceSingleFrom,
         wappLib: wapp,
         from: from,
         to: mobilePhone,
