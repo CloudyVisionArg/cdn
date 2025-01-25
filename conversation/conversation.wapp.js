@@ -451,6 +451,7 @@ function whatsAppDataProvider(opts){
             {   docField: "NUMMEDIA",    msgField: "nummedia" },
             {   docField: "MEDIA",    msgField: "media" },
             {   docField: "REFERRALSOURCEURL",    msgField: "referralSourceUrl" },
+            {   docField: "ERRORMESSAGE",    msgField: "errorMessage" },
             ]
     };
 
@@ -594,7 +595,8 @@ function whatsAppDataProvider(opts){
 
     // Devuelve los ticks segun el status
     //TODO Mover a mensaje
-    this.getTicks = function (pStatus) {
+    this.getTicks = function (pStatus, errorMessage) {
+		if(!errorMessage) errorMessage = "";
 		var tick = '&#x2713;'
 		if (pStatus == 'read') {
 			return '<span class="wapp-message-status" style="color: #5FC4E8;">' + tick + tick + '</span>';
@@ -610,15 +612,15 @@ function whatsAppDataProvider(opts){
 			}
 		} else if (pStatus == 'undelivered') {
 			if (typeof(cordova) == 'object') {
-				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>';
+				return `<i class="f7-icons" title="${errorMessage}" style="font-size: 13px;">exclamationmark_circle_fill</i>`;
 			} else {
-				return '<i class="fa fa-exclamation-circle" />';
+				return `<i class="fa fa-exclamation-circle" title="${errorMessage}" />`;
 			}
 		} else if (pStatus == 'failed') {
 			if (typeof(cordova) == 'object') {
-				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>';
+				return `<i class="f7-icons" style="font-size: 13px;" title="${errorMessage}">exclamationmark_triangle_fill</i>`;
 			} else {
-				return '<i class="fa fa-exclamation-triangle" />';
+				return `<i class="fa fa-exclamation-triangle" title="${errorMessage}" />`;
 			}
 		} else {
 			return '??';
@@ -1498,6 +1500,7 @@ function wappMsg(){
 	this.mapsUrl = null;
 	this.placesUrl = null;
 	this.referralSourceUrl = null;
+	this.errorMessage = null;
 	this.viewImage = function(e){};
 	this.getMessageHtml = function(message){
 		var me = this;
@@ -1647,7 +1650,7 @@ function wappMsg(){
 				$msgTime.append(me.formatDate(dt));
 				
 				if (pMsg.status) {
-					$msgTime.append(' <span class="wapp-message-status-container">' + me.getTicks(pMsg.status) + '</span>');
+					$msgTime.append(' <span class="wapp-message-status-container">' + me.getTicks(pMsg.status, pMsg.errorMessage) + '</span>');
 				}
 				
 				resolve($row);
@@ -1661,7 +1664,8 @@ function wappMsg(){
 
 
 	// Devuelve los ticks segun el status
-	this.getTicks = function (pStatus) {
+	this.getTicks = function (pStatus, errorMessage) {
+		if(!errorMessage) errorMessage = "";
 		var tick = '&#x2713;'
 		if (pStatus == 'read') {
 			return '<span class="wapp-message-status" style="color: #5FC4E8;">' + tick + tick + '</span>';
@@ -1677,15 +1681,15 @@ function wappMsg(){
 			}
 		} else if (pStatus == 'undelivered') {
 			if (typeof(cordova) == 'object') {
-				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>';
+				return `<i class="f7-icons" title="${errorMessage}" style="font-size: 13px;">exclamationmark_circle_fill</i>`;
 			} else {
-				return '<i class="fa fa-exclamation-circle" />';
+				return `<i class="fa fa-exclamation-circle" title="${errorMessage}" />`;
 			}
 		} else if (pStatus == 'failed') {
 			if (typeof(cordova) == 'object') {
-				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>';
+				return `<i class="f7-icons" style="font-size: 13px;" title="${errorMessage}">exclamationmark_triangle_fill</i>`;
 			} else {
-				return '<i class="fa fa-exclamation-triangle" />';
+				return `<i class="fa fa-exclamation-triangle" title="${errorMessage}" />`;
 			}
 		} else {
 			return '??';
