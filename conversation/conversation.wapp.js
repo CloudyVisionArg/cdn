@@ -1961,10 +1961,10 @@ async function newWhatsAppChatControl(opts){
 		return control;
     });
 
-	wappAddRequiredElements();
+	wappAddRequiredElements(wappProvider);
 }
 
-var wappAddRequiredElements = function(){
+var wappAddRequiredElements = function(wappProvider){
 	var root = document.documentElement;
 
 	if (typeof(cordova) == 'object') {

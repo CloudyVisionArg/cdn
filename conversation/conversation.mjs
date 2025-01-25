@@ -368,9 +368,9 @@ async function setupWappProvider(selector, wappConfig){
             //TODO Update header?
         }
     };
-
-    wappAddRequiredElements();
-    return new whatsAppDataProvider(wappOpts);
+    let wappProvider = new whatsAppDataProvider(wappOpts);
+    wappAddRequiredElements(wappProvider);
+    return wappProvider;
 }
 
 async function setupFbMessengerProvider(selector, fbConfig){
