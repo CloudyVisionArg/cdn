@@ -1,5 +1,5 @@
 /**
- * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.media.js?_fresh=true
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@unificacionControlesGlobalesChat/conversation/conversation.media.js?_fresh=true
  */
 /**
  * Clase para grabar audio tanto en Cordova como en la web.
