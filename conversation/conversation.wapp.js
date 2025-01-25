@@ -1957,6 +1957,10 @@ async function newWhatsAppChatControl(opts){
 		return control;
     });
 
+	wappAddRequiredElements();
+}
+
+var wappAddRequiredElements = function(){
 	var root = document.documentElement;
 
 	if (typeof(cordova) == 'object') {
@@ -2002,15 +2006,14 @@ async function newWhatsAppChatControl(opts){
 			}
 		})
 	}
-
-	function onWhatsappPutTemplate(chatInputSelector, text, templateObj,vars){
-		let input =  $(chatInputSelector);
-		if(templateObj){
-			$(input).attr("data-template", JSON.stringify(templateObj));
-		}
-		if(vars){
-			$(input).attr("data-template-vars", JSON.stringify(vars));
-		}
-		insertAtCaret(input[0], text);
+}
+function onWhatsappPutTemplate(chatInputSelector, text, templateObj, vars){
+	let input =  $(chatInputSelector);
+	if(templateObj){
+		$(input).attr("data-template", JSON.stringify(templateObj));
 	}
+	if(vars){
+		$(input).attr("data-template-vars", JSON.stringify(vars));
+	}
+	insertAtCaret(input[0], text);
 }
