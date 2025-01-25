@@ -302,6 +302,17 @@ function conversationControl(opt) {
 			}
 
 		} else {
+			if (pLoading) {
+				$mainContainer.append(`<div class="web-chat-loading">
+    				<span class="web-chat-loading-icon">
+						<i class="fa fa-refresh fa-spin"></i>
+					</span>
+					<span class="web-chat-loading-text">Cargando...</span>
+				</div>`)
+			}
+			else{
+				$mainContainer.find('.web-chat-loading').remove();
+			}
 			$mainContainer.css('cursor', pLoading ? 'progress' : 'default');
 		}
 	};
@@ -730,7 +741,7 @@ function conversationControl(opt) {
 		var msgLimit = 50;
 		var maxDate = null;
 		serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
-
+		me.cursorLoading(true);
 		me.dataProvider.getMessages(msgLimit, maxDate).then(
 			function (res) {
 				var $chat = pChat.find('div.wapp-chat');
