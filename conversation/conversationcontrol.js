@@ -200,22 +200,21 @@ function conversationDataProvider() {
 	this.sendMessage = function (msg) {
 		let me = this;
 		return new Promise((resolve, reject) => {
-			me.conversationControl.cursorLoading(true);
 			let msgType = msg.constructor.name;
 			for (let i = 0; i < this.msgproviders.length; i++) {
 				let provider = this.msgproviders[i];
 				if (provider.supportedTypes.indexOf(msgType) > -1) {
+					provider.conversationControl.cursorLoading(true);
 					provider.sendMessage(msg).then((arg)=>{
-						me.conversationControl.cursorLoading(false);
+						provider.conversationControl.cursorLoading(false);
 						resolve(arg);
 					}, (argErr)=>{
-						me.conversationControl.cursorLoading(false);
+						provider.conversationControl.cursorLoading(false);
 						reject(argErr);
 					});
 					return;
 				}
 			}
-			me.conversationControl.cursorLoading(false);
 			reject(null);
 		});
 	};
