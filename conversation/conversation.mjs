@@ -494,7 +494,9 @@ async function setupCrmProvider(selector, crmConfig){
     var notasOpts = crmConfig.notas;
     if(crmConfig.notas === true){
         notasOpts = {
-            fldId: (await (await crmConfig.doc.parent).folders("notas")).id,
+            fldId: crmConfig.doc ? 
+                (await (await crmConfig.doc.parent).folders("notas")).id : 
+                (await (await dSession.folder(crmConfig.fldId)).folders("notas")).id,
             formula: "DOC_ID_PADRE = " + crmConfig.doc.id,
             leadData: leadData,
             supportedTypes: ["notaMsg"],
