@@ -877,6 +877,7 @@ function whatsAppDataProvider(opts){
 			
 			// Pasos para configurar un Bucket publico en S3:
 			// https://medium.com/@shresthshruti09/uploading-files-in-aws-s3-bucket-through-javascript-sdk-with-progress-bar-d2a4b3ee77b5
+			me.conversationControl.cursorLoading(true);
 			me.getS3(function () {
 				var s3Key = Doors.RESTFULL.AuthToken + '/' + file2.name;
 
@@ -893,6 +894,7 @@ function whatsAppDataProvider(opts){
 							debugger;
 							//wapp.cursorLoading(false);
 							alert(errMsg(err));
+							me.conversationControl.cursorLoading(false);
 
 						} else {
 							var fromN = from; //$chat.attr('data-internal-number');
@@ -931,6 +933,7 @@ function whatsAppDataProvider(opts){
 									if(me.options.onMessageSent){
 										me.options.onMessageSent(sentMsg);
 									}
+									me.conversationControl.cursorLoading(false);
 									//TODO
 									/*wapp.renderMsg(sentMsg, function (msgRow) {
 										var $cont = $chat.find('div.wapp-messages');
@@ -943,6 +946,7 @@ function whatsAppDataProvider(opts){
 									debugger;
 									//wapp.cursorLoading(false);
 									alert('Error: ' + err.jqXHR.responseText);
+									me.conversationControl.cursorLoading(false);
 								}
 							);
 
