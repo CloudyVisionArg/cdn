@@ -61,7 +61,6 @@ async function getOpenUrl(folder, docId) {
         let form = await folder.form;
         prop = await form.properties(propEditPage);
     }
-    debugger;
     let url;
     if (prop) {
         url = prop + (prop.indexOf('?') >= 0 ? '&' : '?');
