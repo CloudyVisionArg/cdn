@@ -51,6 +51,29 @@ getFile(pFileURL)
 	});
 })();
 
+/**
+Devuelve la ruta para editar el docId, o crear uno nuevo si no viene
+*/
+async function getOpenUrl(folder, docId) {
+    let propEditPage = 'App7_editPage';
+    let prop = await folder.properties(propEditPage);
+    if (!prop) {
+        let form = await folder.form;
+        prop = await form.properties(propEditPage);
+    }
+    debugger;
+    let url;
+    if (prop) {
+        url = prop + (prop.indexOf('?') >= 0 ? '&' : '?');
+        if (url.indexOf('fld_id=') < 0) url += 'fld_id=' + folder.id;
+    } else {
+        let form = await folder.form;
+        url = formUrlRoute(form.urlRaw) + '?fld_id=' + folder.id;
+    }
+    if (docId !== undefined) url += '&doc_id=' + docId;
+    return url;
+}
+
 
 window.deviceServices = {
     takePhoto: async function () {
