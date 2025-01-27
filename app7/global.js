@@ -52,7 +52,7 @@ getFile(pFileURL)
 })();
 
 /**
-Devuelve la ruta para editar el docId, o crear uno nuevo si no viene
+Devuelve la ruta para editar el docId, o crear uno nuevo (si no viene)
 */
 async function getOpenUrl(folder, docId) {
     let propEditPage = 'App7_editPage';
