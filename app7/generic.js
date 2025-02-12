@@ -1994,6 +1994,7 @@ async function evalCode(code, ctx) {
 
 async function takePhoto() {
     var files = [];
+    debugger;
     if (_isCapacitor()) {
         const opts = cameraOptionsCapacitor(CameraSource.Camera);
         opts.resultType = CameraResultType.Uri;
