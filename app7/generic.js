@@ -2035,10 +2035,9 @@ async function pickImages(opts){
     if (_isCapacitor()) {
         let options = {};
         if(opts) { options = opts; }
-        //const hasPermission = await requestPermissionsImages(CameraPermissionType.Photos);
-        //if(hasPermission){
+        const hasPermission = await requestPermissionsImages([CameraPermissionType.Photos]);
+        if(hasPermission){
             const selectedPhotos = await Capacitor.Plugins.Camera.pickImages(options);
-            debugger;
             for(let idx=0; idx < selectedPhotos.photos.length; idx++){
                 const file = selectedPhotos.photos[idx];
                 file.filename = file.path.replace(/^.*[\\\/]/, '');
@@ -2047,8 +2046,8 @@ async function pickImages(opts){
                 //files.push({ uri : fileInCache.uri, name : fileInCache.name, size : fileInCache.size });
             }
             return files;
-        //}
-        //throw new Error('Se necesita permiso de acceso a im&aacutegenes');
+        }
+        throw new Error('Se necesita permiso de acceso a im&aacutegenes');
     }
 
     else {
