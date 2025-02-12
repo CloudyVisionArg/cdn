@@ -1998,14 +1998,14 @@ async function takePhoto() {
     if (_isCapacitor()) {
         const opts = cameraOptionsCapacitor(CameraSource.Camera);
         opts.resultType = CameraResultType.Uri;
-        // const hasPermission = await requestPermissionsImages(CameraPermissionType.Camera);
-        // if(hasPermission){
+         const hasPermission = await requestPermissionsImages([CameraPermissionType.Camera]);
+         if(hasPermission){
             var file =  await Capacitor.Plugins.Camera.getPhoto(opts);
             file.filename = file.path.replace(/^.*[\\\/]/, '');
             files.push({ uri : file.path, name : file.filename, size : file.size });
             return files;
-        //}
-        //throw new Error('Se necesita permiso de acceso a la c&aacutemara');
+        }
+        throw new Error('Se necesita permiso de acceso a la c&aacutemara');
     }
     else{
         return new Promise((resolve, reject)=>{
@@ -2109,6 +2109,7 @@ async function pickFiles(opts){
 }
 
 async function requestPermissionsImages(cameraPermissionType){
+    debugger;
     const oPermissionStatus = await Capacitor.Plugins.Camera.requestPermissions({ permissions : cameraPermissionType });
     return (oPermissionStatus[cameraPermissionType] == 'granted' || oPermissionStatus[cameraPermissionType] == 'limited');
 }
