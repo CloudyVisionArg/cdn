@@ -79,7 +79,7 @@ window.deviceServices = {
         let me = this;
 
         let opts = me.cameraOptions('CAMERA'); // PROMPT, CAMERA, PHOTOS
-        let perm = await me.requestCameraPermissions('camera'); // camera, photos
+        let perm = await me.requestCameraPermissions(['camera']); // camera, photos
         if (perm) {
             let file = await Capacitor.Plugins.Camera.getPhoto(opts);
             file.name = file.path.replace(/^.*[\\\/]/, '');
@@ -122,7 +122,7 @@ window.deviceServices = {
         }
 		Object.assign(opt, options);
 
-        let perm = await me.requestCameraPermissions('photos');
+        let perm = await me.requestCameraPermissions(['photos']);
         if (perm) {
             let res = await Capacitor.Plugins.Camera.pickImages(opt);
             res.photos.forEach(file => {
