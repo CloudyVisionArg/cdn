@@ -4,6 +4,7 @@ Funciones varias de JavaScript del APP7
 
 Inventario de metodos:
 
+getOpenUrl(folder, docId)
 resolveRoute(pArgs)
 logAndToast(pMsg)
 dbExec(pSql, pArgs, pSuccessCallback, pErrorCallback)
@@ -67,7 +68,8 @@ async function getOpenUrl(folder, docId) {
         if (url.indexOf('fld_id=') < 0) url += 'fld_id=' + folder.id;
     } else {
         let form = await folder.form;
-        url = formUrlRoute(form.urlRaw) + '?fld_id=' + folder.id;
+        url = formUrlRoute(form.urlRaw);
+        url += (url.indexOf('?') >= 0 ? '&' : '?') + 'fld_id=' + folder.id;
     }
     if (docId !== undefined) url += '&doc_id=' + docId;
     return url;
