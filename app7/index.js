@@ -182,6 +182,7 @@ var app = {
                     async: function () {
                         var context = getRouterContext(arguments);
                         let params = context.to.params;
+                        debugger;
                         let url = 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
                         url = url.replace('!', '?');
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
