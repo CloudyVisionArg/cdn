@@ -167,9 +167,14 @@ var app = {
                     async: function () {
                         var context = getRouterContext(arguments);
                         let params = context.to.params;
-                        let url = 'https://cdn.cloudycrm.net/gh/' + params.owner + '/' + params.repo + '/' + params.path;
+                        let url = gitCdn({
+                            owner: params.owner,
+                            repo: params.repo,
+                            path: params.path,
+                            url: true,
+                        });
                         /*
-                        Este replace es para poder enviar el fresh en el path, porque si lo 
+                        Este replace es para poder poner parametros en el path, porque si lo 
                         pasas con ? se rompe. Ej de llamada:
                         f7Page.view.router.navigate('/gh/CloudyVisionArg/Global/client/pivotable.js!_fresh=1/?fld_id=' + fld_id);
                         */
@@ -182,13 +187,12 @@ var app = {
                     async: function () {
                         var context = getRouterContext(arguments);
                         let params = context.to.params;
-                        debugger;
                         let url = gitCdn({
                             repo: params.repo,
                             path: params.path,
                             url: true,
-                        });// 'https://cdn.cloudycrm.net/ghcv/' + params.repo + '/' + params.path;
-                        url = url.replace('!', '?');
+                        });
+                        url = url.replace('!', '?'); // Ver coments en ruta gh
                         loadJS(url, context.to, context.from, context.resolve, context.reject);
                     }
                 },
