@@ -28,20 +28,17 @@ function registeredScripts() {
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 425 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 423, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 422 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 421 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 420 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 420 });
     /*
     Por si hay que volver atras
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 370 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 370, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 370 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 255 });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 412 });
     */
 
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 421 });
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 420 });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 420 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 405 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
