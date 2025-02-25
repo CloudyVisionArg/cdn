@@ -9,6 +9,7 @@ Changelog:
 
 Inventario de metodos:
 
+loadDoorsapi2()
 downloadFile(buffer, fileName)
 submitData(options)
 logAndToast(pMsg, pToastOptions)
