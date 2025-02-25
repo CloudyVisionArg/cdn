@@ -30,7 +30,7 @@ function registeredScripts() {
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 423, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 422 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 427 });
-    /*gi
+    /*
     Por si hay que volver atras
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 420 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 405 });
