@@ -9,7 +9,7 @@ Changelog:
 
 Inventario de metodos:
 
-loadDoorsapi2()
+importDoorsapi2()
 downloadFile(buffer, fileName)
 submitData(options)
 logAndToast(pMsg, pToastOptions)
@@ -36,7 +36,7 @@ wappNumber(pPhone)
 /**
 Carga doorsapi2, crea dSession y lo conecta a la sesion web
 */
-async function loadDoorsapi2() {
+async function importDoorsapi2() {
 	if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
 	if (!window.dSession) {
 		window.dSession = new doorsapi2.Session();
