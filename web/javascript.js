@@ -33,18 +33,36 @@ wappNumber(pPhone)
 })();
 
 /**
+Carga doorsapi2, crea dSession y lo conecta a la sesion web
+*/
+async function loadDoorsapi2() {
+	if (!window.doorsapi2) window.doorsapi2 = await import(scriptSrc('doorsapi2'));
+	if (!window.dSession) {
+		window.dSession = new doorsapi2.Session();
+
+		if (!await dSession.webSession() || !await dSession.isLogged) {
+			let msg = 'La sesion no ha sido iniciada';
+			toast(msg);
+			throw new Error(msg);
+		}
+	}
+	await dSession.runSyncEventsOnClient(false);
+}
+
+/**
 Descarga un buffer como archivo
 @example
 downloadFile(buffer, 'logo.jpg');
 */
 function downloadFile(buffer, fileName) {
-    var url = window.URL.createObjectURL(buffer);
+    var url = URL.createObjectURL(buffer);
     var a = document.createElement('a');
     a.href = url;
     a.download = fileName;
     document.body.appendChild(a);
     a.click();    
-    a.remove(); 
+    a.remove();
+	URL.revokeObjectURL(url);
 }
 
 /**

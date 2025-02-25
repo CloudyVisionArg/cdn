@@ -182,7 +182,7 @@ async function loadUtils() {
                     _fastXmlParser = window.fastXmlParser;
                 } else {
                     var res = await import('https://cdn.jsdelivr.net/npm/fast-xml-parser/+esm');
-                    _fastXmlParser = (res.default) ? res.default : res;
+                    _fastXmlParser = res.default ? res.default : res;
                     window.fastXmlParser = _fastXmlParser;
                 }
             }
