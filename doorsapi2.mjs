@@ -2074,7 +2074,7 @@ export class Document {
                         resolve(res);
                     },
                     err => {
-                        reject(me.session.utils.newErr(err));
+                        reject(err);
                     }
                 )
             });
@@ -5156,13 +5156,6 @@ export class Utilities {
         return (value == null || value === undefined) ? '' : encodeURIComponent(value);
     }
 
-    /** Recibe un err, lo convierte a Error, loguea y dispara */
-    errMgr(err) {
-        var e = this.newErr(err);
-        console.error(e);
-        throw e;
-    }
-   
     /** Devuelve el mensaje de un objeto err */
     errMsg(err) {
         if (typeof(err) == 'string') {
@@ -5431,6 +5424,8 @@ export class Utilities {
     }
 
     newErr(err) {
+        console.warn('Metodo deprecado');
+        
         var e;
         if (err instanceof Error) {
             e = err;
@@ -5956,7 +5951,7 @@ class RestClient {
                         resolve(parsedJson.InternalObject);
                     } else {
                         if (parsedJson) {
-                            let err = me.session.utils.newErr(parsedJson);
+                            let err = new Error(me.session.utils.errMsg(parsedJson));
                             err.doorsException = parsedJson;
                             reject(err);
                         } else {
@@ -5966,7 +5961,7 @@ class RestClient {
                 });
             }).catch((error) => {
                 debugger;
-                reject(me.session.utils.newErr(error));
+                reject(error);
             });
         });
     }
@@ -5993,14 +5988,14 @@ class RestClient {
                             res => {
                                 debugger;
                                 let json = JSON.parse(res);
-                                reject(me.session.utils.newErr(json));
+                                reject(new Error(me.session.utils.errMsg(json)));
                             }
                         );
                     }
                 },
                 err => {
                     debugger;
-                    reject(me.session.utils.newErr(err));
+                    reject(err);
                 }
             )
         });
