@@ -5169,6 +5169,7 @@ export class Utilities {
             return err;
         } else if (typeof(err) == 'object') {
             if (err instanceof Error || err instanceof ErrorEvent) {
+                debugger;
                 return err.constructor.name + ': ' + err.message;
             } else if (err.constructor.name == 'SQLError') {
                 return 'SQLError {code: ' + err.code + ', message: \'' + err.message + '\'}';
