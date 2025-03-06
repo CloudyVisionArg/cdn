@@ -5425,7 +5425,7 @@ export class Utilities {
 
     newErr(err) {
         console.warn('Metodo deprecado');
-        
+
         var e;
         if (err instanceof Error) {
             e = err;
@@ -5546,6 +5546,13 @@ export class Utilities {
 
     get URL() {
         return _URL;
+    }
+
+    /**
+    Retorna la fecha actual sin hora, equivalente al Date de vbs
+    */
+    today() {
+        return new Date((new Date()).setHours(-3, 0, 0, 0));
     }
 
     /**
