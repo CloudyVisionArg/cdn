@@ -5549,7 +5549,10 @@ export class Utilities {
     }
 
     /**
-    Retorna la fecha actual sin hora, equivalente al Date de vbs
+    Retorna la fecha actual sin hora, para asignar a un campo.
+    Es equivalente al Date de vbs.
+    @example
+    doc.fields('DIA').value = dSession.utils.today();
     */
     today() {
         //todo, el timeDiff no deberia estar hardcode
