@@ -5552,6 +5552,7 @@ export class Utilities {
     Retorna la fecha actual sin hora, equivalente al Date de vbs
     */
     today() {
+        //todo, el timeDiff no deberia estar hardcode
         return new Date((new Date()).setHours(-3, 0, 0, 0));
     }
 
