@@ -1009,9 +1009,9 @@ function proxAccionControl(opts){
 				'</div>' +
 				'<div class="form-group">'+
 					"<label for='inputFechaProxAccion'>Fecha proxima acci&oacute;n</label>" +
-					"<div class='input-group date' data-target-input='nearest'>" +
-					"	<input id='inputFechaProxAccion' type='text' class='form-control datetimepicker-input' placeholder='Fecha proxima acci&oacute;n'>" +
-					"	<span class='input-group-addon input-group-text' data-target='#inputFechaProxAccion' data-toggle='datetimepicker'>" + 
+					"<div class='input-group date' data-target-input='nearest' id='inputFechaProxAccionParent'>" +
+					"	<input id='inputFechaProxAccion' type='text' class='form-control datetimepicker-input' data-target='#inputFechaProxAccionParent' placeholder='Fecha proxima acci&oacute;n'>" +
+					"	<span class='input-group-addon input-group-text' data-target='#inputFechaProxAccionParent' data-toggle='datetimepicker'>" + 
 					"		<span class='fa fa-calendar'></span>" +
 					"	</span>" +
 					'</div>' +
