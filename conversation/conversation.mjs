@@ -142,7 +142,7 @@ export async function newConversationControl(basicConfig){
     conversationOptions.subheaderHtml = ""; //getSubheaderHtml();
     conversationOptions.selector = basicConfig.selector;
     conversationOptions.quickMessageTypes = quickMessageTypes;
-    conversationOptions.defaultQuickMessageType = "messengerMsg" || basicConfig.defaultQuickMessageType;
+    conversationOptions.defaultQuickMessageType = basicConfig.defaultQuickMessageType || "messengerMsg";
     conversationOptions.quickOptionSelected = function(provider, newMessageType, option){
     }
     conversationOptions.quickMessageChanged = function(newMessageType, container){
