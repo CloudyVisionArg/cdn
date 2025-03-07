@@ -1080,7 +1080,8 @@ function proxAccionControl(opts){
 		});
 
         $("#proxAccionMainContainer #selectProxAccion").on("change",function(e){
-            let objDtPicker = $("#proxAccionMainContainer #inputFechaProxAccion").parent().datetimepicker().data("DateTimePicker");
+            //let objDtPicker = $("#proxAccionMainContainer #inputFechaProxAccion").parent().datetimepicker().data("DateTimePicker");
+            let objDtPicker = $("#proxAccionMainContainer #inputFechaProxAccion").parent().data("datetimepicker");
             objDtPicker.hide();
             let newAccion = $("#proxAccionMainContainer #selectProxAccion option:selected").val();
             me.allOptions.onProxAccionChange.call(me, newAccion);
