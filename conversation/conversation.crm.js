@@ -950,7 +950,7 @@ function proxAccionControl(opts){
             frmId:null,
             frmName:null
         },
-        actvityData:{
+        activityData:{
             fldId: null,
             activityId: null,
             extraFields:null
@@ -968,7 +968,7 @@ function proxAccionControl(opts){
         if(!this.allOptions.leadData.docId || !this.allOptions.leadData.subject || !this.allOptions.leadData.frmId || !this.allOptions.leadData.frmName){
             throw "Si se utiliza generateActivity en true, deberá completar todos los valores de la lead";
         }
-        if(!this.allOptions.actvityData.fldId){
+        if(!this.allOptions.activityData.fldId){
             throw "Si se utiliza generateActivity en true, deberá completar el fldId de actividades en parametro activityData";
         }
     }
@@ -1153,8 +1153,8 @@ function proxAccionControl(opts){
 	}
     function activActionClick(estadoAct) {
 	
-        var fldAct = me.allOptions.actvityData.fldId;
-        var idActAsociada = me.allOptions.actvityData.activityId; //Gestar.Tools.getDocumentValue(doc,"DOC_ID_ACT");
+        var fldAct = me.allOptions.activityData.fldId;
+        var idActAsociada = me.allOptions.activityData.activityId; //Gestar.Tools.getDocumentValue(doc,"DOC_ID_ACT");
         debugger;
         var tipo = me.proxAccion;
         if (tipo == null) {
