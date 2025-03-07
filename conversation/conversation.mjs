@@ -231,9 +231,11 @@ async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig
         necessaryScripts.push({id:'conversation-msngr',depends: cloneArr(depends), src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + scriptsBranch + '/conversation/conversation.msngr.js?v=6'});
     }
     
+
     //TODO Si agrego fechaproxaccion
-    necessaryScripts.push({id:"bootstrap-datepicker.css", src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"});
-    necessaryScripts.push({id:"bootstrap-datepicker.js", src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"});
+    necessaryScripts.push({ id: 'lib-moment' });
+    necessaryScripts.push({ id:"bootstraptemp-datepicker.css", src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"});
+    necessaryScripts.push({ id:"bootstraptemp-datepicker.js", depends: ["lib-moment"], src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"});
 
     
     
