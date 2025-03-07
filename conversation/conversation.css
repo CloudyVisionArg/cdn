@@ -1,9 +1,10 @@
 @import 'conversationcontrol.css';
 
-.container > div.row,
+/*TODO FAIL*/
+/*.container > div.row,
 .container > hr{
     display: none;
-}
+}*/
 
 div#chat {
     height: 80vh;
