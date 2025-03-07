@@ -149,7 +149,7 @@ export async function newConversationControl(basicConfig){
         //TODO
         if(newMessageType == "wappMsg"){
             //debugger;
-            wappProvider.displayWhatsAppOptions(container);
+            //wappProvider.displayWhatsAppOptions(container);
         }
         if(newMessageType == "messengerMsg"){
             //fbProvider.displayMessengerOptions($(conversationSelector + " .message-type-button"));
