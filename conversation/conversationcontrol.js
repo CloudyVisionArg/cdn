@@ -629,7 +629,7 @@ function conversationControl(opt) {
 				$media = $('<i/>', {
 					id: "",
 					class: 'fa ' + defaultIcon,
-				}).appendTo($div);
+				}).appendTo($dropup);
 
 				insertMobileMessageTypeOptionsMenu($dropup, $media);
 			}
