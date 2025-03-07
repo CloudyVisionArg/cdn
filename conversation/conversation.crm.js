@@ -186,8 +186,8 @@ function emailMsg(){
                 }
                 else{
                     body += "<div class='activity-actions'>" +
-                    "<button class='btn btn-success' ><i class='fa fa-thumbs-up'></i> La hice</button>" + 
-                    "<button class='btn btn-danger' ><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
+                    "<button class='btn btn-success button button-fill color-green' ><i class='fa fa-thumbs-up'></i> La hice</button>" + 
+                    "<button class='btn btn-danger button button-fill color-red' ><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
                     "</div>";
                 }
                 var $msgTime = $('<div/>', {
@@ -332,8 +332,8 @@ function llamadaMsg(){
                     }
                     else{
                         body += "<div class='activity-actions'>" +
-                        "<button class='btn btn-success'><i class='fa fa-thumbs-up'></i> La hice</button>" + 
-                        "<button class='btn btn-danger' ><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
+                        "<button class='btn btn-success button button-fill color-green'><i class='fa fa-thumbs-up'></i> La hice</button>" + 
+                        "<button class='btn btn-danger button button-fill color-red' ><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
                         "</div>";
                     }
                     $msgText.append(body);
@@ -420,8 +420,8 @@ function visitaMsg(){
                 }
                 else{
                     body += "<div class='activity-actions'>" +
-                    "<button class='btn btn-success' ><i class='fa fa-thumbs-up'></i> La hice</button>" + 
-                    "<button class='btn btn-danger' ><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
+                    "<button class='btn btn-success button button-fill color-green' ><i class='fa fa-thumbs-up'></i> La hice</button>" + 
+                    "<button class='btn btn-danger button button-fill color-red' ><i class='fa fa-thumbs-down'></i> No la hice</button>" + 
                     "</div>";
                 }
                 $msgText.append(body);
