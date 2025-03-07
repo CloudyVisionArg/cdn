@@ -232,7 +232,11 @@ async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig
     }
     
     //TODO Si agrego fechaproxaccion
-    necessaryScripts.push({id:"bootstrap-datepicker.css", src: "https://cloudycrm.net/c/themes/default/css/bootstrap-datetimepicker.min.css"});
+    necessaryScripts.push({id:"bootstrap-datepicker.css", src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"});
+    necessaryScripts.push({id:"bootstrap-datepicker.js", src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"});
+
+    
+    
 
     return necessaryScripts;
 }
