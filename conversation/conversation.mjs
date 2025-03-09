@@ -234,8 +234,8 @@ async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig
 
     //TODO Si agrego fechaproxaccion
     necessaryScripts.push({ id: 'lib-moment' });
-    necessaryScripts.push({ id:"bootstraptemp-datepicker.css", src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"});
-    necessaryScripts.push({ id:"bootstraptemp-datepicker.js", depends: ["lib-moment"], src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"});
+    necessaryScripts.push({ id:"tempus-dominus-css", src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"});
+    necessaryScripts.push({ id:"tempus-dominus", depends: ["lib-moment"], src: "https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"});
 
     
     
