@@ -1,3 +1,7 @@
+/**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.status.js?_fresh=true
+ */
+
 window._isCapacitor = function () {
 	try { return (Capacitor != undefined); }
 	catch (e) { return false; }

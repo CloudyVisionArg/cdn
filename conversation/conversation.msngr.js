@@ -1,4 +1,7 @@
 /**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.msngr.js?_fresh=true
+ */
+/**
  * Libreria de mensajería a través de messenger para conversationcontrol.v2.js
  * Requiere bootstrap.js, Doorsapi.js
  * Bootstrap.js: Ventanas modales
