@@ -4195,12 +4195,12 @@ export class Node {
                 };
 
                 debugger;
-                if (await dSession.isLogged) {
+                if (await me.session.isLogged) {
                     // setting y userSetting
                     parseSetting(cfg, await me.session.settings('NODE_CONFIG'))
                     parseSetting(cfg, await me.session.userSettings('NODE_CONFIG'))
                 }
-                
+
                 me.#config = cfg;
                 resolve(me.#config);
             });
