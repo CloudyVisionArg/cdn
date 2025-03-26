@@ -4195,7 +4195,7 @@ export class Node {
                 };
 
                 debugger;
-                if (await me.session.isLogged) {
+                if (me.session.serverUrl && await me.session.isLogged) {
                     // setting y userSetting
                     parseSetting(cfg, await me.session.settings('NODE_CONFIG'))
                     parseSetting(cfg, await me.session.userSettings('NODE_CONFIG'))
