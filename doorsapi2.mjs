@@ -4194,7 +4194,6 @@ export class Node {
                     debugServer: 'https://nodedev.cloudycrm.net',
                 };
 
-                debugger;
                 if (me.session.serverUrl && await me.session.isLogged) {
                     // setting y userSetting
                     parseSetting(cfg, await me.session.settings('NODE_CONFIG'))
