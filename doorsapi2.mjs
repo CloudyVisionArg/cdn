@@ -4709,9 +4709,9 @@ export class Push {
         msg.to = Array.isArray(msg.to) ? msg.to : [msg.to];
         for (var el of msg.to) {
             var notW = {};
-            notW.AccId = el;
-            notW.Title = msg.title;
-            notW.Body = msg.body;
+            notW.to = el;
+            notW.title = msg.title;
+            notW.body = msg.body;
             if (msg.data) {
                 if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
                 notW.JsonExtraParameters = this.stringifyData(msg.data);
