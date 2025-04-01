@@ -154,7 +154,9 @@ export async function newConversationControl(basicConfig){
         //TODO
         if(newMessageType == "wappMsg"){
             //debugger;
-            //wappProvider.displayWhatsAppOptions(container);
+            if (typeof (cordova) == 'object' && wappProvider != null) {
+                wappProvider.displayWhatsAppOptions(container);
+            }
         }
         if(newMessageType == "messengerMsg"){
             //fbProvider.displayMessengerOptions($(conversationSelector + " .message-type-button"));
