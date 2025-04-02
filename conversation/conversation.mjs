@@ -361,7 +361,7 @@ async function setupWappProvider(selector, wappConfig){
         forceSingleFrom: wappConfig.forceSingleFrom,
         wappLib: wapp,
         from: from,
-        to: mobilePhone,
+        to: to,
         loggedUser: userData,
         googleMapsKey: null,
         supportedTypes: ["wappMsg"],
