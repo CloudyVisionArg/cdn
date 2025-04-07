@@ -725,7 +725,7 @@ function messengerDataProvider(opts){
 	};
 	this.getQuickMessageOptions = async function(messageType){
 		let me = this;
-		return new Promise(resolve,reject=>{
+		return new Promise((resolve, reject) =>{
 			let templates = [];
 			if (me.templates && me.templates.length > 0) {
 				me.templates.forEach(it => {
