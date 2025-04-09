@@ -4354,16 +4354,16 @@ export class Node {
     */
     async modCall(options) {
         //todo: soporte para apiKey y url
-        execOpt = {
+        let xOpt = {
             code: { repo: 'Global', path: 'server/modproxy.js' },
             payload: options,
         };
         if (options.doc) {
-            execOpt.doc = options.doc;
+            xOpt.doc = options.doc;
             delete options.doc;
         }
         if (options.folder) {
-            execOpt.folder = options.folder;
+            xOpt.folder = options.folder;
             delete options.folder;
         }
         return await this.exec({
