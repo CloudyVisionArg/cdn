@@ -4366,10 +4366,7 @@ export class Node {
             xOpt.folder = options.folder;
             delete options.folder;
         }
-        return await this.exec({
-            code: { repo: 'Global', path: 'server/modproxy.js' },
-            payload: options,
-        });
+        return await this.exec(xOpt);
     }
 
     get server() {
