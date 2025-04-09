@@ -4241,17 +4241,18 @@ export class Node {
     @example
     exec({
         code: {
-            owner // Opcional, def CloudyVisionArg
-            repo // Opcional, def cdn
-            ref // Opcional, branch o tag. def el main del repo.
-            path // Requerido
-            fresh // Opcional, def false
-        }
-        payload // Informacion para el codigo que se va a ejecutar
-        apiKey // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
-        url // Pasar true para obtener la url, que ejecuta el job con GET
-        doc // Opcional, el json de un documento
-        returnFetch // Opcional, def false. Devuelve el fetch en vez de la respuesta
+            owner, // Opcional, def CloudyVisionArg
+            repo, // Opcional, def cdn
+            ref, // Opcional, branch o tag. def el main del repo.
+            path, // Requerido
+            fresh, // Opcional, def false
+        },
+        payload, // Informacion para el codigo que se va a ejecutar
+        apiKey, // Opcional, para hacer la llamada con este apiKey (sino se utiliza authToken o apiKey de la sesion)
+        url, // Pasar true para obtener la url, que ejecuta el job con GET
+        doc, // Opcional, el id o json de un documento
+        folder, // Opcional, el id o json de un folder
+        returnFetch, // Opcional, def false. Devuelve el fetch en vez de la respuesta
     });
     */
     exec(options) {
@@ -4263,6 +4264,7 @@ export class Node {
                 serverUrl: me.session.serverUrl,
                 //events: await me.codeOptions(options.code),
                 doc: options.doc,
+                folder: options.folder,
                 payload: options.payload,
             }
 
@@ -4343,13 +4345,27 @@ export class Node {
             repo // Opcional, def cdn
             path // Requerido
             fresh // Opcional, def false
-        }
-        method // Nombre del metodo
-        args // Argumentos para el metodo. Si el metodo tiene multiples argumentos enviarlos como un array.
+        },
+        method, // Nombre del metodo
+        args, // Argumentos para el metodo. Si el metodo tiene multiples argumentos enviarlos como un array.
+        doc, // Opcional, id o json del documento para el seteo de contexto en el server
+        folder, // Opcional, id o json del folder para el seteo de contexto en el server
     });
     */
     async modCall(options) {
         //todo: soporte para apiKey y url
+        execOpt = {
+            code: { repo: 'Global', path: 'server/modproxy.js' },
+            payload: options,
+        };
+        if (options.doc) {
+            execOpt.doc = options.doc;
+            delete options.doc;
+        }
+        if (options.folder) {
+            execOpt.folder = options.folder;
+            delete options.folder;
+        }
         return await this.exec({
             code: { repo: 'Global', path: 'server/modproxy.js' },
             payload: options,
