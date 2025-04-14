@@ -4,6 +4,7 @@ Funciones varias de JavaScript para web y app
 
 Inventario de metodos:
 
+validEmail(value)
 tabClick(ev)
 numbersOnly(pText)
 sheetFuncs (sheet)
@@ -39,6 +40,14 @@ leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
 */
+
+/**
+Valida que la direccion de email sea correcta
+*/
+function validEmail(value) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(value).toLowerCase());
+}
 
 /**
 Esta funcion se utiliza para seleccionar el tab correspondiente a
