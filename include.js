@@ -24,26 +24,23 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 435 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 434 });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 429, hasdep: true });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 426 });
+    /*
+    Por si hay que volver atras
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 420 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 368, hasdep: true });
+    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 420 });
+    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 370 });
+    */
+
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 425 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 423, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 422 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 427 });
-    /*
-    Por si hay que volver atras
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 368, hasdep: true });
-    scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 420 });
-    scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 405 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 370 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 224 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 370, hasdep: true });
-    scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 313 });
-    */
-
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 421 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 420 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
