@@ -435,7 +435,7 @@ export class Session {
                 }
             },
             err => {
-                console.err(err);
+                console.err('Error in session._userChange', err);
             }
         );
     }
