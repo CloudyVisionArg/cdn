@@ -23,6 +23,8 @@ async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constr
 var _moment, _numeral, _CryptoJS, _serializeError,
     _fastXmlParser, _URL, _htmlEntities, _contentDisposition, _incjs;
 
+let serverZone = 'America/Argentina/Cordoba';
+
 export { _moment as moment };
 export { _numeral as numeral };
 export { _CryptoJS as CryptoJS };
@@ -425,12 +427,15 @@ export class Session {
         let me = this;
         me.currentUser.then(
             async usr => {
+                /*
+                Si el timeDiff del usuario es 0 y la zona horaria no es la del servidor,
+                le seteo como default la zona del servidor.
+                */
                 await utilsPromise;
-                let zone0 = 'America/Argentina/Cordoba';
                 debugger
                 if (usr.timeDiff == 0) {
-                    if (_moment().utcOffset() != _moment().tz(zone0).utcOffset()) {
-                        _moment.tz.setDefault(zone0);
+                    if (_moment().utcOffset() != _moment().tz(serverZone).utcOffset()) {
+                        _moment.tz.setDefault(serverZone);
                     }
                 } else {
                     //todo: a que zona lo seteo?
