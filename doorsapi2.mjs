@@ -421,6 +421,7 @@ export class Session {
     }
 
     _userChange() {
+        let me = this;
         me.currentUser.then(
             res => {debugger},
             err => {debugger}
