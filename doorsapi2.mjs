@@ -431,7 +431,6 @@ export class Session {
                 le seteo como default la zona del servidor.
                 */
                 await utilsPromise;
-                debugger
                 if (usr.timeDiff == 0) {
                     if (_moment().utcOffset() != _moment().tz(serverZone).utcOffset()) {
                         _moment.tz.setDefault(serverZone);
