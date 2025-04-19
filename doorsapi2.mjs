@@ -421,12 +421,13 @@ export class Session {
         let me = this;
         me.currentUser.then(
             async usr => {
+                await utilsPromise;
+
                 // todo: setear a partir del lngId
                 _numeral.locale('es'); // es / en
                 _numeral.defaultFormat('0,0.[00]');
                 _moment.locale('es');
         
-                await utilsPromise;
                 if (usr.timeDiff == 0) {
                     /*
                     Si el timeDiff del usuario es 0 y la zona horaria no es la del servidor,
