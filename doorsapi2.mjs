@@ -82,7 +82,6 @@ async function loadUtils() {
     // moment - https://momentjs.com/docs/
 
     try {
-        debugger
         if (typeof(moment) == 'undefined') {
             if (inNode()) {
                 res = await import('moment');
