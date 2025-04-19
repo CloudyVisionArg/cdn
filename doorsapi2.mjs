@@ -87,7 +87,6 @@ async function loadUtils() {
         if (typeof(moment) == 'undefined') {
             if (inNode()) {
                 res = await import('moment-timezone');
-                debugger
                 _moment = res.default;
             } else {
                 await include('lib-moment');
