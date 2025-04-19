@@ -86,7 +86,8 @@ async function loadUtils() {
     try {
         if (typeof(moment) == 'undefined') {
             if (inNode()) {
-                res = await import('moment');
+                res = await import('moment-timezone');
+                debugger
                 _moment = res.default;
             } else {
                 await include('lib-moment');
@@ -97,8 +98,6 @@ async function loadUtils() {
             _moment = moment;
         }
 
-        _moment.locale('es'); // todo: setear a partir del lngId
-        
     } catch(err) {
         console.error('Error loading moment', err);
     }
@@ -120,10 +119,6 @@ async function loadUtils() {
         } else {
             _numeral = numeral;
         }
-
-        // todo: setear a partir del lngId
-        _numeral.locale('es'); // es / en
-        _numeral.defaultFormat('0,0.[00]');
 
     } catch(err) {
         console.error('Error loading numeral', err);
@@ -427,6 +422,11 @@ export class Session {
         let me = this;
         me.currentUser.then(
             async usr => {
+                // todo: setear a partir del lngId
+                _numeral.locale('es'); // es / en
+                _numeral.defaultFormat('0,0.[00]');
+                _moment.locale('es');
+        
                 /*
                 Si el timeDiff del usuario es 0 y la zona horaria no es la del servidor,
                 le seteo como default la zona del servidor.
