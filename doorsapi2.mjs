@@ -88,6 +88,7 @@ async function loadUtils() {
                 _moment = res.default;
             } else {
                 await include('lib-moment');
+                await include('lib-moment-timezone');
                 _moment = moment;
             }
         } else {
