@@ -423,8 +423,20 @@ export class Session {
     _userChange() {
         let me = this;
         me.currentUser.then(
-            res => {debugger},
-            err => {debugger}
+            usr => {
+                let zone0 = 'America/Argentina/Cordoba';
+                debugger
+                if (usr.timeDiff == 0) {
+                    if (_moment().utcOffset() != _moment().tz(zone0).utcOffset()) {
+                        _moment.tz.setDefault(zone0);
+                    }
+                } else {
+                    //todo: a que zona lo seteo?
+                }
+            },
+            err => {
+                console.err(err);
+            }
         );
     }
 
