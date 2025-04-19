@@ -24,6 +24,7 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
+    scripts.push({ id: 'lib-moment-timezone', path: 'lib/moment-timezone-with-data.min.js', version: 436 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 435 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 434 });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 429, hasdep: true });
