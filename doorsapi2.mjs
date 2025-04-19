@@ -420,6 +420,13 @@ export class Session {
         this.#doorsVersion = undefined;
     }
 
+    _userChange() {
+        me.currentUser.then(
+            res => {debugger},
+            err => {debugger}
+        );
+    }
+
     /**
     @returns {string}
     */
@@ -429,6 +436,7 @@ export class Session {
     set apiKey(value) {
         this._reset();
         this.#apiKey = value;
+        this._userChange();
     }
 
     asyncEventsDisabled(value) {
@@ -449,6 +457,7 @@ export class Session {
     set authToken(value) {
         this._reset();
         this.#authToken = value;
+        this._userChange();
     }
 
     /**
