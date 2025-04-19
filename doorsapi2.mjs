@@ -423,7 +423,8 @@ export class Session {
     _userChange() {
         let me = this;
         me.currentUser.then(
-            usr => {
+            async usr => {
+                await utilsPromise;
                 let zone0 = 'America/Argentina/Cordoba';
                 debugger
                 if (usr.timeDiff == 0) {
