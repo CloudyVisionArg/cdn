@@ -426,12 +426,12 @@ export class Session {
                 _numeral.defaultFormat('0,0.[00]');
                 _moment.locale('es');
         
-                /*
-                Si el timeDiff del usuario es 0 y la zona horaria no es la del servidor,
-                le seteo como default la zona del servidor.
-                */
                 await utilsPromise;
                 if (usr.timeDiff == 0) {
+                    /*
+                    Si el timeDiff del usuario es 0 y la zona horaria no es la del servidor,
+                    le seteo como default la zona del servidor.
+                    */
                     if (_moment().utcOffset() != _moment().tz(serverZone).utcOffset()) {
                         _moment.tz.setDefault(serverZone);
                     }
