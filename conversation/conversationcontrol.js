@@ -1020,6 +1020,11 @@ function conversationControl(opt) {
 							thisInstance.options.quickMessageChanged(msgInst.constructor.name, null);
 						}
 					});
+					if(prov.getQuickMessageOptions){
+						prov.getQuickMessageOptions(typeName).then(options=>{
+							addRecursively($menu, options, thisInstance.options.quickOptionSelected, typeName, prov);
+						});
+					}
 				}
 				if(typeof(menuOption) == "object"){
 				 	if(menuOption.children && menuOption.children.length > 0){
@@ -1034,10 +1039,19 @@ function conversationControl(opt) {
 		} catch (error) {
 			//TODO
 		}
-		function addRecursively(liItem, children, clickHandler, typeName, provider){
+		function addRecursively(container, children, clickHandler, typeName, provider){
 			if(children && children.length > 0){
-				liItem.addClass("dropdown-submenu");
-				var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo(liItem);
+				$subMenu = $(container);
+				
+				if(!$(container).is("ul")){
+					$subMenu = $('<ul/>', {
+						class: 'dropdown-menu',
+					}).appendTo(container);
+					container.addClass("dropdown-submenu");
+					//var $subMenu = $('<ul/>', {class: "dropdown-menu"}).appendTo(container);
+				}
+				if($subMenu.children().length > 0) return;
+
 				for (let index = 0; index < children.length; index++) {
 					const option = children[index];
 					var $li = $('<li/>', {class: "dropdown-item"}).appendTo($subMenu);
