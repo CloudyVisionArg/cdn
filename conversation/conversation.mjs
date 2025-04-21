@@ -96,7 +96,12 @@ export async function newConversationControl(basicConfig){
         window.whatsAppProvider = wappProvider;
         if(wappProvider != null){
             convProviders.push(wappProvider);
-            quickMessageTypes.push(...wappProvider.options.supportedTypes);
+            if(wappConfig.supportedTypes){
+                quickMessageTypes.push(...wappConfig.supportedTypes);
+            }
+            else{
+                quickMessageTypes.push(...wappProvider.options.supportedTypes);
+            }
         }
     }
     if(fbConfig != null){
