@@ -96,7 +96,12 @@ export async function newConversationControl(basicConfig){
         window.whatsAppProvider = wappProvider;
         if(wappProvider != null){
             convProviders.push(wappProvider);
-            quickMessageTypes.push(...wappProvider.options.supportedTypes);
+            if(wappConfig.supportedTypes){
+                quickMessageTypes.push(...wappConfig.supportedTypes);
+            }
+            else{
+                quickMessageTypes.push(...wappProvider.options.supportedTypes);
+            }
         }
     }
     if(fbConfig != null){
@@ -154,7 +159,9 @@ export async function newConversationControl(basicConfig){
         //TODO
         if(newMessageType == "wappMsg"){
             //debugger;
-            //wappProvider.displayWhatsAppOptions(container);
+            if (typeof (cordova) == 'object' && wappProvider != null) {
+                wappProvider.displayWhatsAppOptions(container);
+            }
         }
         if(newMessageType == "messengerMsg"){
             //fbProvider.displayMessengerOptions($(conversationSelector + " .message-type-button"));
@@ -359,7 +366,7 @@ async function setupWappProvider(selector, wappConfig){
         forceSingleFrom: wappConfig.forceSingleFrom,
         wappLib: wapp,
         from: from,
-        to: mobilePhone,
+        to: to,
         loggedUser: userData,
         googleMapsKey: null,
         supportedTypes: ["wappMsg"],
