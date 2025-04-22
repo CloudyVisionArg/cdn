@@ -36,6 +36,7 @@
 .wapp-reply {
     width: 100% !important;
     background-color: white !important;
+    color:#111110 !important;
     border-radius: 10px;
     overflow: hidden;
     padding: 8px !important;
