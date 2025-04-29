@@ -1,3 +1,7 @@
+/**
+ * Fresh: https://cdn.cloudycrm.net/ghcv/cdn@conversationUnifv2/conversation/conversation.css?_fresh=true
+ */
+
 @import 'conversationcontrol.css';
 
 /*TODO FAIL*/
@@ -73,6 +77,7 @@ li.dropdown-item a i {
 .conversation-status {
     flex-basis: 10%;
     display: flex;
+    min-width: 40px;
 }
 
 .conversation-status-icon {
