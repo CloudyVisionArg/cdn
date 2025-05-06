@@ -494,11 +494,14 @@ function conversationControl(opt) {
 				class: 'wapp-messages',
 			}).appendTo($cont);
 
-			$messages.append(`      
-				<div class="wapp-" style="text-align: center; margin-bottom: 15px;">
-					<a onclick="wapp.(this)">Mensajes anteriores</a>
+			let loadMoreCont = $(`      
+				<div class="wapp-load-more" style="text-align: center; margin-bottom: 15px;">
+					<a>Mensajes anteriores</a>
 				</div>
 			`);
+			$messages.append(loadMoreCont);
+			
+			loadMoreCont.find("a").click((e)=>loadMore(loadMoreCont));
 
 			var $reply = $('<div/>', {
 				class: 'wapp-footer',
@@ -739,19 +742,30 @@ function conversationControl(opt) {
 	var clear = function (pChat) {
 		var $messages = pChat.find('div.wapp-messages')
 		$messages.empty();
-		$messages.append(`      
-			<div class="wapp-" style="text-align: center; margin-bottom: 15px;">
-				<a onclick="wapp.(this)">Mensajes anteriores</a>
+		let loadMoreCont = $(`
+			<div class="wapp-load-more" style="text-align: center; margin-bottom: 15px;">
+				<a>Mensajes anteriores</a>
 			</div>
 		`);
+		$messages.append(loadMoreCont);
 		pChat.removeAttr('data-last-load');
+		loadMoreCont.find("a").click((e)=>loadMore(loadMoreCont));
 	};
 
 	var loadMessages = function (pChat, pOlders) {
 		var msgLimit = 50;
 		var maxDate = null;
 		serverDate().then(function (dt) { pChat.attr('data-last-load', dt.toJSON()); });
-		//me.cursorLoading(true);
+		
+		if (pOlders) {
+			var $older = pChat.find('div.wapp-message').first();
+			if ($older.length > 0) {
+				var dt = new Date($older.attr('data-date'));
+				maxDate = dt.toISOString();
+				//formula = 'created < \'' + ISODate(dt) + ' ' + ISOTime(dt, true) + '\' and (' + formula + ')';
+			}
+		}
+
 		me.dataProvider.getMessages(msgLimit, maxDate).then(
 			function (res) {
 				var $chat = pChat.find('div.wapp-chat');
@@ -797,9 +811,13 @@ function conversationControl(opt) {
 			});
 	};
 
-	var loadMore = function (el) {
+	/*var loadMore = function (el) {
 		me.cursorLoading(true);
 		loadMessages($(el).closest('div.wapp-chat'), true);
+	};*/
+	var loadMore = function (el) {
+		me.cursorLoading(true);
+		loadMessages($mainContainer, true);
 	};
 	// Enter manda, shift enter nueva linea
 	var inputKeyDown = function (el, ev) {
