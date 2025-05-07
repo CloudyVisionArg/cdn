@@ -2293,7 +2293,7 @@ export class Document {
     currentAccess(access) {
         let url = `/documents/${ this.id }/acl/${ access }`;
         let ret = this.session.restClient.fetch(url, 'GET', '', '');
-        debugger;
+        ret.then(res => {debugger})
     }
 
     /**
