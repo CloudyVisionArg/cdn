@@ -2290,11 +2290,11 @@ export class Document {
     }
 
     /** No implementado aun */
-    /*
-    currentAccess(access, explicit) {
-        //todo
+    currentAccess(access) {
+        let url = `/documents/${ this.id }/acl/${ access }`;
+        let ret = this.session.restClient.fetch(url, 'GET', '', '');
+        debugger;
     }
-    */
 
     /**
     Borra el documento, si purge=true no se envia a la papelera
