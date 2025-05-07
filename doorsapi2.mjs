@@ -2289,11 +2289,14 @@ export class Document {
         return this.fields('created').value;
     }
 
-    /** No implementado aun */
+    /**
+    Devuelve true si el currentUser tiene el acceso indicado en el documento
+    @param {string} access - read / modify / delete / admin
+    @returns {Promise<boolean>}
+    */
     currentAccess(access) {
         let url = `/documents/${ this.id }/acl/${ access }`;
-        let ret = this.session.restClient.fetch(url, 'GET', '', '');
-        ret.then(res => {debugger})
+        return this.session.restClient.fetch(url, 'GET', '', '');
     }
 
     /**
