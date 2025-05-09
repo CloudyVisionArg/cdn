@@ -4270,6 +4270,8 @@ export class Node {
     devolviendo el json del doc con los cambios que haya realizado el codigo.
 
     @example
+    exec(`console.log('Hello world')`);
+    o
     exec({
         code: {
             owner, // Opcional, def CloudyVisionArg
@@ -4287,79 +4289,92 @@ export class Node {
     });
     */
     exec(options) {
-        var me = this;
-        var utils = me.session.utils;
+        let me = this;
+        let utils = me.session.utils;
 
-        return new Promise(async (resolve, reject) => {
-            let data = {
-                serverUrl: me.session.serverUrl,
-                //events: await me.codeOptions(options.code),
-                doc: options.doc,
-                folder: options.folder,
-                payload: options.payload,
-            }
+        if (typeof(options) == 'string') {
+            debugger;
+            // Vino el codigo
+            return me.exec({
+                code: {
+                    repo: 'Global',
+                    path: 'server/evalapi.js',
+                },
+                payload: { options },
+            });
 
-            if (me.session.apiKey || options.apiKey) {
-                data.apiKey = options.apiKey ? options.apiKey : me.session.apiKey;
-            } else if (me.session.authToken) {
-                data.authToken = me.session.authToken;
-            }
+        } else {
+            return new Promise(async (resolve, reject) => {
+                let data = {
+                    serverUrl: me.session.serverUrl,
+                    //events: await me.codeOptions(options.code),
+                    doc: options.doc,
+                    folder: options.folder,
+                    payload: options.payload,
+                }
 
-            let code = await me.codeOptions(structuredClone(options.code));
-            code.exec = true;
-            let srv = await me.server;
-            if (srv) code.server = srv;
+                if (me.session.apiKey || options.apiKey) {
+                    data.apiKey = options.apiKey ? options.apiKey : me.session.apiKey;
+                } else if (me.session.authToken) {
+                    data.authToken = me.session.authToken;
+                }
 
-            let url = me.inNode ? _incjs.ghCodeUrl(code) : ghCodeUrl(code);
+                let code = await me.codeOptions(structuredClone(options.code));
+                code.exec = true;
+                let srv = await me.server;
+                if (srv) code.server = srv;
 
-            if (options.url) {
-                url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
-                resolve(url);
+                let url = me.inNode ? _incjs.ghCodeUrl(code) : ghCodeUrl(code);
 
-            } else {
-                let args = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: utils.jsonStringify(data),
-                };
+                if (options.url) {
+                    url += '?msg=' + encodeURIComponent(utils.jsonStringify(data));
+                    resolve(url);
 
-                if (options.returnFetch) {
-                    resolve(fetch(url, args));
-                    
                 } else {
-                    let res = await fetch(url, args);
+                    let args = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: utils.jsonStringify(data),
+                    };
 
-                    if (res.ok) {
-                        let buf = new SimpleBuffer(await res.arrayBuffer());
-                        try {
-                            let json = utils.jsonParse(buf.toString());
-                            if (json.__type__) {
-                                resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
-                            } else {
-                                resolve(json);
+                    if (options.returnFetch) {
+                        resolve(fetch(url, args));
+                        
+                    } else {
+                        let res = await fetch(url, args);
+
+                        if (res.ok) {
+                            let buf = new SimpleBuffer(await res.arrayBuffer());
+                            try {
+                                let json = utils.jsonParse(buf.toString());
+                                if (json.__type__) {
+                                    resolve(json.__type__ == 'Date' ? new Date(json.__value__) : json.__value__);
+                                } else {
+                                    resolve(json);
+                                }
+
+                            } catch(err) {
+                                resolve(buf);
                             }
 
-                        } catch(err) {
-                            resolve(buf);
+                        } else {
+                            let err;
+                            try {
+                                let txt = await res.text();
+                                let json = JSON.parse(txt);
+                                err = utils.deserializeError(json);
+                        
+                            } catch(e) {
+                                err = new Error(res.status + ' (' + res.statusText + ')');
+                            }
+                            reject(err);
                         }
-
-                    } else {
-                        let err;
-                        try {
-                            let txt = await res.text();
-                            let json = JSON.parse(txt);
-                            err = utils.deserializeError(json);
-                    
-                        } catch(e) {
-                            err = new Error(res.status + ' (' + res.statusText + ')');
-                        }
-                        reject(err);
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     get inNode() {
