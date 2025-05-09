@@ -4293,7 +4293,6 @@ export class Node {
         let utils = me.session.utils;
 
         if (typeof(options) == 'string') {
-            debugger;
             // Vino el codigo
             return me.exec({
                 code: {
