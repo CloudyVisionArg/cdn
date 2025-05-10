@@ -209,7 +209,7 @@ function addPhoneButtons(pInput) {
 // saca los + ( ) - y espacios
 function wappNumber(pPhone) {
     var num = pPhone.replace(/[^0-9]/g, '');
-    if (num.length == 10) num = '549' + num;
+    //if (num.length == 10) num = '549' + num;
 	return encodeURI(num);
 }
 
