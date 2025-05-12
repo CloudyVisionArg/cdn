@@ -630,6 +630,7 @@ var wapp = {
 				lMsg.src = lMsg.media.Url;
 				//todo: aca traer el body como caption, etc (segun el type)
 			} else if (lMsg.latitude || lMsg.longitude) {
+				/*
 				{
 					"from":"5493515284577",
 					"id":"wamid.HBgNNTQ5MzUxNTI4NDU3NxUCABIYFDNBQzhBQTUxMkQzM0M3NzA4QUFDAA==",
@@ -643,6 +644,7 @@ var wapp = {
 					},
 					"type":"location"
 				}
+				*/
 
 			}
 		}
