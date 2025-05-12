@@ -106,8 +106,6 @@ async function loadUtils() {
             await include('lib-moment-timezone');
             _moment = moment;
         }
-    }
-
 
     } catch(err) {
         console.error('Error loading moment', err);
