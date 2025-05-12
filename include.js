@@ -26,7 +26,7 @@ function registeredScripts() {
     */
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 444 });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 444, hasdep: true });
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 443 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 }); // poner 443 dps de revisar
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 442 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 435 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 426 });
