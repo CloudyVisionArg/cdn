@@ -837,7 +837,7 @@ var wapp = {
 
 	cleanNumber: function (pNumber) {
 		// Elimina los caracteres no numericos, da vuelta y toma los 1ros 10 digitos
-		return pNumber.replace(/\D/g, '').reverse().substring(0, 10);
+		return pNumber.replace(/\D/g, '').reverse();
 	},
 
 	loadMessages: async function (pChat, pOlders) {
