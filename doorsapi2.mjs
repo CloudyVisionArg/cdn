@@ -84,20 +84,6 @@ async function loadUtils() {
     // moment - https://momentjs.com/docs/
 
     try {
-        /*
-        if (typeof(moment) == 'undefined') {
-            if (inNode()) {
-                res = await import('moment-timezone');
-                _moment = res.default;
-            } else {
-                await include('lib-moment');
-                await include('lib-moment-timezone');
-                _moment = moment;
-            }
-        } else {
-            _moment = moment;
-        }
-        */
         if (inNode()) {
             res = await import('moment-timezone');
             _moment = res.default;
