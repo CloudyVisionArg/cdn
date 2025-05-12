@@ -841,6 +841,8 @@ var wapp = {
 	},
 
 	loadMessages: async function (pChat, pOlders) {
+		if (wapp.sending) return;
+		
 		try {
 			var msgLimit = 50;
 			
@@ -995,6 +997,7 @@ var wapp = {
 		var $inp = $chat.find('.wapp-reply');
 		if ($inp.val()) {
 			wapp.cursorLoading(true);
+			wapp.sending = true;
 			var fromN = $chat.attr('data-internal-number');
 			var toN = $chat.attr('data-external-number');
 			let sendObj = {
@@ -1045,6 +1048,7 @@ var wapp = {
 				$cont.append(msgRow);
 				$cont.scrollTop($cont[0].scrollHeight);
 				wapp.cursorLoading(false);
+				wapp.sending = false;
 			});
 
 			$inp.removeAttr("data-content-sid");
@@ -1126,6 +1130,7 @@ var wapp = {
 	},
 
 	sendMedia: function (pFile, pChat) {
+		wapp.sending = true;
 		wapp.cursorLoading(true);
 
 		if (inApp) {
@@ -1202,6 +1207,7 @@ var wapp = {
 									$cont.append(msgRow);
 									$cont.scrollTop($cont[0].scrollHeight);
 									wapp.cursorLoading(false);
+									wapp.sending = false;
 								});
 
 								// Borra el archivo de S3 despues de un minuto
