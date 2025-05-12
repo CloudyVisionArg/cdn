@@ -596,6 +596,7 @@ var wapp = {
 	},
 	
 	renderMsg: async function (pMsg) {
+		let appendBody = true;
 		let lMsg = structuredClone(pMsg);
 
 		if (lMsg.numMedia > 0) {
