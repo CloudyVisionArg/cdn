@@ -1,5 +1,6 @@
 /*
 Este branch tiene avanzado el soporte para Whatsapp Business API
+Falta terminar
 */
 var inApp = typeof app7 == 'object';
 
