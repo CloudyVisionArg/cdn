@@ -1021,6 +1021,7 @@ var wapp = {
 			} catch(er) {
 				console.error(er);
 				alert(dSession.utils.errMsg(er));
+				return;
 			}
 
 			/*
@@ -1203,6 +1204,7 @@ var wapp = {
 								} catch(er) {
 									console.error(er);
 									alert(dSession.utils.errMsg(er));
+									return;
 								}
 
 								msg.operator = wapp.loggedUser.Name;
