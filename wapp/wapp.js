@@ -1021,6 +1021,8 @@ var wapp = {
 			} catch(er) {
 				console.error(er);
 				alert(dSession.utils.errMsg(er));
+				wapp.cursorLoading(false);
+				wapp.sending = false;
 				return;
 			}
 
@@ -1204,6 +1206,8 @@ var wapp = {
 								} catch(er) {
 									console.error(er);
 									alert(dSession.utils.errMsg(er));
+									wapp.cursorLoading(false);
+									wapp.sending = false;
 									return;
 								}
 
