@@ -1016,7 +1016,13 @@ var wapp = {
 				sendObj.from = fromName;
 			}
 			
-			let msg = await wapp.modWapp.send(sendObj);
+			try {
+				let msg = await wapp.modWapp.send(sendObj);
+			} catch(er) {
+				console.error(er);
+				alert(dSession.utils.errMsg(er));
+			}
+
 			/*
 			ObjectaccountSid: "AC47a3e29520495dc61fe3a8c1fbb6a3e7"
 			apiVersion: "2010-04-01"
@@ -1192,7 +1198,13 @@ var wapp = {
 									mediaUrl: data.Location,
 								};
 
-								let msg = await wapp.modWapp.send(sendObj);
+								try {
+									let msg = await wapp.modWapp.send(sendObj);
+								} catch(er) {
+									console.error(er);
+									alert(dSession.utils.errMsg(er));
+								}
+
 								msg.operator = wapp.loggedUser.Name;
 								msg.date = msg.doorsCreated;
 								msg.media = JSON.stringify(await wapp.modWapp.msgMedia(msg.sid));
