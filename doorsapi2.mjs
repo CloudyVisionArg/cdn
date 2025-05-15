@@ -1879,6 +1879,24 @@ export class Directory {
         this.#session = session;
     }
 
+    async accountEmail(account) {
+        var me = this;
+        if (account || account == 0) {
+            let fil;
+            if (isNaN(parseInt(account))) {
+                fil = 'acc_id = ' + account;
+            } else {
+                fil = 'name = ' + me.session.db.sqlEnc(account, 1);
+            }
+            let res = await me.accountsSearch(fil);
+            debugger;
+
+        } else {
+            throw new Error('Invalid account spec: ' + account);
+        }
+
+    }
+
     /**
     Devuelve un account por name o id.
     @returns {Promise<Account>}
