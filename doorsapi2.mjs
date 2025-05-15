@@ -1884,9 +1884,9 @@ export class Directory {
         if (account || account == 0) {
             let fil;
             if (isNaN(parseInt(account))) {
-                fil = 'acc_id = ' + account;
-            } else {
                 fil = 'name = ' + me.session.db.sqlEnc(account, 1);
+            } else {
+                fil = 'acc_id = ' + account;
             }
             let res = await me.accountsSearch(fil);
             debugger;
