@@ -1889,7 +1889,13 @@ export class Directory {
                 fil = 'acc_id = ' + account;
             }
             let res = await me.accountsSearch(fil);
-            debugger;
+            if (res.length == 0) {
+                throw new Error('Account not found (' + account + ')');
+            } else if (res.length > 1) {
+                throw new Error('Vague expression (' + account + ')');
+            } else {
+                return `"${ res[0]['Name'] }" <${ res[0]['Email'] }>`;
+            }
 
         } else {
             throw new Error('Invalid account spec: ' + account);
