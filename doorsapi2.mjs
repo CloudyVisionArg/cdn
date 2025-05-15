@@ -1879,6 +1879,11 @@ export class Directory {
         this.#session = session;
     }
 
+    /**
+    Devuelve el email de un account, por name o id.
+    Formato: "name" <email>
+    @returns {Promise<string>}
+    */
     async accountEmail(account) {
         var me = this;
         if (account || account == 0) {
@@ -1896,11 +1901,17 @@ export class Directory {
             } else {
                 return `"${ res[0]['Name'] }" <${ res[0]['Email'] }>`;
             }
-
         } else {
             throw new Error('Invalid account spec: ' + account);
         }
+    }
 
+    /**
+    Alias de accountEmail.
+    @returns {Promise<string>}
+    */
+    accEmail(account) {
+        return this.accountEmail(account);
     }
 
     /**
