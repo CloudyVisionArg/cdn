@@ -1016,8 +1016,9 @@ var wapp = {
 				sendObj.from = fromName;
 			}
 			
+			let msg;
 			try {
-				let msg = await wapp.modWapp.send(sendObj);
+				msg = await wapp.modWapp.send(sendObj);
 			} catch(er) {
 				console.error(er);
 				alert(dSession.utils.errMsg(er));
