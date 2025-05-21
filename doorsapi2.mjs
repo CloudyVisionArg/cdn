@@ -5411,21 +5411,16 @@ export class Utilities {
         await utilsPromise;
 
         let ret;
-        if (me.session.node.inNode) {
-            // Server
-            if (typeof(module) == 'object') {
+        if (typeof(module) == 'object') {
+            if (me.session.node.inNode) {
+                // Server
                 ret = await _mainlib.gitImport(module);
             } else {
-                ret = await import(module)
-            };
-
-        } else {
-            // Client
-            if (typeof(module) == 'object') {
+                // Client
                 ret = await import(window.gitCdn(Object.assign({ url: true }, module)));
-            } else {
-                ret = await import(module);
             }
+        } else {
+            ret = await import(module);
         }
 
         if (ret.default) ret = ret.default;
