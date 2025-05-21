@@ -20,7 +20,7 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
-var _moment, _numeral, _CryptoJS, _serializeError,
+var _mainlib, _moment, _numeral, _CryptoJS, _serializeError,
     _fastXmlParser, _URL, _htmlEntities, _contentDisposition, _incjs;
 
 let serverTimeZone = 'America/Argentina/Cordoba';
@@ -50,6 +50,23 @@ await utilsPromise;
 
 async function loadUtils() {
 
+    // mainlib
+
+    try {
+        if (inNode()) {
+            if (ctx && ctx.mainlib) {
+                _mainlib = ctx.mainlib;
+            } else {
+                let mod = await import('../mainlib.mjs');
+                _mainlib = mod.default ? mod.default : mod;
+            }
+        }
+
+    } catch(err) {
+        console.error('Error loading mainlib', err);
+    }
+
+
     // include
 
     try {
@@ -67,8 +84,7 @@ async function loadUtils() {
             }
         } else {
             _incjs = {};
-            let mlib = await import('../mainlib.mjs');
-            let code = await mlib.gitCdn({ repo: 'cdn', path: 'include.js' });
+            let code = await _mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
             eval(`
                 ${ code }
                 _incjs.include = include;
@@ -5385,15 +5401,19 @@ export class Utilities {
         return _htmlEntities;
     }
 
-    
+    /**
+    Importa un modulo
+    */
     async import(module) {
         let me = this;
-        
+
+        await utilsPromise;
+
         let ret;
         if (me.session.node.inNode) {
             // Server
             if (typeof(module) == 'object') {
-                ret = await ctx.mainlib.gitImport(module);
+                ret = await _mainlib.gitImport(module);
             } else {
                 ret = await import(module)
             };
