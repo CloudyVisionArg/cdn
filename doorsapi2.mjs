@@ -5402,7 +5402,8 @@ export class Utilities {
     }
 
     /**
-    Importa un modulo
+    Importa un modulo. Se puede usar desde el cliente o el servidor.
+    dSession.utils.import(
     */
     async import(module) {
         let me = this;
