@@ -61,6 +61,7 @@ async function loadUtils() {
                     ${ code }
                     window.include = include;
                     window.scriptSrc = scriptSrc;
+                    window.gitCdn = gitCdn;
                     window.ghCodeUrl = ghCodeUrl;
                 `);
             }
@@ -72,6 +73,7 @@ async function loadUtils() {
                 ${ code }
                 _incjs.include = include;
                 _incjs.scriptSrc = scriptSrc;
+                _incjs.gitCdn = gitCdn;
                 _incjs.ghCodeUrl = ghCodeUrl;
             `);
         }
@@ -5381,6 +5383,32 @@ export class Utilities {
     /** https://github.com/mdevils/html-entities */
     get htmlEntities() {
         return _htmlEntities;
+    }
+
+    
+    async import(module) {
+        let me = this;
+        
+        let ret;
+        if (me.session.node.inNode) {
+            // Server
+            if (typeof(module) == 'object') {
+                ret = await ctx.mainlib.gitImport(module);
+            } else {
+                ret = await import(module)
+            };
+
+        } else {
+            // Client
+            if (typeof(module) == 'object') {
+                ret = await import(window.gitCdn(Object.assign({ url: true }, module)));
+            } else {
+                res = await import(module);
+            }
+        }
+
+        if (ret.default) ret = ret.default;
+        return ret;
     }
 
     inNode() {
