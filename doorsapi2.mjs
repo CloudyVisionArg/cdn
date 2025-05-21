@@ -5402,8 +5402,16 @@ export class Utilities {
     }
 
     /**
-    Importa un modulo. Se puede usar desde el cliente o el servidor.
-    dSession.utils.import(
+    Importa un modulo.
+    Se puede usar desde el cliente o el servidor.
+    module puede ser un string, o un objeto para códigos del repo.
+    @example
+    // server
+    let mod = await dSession.utils.import('fast-xml-parser');
+    // client
+    let mod = await dSession.utils.import('https://cdn.jsdelivr.net/npm/fast-xml-parser/+esm');
+    // repo
+    let mod = await dSession.utils.import({ repo: 'Global', path: 'workflow.mjs' });
     */
     async import(module) {
         let me = this;
