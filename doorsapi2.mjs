@@ -5424,7 +5424,7 @@ export class Utilities {
             if (typeof(module) == 'object') {
                 ret = await import(window.gitCdn(Object.assign({ url: true }, module)));
             } else {
-                res = await import(module);
+                ret = await import(module);
             }
         }
 
