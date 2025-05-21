@@ -54,7 +54,7 @@ async function loadUtils() {
 
     try {
         if (inNode()) {
-            if (ctx && ctx.mainlib) {
+            if (typeof(ctx) == 'object' && ctx.mainlib) {
                 _mainlib = ctx.mainlib;
             } else {
                 let mod = await import('../mainlib.mjs');
