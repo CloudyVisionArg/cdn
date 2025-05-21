@@ -415,6 +415,7 @@ export class Session {
     #instance;
     #node;
     #doorsVersion;
+    #billing;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -429,6 +430,7 @@ export class Session {
         this.#instance = undefined;
         this.#utils = undefined;
         this.#doorsVersion = undefined;
+        this.#billing = undefined;
     }
 
     _userChange() {
@@ -491,6 +493,22 @@ export class Session {
         this._reset();
         this.#authToken = value;
         this._userChange();
+    }
+
+    get billing() {
+        let me = this;
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!me.#billing) {
+                    let modBil = await me.import({ repo: 'Global', path: 'billing/billing.mjs', fresh: true }); //todo: sacar fresh
+                    me.#billing = new modBil.Billing(me);
+                }
+                resolve(me.#billing);
+                
+            } catch(err) {
+                reject(err);
+            }
+        });
     }
 
     /**
