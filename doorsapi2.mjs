@@ -504,7 +504,7 @@ export class Session {
                     me.#billing = new modBil.Billing(me);
                 }
                 resolve(me.#billing);
-                
+
             } catch(err) {
                 reject(err);
             }
@@ -3026,7 +3026,7 @@ export class Field {
     }
     set value(value) {
         if (!this.updatable || this.computed) throw new Error('Field not updatable: ' + this.name);
-        if (!value && !this.nullable) throw new Error('Field not nullable: ' + this.name);
+        if ((value == null || value == undefined) && !this.nullable) throw new Error('Field not nullable: ' + this.name);
         
         if (this.type == 1) {
             this.#json.Value = (value === undefined || value == null || value == '') ? null : value.toString();
