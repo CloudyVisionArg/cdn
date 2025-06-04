@@ -110,6 +110,7 @@ async function loadUtils() {
             await include('lib-moment-timezone');
             _moment = moment;
         }
+        _moment.tz.setDefault(serverTimeZone);
 
     } catch(err) {
         console.error('Error loading moment', err);
@@ -515,16 +516,19 @@ export class Session {
     Cambia la contraseña del usuario logueado.
     @returns {Promise}
     */
-    changePassword(login, oldPassword, newPassword, instance) {
-        var url = 'session/changepassword';
+    async changePassword(login, oldPassword, newPassword, instance) {
+        let me = this;
+        let url = 'session/changepassword';
 
-        var data = {
+        let data = {
             login: login,
             oldPassword: oldPassword,
             newPassword: newPassword,
             instanceName: instance,
         };
-        return this.restClient.fetch(url, 'POST', data, '');
+        let ret = this.restClient.fetch(url, 'POST', data, '');
+        let encPwd = await me.utils.execVbs(`Response.Write dSession.Encrypt("${ newPassword}", "${ newPassword.reverse() }")`);
+        debugger;
     };
 
     /**
