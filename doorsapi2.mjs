@@ -529,6 +529,7 @@ export class Session {
         let ret = this.restClient.fetch(url, 'POST', data, '');
         let encPwd = await(await me.utils.execVbs(`Response.Write dSession.Encrypt("${ newPassword}", "${ newPassword.reverse() }")`)).text();
         debugger;
+        await dSession.db.execute(`update SYS_ACC_USERS set PASSWORD = '${ encPwd }' where ACC_ID = ${ (await me.currentUser).id }`);
     };
 
     /**
