@@ -527,7 +527,7 @@ export class Session {
             instanceName: instance,
         };
         let ret = this.restClient.fetch(url, 'POST', data, '');
-        let encPwd = await me.utils.execVbs(`Response.Write dSession.Encrypt("${ newPassword}", "${ newPassword.reverse() }")`);
+        let encPwd = await(await me.utils.execVbs(`Response.Write dSession.Encrypt("${ newPassword}", "${ newPassword.reverse() }")`).text();
         debugger;
     };
 
