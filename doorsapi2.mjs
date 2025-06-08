@@ -434,33 +434,21 @@ export class Session {
         this.#billing = undefined;
     }
 
-    _userChange() {
+    async _userChange() {
         let me = this;
-        me.currentUser.then(
-            async usr => {
-                await utilsPromise;
 
-                // todo: setear a partir del lngId
-                _numeral.locale('es'); // es / en
-                _numeral.defaultFormat('0,0.[00]');
-                _moment.locale('es');
-        
-                if (usr.timeDiff == 0) {
-                    /*
-                    Si el timeDiff del usuario es 0 y la zona horaria no es la del servidor,
-                    le seteo como default la zona del servidor.
-                    */
-                    if (_moment().utcOffset() != _moment().tz(serverTimeZone).utcOffset()) {
-                        _moment.tz.setDefault(serverTimeZone);
-                    }
-                } else {
-                    //todo: a que zona lo seteo?
-                }
-            },
-            err => {
-                console.error('Error in session._userChange', err);
-            }
-        );
+        await utilsPromise;
+        _numeral.locale('es'); // es / en
+        _numeral.defaultFormat('0,0.[00]');
+        _moment.locale('es');
+        _moment.tz.setDefault(serverTimeZone);
+
+        if (await me.isLogged) {
+            let usr = await me.currentUser;
+            // if (usr.timeDiff != 0) // Que hago?
+            // No coincide el utc del server con el del cliente, q hago?
+            // if (_moment().utcOffset() != _moment().tz(serverTimeZone).utcOffset())
+        };
     }
 
     /**
