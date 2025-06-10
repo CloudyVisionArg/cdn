@@ -35,6 +35,7 @@ export { _contentDisposition as contentDisposition }
 
 //await loadUtils();
 var utilsPromise = loadUtils();
+utilsNotLoadedErr = `Utils not loaded, call 'await dSession.utils.load()' before.`
 
 /*
 todo: Safari soporta await at module top level recien en la v15
@@ -1811,6 +1812,8 @@ export class Database {
     @returns {Promise<Object[]>}
     */
     async openRecordset(sql) {
+        let me = this;
+
         var res = await this.session.utils.execVbs(`
             Set rcs = dSession.Db.OpenRecordset(${ this.session.utils.vbsEncodeString(sql) })
             rcs.Save Response, 1
@@ -1820,7 +1823,7 @@ export class Database {
         var txt = await res.text();
 
         // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
-        var parser = new _fastXmlParser.XMLParser({
+        var parser = new me.utils.fastXmlParser.XMLParser({
             ignoreAttributes: false,
             ignoreDeclaration: true,
             removeNSPrefix: true,
@@ -5128,20 +5131,21 @@ export class Utilities {
     @returns {Date}
     */
     cDate(date, format) {
+        let me = this;
         var dt;
         if (date == null || date === undefined) return null;
 
         if (Object.prototype.toString.call(date) === '[object Date]') {
             dt = date;
-        } else if (_moment.isMoment(date)) {
+        } else if (me.moment.isMoment(date)) {
             dt = date.toDate();
         } else {
             if (this.isIsoDate(date)) {
                 dt = new Date(date);
             } else {
                 let f = format ? format : 'L LTS';
-                dt = _moment(date, f).toDate(); // moment con locale
-                if (isNaN(dt.getTime())) dt = _moment(date).toDate(); // moment sin format
+                dt = me.moment(date, f).toDate(); // moment con locale
+                if (isNaN(dt.getTime())) dt = me.moment(date).toDate(); // moment sin format
                 if (isNaN(dt.getTime())) dt = new Date(date); // nativo
             }
         }
@@ -5162,17 +5166,19 @@ export class Utilities {
     @returns {number}
     */
     cNumber(number) {
+        let me = this;
         var num;
         if (Object.prototype.toString.call(number) === '[object Number]') {
             num = number;
         } else {
-            num = _numeral(number).value();
+            num = me.numeral(number).value();
         }
         return num;
     }
 
     /** https://github.com/jshttp/content-disposition */
     get contentDisposition() {
+        if (!_contentDisposition) throw new Error(utilsNotLoadedErr);
         return _contentDisposition;
     }
     
@@ -5193,6 +5199,7 @@ export class Utilities {
 
     /** https://code.google.com/archive/p/crypto-js/ */
     get cryptoJS() {
+        if (!_CryptoJS) throw new Error(utilsNotLoadedErr);
         return _CryptoJS;
     }
 
@@ -5217,8 +5224,9 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
+        let me = this;
         let pwd = pPass === undefined ? '' : pPass;
-        return _CryptoJS.AES.decrypt(pString, pwd).toString(_CryptoJS.enc.Utf8)
+        return me.cryptoJS.AES.decrypt(pString, pwd).toString(me.cryptoJS.enc.Utf8)
 	}
 
     /**
@@ -5244,6 +5252,7 @@ export class Utilities {
     }
 
     deserializeError(err) {
+        if (!_serializeError) throw new Error(utilsNotLoadedErr);
         return _serializeError.deserializeError(err);
     }
 
@@ -5271,8 +5280,9 @@ export class Utilities {
     }
 
     encrypt(pString, pPass) {
+        let me = this;
         let pwd = pPass === undefined ? '' : pPass;
-        return _CryptoJS.AES.encrypt(pString, pwd).toString();
+        return me.cryptoJS.AES.encrypt(pString, pwd).toString();
     }
 
     /**
@@ -5378,6 +5388,7 @@ export class Utilities {
 
     /** https://github.com/NaturalIntelligence/fast-xml-parser */
     get fastXmlParser() {
+        if (!_fastXmlParser) throw new Error(utilsNotLoadedErr);
         return _fastXmlParser;
     }
 
@@ -5403,8 +5414,9 @@ export class Utilities {
     options se usa solo en node. Ver detalle: https://github.com/mdevils/html-entities
     */
     htmlEncode(text, options) {
+        let me = this;
         if (this.session.node.inNode) {
-            return _htmlEntities.encode(text, options);
+            return me.htmlEntities.encode(text, options);
 
         } else {
             // todo: conviene hacerlo con htmlEntities?
@@ -5416,6 +5428,7 @@ export class Utilities {
 
     /** https://github.com/mdevils/html-entities */
     get htmlEntities() {
+        if (!_htmlEntities) throw new Error(utilsNotLoadedErr);
         return _htmlEntities;
     }
 
@@ -5578,6 +5591,7 @@ export class Utilities {
 
     /** https://momentjs.com/docs/ */
     get moment() {
+        if (!_moment) throw new Error(utilsNotLoadedErr);
         return _moment;
     }
 
@@ -5619,6 +5633,7 @@ export class Utilities {
 
     /** http://numeraljs.com/ */
     get numeral() {
+        if (!_numeral) throw new Error(utilsNotLoadedErr);
         return _numeral;
     }
 
@@ -5646,6 +5661,7 @@ export class Utilities {
 
     /** https://github.com/sindresorhus/serialize-error */
     serializeError(err) {
+        if (!_serializeError) throw new Error(utilsNotLoadedErr);
         return _serializeError.serializeError(err);
     }
 
@@ -5792,7 +5808,7 @@ export class Utilities {
     options: https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
     */
     xmlParser(options) {
-        return new _fastXmlParser.XMLParser(options);
+        return new this.fastXmlParser.XMLParser(options);
     }
 }
 
