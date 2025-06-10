@@ -35,7 +35,7 @@ export { _contentDisposition as contentDisposition }
 
 //await loadUtils();
 var utilsPromise = loadUtils();
-utilsNotLoadedErr = `Utils not loaded, call 'await dSession.utils.load()' before.`
+var utilsNotLoadedErr = `Utils not loaded, call 'await dSession.utils.load()' before.`
 
 /*
 todo: Safari soporta await at module top level recien en la v15
