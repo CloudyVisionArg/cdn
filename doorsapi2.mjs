@@ -1823,7 +1823,7 @@ export class Database {
         var txt = await res.text();
 
         // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
-        var parser = new me.utils.fastXmlParser.XMLParser({
+        var parser = new me.session.utils.fastXmlParser.XMLParser({
             ignoreAttributes: false,
             ignoreDeclaration: true,
             removeNSPrefix: true,
@@ -5166,12 +5166,11 @@ export class Utilities {
     @returns {number}
     */
     cNumber(number) {
-        let me = this;
         var num;
         if (Object.prototype.toString.call(number) === '[object Number]') {
             num = number;
         } else {
-            num = me.numeral(number).value();
+            num = this.numeral(number).value();
         }
         return num;
     }
@@ -5224,9 +5223,8 @@ export class Utilities {
     }
 
     decrypt(pString, pPass) {
-        let me = this;
         let pwd = pPass === undefined ? '' : pPass;
-        return me.cryptoJS.AES.decrypt(pString, pwd).toString(me.cryptoJS.enc.Utf8)
+        return this.cryptoJS.AES.decrypt(pString, pwd).toString(this.cryptoJS.enc.Utf8)
 	}
 
     /**
@@ -5280,9 +5278,8 @@ export class Utilities {
     }
 
     encrypt(pString, pPass) {
-        let me = this;
         let pwd = pPass === undefined ? '' : pPass;
-        return me.cryptoJS.AES.encrypt(pString, pwd).toString();
+        return this.cryptoJS.AES.encrypt(pString, pwd).toString();
     }
 
     /**
@@ -5414,9 +5411,8 @@ export class Utilities {
     options se usa solo en node. Ver detalle: https://github.com/mdevils/html-entities
     */
     htmlEncode(text, options) {
-        let me = this;
         if (this.session.node.inNode) {
-            return me.htmlEntities.encode(text, options);
+            return this.htmlEntities.encode(text, options);
 
         } else {
             // todo: conviene hacerlo con htmlEntities?
