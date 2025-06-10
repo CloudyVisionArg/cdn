@@ -5567,6 +5567,10 @@ export class Utilities {
         });
     }
 
+    async load() {
+        await utilsPromise;
+    }
+
     /** Completa con ceros a la izquierda */
     lZeros(string, length) {
         return ('0'.repeat(length) + string).slice(-length);
