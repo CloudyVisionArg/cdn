@@ -458,6 +458,39 @@ function gitCdn(options) {
     }
 }
 
+/**
+Importa un elemento de GitHub
+
+@example
+myMod = await gitImport({
+    id, // id de registeredScripts
+    ver, // Version del script
+        o
+    owner, // def CloudyVisionArg
+    repo, // def cdn
+    path, // Ruta al archivo, no poner el slash inicial
+    ref, // Branch / tag
+    fresh, // Actualiza el cache
+
+    server, // Opcional, def https://cdn.cloudycrm.net
+}
+@returns {Promise}
+*/
+function gitImport(options) {
+    let url;
+
+    if (options.path) {
+        // gitCdn
+        options.url = true;
+        url = gitCdn(options);
+
+    } else {
+        // scriptSrc
+        url = scriptSrc(options.id, options.ver);
+    }
+    return import(url);
+}
+
 /*
 Esta es una implementacion simplificada de la clase Buffer de node
 Si hace falta algo mas completo usar https://github.com/feross/buffer
