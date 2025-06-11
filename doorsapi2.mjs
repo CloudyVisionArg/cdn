@@ -515,10 +515,11 @@ export class Session {
             newPassword: newPassword,
             instanceName: instance,
         };
-        let ret = this.restClient.fetch(url, 'POST', data, '');
+        let ret = await this.restClient.fetch(url, 'POST', data, '');
+        return ret;
 
         // Sacar esto cdo este resuelto el issue #2 del 2021 ...
-        await me.utils.execVbs(`dSession.Db.Execute "update SYS_ACC_USERS set PASSWORD = '" & dSession.Encrypt("${ newPassword}", "${ newPassword.reverse() }") & "' where ACC_ID = ${ (await me.currentUser).id }"`);
+        //await me.utils.execVbs(`dSession.Db.Execute "update SYS_ACC_USERS set PASSWORD = '" & dSession.Encrypt("${ newPassword}", "${ newPassword.reverse() }") & "' where ACC_ID = ${ (await me.currentUser).id }"`);
     };
 
     /**
