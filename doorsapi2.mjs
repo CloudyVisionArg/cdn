@@ -6267,7 +6267,7 @@ class V8Client {
             let res = await fetch(fullUrl, {
                 method, headers, body,
                 cache: 'no-store',
-                withCredentials: true,
+                credentials: 'include',
             });
             let resJson = await res.json();
             if (res.ok) {
@@ -6293,7 +6293,6 @@ class V8Client {
             let res = await fetch(fullUrl, {
                 method, headers, body,
                 cache: 'no-store',
-                withCredentials: true,
             });
             if (res.ok) {
                 return res;
