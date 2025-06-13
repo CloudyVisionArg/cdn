@@ -6239,7 +6239,10 @@ class V8Client {
         this.#session = session;
     }
 
-    fetch(url, method, parameters, parameterName) {
+    async fetch(url, method, parameters, parameterName) {
+        let me = this;
+        let server = await me.session.node.server();
+
         debugger
 
     }
