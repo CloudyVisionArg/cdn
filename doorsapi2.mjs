@@ -6272,8 +6272,7 @@ class V8Client {
             if (res.ok) {
                 return resJson.InternalObject;
             } else {
-                let err = new Error(me.session.utils.errMsg(resJson));
-                err.doorsException = resJson;
+                let err = me.session.utils.deserializeError(resJson);
                 throw err;
             }
 
@@ -6297,8 +6296,7 @@ class V8Client {
                 return res;
             } else {
                 let resJson = await res.json();
-                let err = new Error(me.session.utils.errMsg(resJson));
-                err.doorsException = resJson;
+                let err = me.session.utils.deserializeError(resJson);
                 throw err;
             }
 
