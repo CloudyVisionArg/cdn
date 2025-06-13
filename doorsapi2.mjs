@@ -6241,7 +6241,7 @@ class V8Client {
 
     async fetch(url, method, parameters, parameterName) {
         let me = this;
-        let server = await me.session.node.server();
+        let server = await me.session.node.server;
 
         debugger
 
