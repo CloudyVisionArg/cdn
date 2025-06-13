@@ -6267,6 +6267,7 @@ class V8Client {
             let res = await fetch(fullUrl, {
                 method, headers, body,
                 cache: 'no-store',
+                withCredentials: true,
             });
             let resJson = await res.json();
             if (res.ok) {
@@ -6292,6 +6293,7 @@ class V8Client {
             let res = await fetch(fullUrl, {
                 method, headers, body,
                 cache: 'no-store',
+                withCredentials: true,
             });
             if (res.ok) {
                 return res;
@@ -6301,7 +6303,7 @@ class V8Client {
                 err.doorsException = resJson;
                 throw err;
             }
-            
+
         } catch(er) {
             console.error(er, { url, method, params, paramName });
             throw er;
