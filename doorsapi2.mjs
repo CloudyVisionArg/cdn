@@ -6244,6 +6244,7 @@ class V8Client {
         let fullUrl = (await me.session.node.server) + '/restful/' + url;
 
         let res = await fetch(fullUrl)
+        let resTxt = await res.text();
 
         debugger
 
