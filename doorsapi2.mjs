@@ -6250,23 +6250,62 @@ class V8Client {
         return ret;
     }
 
-    async fetch(url, method, parameters, parameterName) {
+    async fetch(url, method, params, paramName) {
         let me = this;
-        let fullUrl = (await me.session.node.server) + '/restful/' + url;
-        let headers = me.credentials();
 
-        let res = await fetch(fullUrl, {
-            method, headers,
-            cache: 'no-store',
-        });
-        let resTxt = await res.text();
+        try {
+            let fullUrl = (await me.session.node.server) + '/restful/' + url;
+            let body;
+            if (typeof(params) == 'string') {
+                fullUrl += '?' + params;
+            } else {
+                body = JSON.stringify(paramName ? { [paramName]: params } : params);
+            }
+            let headers = me.credentials();
+            headers['Content-Type'] = 'application/json';
 
-        debugger
+            let res = await fetch(fullUrl, {
+                method, headers, body,
+                cache: 'no-store',
+            });
+            let resJson = await res.json();
+            if (res.ok) {
+                return resJson.InternalObject;
+            } else {
+                let err = new Error(me.session.utils.errMsg(resJson));
+                err.doorsException = resJson;
+                throw err;
+            }
 
+        } catch(er) {
+            console.error(er, { url, method, params, paramName });
+            throw er;
+        }
     }
 
-    fetchRaw(url, method, data) {
+    async fetchRaw(url, method, body) {
+        let me = this;
 
+        try {
+            let fullUrl = (await me.session.node.server) + '/restful/' + url;
+            let headers = me.credentials();
+            let res = await fetch(fullUrl, {
+                method, headers, body,
+                cache: 'no-store',
+            });
+            if (res.ok) {
+                return res;
+            } else {
+                let resJson = await res.json();
+                let err = new Error(me.session.utils.errMsg(resJson));
+                err.doorsException = resJson;
+                throw err;
+            }
+            
+        } catch(er) {
+            console.error(er, { url, method, params, paramName });
+            throw er;
+        }
     };
 
     /**
