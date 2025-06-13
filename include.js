@@ -464,7 +464,7 @@ Importa un elemento de GitHub
 @example
 myMod = await gitImport({
     id, // id de registeredScripts
-    ver, // Version del script
+    version, // Version del script
         o
     owner, // def CloudyVisionArg
     repo, // def cdn
@@ -486,7 +486,7 @@ function gitImport(options) {
 
     } else {
         // scriptSrc
-        url = scriptSrc(options.id, options.ver);
+        url = scriptSrc(options.id, options.version);
     }
     return import(url);
 }
