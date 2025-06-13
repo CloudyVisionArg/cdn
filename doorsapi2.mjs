@@ -6267,7 +6267,6 @@ class V8Client {
             let res = await fetch(fullUrl, {
                 method, headers, body,
                 cache: 'no-store',
-                credentials: 'include',
             });
             let resJson = await res.json();
             if (res.ok) {
