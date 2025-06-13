@@ -6239,11 +6239,26 @@ class V8Client {
         this.#session = session;
     }
 
+    credentials() {
+        var ret = {};
+        if (this.session.authToken) {
+            ret.AuthToken = this.session.authToken;
+        } else if (this.session.apiKey) {
+            ret.ApiKey = this.session.apiKey;
+        }
+        ret.ServerUrl = this.session.serverUrl;
+        return ret;
+    }
+
     async fetch(url, method, parameters, parameterName) {
         let me = this;
         let fullUrl = (await me.session.node.server) + '/restful/' + url;
+        let headers = me.credentials();
 
-        let res = await fetch(fullUrl)
+        let res = await fetch(fullUrl, {
+            method, headers,
+            cache: 'no-store',
+        });
         let resTxt = await res.text();
 
         debugger
