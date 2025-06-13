@@ -6240,6 +6240,7 @@ class V8Client {
     }
 
     fetch(url, method, parameters, parameterName) {
+        debugger
 
     }
 
