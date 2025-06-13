@@ -406,6 +406,7 @@ export class SimpleBuffer extends Uint8Array {
 
 export class Session {
     #restClient;
+    #v8Client;
     #directory;
     #serverUrl;
     #authToken;
@@ -421,6 +422,7 @@ export class Session {
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
+        this.#v8Client = new V8Client(this);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
     }
@@ -1012,6 +1014,10 @@ export class Session {
             this.#utils = new Utilities(this);
         };
         return this.#utils;
+    }
+
+    get v8Client() {
+        return this.#v8Client;
     }
 
     /**
@@ -3721,7 +3727,8 @@ export class Folder {
             '&order=' + encUriC(opt.order) + '&maxDocs=' + encUriC(opt.maxDocs) + 
             '&recursive=' + encUriC(opt.recursive) + '&maxDescrLength=' + encUriC(opt.maxTextLen);
 
-        return this.session.restClient.fetch(url, 'GET', params, '');
+        //return this.session.restClient.fetch(url, 'GET', params, '');
+        return this.session.v8Client.fetch(url, 'GET', params, '');
     }
 
     /**
@@ -6221,5 +6228,29 @@ class RestClient {
             ret.ApiKey = this.session.apiKey;
         }
         return ret;
+    }
+};
+
+
+class V8Client {
+    #session;
+
+    constructor(session) {
+        this.#session = session;
+    }
+
+    fetch(url, method, parameters, parameterName) {
+
+    }
+
+    fetchRaw(url, method, data) {
+
+    };
+
+    /**
+    @returns {Session}
+    */
+    get session() {
+        return this.#session;
     }
 };
