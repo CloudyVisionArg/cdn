@@ -373,7 +373,7 @@ function scriptSrc(scriptId, version) {
             } else {
                 // Branch
                 //src = 'https://cloudycrm.net/c/gitcdn.asp?ref=' + v + '&path=' + script.path;
-                src = gitCdn({ path: script.path, ref: v, url: true });
+                src = gitCdn({ path: script.path, ref: v, fresh: true, url: true });
             }
         }
 
