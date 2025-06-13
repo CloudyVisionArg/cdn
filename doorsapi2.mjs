@@ -6241,7 +6241,9 @@ class V8Client {
 
     async fetch(url, method, parameters, parameterName) {
         let me = this;
-        let server = await me.session.node.server;
+        let fullUrl = (await me.session.node.server) + '/restful/' + url;
+
+        let res = await fetch(fullUrl)
 
         debugger
 
