@@ -1833,8 +1833,9 @@ export class Database {
     }
 
     parseAdoRecordsetXml(xml) {
+        let me = this;
         // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
-        var parser = new me.session.utils.fastXmlParser.XMLParser({
+        let parser = new me.session.utils.fastXmlParser.XMLParser({
             ignoreAttributes: false,
             ignoreDeclaration: true,
             removeNSPrefix: true,
@@ -1843,12 +1844,11 @@ export class Database {
             attributeNamePrefix : '',
             attributesGroupName : 'attributes',
         });
-        var json = parser.parse(txt);
+        let json = parser.parse(txt);
 
-        var ret = [];
-        var rows = json.xml.data.row;
+        let ret = [];
+        let rows = json.xml.data.row;
         if (rows) {
-            var r;
             if (Array.isArray(rows)) {
                 rows.forEach((el, ix) => {
                     ret.push(el.attributes);
