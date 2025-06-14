@@ -492,7 +492,7 @@ export class Session {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!me.#billing) {
-                    let modBil = await me.import({ repo: 'Global', path: 'billing/billing.mjs', fresh: true }); //todo: sacar fresh
+                    let modBil = await me.import({ repo: 'Global', path: 'billing/billing.mjs' });
                     me.#billing = new modBil.Billing(me);
                 }
                 resolve(me.#billing);
@@ -1829,7 +1829,10 @@ export class Database {
         `);
 
         var txt = await res.text();
+        return me.parseAdoRecordsetXml(txt);
+    }
 
+    parseAdoRecordsetXml(xml) {
         // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
         var parser = new me.session.utils.fastXmlParser.XMLParser({
             ignoreAttributes: false,
@@ -1848,14 +1851,10 @@ export class Database {
             var r;
             if (Array.isArray(rows)) {
                 rows.forEach((el, ix) => {
-                    r = {};
-                    Object.assign(r, el.attributes);
-                    ret.push(r);
+                    ret.push(el.attributes);
                 });
             } else {
-                r = {};
-                Object.assign(r, rows.attributes);
-                ret.push(r);
+                ret.push(rows.attributes);
             }
         }
         
