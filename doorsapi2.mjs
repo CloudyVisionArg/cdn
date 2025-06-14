@@ -1844,7 +1844,7 @@ export class Database {
             attributeNamePrefix : '',
             attributesGroupName : 'attributes',
         });
-        let json = parser.parse(txt);
+        let json = parser.parse(xml);
 
         let ret = [];
         let rows = json.xml.data.row;
