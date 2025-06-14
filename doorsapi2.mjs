@@ -1857,7 +1857,6 @@ export class Database {
                 ret.push(rows.attributes);
             }
         }
-        
         return ret;
     }
 
