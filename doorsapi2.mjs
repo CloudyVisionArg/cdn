@@ -3699,12 +3699,13 @@ export class Folder {
     Busca documentos.
     @example
     search({
-        fields // Lista de campos separados por coma (vacio devuelve todos).
-        formula // Filtro SQL.
-        order // Campos de orden.
-        maxDocs // Cant max de documentos. Def 1000. 0 = sin limite.
-        recursive // Busca tb en carpetas hijas con el mismo form.
-        maxTextLength // Largo max de los campos de texto. Def 100. 0 = sin limite.
+        fields, // Lista de campos separados por coma (vacio devuelve todos).
+        formula, // Filtro SQL.
+        order, // Campos de orden.
+        maxDocs, // Cant max de documentos. Def 1000. 0 = sin limite.
+        recursive, // Busca tb en carpetas hijas con el mismo form.
+        maxTextLen, // Largo max de los campos de texto. Def 100. 0 = sin limite.
+        v8, // Utiliza el motor v8 para hacer el search.
     }
     @returns {Promise<Object[]>}
     */
@@ -3725,8 +3726,8 @@ export class Folder {
             '&order=' + encUriC(opt.order) + '&maxDocs=' + encUriC(opt.maxDocs) + 
             '&recursive=' + encUriC(opt.recursive) + '&maxDescrLength=' + encUriC(opt.maxTextLen);
 
-        //return this.session.restClient.fetch(url, 'GET', params, '');
-        return this.session.v8Client.fetch(url, 'GET', params, '');
+        return opt.v8 ? this.session.v8Client.fetch(url, 'GET', params, '') :
+            this.session.restClient.fetch(url, 'GET', params, '')
     }
 
     /**
