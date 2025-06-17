@@ -406,6 +406,7 @@ export class SimpleBuffer extends Uint8Array {
 
 export class Session {
     #restClient;
+    #v8Client;
     #directory;
     #serverUrl;
     #authToken;
@@ -421,6 +422,7 @@ export class Session {
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
+        this.#v8Client = new V8Client(this);
         this.#serverUrl = serverUrl;
         this.#authToken = authToken;
     }
@@ -490,7 +492,7 @@ export class Session {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!me.#billing) {
-                    let modBil = await me.import({ repo: 'Global', path: 'billing/billing.mjs', fresh: true }); //todo: sacar fresh
+                    let modBil = await me.import({ repo: 'Global', path: 'billing/billing.mjs' });
                     me.#billing = new modBil.Billing(me);
                 }
                 resolve(me.#billing);
@@ -1012,6 +1014,10 @@ export class Session {
             this.#utils = new Utilities(this);
         };
         return this.#utils;
+    }
+
+    get v8Client() {
+        return this.#v8Client;
     }
 
     /**
@@ -1823,9 +1829,13 @@ export class Database {
         `);
 
         var txt = await res.text();
+        return me.parseAdoRecordsetXml(txt);
+    }
 
+    parseAdoRecordsetXml(xml) {
+        let me = this;
         // fastXmlParser - https://github.com/NaturalIntelligence/fast-xml-parser/blob/HEAD/docs/v4/2.XMLparseOptions.md
-        var parser = new me.session.utils.fastXmlParser.XMLParser({
+        let parser = new me.session.utils.fastXmlParser.XMLParser({
             ignoreAttributes: false,
             ignoreDeclaration: true,
             removeNSPrefix: true,
@@ -1834,25 +1844,19 @@ export class Database {
             attributeNamePrefix : '',
             attributesGroupName : 'attributes',
         });
-        var json = parser.parse(txt);
+        let json = parser.parse(xml);
 
-        var ret = [];
-        var rows = json.xml.data.row;
+        let ret = [];
+        let rows = json.xml.data.row;
         if (rows) {
-            var r;
             if (Array.isArray(rows)) {
                 rows.forEach((el, ix) => {
-                    r = {};
-                    Object.assign(r, el.attributes);
-                    ret.push(r);
+                    ret.push(el.attributes);
                 });
             } else {
-                r = {};
-                Object.assign(r, rows.attributes);
-                ret.push(r);
+                ret.push(rows.attributes);
             }
         }
-        
         return ret;
     }
 
@@ -3695,12 +3699,13 @@ export class Folder {
     Busca documentos.
     @example
     search({
-        fields // Lista de campos separados por coma (vacio devuelve todos).
-        formula // Filtro SQL.
-        order // Campos de orden.
-        maxDocs // Cant max de documentos. Def 1000. 0 = sin limite.
-        recursive // Busca tb en carpetas hijas con el mismo form.
-        maxTextLength // Largo max de los campos de texto. Def 100. 0 = sin limite.
+        fields, // Lista de campos separados por coma (vacio devuelve todos).
+        formula, // Filtro SQL.
+        order, // Campos de orden.
+        maxDocs, // Cant max de documentos. Def 1000. 0 = sin limite.
+        recursive, // Busca tb en carpetas hijas con el mismo form.
+        maxTextLen, // Largo max de los campos de texto. Def 100. 0 = sin limite.
+        v8, // Utiliza el motor v8 para hacer el search.
     }
     @returns {Promise<Object[]>}
     */
@@ -3721,7 +3726,8 @@ export class Folder {
             '&order=' + encUriC(opt.order) + '&maxDocs=' + encUriC(opt.maxDocs) + 
             '&recursive=' + encUriC(opt.recursive) + '&maxDescrLength=' + encUriC(opt.maxTextLen);
 
-        return this.session.restClient.fetch(url, 'GET', params, '');
+        return opt.v8 ? this.session.v8Client.fetch(url, 'GET', params, '') :
+            this.session.restClient.fetch(url, 'GET', params, '')
     }
 
     /**
@@ -6221,5 +6227,88 @@ class RestClient {
             ret.ApiKey = this.session.apiKey;
         }
         return ret;
+    }
+};
+
+
+class V8Client {
+    #session;
+
+    constructor(session) {
+        this.#session = session;
+    }
+
+    credentials() {
+        var ret = {};
+        if (this.session.authToken) {
+            ret.AuthToken = this.session.authToken;
+        } else if (this.session.apiKey) {
+            ret.ApiKey = this.session.apiKey;
+        }
+        ret.ServerUrl = this.session.serverUrl;
+        return ret;
+    }
+
+    async fetch(url, method, params, paramName) {
+        let me = this;
+
+        try {
+            let fullUrl = (await me.session.node.server) + '/restful/' + url;
+            let body;
+            if (typeof(params) == 'string') {
+                fullUrl += '?' + params;
+            } else {
+                body = JSON.stringify(paramName ? { [paramName]: params } : params);
+            }
+            let headers = me.credentials();
+            headers['Content-Type'] = 'application/json';
+
+            let res = await fetch(fullUrl, {
+                method, headers, body,
+                cache: 'no-store',
+            });
+            let resJson = await res.json();
+            if (res.ok) {
+                return resJson.InternalObject;
+            } else {
+                let err = me.session.utils.deserializeError(resJson);
+                throw err;
+            }
+
+        } catch(er) {
+            console.error(er, { url, method, params, paramName });
+            throw er;
+        }
+    }
+
+    async fetchRaw(url, method, body) {
+        let me = this;
+
+        try {
+            let fullUrl = (await me.session.node.server) + '/restful/' + url;
+            let headers = me.credentials();
+            let res = await fetch(fullUrl, {
+                method, headers, body,
+                cache: 'no-store',
+            });
+            if (res.ok) {
+                return res;
+            } else {
+                let resJson = await res.json();
+                let err = me.session.utils.deserializeError(resJson);
+                throw err;
+            }
+
+        } catch(er) {
+            console.error(er, { url, method, params, paramName });
+            throw er;
+        }
+    };
+
+    /**
+    @returns {Session}
+    */
+    get session() {
+        return this.#session;
     }
 };
