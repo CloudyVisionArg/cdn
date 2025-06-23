@@ -2856,14 +2856,14 @@ export class Document {
 
 export class Field {
     static objectType = 5;
-    #parent; // Document / Form
+    #parent; // Document / Form / Folder
     #json;
     #properties;
     #userProperties;
 
-    constructor(field, document) {
+    constructor(field, parent) {
         this.#json = field;
-        this.#parent = document;
+        this.#parent = parent;
     }
 
     get computed() {
@@ -2931,6 +2931,10 @@ export class Field {
         return this.#json.Name;
     }
 
+    get nameAlias() {
+        return this.#json.NameAlias;
+    }
+
     get nullable() {
         return this.#json.Nullable;
     }
@@ -2984,6 +2988,14 @@ export class Field {
     */
     get session() {
         return this.parent.session;
+    }
+
+    get table() {
+        return this.#json.Table;
+    }
+
+    get tableAlias() {
+        return this.#json.TableAlias;
     }
 
     /**
@@ -3387,10 +3399,9 @@ export class Folder {
             if (!me.#fieldsMap) {
                 let url = 'folders/' + me.id + '/fields';
                 let res = await me.session.v8Client.fetch(url, 'GET');
-                debugger
                 var map = new DoorsMap();
-                me.#json.Fields.forEach(el => {
-                    map.set(el.Name, new Field(el, me.session));
+                res.forEach(el => {
+                    map.set(el.Name, new Field(el, me));
                 });
                 me.#fieldsMap = map;
             }
@@ -4114,7 +4125,7 @@ export class Form {
             if (!me.#fieldsMap) {
                 var map = new DoorsMap();
                 me.#json.Fields.forEach(el => {
-                    map.set(el.Name, new Field(el, me.session));
+                    map.set(el.Name, new Field(el, me));
                 });
                 me.#fieldsMap = map;
             }
