@@ -3074,6 +3074,7 @@ export class Folder {
     #foldersMap;
     #viewsMap;
     #owner;
+    #fieldsMap;
 
     constructor(folder, session, parent) {
         this.#json = folder;
@@ -3355,6 +3356,47 @@ export class Folder {
         //todo
     }
     */
+
+    async fields(field) {
+        var me = this;
+
+        if (field) {
+            return me.fields().get(field);
+
+        } else {
+            /*
+            {
+                "Computed": false,
+                "Custom": false,
+                "Description": null,
+                "DescriptionRaw": null,
+                "HeaderTable": true,
+                "Id": 1807052601,
+                "Length": 4,
+                "Name": "DOC_ID",
+                "Nullable": false,
+                "Precision": 10,
+                "Scale": 0,
+                "Type": 3,
+                "Updatable": false,
+                "IsNew": false,
+                "Tags": null
+            }
+            */
+            // Devuelve la coleccion
+            if (!me.#fieldsMap) {
+                let url = 'folders/' + me.id + '/fields';
+                let res = await me.session.v8Client.fetch(url, 'GET');
+                debugger
+                var map = new DoorsMap();
+                me.#json.Fields.forEach(el => {
+                    map.set(el.Name, new Field(el, me.session));
+                });
+                me.#fieldsMap = map;
+            }
+            return me.#fieldsMap;
+        }
+    }
 
     /**
     @example
