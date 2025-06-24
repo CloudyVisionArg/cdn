@@ -2893,6 +2893,10 @@ export class Field {
     }
     */
 
+    get field() {
+        return this.#json.Field;
+    }
+
     get formId() {
         debugger; // chequear
         return this.#json.Id;
@@ -2929,10 +2933,6 @@ export class Field {
 
     get name() {
         return this.#json.Name;
-    }
-
-    get nameAlias() {
-        return this.#json.NameAlias;
     }
 
     get nullable() {
@@ -3376,25 +3376,6 @@ export class Folder {
             return me.fields().get(field);
 
         } else {
-            /*
-            {
-                "Computed": false,
-                "Custom": false,
-                "Description": null,
-                "DescriptionRaw": null,
-                "HeaderTable": true,
-                "Id": 1807052601,
-                "Length": 4,
-                "Name": "DOC_ID",
-                "Nullable": false,
-                "Precision": 10,
-                "Scale": 0,
-                "Type": 3,
-                "Updatable": false,
-                "IsNew": false,
-                "Tags": null
-            }
-            */
             // Devuelve la coleccion
             if (!me.#fieldsMap) {
                 let url = 'folders/' + me.id + '/fields';
