@@ -6303,10 +6303,8 @@ class V8Client {
                 cache: 'no-store',
             });
             console.log(2, new Date().getTime() - window.mytimer)
-            let resJson = await res.text();
+            let resJson = await res.json();
             console.log(3, new Date().getTime() - window.mytimer)
-            resJson = JSON.parse(resJson);
-            console.log(4, new Date().getTime() - window.mytimer)
             if (res.ok) {
                 return resJson.InternalObject;
             } else {
