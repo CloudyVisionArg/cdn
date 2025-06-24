@@ -6151,6 +6151,7 @@ class RestClient {
 
         return new Promise((resolve, reject) => {
             // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+            console.log(1, new Date().getTime() - window.mytimer)
             fetch(completeUrl, {
                 method: method,
                 cache: 'no-cache',
@@ -6164,7 +6165,9 @@ class RestClient {
                     body = body.substring(1);
                 }*/
 
+                console.log(2, new Date().getTime() - window.mytimer)
                 response.text().then(function (textBody) {
+                    console.log(3, new Date().getTime() - window.mytimer)
                     let firstCharCode = textBody.charCodeAt(0);
                     if (firstCharCode === 65279) {
                         //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
@@ -6178,6 +6181,8 @@ class RestClient {
                         console.warn('Cannot parse server response', completeUrl, textBody);
                     }
                     if (response.ok) {
+                        console.log(4, new Date().getTime() - window.mytimer)
+
                         resolve(parsedJson.InternalObject);
                     } else {
                         if (parsedJson) {
@@ -6286,75 +6291,38 @@ class V8Client {
     async fetch(url, method, params, paramName) {
         let me = this;
 
-        return new Promise(async (resolve, reject) => {
-            let timer = new Date().getTime();
-            try {
-                let fullUrl = (await me.session.node.server) + '/restful/' + url;
-                let body;
-                if (typeof(params) == 'string') {
-                    fullUrl += '?' + params;
-                } else {
-                    body = JSON.stringify(paramName ? { [paramName]: params } : params);
-                }
-                let headers = me.credentials();
-                headers['Content-Type'] = 'application/json';
-
-                /*
-                console.log(1, new Date().getTime() - window.mytimer)
-                let res = await fetch(fullUrl, {
-                    method, headers, body,
-                    cache: 'no-store',
-                });
-                console.log(2, new Date().getTime() - window.mytimer)
-                let resJson = await res.text();
-                console.log(3, new Date().getTime() - window.mytimer)
-                resJson = JSON.parse(resJson);
-                console.log(4, new Date().getTime() - window.mytimer)
-                if (res.ok) {
-                    return resJson.InternalObject;
-                } else {
-                    let err = me.session.utils.deserializeError(resJson);
-                    throw err;
-                }
-                */
-                console.log(1, new Date().getTime() - timer)
-                fetch(fullUrl, {
-                    method, headers, body,
-                    cache: 'no-store',
-                }).then(
-                    res => {
-                        console.log(2, new Date().getTime() - timer)
-                        if (res.ok) {
-                            res.json().then(
-                                resJson => {
-                                    console.log(3, new Date().getTime() - timer)
-                                    resolve(resJson.InternalObject);
-                                },
-                                err => {
-                                    console.error(err, { url, method, params, paramName });
-                                    reject(err);
-                                }
-                            );
-                        } else {
-                            return res.json().then(
-                                json => {
-                                    reject(me.session.utils.deserializeError(json));
-                                }
-                            );
-                        }
-                    },
-                    err => {
-                        console.error(err, { url, method, params, paramName });
-                        reject(err);
-                    }
-                );
-
-            } catch(er) {
-                //console.error(er, { url, method, params, paramName });
-                //throw er;
-                reject(err);
+        try {
+            let fullUrl = (await me.session.node.server) + '/restful/' + url;
+            let body;
+            if (typeof(params) == 'string') {
+                fullUrl += '?' + params;
+            } else {
+                body = JSON.stringify(paramName ? { [paramName]: params } : params);
             }
-        })
+            let headers = me.credentials();
+            headers['Content-Type'] = 'application/json';
+
+            console.log(1, new Date().getTime() - window.mytimer)
+            let res = await fetch(fullUrl, {
+                method, headers, body,
+                cache: 'no-store',
+            });
+            console.log(2, new Date().getTime() - window.mytimer)
+            let resJson = await res.text();
+            console.log(3, new Date().getTime() - window.mytimer)
+            resJson = JSON.parse(resJson);
+            console.log(4, new Date().getTime() - window.mytimer)
+            if (res.ok) {
+                return resJson.InternalObject;
+            } else {
+                let err = me.session.utils.deserializeError(resJson);
+                throw err;
+            }
+
+        } catch(er) {
+            console.error(er, { url, method, params, paramName });
+            throw er;
+        }
     }
 
     async fetchRaw(url, method, body) {
