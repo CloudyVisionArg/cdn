@@ -6151,6 +6151,7 @@ class RestClient {
 
         return new Promise((resolve, reject) => {
             // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+            console.log(1, new Date().getTime() - window.mytimer)
             fetch(completeUrl, {
                 method: method,
                 cache: 'no-cache',
@@ -6164,7 +6165,9 @@ class RestClient {
                     body = body.substring(1);
                 }*/
 
+                console.log(2, new Date().getTime() - window.mytimer)
                 response.text().then(function (textBody) {
+                    console.log(3, new Date().getTime() - window.mytimer)
                     let firstCharCode = textBody.charCodeAt(0);
                     if (firstCharCode === 65279) {
                         //console.log('First character "' + firstChar + '" (character code: ' + firstCharCode + ') is invalid so removing it.');
@@ -6178,6 +6181,8 @@ class RestClient {
                         console.warn('Cannot parse server response', completeUrl, textBody);
                     }
                     if (response.ok) {
+                        console.log(4, new Date().getTime() - window.mytimer)
+
                         resolve(parsedJson.InternalObject);
                     } else {
                         if (parsedJson) {
