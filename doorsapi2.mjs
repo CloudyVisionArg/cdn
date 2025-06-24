@@ -6292,6 +6292,7 @@ class V8Client {
         let me = this;
 
         return new Promise(async (resolve, reject) => {
+            let timer = new Date().getTime();
             try {
                 let fullUrl = (await me.session.node.server) + '/restful/' + url;
                 let body;
@@ -6321,17 +6322,17 @@ class V8Client {
                     throw err;
                 }
                 */
-                console.log(1, new Date().getTime() - window.mytimer)
+                console.log(1, new Date().getTime() - timer)
                 fetch(fullUrl, {
                     method, headers, body,
                     cache: 'no-store',
                 }).then(
                     res => {
-                        console.log(2, new Date().getTime() - window.mytimer)
+                        console.log(2, new Date().getTime() - timer)
                         if (res.ok) {
                             res.json().then(
                                 resJson => {
-                                    console.log(3, new Date().getTime() - window.mytimer)
+                                    console.log(3, new Date().getTime() - timer)
                                     resolve(resJson.InternalObject);
                                 },
                                 err => {
