@@ -6297,11 +6297,14 @@ class V8Client {
             let headers = me.credentials();
             headers['Content-Type'] = 'application/json';
 
+            console.log(1, new Date().getTime() - window.mytimer)
             let res = await fetch(fullUrl, {
                 method, headers, body,
                 cache: 'no-store',
             });
+            console.log(2, new Date().getTime() - window.mytimer)
             let resJson = await res.json();
+            console.log(3, new Date().getTime() - window.mytimer)
             if (res.ok) {
                 return resJson.InternalObject;
             } else {
