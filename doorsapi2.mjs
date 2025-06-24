@@ -5357,7 +5357,7 @@ export class Utilities {
             return err;
         } else if (typeof(err) == 'object') {
             if (err instanceof Error) {
-                return err.constructor.name + ': ' + err.message;
+                return err.constructor.name + (err.message ? ': ' + err.message : '');
             } else if (err.constructor.name == 'SQLError') {
                 return 'SQLError {code: ' + err.code + ', message: \'' + err.message + '\'}';
             } else if (err.ExceptionMessage) {
