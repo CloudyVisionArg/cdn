@@ -6303,10 +6303,12 @@ class V8Client {
                 method, headers, body,
                 cache: 'no-store',
             });
-            let resJson = await res.json();
             if (res.ok) {
+                let resJson = await res.json();
                 return resJson.InternalObject;
             } else {
+                let resTxt = await res.text();
+                debugger;
                 let err = me.session.utils.deserializeError(resJson);
                 throw err;
             }
