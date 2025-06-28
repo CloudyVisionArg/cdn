@@ -6330,7 +6330,7 @@ class V8Client {
             } else {
                 let resTxt = await res.text();
                 let resJson;
-                try { JSON.parse(resTxt) } catch (e) {};
+                try { resJson = JSON.parse(resTxt) } catch (e) {};
                 if (resJson) {
                     let err = me.session.utils.deserializeError(resJson);
                     throw err;
@@ -6361,7 +6361,7 @@ class V8Client {
             } else {
                 let resTxt = await res.text();
                 let resJson;
-                try { JSON.parse(resTxt) } catch (e) {};
+                try { resJson = JSON.parse(resTxt) } catch (e) {};
                 if (resJson) {
                     let err = me.session.utils.deserializeError(resJson);
                     throw err;
