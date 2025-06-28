@@ -5170,6 +5170,26 @@ export class Utilities {
         }
     }
 
+    /** Alias de cBoolean */
+    cBool(number) {
+        return this.cBoolean(number);
+    }
+
+    /**
+    Convierte a Boolean
+    @returns {Boolean}
+    */
+    cBoolean(value) {
+        let v = value;
+        if (v === undefined || v === null) return false;
+        if (typeof(v) == 'boolean') return v;
+        if (typeof(v) == 'string') {
+            v = v.trim().toLowerCase();
+            return v == 'false' || value == '0' || v == '' ? false : true;
+        }
+        return Boolean(value);
+    }
+
     /**
     Convierte a Date
     @returns {Date}
