@@ -3768,14 +3768,15 @@ export class Folder {
     Busqueda agrupada de documentos.
     @example
     searchGroups({
-        groups // Campos de grupo separados por coma.
+        groups, // Campos de grupo separados por coma.
         totals: 'count(*) as totals',
-        formula // Filtro SQL.
+        formula, // Filtro SQL.
         order: 'totals desc', // Por defecto se ordena con los mismos campos de group.
-        maxDocs // Cant max de documentos. Def 1000. 0 = sin limite.
-        recursive //
-        groupsOrder //
-        totalsOrder //
+        maxDocs, // Cant max de documentos. Def 1000. 0 = sin limite.
+        recursive, //
+        groupsOrder, //
+        totalsOrder, //
+        v8, // Utiliza el motor v8 para hacer el search.
     }
     @returns {Promise<Object[]>}
     */
@@ -3799,7 +3800,8 @@ export class Folder {
             '&maxDocs=' + encUriC(opt.maxDocs) + '&recursive=' + encUriC(opt.recursive) + 
             '&groupsOrder=' + encUriC(opt.groupsOrder) + '&totalsOrder=' + encUriC(opt.totalsOrder);
 
-        return this.session.restClient.fetch(url, 'GET', params, '');
+        return opt.v8 ? this.session.v8Client.fetch(url, 'GET', params, '') :
+            this.session.restClient.fetch(url, 'GET', params, '')
     }
 
     /**
@@ -6296,7 +6298,7 @@ class V8Client {
             }
             let headers = me.credentials();
             headers['Content-Type'] = 'application/json';
-            
+
             let res = await fetch(fullUrl, {
                 method, headers, body,
                 cache: 'no-store',
