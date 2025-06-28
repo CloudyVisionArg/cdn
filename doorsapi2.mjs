@@ -6287,6 +6287,7 @@ class V8Client {
 
     async fetch(url, method, params, paramName) {
         let me = this;
+        await utilsPromise;
 
         try {
             let fullUrl = (await me.session.node.server) + '/restful/' + url;
@@ -6308,9 +6309,14 @@ class V8Client {
                 return resJson.InternalObject;
             } else {
                 let resTxt = await res.text();
-                debugger;
-                let err = me.session.utils.deserializeError(resJson);
-                throw err;
+                let resJson;
+                try { JSON.parse(resTxt) } catch (e) {};
+                if (resJson) {
+                    let err = me.session.utils.deserializeError(resJson);
+                    throw err;
+                } else {
+                    throw new Error(resTxt);
+                }
             }
 
         } catch(er) {
@@ -6321,6 +6327,7 @@ class V8Client {
 
     async fetchRaw(url, method, body) {
         let me = this;
+        await utilsPromise;
 
         try {
             let fullUrl = (await me.session.node.server) + '/restful/' + url;
@@ -6332,9 +6339,15 @@ class V8Client {
             if (res.ok) {
                 return res;
             } else {
-                let resJson = await res.json();
-                let err = me.session.utils.deserializeError(resJson);
-                throw err;
+                let resTxt = await res.text();
+                let resJson;
+                try { JSON.parse(resTxt) } catch (e) {};
+                if (resJson) {
+                    let err = me.session.utils.deserializeError(resJson);
+                    throw err;
+                } else {
+                    throw new Error(resTxt);
+                }
             }
 
         } catch(er) {
