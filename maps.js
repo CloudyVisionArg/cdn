@@ -73,13 +73,10 @@ var maps = {
     },
 
     initAc: function (el, callback) {
-        if (el.mapsAutocomplete || el.initializing) {
-            console.log('maps.initAc: ya inicializando',el);
-            return;
-        }
+        if (el.mapsAutocomplete || el.initializing) return;
+        
         el.initializing = true;
         scriptLoaded('mapsapi', function () {
-            console.log('maps.initAc scriptLoaded mapsapi - creando autocomplete',el);
             var ac = new google.maps.places.Autocomplete(el, {types: ['geocode']});
             ac.inputEl = el;
             el.mapsAutocomplete = ac;
@@ -137,7 +134,6 @@ var maps = {
             };
 
             el.initializing = undefined;
-            console.log('maps.initAc por llamar al callback ', callback, el);
             if (callback) {
                 callback(el);
             }
