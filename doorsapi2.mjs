@@ -3373,7 +3373,7 @@ export class Folder {
         var me = this;
 
         if (field) {
-            return me.fields().get(field);
+            return (await me.fields()).get(field);
 
         } else {
             // Devuelve la coleccion
