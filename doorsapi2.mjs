@@ -5796,8 +5796,10 @@ export class Utilities {
     doc.fields('DIA').value = dSession.utils.today();
     */
     today() {
-        //todo, el timeDiff no deberia estar hardcode
-        return new Date((new Date()).setHours(-3, 0, 0, 0));
+        //todo: el timeDiff no deberia estar hardcode
+        //todo: lo dejo en 0 pero no tengo claro tema timediff
+        return new Date().setHours(0, 0, 0, 0);
+        //return new Date((new Date()).setHours(-3, 0, 0, 0));
     }
 
     /**
