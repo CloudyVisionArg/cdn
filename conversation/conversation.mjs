@@ -85,6 +85,7 @@ export async function newConversationControl(basicConfig){
     
     let wappProvider = null;
     let fbProvider = null;
+    let instaProvider = null;
     let crmProviders = null;
     let convProviders = [];
     let quickMessageTypes = [];
