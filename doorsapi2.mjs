@@ -6314,7 +6314,6 @@ class V8Client {
         try {
             let fullUrl = (await me.session.node.server) + '/restful/' + url;
             let body;
-            debugger
             if (typeof(params) != 'string') params = JSON.stringify(params);
             method = method.toUpperCase();
             if (method == 'GET' || method == 'DELETE') {
