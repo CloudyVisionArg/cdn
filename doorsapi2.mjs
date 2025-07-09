@@ -6318,7 +6318,7 @@ class V8Client {
             if (typeof(params) != 'string') params = JSON.stringify(params);
             method = method.toUpperCase();
             if (method == 'GET' || method == 'DELETE') {
-                fullUrl += '?' + params;
+                if (params) fullUrl += '?' + params;
             } else {
                 body = params;
             }
