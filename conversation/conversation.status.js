@@ -249,11 +249,16 @@ function conversationStatusBar(options) {
 				return;
 			}
 			let provName = "";
-			if(provider instanceof whatsAppDataProvider){
+			//if(provider instanceof whatsAppDataProvider){
+			if(provider.constructor.name == "whatsAppDataProvider"){
 				provName = "Whatsapp";
 			}
-			else if(provider instanceof messengerDataProvider){
+			//else if(provider instanceof messengerDataProvider){
+			else if(provider.constructor.name == "messengerDataProvider"){
 				provName = "Facebook";
+			}
+			else if(provider.constructor.name == "instagramDataProvider"){
+				provName = "Instagram";
 			}
 			//html += `<optgroup label="${provName}" data-content="<span>${provName}</span>">`;
 			accounts.forEach(function (account) {
