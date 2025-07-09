@@ -589,7 +589,7 @@ async function setupInstagramMessengerProvider(selector, instaConfig){
         loggedUser: userData,
         googleMapsKey: null,
         codelibUrl: null,
-        s3Key: fbConfig.s3Key,
+        s3Key: instaConfig.s3Key,
         putTemplateRequested: null
     };
     return new instagramDataProvider(messengerOpts);
