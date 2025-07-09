@@ -73,9 +73,10 @@ export async function newConversationControl(basicConfig){
     let wappConfig = basicConfig.wappConfig;
     let crmConfig = basicConfig.crmConfig;
     let fbConfig = basicConfig.fbConfig;
+    let instaConfig = basicConfig.instaConfig;
     let meliConfig = basicConfig.meliConfig;
     
-    let necessaryScripts = await setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig);
+    let necessaryScripts = await setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig, instaConfig);
     await include(necessaryScripts);
 
     //Esto tendriamos que sacarlo.
@@ -111,6 +112,15 @@ export async function newConversationControl(basicConfig){
         if(fbProvider != null){
             convProviders.push(fbProvider);
             quickMessageTypes.push(...fbProvider.options.supportedTypes);
+        }
+    }
+    if(instaConfig != null){
+        instaConfig.dSession = doc ? doc.session : dSession;
+        instaConfig.doc = doc ? doc : null;
+        instaProvider = await setupInstagramMessengerProvider(conversationSelector, instaConfig);
+        if(instaProvider != null){
+            convProviders.push(instaProvider);
+            quickMessageTypes.push(...instaProvider.options.supportedTypes);
         }
     }
 
@@ -195,7 +205,7 @@ export async function newConversationControl(basicConfig){
     return ctrl;
 }
 
-async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig){
+async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig, instaConfig){
     let necessaryScripts = [];
 
     //ESTA YA NO SE NECESITA, ESTÁ EN conversationcontrol.css
@@ -242,7 +252,10 @@ async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig
     if(fbConfig != undefined && fbConfig != null){    
         necessaryScripts.push({id:'conversation-msngr',depends: cloneArr(depends), src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + scriptsBranch + '/conversation/conversation.msngr.js?v=6'});
     }
-    
+
+    if(instaConfig != undefined && instaConfig != null){    
+        necessaryScripts.push({id:'conversation-insta',depends: cloneArr(depends), src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + scriptsBranch + '/conversation/conversation.instagram.js?v=6'});
+    }
 
     //TODO Si agrego fechaproxaccion
     necessaryScripts.push({ id: 'lib-moment' });
@@ -437,6 +450,7 @@ async function setupFbMessengerProvider(selector, fbConfig){
     return new messengerDataProvider(messengerOpts);
 }
 
+
 async function setupCrmProvider(selector, crmConfig){
 
     if(crmConfig == null) return null;
@@ -533,6 +547,52 @@ async function setupCrmProvider(selector, crmConfig){
 		providers.push(notasProvider);
 	}
 	return providers;
+}
+
+async function setupInstagramMessengerProvider(selector, instaConfig){
+    let instaMessengerId = null;
+    let pageId = null;
+    if(instaConfig && instaConfig.userId != null){
+        instaMessengerId = instaConfig.userId;
+    }
+    if(instaConfig && instaConfig.msgnrIdField != null){
+        instaMessengerId = instaConfig.doc.fields(instaConfig.msgnrIdField).value;
+    }
+    if(instaConfig && instaConfig.pageId != null){
+        pageId = instaConfig.pageId;
+    }
+    if(instaConfig && instaConfig.pageIdField != null){
+        pageId = instaConfig.doc.fields(instaConfig.pageIdField).value;
+    }
+    //Se valida también el page id, porque no se puede interactuar con otra página que no sea a la que escribió
+    if(instaMessengerId == null || pageId == null) return null;
+
+    let userData = {
+        name: loggedUser.name,
+        accId: loggedUser.id,
+        email: loggedUser.email
+    };
+    //TODO
+    let fbRootFolderId = await dSession.settings('FACEBOOK_CONNECTOR_FOLDER');
+    let rootFld = await dSession.folder(fbRootFolderId);
+    let fldMsg = await rootFld.app.folder('/instagram/insta_chats/insta_messages');
+    var messengerOpts = {
+        rootFldId: fbRootFolderId,
+        messagesFolder: fldMsg.id,
+        supportedTypes: ["instaMessengerMsg"],
+        formula: "SENDER_ID = '" + messengerId + "' OR RECIPIENT_ID = '" + messengerId + "'",
+        sessionStatusContainer: "", /*Esto no haría falta? */
+        modalContainer: "",
+        from: pageId,
+        to: messengerId,
+        pageId: pageId,
+        loggedUser: userData,
+        googleMapsKey: null,
+        codelibUrl: null,
+        s3Key: fbConfig.s3Key,
+        putTemplateRequested: null
+    };
+    return new instagramDataProvider(messengerOpts);
 }
 
 function cloneArr(arr){

@@ -1427,7 +1427,7 @@ function instaMessengerMsg(){
  * @param {boolean} opts.forceSingleFrom - (opcional) Si es true, filtra los mensajes solo por el from
  * @param {object} opts.variables - (opcional) Variables a reemplazar en el mensaje
  */
-async function newMessengerChatControl(opts){
+async function newInstaMessengerChatControl(opts){
 	let accountField = opts.accountField;
 	let nameField = opts.nameField;
 	let pageIdField = opts.pageIdField;
