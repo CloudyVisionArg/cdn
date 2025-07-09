@@ -6307,17 +6307,19 @@ class V8Client {
         return ret;
     }
 
-    async fetch(url, method, params, paramName) {
+    async fetch(url, method, params) {
         let me = this;
         await utilsPromise;
 
         try {
             let fullUrl = (await me.session.node.server) + '/restful/' + url;
             let body;
-            if (typeof(params) == 'string') {
+            if (typeof(params) != 'string') params = JSON.stringify(params);
+            method = method.toUpperCase();
+            if (method == 'GET' || method == 'DELETE') {
                 fullUrl += '?' + params;
             } else {
-                body = JSON.stringify(paramName ? { [paramName]: params } : params);
+                body = params;
             }
             let headers = me.credentials();
             headers['Content-Type'] = 'application/json';
