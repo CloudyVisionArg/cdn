@@ -580,11 +580,11 @@ async function setupInstagramMessengerProvider(selector, instaConfig){
         rootFldId: fbRootFolderId,
         messagesFolder: fldMsg.id,
         supportedTypes: ["instaMessengerMsg"],
-        formula: "SENDER_ID = '" + messengerId + "' OR RECIPIENT_ID = '" + messengerId + "'",
+        formula: "SENDER_ID = '" + instaMessengerId + "' OR RECIPIENT_ID = '" + instaMessengerId + "'",
         sessionStatusContainer: "", /*Esto no haría falta? */
         modalContainer: "",
         from: pageId,
-        to: messengerId,
+        to: instaMessengerId,
         pageId: pageId,
         loggedUser: userData,
         googleMapsKey: null,
