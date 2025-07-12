@@ -5798,7 +5798,7 @@ export class Utilities {
     today() {
         //todo: el timeDiff no deberia estar hardcode
         //todo: lo dejo en 0 pero no tengo claro tema timediff
-        return new Date().setHours(0, 0, 0, 0);
+        return new Date(new Date().setHours(0, 0, 0, 0));
         //return new Date((new Date()).setHours(-3, 0, 0, 0));
     }
 
