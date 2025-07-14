@@ -3379,7 +3379,7 @@ export class Folder {
             // Devuelve la coleccion
             if (!me.#fieldsMap) {
                 let url = 'folders/' + me.id + '/fields';
-                let res = await me.session.v8Client.fetch(url, 'GET');
+                let res = await me.session.v8Client.fetch(url, { method: 'GET' });
                 var map = new DoorsMap();
                 res.forEach(el => {
                     map.set(el.Name, new Field(el, me));
@@ -3760,7 +3760,7 @@ export class Folder {
             '&order=' + encUriC(opt.order) + '&maxDocs=' + encUriC(opt.maxDocs) + 
             '&recursive=' + encUriC(opt.recursive) + '&maxDescrLength=' + encUriC(opt.maxTextLen);
 
-        return opt.v8 ? this.session.v8Client.fetch(url, 'GET', params, '') :
+        return opt.v8 ? this.session.v8Client.fetch(url, { method: 'GET', params }) :
             this.session.restClient.fetch(url, 'GET', params, '')
     }
 
@@ -3800,7 +3800,7 @@ export class Folder {
             '&maxDocs=' + encUriC(opt.maxDocs) + '&recursive=' + encUriC(opt.recursive) + 
             '&groupsOrder=' + encUriC(opt.groupsOrder) + '&totalsOrder=' + encUriC(opt.totalsOrder);
 
-        return opt.v8 ? this.session.v8Client.fetch(url, 'GET', params, '') :
+        return opt.v8 ? this.session.v8Client.fetch(url, { method: 'GET', params }) :
             this.session.restClient.fetch(url, 'GET', params, '')
     }
 
