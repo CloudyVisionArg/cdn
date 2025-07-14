@@ -6324,7 +6324,7 @@ class V8Client {
         try {
             let fullUrl = (await me.session.node.server) + '/restful/' + url;
             let body;
-            let params = typeof(opt.params) != 'string' ? JSON.stringify(opt.params) : params;
+            let params = typeof(opt.params) != 'string' ? JSON.stringify(opt.params) : opt.params;
             let method = opt.method.toUpperCase();
             if (method == 'GET' || method == 'DELETE') {
                 if (params) fullUrl += '?' + params;
