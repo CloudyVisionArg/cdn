@@ -6344,7 +6344,7 @@ class V8Client {
             }
 
         } catch(er) {
-            console.error(er, { url, method, params, paramName });
+            console.error(er, { url, method, params });
             throw er;
         }
     }
@@ -6375,7 +6375,7 @@ class V8Client {
             }
 
         } catch(er) {
-            console.error(er, { url, method, params, paramName });
+            console.error(er, { url, method, params });
             throw er;
         }
     };
