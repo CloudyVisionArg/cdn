@@ -6307,15 +6307,25 @@ class V8Client {
         return ret;
     }
 
-    async fetch(url, method, params) {
+    /*
+    options = {
+        method: 'GET',
+        params: {}, // Parametros
+    }
+    */
+    async fetch(url, options) {
         let me = this;
         await utilsPromise;
+
+        let opt = Object.assign({
+            method: 'GET',
+        }, options);
 
         try {
             let fullUrl = (await me.session.node.server) + '/restful/' + url;
             let body;
-            if (typeof(params) != 'string') params = JSON.stringify(params);
-            method = method.toUpperCase();
+            let params = typeof(opt.params) != 'string' ? JSON.stringify(opt.params) : params;
+            let method = opt.method.toUpperCase();
             if (method == 'GET' || method == 'DELETE') {
                 if (params) fullUrl += '?' + params;
             } else {
@@ -6344,41 +6354,10 @@ class V8Client {
             }
 
         } catch(er) {
-            console.error(er, { url, method, params });
+            console.error(er, { url, options });
             throw er;
         }
     }
-
-    async fetchRaw(url, method, body) {
-        let me = this;
-        await utilsPromise;
-
-        try {
-            let fullUrl = (await me.session.node.server) + '/restful/' + url;
-            let headers = me.credentials();
-            let res = await fetch(fullUrl, {
-                method, headers, body,
-                cache: 'no-store',
-            });
-            if (res.ok) {
-                return res;
-            } else {
-                let resTxt = await res.text();
-                let resJson;
-                try { resJson = JSON.parse(resTxt) } catch (e) {};
-                if (resJson) {
-                    let err = me.session.utils.deserializeError(resJson);
-                    throw err;
-                } else {
-                    throw new Error(resTxt);
-                }
-            }
-
-        } catch(er) {
-            console.error(er, { url, method, params });
-            throw er;
-        }
-    };
 
     /**
     @returns {Session}
