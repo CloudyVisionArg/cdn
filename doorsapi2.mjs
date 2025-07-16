@@ -5412,11 +5412,21 @@ export class Utilities {
         return this.session.node.exec(options);
     }
 
-    async execVbs(code) {
+    /**
+    Ejecuta un codigo vbs via execapi.asp.
+    payload es un objeto con pares clave-valor que se agregan al body
+    */
+    async execVbs(code, payload) {
         //todo: soporte para apiKey
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
             '&code=' + encodeURIComponent(code) +
             '&addACAO=' + encodeURIComponent(await this.execapiAcao);
+        
+        if (payload) {
+            for (let key of Object.keys(payload)) {
+                data += '&' + key + '=' + encodeURIComponent(payload[key]);
+            }
+        }
     
         var res = await fetch(this.session.serverUrl.replace('/restful', '/c/execapi.asp'), {
             method: 'POST',
