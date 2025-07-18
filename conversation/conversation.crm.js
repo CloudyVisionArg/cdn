@@ -1076,7 +1076,7 @@ function proxAccionControl(opts){
             $(me.allOptions.container).find(".right-container .btn-danger").removeClass("hidden");
 
             //Disparo el evento
-            me.allOptions.onChange.call(me, this.proxAccion, this.fechaProxAccion);
+            me.allOptions.onChange.call(me, me.proxAccion, me.fechaProxAccion);
 		});
 
         $("#proxAccionMainContainer #selectProxAccion").on("change",function(e){
@@ -1096,6 +1096,8 @@ function proxAccionControl(opts){
 		$(this.allOptions.container).find(".prox-accion-text").text("(sin prox accion)");
         this.proxAccion = null;
         this.fechaProxAccion = null;
+        me.proxAccion = null;
+        me.fechaProxAccion = null;
         $(this.allOptions.container).find(".right-container .btn-success").addClass("hidden");
         $(this.allOptions.container).find(".right-container .btn-danger").addClass("hidden");
 	};
