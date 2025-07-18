@@ -1063,8 +1063,8 @@ function proxAccionControl(opts){
 			}
 
             //Actualizo los datos
-            this.proxAccion = newAccion;
-            this.fechaProxAccion = newDateMoment.toISOString();
+            me.proxAccion = newAccion;
+            me.fechaProxAccion = newDateMoment.toISOString();
 
 			
             //Actualizo los textos
