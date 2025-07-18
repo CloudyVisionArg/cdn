@@ -510,14 +510,19 @@ async function setupCrmProvider(selector, crmConfig){
     };
 
     let suppTypes = [];
-    if(crmConfig.customerData.mobilePhone && crmConfig.customerData.mobilePhone != null && crmConfig.customerData.mobilePhone != ""){
-        suppTypes.push("llamadaMsg");
-        suppTypes.push("smsMsg");
+    if(!crmConfig.supportedTypes){
+        if(crmConfig.customerData.mobilePhone && crmConfig.customerData.mobilePhone != null && crmConfig.customerData.mobilePhone != ""){
+            suppTypes.push("llamadaMsg");
+            suppTypes.push("smsMsg");
+        }
+        if(crmConfig.customerData.email && crmConfig.customerData.email != null && crmConfig.customerData.email != ""){
+            suppTypes.push("emailMsg");
+        }
+        suppTypes.push("visitaMsg");
     }
-    if(crmConfig.customerData.email && crmConfig.customerData.email != null && crmConfig.customerData.email != ""){
-        suppTypes.push("emailMsg");
+    else{
+        suppTypes = [...crmConfig.supportedTypes];
     }
-    suppTypes.push("visitaMsg");
 
     var actsProvOpts = {
         chatContainer: selector,
