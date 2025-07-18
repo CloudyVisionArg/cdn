@@ -412,7 +412,7 @@ function visitaMsg(){
                 dt = new Date(msj.date);
                 
                 let  visitaText = me.actType ? me.actType : me.type;
-                body += "<h4><i class='fa " + me.icon + "'></i> " + visitaText + " el " + moment(dt).format("L") + " a las " + moment(dt).format("LT") + "</h4>";
+                body += "<h6><i class='fa " + me.icon + "'></i> " + visitaText + " el " + moment(dt).format("L") + " a las " + moment(dt).format("LT") + "</h6>";
 
                 if (msj.status) {
                     let icon = msj.status == "Vino a la reunión" ? "fa-thumbs-up text-success" : "fa-thumbs-down text-danger";
