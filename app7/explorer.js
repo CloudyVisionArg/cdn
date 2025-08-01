@@ -512,8 +512,6 @@ function reloadView(pCallback) {
 function loadViewSection(pContainer, pCallback) {
     var level, levelDrill, i, view, formula, order;
 
-    debugger
-    
     app7.preloader.show();
     view = $viewDiv[0].view;
 
