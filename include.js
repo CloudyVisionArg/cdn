@@ -24,10 +24,14 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 463 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 463, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 462 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 449 });
     /*
     Por si hay que volver atras
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 421 });
+    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 423, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 461 });
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 381 });
     */
@@ -36,10 +40,8 @@ function registeredScripts() {
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 435 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 426 });
     scripts.push({ id: 'lib-moment-timezone', path: 'lib/moment-timezone-with-data.min.js', version: 436 });
-    scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 423, hasdep: true });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 422 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 427 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 421 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
     scripts.push({ id: 'pivotable', repo: 'Global', path: 'client/pivotable.js' });
