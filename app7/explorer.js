@@ -920,8 +920,7 @@ function getRenderer(pView, pFolder, pCallback) {
 }
 
 function findProp(pProps, pFind) {
-    if (pProps == undefined) debugger
-    for (var i = 0; i < pProps.length; i++) {
+    for (var i = 0; i < pProps?.length; i++) {
         if (pProps[i].Name.toUpperCase() == pFind.toUpperCase()) {
             return pProps[i].Value;
         }
