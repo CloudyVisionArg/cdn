@@ -1869,7 +1869,7 @@ function f7AppEvents() {
         };
 
         // Ejecuto el metodo refresh del explorer
-        if (pageId && pageId.substring(0, 9) == 'explorer_') {
+        if (pageId && pageId.substring(0, 9) == 'explorer_' && page.pageEl.drs) {
             page.pageEl.drs.refreshOnFocus();
         };
     })
