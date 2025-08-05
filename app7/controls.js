@@ -2076,6 +2076,12 @@ function getTabbedViewsLayout(pTabs) {
                 });
             }
 
+            actArr.push({
+                text: 'Cerrar',
+                close: true,
+                color: 'red',
+            });
+
             actions = app7.actions.create({
                 buttons: actArr,
             });
