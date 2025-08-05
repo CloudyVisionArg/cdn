@@ -1967,6 +1967,7 @@ Para usar en el onDeviceReady. Devuelve un layout inicial con Tabbed Views
 
 getTabbedViewsLayout([
     {
+        // Explorer
         viewid: 'view-explorer',
         label: 'Contactos',
         url: '/explorer/?fld_id=5103&fixed=1',
@@ -1974,10 +1975,25 @@ getTabbedViewsLayout([
         mdicon: 'contacts',
     },
     {
-        viewid: 'view-opciones',
-        label: 'Opciones',
-        url: '/codelib/?code=opciones',
-        iosicon: 'gear_alt_fill', // Como no especifico mdicon se usa este en los 2
+        // Boton con subtabs
+        label: 'Mas',
+        iosicon: 'ellipsis',
+        mdicon: 'more_horiz',
+        tabs: [
+            { // Notificaciones
+                viewid: 'view-notifications',
+                label: 'Notificaciones',
+                url: '/cdn/?script=app7-notifications',
+                iosicon: '<div class="icon">bell</div>',
+                mdicon: '<div class="icon">notifications</div>',
+            },
+            { // Opciones
+                viewid: 'view-opciones',
+                label: 'Opciones',
+                url: '/codelib/?code=opciones',
+                iosicon: 'gear_alt_fill', // Como no especifico mdicon se usa este en los 2
+            },
+        ],
     }
 ]).appendTo($('#app'));
 */
