@@ -2080,6 +2080,7 @@ function getTabbedViewsLayout(pTabs) {
                 text: 'Cerrar',
                 close: true,
                 color: 'red',
+                icon: 'bell',
             });
 
             actions = app7.actions.create({
