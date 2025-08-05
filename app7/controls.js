@@ -2049,7 +2049,6 @@ function getTabbedViewsLayout(pTabs) {
                     text: subtab.label,
                     icon,
                     onClick: function(actions, e) {
-                        debugger;
                         app7.tab.show('#' + subtab.viewid);
                     },
                 });
