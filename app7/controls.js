@@ -2071,6 +2071,16 @@ function getTabbedViewsLayout(pTabs) {
             let actArr = [];
             for (var j = 0; j < tab.tabs.length; j++) {
                 var subtab = tab.tabs[j];
+
+                let $view = $('<div/>', {
+                    id: subtab.viewid,
+                    class: 'view tab',
+                }).appendTo($tabs);
+                
+                let f7View = app7.views.create($view[0], {
+                    url: subtab.url,
+                });
+
                 let icon = '';
                 if (subtab.iosicon) icon += `<i class="f7-icons ${ tab.mdicon ? ' ios-only' : '' }">${ subtab.iosicon }</i>`;
                 if (subtab.mdicon) icon += `<i class="material-icons ${ tab.iosicon ? ' md-only' : '' }">${ subtab.mdicon }</i>`;
@@ -2078,9 +2088,10 @@ function getTabbedViewsLayout(pTabs) {
                     text: subtab.label,
                     icon,
                     onClick: function(actions, e) {
-                        debugger
+                        app7.tab.show('#' + subtab.viewid);
                     },
                 });
+
             }
 
             actArr.push({
