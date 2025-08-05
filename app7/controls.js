@@ -2039,13 +2039,15 @@ function getTabbedViewsLayout(pTabs) {
 
         } else if (tab.tabs) {
             // Es un tab de tabs
+            let actions;
+
             $a = $('<a/>', {
                 href: '#' + tab.id,
                 class: 'tab-link' + (i == 0 ? ' tab-link-active' : ''),
             }).appendTo($toolbarInner);
     
             $a.click(function (e) {
-                debugger
+                actions.open();
             });
 
             if (tab.iosicon) {
@@ -2065,6 +2067,18 @@ function getTabbedViewsLayout(pTabs) {
                     class: 'tabbar-label',
                 }).append(tab.label).appendTo($a);
             }
+
+            let actArr = [];
+            for (var j = 0; j < tab.tabs.length; j++) {
+                var subtab = tab.tabs[j];
+                actArr.push({
+                    text: subtab.label,
+                });
+            }
+
+            actions = app7.actions.create({
+                buttons: actArr,
+            });
 
         }
     };
