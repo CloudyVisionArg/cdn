@@ -2031,7 +2031,7 @@ function getTabbedViewsLayout(pTabs) {
 
             let actArr = [];
             for (var j = 0; j < tab.tabs.length; j++) {
-                var subtab = tab.tabs[j];
+                let subtab = tab.tabs[j];
 
                 let $view = $('<div/>', {
                     id: subtab.viewid,
