@@ -2076,7 +2076,10 @@ function getTabbedViewsLayout(pTabs) {
                 if (subtab.mdicon) icon += `<i class="material-icons ${ tab.iosicon ? ' md-only' : '' }">${ subtab.mdicon }</i>`;
                 actArr.push({
                     text: subtab.label,
-                    icon, 
+                    icon,
+                    onClick: function(actions, e) {
+                        debugger
+                    },
                 });
             }
 
@@ -2084,7 +2087,7 @@ function getTabbedViewsLayout(pTabs) {
                 text: 'Cerrar',
                 close: true,
                 color: 'red',
-                icon: '<i class="f7-icons ios-only">bag_fill</i>',
+                icon: '<i class="f7-icons ios-only">multiply</i><i class="material-icons md-only">close</i>',
             });
 
             actions = app7.actions.create({
