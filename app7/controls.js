@@ -2080,7 +2080,7 @@ function getTabbedViewsLayout(pTabs) {
                 text: 'Cerrar',
                 close: true,
                 color: 'red',
-                icon: 'bell',
+                icon: '<i class="f7-icons ios-only">bag_fill</i>',
             });
 
             actions = app7.actions.create({
