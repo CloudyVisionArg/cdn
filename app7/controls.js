@@ -2005,28 +2005,8 @@ function getTabbedViewsLayout(pTabs) {
 
         if (tab.url && tab.viewid) {
             // Es un tab de vista
-            $a = $('<a/>', {
-                href: '#' + tab.viewid,
-                class: 'tab-link' + (i == 0 ? ' tab-link-active' : ''),
-            }).appendTo($toolbarInner);
-    
-            if (tab.iosicon) {
-                $('<i/>', {
-                    class: 'f7-icons' + (tab.mdicon ? ' ios-only' : ''),
-                }).append(tab.iosicon).appendTo($a);
-            };
-            
-            if (tab.mdicon) {
-                $('<i/>', {
-                    class: 'material-icons' + (tab.iosicon ? ' md-only' : ''),
-                }).append(tab.mdicon).appendTo($a);
-            };
-
-            if (tab.label) {
-                $('<span/>', {
-                    class: 'tabbar-label',
-                }).append(tab.label).appendTo($a);
-            }
+            $a = getTabLink(tab);
+            $a.appendTo($toolbarInner);
             
             $view = $('<div/>', {
                 id: tab.viewid,
@@ -2041,32 +2021,13 @@ function getTabbedViewsLayout(pTabs) {
             // Es un tab de tabs
             let actions;
 
-            $a = $('<a/>', {
-                href: '#' + tab.id,
-                class: 'tab-link' + (i == 0 ? ' tab-link-active' : ''),
-            }).appendTo($toolbarInner);
+            tab.href = '';
+            $a = getTabLink(tab);
+            $a.appendTo($toolbarInner);
     
             $a.click(function (e) {
                 actions.open();
             });
-
-            if (tab.iosicon) {
-                $('<i/>', {
-                    class: 'f7-icons' + (tab.mdicon ? ' ios-only' : ''),
-                }).append(tab.iosicon).appendTo($a);
-            };
-            
-            if (tab.mdicon) {
-                $('<i/>', {
-                    class: 'material-icons' + (tab.iosicon ? ' md-only' : ''),
-                }).append(tab.mdicon).appendTo($a);
-            };
-
-            if (tab.label) {
-                $('<span/>', {
-                    class: 'tabbar-label',
-                }).append(tab.label).appendTo($a);
-            }
 
             let actArr = [];
             for (var j = 0; j < tab.tabs.length; j++) {
@@ -2107,6 +2068,33 @@ function getTabbedViewsLayout(pTabs) {
 
         }
     };
+
+    function getTabLink(tab) {
+        let $a = $('<a/>', {
+            href: '#' + tab.viewid,
+            class: 'tab-link',
+        });
+
+        if (tab.iosicon) {
+            $('<i/>', {
+                class: 'f7-icons' + (tab.mdicon ? ' ios-only' : ''),
+            }).append(tab.iosicon).appendTo($a);
+        };
+        
+        if (tab.mdicon) {
+            $('<i/>', {
+                class: 'material-icons' + (tab.iosicon ? ' md-only' : ''),
+            }).append(tab.mdicon).appendTo($a);
+        };
+
+        if (tab.label) {
+            $('<span/>', {
+                class: 'tabbar-label',
+            }).append(tab.label).appendTo($a);
+        }
+
+        return $a;
+    }
 
     return $views;
 }
