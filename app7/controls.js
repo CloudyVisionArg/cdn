@@ -2006,6 +2006,7 @@ function getTabbedViewsLayout(pTabs) {
         if (tab.url && tab.viewid) {
             // Es un tab de vista
             $a = getTabLink(tab);
+            if (i == 0) $a.addClass('tab-link-active');
             $a.appendTo($toolbarInner);
             
             $view = $('<div/>', {
