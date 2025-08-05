@@ -2051,6 +2051,7 @@ function getTabbedViewsLayout(pTabs) {
                     icon,
                     onClick: function(actions, e) {
                         app7.tab.show('#' + subtab.viewid);
+                        $toolbarInner.find('.tab-link-active').removeClass('tab-link-active');
                     },
                 });
 
