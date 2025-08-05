@@ -2071,8 +2071,12 @@ function getTabbedViewsLayout(pTabs) {
             let actArr = [];
             for (var j = 0; j < tab.tabs.length; j++) {
                 var subtab = tab.tabs[j];
+                let icon = '';
+                if (subtab.iosicon) icon += `<i class="f7-icons ${ tab.mdicon ? ' ios-only' : '' }">${ subtab.iosicon }</i>`;
+                if (subtab.mdicon) icon += `<i class="material-icons ${ tab.iosicon ? ' md-only' : '' }">${ subtab.mdicon }</i>`;
                 actArr.push({
                     text: subtab.label,
+                    icon, 
                 });
             }
 
