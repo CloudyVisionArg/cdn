@@ -2003,37 +2003,70 @@ function getTabbedViewsLayout(pTabs) {
     for (var i = 0; i < pTabs.length; i++) {
         tab = pTabs[i];
 
-        $a = $('<a/>', {
-            href: '#' + tab.viewid,
-            class: 'tab-link' + (i == 0 ? ' tab-link-active' : ''),
-        }).appendTo($toolbarInner);
- 
-        if (tab.iosicon) {
-            $('<i/>', {
-                class: 'f7-icons' + (tab.mdicon ? ' ios-only' : ''),
-            }).append(tab.iosicon).appendTo($a);
-        };
-        
-        if (tab.mdicon) {
-            $('<i/>', {
-                class: 'material-icons' + (tab.iosicon ? ' md-only' : ''),
-            }).append(tab.mdicon).appendTo($a);
-        };
+        if (tab.url && tab.viewid) {
+            // Es un tab de vista
+            $a = $('<a/>', {
+                href: '#' + tab.viewid,
+                class: 'tab-link' + (i == 0 ? ' tab-link-active' : ''),
+            }).appendTo($toolbarInner);
+    
+            if (tab.iosicon) {
+                $('<i/>', {
+                    class: 'f7-icons' + (tab.mdicon ? ' ios-only' : ''),
+                }).append(tab.iosicon).appendTo($a);
+            };
+            
+            if (tab.mdicon) {
+                $('<i/>', {
+                    class: 'material-icons' + (tab.iosicon ? ' md-only' : ''),
+                }).append(tab.mdicon).appendTo($a);
+            };
 
-        if (tab.label) {
-            $('<span/>', {
-                class: 'tabbar-label',
-            }).append(tab.label).appendTo($a);
+            if (tab.label) {
+                $('<span/>', {
+                    class: 'tabbar-label',
+                }).append(tab.label).appendTo($a);
+            }
+            
+            $view = $('<div/>', {
+                id: tab.viewid,
+                class: 'view tab' + (i == 0 ? ' view-main tab-active' : ''),
+            }).appendTo($tabs);
+            
+            app7.views.create($view[0], {
+                url: tab.url,
+            });
+
+        } else if (tab.tabs) {
+            // Es un tab de tabs
+            $a = $('<a/>', {
+                href: '#' + tab.id,
+                class: 'tab-link' + (i == 0 ? ' tab-link-active' : ''),
+            }).appendTo($toolbarInner);
+    
+            $a.click(function (e) {
+                debugger
+            });
+
+            if (tab.iosicon) {
+                $('<i/>', {
+                    class: 'f7-icons' + (tab.mdicon ? ' ios-only' : ''),
+                }).append(tab.iosicon).appendTo($a);
+            };
+            
+            if (tab.mdicon) {
+                $('<i/>', {
+                    class: 'material-icons' + (tab.iosicon ? ' md-only' : ''),
+                }).append(tab.mdicon).appendTo($a);
+            };
+
+            if (tab.label) {
+                $('<span/>', {
+                    class: 'tabbar-label',
+                }).append(tab.label).appendTo($a);
+            }
+
         }
-         
-        $view = $('<div/>', {
-            id: tab.viewid,
-            class: 'view tab' + (i == 0 ? ' view-main tab-active' : ''),
-        }).appendTo($tabs);
-        
-        app7.views.create($view[0], {
-            url: tab.url,
-        });
     };
 
     return $views;
