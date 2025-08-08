@@ -481,7 +481,8 @@ function searchLimit() {
 
 function evalCode(pCode) {
     return new Promise(async function (resolve, reject) {
-        eval(pCode);
+        try { eval(pCode) }
+        catch (er) { debugger }
     });
 }
 
