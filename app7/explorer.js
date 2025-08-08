@@ -483,7 +483,7 @@ function evalCode(pCode) {
     return new Promise(async function (resolve, reject) {
         debugger
         var pipe = {};
-        eval(`pipe.fn = async (resolve, reject) => { ${ code }\n};`);
+        eval(`pipe.fn = async (resolve, reject) => { ${ pCode }\n};`);
         pipe.fn(resolve, reject);
 
         /*
