@@ -480,7 +480,7 @@ function searchLimit() {
 }
 
 function evalCode(pCode) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         eval(pCode);
     });
 }

@@ -3680,6 +3680,7 @@ export class Folder {
         lang, // Lenguaje del codigo (js, vbs) (def js)
         evnId, // Id del evento asincrono de la carpeta, con las credenciales que se usaran
     }
+    //todo: permitir q se pase el json del doc, y la sesion elevada
     */
     async runElevated(options) {
         let me = this;
