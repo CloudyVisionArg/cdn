@@ -481,17 +481,9 @@ function searchLimit() {
 
 function evalCode(pCode) {
     return new Promise(async function (resolve, reject) {
-        debugger
         var pipe = {};
         eval(`pipe.fn = async (resolve, reject) => { ${ pCode }\n};`);
         pipe.fn(resolve, reject);
-
-        /*
-        var pipe = {};
-        eval(`pipe.fn = async (ctx) => { ${ code }\n};`);
-        return await pipe.fn(ctx);
-        */
-
     });
 }
 
