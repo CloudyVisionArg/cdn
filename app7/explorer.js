@@ -481,6 +481,7 @@ function searchLimit() {
 
 function evalCode(pCode) {
     return new Promise(function (resolve, reject) {
+        debuygger
         let fn = new Function('ctx', pCode);
         try { fn() }
         catch (er) { debugger }
