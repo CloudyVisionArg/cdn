@@ -482,9 +482,12 @@ function searchLimit() {
 function evalCode(pCode) {
     return new Promise(function (resolve, reject) {
         debugger
-        let fn = new Function('ctx', pCode);
-        try { fn() }
-        catch (er) { debugger }
+        try {
+            let fn = new Function('ctx', pCode);
+            fn();
+        } catch (er) {
+            debugger
+        }
 
         /*
         var pipe = {};
