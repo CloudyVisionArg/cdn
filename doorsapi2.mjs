@@ -1576,30 +1576,23 @@ export class Attachment {
         });
     }
     set fileStream(value) {
-        if (!this.isNew) throw new Error('Readonly property');
-        this.#json.File = value;
+        return new Promise(async (resolve, reject) => {
+            if (!this.isNew) throw new Error('Readonly property');
+            let buf;
 
-        debugger
-        if (value instanceof Blob) {
-            this.#json.Size = value.size;
-        } else if (value instanceof ArrayBuffer) {
-            this.#json.Size = value.byteLength;
-        } else if (value instanceof Uint8Array) {
-            this.#json.Size = value.length;
-        } 
-        /*
-        let buf, fs = await att.fileStream;
-        if (fs.arrayBuffer) {
-            buf = await fs.arrayBuffer();
-        } else if (fs.buffer) {
-            buf = fs.buffer;
-        } else {
-            buf = fs;
-        }
-        let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
-        newAtt.File = new SimpleBuffer(buf).toString('base64');
-        newAtt.Group = att.group;
-        */
+            if (value instanceof Blob) {
+                buf = await value.arrayBuffer();
+                this.#json.Size = value.size;
+            } else if (value instanceof ArrayBuffer) {
+                buf = value;
+                this.#json.Size = value.byteLength;
+            } else if (value instanceof Uint8Array) {
+                buf = fs.buffer;
+                this.#json.Size = value.length;
+            } 
+
+            this.#json.File = new SimpleBuffer(buf).toString('base64');
+        });
     }
 
     /**
@@ -2364,6 +2357,10 @@ export class Document {
                 attJson.AccName = res.name;
             }
         )
+
+        /*
+        let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
+        */
 
         this.#attachmentsMap.set(name, att);
         return att;
