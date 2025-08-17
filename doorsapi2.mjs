@@ -2747,15 +2747,10 @@ export class Document {
                     try {
                         await s3.headBucket({ Bucket: bucketName }).promise();
                     } catch (err) {
-                        debugger
-                        if (err.code === 'NoSuchBucket') {
-                            try {
-                                await s3.createBucket({ Bucket: bucketName }).promise();
-                            } catch (err2) {
-                                throw err2;
-                            }
-                        } else {
-                            throw err;
+                        try {
+                            await s3.createBucket({ Bucket: bucketName }).promise();
+                        } catch (err2) {
+                            throw err2;
                         }
                     }
 
