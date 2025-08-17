@@ -1559,6 +1559,7 @@ export class Attachment {
     */
     get fileStream() {
         var me = this;
+
         return new Promise((resolve, reject) => {
             if (!me.#json.File) {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
@@ -1571,7 +1572,21 @@ export class Attachment {
                 )
 
             } else {
-                resolve(me.#json.File);
+                let file = me.#json.File;
+
+                if (typeof(file) == 'string') {
+                    // Es base64
+                    let bf;
+                    if (me.session.node.inNode) {
+                        bf = Buffer.from(atob(file), 'binary');
+                    } else {
+                        bf = me.session.utils.base64ToBuffer(me.#json.File);
+                    }
+                    resolve(bf);
+
+                } else {
+                    resolve(file);
+                }
             }
         });
     }
@@ -1594,16 +1609,6 @@ export class Attachment {
             } 
 
             me.#json.File = new SimpleBuffer(buf).toString('base64');
-
-            let brp;
-            if (me.session.node.inNode) {
-                brp = Buffer.from(atob(me.#json.File), 'binary');
-            } else {
-                // todo: falta probar
-                brp = me.session.utils.base64ToBuffer(me.#json.File);
-            }
-            debugger;
-
         });
     }
 
@@ -5310,8 +5315,7 @@ export class Utilities {
             if (me.session.node.inNode) {
                 return Buffer.from(atob(str.substring(prefix.length)), 'binary');
             } else {
-                // todo: falta probar
-                debugger;
+                // Devuelve un SimpleBuffer
                 return me.base64ToBuffer(str.substring(prefix.length));
             }
         } else {
