@@ -2354,6 +2354,7 @@ export class Document {
         let attJson = {
             Name: name,
             IsNew: true,
+            DocId: me.id,
         };
 
         let ix = name.lastIndexOf('.');
@@ -2375,10 +2376,12 @@ export class Document {
             }
         )
 
+        /*
         me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '').then(
             res => {debugger},
             err => {debugger}
         );
+        */
 
         this.#attachmentsMap.set(name, att);
         return att;
