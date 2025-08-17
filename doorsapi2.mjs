@@ -1508,16 +1508,14 @@ export class Attachment {
     delete() {
         var me = this;
         return new Promise(async (resolve, reject) => {
-            if (await me.session.doorsVersion >= '008.000.000.000') {
-                console.warn('attachment.delete no dispara los eventos sincronos de documento, no deberia usarse a partir de Doors 8');
-            }
-
             try {
-                if (!me.isNew) {
-                    let url = 'documents/' + me.parent.id + '/attachments';
-                    await me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId');
+                if (await me.session.doorsVersion < '008.000.000.000') {
+                    if (!me.isNew) {
+                        let url = 'documents/' + me.parent.id + '/attachments';
+                        await me.session.restClient.fetch(url, 'DELETE', [me.id], 'arrayAttId');
+                    }
                 }
-                me.parent._attMapsRemove(me);
+                me.parent._attRemove(me);
                 resolve(true);
 
             } catch(er) {
@@ -1696,31 +1694,32 @@ export class Attachment {
 
         var me = this;
         return new Promise(async (resolve, reject) => {
-            if (await me.session.doorsVersion >= '008.000.000.000') {
-                console.warn('attachment.save no dispara los eventos sincronos de documento, no deberia usarse a partir de Doors 8');
-            }
+            if (await me.session.doorsVersion < '008.000.000.000') {
+                var formData = new FormData();
+                var fs = await me.fileStream;
+                var blob = (fs instanceof Blob ? fs : new Blob([fs]));
+                formData.append('attachment', blob, me.name);
+                if (me.description || me.description == 0) formData.append('description', me.description);
+                if (me.group || me.group == 0) formData.append('group', me.group);
+                var url = 'documents/' + me.parent.id + '/attachments';
+                me.session.restClient.fetchRaw(url, 'POST', formData).then(
+                    async res => {
+                        let resJson = await res.json();
+                        let newId = Math.max(...resJson.InternalObject.map(el => el.AttId));
+                        let newJson = resJson.InternalObject.find(el => el.AttId == newId);
+                        if (me.name != newJson.Name) reject(new Error('Same name expected'));
+                        Object.assign(me.#json, newJson);
+                        me.#json.AccName = (await me.session.currentUser).name;
+                        //me.#json.File = fs; // Para que no se postee cdo grabe el doc
+                        //me.parent.toJSON().Attachments.push(newJson);
+                        resolve(me);
+                    },
+                    reject
+                );
 
-            var formData = new FormData();
-            var fs = await me.fileStream;
-            var blob = (fs instanceof Blob ? fs : new Blob([fs]));
-            formData.append('attachment', blob, me.name);
-            if (me.description || me.description == 0) formData.append('description', me.description);
-            if (me.group || me.group == 0) formData.append('group', me.group);
-            var url = 'documents/' + me.parent.id + '/attachments';
-            me.session.restClient.fetchRaw(url, 'POST', formData).then(
-                async res => {
-                    let resJson = await res.json();
-                    let newId = Math.max(...resJson.InternalObject.map(el => el.AttId));
-                    let newJson = resJson.InternalObject.find(el => el.AttId == newId);
-                    if (me.name != newJson.Name) reject(new Error('Same name expected'));
-                    me.#json = newJson
-                    me.#json.AccName = (await me.session.currentUser).name;
-                    //me.#json.File = fs; // Para que no se postee cdo grabe el doc
-                    me.parent.toJSON().Attachments.push(newJson);
-                    resolve(me);
-                },
-                reject
-            );
+            } else {
+                resolve(undefined);
+            }
         });
     }
 
@@ -2124,6 +2123,19 @@ export class Document {
         if (folder) this.#parent = folder;
     }
 
+    /**
+    Este metodo se usa desde att.delete para sacar el adjunto de los maps
+    cdo se borra
+    */
+    _attRemove(att) {
+        if (this.#attachmentsMap.find((value, key) => value == att))
+            this.#attachmentsMap.delete(att.name);
+
+        let atts = this.#json.Attachments;
+        let ix = atts.findIndex(el => el.AttId == att.id);
+        if (ix >= 0) atts.splice(ix, 1);
+    }
+
     _reset() {
         this.#parent = undefined;
         this.#fieldsMap = undefined;
@@ -2288,7 +2300,10 @@ export class Document {
                 if (typeof(attachment) == 'number') {
                     // Busca por id
                     for (let att of map.values()) {
-                        if (att.id == attachment) ret = att;
+                        if (att.id == attachment) {
+                            ret = att;
+                            break;
+                        }
                     }
                 } else {
                     // Busca por name
@@ -2341,34 +2356,37 @@ export class Document {
     Marca un adjunto para borrar cdo se haga el save
     @returns {Attachment}
     */
-    /* todoAt: ver dnd se usa
-    attachmentsDelete(name) {
+    attachmentsDelete(attachment) {
+        debugger
         let me = this;
-        let att = me.#attachmentsMap.get(name);
+        let att;
+        if (typeof(attachment) == 'number') {
+            // Busca por id
+            for (let el of me.#attachmentsMap.values()) {
+                if (el.id == attachment) {
+                    att = el;
+                    break;
+                }
+            }
+        } else {
+            // Busca por name
+            att = me.#attachmentsMap.get(attachment);
+        }
+
         if (att) {
-            if (!att.isNew) me.#deletedAttsMap.set(att.name, att);
-            me.#attachmentsMap.delete(att.name);
+            me._attRemove(att);
             return att;
         } else {
             throw new Error('Not found');
         }
     }
-    */
 
     /**
     Alias de attachmentsAdd
     */
-    attachmentsNew(name) {
-        return this.attachmentsAdd(name);
+    attachmentsNew(attachment) {
+        return this.attachmentsAdd(attachment);
     }
-
-    /* todoAt: ver dnd se usa
-    attachmentsReset() {
-        this.#attachmentsMap = new DoorsMap();
-        this.#attachmentsMap._loaded = false;
-        this.#deletedAttsMap = new DoorsMap();
-    }
-    */
 
     /** No implementado aun */
     /*
@@ -2412,17 +2430,17 @@ export class Document {
     fields(name, value) // Setea el valor del field.
     @returns {(DoorsMap|Field)}
     */
-    fields(name, value) {
+    fields(attachment, value) {
         var me = this;
 
-        if (name) {
+        if (attachment) {
             // Devuelve un field
-            var field = me.fields().get(name);
+            var field = me.fields().get(attachment);
             if (field) {
                 if (value !== undefined) field.value = value;
                 return field;
             } else {
-                if (name.toUpperCase() != '[NULL]') console.log('Field not found: ' + name);
+                if (attachment.toUpperCase() != '[NULL]') console.log('Field not found: ' + attachment);
                 return undefined;
             }
 
@@ -2562,11 +2580,11 @@ export class Document {
     @example
     await doc.nodeEvent({ owner, repo, path, ref, fresh });
     */
-    async nodeEvent(code, name) {
+    async nodeEvent(code, attachment) {
         this.#json = await this.session.node.exec({
             code: code,
             payload: {
-                eventName: name,
+                eventName: attachment,
             },
             doc: this.toJSON(),
         });
@@ -2672,48 +2690,6 @@ export class Document {
             }
             var tags = me.#json.Tags;
 
-            // En Doors 8 los attachs se graban junto con el doc
-            if (await me.session.doorsVersion >= '008.000.000.000') {
-                let attsJson = me.#json.Attachments;
-
-                // Borrados
-                //todoAt: let attsMap = this.#deletedAttsMap
-                let keys = Array.from(attsMap.keys());
-                await me.session.utils.asyncLoop(keys.length, async loop => {
-                    let att = attsMap.get(keys[loop.iteration()]);
-                    let ix = attsJson.indexOf(attsJson.find(el => el.AttId == att.id));
-                    if (ix >= 0) attsJson.splice(ix, 1);
-                    loop.next();
-                });
-    
-                // Nuevos
-                attsMap = await me.attachments();
-                keys = Array.from(attsMap.keys());
-                await me.session.utils.asyncLoop(keys.length, async loop => {
-                    let att = attsMap.get(keys[loop.iteration()]);
-                    if (att.isNew) {
-                        let buf, fs = await att.fileStream;
-                        if (fs.arrayBuffer) {
-                            buf = await fs.arrayBuffer();
-                        } else if (fs.buffer) {
-                            buf = fs.buffer;
-                        } else {
-                            buf = fs;
-                        }
-                        let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
-                        newAtt.Description = att.description;
-                        let ix = att.name.lastIndexOf('.');
-                        if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
-                        newAtt.File = new SimpleBuffer(buf).toString('base64');
-                        newAtt.Group = att.group;
-                        newAtt.Name = att.name;
-                        newAtt.Size = att.size;
-                        me.#json.Attachments.push(newAtt);
-                    }
-                    loop.next();
-                });
-            }
-
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
@@ -2731,8 +2707,6 @@ export class Document {
                             }
 
                             me._reset();
-                            if (await me.session.doorsVersion >= '008.000.000.000') me.attachmentsReset();
-
                             resolve(me);
                         },
                         reject
