@@ -2729,7 +2729,7 @@ export class Document {
             var atts = me.#json.Attachments;
             for (let att of atts) {
                 if (att.IsNew) {
-                    let awsSdkclientS3 = await import('https://cdn.jsdelivr.net/npm/@aws-sdk/client-s3/+esm');
+                    let awsSdkclientS3 = await import("https://esm.sh/@aws-sdk/client-s3@3.485.0");
                     debugger
 
                     await include('aws-sdk', 'https://cdn.jsdelivr.net/npm/@aws-sdk/client-s3/+esm');
