@@ -20,6 +20,7 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
+debugger
 let s3 = await import('https://esm.sh/@aws-sdk/client-s3@3.485.0');
 const client = new s3.S3Client({ region: 'sa-east-1' });
 const command = new s3.HeadBucketCommand({ Bucket: "your-bucket-name" });
