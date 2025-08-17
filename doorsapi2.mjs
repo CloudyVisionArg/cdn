@@ -1576,22 +1576,34 @@ export class Attachment {
         });
     }
     set fileStream(value) {
+        let me = this;
+
         return new Promise(async (resolve, reject) => {
-            if (!this.isNew) throw new Error('Readonly property');
+            if (!me.isNew) throw new Error('Readonly property');
             let buf;
 
             if (value instanceof Blob) {
                 buf = await value.arrayBuffer();
-                this.#json.Size = value.size;
+                me.#json.Size = value.size;
             } else if (value instanceof ArrayBuffer) {
                 buf = value;
-                this.#json.Size = value.byteLength;
+                me.#json.Size = value.byteLength;
             } else if (value instanceof Uint8Array) {
                 buf = fs.buffer;
-                this.#json.Size = value.length;
+                me.#json.Size = value.length;
             } 
 
-            this.#json.File = new SimpleBuffer(buf).toString('base64');
+            me.#json.File = new SimpleBuffer(buf).toString('base64');
+
+            let brp;
+            if (me.session.node.inNode) {
+                brp = Buffer.from(atob(me.#json.File), 'binary');
+            } else {
+                // todo: falta probar
+                brp = me.session.utils.base64ToBuffer(me.#json.File);
+            }
+            debugger;
+
         });
     }
 
@@ -2707,9 +2719,14 @@ export class Document {
             // Saco el File de los adjuntos que no son nuevos
             var atts = me.#json.Attachments;
             atts.forEach(att => {
-                if (!att.IsNew) delete att.File;
+                if (att.IsNew) {
+                    //todo: subir los attachs nuevos a s3
+                } else {
+                    delete att.File;
+                }
             });
-            
+
+
             debugger
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
