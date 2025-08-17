@@ -1586,6 +1586,22 @@ export class Attachment {
         } else if (value instanceof Uint8Array) {
             this.#json.Size = value.length;
         } 
+        /*
+        let buf, fs = await att.fileStream;
+        if (fs.arrayBuffer) {
+            buf = await fs.arrayBuffer();
+        } else if (fs.buffer) {
+            buf = fs.buffer;
+        } else {
+            buf = fs;
+        }
+        let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
+        newAtt.Description = att.description;
+        let ix = att.name.lastIndexOf('.');
+        if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
+        newAtt.File = new SimpleBuffer(buf).toString('base64');
+        newAtt.Group = att.group;
+        */
     }
 
     /**
