@@ -2740,12 +2740,12 @@ export class Document {
 
                     const s3 = new AWS.S3();
 
-                    debugger
 
                     //const bucketName = 'ATT-' + (await dSession.instance).Name;
                     const bucketName = 'cloudy-whatsapp-connector';
 
-                    await s3.headBucket({ Bucket: bucketName }).promise();
+                    //await s3.headBucket({ Bucket: bucketName }).promise();
+                    let ret = s3.headBucket({ Bucket: bucketName });
 
                     debugger
 
