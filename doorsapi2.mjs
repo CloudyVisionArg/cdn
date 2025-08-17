@@ -2746,7 +2746,6 @@ export class Document {
 						apiVersion: '2006-03-01',
 						params: {Bucket: 'cloudy-whatsapp-connector'}
 					});
-                    */
 
                     s3.upload(
 						{
@@ -2757,11 +2756,12 @@ export class Document {
 						},
                         (err, data) => {}
                     );
+                    */
 
                 } else {
                     delete att.File;
                 }
-            });
+            };
 
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
