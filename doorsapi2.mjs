@@ -2262,44 +2262,47 @@ export class Document {
     attachments(attachment) {
         var me = this;
 
-        if (attachment == undefined) {
-            // Devuelve la coleccion
-            if (!me.#attachmentsMap) {
-                let map = new DoorsMap();
-                me.#json.Attachments.forEach(el => {
-                    map.set(el.Name, new Attachment(el, me));
-                });
-                me.#attachmentsMap = map;
-            }
-            return me.#attachmentsMap;
+        return new Promise(async (resolve, reject) => {
+            if (attachment == undefined) {
+                // Devuelve la coleccion
+                if (!me.#attachmentsMap) {
+                    let map = new DoorsMap();
 
-        } else {
-            // Devuelve un adjunto
-            let map = me.attachments();
-            if (typeof(attachment) == 'number') {
-                // Busca por id
-                for (let att of map.values()) {
-                    if (att.id == attachment) return att;
+                    debugger;
+                    let atts = me.#json.Attachments;
+                    var ids = atts.map(att => att.AccId);
+                    // Saca los repetidos
+                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+                    // Levanta los accounts y completa el AccName
+                    let accs = await me.session.directory.accountsSearch('acc_id in (' + ids.join + ',)'); 
+                    atts.forEach(el => {
+                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                        map.set(el.Name, new Attachment(el, me));
+                    });
+                    me.#attachmentsMap = map;
                 }
-                return undefined;
+                resolve(me.#attachmentsMap);
+
+            } else {
+                // Devuelve un adjunto
+                let map = me.attachments();
+                let ret;
+                if (typeof(attachment) == 'number') {
+                    // Busca por id
+                    for (let att of map.values()) {
+                        if (att.id == attachment) ret = att;
+                    }
+                } else {
+                    // Busca por name
+                    ret = map.get(attachment);
+                }
+                if (ret) {
+                    resolve(ret);
+                } else {
+                    reject(new Error('Attachment not found: ' + attachment));
+                }
             }
-            // Busca por name
-            return map.get(attachment);
-        }
-
-
-        /*
-        // Arma un array de AccId
-        var ids = res.map(att => att.AccId);
-        // Saca los repetidos
-        ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-        // Levanta los accounts y completa el nombre
-        me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-            accs => {
-                res.forEach(el => {
-                    el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                    me.#attachmentsMap.set(el.Name, new Attachment(el, me));
-        */
+        });
     }
 
     /**
