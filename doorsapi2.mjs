@@ -20,6 +20,9 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
+let awsSdkclientS3 = await import("https://esm.sh/@aws-sdk/client-s3@3.485.0");
+debugger
+
 var _mainlib, _moment, _numeral, _CryptoJS, _serializeError,
     _fastXmlParser, _URL, _htmlEntities, _contentDisposition, _incjs;
 
