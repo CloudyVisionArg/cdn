@@ -2741,11 +2741,24 @@ export class Document {
                     const s3 = new AWS.S3();
 
 
-                    //const bucketName = 'ATT-' + (await dSession.instance).Name;
-                    const bucketName = 'cloudy-whatsapp-connector';
+                    const bucketName = 'ATT-' + (await dSession.instance).Name;
+                    //const bucketName = 'cloudy-whatsapp-connector';
 
-                    //await s3.headBucket({ Bucket: bucketName }).promise();
-                    let ret = s3.headBucket({ Bucket: bucketName });
+                    try {
+                        await s3.headBucket({ Bucket: bucketName }).promise();
+                    } catch (err) {
+                        if (err.code === 'NoSuchBucket') {
+                            try {
+                                await s3.createBucket({ Bucket: bucketName }).promise();
+                            } catch (err2) {
+                                throw err2;
+                            }
+                        } else {
+                            throw err;
+                        }
+                    }
+
+
 
                     debugger
 
