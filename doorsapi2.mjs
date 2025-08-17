@@ -2393,7 +2393,6 @@ export class Document {
     @returns {Attachment}
     */
     attachmentsDelete(attachment) {
-        debugger
         let me = this;
         let att;
         if (typeof(attachment) == 'number') {
@@ -2736,8 +2735,6 @@ export class Document {
                 }
             });
 
-
-            debugger
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
