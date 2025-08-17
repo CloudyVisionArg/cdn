@@ -2360,8 +2360,8 @@ export class Document {
         // Obtiene el ID
         me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '').then(
             res => {
-                debugger
                 attJson.AttId = res.AttId;
+                attJson.Created = res.Created;
             }
         );
 
