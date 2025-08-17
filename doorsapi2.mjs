@@ -2326,11 +2326,10 @@ export class Document {
 
         let att = new Attachment(attJson, me);
 
-        debugger;
         this.session.currentUser.then(
             res => {
-                att.AccId = res.id;
-                att.AccName = res.name;
+                attJson.AccId = res.id;
+                attJson.AccName = res.name;
             }
         )
 
