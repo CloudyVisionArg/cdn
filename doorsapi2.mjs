@@ -2274,7 +2274,7 @@ export class Document {
                     // Saca los repetidos
                     ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
                     // Levanta los accounts y completa el AccName
-                    let accs = await me.session.directory.accountsSearch('acc_id in (' + ids.join + ',)'); 
+                    let accs = await me.session.directory.accountsSearch('acc_id in (' + ids.join + ')'); 
                     atts.forEach(el => {
                         el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                         map.set(el.Name, new Attachment(el, me));
