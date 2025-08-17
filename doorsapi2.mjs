@@ -2296,6 +2296,7 @@ export class Document {
     @returns {(Promise<DoorsMap>|Promise<Attachment>)}
     */
     attachments(attachment) {
+        debugger
         var me = this;
 
         return new Promise(async (resolve, reject) => {
