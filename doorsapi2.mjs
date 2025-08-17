@@ -23,7 +23,7 @@ async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constr
 debugger
 let s3 = await import('https://esm.sh/@aws-sdk/client-s3@3.485.0');
 const client = new s3.S3Client({ region: 'sa-east-1' });
-const command = new s3.HeadBucketCommand({ Bucket: "your-bucket-name" });
+await client.send(new s3.HeadBucketCommand({ Bucket: "your-bucket-name" }));
 
 
 var _mainlib, _moment, _numeral, _CryptoJS, _serializeError,
