@@ -2296,7 +2296,6 @@ export class Document {
     @returns {(Promise<DoorsMap>|Promise<Attachment>)}
     */
     attachments(attachment) {
-        debugger
         var me = this;
 
         return new Promise(async (resolve, reject) => {
@@ -2358,6 +2357,22 @@ export class Document {
             DocId: me.id,
         };
 
+        // Obtiene el ID
+        me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '').then(
+            res => {
+                debugger
+                attJson.AttId = res.AttId;
+            }
+        );
+
+        // Completa el creador
+        me.session.currentUser.then(
+            res => {
+                attJson.AccId = res.id;
+                attJson.AccName = res.name;
+            }
+        )
+
         let ix = name.lastIndexOf('.');
         if (ix >= 0) attJson.Extension = name.substring(ix + 1);
 
@@ -2369,21 +2384,6 @@ export class Document {
         atts.push(attJson);
 
         let att = new Attachment(attJson, me);
-
-        me.session.currentUser.then(
-            res => {
-                attJson.AccId = res.id;
-                attJson.AccName = res.name;
-            }
-        )
-
-        /*
-        me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '').then(
-            res => {debugger},
-            err => {debugger}
-        );
-        */
-
         this.#attachmentsMap.set(name, att);
         return att;
     }
