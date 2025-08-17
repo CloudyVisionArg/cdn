@@ -3961,6 +3961,7 @@ export class Folder {
 
 /*
 todo: terminar
+JSON del folder:
 
 AccId: 462
 AclInfo: null
