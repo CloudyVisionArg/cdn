@@ -2729,6 +2729,9 @@ export class Document {
             var atts = me.#json.Attachments;
             for (let att of atts) {
                 if (att.IsNew) {
+                    let awsSdkclientS3 = await import('https://cdn.jsdelivr.net/npm/@aws-sdk/client-s3@3.864.0/+esm');
+                    debugger
+
                     await include('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1481.0.min.js');
 
                     //todo: subir los attachs nuevos a s3
