@@ -2747,6 +2747,7 @@ export class Document {
                     try {
                         await s3.headBucket({ Bucket: bucketName }).promise();
                     } catch (err) {
+                        debugger
                         if (err.code === 'NoSuchBucket') {
                             try {
                                 await s3.createBucket({ Bucket: bucketName }).promise();
