@@ -2727,9 +2727,37 @@ export class Document {
 
             // Saco el File de los adjuntos que no son nuevos
             var atts = me.#json.Attachments;
-            atts.forEach(att => {
+            for (let att of atts) {
                 if (att.IsNew) {
+                    debugger
+                    await include('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1481.0.min.js');
+
                     //todo: subir los attachs nuevos a s3
+                    AWS.config.update({
+                        accessKeyId: 'AKIASRVDXJIVCT53EAHR',
+                        secretAccessKey: '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',
+						region: 'sa-east-1',
+                    });
+
+                    const s3 = new AWS.S3();
+
+                    /*
+                    let s3 = new AWS.S3({
+						apiVersion: '2006-03-01',
+						params: {Bucket: 'cloudy-whatsapp-connector'}
+					});
+                    */
+
+                    s3.upload(
+						{
+							Key: s3Key,
+							Body: blobData,
+							ContentType: blobData.contentType,
+							ACL: 'public-read',
+						},
+                        (err, data) => {}
+                    );
+
                 } else {
                     delete att.File;
                 }
