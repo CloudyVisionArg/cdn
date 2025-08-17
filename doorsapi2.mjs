@@ -21,7 +21,7 @@ async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constr
 */
 
 debugger
-let s3 = await import('https://esm.sh/@aws-sdk/client-s3@3.485.0');
+let s3 = await import("https://cdn.jsdelivr.net/gh/aws-sdk/client-s3@3.844.0/index.min.mjs");
 const client = new s3.S3Client({ region: 'sa-east-1' });
 await client.send(new s3.HeadBucketCommand({ Bucket: "cloudy-whatsapp-connector" }));
 
