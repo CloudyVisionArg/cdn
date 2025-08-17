@@ -1579,6 +1579,7 @@ export class Attachment {
         if (!this.isNew) throw new Error('Readonly property');
         this.#json.File = value;
 
+        debugger
         if (value instanceof Blob) {
             this.#json.Size = value.size;
         } else if (value instanceof ArrayBuffer) {
@@ -1596,9 +1597,6 @@ export class Attachment {
             buf = fs;
         }
         let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
-        newAtt.Description = att.description;
-        let ix = att.name.lastIndexOf('.');
-        if (ix >= 0) newAtt.Extension = att.name.substring(ix + 1);
         newAtt.File = new SimpleBuffer(buf).toString('base64');
         newAtt.Group = att.group;
         */
@@ -2347,6 +2345,9 @@ export class Document {
             Name: name,
             IsNew: true,
         };
+
+        let ix = name.lastIndexOf('.');
+        if (ix >= 0) attJson.Extension = name.substring(ix + 1);
 
         let atts = me.#json.Attachments || [];
         // Verifica que no exista un adjunto con el mismo nombre
