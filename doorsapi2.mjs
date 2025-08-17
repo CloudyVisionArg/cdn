@@ -2054,6 +2054,55 @@ export class Directory {
 };
 
 
+/**
+{
+    "DocId": 12345,
+    "IsNew": false,
+    "HeadFields": [
+        {
+            "Name": "subject",
+            "Value": "Ejemplo de documento",
+            "Type": 1,
+            "Computed": false,
+            "Custom": false,
+            "HeaderTable": true,
+            "Description": "Asunto",
+            "Length": 255,
+            "Nullable": false,
+            "Updatable": true,
+            "ValueOld": null
+        }
+    ],
+    "CustomFields": [
+        // Igual que los Head
+    ],
+    "Attachments": [
+        {
+            "AttId": 1,
+            "IsNew": false,
+            "Name": "archivo.pdf",
+            "Description": "Archivo adjunto",
+            "Extension": "pdf",
+            "External": false,
+            "File": "__base64__=>...",
+            "Group": "default",
+            "Size": 1234,
+            "AccId": 462,
+            "AccName": "pagano",
+            "Created": "2024-04-25T15:29:45.02Z",
+            "Tags": { "documentType": "pdf" },
+            "toDelete": false
+        },
+        // ... otros adjuntos
+    ],
+    "Tags": { },
+    "Modified": "2024-06-06T15:49:51.29Z",
+    "Created": "2024-04-25T15:29:45.02Z",
+    "AccId": 462,
+    "FrmId": 504,
+    "FldId": 1001
+}
+*/
 export class Document {
     static objectType = 2;
     #parent;
@@ -2061,7 +2110,6 @@ export class Document {
     #json;
     #fieldsMap;
     #attachmentsMap;
-    #deletedAttsMap;
     #properties;
     #userProperties;
     #owner;
@@ -2069,17 +2117,16 @@ export class Document {
     #log;
 
     constructor(document, session, folder) {
+        debugger
         this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
-        this.#attachmentsMap = new DoorsMap();
-        this.#attachmentsMap._loaded = false;
-        this.#deletedAttsMap = new DoorsMap();
     }
 
     _reset() {
         this.#parent = undefined;
         this.#fieldsMap = undefined;
+        this.#attachmentsMap = undefined;
         this.#properties = undefined;
         this.#userProperties = undefined;
         this.#owner = undefined;
@@ -2117,17 +2164,6 @@ export class Document {
 
             await me.nodeEvent(code, event);
         }
-    }
-
-    /**
-    Este metodo se usa desde att.delete para sacar el adjunto de los maps
-    cdo se borra
-    */
-    _attMapsRemove(att) {
-        if (this.#deletedAttsMap.find((value, key) => value == att))
-            this.#deletedAttsMap.delete(att.name);
-        if (this.#attachmentsMap.find((value, key) => value == att))
-            this.#attachmentsMap.delete(att.name);
     }
 
     /**
