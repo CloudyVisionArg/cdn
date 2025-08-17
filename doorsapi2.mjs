@@ -20,7 +20,6 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
-debugger
 let s3 = await import("https://cdn.jsdelivr.net/gh/aws-sdk/client-s3@3.844.0/index.min.mjs");
 const client = new s3.S3Client({
     region: 'sa-east-1',
@@ -29,8 +28,8 @@ const client = new s3.S3Client({
         secretAccessKey: 'RBa7qWTIDB/crDUyR6HyQmeYlZDSBWqBcXo2wQyU',
     }
  });
-await client.send(new s3.HeadBucketCommand({ Bucket: "cloudy-whatsapp-connector" }));
-
+let res = await client.send(new s3.HeadBucketCommand({ Bucket: "cloudy-whatsapp-connector" }));
+debugger
 
 var _mainlib, _moment, _numeral, _CryptoJS, _serializeError,
     _fastXmlParser, _URL, _htmlEntities, _contentDisposition, _incjs;
