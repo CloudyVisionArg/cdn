@@ -2362,6 +2362,7 @@ export class Document {
     Marca un adjunto para borrar cdo se haga el save
     @returns {Attachment}
     */
+    /* todoAt: ver dnd se usa
     attachmentsDelete(name) {
         let me = this;
         let att = me.#attachmentsMap.get(name);
@@ -2373,6 +2374,7 @@ export class Document {
             throw new Error('Not found');
         }
     }
+    */
 
     /**
     Alias de attachmentsAdd
@@ -2381,11 +2383,13 @@ export class Document {
         return this.attachmentsAdd(name);
     }
 
+    /* todoAt: ver dnd se usa
     attachmentsReset() {
         this.#attachmentsMap = new DoorsMap();
         this.#attachmentsMap._loaded = false;
         this.#deletedAttsMap = new DoorsMap();
     }
+    */
 
     /** No implementado aun */
     /*
@@ -2694,7 +2698,7 @@ export class Document {
                 let attsJson = me.#json.Attachments;
 
                 // Borrados
-                let attsMap = this.#deletedAttsMap
+                //todoAt: let attsMap = this.#deletedAttsMap
                 let keys = Array.from(attsMap.keys());
                 await me.session.utils.asyncLoop(keys.length, async loop => {
                     let att = attsMap.get(keys[loop.iteration()]);
@@ -2773,7 +2777,7 @@ export class Document {
         }
 
         // 1ro borrar
-        let atts = this.#deletedAttsMap
+        //todoAt: let atts = this.#deletedAttsMap
         let keys = Array.from(atts.keys());
         await utils.asyncLoop(keys.length, async loop => {
             let att = atts.get(keys[loop.iteration()]);
