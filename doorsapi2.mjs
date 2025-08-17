@@ -2267,13 +2267,11 @@ export class Document {
                 // Devuelve la coleccion
                 if (!me.#attachmentsMap) {
                     let map = new DoorsMap();
-
-                    debugger;
                     let atts = me.#json.Attachments;
                     var ids = atts.map(att => att.AccId);
                     // Saca los repetidos
                     ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                    // Levanta los accounts y completa el AccName
+                    // Levanta los accounts para completar el AccName
                     let accs = await me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')'); 
                     atts.forEach(el => {
                         el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
@@ -2310,21 +2308,31 @@ export class Document {
     @returns {Attachment}
     */
     attachmentsAdd(name) {
+        let me = this;
+
         if (!name) throw new Error('name is required');
 
-        var att = new Attachment({
+        let attJson = {
             Name: name,
             IsNew: true,
-        }, this);
+        };
 
-        /* todo: no esta andando, resolver de otra forma, sin async
+        let atts = me.#json.Attachments || [];
+        // Verifica que no exista un adjunto con el mismo nombre
+        if (atts.find(att => att.Name.toUpperCase() == name.toUpperCase())) {
+            throw new Error('Attachment with name "' + name + '" already exists');
+        }
+        atts.push(attJson);
+
+        let att = new Attachment(attJson, me);
+
+        debugger;
         this.session.currentUser.then(
             res => {
                 att.AccId = res.id;
                 att.AccName = res.name;
             }
         )
-        */
 
         this.#attachmentsMap.set(name, att);
         return att;
