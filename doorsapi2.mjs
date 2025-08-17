@@ -27,8 +27,18 @@ const client = new s3.S3Client({
         accessKeyId: 'AKIASRVDXJIVCT53EAHR',
         secretAccessKey: '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',
     }
- });
-let res = await client.send(new s3.HeadBucketCommand({ Bucket: "cloudy-whatsapp-connecto" }));
+});
+const bucketName = 'cloudy-whatsapp-connecto';
+try {
+    let res = await client.send(new s3.HeadBucketCommand({ Bucket: bucketName }));
+} catch(err) {
+    debugger
+    try {
+        let res = await client.send(new s3.CreateBucketCommand({ Bucket: bucketName }))
+    } catch (err2) {
+        debugger
+    }
+}
 debugger
 
 var _mainlib, _moment, _numeral, _CryptoJS, _serializeError,
