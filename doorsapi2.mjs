@@ -2056,51 +2056,53 @@ export class Directory {
 
 /**
 {
-    "DocId": 12345,
-    "IsNew": false,
-    "HeadFields": [
-        {
-            "Name": "subject",
-            "Value": "Ejemplo de documento",
-            "Type": 1,
-            "Computed": false,
-            "Custom": false,
-            "HeaderTable": true,
-            "Description": "Asunto",
-            "Length": 255,
-            "Nullable": false,
-            "Updatable": true,
-            "ValueOld": null
-        }
-    ],
-    "CustomFields": [
-        // Igual que los Head
-    ],
+    "AclInfo": null,
+    "AclInherits": true,
     "Attachments": [
         {
-            "AttId": 1,
-            "IsNew": false,
-            "Name": "archivo.pdf",
-            "Description": "Archivo adjunto",
-            "Extension": "pdf",
-            "External": false,
-            "File": "__base64__=>...",
-            "Group": "default",
-            "Size": 1234,
             "AccId": 462,
-            "AccName": "pagano",
-            "Created": "2024-04-25T15:29:45.02Z",
-            "Tags": { "documentType": "pdf" },
-            "toDelete": false
+            "AttId": 9271,
+            "Created": "2024-09-05T14:22:05.183Z",
+            "Description": "tag1",
+            "DocId": 443188,
+            "Extension": null,
+            "External": false,
+            "File": null,
+            "Group": "tag1",
+            "Name": "2024-08 - Vidacel - Propuesta Valvulas Cardiacas.pdf",
+            "Size": 423845,
+            "IsNew": false,
+            "Tags": null
         },
-        // ... otros adjuntos
     ],
+    "CustomFields": [
+        {
+            "Value": "Daniel Aguilera;Daniel Paz",
+            "ValueOld": "Daniel Aguilera;Daniel Paz",
+            "ValueChanged": false,
+            "Computed": false,
+            "Custom": true,
+            "Description": null,
+            "DescriptionRaw": null,
+            "HeaderTable": false,
+            "Id": 509,
+            "Length": 400,
+            "Name": "ACTEXT",
+            "Nullable": true,
+            "Precision": 0,
+            "Scale": 0,
+            "Type": 1,
+            "Updatable": true,
+            "IsNew": false,
+            "Tags": null
+        },
+    ],
+    "DocId": 443188,
+    "HeadFields": [
+        // Igual que CustomFields pero con HeaderTable = true
+    ],
+    "IsNew": false,
     "Tags": { },
-    "Modified": "2024-06-06T15:49:51.29Z",
-    "Created": "2024-04-25T15:29:45.02Z",
-    "AccId": 462,
-    "FrmId": 504,
-    "FldId": 1001
 }
 */
 export class Document {
@@ -2117,7 +2119,6 @@ export class Document {
     #log;
 
     constructor(document, session, folder) {
-        debugger
         this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
@@ -2260,77 +2261,45 @@ export class Document {
     */
     attachments(attachment) {
         var me = this;
-        return new Promise((resolve, reject) => {
-            if (attachment !== undefined) {
-                me.attachments().then(
-                    res => {
-                        if (res.has(attachment)) {
-                            resolve(res.get(attachment));
-                        } else {
-                            reject(new Error('Attachment not found: ' + attachment));
-                        }
-                    },
-                    reject
-                )
 
-            } else {
-                // Devuelve la coleccion
-                if (!me.#attachmentsMap._loaded) {
-                    if (me.#attachmentsMap._loading == true) {
-                        // Evita la doble carga cdo piden varios en simultaneo
-                        let wait = 0;
-                        let interv = setInterval(() => {
-                            if (me.#attachmentsMap._loaded) {
-                                clearInterval(interv);
-                                resolve(me.#attachmentsMap);
-                            } else {
-                                if (wait += 100 > 5000) {
-                                    clearInterval(interv);
-                                    reject(new Error('Attachments loading is taking too long'));
-                                }
-                            }
-                        }, 100);
-
-                    } else {
-                        me.#attachmentsMap._loading = true;
-                        var url = 'documents/' + me.id + '/attachments';
-                        me.session.restClient.fetch(url, 'GET', '', '').then(
-                            res => {
-                                if (res.length > 0) {
-                                    // Ordena descendente
-                                    res.sort(function (a, b) {
-                                        return a.AttId >= b.AttId ? -1 : 1;
-                                    });
-                                    // Arma un array de AccId
-                                    var ids = res.map(att => att.AccId);
-                                    // Saca los repetidos
-                                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                                    // Levanta los accounts y completa el nombre
-                                    me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                                        accs => {
-                                            res.forEach(el => {
-                                                el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                                                me.#attachmentsMap.set(el.Name, new Attachment(el, me));
-                                            });
-                                            me.#attachmentsMap._loaded = true;
-                                            me.#attachmentsMap._loading = false;
-                                            resolve(me.#attachmentsMap);
-                
-                                        }, reject
-                                    )
-                                } else {
-                                    me.#attachmentsMap._loaded = true;
-                                    resolve(me.#attachmentsMap);
-                                }
-                            }, reject
-                        );
-                    }
-
-                } else {
-                    resolve(me.#attachmentsMap);
-                }
+        if (attachment == undefined) {
+            // Devuelve la coleccion
+            if (!me.#attachmentsMap) {
+                let map = new DoorsMap();
+                me.#json.Attachments.forEach(el => {
+                    map.set(el.Name, new Attachment(el, me));
+                });
+                me.#attachmentsMap = map;
             }
-        });
+            return me.#attachmentsMap;
+
+        } else {
+            // Devuelve un adjunto
+            let map = me.attachments();
+            if (typeof(attachment) == 'number') {
+                // Busca por id
+                for (let att of map.values()) {
+                    if (att.id == attachment) return att;
+                }
+                return undefined;
+            }
+            // Busca por name
+            return map.get(attachment);
+        }
+
+
+        /*
+        // Arma un array de AccId
+        var ids = res.map(att => att.AccId);
+        // Saca los repetidos
+        ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
+        // Levanta los accounts y completa el nombre
+        me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+            accs => {
+                res.forEach(el => {
+                    el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                    me.#attachmentsMap.set(el.Name, new Attachment(el, me));
+        */
     }
 
     /**
