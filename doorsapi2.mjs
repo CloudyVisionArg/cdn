@@ -2704,6 +2704,12 @@ export class Document {
             }
             var tags = me.#json.Tags;
 
+            // Saco el File de los adjuntos que no son nuevos
+            var atts = me.#json.Attachments;
+            atts.forEach(att => {
+                if (!att.IsNew) delete att.File;
+            });
+            
             debugger
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
