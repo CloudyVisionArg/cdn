@@ -2368,16 +2368,17 @@ export class Document {
 
         let att = new Attachment(attJson, me);
 
-        this.session.currentUser.then(
+        me.session.currentUser.then(
             res => {
                 attJson.AccId = res.id;
                 attJson.AccName = res.name;
             }
         )
 
-        /*
-        let newAtt = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '');
-        */
+        me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '').then(
+            res => {debugger},
+            err => {debugger}
+        );
 
         this.#attachmentsMap.set(name, att);
         return att;
