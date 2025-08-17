@@ -20,8 +20,10 @@ types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
 */
 
-let awsSdkclientS3 = await import("https://esm.sh/@aws-sdk/client-s3@3.485.0");
-debugger
+let s3 = await import('https://esm.sh/@aws-sdk/client-s3@3.485.0');
+const client = new s3.S3Client({ region: 'sa-east-1' });
+const command = new s3.HeadBucketCommand({ Bucket: "your-bucket-name" });
+
 
 var _mainlib, _moment, _numeral, _CryptoJS, _serializeError,
     _fastXmlParser, _URL, _htmlEntities, _contentDisposition, _incjs;
@@ -2732,9 +2734,10 @@ export class Document {
             var atts = me.#json.Attachments;
             for (let att of atts) {
                 if (att.IsNew) {
-                    let awsSdkclientS3 = await import("https://esm.sh/@aws-sdk/client-s3@3.485.0");
+                    let s3 = await import("https://esm.sh/@aws-sdk/client-s3@3.485.0");
                     debugger
 
+                    /*
                     await include('aws-sdk', 'https://cdn.jsdelivr.net/npm/@aws-sdk/client-s3/+esm');
 
                     //todo: subir los attachs nuevos a s3
