@@ -2704,6 +2704,7 @@ export class Document {
             }
             var tags = me.#json.Tags;
 
+            debugger
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 res => {
