@@ -2729,7 +2729,6 @@ export class Document {
             var atts = me.#json.Attachments;
             for (let att of atts) {
                 if (att.IsNew) {
-                    debugger
                     await include('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.1481.0.min.js');
 
                     //todo: subir los attachs nuevos a s3
@@ -2741,11 +2740,42 @@ export class Document {
 
                     const s3 = new AWS.S3();
 
+                    debugger
+
+                    const bucketName = 'ATT-' + (await dSession.instance).Name;
+
+                    await s3.headBucket({ Bucket: bucketName }).promise();
+
+                    debugger
+
+
                     /*
+
+    console.log(`El bucket ${bucketName} ya existe.`);
+  } catch (error) {
+    if (error.code === 'NoSuchBucket') {
+      try {
+        await s3.createBucket({ Bucket: bucketName }).promise();
+        console.log(`Bucket ${bucketName} creado exitosamente.`);
+      } catch (createError) {
+        console.error(`Error al crear el bucket: ${createError}`);
+      }
+    } else {
+      console.error(`Error al verificar el bucket: ${error}`);
+    }
+  }
+}
+
                     let s3 = new AWS.S3({
 						apiVersion: '2006-03-01',
 						params: {Bucket: 'cloudy-whatsapp-connector'}
 					});
+
+                    const params = {
+       Bucket: 'NOMBRE_DE_TU_BUCKET',
+       Key: 'nombre_del_archivo.txt', // Nombre del archivo en S3
+       Body: 'Contenido del archivo' // Contenido del archivo a subir
+     };
 
                     s3.upload(
 						{
