@@ -1596,8 +1596,8 @@ export class Attachment {
         //todo: el retorno de los setters no se devuelve
         return new Promise(async (resolve, reject) => {
             if (!me.isNew) throw new Error('Readonly property');
-            let buf;
 
+            let buf;
             if (value instanceof Blob) {
                 buf = await value.arrayBuffer();
                 me.#json.Size = value.size;
@@ -1605,9 +1605,9 @@ export class Attachment {
                 buf = value;
                 me.#json.Size = value.byteLength;
             } else if (value instanceof Uint8Array) {
-                buf = fs.buffer;
+                buf = value.buffer;
                 me.#json.Size = value.length;
-            } 
+            }
 
             me.#json.File = new SimpleBuffer(buf).toString('base64');
         });
@@ -5240,6 +5240,36 @@ export class Utilities {
             return v == 'false' || value == '0' || v == '' ? false : true;
         }
         return Boolean(value);
+    }
+
+    /**
+    Calcula el CRC32 de un ArrayBuffer
+    */
+    crc32(arrayBuffer) {
+        const crcTable = [];
+        const polynomial = 0xEDB88320; // Common CRC32 polynomial (reversed)
+      
+        // Generate CRC32 lookup table
+        for (let i = 0; i < 256; i++) {
+            let crc = i;
+            for (let j = 0; j < 8; j++) {
+                if (crc & 1) {
+                    crc = (crc >>> 1) ^ polynomial;
+                } else {
+                    crc = crc >>> 1;
+                }
+            }
+            crcTable[i] = crc;
+        }
+      
+        let crc = 0xFFFFFFFF; // Initial CRC value
+      
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < uint8Array.length; i++) {
+            crc = (crc >>> 8) ^ crcTable[(crc & 0xFF) ^ uint8Array[i]];
+        }
+      
+        return (crc ^ 0xFFFFFFFF) >>> 0; // Final XOR and convert to unsigned 32-bit integer
     }
 
     /**
