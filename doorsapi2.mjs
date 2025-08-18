@@ -1612,6 +1612,89 @@ export class Attachment {
         });
     }
 
+    async fileStream2(value, progress) {
+        debugger;
+        let me = this;
+        if (!me.isNew) throw new Error('Readonly property');
+
+        let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true });
+        modS3.setContext({ dSession: me.session });
+        await modS3.upload({});
+
+                    /*
+                    await import('https://cdn.jsdelivr.net/gh/aws-sdk/client-s3@3.844.0/index.min.mjs');
+
+                    //todo: subir los attachs nuevos a s3
+                    AWS.config.update({
+                        accessKeyId: 'AKIASRVDXJIVCT53EAHR',
+                        secretAccessKey: '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',
+						region: 'sa-east-1',
+                    });
+
+                    const s3 = new AWS.S3();
+
+
+                    const bucketName = 'ATT-' + (await dSession.instance).Name;
+                    //const bucketName = 'cloudy-whatsapp-connector';
+
+                    try {
+                        await s3.headBucket({ Bucket: bucketName }).promise();
+                    } catch (err) {
+                        try {
+                            await s3.createBucket({ Bucket: bucketName }).promise();
+                        } catch (err2) {
+                            throw err2;
+                        }
+                    }
+
+
+
+                    debugger
+
+
+                    /*
+
+    console.log(`El bucket ${bucketName} ya existe.`);
+  } catch (error) {
+    if (error.code === 'NoSuchBucket') {
+      try {
+        await s3.createBucket({ Bucket: bucketName }).promise();
+        console.log(`Bucket ${bucketName} creado exitosamente.`);
+      } catch (createError) {
+        console.error(`Error al crear el bucket: ${createError}`);
+      }
+    } else {
+      console.error(`Error al verificar el bucket: ${error}`);
+    }
+  }
+}
+
+                    let s3 = new AWS.S3({
+						apiVersion: '2006-03-01',
+						params: {Bucket: 'cloudy-whatsapp-connector'}
+					});
+
+                    const params = {
+       Bucket: 'NOMBRE_DE_TU_BUCKET',
+       Key: 'nombre_del_archivo.txt', // Nombre del archivo en S3
+       Body: 'Contenido del archivo' // Contenido del archivo a subir
+     };
+
+                    s3.upload(
+						{
+							Key: s3Key,
+							Body: blobData,
+							ContentType: blobData.contentType,
+							ACL: 'public-read',
+						},
+                        (err, data) => {}
+                    ).on('httpUploadProgress', function (progress) {
+						// Por si hay que actualizar un progress
+						var uploaded = parseInt((progress.loaded * 100) / progress.total);
+					});
+                    */
+    }
+
     /**
     @returns {string}
     */
@@ -2728,83 +2811,7 @@ export class Document {
             // Saco el File de los adjuntos que no son nuevos
             var atts = me.#json.Attachments;
             for (let att of atts) {
-                if (att.IsNew) {
-                    let s3 = await import("https://esm.sh/@aws-sdk/client-s3@3.485.0");
-                    debugger
-
-                    /*
-                    await include('aws-sdk', 'https://cdn.jsdelivr.net/npm/@aws-sdk/client-s3/+esm');
-
-                    //todo: subir los attachs nuevos a s3
-                    AWS.config.update({
-                        accessKeyId: 'AKIASRVDXJIVCT53EAHR',
-                        secretAccessKey: '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',
-						region: 'sa-east-1',
-                    });
-
-                    const s3 = new AWS.S3();
-
-
-                    const bucketName = 'ATT-' + (await dSession.instance).Name;
-                    //const bucketName = 'cloudy-whatsapp-connector';
-
-                    try {
-                        await s3.headBucket({ Bucket: bucketName }).promise();
-                    } catch (err) {
-                        try {
-                            await s3.createBucket({ Bucket: bucketName }).promise();
-                        } catch (err2) {
-                            throw err2;
-                        }
-                    }
-
-
-
-                    debugger
-
-
-                    /*
-
-    console.log(`El bucket ${bucketName} ya existe.`);
-  } catch (error) {
-    if (error.code === 'NoSuchBucket') {
-      try {
-        await s3.createBucket({ Bucket: bucketName }).promise();
-        console.log(`Bucket ${bucketName} creado exitosamente.`);
-      } catch (createError) {
-        console.error(`Error al crear el bucket: ${createError}`);
-      }
-    } else {
-      console.error(`Error al verificar el bucket: ${error}`);
-    }
-  }
-}
-
-                    let s3 = new AWS.S3({
-						apiVersion: '2006-03-01',
-						params: {Bucket: 'cloudy-whatsapp-connector'}
-					});
-
-                    const params = {
-       Bucket: 'NOMBRE_DE_TU_BUCKET',
-       Key: 'nombre_del_archivo.txt', // Nombre del archivo en S3
-       Body: 'Contenido del archivo' // Contenido del archivo a subir
-     };
-
-                    s3.upload(
-						{
-							Key: s3Key,
-							Body: blobData,
-							ContentType: blobData.contentType,
-							ACL: 'public-read',
-						},
-                        (err, data) => {}
-                    );
-                    */
-
-                } else {
-                    delete att.File;
-                }
+                if (!att.IsNew) delete att.File;
             };
 
             var url = 'documents';
@@ -2846,8 +2853,9 @@ export class Document {
             console.warn('document.saveAttachments no dispara los eventos sincronos de documento, no deberia usarse a partir de Doors 8');
         }
 
+        /*
         // 1ro borrar
-        //todoAt: let atts = this.#deletedAttsMap
+        let atts = this.#deletedAttsMap
         let keys = Array.from(atts.keys());
         await utils.asyncLoop(keys.length, async loop => {
             let att = atts.get(keys[loop.iteration()]);
@@ -2865,6 +2873,7 @@ export class Document {
             }
             loop.next();
         });
+        */
 
         // 2do agregar
         atts = await this.attachments();
