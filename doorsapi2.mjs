@@ -1613,13 +1613,15 @@ export class Attachment {
     }
 
     async fileStream2(value, progress) {
-        debugger;
         let me = this;
         if (!me.isNew) throw new Error('Readonly property');
 
         let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true });
         modS3.setContext({ dSession: me.session });
-        await modS3.upload({});
+        await modS3.upload({
+            attachment: me,
+            file: value,
+        });
 
                     /*
                     await import('https://cdn.jsdelivr.net/gh/aws-sdk/client-s3@3.844.0/index.min.mjs');
