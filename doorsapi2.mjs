@@ -1593,6 +1593,7 @@ export class Attachment {
     set fileStream(value) {
         let me = this;
 
+        //todo: el retorno de los setters no se devuelve
         return new Promise(async (resolve, reject) => {
             if (!me.isNew) throw new Error('Readonly property');
             let buf;
@@ -1617,84 +1618,12 @@ export class Attachment {
         if (!me.isNew) throw new Error('Readonly property');
 
         let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
-        modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
+        await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
         await modS3.upload({
             attachment: me,
             file: value,
         });
 
-                    /*
-                    await import('https://cdn.jsdelivr.net/gh/aws-sdk/client-s3@3.844.0/index.min.mjs');
-
-                    //todo: subir los attachs nuevos a s3
-                    AWS.config.update({
-                        accessKeyId: 'AKIASRVDXJIVCT53EAHR',
-                        secretAccessKey: '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',
-						region: 'sa-east-1',
-                    });
-
-                    const s3 = new AWS.S3();
-
-
-                    const bucketName = 'ATT-' + (await dSession.instance).Name;
-                    //const bucketName = 'cloudy-whatsapp-connector';
-
-                    try {
-                        await s3.headBucket({ Bucket: bucketName }).promise();
-                    } catch (err) {
-                        try {
-                            await s3.createBucket({ Bucket: bucketName }).promise();
-                        } catch (err2) {
-                            throw err2;
-                        }
-                    }
-
-
-
-                    debugger
-
-
-                    /*
-
-    console.log(`El bucket ${bucketName} ya existe.`);
-  } catch (error) {
-    if (error.code === 'NoSuchBucket') {
-      try {
-        await s3.createBucket({ Bucket: bucketName }).promise();
-        console.log(`Bucket ${bucketName} creado exitosamente.`);
-      } catch (createError) {
-        console.error(`Error al crear el bucket: ${createError}`);
-      }
-    } else {
-      console.error(`Error al verificar el bucket: ${error}`);
-    }
-  }
-}
-
-                    let s3 = new AWS.S3({
-						apiVersion: '2006-03-01',
-						params: {Bucket: 'cloudy-whatsapp-connector'}
-					});
-
-                    const params = {
-       Bucket: 'NOMBRE_DE_TU_BUCKET',
-       Key: 'nombre_del_archivo.txt', // Nombre del archivo en S3
-       Body: 'Contenido del archivo' // Contenido del archivo a subir
-     };
-
-                    s3.upload(
-						{
-							Key: s3Key,
-							Body: blobData,
-							ContentType: blobData.contentType,
-							ACL: 'public-read',
-						},
-                        (err, data) => {}
-                    ).on('httpUploadProgress', function (progress) {
-						// Por si hay que actualizar un progress
-						var uploaded = parseInt((progress.loaded * 100) / progress.total);
-					});
-                    */
     }
 
     /**
