@@ -1616,8 +1616,8 @@ export class Attachment {
         let me = this;
         if (!me.isNew) throw new Error('Readonly property');
 
-        let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true });
-        modS3.setContext({ dSession: me.session });
+        let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
+        modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
         await modS3.upload({
             attachment: me,
             file: value,
