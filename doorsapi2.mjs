@@ -4496,7 +4496,7 @@ export class Node {
     devolviendo el json del doc con los cambios que haya realizado el codigo.
 
     @example
-    exec(`console.log('Hello world')`);
+    exec({ code: `console.log('Hello world')` });
     o
     exec({
         code: {
@@ -4518,14 +4518,14 @@ export class Node {
         let me = this;
         let utils = me.session.utils;
 
-        if (typeof(options) == 'string') {
+        if (typeof(options.code) == 'string') {
             // Vino el codigo
             return me.exec({
                 code: {
                     repo: 'Global',
                     path: 'server/evalapi.js',
                 },
-                payload: { options },
+                payload: options,
             });
 
         } else {
