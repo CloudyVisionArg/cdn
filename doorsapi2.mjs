@@ -1596,24 +1596,13 @@ export class Attachment {
         //todo: el retorno de los setters no se devuelve
         return new Promise(async (resolve, reject) => {
             if (!me.isNew) throw new Error('Readonly property');
-
-            let buf;
-            if (value instanceof Blob) {
-                buf = await value.arrayBuffer();
-                me.#json.Size = value.size;
-            } else if (value instanceof ArrayBuffer) {
-                buf = value;
-                me.#json.Size = value.byteLength;
-            } else if (value instanceof Uint8Array) {
-                buf = value.buffer;
-                me.#json.Size = value.length;
-            }
-
+            let buf = await me.session.utils.arrBuffer(value);
             me.#json.File = new SimpleBuffer(buf).toString('base64');
+            me.#json.Size = buf.byteLength;
         });
     }
 
-    async fileStream2(value, progress) {
+    async fileStream2(value, onProgress) {
         let me = this;
         if (!me.isNew) throw new Error('Readonly property');
 
@@ -1622,8 +1611,12 @@ export class Attachment {
         await modS3.upload({
             attachment: me,
             file: value,
+            onProgress,
         });
 
+        debugger
+        me.#json.File = new SimpleBuffer('This file is at S3'.split('')).toString('base64');
+        me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
     }
 
     /**
@@ -5128,6 +5121,21 @@ export class Utilities {
         this.#cache = new DoorsMap();
     }
 
+    async arrBuffer(value) {
+        let ret;
+        if (value instanceof Blob) {
+            buf = await value.arrayBuffer();
+        } else if (value instanceof Buffer) {
+            //todo: chequear
+            buf = value.buffer;
+        } else if (value instanceof ArrayBuffer) {
+            buf = value;
+        } else if (value instanceof Uint8Array) {
+            buf = value.buffer;
+        }
+        return ret;
+    }
+
     /**
     Asigna la property del objeto source al objeto target, solo si tiene valor.
     Override indica si se sobreescribe la prop en target, o si se asigna
@@ -5240,36 +5248,6 @@ export class Utilities {
             return v == 'false' || value == '0' || v == '' ? false : true;
         }
         return Boolean(value);
-    }
-
-    /**
-    Calcula el CRC32 de un ArrayBuffer
-    */
-    crc32(arrayBuffer) {
-        const crcTable = [];
-        const polynomial = 0xEDB88320; // Common CRC32 polynomial (reversed)
-      
-        // Generate CRC32 lookup table
-        for (let i = 0; i < 256; i++) {
-            let crc = i;
-            for (let j = 0; j < 8; j++) {
-                if (crc & 1) {
-                    crc = (crc >>> 1) ^ polynomial;
-                } else {
-                    crc = crc >>> 1;
-                }
-            }
-            crcTable[i] = crc;
-        }
-      
-        let crc = 0xFFFFFFFF; // Initial CRC value
-      
-        const uint8Array = new Uint8Array(arrayBuffer);
-        for (let i = 0; i < uint8Array.length; i++) {
-            crc = (crc >>> 8) ^ crcTable[(crc & 0xFF) ^ uint8Array[i]];
-        }
-      
-        return (crc ^ 0xFFFFFFFF) >>> 0; // Final XOR and convert to unsigned 32-bit integer
     }
 
     /**
