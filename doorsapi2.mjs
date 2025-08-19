@@ -1601,6 +1601,7 @@ export class Attachment {
                 )
 
             } else {
+                debugger
                 let file = me.#json.File;
 
                 if (typeof(file) == 'string') {
