@@ -1637,8 +1637,7 @@ export class Attachment {
         if (!me.isNew) throw new Error('Readonly property');
 
         await Promise.all(me.promises);
-        let s3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
-        await s3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
+        let s3 = await me.session.s3;
         await s3.upload({
             attId: me.id,
             file: value,
