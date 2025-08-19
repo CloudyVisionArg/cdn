@@ -5124,14 +5124,14 @@ export class Utilities {
     async arrBuffer(value) {
         let ret;
         if (value instanceof Blob) {
-            buf = await value.arrayBuffer();
+            ret = await value.arrayBuffer();
         } else if (value instanceof Buffer) {
             //todo: chequear
-            buf = value.buffer;
+            ret = value.buffer;
         } else if (value instanceof ArrayBuffer) {
-            buf = value;
+            ret = value;
         } else if (value instanceof Uint8Array) {
-            buf = value.buffer;
+            ret = value.buffer;
         }
         return ret;
     }
