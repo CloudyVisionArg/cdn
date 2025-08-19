@@ -1573,6 +1573,8 @@ export class Attachment {
                             await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
                             debugger
                             let dl = await modS3.download({ attId: me.id });
+                            let buf2 = await dl.Body.transformToByteArray();
+                            me.#json.File = buf2;
                             debugger
                     
                         } else {
