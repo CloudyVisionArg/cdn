@@ -1568,8 +1568,7 @@ export class Attachment {
                 me.session.restClient.fetchRaw(url, 'GET', '').then(
                     async res => {
                         let buf = await res.arrayBuffer();
-                        debugger;
-                        if (buf.byteLength == 18 && new SimpleBuffer(buf).toString() == fileAtS3) {
+                        if (buf.byteLength == fileAtS3.length && new SimpleBuffer(buf).toString() == fileAtS3) {
                             debugger;
 
                         } else {
