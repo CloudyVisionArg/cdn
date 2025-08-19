@@ -1614,8 +1614,7 @@ export class Attachment {
         async function checkBuffer(buffer) {
             if (buffer.byteLength == fileAtS3.length && new SimpleBuffer(buffer).toString() == fileAtS3) {
                 let s3 = await me.session.s3;
-                let dl = await s3.download({ attId: me.id });
-                return dl.Body.transformToByteArray();
+                return await s3.download({ attId: me.id });
             } else {
                 return buffer;
             }
