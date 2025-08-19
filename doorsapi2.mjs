@@ -1490,10 +1490,12 @@ export class Attachment {
     #properties;
     #userProperties;
     #owner;
+    #promises;
 
     constructor(attachment, document) {
         this.#json = attachment;
         this.#parent = document;
+        this.#promises = [];
     }
 
     /**
@@ -1608,18 +1610,21 @@ export class Attachment {
         let me = this;
 
         //todo: el retorno de los setters no se devuelve
-        return new Promise(async (resolve, reject) => {
+        let prom = new Promise(async (resolve, reject) => {
             if (!me.isNew) throw new Error('Readonly property');
             let buf = await me.session.utils.arrBuffer(value);
             me.#json.File = new SimpleBuffer(buf).toString('base64');
             me.#json.Size = buf.byteLength;
         });
+        me.promises.push(prom);
     }
 
     async fileStream2(value, onProgress) {
         let me = this;
         if (!me.isNew) throw new Error('Readonly property');
 
+        debugger
+        await Promise.all(me.promises);
         let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
         await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
         await modS3.upload({
@@ -1710,6 +1715,10 @@ export class Attachment {
     */
     get parent() {
         return this.#parent;
+    }
+
+    get promises() {
+        return this.#promises;
     }
 
     /**
@@ -2378,7 +2387,8 @@ export class Document {
         };
 
         // Obtiene el ID
-        me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '').then(
+        let prom1 = me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '')
+        prom1.then(
             res => {
                 attJson.AttId = res.AttId;
                 attJson.Created = res.Created;
@@ -2386,7 +2396,8 @@ export class Document {
         );
 
         // Completa el creador
-        me.session.currentUser.then(
+        let prom2 = me.session.currentUser
+        prom2.then(
             res => {
                 attJson.AccId = res.id;
                 attJson.AccName = res.name;
@@ -2404,6 +2415,7 @@ export class Document {
         atts.push(attJson);
 
         let att = new Attachment(attJson, me);
+        att.promises.push(prom1, prom2);
         this.#attachmentsMap.set(name, att);
         return att;
     }
