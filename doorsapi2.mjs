@@ -1609,12 +1609,8 @@ export class Attachment {
 
                 if (typeof(file) == 'string') {
                     // Es base64
-                    let buf;
-                    if (me.session.node.inNode) {
-                        buf = Buffer.from(atob(file), 'binary');
-                    } else {
-                        buf = me.session.utils.base64ToBuffer(me.#json.File);
-                    }
+                    let buf = me.session.node.inNode ? Buffer.from(atob(file), 'binary')
+                        : me.session.utils.base64ToBuffer(me.#json.File);
                     resolve(checkBuffer(buf));
 
                 } else {
@@ -1623,6 +1619,10 @@ export class Attachment {
             }
         });
 
+        /**
+        Verifica si el buffer indica que el archivo esta en S3,
+        y en ese caso lo descarga
+        */
         async function checkBuffer(buffer) {
             if (buffer.byteLength == fileAtS3.length && new SimpleBuffer(buffer).toString() == fileAtS3) {
                 let s3 = await me.session.s3;
@@ -1637,10 +1637,10 @@ export class Attachment {
     }
     set fileStream(value) {
         let me = this;
+        if (!me.isNew) throw new Error('Readonly property');
 
         //todo: el retorno de los setters no se devuelve
         let prom = new Promise(async (resolve, reject) => {
-            if (!me.isNew) throw new Error('Readonly property');
             let buf = await me.session.utils.arrBuffer(value);
             me.#json.File = new SimpleBuffer(buf).toString('base64');
             me.#json.Size = buf.byteLength;
@@ -1745,6 +1745,12 @@ export class Attachment {
         return this.#parent;
     }
 
+    /**
+    Hay un par de metodos que generan promesas y las pushean aca.
+    Esperarlas de esta forma antes de guardar, salir del evento, etc:
+    @example
+    await Promise.all(att.promises);
+    */
     get promises() {
         return this.#promises;
     }
@@ -2495,6 +2501,16 @@ export class Document {
     */
 
     /**
+    Espera Promesas
+    */
+    async awaitPromises() {
+        let me = this;
+        if (me.#attachmentsMap) {
+            await Promise.all(me.#attachmentsMap.values().map(att => att.promises));
+        }
+    }
+
+    /**
     @returns {Date}
     */
     get created() {
@@ -2790,10 +2806,17 @@ export class Document {
             var tags = me.#json.Tags;
 
             // Saco el File de los adjuntos que no son nuevos
-            var atts = me.#json.Attachments;
-            for (let att of atts) {
+            for (let att of me.#json.Attachments) {
                 if (!att.IsNew) delete att.File;
             };
+
+            // Saco el File de los adjuntos que no son nuevos
+            for (let att of me.#json.Attachments) {
+                if (!att.IsNew) delete att.File;
+            };
+
+            // Espera Promesas
+            await me.awaitPromises();
 
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
