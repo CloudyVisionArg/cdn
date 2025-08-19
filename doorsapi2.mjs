@@ -421,6 +421,7 @@ export class Session {
     #node;
     #doorsVersion;
     #billing;
+    #s3;
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -871,6 +872,22 @@ export class Session {
         }
     }
     
+    get s3() {
+        let me = this;
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!me.#s3) {
+                    me.#s3 = await me.session.import({ repo: 'Global', path: 's3.mjs' });
+                    await me.#s3.setContext({ dSession: me });
+                }
+                resolve(me.#s3);
+
+            } catch(err) {
+                reject(err);
+            }
+        });
+    }
+
     /**
     @returns {string}
     */
@@ -1571,14 +1588,10 @@ export class Attachment {
                     async res => {
                         let buf = await res.arrayBuffer();
                         if (buf.byteLength == fileAtS3.length && new SimpleBuffer(buf).toString() == fileAtS3) {
-                            let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
-                            await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
-                            debugger
-                            let dl = await modS3.download({ attId: me.id });
+                            let s3 = await me.session.s3;
+                            let dl = await s3.download({ attId: me.id });
                             let buf2 = await dl.Body.transformToByteArray();
-                            me.#json.File = buf2;
-                            debugger
-                    
+                            me.#json.File = buf2;                    
                         } else {
                             me.#json.File = buf;
                         }
@@ -1624,9 +1637,9 @@ export class Attachment {
         if (!me.isNew) throw new Error('Readonly property');
 
         await Promise.all(me.promises);
-        let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
-        await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
-        await modS3.upload({
+        let s3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
+        await s3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
+        await s3.upload({
             attId: me.id,
             file: value,
             onProgress,
