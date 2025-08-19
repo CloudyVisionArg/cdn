@@ -57,3 +57,7 @@
     margin-left: 8px;
     margin-top: 8px;
 }
+
+.accordion-item-content .media-list .item-link .item-inner:before, .accordion-item-content li.media-item .item-link .item-inner:before {
+    display: inherit;
+}
