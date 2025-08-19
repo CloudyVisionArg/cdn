@@ -33,6 +33,8 @@ export { _fastXmlParser as fastXmlParser }
 export { _htmlEntities as htmlEntities }
 export { _contentDisposition as contentDisposition }
 
+const fileAtS3 = 'This file is at S3';
+
 //await loadUtils();
 var utilsPromise = loadUtils();
 var utilsNotLoadedErr = `Utils not loaded, call 'await dSession.utils.load()' before.`
@@ -1616,7 +1618,7 @@ export class Attachment {
         });
 
         debugger
-        me.#json.File = new SimpleBuffer('This file is at S3'.split('').map(el => el.charCodeAt(0))).toString('base64');
+        me.#json.File = new SimpleBuffer(fileAtS3.split('').map(el => el.charCodeAt(0))).toString('base64');
         me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
     }
 
