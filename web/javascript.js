@@ -215,7 +215,8 @@ function toast(pText, pOptions) {
         $(this).remove();
     });
 
-    t.show()
+    t.show();
+	return t;
 }
 
 function addInputButton(pControl, pIcon, pAction, pPrepend) {
