@@ -872,12 +872,15 @@ export class Session {
         }
     }
     
+    /**
+    Devuelve el modulo s3
+    */
     get s3() {
         let me = this;
         return new Promise(async (resolve, reject) => {
             try {
                 if (!me.#s3) {
-                    me.#s3 = await me.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: scar fersh
+                    me.#s3 = await me.import({ repo: 'Global', path: 's3.mjs' });
                     await me.#s3.setContext({ dSession: me });
                 }
                 resolve(me.#s3);
@@ -885,6 +888,15 @@ export class Session {
             } catch(err) {
                 reject(err);
             }
+        });
+    }
+
+    /**
+    Devuelve el nombre del bucket S3
+    */
+    get s3Bucket() {
+        return new Promise(async (resolve, reject) => {
+            resolve('att-' + (await dSession.instance).Name.toLowerCase());
         });
     }
 
@@ -1614,7 +1626,10 @@ export class Attachment {
         async function checkBuffer(buffer) {
             if (buffer.byteLength == fileAtS3.length && new SimpleBuffer(buffer).toString() == fileAtS3) {
                 let s3 = await me.session.s3;
-                return await s3.download({ attId: me.id });
+                return await s3.download({
+                    bucket: await me.session.s3Bucket,
+                    key: me.s3Key,
+                });
             } else {
                 return buffer;
             }
@@ -1640,7 +1655,8 @@ export class Attachment {
         await Promise.all(me.promises);
         let s3 = await me.session.s3;
         await s3.upload({
-            attId: me.id,
+            bucket: await me.session.s3Bucket,
+            key: me.s3Key,
             file: value,
             onProgress,
         });
@@ -1748,6 +1764,10 @@ export class Attachment {
     /** Alias de delete */
     remove() {
         return this.delete();
+    }
+
+    get s3Key() {
+        return 'att-' + this.session.utils.lZeros(this.id, 8) + '.dat';
     }
 
     /**
