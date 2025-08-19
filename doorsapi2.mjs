@@ -1571,6 +1571,7 @@ export class Attachment {
                         if (buf.byteLength == fileAtS3.length && new SimpleBuffer(buf).toString() == fileAtS3) {
                             let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
                             await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
+                            debugger
                             let dl = await modS3.download({ attId: me.id });
                             debugger
                     
