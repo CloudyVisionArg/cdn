@@ -1566,6 +1566,7 @@ export class Attachment {
                 me.session.restClient.fetchRaw(url, 'GET', '').then(
                     async res => {
                         me.#json.File = await res.arrayBuffer();
+                        debugger;
                         resolve(me.#json.File);
                     },
                     reject
