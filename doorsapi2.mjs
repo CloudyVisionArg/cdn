@@ -2771,7 +2771,6 @@ export class Document {
             // Saco el File de los adjuntos que no son nuevos
             var atts = me.#json.Attachments;
             for (let att of atts) {
-                await Promise.all(att.promises);
                 if (!att.IsNew) delete att.File;
             };
 
