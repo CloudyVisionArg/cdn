@@ -5121,6 +5121,9 @@ export class Utilities {
         this.#cache = new DoorsMap();
     }
 
+    /**
+    Devuelve el ArrayBuffer de un Blob, Buffer o Uint8Array
+    */
     async arrBuffer(value) {
         let ret;
         if (value instanceof Blob) {
