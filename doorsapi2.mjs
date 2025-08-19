@@ -1568,11 +1568,12 @@ export class Attachment {
                 me.session.restClient.fetchRaw(url, 'GET', '').then(
                     async res => {
                         let buf = await res.arrayBuffer();
+                        debugger;
                         if (buf.byteLength == 10 && new SimpleBuffer(buf).toString() == fileAtS3) {
                             debugger;
 
                         } else {
-                            me.#json.File = await res.arrayBuffer();
+                            me.#json.File = await buf;
                         }
                         resolve(me.#json.File);
                     },
