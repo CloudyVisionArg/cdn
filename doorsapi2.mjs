@@ -1603,7 +1603,6 @@ export class Attachment {
                     } else {
                         buf = me.session.utils.base64ToBuffer(me.#json.File);
                     }
-                    debugger
                     resolve(checkBuffer(buf));
 
                 } else {
