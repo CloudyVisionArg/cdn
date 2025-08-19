@@ -1623,7 +1623,6 @@ export class Attachment {
         let me = this;
         if (!me.isNew) throw new Error('Readonly property');
 
-        debugger
         await Promise.all(me.promises);
         let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
         await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
@@ -2760,6 +2759,7 @@ export class Document {
             // Saco el File de los adjuntos que no son nuevos
             var atts = me.#json.Attachments;
             for (let att of atts) {
+                await Promise.all(att.promises);
                 if (!att.IsNew) delete att.File;
             };
 
