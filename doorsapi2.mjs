@@ -1569,10 +1569,13 @@ export class Attachment {
                     async res => {
                         let buf = await res.arrayBuffer();
                         if (buf.byteLength == fileAtS3.length && new SimpleBuffer(buf).toString() == fileAtS3) {
-                            debugger;
-
+                            let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
+                            await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
+                            let dl = await modS3.download({ attId: me.id });
+                            debugger
+                    
                         } else {
-                            me.#json.File = await buf;
+                            me.#json.File = buf;
                         }
                         resolve(me.#json.File);
                     },
@@ -1617,12 +1620,11 @@ export class Attachment {
         let modS3 = await me.session.import({ repo: 'Global', path: 's3.mjs', fresh: true }); //todo: sacar fresh
         await modS3.setContext({ dSession: me.session, fresh: true }); //todo: sacar fresh
         await modS3.upload({
-            attachment: me,
+            attId: me.id,
             file: value,
             onProgress,
         });
 
-        debugger
         me.#json.File = new SimpleBuffer(fileAtS3.split('').map(el => el.charCodeAt(0))).toString('base64');
         me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
     }
