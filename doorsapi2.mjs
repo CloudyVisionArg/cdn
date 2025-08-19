@@ -877,7 +877,7 @@ export class Session {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!me.#s3) {
-                    me.#s3 = await me.session.import({ repo: 'Global', path: 's3.mjs' });
+                    me.#s3 = await me.import({ repo: 'Global', path: 's3.mjs' });
                     await me.#s3.setContext({ dSession: me });
                 }
                 resolve(me.#s3);
