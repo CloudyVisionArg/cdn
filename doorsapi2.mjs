@@ -1586,39 +1586,41 @@ export class Attachment {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
                 me.session.restClient.fetchRaw(url, 'GET', '').then(
                     async res => {
-                        let buf = await res.arrayBuffer();
-                        if (buf.byteLength == fileAtS3.length && new SimpleBuffer(buf).toString() == fileAtS3) {
-                            let s3 = await me.session.s3;
-                            let dl = await s3.download({ attId: me.id });
-                            let buf2 = await dl.Body.transformToByteArray();
-                            me.#json.File = buf2;                    
-                        } else {
-                            me.#json.File = buf;
-                        }
+                        me.#json.File = checkBuffer(await res.arrayBuffer());
                         resolve(me.#json.File);
                     },
                     reject
                 )
 
             } else {
-                debugger
                 let file = me.#json.File;
 
                 if (typeof(file) == 'string') {
                     // Es base64
-                    let bf;
+                    let buf;
                     if (me.session.node.inNode) {
-                        bf = Buffer.from(atob(file), 'binary');
+                        buf = Buffer.from(atob(file), 'binary');
                     } else {
-                        bf = me.session.utils.base64ToBuffer(me.#json.File);
+                        buf = me.session.utils.base64ToBuffer(me.#json.File);
                     }
-                    resolve(bf);
+                    debugger
+                    resolve(checkBuffer(buf));
 
                 } else {
                     resolve(file);
                 }
             }
         });
+
+        async function checkBuffer(buffer) {
+            if (buffer.byteLength == fileAtS3.length && new SimpleBuffer(buffer).toString() == fileAtS3) {
+                let s3 = await me.session.s3;
+                let dl = await s3.download({ attId: me.id });
+                return dl.Body.transformToByteArray();
+            } else {
+                return buffer;
+            }
+        }
     }
     set fileStream(value) {
         let me = this;
