@@ -1615,7 +1615,7 @@ export class Attachment {
         });
 
         debugger
-        me.#json.File = new SimpleBuffer('This file is at S3'.split('')).toString('base64');
+        me.#json.File = new SimpleBuffer('This file is at S3'.split('').map(el => el.charCodeAt(0))).toString('base64');
         me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
     }
 
