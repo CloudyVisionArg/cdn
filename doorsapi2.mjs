@@ -1567,8 +1567,13 @@ export class Attachment {
                 var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
                 me.session.restClient.fetchRaw(url, 'GET', '').then(
                     async res => {
-                        me.#json.File = await res.arrayBuffer();
-                        debugger;
+                        let buf = await res.arrayBuffer();
+                        if (buf.byteLength == 10 && new SimpleBuffer(buf).toString() == fileAtS3) {
+                            debugger;
+
+                        } else {
+                            me.#json.File = await res.arrayBuffer();
+                        }
                         resolve(me.#json.File);
                     },
                     reject
