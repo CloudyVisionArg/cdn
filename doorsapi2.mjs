@@ -2377,7 +2377,7 @@ export class Document {
 
                 // Completa AccName
                 var ids = atts.map(att => att.AccId);
-                ids = ids.filter((el, ix) => ids.indexOf(el) == ix); // Saca los repetidos
+                ids = ids.filter((el, ix) => el != undefined && ids.indexOf(el) == ix); // Saca los repetidos
                 if (ids.length) {
                     // Levanta los accounts para completar el AccName
                     me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
