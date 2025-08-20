@@ -2374,12 +2374,14 @@ export class Document {
                     var ids = atts.map(att => att.AccId);
                     // Saca los repetidos
                     ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                    // Levanta los accounts para completar el AccName
-                    let accs = await me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')'); 
-                    atts.forEach(el => {
-                        el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                        map.set(el.Name, new Attachment(el, me));
-                    });
+                    if (ids.length) {
+                        // Levanta los accounts para completar el AccName
+                        let accs = await me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')'); 
+                        atts.forEach(el => {
+                            el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                            map.set(el.Name, new Attachment(el, me));
+                        });
+                    }
                     me.#attachmentsMap = map;
                 }
                 resolve(me.#attachmentsMap);
