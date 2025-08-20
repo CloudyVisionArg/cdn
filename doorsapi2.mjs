@@ -2508,8 +2508,11 @@ export class Document {
     async awaitPromises() {
         let me = this;
         if (me.#attachmentsMap) {
-            let atts = me.#attachmentsMap.values();
-            await Promise.all(atts.map(att => att.promises));
+            let proms = [];
+            for (let att of me.#attachmentsMap) {
+                proms.push(...att.promises);
+            }
+            await Promise.all(proms);
         }
     }
 
