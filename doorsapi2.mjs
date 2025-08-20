@@ -2701,12 +2701,10 @@ export class Document {
     @example
     await doc.nodeEvent({ owner, repo, path, ref, fresh });
     */
-    async nodeEvent(code, attachment) {
+    async nodeEvent(code, eventName) {
         this.#json = await this.session.node.exec({
             code: code,
-            payload: {
-                eventName: attachment,
-            },
+            payload: { eventName },
             doc: this.toJSON(),
         });
         this._reset();
