@@ -2510,7 +2510,7 @@ export class Document {
         if (me.#attachmentsMap) {
             let proms = [];
             debugger
-            for (let att of me.#attachmentsMap) {
+            for (let att of me.#attachmentsMap.values()) {
                 proms.push(...att.promises);
             }
             await Promise.all(proms);
