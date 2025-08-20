@@ -1779,14 +1779,14 @@ function toast(message, options) {
     debugger;
     let opt = {
         text: message,
-        duration: 3000,
+        closeTimeout: 3000,
         position: 'bottom',
         closeButton: true,
     };
 
     if (typeof options === 'number') {
         // Bw compat
-        opt.duration = options;
+        opt.closeTimeout = options;
     } else if (typeof options === 'object') {
         opt = Object.assign(opt, options);
     }
