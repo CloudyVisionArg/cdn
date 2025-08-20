@@ -2509,7 +2509,6 @@ export class Document {
         let me = this;
         if (me.#attachmentsMap) {
             let proms = [];
-            debugger
             for (let att of me.#attachmentsMap.values()) {
                 proms.push(...att.promises);
             }
