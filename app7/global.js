@@ -1781,6 +1781,7 @@ function toast(message, options) {
         closeTimeout: 3000,
         position: 'bottom',
         closeButton: true,
+        destroyOnClose: true,
     };
 
     if (typeof options === 'number') {
