@@ -2531,7 +2531,7 @@ export class Document {
     async awaitPromises() {
         let me = this;
         let proms = [];
-        proms.push(...me.promises);
+        proms.push(...me.#promises);
         for (let att of me._attachments().values()) {
             proms.push(...att.promises);
         }
