@@ -2385,7 +2385,8 @@ export class Document {
                             me.#json.Attachments.forEach(el => {
                                 el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
                             });
-                        }
+                        },
+                        err => { debugger }
                     );
                 }
                 me.#attachmentsMap = map;
