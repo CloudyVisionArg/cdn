@@ -150,8 +150,7 @@ window.deviceServices = {
         if (device.platform == 'browser') {
             let $inp = $('<input type="file" style="display: none;" multiple />');
             $inp.change(function (ev) {
-                debugger
-
+                return this.files;
             });
             $inp.click()
 
