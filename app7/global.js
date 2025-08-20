@@ -147,8 +147,18 @@ window.deviceServices = {
         }
 		Object.assign(opt, options);
 
-        let res = await Capacitor.Plugins.FilePicker.pickFiles(options);
-        return res.files;
+        if (device.platform == 'browser') {
+            let $inp = $('<input type="file" style="display: none;" multiple />');
+            $inp.change(function (ev) {
+                debugger
+
+            });
+            $inp.click()
+
+        } else {
+            let res = await Capacitor.Plugins.FilePicker.pickFiles(options);
+            return res.files;
+        }
     },
 
     recordAudio: function () {
