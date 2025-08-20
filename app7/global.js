@@ -1776,7 +1776,6 @@ Opciones de toast: https://framework7.io/docs/toast
 */
 //function toast(message, duration, position)
 function toast(message, options) {
-    debugger;
     let opt = {
         text: message,
         closeTimeout: 3000,
