@@ -1644,6 +1644,7 @@ export class Attachment {
             let buf = await me.session.utils.arrBuffer(value);
             me.#json.File = new SimpleBuffer(buf).toString('base64');
             me.#json.Size = buf.byteLength;
+            resolve(true);
         });
         me.promises.push(prom);
     }
