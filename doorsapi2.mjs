@@ -2208,11 +2208,73 @@ export class Document {
     #owner;
     #form;
     #log;
+    #promises;
 
     constructor(document, session, folder) {
         this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
+        this.#promises = [];
+    }
+
+    /**
+    Devuelve la coleccion de adjuntos, o uno en particular si se especifica attachment (name).
+    @returns {(Promise<DoorsMap>|Promise<Attachment>)}
+    */
+    _attachments(attachment) {
+        var me = this;
+
+        if (attachment == undefined) {
+            // Devuelve la coleccion
+            if (!me.#attachmentsMap) {
+                let map = new DoorsMap();
+                let atts = me.#json.Attachments;
+                for (let att of atts) {
+                    map.set(att.Name, new Attachment(att, me));
+                }
+
+                // Completa AccName
+                var ids = atts.map(att => att.AccId);
+                ids = ids.filter((el, ix) => el != undefined && ids.indexOf(el) == ix); // Saca los repetidos
+                if (ids.length) {
+                    // Levanta los accounts para completar el AccName
+                    let prom = me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')');
+                    me.#promises.push(prom);
+                    prom.then(
+                        accs => {
+                            me.#json.Attachments.forEach(el => {
+                                el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                            });
+                        },
+                        err => { debugger }
+                    );
+                }
+                me.#attachmentsMap = map;
+            }
+            return me.#attachmentsMap;
+
+        } else {
+            // Devuelve un adjunto
+            let map = me.attachments();
+            let ret;
+            if (typeof(attachment) == 'number') {
+                // Busca por id
+                for (let att of map.values()) {
+                    if (att.id == attachment) {
+                        ret = att;
+                        break;
+                    }
+                }
+            } else {
+                // Busca por name
+                ret = map.get(attachment);
+            }
+            if (ret) {
+                return ret;
+            } else {
+                throw new Error('Attachment not found: ' + attachment);
+            }
+        }
     }
 
     /**
@@ -2515,6 +2577,7 @@ export class Document {
     async awaitPromises() {
         let me = this;
         let proms = [];
+        proms.push(...me.promises);
         for (let att of me.attachments().values()) {
             proms.push(...att.promises);
         }
