@@ -2429,8 +2429,9 @@ export class Document {
     attachments(attachment) {
         let me = this;
         return new Promise(async (resolve, reject) => {
+            let atts = me._attachments(attachment);
             await me.awaitPromises();
-            resolve(me._attachments(attachment));
+            resolve(atts);
         });
     }
 
