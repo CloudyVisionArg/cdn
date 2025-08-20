@@ -1771,19 +1771,34 @@ function goTop() {
     }
 }
 
-function toast(message, duration, position) {
-    //duration: milliseconds
-    //position: 'top', 'center', 'bottom'
-
-    if (duration === undefined) duration = 3000;
-    if (position === undefined) position = 'bottom';
-
-    app7.toast.create({
+/*
+Opciones de toast: https://framework7.io/docs/toast
+*/
+//function toast(message, duration, position)
+function toast(message, options) {
+    debugger;
+    let opt = {
         text: message,
-        closeTimeout: duration,
-        position: position,
+        duration: 3000,
+        position: 'bottom',
         closeButton: true,
-    }).open();
+    };
+
+    if (typeof options === 'number') {
+        // Bw compat
+        opt.duration = options;
+    } else if (typeof options === 'object') {
+        opt = Object.assign(opt, options);
+    }
+
+    if (typeof(arguments[2]) === 'string') {
+        // Bw compat
+        opt.position = arguments[2];
+    }
+
+    let t = app7.toast.create(opt);
+    t.open();
+    return t;
 }
 
 function getURLParameter(name, url) {
