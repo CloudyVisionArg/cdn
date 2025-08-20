@@ -2219,8 +2219,9 @@ export class Document {
     cdo se borra
     */
     _attRemove(att) {
-        if (this.#attachmentsMap.find((value, key) => value == att))
-            this.#attachmentsMap.delete(att.name);
+        let attMap = this.attachments();
+        if (attMap.find((value, key) => value == att))
+            this.attMap.delete(att.name);
 
         let atts = this.#json.Attachments;
         let ix = atts.findIndex(el => el.AttId == att.id);
@@ -2365,50 +2366,54 @@ export class Document {
     attachments(attachment) {
         var me = this;
 
-        return new Promise(async (resolve, reject) => {
-            if (attachment == undefined) {
-                // Devuelve la coleccion
-                if (!me.#attachmentsMap) {
-                    let map = new DoorsMap();
-                    let atts = me.#json.Attachments;
-                    var ids = atts.map(att => att.AccId);
-                    // Saca los repetidos
-                    ids = ids.filter((el, ix) => ids.indexOf(el) == ix);
-                    if (ids.length) {
-                        // Levanta los accounts para completar el AccName
-                        let accs = await me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')'); 
-                        atts.forEach(el => {
-                            el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                            map.set(el.Name, new Attachment(el, me));
-                        });
-                    }
-                    me.#attachmentsMap = map;
+        if (attachment == undefined) {
+            // Devuelve la coleccion
+            if (!me.#attachmentsMap) {
+                let map = new DoorsMap();
+                let atts = me.#json.Attachments;
+                for (let att of atts) {
+                    map.set(att.Name, new Attachment(att, me));
                 }
-                resolve(me.#attachmentsMap);
 
-            } else {
-                // Devuelve un adjunto
-                let map = me.attachments();
-                let ret;
-                if (typeof(attachment) == 'number') {
-                    // Busca por id
-                    for (let att of map.values()) {
-                        if (att.id == attachment) {
-                            ret = att;
-                            break;
+                // Completa AccName
+                var ids = atts.map(att => att.AccId);
+                ids = ids.filter((el, ix) => ids.indexOf(el) == ix); // Saca los repetidos
+                if (ids.length) {
+                    // Levanta los accounts para completar el AccName
+                    me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
+                        accs => {
+                            me.#json.Attachments.forEach(el => {
+                                el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
+                            });
                         }
-                    }
-                } else {
-                    // Busca por name
-                    ret = map.get(attachment);
+                    );
                 }
-                if (ret) {
-                    resolve(ret);
-                } else {
-                    reject(new Error('Attachment not found: ' + attachment));
-                }
+                me.#attachmentsMap = map;
             }
-        });
+            return me.#attachmentsMap;
+
+        } else {
+            // Devuelve un adjunto
+            let map = me.attachments();
+            let ret;
+            if (typeof(attachment) == 'number') {
+                // Busca por id
+                for (let att of map.values()) {
+                    if (att.id == attachment) {
+                        ret = att;
+                        break;
+                    }
+                }
+            } else {
+                // Busca por name
+                ret = map.get(attachment);
+            }
+            if (ret) {
+                return ret;
+            } else {
+                throw new Error('Attachment not found: ' + attachment);
+            }
+        }
     }
 
     /**
@@ -2456,7 +2461,7 @@ export class Document {
 
         let att = new Attachment(attJson, me);
         att.promises.push(prom1, prom2);
-        this.#attachmentsMap.set(name, att);
+        this.attachments().set(name, att);
         return att;
     }
 
@@ -2469,7 +2474,7 @@ export class Document {
         let att;
         if (typeof(attachment) == 'number') {
             // Busca por id
-            for (let el of me.#attachmentsMap.values()) {
+            for (let el of me.attachments().values()) {
                 if (el.id == attachment) {
                     att = el;
                     break;
@@ -2477,7 +2482,7 @@ export class Document {
             }
         } else {
             // Busca por name
-            att = me.#attachmentsMap.get(attachment);
+            att = me.attachments().get(attachment);
         }
 
         if (att) {
@@ -2507,13 +2512,11 @@ export class Document {
     */
     async awaitPromises() {
         let me = this;
-        if (me.#attachmentsMap) {
-            let proms = [];
-            for (let att of me.#attachmentsMap.values()) {
-                proms.push(...att.promises);
-            }
-            await Promise.all(proms);
+        let proms = [];
+        for (let att of me.attachments().values()) {
+            proms.push(...att.promises);
         }
+        await Promise.all(proms);
     }
 
     /**
