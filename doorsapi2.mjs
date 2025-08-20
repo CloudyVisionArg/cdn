@@ -2508,7 +2508,8 @@ export class Document {
     async awaitPromises() {
         let me = this;
         if (me.#attachmentsMap) {
-            await Promise.all(me.#attachmentsMap.values().map(att => att.promises));
+            let atts = me.#attachmentsMap.values();
+            await Promise.all(atts.map(att => att.promises));
         }
     }
 
