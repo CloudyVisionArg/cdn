@@ -5208,7 +5208,7 @@ export class Utilities {
         let ret;
         if (value instanceof Blob) {
             ret = await value.arrayBuffer();
-        } else if (value instanceof Buffer) {
+        } else if (typeof(Buffer) != 'undefined' && value instanceof Buffer) {
             //todo: chequear
             ret = value.buffer;
         } else if (value instanceof ArrayBuffer) {
