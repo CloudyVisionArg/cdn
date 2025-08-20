@@ -148,11 +148,13 @@ window.deviceServices = {
 		Object.assign(opt, options);
 
         if (device.platform == 'browser') {
-            let $inp = $('<input type="file" style="display: none;" multiple />');
-            $inp.change(function (ev) {
-                return this.files;
+            return new Promise((resolve, reject) => {
+                let $inp = $('<input type="file" style="display: none;" multiple />');
+                $inp.change(function (ev) {
+                    resolve(this.files);
+                });
+                $inp.click()
             });
-            $inp.click()
 
         } else {
             let res = await Capacitor.Plugins.FilePicker.pickFiles(options);
