@@ -2255,7 +2255,7 @@ export class Document {
 
         } else {
             // Devuelve un adjunto
-            let map = me.attachments();
+            let map = me._attachments();
             let ret;
             if (typeof(attachment) == 'number') {
                 // Busca por id
@@ -2282,7 +2282,7 @@ export class Document {
     cdo se borra
     */
     _attRemove(att) {
-        let attMap = this.attachments();
+        let attMap = this._attachments();
         if (attMap.find((value, key) => value == att))
             this.attMap.delete(att.name);
 
@@ -2427,57 +2427,11 @@ export class Document {
     @returns {(Promise<DoorsMap>|Promise<Attachment>)}
     */
     attachments(attachment) {
-        var me = this;
-
-        if (attachment == undefined) {
-            // Devuelve la coleccion
-            if (!me.#attachmentsMap) {
-                let map = new DoorsMap();
-                let atts = me.#json.Attachments;
-                for (let att of atts) {
-                    map.set(att.Name, new Attachment(att, me));
-                }
-
-                // Completa AccName
-                var ids = atts.map(att => att.AccId);
-                ids = ids.filter((el, ix) => el != undefined && ids.indexOf(el) == ix); // Saca los repetidos
-                if (ids.length) {
-                    // Levanta los accounts para completar el AccName
-                    me.session.directory.accountsSearch('acc_id in (' + ids.join(',') + ')').then(
-                        accs => {
-                            me.#json.Attachments.forEach(el => {
-                                el.AccName = accs.find(acc => acc['AccId'] == el.AccId)['Name'];
-                            });
-                        },
-                        err => { debugger }
-                    );
-                }
-                me.#attachmentsMap = map;
-            }
-            return me.#attachmentsMap;
-
-        } else {
-            // Devuelve un adjunto
-            let map = me.attachments();
-            let ret;
-            if (typeof(attachment) == 'number') {
-                // Busca por id
-                for (let att of map.values()) {
-                    if (att.id == attachment) {
-                        ret = att;
-                        break;
-                    }
-                }
-            } else {
-                // Busca por name
-                ret = map.get(attachment);
-            }
-            if (ret) {
-                return ret;
-            } else {
-                throw new Error('Attachment not found: ' + attachment);
-            }
-        }
+        let me = this;
+        return new Promise(async (resolve, reject) => {
+            await me.awaitPromises();
+            resolve(me._attachments(attachment));
+        });
     }
 
     /**
@@ -2525,7 +2479,7 @@ export class Document {
 
         let att = new Attachment(attJson, me);
         att.promises.push(prom1, prom2);
-        this.attachments().set(name, att);
+        this._attachments().set(name, att);
         return att;
     }
 
@@ -2538,7 +2492,7 @@ export class Document {
         let att;
         if (typeof(attachment) == 'number') {
             // Busca por id
-            for (let el of me.attachments().values()) {
+            for (let el of me._attachments().values()) {
                 if (el.id == attachment) {
                     att = el;
                     break;
@@ -2546,7 +2500,7 @@ export class Document {
             }
         } else {
             // Busca por name
-            att = me.attachments().get(attachment);
+            att = me._attachments().get(attachment);
         }
 
         if (att) {
@@ -2578,7 +2532,7 @@ export class Document {
         let me = this;
         let proms = [];
         proms.push(...me.promises);
-        for (let att of me.attachments().values()) {
+        for (let att of me._attachments().values()) {
             proms.push(...att.promises);
         }
         await Promise.all(proms);
@@ -2952,8 +2906,8 @@ export class Document {
         */
 
         // 2do agregar
-        atts = await this.attachments();
-        keys = Array.from(atts.keys());
+        let atts = await this._attachments();
+        let keys = Array.from(atts.keys());
         await utils.asyncLoop(keys.length, async loop => {
             let att = atts.get(keys[loop.iteration()]);
             if (att.isNew) {
