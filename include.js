@@ -41,7 +41,7 @@ function registeredScripts() {
     */
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 449 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 444 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 436 });
+    scripts.push({ id: 'jslib', path: '/jslib.js', version: 435 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 426 });
     scripts.push({ id: 'lib-moment-timezone', path: 'lib/moment-timezone-with-data.min.js', version: 436 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 422 });
