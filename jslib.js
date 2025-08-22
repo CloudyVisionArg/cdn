@@ -39,6 +39,7 @@ ISOTime(pDate, pSeconds)
 leadingZeros(pString, pLength)
 getDocField(pDoc, pFieldName)
 errMsg(pErr)
+highlightControl(pControlId)
 */
 
 /**
@@ -639,4 +640,116 @@ function errMsg(pErr) {
         }
     }
     return JSON.stringify(pErr);
+}
+
+// Resalta un control en la interfaz dado un id de control
+function highlightControl(targetSelector) {    
+    if (!targetSelector || targetSelector.trim() === "") return;
+
+    let $target = $("#" + targetSelector);
+    if (!$target.length) {
+        $target = $("#" + targetSelector.toLowerCase());
+    }
+
+    if (!$target.length) {        
+        const ctl = controls.find(ctl => ctl.NAME.toLowerCase() == targetSelector.toLowerCase());
+        if (ctl) {
+            $target = $("#" + ctl.NAME);
+        }
+    }
+
+    if (!$target.length) return;
+
+    if ($target.is("textarea") && CKEDITOR.instances[$target.attr("id")]) {
+        $target = $target.siblings("div[id^='cke_']");
+    }
+
+    // 1) Buscar tab (si lo hay)
+    const $tabPane = $target.closest(".tab-pane");
+    const tabSelector = $tabPane.length ? "#" + $tabPane.attr("id") : null;
+    // Soporta href y data-bs-target (Bootstrap 5)
+    const $tabLink = tabSelector
+        ? $('[data-bs-toggle="tab"][href="' + tabSelector + '"], [data-bs-toggle="tab"][data-bs-target="' + tabSelector + '"]')
+        : $();
+
+    // 2) Collapsibles padres
+    const $collapsibles = $target.parents(".collapse");
+    let totalToWait = $collapsibles.length;
+    let expandedCount = 0;
+
+    const continuar = () => {
+        setTimeout(() => {
+            const elementTop = $target.offset().top;
+            const elementHeight = $target.outerHeight();
+            const windowHeight = $(window).height();
+            const scrollToPos = elementTop - (windowHeight / 2) + (elementHeight / 2);
+
+            $("html, body").animate({ scrollTop: scrollToPos }, 600, function () {
+            $target.parent().focus();
+            $target.parent().css({
+                outline: "1px solid red",
+                transition: "outline 0.3s ease-in-out",
+                borderRadius: "6px"
+            });
+            setTimeout(() => { 
+                $target.parent().css({
+                    "outline": "",
+                    "borderRadius": "",
+                    "transition": ""
+                });
+            }, 3000);
+            });
+        }, 100);
+    };
+
+    const expandCollapsibles = () => {
+        if (totalToWait === 0) {
+            continuar();
+            return;
+        }
+
+        $collapsibles.each(function () {
+            const $col = $(this);
+
+            if ($col.hasClass("show")) {
+            // ya está expandido
+            expandedCount++;
+            if (expandedCount === totalToWait) continuar();
+            } else {
+            // esperar evento y luego mostrar usando la API nativa
+            $col.one("shown.bs.collapse", function () {
+                expandedCount++;
+                if (expandedCount === totalToWait) continuar();
+            });
+
+            const el = $col[0];            
+            const instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+            instance.show();
+            }
+        });
+    };
+
+    const activarTabSiEsNecesario = () => {
+        if (!tabSelector || !$tabLink.length) {
+            // no hay tab contenedor
+            expandCollapsibles();
+            return;
+        }
+
+        const isTabAlreadyActive = $tabLink.hasClass("active");
+
+        if (isTabAlreadyActive) {
+            expandCollapsibles();
+        } else {
+            $tabLink[0].addEventListener("shown.bs.tab", function () {
+            expandCollapsibles();
+            });
+            // Bootstrap 5: API nativa para tabs
+            const tab = new bootstrap.Tab($tabLink[0]);
+            tab.show();
+        }
+    };
+
+    // Iniciar
+    activarTabSiEsNecesario();
 }
