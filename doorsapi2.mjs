@@ -2284,7 +2284,7 @@ export class Document {
     _attRemove(att) {
         let attMap = this._attachments();
         if (attMap.find((value, key) => value == att))
-            this.attMap.delete(att.name);
+            attMap.delete(att.name);
 
         let atts = this.#json.Attachments;
         let ix = atts.findIndex(el => el.AttId == att.id);
