@@ -650,8 +650,15 @@ function highlightControl(targetSelector) {
     if (!$target.length) $target = $("#" + targetSelector.toLowerCase());
     
     if (!$target.length && !inApp) {
-        const ctl = controls.find(ctl => ctl.NAME.toLowerCase() == targetSelector.toLowerCase());
-        if (ctl) $target = $("#" + ctl.NAME);
+        const ctl = controls.find(item => 
+            item.XMLATTRIBUTES &&
+            (
+            item.XMLATTRIBUTES.textfield?.toLowerCase() === targetSelector.toLowerCase() ||
+            item.XMLATTRIBUTES.valuefield?.toLowerCase() === targetSelector.toLowerCase()
+            )
+        )?.NAME;
+
+        if (ctl) $target = $("#" + ctl);
     }
     
     if (!$target.length) return;
