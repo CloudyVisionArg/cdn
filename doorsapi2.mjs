@@ -4716,7 +4716,7 @@ export class Push {
                 if (!msg.data.guid) msg.data.guid = this.session.utils.getGuid();
                 notW.JsonExtraParameters = this.stringifyData(msg.data);
             }
-    
+
             var url = '/notification';
             await this.session.restClient.fetch(url, 'PUT', notW, 'notificationW');
         }
