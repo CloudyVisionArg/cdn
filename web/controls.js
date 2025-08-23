@@ -972,12 +972,15 @@ async function newAutocomplete(pId, pLabel, options){
         if(text != null){            
             if($oSel.find("option").filter(function () { return $(this).html() == text }).length == 0){
                 let option = new Option(text, text, false, false);
+                option.setAttribute("data-text", text);
+                option.setAttribute("data-value", value);
                 $oSel.append(option);
             }
         }
         if(value){            
             if($oSel[0].getAttribute("data-textfield") != "[NULL]"){
                 $oSel[0].options[selectedIndex].value = value
+                $oSel[0].options[selectedIndex].setAttribute("data-value", value);
                 let oData = $oSel.select2("data");
                 if(oData && oData.length > 0){
                     $oSel.select2("data")[selectedIndex].id = value
@@ -985,6 +988,7 @@ async function newAutocomplete(pId, pLabel, options){
             }else{                
                 if($oSel.find("option[value='"+ value +"']").length == 0){
                     let option = new Option(value, value, false, false);
+                    option.setAttribute("data-value", value);
                     $oSel.append(option);
                 }
             }           
