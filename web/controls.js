@@ -1271,7 +1271,7 @@ async function newAutocomplete(pId, pLabel, options){
     // Función para formatear la selección
     function formatSelection (option) {
         let sText = option[pOptions.textSource.toUpperCase()] || option.text;
-        if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]")
+        if(!option.id || !pOptions.editUrl || $oSel[0].getAttribute("data-valuefield") == "[NULL]" || option.element.getAttribute("data-value") == "null")
             return sText;
 
         let editUrl = `${pOptions.editUrl}&callbackfunction=reloadAutocomplete_${$oSel[0].id}&doc_id=${option.id}`       
