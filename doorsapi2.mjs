@@ -1528,11 +1528,29 @@ export class Attachment {
         this.#promises = [];
     }
 
-    async _getFile() {
+    async _getFile(onProgress) {
         var me = this;
-        var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
-        let res = await me.session.restClient.fetchRaw(url, 'GET', '');
-        return await res.arrayBuffer();
+
+        if (!me.#json.File) {
+            let url = 'documents/' + me.parent.id + '/attachments/' + me.id;
+            let res = await me.session.restClient.fetchRaw(url, 'GET', '');
+            let buf = await res.arrayBuffer();
+            me.#json.File = await me._checkBuffer(buf, onProgress);
+            return me.#json.File;
+
+        } else {
+            let file = me.#json.File;
+
+            if (typeof(file) == 'string') {
+                // Es base64, se acaba de subir
+                let buf = me.session.node.inNode ? Buffer.from(atob(file), 'binary')
+                    : me.session.utils.base64ToBuffer(me.#json.File);
+                return await me._checkBuffer(buf, onProgress);
+
+            } else {
+                return file;
+            }
+        }
     }
 
     /**
@@ -1617,33 +1635,7 @@ export class Attachment {
     @returns {Promise<ArrayBuffer>}
     */
     get fileStream() {
-        var me = this;
-
-        return new Promise(async (resolve, reject) => {
-            debugger
-            try {
-                if (!me.#json.File) {
-                    let buf = await me._getFile();
-                    me.#json.File = await me._checkBuffer(buf);
-                    resolve(me.#json.File);
-
-                } else {
-                    let file = me.#json.File;
-
-                    if (typeof(file) == 'string') {
-                        // Es base64, se acaba de subir
-                        let buf = me.session.node.inNode ? Buffer.from(atob(file), 'binary')
-                            : me.session.utils.base64ToBuffer(me.#json.File);
-                        resolve(await me._checkBuffer(buf));
-
-                    } else {
-                        resolve(file);
-                    }
-                }
-            } catch (error) {
-                reject(error);
-            }
-        });
+        return this._getFile();
     }
     set fileStream(value) {
         let me = this;
@@ -1664,6 +1656,7 @@ export class Attachment {
 
         if (value === undefined) {
             // GET
+            return await me._getFile(onProgress);
 
         } else {
             // SET
