@@ -895,8 +895,9 @@ export class Session {
     Devuelve el nombre del bucket S3
     */
     get s3Bucket() {
+        let me = this;
         return new Promise(async (resolve, reject) => {
-            resolve('att-' + (await dSession.instance).Name.toLowerCase());
+            resolve('att-' + (await me.instance).Name.toLowerCase());
         });
     }
 
