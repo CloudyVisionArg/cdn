@@ -1540,6 +1540,7 @@ export class Attachment {
     y en ese caso lo descarga
     */
     async _checkBuffer(buffer, onProgress) {
+        let me = this;
         if (buffer.byteLength == fileAtS3.length && new SimpleBuffer(buffer).toString() == fileAtS3) {
             let s3 = await me.session.s3;
             return await s3.download({
