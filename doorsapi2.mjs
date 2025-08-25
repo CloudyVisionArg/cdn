@@ -1528,6 +1528,30 @@ export class Attachment {
         this.#promises = [];
     }
 
+    async _getFile() {
+        var me = this;
+        var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
+        let res = await me.session.restClient.fetchRaw(url, 'GET', '');
+        return await res.arrayBuffer();
+    }
+
+    /**
+    Verifica si el buffer indica que el archivo esta en S3,
+    y en ese caso lo descarga
+    */
+    async _checkBuffer(buffer, onProgress) {
+        if (buffer.byteLength == fileAtS3.length && new SimpleBuffer(buffer).toString() == fileAtS3) {
+            let s3 = await me.session.s3;
+            return await s3.download({
+                bucket: await me.session.s3Bucket,
+                key: me.s3Key,
+                onProgress,
+            });
+        } else {
+            return buffer;
+        }
+    }
+
     /**
     @returns {Date}
     */
@@ -1595,46 +1619,29 @@ export class Attachment {
         var me = this;
 
         return new Promise((resolve, reject) => {
-            if (!me.#json.File) {
-                var url = 'documents/' + me.parent.id + '/attachments/' + me.id;
-                me.session.restClient.fetchRaw(url, 'GET', '').then(
-                    async res => {
-                        me.#json.File = checkBuffer(await res.arrayBuffer());
-                        resolve(me.#json.File);
-                    },
-                    reject
-                )
-
-            } else {
-                let file = me.#json.File;
-
-                if (typeof(file) == 'string') {
-                    // Es base64
-                    let buf = me.session.node.inNode ? Buffer.from(atob(file), 'binary')
-                        : me.session.utils.base64ToBuffer(me.#json.File);
-                    resolve(checkBuffer(buf));
+            try {
+                if (!me.#json.File) {
+                    let buf = me._getFile();
+                    me.#json.File = me._checkBuffer(buf);
+                    resolve(me.#json.File);
 
                 } else {
-                    resolve(file);
+                    let file = me.#json.File;
+
+                    if (typeof(file) == 'string') {
+                        // Es base64, se acaba de subir
+                        let buf = me.session.node.inNode ? Buffer.from(atob(file), 'binary')
+                            : me.session.utils.base64ToBuffer(me.#json.File);
+                        resolve(me._checkBuffer(buf));
+
+                    } else {
+                        resolve(file);
+                    }
                 }
+            } catch (error) {
+                reject(error);
             }
         });
-
-        /**
-        Verifica si el buffer indica que el archivo esta en S3,
-        y en ese caso lo descarga
-        */
-        async function checkBuffer(buffer) {
-            if (buffer.byteLength == fileAtS3.length && new SimpleBuffer(buffer).toString() == fileAtS3) {
-                let s3 = await me.session.s3;
-                return await s3.download({
-                    bucket: await me.session.s3Bucket,
-                    key: me.s3Key,
-                });
-            } else {
-                return buffer;
-            }
-        }
     }
     set fileStream(value) {
         let me = this;
@@ -1652,19 +1659,26 @@ export class Attachment {
 
     async fileStream2(value, onProgress) {
         let me = this;
-        if (!me.isNew) throw new Error('Readonly property');
 
-        await Promise.all(me.promises);
-        let s3 = await me.session.s3;
-        await s3.upload({
-            bucket: await me.session.s3Bucket,
-            key: me.s3Key,
-            file: value,
-            onProgress,
-        });
+        if (value === undefined) {
+            // GET
 
-        me.#json.File = new SimpleBuffer(fileAtS3.split('').map(el => el.charCodeAt(0))).toString('base64');
-        me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
+        } else {
+            // SET
+            if (!me.isNew) throw new Error('Readonly property');
+
+            await Promise.all(me.promises);
+            let s3 = await me.session.s3;
+            await s3.upload({
+                bucket: await me.session.s3Bucket,
+                key: me.s3Key,
+                file: value,
+                onProgress,
+            });
+
+            me.#json.File = new SimpleBuffer(fileAtS3.split('').map(el => el.charCodeAt(0))).toString('base64');
+            me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
+        }
     }
 
     /**
