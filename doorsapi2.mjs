@@ -1618,12 +1618,12 @@ export class Attachment {
     get fileStream() {
         var me = this;
 
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             debugger
             try {
                 if (!me.#json.File) {
-                    let buf = me._getFile();
-                    me.#json.File = me._checkBuffer(buf);
+                    let buf = await me._getFile();
+                    me.#json.File = await me._checkBuffer(buf);
                     resolve(me.#json.File);
 
                 } else {
@@ -1633,7 +1633,7 @@ export class Attachment {
                         // Es base64, se acaba de subir
                         let buf = me.session.node.inNode ? Buffer.from(atob(file), 'binary')
                             : me.session.utils.base64ToBuffer(me.#json.File);
-                        resolve(me._checkBuffer(buf));
+                        resolve(await me._checkBuffer(buf));
 
                     } else {
                         resolve(file);
