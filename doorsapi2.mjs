@@ -1619,6 +1619,7 @@ export class Attachment {
         var me = this;
 
         return new Promise((resolve, reject) => {
+            debugger
             try {
                 if (!me.#json.File) {
                     let buf = me._getFile();
