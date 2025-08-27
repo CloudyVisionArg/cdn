@@ -1086,8 +1086,13 @@ function proxAccionControl(opts){
             let newAccion = $("#proxAccionMainContainer #selectProxAccion option:selected").val();
             me.allOptions.onProxAccionChange.call(me, newAccion);
 		});
-		
-		$("#proxAccionMainContainer #inputFechaProxAccion").parent().datetimepicker({showClose:true,locale:'es',focusOnShow:false});
+		if (typeof(cordova) == 'object') {
+            $("#proxAccionMainContainer #inputFechaProxAccion").attr("type","datetime");
+            $("#proxAccionMainContainer .input-group-addon.input-group-text").remove();
+        }
+        else{
+            $("#proxAccionMainContainer #inputFechaProxAccion").parent().datetimepicker({showClose:true,locale:'es',focusOnShow:false});
+        }
 	};
 
     //Segunda parte: Dibujado y completado de acciones

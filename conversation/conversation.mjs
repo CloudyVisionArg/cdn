@@ -246,7 +246,15 @@ async function setupNecessaryScripts(wappConfig, fbConfig, crmConfig, meliConfig
         necessaryScripts.push({ id: 'conversation-wapp', depends: cloneArr(depends), src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + scriptsBranch + '/conversation/conversation.wapp.js' });
     }
     
-    if(crmConfig != undefined && crmConfig != null){    
+    if(crmConfig != undefined && crmConfig != null){
+        //Para el control de proxima accion necesito bootstrap?
+        /*if (typeof(cordova) == 'object') {
+            necessaryScripts.push({id: 'bootstrap', src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' });
+            necessaryScripts.push({id: "bootstrap-css", src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' });
+            depends.push("bootstrap");
+            depends.push("bootstrap-css");
+        }*/
+        
         necessaryScripts.push({id:'conversation-crm',depends: cloneArr(depends), src: 'https://cdn.cloudycrm.net/ghcv/cdn@' + scriptsBranch + '/conversation/conversation.crm.js?v=6'});
     }
 
