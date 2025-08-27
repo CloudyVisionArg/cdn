@@ -1123,15 +1123,23 @@ function proxAccionControl(opts){
         }
 
         let doneClass = me.proxAccion ? "" : "hidden";
+        let appClassesSuccess = "";
+        let appClassesCancel = "";
+        let appClassesEdit = "";
+        if(typeof(cordova) == 'object'){
+            appClassesSuccess = "button button-small button-fill color-green";
+            appClassesCancel = "button button-small button-fill color-red";
+            appClassesEdit = "button button-small button-fill";
+        }
         html = '<div class="chat-subheader prox-accion-container">' +
         '	<div>' +
         '		<div id="proxAccionText" class="prox-accion-text external-name">' + proxAccionString + '</div>' +
         '		<div id="fechaProxAccionText" class="fecha-prox-accion external-name">' + fechaProxAccionString + '</div>' + 
         '	</div>' +
         '	<div class="right-container">'+
-        '       <button type="button" class="btn btn-default"><i class="fa fa-pencil"></i></button>'+
-        '       <button id="successProxAccion" type="button" class="btn btn-success ' + doneClass + '" ><i class="fa fa-check"></i></button>' + 
-        '       <button id="failProxAccion" type="button" class="btn btn-danger ' + doneClass + '" ><i class="fa fa-times"></i></button>' + 
+        '       <button type="button" class="btn btn-default ' + appClassesEdit + '"><i class="fa fa-pencil"></i></button>'+
+        '       <button id="successProxAccion" type="button" class="btn btn-success ' + doneClass + ' ' + appClassesSuccess + '" ><i class="fa fa-check"></i></button>' + 
+        '       <button id="failProxAccion" type="button" class="btn btn-danger ' + doneClass + ' ' + appClassesCancel + '" ><i class="fa fa-times"></i></button>' + 
         '	</div>' +
         '</div>';
         let jqObject = $(html);
