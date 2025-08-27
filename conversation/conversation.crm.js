@@ -1000,6 +1000,15 @@ function proxAccionControl(opts){
         }
 		let agendarButtonHtml = '<div class="form-group"><button id="agendarProxAccionButton" class="col button button-fill">Agendar</button></div>';
 		/*'<input id="inputFechaProxAccion" type="datetime-local" class="form-control" id="proxAccionDate" placeholder="Fecha proxima acci&oacute;n">' +*/
+
+        let inputFechaProxAccion = `
+            <input id='inputFechaProxAccion' type='text' class='form-control datetimepicker-input' data-target='#inputFechaProxAccionParent' placeholder='Fecha proxima acci&oacute;n'>
+            <span class='input-group-addon input-group-text' data-target='#inputFechaProxAccionParent' data-toggle='datetimepicker'>
+                <span class='fa fa-calendar'></span>
+            </span>`;
+        if(typeof(cordova) == 'object'){
+            inputFechaProxAccion = `<div class="item-input-wrap"><input type="datetime-local" id="inputFechaProxAccion" ><span class="input-clear-button"></span></div>`
+		}
 		let proxAccionHtml = '<div class="block block-strong inset"><div class="form-group">' +
 					'<label for="proxAccion">Proxima acci&oacute;n</label>' +
 					'<select id="selectProxAccion" class="">' +
@@ -1010,10 +1019,7 @@ function proxAccionControl(opts){
 				'<div class="form-group">'+
 					"<label for='inputFechaProxAccion'>Fecha proxima acci&oacute;n</label>" +
 					"<div class='input-group date' data-target-input='nearest' id='inputFechaProxAccionParent'>" +
-					"	<input id='inputFechaProxAccion' type='text' class='form-control datetimepicker-input' data-target='#inputFechaProxAccionParent' placeholder='Fecha proxima acci&oacute;n'>" +
-					"	<span class='input-group-addon input-group-text' data-target='#inputFechaProxAccionParent' data-toggle='datetimepicker'>" + 
-					"		<span class='fa fa-calendar'></span>" +
-					"	</span>" +
+					inputFechaProxAccion +
 					'</div>' +
 				'</div></div>';
 		let html = '<div id="proxAccionMainContainer">' + popupHeader + proxAccionHtml + agendarButtonHtml + '</div>'; // + popUpScript;
@@ -1086,11 +1092,7 @@ function proxAccionControl(opts){
             let newAccion = $("#proxAccionMainContainer #selectProxAccion option:selected").val();
             me.allOptions.onProxAccionChange.call(me, newAccion);
 		});
-		if (typeof(cordova) == 'object') {
-            $("#proxAccionMainContainer #inputFechaProxAccion").attr("type","datetime");
-            $("#proxAccionMainContainer .input-group-addon.input-group-text").remove();
-        }
-        else{
+		if (typeof(cordova) != 'object') {
             $("#proxAccionMainContainer #inputFechaProxAccion").parent().datetimepicker({showClose:true,locale:'es',focusOnShow:false});
         }
 	};
