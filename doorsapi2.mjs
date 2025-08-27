@@ -3225,7 +3225,7 @@ export class Field {
     @returns {boolean}
     */
     get valueEmpty() {
-        return (this.value == null || this.value === undefined || this.value == '');
+        return (this.value === null || this.value === undefined || this.value === '');
     }
 
     get valueOld() {
