@@ -2229,11 +2229,12 @@ export class Document {
         this.#promises = [];
 
         // Busca los fields de relaciones
+        // Seguir aca, esto lo voy a tener q tirar antes de llamar al constructor
         this.#promises.push(new Promise(async (resolve, reject) => {
             try {
                 let url = 'documents/' + me.id + '/relfields';
                 let res = await me.session.v8Client.fetch(url);
-                debugger
+                me.#json.RelFields = res;
                 resolve(true);
             } catch(er) {
                 reject(er);
@@ -2598,17 +2599,17 @@ export class Document {
     fields(name, value) // Setea el valor del field.
     @returns {(DoorsMap|Field)}
     */
-    fields(attachment, value) {
+    fields(name, value) {
         var me = this;
 
-        if (attachment) {
+        if (name) {
             // Devuelve un field
-            var field = me.fields().get(attachment);
+            var field = me.fields().get(name);
             if (field) {
                 if (value !== undefined) field.value = value;
                 return field;
             } else {
-                if (attachment.toUpperCase() != '[NULL]') console.log('Field not found: ' + attachment);
+                if (name.toUpperCase() != '[NULL]') console.log('Field not found: ' + name);
                 return undefined;
             }
 
@@ -3027,7 +3028,28 @@ export class Document {
     }
 };
 
-
+/**
+field = {
+    Computed,
+    Custom,
+    Description,
+    DescriptionRaw,
+    HeaderTable,
+    Id,
+    IsNew,
+    Length,
+    Name,
+    Nullable,
+    Precision,
+    Scale,
+    Tags,
+    Type,
+    Updatable,
+    Value,
+    ValueChanged,
+    ValueOld,
+}
+*/
 export class Field {
     static objectType = 5;
     #parent; // Document / Form / Folder
