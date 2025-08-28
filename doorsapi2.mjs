@@ -2221,10 +2221,24 @@ export class Document {
     #promises;
 
     constructor(document, session, folder) {
+        let me = this;
+
         this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
         this.#promises = [];
+
+        // Busca los fields de relaciones
+        this.#promises.push(new Promise(async (resolve, reject) => {
+            try {
+                let url = 'documents/' + me.id + '/relfields';
+                let res = await me.session.v8Client.fetch(url);
+                debugger
+                resolve(true);
+            } catch(er) {
+                reject(er);
+            }
+        }));
     }
 
     /**
