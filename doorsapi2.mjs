@@ -435,6 +435,7 @@ export class Session {
     y los agrega al Json
     */
     async _docRefFields(docJson) {
+        debugger
         let me = this;
         let url = 'documents/' + docJson.DocId + '/relfields';
         let res = await me.v8Client.fetch(url);
