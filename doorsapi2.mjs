@@ -6554,7 +6554,6 @@ class V8Client {
         }
         ret.ServerUrl = this.session.serverUrl;
         ret.InstanceName = (await me.session.instance).Name;
-        debugger
         return ret;
     }
 
