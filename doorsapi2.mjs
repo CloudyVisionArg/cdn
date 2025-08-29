@@ -435,12 +435,16 @@ export class Session {
     y los agrega al Json
     */
     async _docRefFields(docJson) {
-        debugger
         let me = this;
         if (docJson.IsNew) {
             let fldId = docJson.HeadFields.find(el => el['Name'] == 'FLD_ID').Value
             let url = 'folders/' + fldId + '/relfields';
             let res = await me.v8Client.fetch(url);
+        debugger
+            res.forEach(el => {
+                el['Value'] = null;
+                el['ValueOld'] = null;
+            });
             docJson.RelFields = res;
         } else {
             let url = 'documents/' + docJson.DocId + '/relfields';
