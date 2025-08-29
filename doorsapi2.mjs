@@ -430,6 +430,17 @@ export class Session {
         this.#authToken = authToken;
     }
     
+    /**
+    Obtiene los campos de relaciones de un documento
+    y los agrega al Json
+    */
+    async _docRefFields(docJson) {
+        debugger
+        let url = 'documents/' + docJson.Id + '/relfields';
+        let res = await me.session.v8Client.fetch(url);
+        docJson.RelFields = res;
+    }
+
     _reset() {
         this.#apiKey = undefined;
         this.#authToken = undefined;
@@ -602,6 +613,7 @@ export class Session {
             let url = 'documents/' + docId;
             me.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
+                    await me.session._docRefFields(res);
                     let doc = new Document(res, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
@@ -2221,25 +2233,10 @@ export class Document {
     #promises;
 
     constructor(document, session, folder) {
-        let me = this;
-
         this.#json = document;
         this.#session = session;
         if (folder) this.#parent = folder;
         this.#promises = [];
-
-        // Busca los fields de relaciones
-        // Seguir aca, esto lo voy a tener q tirar antes de llamar al constructor
-        this.#promises.push(new Promise(async (resolve, reject) => {
-            try {
-                let url = 'documents/' + me.id + '/relfields';
-                let res = await me.session.v8Client.fetch(url);
-                me.#json.RelFields = res;
-                resolve(true);
-            } catch(er) {
-                reject(er);
-            }
-        }));
     }
 
     /**
@@ -2750,12 +2747,14 @@ export class Document {
     await doc.nodeEvent({ owner, repo, path, ref, fresh });
     */
     async nodeEvent(code, eventName) {
-        this.#json = await this.session.node.exec({
+        let me = this;
+        me.#json = await me.session.node.exec({
             code: code,
             payload: { eventName },
-            doc: this.toJSON(),
+            doc: me.toJSON(),
         });
-        this._reset();
+        await me.session._docRefFields(me.#json);
+        me._reset();
     }
 
     /**
@@ -2877,6 +2876,7 @@ export class Document {
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         async res => {
+                            await me.session._docRefFields(res);
                             me.#json = res;
                             me.#json.Tags = tags; // Restauro los tags para el afterSave
 
@@ -3535,6 +3535,7 @@ export class Folder {
             var url = 'folders/' + me.id + '/documents/new';
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
+                    await me.session._docRefFields(res);
                     let doc = new Document(res, me.session, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
