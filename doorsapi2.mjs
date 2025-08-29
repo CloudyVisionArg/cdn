@@ -2631,9 +2631,10 @@ export class Document {
                 me.#json.CustomFields.forEach(el => {
                     map.set(el.Name, new Field(el, me));
                 });
-                me.#json.RelFields.forEach(el => {
-                    map.set(el.Name, new Field(el, me));
-                });
+                if (Array.isArray(me.#json.RelFields)) {
+                    me.#json.RelFields.forEach(el => {
+                        map.set(el.Name, new Field(el, me));
+                    });
                 me.#fieldsMap = map;
             }
             return me.#fieldsMap;
