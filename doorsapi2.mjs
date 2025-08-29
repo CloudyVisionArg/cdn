@@ -6553,7 +6553,7 @@ class V8Client {
             ret.ApiKey = this.session.apiKey;
         }
         ret.ServerUrl = this.session.serverUrl;
-        ret.InstanceName = (await me.session.instance);
+        ret.InstanceName = (await me.session.instance).Name;
         debugger
         return ret;
     }
