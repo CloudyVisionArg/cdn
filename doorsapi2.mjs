@@ -613,7 +613,7 @@ export class Session {
             let url = 'documents/' + docId;
             me.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
-                    await me.session._docRefFields(res);
+                    await me._docRefFields(res);
                     let doc = new Document(res, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
