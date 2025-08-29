@@ -439,7 +439,7 @@ export class Session {
         let me = this;
         if (docJson.IsNew) {
             let fldId = docJson.HeadFields.find(el => el['Name'] == 'FLD_ID').Value
-            let url = 'folder/' + fldId + '/relfields';
+            let url = 'folders/' + fldId + '/relfields';
             let res = await me.v8Client.fetch(url);
             docJson.RelFields = res;
         } else {
