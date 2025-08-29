@@ -6543,7 +6543,9 @@ class V8Client {
         this.#session = session;
     }
 
-    credentials() {
+    async credentials() {
+        let me = this;
+
         var ret = {};
         if (this.session.authToken) {
             ret.AuthToken = this.session.authToken;
@@ -6551,6 +6553,8 @@ class V8Client {
             ret.ApiKey = this.session.apiKey;
         }
         ret.ServerUrl = this.session.serverUrl;
+        ret.InstanceName = (await me.session.instance).Name;
+        debugger
         return ret;
     }
 
