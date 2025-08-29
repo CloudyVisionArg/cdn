@@ -6553,7 +6553,7 @@ class V8Client {
             ret.ApiKey = this.session.apiKey;
         }
         ret.ServerUrl = this.session.serverUrl;
-        ret.InstanceName = (await me.session.instance).Name;
+        ret.InstanceName = (await me.session.instance);
         debugger
         return ret;
     }
@@ -6582,7 +6582,7 @@ class V8Client {
             } else {
                 body = params;
             }
-            let headers = me.credentials();
+            let headers = await me.credentials();
             headers['Content-Type'] = 'application/json';
 
             let res = await fetch(fullUrl, {
