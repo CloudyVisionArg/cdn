@@ -437,9 +437,15 @@ export class Session {
     async _docRefFields(docJson) {
         debugger
         let me = this;
-        let url = 'documents/' + docJson.DocId + '/relfields';
-        let res = await me.v8Client.fetch(url);
-        docJson.RelFields = res;
+        if (docJson.IsNew) {
+            let url = 'folder/' + docJson.FldId + '/relfields';
+            let res = await me.v8Client.fetch(url);
+            docJson.RelFields = res;
+        } else {
+            let url = 'documents/' + docJson.DocId + '/relfields';
+            let res = await me.v8Client.fetch(url);
+            docJson.RelFields = res;
+        }
     }
 
     _reset() {
