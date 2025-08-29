@@ -436,19 +436,24 @@ export class Session {
     */
     async _docRefFields(docJson) {
         let me = this;
-        if (docJson.IsNew) {
-            let fldId = docJson.HeadFields.find(el => el['Name'] == 'FLD_ID').Value
-            let url = 'folders/' + fldId + '/relfields';
-            let res = await me.v8Client.fetch(url);
-            res.forEach(el => {
-                el['Value'] = null;
-                el['ValueOld'] = null;
-            });
-            docJson.RelFields = res;
-        } else {
-            let url = 'documents/' + docJson.DocId + '/relfields';
-            let res = await me.v8Client.fetch(url);
-            docJson.RelFields = res;
+        try {
+            if (docJson.IsNew) {
+                let fldId = docJson.HeadFields.find(el => el['Name'] == 'FLD_ID').Value
+                let url = 'folders/' + fldId + '/relfields';
+                let res = await me.v8Client.fetch(url);
+                res.forEach(el => {
+                    el['Value'] = null;
+                    el['ValueOld'] = null;
+                });
+                docJson.RelFields = res;
+            } else {
+                let url = 'documents/' + docJson.DocId + '/relfields';
+                let res = await me.v8Client.fetch(url);
+                docJson.RelFields = res;
+            }
+
+        } catch(err) {
+            console.error(err, { consoleTag1: 'doorsapi2.Session._docRefFields' });
         }
     }
 
