@@ -5654,7 +5654,8 @@ export class Utilities {
     payload es un objeto con pares clave-valor que se agregan al body
     */
     async execVbs(code, payload) {
-        //todo: soporte para apiKey
+        if (!this.session.authToken) throw new Error('authToken is required');
+
         var data = 'AuthToken=' + encodeURIComponent(this.session.authToken) +
             '&code=' + encodeURIComponent(code) +
             '&addACAO=' + encodeURIComponent(await this.execapiAcao);
