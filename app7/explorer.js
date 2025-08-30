@@ -814,7 +814,7 @@ async function loadViewSection(pContainer, pCallback) {
 
     } catch (err) {
         console.error(err);
-        pContainer.html(`<div class="page-content"><div class="block-title">Error</div><div class="block">${ errMsg(err) }</div></div>`); 
+        pContainer.html(`<div class="block-title">Error</div><div class="block block-strong">${ errMsg(err) }</div>`); 
 
     } finally {
         app7.preloader.hide();
