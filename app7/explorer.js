@@ -28,10 +28,10 @@ var maxLen = 200;
 (async () => {
     folder2 = await dSession.folder(fld_id);
     folder = folder2.toJSON();
-    getFolderElements(folder);
+    let gfeProm = getFolderElements(folder);
 
 
-
+    await gfeProm;
     debugger;
 })();
 
