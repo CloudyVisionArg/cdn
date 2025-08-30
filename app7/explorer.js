@@ -34,7 +34,6 @@ var maxLen = 200;
     if (folder2.type == 1) {
         let frm = await folder2.form;
         proms.push(frm.properties());
-        proms.push(folder2.form());
         proms.push(folder2.views());
     }
 
