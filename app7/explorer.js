@@ -1,5 +1,7 @@
 // todo: recibir una señal de refresh, dps de modif un doc
 
+let folder2;
+
 var folder, f7Page, pageEl;
 var $page, $navbar, $subnavbar, $title, $views, $pageCont, $viewDiv;
 var searchBar, docActions, actionsPopup, fldActions;
@@ -24,6 +26,9 @@ var propImport = 'App7_import';
 var maxLen = 200;
 
 actionsPopup = getActionsPopup();
+
+folder2 = await dSession.folder(fld_id);
+debugger;
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
