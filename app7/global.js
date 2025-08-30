@@ -1909,6 +1909,7 @@ todo: manejar un cache local para folders offline
 function getFolderElements(pFolder) {
     return new Promise(async function (resolve, reject) {
         try {
+            debugger
             let fldProps = DoorsAPI.folderPropertiesGet(pFolder.FldId);
             let fldUserProps = DoorsAPI.folderUserPropertiesGet(pFolder.FldId);
             let fldForm, frmProps, fldViews;
@@ -1963,7 +1964,7 @@ function getFolderElements(pFolder) {
             reject(err);
         }
     });
-    
+
     pFolder.pendingCalls = 0;
 
     // Lee las Properties del Folder
