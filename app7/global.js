@@ -1909,7 +1909,6 @@ todo: manejar un cache local para folders offline
 function getFolderElements(pFolder) {
     return new Promise(async function (resolve, reject) {
         try {
-            debugger
             let fldProps = DoorsAPI.folderPropertiesGet(pFolder.FldId);
             let fldUserProps = DoorsAPI.folderUserPropertiesGet(pFolder.FldId);
             let fldForm, frmProps, fldViews;
@@ -1964,94 +1963,7 @@ function getFolderElements(pFolder) {
             reject(err);
         }
     });
-
-    pFolder.pendingCalls = 0;
-
-    // Lee las Properties del Folder
-    pFolder.pendingCalls++;
-    DoorsAPI.folderPropertiesGet(pFolder.FldId).then(
-        function (props) {
-            pFolder.Properties = props;
-            pFolder.pendingCalls--;
-        },
-        errFunction
-    );
-
-    // Lee las UserProperties del Folder
-    pFolder.pendingCalls++;
-    DoorsAPI.folderUserPropertiesGet(pFolder.FldId).then(
-        function (props) {
-            pFolder.UserProperties = props;
-            pFolder.pendingCalls--;
-        },
-        errFunction
-    );
-
-    if (pFolder.Type == 1) {
-        // Lee el Form
-        pFolder.pendingCalls++;
-        DoorsAPI.formsGetById(pFolder.FrmId).then(
-            function (frm) {
-                pFolder.Form = frm;
-
-                // Lee las Properties del Form
-                DoorsAPI.formPropertiesGet(pFolder.FrmId).then(
-                    function (props) {
-                        pFolder.Form.Properties = props;
-                        pFolder.pendingCalls--;
-                    },
-                    errFunction
-                );
-            },
-            errFunction
-        );
-
-        // Lee las vistas del folder
-        pFolder.pendingCalls++;
-        DoorsAPI.views(pFolder.FldId).then(
-            function (views) {
-                var arrViews = [];
-                for (var i = 0; i < views.length; i++) {
-                    var view = views[i];
-                    if (view['Type'] = 1 && (!view['Private'] || view['AccId'] == dSession.loggedUser()['AccId'])) {
-                        arrViews.push({
-                            VieId: view['VieId'],
-                            Name: view['Name'],
-                            Description: view['Description'],
-                            Private: view['Private'],
-                        });
-                    };
-                };
-
-                // Ordena
-                arrViews.sort(function (a, b) {
-                    if (!a['Private'] && b['Private']) {
-                        return -1;
-                    } else if (a['Private'] && !b['Private']) {
-                        return 1;
-                    } else {
-                        var aTitle = a['Description'] ? a['Description'] : a['Name'];
-                        var bTitle = b['Description'] ? b['Description'] : b['Name'];
-                        if (aTitle.toLowerCase() < bTitle.toLowerCase()) {
-                            return -1;
-                        } else {
-                            return 1;
-                        };
-                    };
-                });
-                pFolder.Views = arrViews;
-                pFolder.pendingCalls--;
-            },
-            errFunction
-        );
-    }
-
-    function errFunction(err) {
-        console.error(errMsg(err));
-        throw err;
-    };
 }
-
 
 function folderSearch(fldId, fields, formula, order, limit, maxLen, forceOnline) {
     return new Promise(function (resolve, reject) {
