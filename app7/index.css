@@ -62,6 +62,6 @@
     display: inherit;
 }
 
-.doors-attachments .media-list .item-link .item-inner:before {
+.doors-attachments .media-list .item-link .item-title-row:before {
     display: none;
 }
