@@ -27,15 +27,10 @@ var maxLen = 200;
 
 (async () => {
     folder2 = await dSession.folder(fld_id);
+    folder = folder2.toJSON();
+    getFolderElements(folder);
 
-    let proms = [];
-    proms.push(folder2.properties());
-    proms.push(folder2.userProperties());
-    if (folder2.type == 1) {
-        let frm = await folder2.form;
-        proms.push(frm.properties());
-        proms.push(folder2.views());
-    }
+
 
     await Promise.all(proms);
     debugger;
