@@ -32,7 +32,6 @@ var maxLen = 200;
 
 
 
-    await Promise.all(proms);
     debugger;
 })();
 
