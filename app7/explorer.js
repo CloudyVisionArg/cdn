@@ -25,10 +25,25 @@ var propInit = 'App7_explorerInit';
 var propImport = 'App7_import';
 var maxLen = 200;
 
+(async () => {
+    folder2 = await dSession.folder(fld_id);
+
+    let proms = [];
+    proms.push(folder2.properties());
+    proms.push(folder2.userProperties());
+    if (folder2.type == 1) {
+        let frm = await folder2.form;
+        proms.push(frm.properties());
+        proms.push(folder2.form());
+        proms.push(folder2.views());
+    }
+
+    await Promise.all(proms);
+    debugger;
+})();
+
 actionsPopup = getActionsPopup();
 
-folder2 = await dSession.folder(fld_id);
-debugger;
 
 dSession.foldersGetFromId(fld_id).then(
     function (fld) {
