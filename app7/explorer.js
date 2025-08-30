@@ -502,7 +502,7 @@ function reloadView(pCallback) {
     )
 }
 
-function loadViewSection(pContainer, pCallback) {
+async function loadViewSection(pContainer, pCallback) {
     var level, levelDrill, i, view, formula, order;
 
     app7.preloader.show();
@@ -576,6 +576,14 @@ function loadViewSection(pContainer, pCallback) {
         };
         if (order) order = order.substring(2);
 
+        let res = await folder2.search({
+            fields: arrFields.join(', '),
+            formula,
+            order,
+            maxDocs: searchLimit(),
+            maxTextLen: maxLen,
+        });
+        debugger
         folderSearch(fld_id, arrFields.join(', '), formula, order, searchLimit(), maxLen, forceOnline).then(
             async function (res) {
                 if (res.length == 0) {
