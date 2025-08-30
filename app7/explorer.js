@@ -7,7 +7,7 @@ var $page, $navbar, $subnavbar, $title, $views, $pageCont, $viewDiv;
 var searchBar, docActions, actionsPopup, fldActions;
 
 var fld_id = routeTo.query.fld_id;
-var forceOnline = routeTo.query.online;
+var forceOnline = true; //routeTo.query.online;
 var arrOfflineCols;
 if (!forceOnline) {
     sync.getDbFields('folder_' + fld_id, function (cols) {
@@ -344,7 +344,6 @@ function pageInit(e, page) {
                 function (err) { console.error(err) }
             )
         }
-
 
         // Acciones de documento
         var stdDocActions = [
@@ -720,7 +719,7 @@ async function loadViewSection(pContainer, pCallback) {
             }
 
             let res = await folder2.searchGroups({
-                groupField,
+                gropups: groupField,
                 totals: totals + ' as totals',
                 formula,
                 order,
