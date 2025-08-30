@@ -718,6 +718,7 @@ async function loadViewSection(pContainer, pCallback) {
                 groupTitle += groupField.substring(0, 1).toUpperCase() + groupField.substring(1).toLowerCase();
             }
 
+            debugger
             let res = await folder2.searchGroups({
                 groups: groupField,
                 totals: totals + ' as totals',
