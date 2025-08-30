@@ -506,326 +506,319 @@ async function loadViewSection(pContainer, pCallback) {
     var level, levelDrill, i, view, formula, order;
 
     app7.preloader.show();
-    view = $viewDiv[0].view;
 
-    if (view.Definition.CustomizedFormula) {
-        formula = view.Definition.Formula;
-    } else {
-        var arrFils = [];
-        view.Definition.Filters.Items.forEach(it => {
-            var fieldObj = getFormField(folder.Form, it.Field);
-            arrFils.push(it.Field + ' ' + it.Operator + ' ' + sqlEncode(it.Value, fieldObj.Type));
-        });
-        formula = arrFils.join(' and ');
-    }
-    formula = (formula ? '(' + formula + ')' : '');
+    try {
+        view = $viewDiv[0].view;
 
-    // Calcula el nivel y la formula de drill
-    var $parents = pContainer.parents('li.accordion-item');
-    level = $parents.length + 1;
-    levelDrill = '';
-    $parents.each(function (index) {
-        var field = view.Definition.Groups.Items[level - 2 - index].Field;
-        levelDrill += ' and ' + field;
-        var value = $(this).attr('value');
-        if (value == '__NULL__') {
-            levelDrill += ' is null';
+        if (view.Definition.CustomizedFormula) {
+            formula = view.Definition.Formula;
         } else {
-            var fieldObj = getFormField(folder.Form, field);
-            levelDrill += ' = ' + sqlEncode(value, fieldObj['Type']);
-        };
-    });
-    if (levelDrill) {
-        levelDrill = levelDrill.substring(5);
-        if (formula) formula += ' and ';
-        formula += '(' + levelDrill + ')';
-    }
+            var arrFils = [];
+            view.Definition.Filters.Items.forEach(it => {
+                var fieldObj = getFormField(folder.Form, it.Field);
+                arrFils.push(it.Field + ' ' + it.Operator + ' ' + sqlEncode(it.Value, fieldObj.Type));
+            });
+            formula = arrFils.join(' and ');
+        }
+        formula = (formula ? '(' + formula + ')' : '');
 
-    // Filtro del searchBar
-    if (searchBar.query) {
-        var query = searchBar.query;
-        if (formula) formula += ' and ';
-        formula += '(' + textSearch(query) + ')';
-    }
+        // Calcula el nivel y la formula de drill
+        var $parents = pContainer.parents('li.accordion-item');
+        level = $parents.length + 1;
+        levelDrill = '';
+        $parents.each(function (index) {
+            var field = view.Definition.Groups.Items[level - 2 - index].Field;
+            levelDrill += ' and ' + field;
+            var value = $(this).attr('value');
+            if (value == '__NULL__') {
+                levelDrill += ' is null';
+            } else {
+                var fieldObj = getFormField(folder.Form, field);
+                levelDrill += ' = ' + sqlEncode(value, fieldObj['Type']);
+            };
+        });
+        if (levelDrill) {
+            levelDrill = levelDrill.substring(5);
+            if (formula) formula += ' and ';
+            formula += '(' + levelDrill + ')';
+        }
 
-    if (view.Definition.Groups.Items.length < level) {
-        //Search
-        var arrFields = [];
-        var field;
-        for (i = 0; i < view.Definition.Fields.Items.length; i++) {
-            field = view.Definition.Fields.Items[i].Field.toUpperCase();
-            if (arrFields.indexOf(field) == -1) arrFields.push(field);
-        };
-        for (i = 0; i < view.StyleScriptDefinition.Fields.length; i++) {
-            field = view.StyleScriptDefinition.Fields[i].toUpperCase();
-            if (arrFields.indexOf(field) == -1) arrFields.push(field);
-        };
-        if (!view.StyleScriptDefinition.Override) {
-            for (i = 0; i < view.StyleScriptDefinition.InheritedFields.length; i++) {
-                field = view.StyleScriptDefinition.InheritedFields[i].toUpperCase();
+        // Filtro del searchBar
+        if (searchBar.query) {
+            var query = searchBar.query;
+            if (formula) formula += ' and ';
+            formula += '(' + textSearch(query) + ')';
+        }
+
+        if (view.Definition.Groups.Items.length < level) {
+            //Search
+            var arrFields = [];
+            var field;
+            for (i = 0; i < view.Definition.Fields.Items.length; i++) {
+                field = view.Definition.Fields.Items[i].Field.toUpperCase();
                 if (arrFields.indexOf(field) == -1) arrFields.push(field);
             };
-        }
-        if (arrFields.indexOf('DOC_ID') == -1) arrFields.push('DOC_ID');
+            for (i = 0; i < view.StyleScriptDefinition.Fields.length; i++) {
+                field = view.StyleScriptDefinition.Fields[i].toUpperCase();
+                if (arrFields.indexOf(field) == -1) arrFields.push(field);
+            };
+            if (!view.StyleScriptDefinition.Override) {
+                for (i = 0; i < view.StyleScriptDefinition.InheritedFields.length; i++) {
+                    field = view.StyleScriptDefinition.InheritedFields[i].toUpperCase();
+                    if (arrFields.indexOf(field) == -1) arrFields.push(field);
+                };
+            }
+            if (arrFields.indexOf('DOC_ID') == -1) arrFields.push('DOC_ID');
 
-        order = '';
-        for (i = 0; i < view.Definition.Orders.Items.length; i++) {
-            field = view.Definition.Orders.Items[i];
-            order += ', ' + field.Field;
-            if (field.Direction == 1) order += ' desc';
-        };
-        if (order) order = order.substring(2);
+            order = '';
+            for (i = 0; i < view.Definition.Orders.Items.length; i++) {
+                field = view.Definition.Orders.Items[i];
+                order += ', ' + field.Field;
+                if (field.Direction == 1) order += ' desc';
+            };
+            if (order) order = order.substring(2);
 
-        let res = await folder2.search({
-            fields: arrFields.join(', '),
-            formula,
-            order,
-            maxDocs: searchLimit(),
-            maxTextLen: maxLen,
-        });
-        debugger
-        folderSearch(fld_id, arrFields.join(', '), formula, order, searchLimit(), maxLen, forceOnline).then(
-            async function (res) {
-                if (res.length == 0) {
-                    noResults().appendTo(pContainer);
+            let res = await folder2.search({
+                fields: arrFields.join(', '),
+                formula,
+                order,
+                maxDocs: searchLimit(),
+                maxTextLen: maxLen,
+                v8: true,
+            });
 
-                } else {
-                    var $list, $ul, $li, $itemContent;
-                    var row, style, styleScript, item, text;
+            if (res.length == 0) {
+                noResults().appendTo(pContainer);
 
-                    $list = $('<div/>', {
-                        class: 'list media-list chevron-center text-select-none',
-                        style: 'margin-top: 0;',
-                    }).appendTo(pContainer);
+            } else {
+                var $list, $ul, $li, $itemContent;
+                var row, style, styleScript, item, text;
 
-                    $ul = $('<ul/>').appendTo($list);
+                $list = $('<div/>', {
+                    class: 'list media-list chevron-center text-select-none',
+                    style: 'margin-top: 0;',
+                }).appendTo(pContainer);
 
-                    styleScript = view.StyleScriptDefinition.Code;
-                    if (!view.StyleScriptDefinition.Override) {
-                        styleScript = view.StyleScriptDefinition.InheritedCode + styleScript;
-                    }
+                $ul = $('<ul/>').appendTo($list);
 
-                    if (res.length == searchLimit()) searchLimitLegend().appendTo($ul);
+                styleScript = view.StyleScriptDefinition.Code;
+                if (!view.StyleScriptDefinition.Override) {
+                    styleScript = view.StyleScriptDefinition.InheritedCode + styleScript;
+                }
 
-                    for (i = 0; i < res.length; i++) {
-                        row = res[i];
-                        $li = $('<li/>', {
-                            doc_id: row['DOC_ID'],
-                        }).appendTo($ul);
+                if (res.length == searchLimit()) searchLimitLegend().appendTo($ul);
 
-                        // Ejecuta el styleScript
-                        style = '';
-                        if (styleScript) {
-                            try {
-                                eval(styleScript)
-                            } catch (err) {
-                                console.error('Error in styleScript: ' + errMsg(err));
-                            }
-                        };
+                for (i = 0; i < res.length; i++) {
+                    row = res[i];
+                    $li = $('<li/>', {
+                        doc_id: row['DOC_ID'],
+                    }).appendTo($ul);
 
-                        var $itemContent = getItemContent();
-                        $itemContent.appendTo($li);
-
-                        if (view.ItemRenderer) {
-                            try {
-                                let pipe = {};
-                                eval(`pipe.fn = async () => {\n\n${view.ItemRenderer}\n};`);
-                                await pipe.fn();
-
-                            } catch (err) {
-                                renderItem({ text: errMsg(err) }, $itemContent);
-                            }
-
-                        } else {
-                            // Muestra las 4 1ras columnas
-                            item = {};
-
-                            if (arrFields.length > 0) {
-                                text = fieldToString(arrFields[0], row[arrFields[0]]);
-                                if (style) text = '<span style="padding: 3px; ' + style + '">' + text + '</span>';
-                                item.title = text;
-                            };
-
-                            if (arrFields.length > 1) {
-                                item.subtitle = fieldToString(arrFields[1], row[arrFields[1]]);;
-                            }
-        
-                            if (arrFields.length > 2) {
-                                text = fieldToString(arrFields[2], row[arrFields[2]]);
-                                if (arrFields.length > 3) {
-                                    text += '<br/>' + fieldToString(arrFields[3], row[arrFields[3]]);
-                                }
-                                item.text = text;
-                            }
-                            renderItem(item, $itemContent);
+                    // Ejecuta el styleScript
+                    style = '';
+                    if (styleScript) {
+                        try {
+                            eval(styleScript)
+                        } catch (err) {
+                            console.error('Error in styleScript: ' + errMsg(err));
                         }
                     };
 
-                    function fieldToString(pField, pValue) {
-                        var field = getFormField(folder.Form, pField);
-                        var text = '';
-                        if (field['Description']) {
-                            text += field['Description'];
-                        } else {
-                            text += field['Name'].substring(0, 1).toUpperCase() + field['Name'].substring(1).toLowerCase();
+                    var $itemContent = getItemContent();
+                    $itemContent.appendTo($li);
+
+                    if (view.ItemRenderer) {
+                        try {
+                            let pipe = {};
+                            eval(`pipe.fn = async () => {\n\n${view.ItemRenderer}\n};`);
+                            await pipe.fn();
+
+                        } catch (err) {
+                            renderItem({ text: errMsg(err) }, $itemContent);
                         }
-                        text += ': ';
-                        if (field['Type'] == 2) {
-                            text += formatDate(pValue);
-                        } else if (field['Type'] == 3) {
-                            text += numeral(pValue).format();
-                        } else {
-                            text += htmlEncode(pValue);
+
+                    } else {
+                        // Muestra las 4 1ras columnas
+                        item = {};
+
+                        if (arrFields.length > 0) {
+                            text = fieldToString(arrFields[0], row[arrFields[0]]);
+                            if (style) text = '<span style="padding: 3px; ' + style + '">' + text + '</span>';
+                            item.title = text;
+                        };
+
+                        if (arrFields.length > 1) {
+                            item.subtitle = fieldToString(arrFields[1], row[arrFields[1]]);;
                         }
-                        return text;
+
+                        if (arrFields.length > 2) {
+                            text = fieldToString(arrFields[2], row[arrFields[2]]);
+                            if (arrFields.length > 3) {
+                                text += '<br/>' + fieldToString(arrFields[3], row[arrFields[3]]);
+                            }
+                            item.text = text;
+                        }
+                        renderItem(item, $itemContent);
                     }
+                };
 
+                function fieldToString(pField, pValue) {
+                    var field = getFormField(folder.Form, pField);
+                    var text = '';
+                    if (field['Description']) {
+                        text += field['Description'];
+                    } else {
+                        text += field['Name'].substring(0, 1).toUpperCase() + field['Name'].substring(1).toLowerCase();
+                    }
+                    text += ': ';
+                    if (field['Type'] == 2) {
+                        text += formatDate(pValue);
+                    } else if (field['Type'] == 3) {
+                        text += numeral(pValue).format();
+                    } else {
+                        text += htmlEncode(pValue);
+                    }
+                    return text;
                 }
-                app7.preloader.hide();
-                if (pCallback) pCallback();
-
-            },
-            function (err) {
-                console.log(err);
-                pContainer.html('Error: ' + errMsg(err));
-                app7.preloader.hide();
-                if (pCallback) pCallback();
             }
-        );
 
-    } else {
-
-        //SearchGroups
-        var groupItem = view.Definition.Groups.Items[level - 1];
-        var groupField = groupItem.Field;
-        var formField = getFormField(folder.Form, groupField);
-
-        var totals;
-        var totField = view.Definition.Groups.STotals;
-        if (totField) {
-            if (view.Definition.Groups.Function == 1) {
-                totals = 'avg(' + totField + ')';
-            } else {
-                totals = 'sum(' + totField + ')';
-            }
         } else {
-            totals = 'count(*)';
-        }
-        var totDesc = view.Definition.Groups.TotalsDescription;
+            //SearchGroups
+            var groupItem = view.Definition.Groups.Items[level - 1];
+            var groupField = groupItem.Field;
+            var formField = getFormField(folder.Form, groupField);
 
-        if (groupItem.OrderBy == 0) {
-            order = groupField;
-        } else {
-            order = totals;
-        };
-        if (groupItem.Direction == 1) {
-            order += ' desc';
-        };
-
-        var groupTitle = '';
-        if (groupItem['Description']) {
-            groupTitle = groupItem['Description'];
-        } else if (formField['Description']) {
-            groupTitle = formField['Description'];
-        } else {
-            groupTitle += groupField.substring(0, 1).toUpperCase() + groupField.substring(1).toLowerCase();
-        }
-
-        folderSearchGroups(fld_id, groupField, totals + ' as totals', formula, order, searchLimit(), forceOnline).then(
-            function (res) {
-                if (res.length == 0) {
-                    noResults().appendTo(pContainer);
-
+            var totals;
+            var totField = view.Definition.Groups.STotals;
+            if (totField) {
+                if (view.Definition.Groups.Function == 1) {
+                    totals = 'avg(' + totField + ')';
                 } else {
-                    var $list = $('<div/>', {
-                        class: 'list',
-                        style: 'margin-top: 0;',
-                    }).appendTo(pContainer);
+                    totals = 'sum(' + totField + ')';
+                }
+            } else {
+                totals = 'count(*)';
+            }
+            var totDesc = view.Definition.Groups.TotalsDescription;
 
-                    var $ul = $('<ul/>').appendTo($list);
-                    
-                    var $li, $a, $div, row, label, value;
+            if (groupItem.OrderBy == 0) {
+                order = groupField;
+            } else {
+                order = totals;
+            };
+            if (groupItem.Direction == 1) {
+                order += ' desc';
+            };
 
-                    // Nombre del grupo
+            var groupTitle = '';
+            if (groupItem['Description']) {
+                groupTitle = groupItem['Description'];
+            } else if (formField['Description']) {
+                groupTitle = formField['Description'];
+            } else {
+                groupTitle += groupField.substring(0, 1).toUpperCase() + groupField.substring(1).toLowerCase();
+            }
+
+            let res = await folder2.searchGroups({
+                groupField,
+                totals: totals + ' as totals',
+                formula,
+                order,
+                maxDocs: searchLimit(),
+                v8: true,
+            });
+
+            if (res.length == 0) {
+                noResults().appendTo(pContainer);
+
+            } else {
+                var $list = $('<div/>', {
+                    class: 'list',
+                    style: 'margin-top: 0;',
+                }).appendTo(pContainer);
+
+                var $ul = $('<ul/>').appendTo($list);
+                
+                var $li, $a, $div, row, label, value;
+
+                // Nombre del grupo
+                $li = $('<li/>', {
+                    class: 'accordion-item item-content',
+                    style: 'background-color: var(--f7-list-item-divider-bg-color);',
+                }).appendTo($ul);
+
+                $div = $('<div/>', {
+                    class: 'item-inner',
+                }).appendTo($li);
+
+                $('<div/>', {
+                    class: 'item-title',
+                }).append(htmlEncode(groupTitle)).appendTo($div);
+
+                // Leyenda de limite de registros
+                if (res.length == searchLimit()) searchLimitLegend().appendTo($ul);
+
+                for (i = 0; i < res.length; i++) {
+                    row = res[i];
+                    value = row[groupField.toUpperCase()];
+
                     $li = $('<li/>', {
-                        class: 'accordion-item item-content',
+                        class: 'accordion-item',
                         style: 'background-color: var(--f7-list-item-divider-bg-color);',
+                        value: (value == null ? '__NULL__' : value),
                     }).appendTo($ul);
+
+                    $a = $('<a/>', {
+                        href: '',
+                        class: 'item-link item-content',
+                    }).appendTo($li);
 
                     $div = $('<div/>', {
                         class: 'item-inner',
-                    }).appendTo($li);
+                    }).appendTo($a);
+
+                    if (value == null) {
+                        label = '(ninguno)';
+                    } else if (formField.Type == 2) {
+                        label = formatDate(value);
+                    } else {
+                        label = htmlEncode(value);
+                    }
+                    label = '<b>' + label + '</b> (';
+                    var tot = (row['TOTALS'] == null ? 0 : row['TOTALS']);
+                    var totStr = numeral(tot).format();
+                    if (totDesc == '$') {
+                        label += '$ ' + totStr + ')';
+                    } else if (totDesc) {
+                        label += totStr + ' ' + htmlEncode(totDesc) + ')';
+                    } else {
+                        label += totStr + ' ';
+                        if (totField) {
+                            label += totField + ')';
+                        } else {
+                            label += 'items)';
+                        }
+                    };
 
                     $('<div/>', {
                         class: 'item-title',
-                    }).append(htmlEncode(groupTitle)).appendTo($div);
+                    }).append(label).appendTo($div);
 
-                    // Leyenda de limite de registros
-                    if (res.length == searchLimit()) searchLimitLegend().appendTo($ul);
-
-                    for (i = 0; i < res.length; i++) {
-                        row = res[i];
-                        value = row[groupField.toUpperCase()];
-
-                        $li = $('<li/>', {
-                            class: 'accordion-item',
-                            style: 'background-color: var(--f7-list-item-divider-bg-color);',
-                            value: (value == null ? '__NULL__' : value),
-                        }).appendTo($ul);
-
-                        $a = $('<a/>', {
-                            href: '',
-                            class: 'item-link item-content',
-                        }).appendTo($li);
-
-                        $div = $('<div/>', {
-                            class: 'item-inner',
-                        }).appendTo($a);
-
-                        if (value == null) {
-                            label = '(ninguno)';
-                        } else if (formField.Type == 2) {
-                            label = formatDate(value);
-                        } else {
-                            label = htmlEncode(value);
-                        }
-                        label = '<b>' + label + '</b> (';
-                        var tot = (row['TOTALS'] == null ? 0 : row['TOTALS']);
-                        var totStr = numeral(tot).format();
-                        if (totDesc == '$') {
-                            label += '$ ' + totStr + ')';
-                        } else if (totDesc) {
-                            label += totStr + ' ' + htmlEncode(totDesc) + ')';
-                        } else {
-                            label += totStr + ' ';
-                            if (totField) {
-                                label += totField + ')';
-                            } else {
-                                label += 'items)';
-                            }
-                        };
-
-                        $('<div/>', {
-                            class: 'item-title',
-                        }).append(label).appendTo($div);
-
-                        $('<div/>', {
-                            class: 'accordion-item-content',
-                            style: 'padding-left: 8px;',
-                        }).appendTo($li);
-                    }
+                    $('<div/>', {
+                        class: 'accordion-item-content',
+                        style: 'padding-left: 8px;',
+                    }).appendTo($li);
                 }
-                app7.preloader.hide();
-                if (pCallback) pCallback();
-            },
-
-            function (err) {
-                console.log(err);
-                pContainer.html('Error: ' + errMsg(err));
-                app7.preloader.hide();
-                if (pCallback) pCallback();
             }
-        )
+        }
+
+    } catch (err) {
+        console.error(err);
+        pContainer.html('Error: ' + errMsg(err)); 
+
+    } finally {
+        app7.preloader.hide();
+        if (pCallback) pCallback();
     }
 }
 
