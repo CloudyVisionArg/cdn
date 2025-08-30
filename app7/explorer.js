@@ -200,8 +200,10 @@ actionsPopup = getActionsPopup();
         if (device.platform == 'browser' || device.platform == 'Android') {
             // El taphold no anda en el browser
             // En Android tampoco funciona el taphold
-            $viewDiv.on('contextmenu', 'a', taphold);
-            debugger;
+            $viewDiv.on('contextmenu', 'a', () => {
+                taphold();
+                debugger;
+            });
         } else {                 
             $viewDiv.on('taphold', 'a', taphold);
         };
