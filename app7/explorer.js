@@ -25,244 +25,222 @@ var propInit = 'App7_explorerInit';
 var propImport = 'App7_import';
 var maxLen = 200;
 
+actionsPopup = getActionsPopup();
+
 (async () => {
     folder2 = await dSession.folder(fld_id);
     folder = folder2.toJSON();
     let gfeProm = getFolderElements(folder);
 
+    // -- Documents Folder --
+
+    if (folder.Type == 1) {
+        $page = getPage({
+            id: 'explorer_' + getGuid(),
+            title: (folder.Description ? folder.Description : folder.Name),
+            leftbutton: 'search',
+            rightbutton: 'menu',
+            searchbar: 2,
+            subnavbar: true,
+            pulltorefresh: true,
+        });
+
+        var $nbLeft = $page.find('.navbar-inner .left');
+        
+        // Boton Buscar
+        var $btn = $page.find('.navbar-inner .left .link')
+        $btn.attr('id', 'buttonSearch');
+        $btn.click(function (e) {
+            searchBar.enable();
+        });
+
+        if (routeTo.query.back == '1') {
+            $btn.css('margin-left', '0px');
+
+            // Boton Back
+            var $backBtn = $('<a/>', {
+                href: '#',
+                class: 'link icon-only',
+            }).prependTo($nbLeft);
+            $backBtn.append('<i class="f7-icons ios-only">chevron_left</i>' + 
+                '<i class="material-icons md-only">arrow_back</i>');
+
+            $backBtn.click(function () {
+                f7Page.view.router.back();
+            });
+        }
+        
+        // Boton Acciones
+        $btn = getLink({ iosicon: 'menu', mdicon: 'menu' });
+        $btn.attr('id', 'buttonActions');
+        $btn.appendTo($page.find('.navbar-inner .left'));
+        $btn.on('click', function (e) {
+            docActions.open();
+        });
+        $btn.css('margin-left', '0px');
+        $btn.hide();
+        
+        // Inicializa el Searchbar
+        var timeout;
+        searchBar = app7.searchbar.create({
+            el: $page.find('form.searchbar')[0],
+            customSearch: true,
+            on: {
+                search: function (e, query, previousQuery) {
+                    // Espera un rato antes de buscar
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function () {
+                        var $input = $(e.$inputEl[0]);
+                        $input.prop('readonly', true);
+                        reloadView(function () {
+                            $input.prop('readonly', false);
+                        });
+                    }, 800);
+                },
+                enable: function (sb) {
+                    // Si le doy el foco de una se corre la pantalla
+                    setTimeout(function () { sb.inputEl.focus(); }, 200);
+                }
+            }
+        });
+        
+        // Boton Menu (fldActions)
+        $btn = $page.find('.navbar-inner .right .link')
+        $btn.attr('id', 'buttonMenu');
+        $btn.on('click', function (e) {
+            fldActions.open();
+        });
+
+        // Boton Nuevo - fab
+        var $fab = $('<div/>', {
+            id: 'fabAdd',
+            class: 'fab fab-right-bottom',
+        }).appendTo($page);
+
+        $btn = $('<a/>', {
+            href: '#',
+        }).appendTo($fab);
+
+        $btn.append('<i class="icon f7-icons">plus</i>');
+        $btn.on('click', newDoc);
+
+        // Boton Cancelar Selection Mode
+        $btn = getLink({ text: 'Cancelar' });
+        $btn.attr('id', 'buttonCancel');
+        $btn.appendTo($page.find('.navbar-inner .right'));
+        $btn.on('click', function (e) {
+            toggleSelectionMode();
+        });
+        $btn.hide();
+        
+        // Vistas (Smart Select)
+        $subnavbar = $page.find('.subnavbar');
+        
+        $subnavbar.append(`
+        <div class="subnavbar-inner no-padding">
+            <div class="list" style="width: 100%;">
+                <ul/>
+            </div>
+        </div>
+        `);
+        
+        getSmartSelect(null, 'Vista').appendTo($subnavbar.find('ul'));
+        $views = $subnavbar.find('select');
+        $views.change(function (e) {
+            if ($(this).val() != '-1') {
+                window.localStorage.setItem('folderView_' + fld_id, $(this).val());
+                reloadView();
+            }
+        });
+        // Fin Vistas
+
+        $pageCont = $page.find('.page-content');
+        
+        // Evento del Pull To Refresh
+        $pageCont.on('ptr:refresh', function (e) {
+            if (selectionMode) {
+                toast('Refresh disabled in selection mode');
+            } else {
+                reloadView();
+            }
+            e.originalEvent.detail(); // done
+        });
+        
+        // Accordion Ajax
+        $viewDiv = $('<div/>', {
+            class: 'accordion-ajax',
+        }).appendTo($pageCont);
+        // Setea la funcion que carga el acordion (ver f7AppEvents en global.js)
+        $viewDiv[0].loadAccordionContent = loadViewSection;
+        
+        $viewDiv.on('click', 'a', function (e) {
+            var $list = $(this).closest('div.list');
+            if ($list.hasClass('media-list')) {
+                if ($list.attr('clicked') != 1) {
+                    $list.attr('clicked', 1);
+                    var $li = $(this).closest('li');
+                    var doc_id = $li.attr('doc_id');
+                    var prop = findProp(folder.UserProperties, propEditPage);
+                    if (prop == undefined) prop = findProp(folder.Properties, propEditPage);
+                    if (prop == undefined) prop = findProp(folder.Form.Properties, propEditPage);
+                    if (prop) {
+                        prop += (prop.indexOf('?') >= 0 ? '&' : '?');
+                        if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
+                        f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
+                    } else {
+                        f7Page.view.router.navigate(formUrlRoute(folder.Form.UrlRaw) + '?fld_id=' + fld_id + '&doc_id=' + doc_id);
+                    }
+                    $li.addClass('refresh-on-focus');
+                    $list.removeAttr('clicked');
+                }
+            }
+        });
+        
+        // Evento taphold
+        if (device.platform == 'browser' || device.platform == 'Android') {
+            // El taphold no anda en el browser
+            // En Android tampoco funciona el taphold
+            $viewDiv.on('contextmenu', 'a', taphold);
+        } else {                 
+            $viewDiv.on('taphold', 'a', taphold);
+        };
+        
+        // Fin Accordion Ajax
+
+    
+    // -- Link Folder --
+
+    } else if (folder.Type == 2) {
+        $page = getPage({
+            id: 'explorer_' + getGuid(),
+            title: folder.Description ? folder.Description : folder.Name,
+            pulltorefresh: true,
+        });
+
+        $pageCont = $page.find('.page-content');
+        //todo: cargar la pag en iframe (ver codelib pruebas)
+        
+        // Evento del Pull To Refresh
+        $pageCont.on('ptr:refresh', function (e) {
+            toast('todo: refrescar la pagina');
+            e.originalEvent.detail(); // done
+        });
+    }
+
+    // Seleccion de Folder en el Titulo
+    $title = $page.find('.title');
+    if (routeTo.query.fixed == '0') {
+        $title.css('cursor', 'pointer');
+        $title.click(function () {
+            var fld = prompt('Ingrese el fldId'); // todo: mostrar popup con el treeview para elegir la carpeta
+            if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld + '&fixed=0&back=1');
+        });
+    }
 
     await gfeProm;
-    debugger;
+    resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
 })();
 
-actionsPopup = getActionsPopup();
-
-
-dSession.foldersGetFromId(fld_id).then(
-    function (fld) {
-        folder = fld.toJSON(); // TODO: cambiar a doorsapi2
-        getFolderElements(folder);
-
-        // -- Documents Folder --
-
-        if (folder.Type == 1) {
-            $page = getPage({
-                id: 'explorer_' + getGuid(),
-                title: (folder.Description ? folder.Description : folder.Name),
-                leftbutton: 'search',
-                rightbutton: 'menu',
-                searchbar: 2,
-                subnavbar: true,
-                pulltorefresh: true,
-            });
-
-            var $nbLeft = $page.find('.navbar-inner .left');
-            
-            // Boton Buscar
-            var $btn = $page.find('.navbar-inner .left .link')
-            $btn.attr('id', 'buttonSearch');
-            $btn.click(function (e) {
-                searchBar.enable();
-            });
-
-            if (routeTo.query.back == '1') {
-                $btn.css('margin-left', '0px');
-
-                // Boton Back
-                var $backBtn = $('<a/>', {
-                    href: '#',
-                    class: 'link icon-only',
-                }).prependTo($nbLeft);
-                $backBtn.append('<i class="f7-icons ios-only">chevron_left</i>' + 
-                    '<i class="material-icons md-only">arrow_back</i>');
-
-                $backBtn.click(function () {
-                    f7Page.view.router.back();
-                });
-            }
-            
-            // Boton Acciones
-            $btn = getLink({ iosicon: 'menu', mdicon: 'menu' });
-            $btn.attr('id', 'buttonActions');
-            $btn.appendTo($page.find('.navbar-inner .left'));
-            $btn.on('click', function (e) {
-                docActions.open();
-            });
-            $btn.css('margin-left', '0px');
-            $btn.hide();
-            
-            // Inicializa el Searchbar
-            var timeout;
-            searchBar = app7.searchbar.create({
-                el: $page.find('form.searchbar')[0],
-                customSearch: true,
-                on: {
-                    search: function (e, query, previousQuery) {
-                        // Espera un rato antes de buscar
-                        clearTimeout(timeout);
-                        timeout = setTimeout(function () {
-                            var $input = $(e.$inputEl[0]);
-                            $input.prop('readonly', true);
-                            reloadView(function () {
-                                $input.prop('readonly', false);
-                            });
-                        }, 800);
-                    },
-                    enable: function (sb) {
-                        // Si le doy el foco de una se corre la pantalla
-                        setTimeout(function () { sb.inputEl.focus(); }, 200);
-                    }
-                }
-            });
-            
-            // Boton Menu (fldActions)
-            $btn = $page.find('.navbar-inner .right .link')
-            $btn.attr('id', 'buttonMenu');
-            $btn.on('click', function (e) {
-                fldActions.open();
-            });
-
-            // Boton Nuevo - fab
-            var $fab = $('<div/>', {
-                id: 'fabAdd',
-                class: 'fab fab-right-bottom',
-            }).appendTo($page);
-
-            $btn = $('<a/>', {
-                href: '#',
-            }).appendTo($fab);
-
-            $btn.append('<i class="icon f7-icons">plus</i>');
-            $btn.on('click', newDoc);
-
-            // Boton Cancelar Selection Mode
-            $btn = getLink({ text: 'Cancelar' });
-            $btn.attr('id', 'buttonCancel');
-            $btn.appendTo($page.find('.navbar-inner .right'));
-            $btn.on('click', function (e) {
-                toggleSelectionMode();
-            });
-            $btn.hide();
-            
-            // Vistas (Smart Select)
-            $subnavbar = $page.find('.subnavbar');
-            
-            $subnavbar.append(`
-            <div class="subnavbar-inner no-padding">
-                <div class="list" style="width: 100%;">
-                    <ul/>
-                </div>
-            </div>
-            `);
-            
-            getSmartSelect(null, 'Vista').appendTo($subnavbar.find('ul'));
-            $views = $subnavbar.find('select');
-            $views.change(function (e) {
-                if ($(this).val() != '-1') {
-                    window.localStorage.setItem('folderView_' + fld_id, $(this).val());
-                    reloadView();
-                }
-            });
-            // Fin Vistas
-
-            $pageCont = $page.find('.page-content');
-            
-            // Evento del Pull To Refresh
-            $pageCont.on('ptr:refresh', function (e) {
-                if (selectionMode) {
-                    toast('Refresh disabled in selection mode');
-                } else {
-                    reloadView();
-                }
-                e.originalEvent.detail(); // done
-            });
-            
-            // Accordion Ajax
-            $viewDiv = $('<div/>', {
-                class: 'accordion-ajax',
-            }).appendTo($pageCont);
-            // Setea la funcion que carga el acordion (ver f7AppEvents en global.js)
-            $viewDiv[0].loadAccordionContent = loadViewSection;
-            
-            $viewDiv.on('click', 'a', function (e) {
-                var $list = $(this).closest('div.list');
-                if ($list.hasClass('media-list')) {
-                    if ($list.attr('clicked') != 1) {
-                        $list.attr('clicked', 1);
-                        var $li = $(this).closest('li');
-                        var doc_id = $li.attr('doc_id');
-                        var prop = findProp(folder.UserProperties, propEditPage);
-                        if (prop == undefined) prop = findProp(folder.Properties, propEditPage);
-                        if (prop == undefined) prop = findProp(folder.Form.Properties, propEditPage);
-                        if (prop) {
-                            prop += (prop.indexOf('?') >= 0 ? '&' : '?');
-                            if (prop.indexOf('fld_id=') < 0) prop += 'fld_id=' + fld_id + '&';
-                            f7Page.view.router.navigate(prop + 'doc_id=' + doc_id);
-                        } else {
-                            f7Page.view.router.navigate(formUrlRoute(folder.Form.UrlRaw) + '?fld_id=' + fld_id + '&doc_id=' + doc_id);
-                        }
-                        $li.addClass('refresh-on-focus');
-                        $list.removeAttr('clicked');
-                    }
-                }
-            });
-            
-            // Evento taphold
-            if (device.platform == 'browser' || device.platform == 'Android') {
-                // El taphold no anda en el browser
-                // En Android tampoco funciona el taphold
-                $viewDiv.on('contextmenu', 'a', taphold);
-            } else {                 
-                $viewDiv.on('taphold', 'a', taphold);
-            };
-            
-            // Fin Accordion Ajax
-
-        
-        // -- Link Folder --
-
-        } else if (folder.Type == 2) {
-            $page = getPage({
-                id: 'explorer_' + getGuid(),
-                title: folder.Description ? folder.Description : folder.Name,
-                pulltorefresh: true,
-            });
-
-            $pageCont = $page.find('.page-content');
-            //todo: cargar la pag en iframe (ver codelib pruebas)
-            
-            // Evento del Pull To Refresh
-            $pageCont.on('ptr:refresh', function (e) {
-                toast('todo: refrescar la pagina');
-                e.originalEvent.detail(); // done
-            });
-        }
-
-        // Seleccion de Folder en el Titulo
-        $title = $page.find('.title');
-        if (routeTo.query.fixed == '0') {
-            $title.css('cursor', 'pointer');
-            $title.click(function () {
-                var fld = prompt('Ingrese el fldId'); // todo: mostrar popup con el treeview para elegir la carpeta
-                if (fld) f7Page.view.router.navigate('/explorer/?fld_id=' + fld + '&fixed=0&back=1');
-            });
-        }
-
-        // Espera que se termine de llenar el Folder y resuelve
-        setTimeout(function waiting() {
-            if (folder.pendingCalls) {
-                setTimeout(waiting, 100);
-            } else {
-                resolveRoute({ resolve: resolve, pageEl: $page, pageInit: pageInit });
-            }
-        }, 0);
-    },
-
-    function (err) {
-        console.log(err);
-        throw err;
-    }
-);
 
 // Crea un nuevo documento
 function newDoc(e) {
