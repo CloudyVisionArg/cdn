@@ -719,7 +719,7 @@ async function loadViewSection(pContainer, pCallback) {
             }
 
             let res = await folder2.searchGroups({
-                gropups: groupField,
+                groups: groupField,
                 totals: totals + ' as totals',
                 formula,
                 order,
