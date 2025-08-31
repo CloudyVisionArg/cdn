@@ -65,3 +65,7 @@
 .doors-attachments .media-list .item-link .item-title-row:before {
     display: none;
 }
+
+.doors-switch .item-title {
+    font-weight: inherit;
+}
