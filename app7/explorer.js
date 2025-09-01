@@ -208,7 +208,6 @@ actionsPopup = getActionsPopup();
             // En Android tampoco funciona el taphold
             $viewDiv.on('contextmenu', 'a', () => {
                 taphold();
-                debugger;
             });
         } else {                 
             $viewDiv.on('taphold', 'a', taphold);
@@ -561,7 +560,6 @@ async function loadViewSection(pContainer, pCallback) {
         if (view.Definition.Groups.Items.length < level) {
             //Search
             var arrFields = fixedFields.map(f => f.toUpperCase());
-            debugger
 
             var field;
             for (i = 0; i < view.Definition.Fields.Items.length; i++) {
