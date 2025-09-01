@@ -561,7 +561,8 @@ async function loadViewSection(pContainer, pCallback) {
         if (view.Definition.Groups.Items.length < level) {
             //Search
             var arrFields = fixedFields.map(f => f.toUpperCase());
-            
+            debugger
+
             var field;
             for (i = 0; i < view.Definition.Fields.Items.length; i++) {
                 field = view.Definition.Fields.Items[i].Field.toUpperCase();
