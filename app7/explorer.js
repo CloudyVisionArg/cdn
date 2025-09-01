@@ -417,6 +417,7 @@ function pageInit(e, page) {
 
 function taphold(e) {
     var $list = $(this).closest('div.list');
+    debugger
     if ($list.hasClass('media-list')) {
         var $li = $(this).closest('li');
         toggleSelectionMode();
