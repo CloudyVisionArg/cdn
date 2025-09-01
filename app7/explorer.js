@@ -2,6 +2,12 @@
 
 let folder2;
 
+/*
+Campos que se leen siempre, para el renderer.
+Pushearlos en el App7_explorerInit
+*/
+let fixedFields = [];
+
 var folder, f7Page, pageEl;
 var $page, $navbar, $subnavbar, $title, $views, $pageCont, $viewDiv;
 var searchBar, docActions, actionsPopup, fldActions;
@@ -554,7 +560,8 @@ async function loadViewSection(pContainer, pCallback) {
 
         if (view.Definition.Groups.Items.length < level) {
             //Search
-            var arrFields = [];
+            var arrFields = fixedFields.map(f => f.toUpperCase());
+            
             var field;
             for (i = 0; i < view.Definition.Fields.Items.length; i++) {
                 field = view.Definition.Fields.Items[i].Field.toUpperCase();
