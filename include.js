@@ -25,7 +25,7 @@ function registeredScripts() {
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 491 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 489 });
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 492 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 487, hasdep: true });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 486 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 480 });
