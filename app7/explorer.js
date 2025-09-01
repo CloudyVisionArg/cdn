@@ -422,6 +422,7 @@ function taphold(e) {
         toggleSelectionMode();
         $li.find('input:checkbox').prop('checked', true);
     };
+    debugger;
 };
 
 
