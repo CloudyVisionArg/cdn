@@ -424,6 +424,20 @@ function taphold(e) {
     };
 };
 
+renderItem({
+    title: row['SUBJECT'],
+    after: row['RELINST_SERVER'] ? '<span class="badge color-green">' + row['RELINST_SERVER'] + '</span>' : '',
+    subtitle: 'Prox accion: ' + (row['PROXIMA_ACCION'] == null ? "-" : row["PROXIMA_ACCION"]),
+    text: (style ? '<span style="padding: 3px; ' + style + '">' : '') + row['VENDEDOR'] + (style ? '</span>' : '') + 
+        ' - Creado ' + moment(row['CREATED']).fromNow()
+}, $itemContent);
+
+function srvColor(server) {
+    let srv = server.toLowerCase();
+    if (srv == 'w1') return 'green';
+    if (srv == 'w2') return 'blue';
+    if (srv == 'w3') return 'red';
+}
 
 function toggleSelectionMode() {
     var $itemContent;
