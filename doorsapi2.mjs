@@ -477,7 +477,9 @@ export class Session {
         _moment.tz.setDefault(serverTimeZone);
 
         if (await me.isLogged) {
-            let usr = await me.currentUser;
+            try {
+                let usr = await me.currentUser;
+            } catch(er) {}
             // if (usr.timeDiff != 0) // Que hago?
             // No coincide el utc del server con el del cliente, q hago?
             // if (_moment().utcOffset() != _moment().tz(serverTimeZone).utcOffset())
