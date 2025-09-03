@@ -5161,7 +5161,7 @@ export class User extends Account {
             try {
                 debugger
                 let url = `/restful/accounts/${ me.id }/picture`;
-                let res = await me.session.restClient.fetch(url, 'GET', '', '');
+                let res = await me.session.restClient.fetchRaw(url, 'GET', '', '');
                 resolve(res);
             } catch(err) {
                 reject(err);
