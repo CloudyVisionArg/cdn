@@ -5155,6 +5155,20 @@ export class User extends Account {
         this.toJSON().AdfsLogon = value;
     }
 
+    get avatar() {
+        let me = this;
+        return new Promise(async (resolve, reject) => {
+            try {
+                debugger
+                let url = `/restful/accounts/${ me.id }/picture`;
+                let res = await me.session.restClient.fetch(url, 'GET', '', '');
+                resolve(res);
+            } catch(err) {
+                reject(err);
+            }
+        });
+    }
+
     get business() {
         return this.toJSON().Business;
     }
