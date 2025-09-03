@@ -6496,6 +6496,7 @@ class RestClient {
             fetch(completeUrl, {
                 method: method,
                 cache: 'no-cache',
+                credentials: 'same-origin',
                 headers: headers,
                 body: data ? data : null,
 
