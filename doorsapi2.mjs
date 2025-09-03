@@ -2269,6 +2269,7 @@ export class Document {
         if (attachment == undefined) {
             // Devuelve la coleccion
             if (!me.#attachmentsMap) {
+                debugger;
                 let map = new DoorsMap();
                 let atts = me.#json.Attachments;
                 for (let att of atts) {
