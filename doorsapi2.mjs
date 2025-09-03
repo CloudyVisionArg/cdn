@@ -1679,6 +1679,7 @@ export class Attachment {
             resolve(true);
         });
         me.promises.push(prom);
+        me.external = 0;
     }
 
     async fileStream2(value, onProgress) {
@@ -1703,6 +1704,7 @@ export class Attachment {
 
             me.#json.File = new SimpleBuffer(fileAtS3.split('').map(el => el.charCodeAt(0))).toString('base64');
             me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
+            me.external = 2;
         }
     }
 
