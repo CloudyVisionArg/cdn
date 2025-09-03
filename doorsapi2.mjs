@@ -1704,7 +1704,7 @@ export class Attachment {
 
             me.#json.File = new SimpleBuffer(fileAtS3.split('').map(el => el.charCodeAt(0))).toString('base64');
             me.#json.Size = (await me.session.utils.arrBuffer(value)).byteLength;
-            me.external = 2;
+            //me.external = 2; //todo: el backend lo guarda como 1, descomentar cdo este arreglado el issue #502
         }
     }
 
