@@ -2272,8 +2272,8 @@ export class Document {
                 let map = new DoorsMap();
                 let atts = me.#json.Attachments;
                 atts.sort((a, b) => {
-                    if (a.AttId > b.AttId) return 1;
-                    if (a.AttId < b.AttId) return -1;
+                    if (a.AttId > b.AttId) return -1;
+                    if (a.AttId < b.AttId) return 1;
                     return 0;
                 });
                 for (let att of atts) {
