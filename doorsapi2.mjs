@@ -5160,7 +5160,7 @@ export class User extends Account {
         return new Promise(async (resolve, reject) => {
             try {
                 debugger
-                let url = `/restful/accounts/${ me.id }/picture`;
+                let url = `accounts/${ me.id }/picture`;
                 let res = await me.session.restClient.fetchRaw(url, 'GET', '', '');
                 resolve(res);
             } catch(err) {
