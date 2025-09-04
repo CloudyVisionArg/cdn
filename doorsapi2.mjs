@@ -927,7 +927,9 @@ export class Session {
     get s3Bucket() {
         let me = this;
         return new Promise(async (resolve, reject) => {
-            resolve('att-' + (await me.instance).Name.toLowerCase());
+            let ret = 'att-' + (await me.instance).Name.toLowerCase();
+            ret.replaceAll(/[^a-z0-9.-]/g, '-');
+            resolve(ret);
         });
     }
 
