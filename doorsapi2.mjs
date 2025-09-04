@@ -5166,7 +5166,7 @@ export class User extends Account {
         return new Promise(async (resolve, reject) => {
             try {
                 let url = `accounts/${ me.id }/picture`;
-                let res = await me.session.v8Client.fetchRaw(url, { raw: true });
+                let res = await me.session.v8Client.fetch(url, { raw: true });
                 debugger
                 resolve(res);
             } catch(err) {
