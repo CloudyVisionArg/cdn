@@ -928,8 +928,7 @@ export class Session {
         let me = this;
         return new Promise(async (resolve, reject) => {
             let ret = 'att-' + (await me.instance).Name.toLowerCase();
-            ret.replaceAll(/[^a-z0-9.-]/g, '-');
-            resolve(ret);
+            resolve(ret.replaceAll(/[^a-z0-9.-]/g, '-'));
         });
     }
 
