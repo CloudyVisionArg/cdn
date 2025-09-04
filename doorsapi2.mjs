@@ -6501,7 +6501,7 @@ class RestClient {
             fetch(completeUrl, {
                 method: method,
                 cache: 'no-cache',
-                credentials: 'include',
+                //credentials: 'include',
                 headers: headers,
                 body: data ? data : null,
 
