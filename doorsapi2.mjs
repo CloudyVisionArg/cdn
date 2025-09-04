@@ -5168,8 +5168,8 @@ export class User extends Account {
                 let url = `accounts/${ me.id }/picture`;
                 let res = await me.session.v8Client.fetch(url, { raw: true });
                 let buf = new SimpleBuffer(await res.arrayBuffer());
-                debugger
                 resolve(buf);
+                
             } catch(err) {
                 reject(err);
             }
