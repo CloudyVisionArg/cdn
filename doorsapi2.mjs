@@ -5165,9 +5165,9 @@ export class User extends Account {
         let me = this;
         return new Promise(async (resolve, reject) => {
             try {
-                debugger
                 let url = `accounts/${ me.id }/picture`;
-                let res = await me.session.restClient.fetchRaw(url, 'GET', '', '');
+                let res = await me.session.v8Client.fetchRaw(url, { raw: true });
+                debugger
                 resolve(res);
             } catch(err) {
                 reject(err);
@@ -6587,6 +6587,7 @@ class V8Client {
     options = {
         method: 'GET',
         params: {}, // Parametros
+        raw: false, // Si es true devuelve el response sin parsear
     }
     */
     async fetch(url, options) {
@@ -6615,8 +6616,12 @@ class V8Client {
                 cache: 'no-store',
             });
             if (res.ok) {
-                let resJson = await res.json();
-                return resJson.InternalObject;
+                if (opt.raw) {
+                    return res;
+                } else {
+                    let resJson = await res.json();
+                    return resJson.InternalObject;
+                }
             } else {
                 let resTxt = await res.text();
                 let resJson;
