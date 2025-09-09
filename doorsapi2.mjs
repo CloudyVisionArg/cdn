@@ -5161,6 +5161,10 @@ export class User extends Account {
         this.toJSON().AdfsLogon = value;
     }
 
+    /**
+    Devuelve el avatar del usuario
+    @returns {Promise<SimpleBuffer|Blob>} En node SimpleBuffer, en browser Blob
+    */
     get avatar() {
         let me = this;
         return new Promise(async (resolve, reject) => {
