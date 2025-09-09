@@ -5170,7 +5170,7 @@ export class User extends Account {
                 let type = res.headers.get('Content-type');
                 if (me.session.node.inNode) {
                 } else {
-                    resolve(new Blob([buf], { type }));
+                    resolve(new Blob(await res.arrayBuffer(), { type }));
                 }
                 
                 //let buf = new SimpleBuffer(await res.arrayBuffer());
