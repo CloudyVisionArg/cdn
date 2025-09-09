@@ -5165,12 +5165,16 @@ export class User extends Account {
         let me = this;
         return new Promise(async (resolve, reject) => {
             try {
-                let url = `accounts/${ me.id }/pictur`;
+                let url = `accounts/${ me.id }/picture`;
                 let res = await me.session.v8Client.fetch(url, { raw: true });
-                let mt = res.headers.get('Content-type');
-                debugger;
-                let buf = new SimpleBuffer(await res.arrayBuffer());
-                resolve(buf);
+                let type = res.headers.get('Content-type');
+                if (me.session.node.inNode) {
+                } else {
+                    resolve(new Blob([buf], { type }));
+                }
+                
+                //let buf = new SimpleBuffer(await res.arrayBuffer());
+                //resolve(buf);
 
             } catch(err) {
                 reject(err);
