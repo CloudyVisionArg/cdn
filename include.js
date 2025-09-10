@@ -289,6 +289,9 @@ function include() {
                     });
                 }
             }
+
+        } else {
+            reject(new Error('First argument must be string or array'));
         }
     });
 };
