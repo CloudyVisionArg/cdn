@@ -2078,7 +2078,8 @@ export class Directory {
             } else if (res.length > 1) {
                 throw new Error('Vague expression (' + account + ')');
             } else {
-                return `"${ res[0]['Name'] }" <${ res[0]['Email'] }>`;
+                let email = res[0]['Email'];
+                return email ? `"${ res[0]['Name'] }" <${ email }>` : null;
             }
         } else {
             throw new Error('Invalid account spec: ' + account);
