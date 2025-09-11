@@ -2903,11 +2903,13 @@ export class Document {
 
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
-                res => {
+                async res => {
+                    /*
                     // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
                     var url = 'documents/' + me.id;
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         async res => {
+                    */
                             await me.session._docRefFields(res);
                             me.#json = res;
                             me.#json.Tags = tags; // Restauro los tags para el afterSave
@@ -2920,9 +2922,11 @@ export class Document {
 
                             me._reset();
                             resolve(me);
+                        /*
                         },
                         reject
                     )
+                        */
                 },
                 reject
             );
