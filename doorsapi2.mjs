@@ -2910,6 +2910,7 @@ export class Document {
                     me.session.restClient.fetch(url, 'GET', '', '').then(
                         async res => {
                     */
+                    debugger
                             await me.session._docRefFields(res);
                             me.#json = res;
                             me.#json.Tags = tags; // Restauro los tags para el afterSave
