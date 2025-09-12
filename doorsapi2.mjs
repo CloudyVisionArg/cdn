@@ -2901,7 +2901,6 @@ export class Document {
                 async res => {
                     await me.session._docRefFields(res);
                     me.#json = res;
-                    debugger
                     me.#json.Tags = Object.assign(tags, me.#json.Tags); // Restauro los tags para el afterSave
 
                     try {
