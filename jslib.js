@@ -691,8 +691,8 @@ function highlightControl(targetSelector) {
         const ctl = controls.find(item => 
             item.XMLATTRIBUTES &&
             (
-            item.XMLATTRIBUTES.textfield?.toLowerCase() === targetSelector.toLowerCase() ||
-            item.XMLATTRIBUTES.valuefield?.toLowerCase() === targetSelector.toLowerCase()
+                item.XMLATTRIBUTES.textfield?.toLowerCase() === targetSelector.toLowerCase() ||
+                item.XMLATTRIBUTES.valuefield?.toLowerCase() === targetSelector.toLowerCase()
             )
         )?.NAME;
 
@@ -707,28 +707,37 @@ function highlightControl(targetSelector) {
 
     const continuar = () => {
         setTimeout(() => {
-        if (inApp) {
-            // Framework7 scroll
-            $target[0].scrollIntoView({ behavior: "smooth", block: "center" });
-        } else {
-            // Web con Bootstrap
-            const elementTop = $target.offset().top;
-            const elementHeight = $target.outerHeight();
-            const windowHeight = $(window).height();
-            const scrollToPos = elementTop - (windowHeight / 2) + (elementHeight / 2);
-            $("html, body").animate({ scrollTop: scrollToPos }, 600);
-        }
+            if (inApp) {
+                // Framework7 scroll
+                $target[0].scrollIntoView({ behavior: "smooth", block: "center" });
+            } else {
+                // Web con Bootstrap
+                const elementTop = $target.offset().top;
+                const elementHeight = $target.outerHeight();
+                const windowHeight = $(window).height();
+                const scrollToPos = elementTop - (windowHeight / 2) + (elementHeight / 2);
+                $("html, body").animate({ scrollTop: scrollToPos }, 600);
+            }
 
-        // Highlight
-        $target.parent().focus();
-        $target.parent().css({
-            outline: "1px solid red",
-            transition: "outline 0.3s ease-in-out",
-            borderRadius: "6px"
-        });
-        setTimeout(() => {
-            $target.parent().css({ outline: "", borderRadius: "", transition: "" });
-        }, 3000);
+            // 🔴 Resetear highlights anteriores
+            $(".highlighted-parent")
+                .css({ outline: "", borderRadius: "", transition: "" })
+                .removeClass("highlighted-parent");
+
+            // 🟢 Aplicar highlight al nuevo
+            const $parent = $target.parent();
+            $parent.addClass("highlighted-parent").focus().css({
+                outline: "2px solid red",
+                transition: "outline 0.3s ease-in-out",
+                borderRadius: "6px"
+            });
+
+            // Quitar highlight a los 3 segundos
+            setTimeout(() => {
+                $parent.css({ outline: "", borderRadius: "", transition: "" })
+                .removeClass("highlighted-parent");
+            }, 3000);
+
         }, 100);
     };
 
@@ -749,26 +758,26 @@ function highlightControl(targetSelector) {
                 continuar();
             }
         } else {
-        continuar();
+            continuar();
         }
 
         const $collapsibles = $target.parents(".accordion-item");
         if ($collapsibles.length) {
-        let total = $collapsibles.length;
-        let done = 0;
-        $collapsibles.each(function () {
-            const $col = $(this);
-            if ($col.hasClass("accordion-item-opened")) {
-            done++;
-            if (done === total) continuar();
-            } else {
-            $col.one("accordion:opened", function () {
-                done++;
-                if (done === total) continuar();
+            let total = $collapsibles.length;
+            let done = 0;
+            $collapsibles.each(function () {
+                const $col = $(this);
+                if ($col.hasClass("accordion-item-opened")) {
+                    done++;
+                    if (done === total) continuar();
+                } else {
+                    $col.one("accordion:opened", function () {
+                        done++;
+                        if (done === total) continuar();
+                    });
+                    app7.accordion.open($col[0]);
+                }
             });
-            app7.accordion.open($col[0]);
-            }
-        });
         } else {
             continuar();
         }
@@ -778,42 +787,42 @@ function highlightControl(targetSelector) {
         const $tabPane = $target.closest(".tab-pane");
         const tabSelector = $tabPane.length ? "#" + $tabPane.attr("id") : null;
         const $tabLink = tabSelector
-        ? $('[data-bs-toggle="tab"][href="' + tabSelector + '"], [data-bs-toggle="tab"][data-bs-target="' + tabSelector + '"]')
-        : $();
+            ? $('[data-bs-toggle="tab"][href="' + tabSelector + '"], [data-bs-toggle="tab"][data-bs-target="' + tabSelector + '"]')
+            : $();
 
         const $collapsibles = $target.parents(".collapse");
         let totalToWait = $collapsibles.length;
         let expandedCount = 0;
 
         const expandCollapsibles = () => {
-        if (totalToWait === 0) { continuar(); return; }
-        $collapsibles.each(function () {
-            const $col = $(this);
-            if ($col.hasClass("show")) {
-            expandedCount++;
-            if (expandedCount === totalToWait) continuar();
-            } else {
-            $col.one("shown.bs.collapse", function () {
-                expandedCount++;
-                if (expandedCount === totalToWait) continuar();
+            if (totalToWait === 0) { continuar(); return; }
+            $collapsibles.each(function () {
+                const $col = $(this);
+                if ($col.hasClass("show")) {
+                    expandedCount++;
+                    if (expandedCount === totalToWait) continuar();
+                } else {
+                    $col.one("shown.bs.collapse", function () {
+                        expandedCount++;
+                        if (expandedCount === totalToWait) continuar();
+                    });
+                    const el = $col[0];
+                    const instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+                    instance.show();
+                }
             });
-            const el = $col[0];
-            const instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
-            instance.show();
-            }
-        });
         };
 
         const activarTabSiEsNecesario = () => {
-        if (!tabSelector || !$tabLink.length) { expandCollapsibles(); return; }
-        const isTabAlreadyActive = $tabLink.hasClass("active");
-        if (isTabAlreadyActive) {
-            expandCollapsibles();
-        } else {
-            $tabLink[0].addEventListener("shown.bs.tab", function () { expandCollapsibles(); });
-            const tab = new bootstrap.Tab($tabLink[0]);
-            tab.show();
-        }
+            if (!tabSelector || !$tabLink.length) { expandCollapsibles(); return; }
+            const isTabAlreadyActive = $tabLink.hasClass("active");
+            if (isTabAlreadyActive) {
+                expandCollapsibles();
+            } else {
+                $tabLink[0].addEventListener("shown.bs.tab", function () { expandCollapsibles(); });
+                const tab = new bootstrap.Tab($tabLink[0]);
+                tab.show();
+            }
         };
 
         activarTabSiEsNecesario();
