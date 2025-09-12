@@ -2893,41 +2893,25 @@ export class Document {
                 if (!att.IsNew) delete att.File;
             };
 
-            // Saco el File de los adjuntos que no son nuevos
-            for (let att of me.#json.Attachments) {
-                if (!att.IsNew) delete att.File;
-            };
-
             // Espera Promesas
             await me.awaitPromises();
 
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 async res => {
-                    /*
-                    // Esta peticion se hace xq la ref q vuelve del PUT no esta actualizada (issue #237)
-                    var url = 'documents/' + me.id;
-                    me.session.restClient.fetch(url, 'GET', '', '').then(
-                        async res => {
-                    */
+                    await me.session._docRefFields(res);
+                    me.#json = res;
                     debugger
-                            await me.session._docRefFields(res);
-                            me.#json = res;
-                            me.#json.Tags = tags; // Restauro los tags para el afterSave
+                    me.#json.Tags = Object.assign(tags, me.#json.Tags); // Restauro los tags para el afterSave
 
-                            try {
-                                await me._dispatchEvent('Document_AfterSave');
-                            } catch(err) {
-                                reject(err);
-                            }
+                    try {
+                        await me._dispatchEvent('Document_AfterSave');
+                    } catch(err) {
+                        reject(err);
+                    }
 
-                            me._reset();
-                            resolve(me);
-                        /*
-                        },
-                        reject
-                    )
-                        */
+                    me._reset();
+                    resolve(me);
                 },
                 reject
             );
