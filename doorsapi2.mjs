@@ -434,7 +434,7 @@ export class Session {
     Obtiene los campos de relaciones de un documento
     y los agrega al Json
     */
-    async _docRefFields(docJson) {
+    async _docRelFields(docJson) {
         let me = this;
         try {
             if (docJson.IsNew) {
@@ -453,7 +453,7 @@ export class Session {
             }
 
         } catch(err) {
-            console.error(err, { consoleTag1: 'doorsapi2.Session._docRefFields' });
+            console.error(err, { consoleTag1: 'doorsapi2.Session._docRelFields' });
         }
     }
 
@@ -631,7 +631,7 @@ export class Session {
             let url = 'documents/' + docId;
             me.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
-                    await me._docRefFields(res);
+                    await me._docRelFields(res);
                     let doc = new Document(res, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
@@ -2785,7 +2785,7 @@ export class Document {
             payload: { eventName },
             doc: me.toJSON(),
         });
-        await me.session._docRefFields(me.#json);
+        await me.session._docRelFields(me.#json);
         me._reset();
     }
 
@@ -2899,7 +2899,7 @@ export class Document {
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 async res => {
-                    await me.session._docRefFields(res);
+                    await me.session._docRelFields(res);
                     me.#json = res;
                     me.#json.Tags = Object.assign(tags, me.#json.Tags); // Restauro los tags, creo que no hace falta
 
@@ -3555,7 +3555,7 @@ export class Folder {
             var url = 'folders/' + me.id + '/documents/new';
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
-                    await me.session._docRefFields(res);
+                    await me.session._docRelFields(res);
                     let doc = new Document(res, me.session, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
