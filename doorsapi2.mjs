@@ -6578,6 +6578,7 @@ class V8Client {
         }
         ret.ServerUrl = this.session.serverUrl;
         ret.InstanceName = (await me.session.instance).Name;
+        ret.UserId = (await me.session.currentUser).id;
         return ret;
     }
 
