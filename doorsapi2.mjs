@@ -1091,11 +1091,14 @@ export class Session {
         return new Promise(async (resolve, reject) => {
             me.serverUrl = window.location.origin + '/restful';
 
+            /*
             let tkn = me.utils.cookie('AuthToken');
             if (tkn) {
                 me.authToken = tkn;
                 resolve(true);
             } else {
+            */
+           debugger
                 try {
                     let res = await fetch('/c/tkn.asp');
                     let txt = await res.text();
@@ -1108,7 +1111,7 @@ export class Session {
                 } catch(err) {
                     reject(err);
                 }
-            }
+            //}
         });
     }
 };
