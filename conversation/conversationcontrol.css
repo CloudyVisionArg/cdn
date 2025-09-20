@@ -490,6 +490,6 @@ i.fa.go {
 .chat-tooltip:hover:after {
     display:block;
 }
-.conv-message.insta-message {
+.conv-message.insta-message .msngr-outbound {
     background: rgb(92 78 251);
 }
