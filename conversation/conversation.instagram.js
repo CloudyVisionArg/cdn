@@ -1217,7 +1217,7 @@ function instaMessengerMsg(){
 				var appendBody = true;
 				let dateString = pMsg.date instanceof Date ? pMsg.date.toISOString() : pMsg.date;
 				var $row = $('<div/>', {
-					class: 'conv-message msngr-message',
+					class: 'conv-message msngr-message insta-message',
 					'data-sid': pMsg.sid,
 					'data-date': dateString,
 				});
