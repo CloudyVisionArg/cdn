@@ -1198,7 +1198,7 @@ function instaMessengerMsg(){
     this.parent = msg;
     this.parent();
     this.type = "Messenger Instagram";
-    this.icon = "fa-wechat";
+    this.icon = "fa-instagram";
     this.nummedia = null;
     this.media = null;
     this.latitude = null;
