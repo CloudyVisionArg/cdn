@@ -38,13 +38,13 @@ wappNumber(pPhone)
 /*
 Carga los archivos de un input file como adjuntos al documento
 options = {
-	inputFile, // Elemento input file con los archivos a cargar
+	input, // Elemento input file con los archivos a cargar
 	doc, // Documento donde se cargan los adjuntos
 	tag, // Opcional, tag a asignar a los adjuntos
 }
 */
 async function inputFileAttachments(options) {
-    for (file of options.inputFile.files) {
+    for (file of options.input.files) {
         let att = options.doc.attachmentsAdd(file.name);
 
         let blb = await new Promise(resolve => {
