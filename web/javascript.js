@@ -9,6 +9,7 @@ Changelog:
 
 Inventario de metodos:
 
+inputFileAttachments(options)
 importDoorsapi2()
 downloadFile(buffer, fileName)
 submitData(options)
@@ -32,6 +33,50 @@ wappNumber(pPhone)
 		n._hasdep = false;
 	});
 })();
+
+
+/*
+Carga los archivos de un input file como adjuntos al documento
+options = {
+	inputFile, // Elemento input file con los archivos a cargar
+	doc, // Documento donde se cargan los adjuntos
+	tag, // Opcional, tag a asignar a los adjuntos
+}
+*/
+async function inputFileAttachments(options) {
+    for (file of options.inputFile.files) {
+        let att = options.doc.attachmentsAdd(file.name);
+
+        let blb = await new Promise(resolve => {
+            let reader = new FileReader();
+            reader.onloadend = async function (e) {
+                resolve(new Blob([this.result], { type: file.type }));
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        let $prog = $(`
+            <div class="mb-2">Subiendo ${ file.name } (${ fileSize(blb.size) })</div>
+            <div class="progress">
+                <div class="progress-bar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        `);
+        let t = toast($prog, { autohide: false });
+        await att.fileStream2(blb, progress => {
+            $prog.find('.progress-bar')
+                .css('width', progress + '%')
+                .attr('aria-valuenow', progress)
+                .text(progress + "%");
+        });
+        t.hide();
+
+		let tag = options.tag;
+        if (tag || tag == 0) {
+            att.description = tag;
+            att.group = tag;
+        }
+    }
+}
 
 /**
 Carga doorsapi2, crea dSession y lo conecta a la sesion web
