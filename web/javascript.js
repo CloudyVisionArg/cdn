@@ -41,11 +41,17 @@ options = {
 	input, // Elemento input file con los archivos a cargar
 	doc, // Documento donde se cargan los adjuntos
 	tag, // Opcional, tag a asignar a los adjuntos
+	storage, // Opcional, s3 (def) / db
+	callback(att), // Opcional, funcion a llamar por cada adjunto cargado
 }
 */
 async function inputFileAttachments(options) {
-    for (file of options.input.files) {
-        let att = options.doc.attachmentsAdd(file.name);
+	let opt = Object.assign({
+		storage: 's3',
+	}, options);
+
+    for (file of opt.input.files) {
+        let att = opt.doc.attachmentsAdd(file.name);
 
         let blb = await new Promise(resolve => {
             let reader = new FileReader();
@@ -55,26 +61,36 @@ async function inputFileAttachments(options) {
             reader.readAsArrayBuffer(file);
         });
 
-        let $prog = $(`
-            <div class="mb-2">Subiendo ${ file.name } (${ fileSize(blb.size) })</div>
-            <div class="progress">
-                <div class="progress-bar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        `);
-        let t = toast($prog, { autohide: false });
-        await att.fileStream2(blb, progress => {
-            $prog.find('.progress-bar')
-                .css('width', progress + '%')
-                .attr('aria-valuenow', progress)
-                .text(progress + "%");
-        });
-        t.hide();
+		if (opt.storage == 's3' && att.fileStream2) {
+			let $prog = $(`
+				<div class="mb-2">Subiendo ${ file.name } (${ fileSize(blb.size) })</div>
+				<div class="progress">
+					<div class="progress-bar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+				</div>
+			`);
+			let t = toast($prog, { autohide: false });
+			await att.fileStream2(blb, progress => {
+				$prog.find('.progress-bar')
+					.css('width', progress + '%')
+					.attr('aria-valuenow', progress)
+					.text(progress + "%");
+			});
+			t.hide();
+			
+		} else if (opt.storage == 'db') {
+			att.fileStream = blb;
 
-		let tag = options.tag;
+		} else {
+			throw new Error('Invalid storage option');
+		}
+
+		let tag = opt.tag;
         if (tag || tag == 0) {
             att.description = tag;
             att.group = tag;
         }
+
+		if (opt.callback) opt.callback(att);
     }
 }
 
