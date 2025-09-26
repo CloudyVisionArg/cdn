@@ -42,7 +42,7 @@ options = {
 	doc, // Documento donde se cargan los adjuntos
 	tag, // Opcional, tag a asignar a los adjuntos
 	storage, // Opcional, s3 (def) / db
-	callback(att), // Opcional, funcion a llamar por cada adjunto cargado
+	callback(att), // Opcional, funcion que se llama por cada adjunto cargado
 }
 */
 async function inputFileAttachments(options) {
@@ -76,7 +76,7 @@ async function inputFileAttachments(options) {
 					.text(progress + "%");
 			});
 			t.hide();
-			
+
 		} else if (opt.storage == 'db') {
 			att.fileStream = blb;
 
