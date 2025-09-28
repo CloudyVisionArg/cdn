@@ -1682,7 +1682,7 @@ function getAttachments(pId, pTitle, pTag) {
     var $accCont = $li.find('.accordion-item-content');
     
     var $btnRow = $('<div/>', {
-        class: 'row',
+        class: document.f7version >= 8 ? 'grid grid-cols-4' : 'row',
         style: 'padding-top: var(--f7-list-item-padding-vertical); padding-bottom: var(--f7-list-item-padding-vertical);',
     }).appendTo($accCont);
 
