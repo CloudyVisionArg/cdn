@@ -754,7 +754,7 @@ async function loadViewSection(pContainer, pCallback) {
                 // Nombre del grupo
                 $li = $('<li/>', {
                     class: 'accordion-item item-content',
-                    style: `background-color: var(${ document._f7version >= 8 ? '--f7-list-button-border-color' : '--f7-list-item-divider-bg-color' });`,
+                    style: `background-color: var(${ document._f7version >= 8 ? '--f7-toolbar-bg-color,var(--f7-bars-bg-color)' : '--f7-list-item-divider-bg-color' });`,
                 }).appendTo($ul);
 
                 $div = $('<div/>', {
@@ -774,7 +774,7 @@ async function loadViewSection(pContainer, pCallback) {
 
                     $li = $('<li/>', {
                         class: 'accordion-item',
-                        style: `background-color: var(${ document._f7version >= 8 ? '--f7-list-button-border-color' : '--f7-list-item-divider-bg-color' });`,
+                        style: `background-color: var(${ document._f7version >= 8 ? '--f7-toolbar-bg-color,var(--f7-bars-bg-color)' : '--f7-list-item-divider-bg-color' });`,
                         value: (value == null ? '__NULL__' : value),
                     }).appendTo($ul);
 
