@@ -1,4 +1,8 @@
-// todo: recibir una señal de refresh, dps de modif un doc
+/*
+todo: recibir una señal de refresh, dps de modif un doc
+
+Fresh: https://node.cloudycrm.net/ghcv/cdn/app7/explorer.js?_fresh=1
+*/
 
 let folder2;
 
