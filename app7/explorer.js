@@ -739,7 +739,7 @@ async function loadViewSection(pContainer, pCallback) {
 
             } else {
                 var $list = $('<div/>', {
-                    class: 'list',
+                    class: 'list' + (document._f7version >= 8 ? ' list-strong list-dividers' : ''),
                     style: 'margin-top: 0;',
                 }).appendTo(pContainer);
 
@@ -877,7 +877,7 @@ function getItemContent() {
 
 function noResults() {
     var $list = $('<div/>', {
-        class: 'list simple-list',
+        class: 'list simple-list' + (document._f7version >= 8 ? ' list-strong list-dividers' : ''),
         style: 'margin-top: 0;',
     }).append('<ul><li class="no-results">Sin resultados</li></ul>');
     return $list;
