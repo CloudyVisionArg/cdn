@@ -148,7 +148,7 @@ actionsPopup = getActionsPopup();
         
         $subnavbar.append(`
         <div class="subnavbar-inner no-padding">
-            <div class="list" style="width: 100%;">
+            <div class="list ${ document._f7version >= 8 ? 'list-strong list-dividers' : '' }" style="width: 100%;">
                 <ul/>
             </div>
         </div>
