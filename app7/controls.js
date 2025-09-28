@@ -1689,7 +1689,7 @@ function getAttachments(pId, pTitle, pTag) {
 
     var $btn = $('<button/>', {
         id: 'camera',
-        class: 'button' + document._f7version >= 8 ? '' : ' col',
+        class: 'button' + (document._f7version >= 8 ? '' : ' col'),
     }).appendTo($btnRow);
 
     $btn.append('<i class="f7-icons ios-only">camera</i>');
@@ -1710,7 +1710,7 @@ function getAttachments(pId, pTitle, pTag) {
 
     var $btn = $('<button/>', {
         id: 'photo',
-        class: 'button' + document._f7version >= 8 ? '' : ' col',
+        class: 'button' + (document._f7version >= 8 ? '' : ' col'),
     }).appendTo($btnRow);
 
     $btn.append('<i class="f7-icons ios-only">photo</i>');
@@ -1718,7 +1718,7 @@ function getAttachments(pId, pTitle, pTag) {
 
     var $btn = $('<button/>', {
         id: 'doc',
-        class: 'button' + document._f7version >= 8 ? '' : ' col',
+        class: 'button' + (document._f7version >= 8 ? '' : ' col'),
     }).appendTo($btnRow);
 
     $btn.append('<i class="f7-icons ios-only">doc</i>');
@@ -1726,7 +1726,7 @@ function getAttachments(pId, pTitle, pTag) {
 
     var $btn = $('<button/>', {
         id: 'audio',
-        class: 'button' + document._f7version >= 8 ? '' : ' col',
+        class: 'button' + (document._f7version >= 8 ? '' : ' col'),
     }).appendTo($btnRow);
 
     $btn.append('<i class="f7-icons ios-only">mic</i>');
