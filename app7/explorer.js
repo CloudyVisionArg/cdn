@@ -601,7 +601,7 @@ async function loadViewSection(pContainer, pCallback) {
                 var row, style, styleScript, item, text;
 
                 $list = $('<div/>', {
-                    class: 'list media-list chevron-center text-select-none',
+                    class: 'list media-list chevron-center text-select-none' + (document._f7version >= 8 ? ' list-strong list-dividers' : ''),
                     style: 'margin-top: 0;',
                 }).appendTo(pContainer);
 
