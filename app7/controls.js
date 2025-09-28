@@ -2005,7 +2005,7 @@ function getTabbedViewsLayout(pTabs) {
 	});
 	
 	$toolbar = $('<div/>', {
-		class: 'toolbar tabbar tabbar-labels toolbar-bottom',
+		class: `toolbar tabbar tabbar-${ document._f7version >= 8 ? 'icons' : 'labels' } toolbar-bottom`,
 	}).appendTo($views);
 	
 	$toolbarInner = $('<div/>', {
