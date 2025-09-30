@@ -326,6 +326,29 @@ async function loadUtils() {
         };
     }
 
+    // array.binaryFind
+    if (typeof Array.prototype.binaryFind !== 'function') {
+        Array.prototype.binaryFind = function (predicate) {
+            let start = 0;
+            let end = arr.length - 1;
+
+            while (start <= end) {
+                let mid = Math.floor((start + end) / 2);
+                let cmp = predicate(arr[mid], mid);
+                if (cmp == 0) {
+                    return arr[mid];
+                } else if (cmp < 0) {
+                    end = mid - 1;
+                } else if (cmp > 0) {
+                    start = mid + 1;
+                } else {
+                    return undefined;
+                }
+            }
+            return undefined;
+        }
+    }
+
     return true;
 };
 
