@@ -329,14 +329,15 @@ async function loadUtils() {
     // array.binaryFind
     if (typeof Array.prototype.binaryFind !== 'function') {
         Array.prototype.binaryFind = function (predicate) {
+            let me = this;
             let start = 0;
-            let end = arr.length - 1;
+            let end = me.length - 1;
 
             while (start <= end) {
                 let mid = Math.floor((start + end) / 2);
-                let cmp = predicate(arr[mid], mid);
+                let cmp = predicate(me[mid], mid);
                 if (cmp == 0) {
-                    return arr[mid];
+                    return me[mid];
                 } else if (cmp < 0) {
                     end = mid - 1;
                 } else if (cmp > 0) {
