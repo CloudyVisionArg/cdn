@@ -192,14 +192,14 @@ function instagramDataProvider(opts){
 			
 			if (maxDate) {
 				let dt = maxDate;
-					formula = 'created < \'' + ISODate(dt) + ' ' + ISOTime(dt, true) + '\' and (' + formula + ')';
+					formula = 'createdtime < \'' + ISODate(dt) + ' ' + ISOTime(dt, true) + '\' and (' + formula + ')';
 			} /*else if (lastLoad) {
 				//incLoad = true;
 				//var dtEnc = '\'' + ISODate(lastLoad) + ' ' + ISOTime(lastLoad, true) + '\'';
 				//formula = '(created > ' + dtEnc + ' or modified > ' + dtEnc + ') and (' + formula + ')';
 			};*/
 			//debugger;
-            DoorsAPI.folderSearch(me.messagesFolder, 'doc_id,ID,page_id,STATE,direction,sender_id,recipient_id,body,TEXT,created', msgsFormula, 'created desc', msgLimit, null, 0).then(
+            DoorsAPI.folderSearch(me.messagesFolder, 'doc_id,ID,page_id,STATE,direction,sender_id,recipient_id,body,TEXT,created,createdtime', msgsFormula, 'createdtime desc', msgLimit, null, 0).then(
 				function (res) {
 					let messages = [];
 					let mediaPromises = [];
@@ -387,7 +387,7 @@ function instagramDataProvider(opts){
             {   docField: "SENDER_ID", msgField: "operator"},
             {   docField: "STATE", msgField: "status"},
             {   docField: "TEXT", msgField: "body"},
-            {   docField: "CREATED",    msgField: "date" },
+            {   docField: "CREATEDTIME",    msgField: "date" },
             {   docField: "DIRECTION",    msgField: "direction" },
             {   docField: "ACC_ID",    msgField: "accId" },
             {   docField: "PAGE_ID",    msgField: "pageId" },
@@ -446,7 +446,7 @@ function instagramDataProvider(opts){
 
 			var formula = 'sender_id = \'' + to + '\' and recipient_id = \'' + from + '\'';
 			
-			DoorsAPI.folderSearchGroups(me.messagesFolder,"recipient_id","MAX(CREATED) AS LASTEST",formula).then(
+			DoorsAPI.folderSearchGroups(me.messagesFolder,"recipient_id","MAX(CREATEDTIME) AS LASTEST",formula).then(
 				function (res) {
 					if (res.length > 0) {
 						res.forEach(function (it) {
