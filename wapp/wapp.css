@@ -124,7 +124,7 @@
 }
 
 .wapp-chat a {
-    color: blue;
-    text-decoration: none;
-    cursor: pointer;
+    color: blue !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
 }
