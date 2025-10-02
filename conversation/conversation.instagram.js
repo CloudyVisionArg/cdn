@@ -1236,11 +1236,14 @@ function instaMessengerMsg(){
 						const att = pMsg.jsonBody.message.attachments[index];
 						var $div = $('<div/>').appendTo($msgText);
 						var $btn;
-						if(att.type == "image"){
+						if(att.type == "image" || att.type == "story_mention"){
 							$('<img/>', {
 								src: att.payload.url,
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(me.viewImage).appendTo($div);
+							if(att.type == "story_mention"){
+								$div.append('<br><b>Te mencionaron en una historia</b>');
+							}
 								
 						} else if (att.type == 'audio') {
 							var $med = $('<audio/>', {
