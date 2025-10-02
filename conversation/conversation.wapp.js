@@ -858,6 +858,58 @@ function whatsAppDataProvider(opts){
 		//var me = this; se pierde la referencia y en este caso this queda apuntando a window en vez del dataprovider 
 		//var me = whatsAppProvider;
 		//se vuelve a cambiar porque se puede obtener la referencia con el this, si se llama con el ".call"
+
+		/*
+		// Redimensiona imagenes antes de subirlas
+		function handleFile(event) {
+			const file = event.target.files[0];
+			if (!file) return;
+
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				const img = new Image();
+				img.onload = function () {
+					const canvas = document.createElement('canvas');
+					const ctx = canvas.getContext('2d');
+
+					// Set desired dimensions
+					const MAX_WIDTH = 800;
+					const MAX_HEIGHT = 800;
+					let width = img.width;
+					let height = img.height;
+
+					// Maintain aspect ratio
+					if (width > height) {
+						if (width > MAX_WIDTH) {
+						height *= MAX_WIDTH / width;
+						width = MAX_WIDTH;
+						}
+					} else {
+						if (height > MAX_HEIGHT) {
+						width *= MAX_HEIGHT / height;
+						height = MAX_HEIGHT;
+						}
+					}
+
+					canvas.width = width;
+					canvas.height = height;
+
+					// Draw the resized image
+					ctx.drawImage(img, 0, 0, width, height);
+
+					// Convert canvas to a Blob or Base64
+					canvas.toBlob(function (blob) {
+						// You can now upload the blob to the server
+						console.log('Resized image blob:', blob);
+					}, file.type, 0.8); // Adjust quality (0.8 = 80%)
+				};
+				img.src = e.target.result;
+			};
+			reader.readAsDataURL(file);
+		}
+		*/
+
+
 		var me = this;
 		debugger;
 		var reader = new FileReader();
@@ -1587,11 +1639,20 @@ function wappMsg(){
 					if(!pMsg.body){
 						pMsg.body = "sin texto";
 					}
-					$('<a/>', {
+					let $link = $('<a/>', {
 						target: '_blank',
 						href: pMsg.referralSourceUrl,
 						style: 'font-weight: 500;',
 				   }).append(pMsg.body).appendTo($div);
+
+				   $link.click(function () {
+						var url = $(this).attr('href');
+						if (typeof(cordova) == 'object') {
+							cordova.InAppBrowser.open(url, '_system');
+						} else {
+							window.open(url);
+						}
+					});
 				   appendBody = false;
 				}
 				
