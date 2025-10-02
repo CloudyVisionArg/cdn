@@ -91,6 +91,56 @@ await utilsPromise;
 
 async function loadUtils() {
 
+    // String.reverse
+    if (typeof String.prototype.reverse !== 'function') {
+        String.prototype.reverse = function () {
+            return this.split('').reverse().join('');
+        };
+    }
+
+    // String.replaceAll
+    if (typeof String.prototype.replaceAll !== 'function') {
+        String.prototype.replaceAll = function (search, replacement) {
+            var me = this;
+            return me.replace(new RegExp(search, 'g'), replacement);
+        };
+    }
+
+    // String.repeat
+    if (typeof String.prototype.repeat !== 'function') {
+        String.prototype.repeat = function (count) {
+            var me = this;
+            var ret = '';
+            for (var i = 0; i < count; i++) ret += me;
+            return ret;
+        };
+    }
+
+    // Array.binaryFind
+    if (typeof Array.prototype.binaryFind !== 'function') {
+        Array.prototype.binaryFind = function (predicate) {
+            let me = this;
+            let start = 0;
+            let end = me.length - 1;
+
+            while (start <= end) {
+                let mid = Math.floor((start + end) / 2);
+                let cmp = predicate(me[mid], mid);
+                if (cmp == 0) {
+                    return me[mid];
+                } else if (cmp < 0) {
+                    end = mid - 1;
+                } else if (cmp > 0) {
+                    start = mid + 1;
+                } else {
+                    return undefined;
+                }
+            }
+            return undefined;
+        }
+    }
+
+
     // mainlib
 
     try {
@@ -298,56 +348,6 @@ async function loadUtils() {
 
     } catch(err) {
         console.error('Error loading url', err);
-    }
-
-    
-    // string.reverse
-    if (typeof String.prototype.reverse !== 'function') {
-        String.prototype.reverse = function () {
-            return this.split('').reverse().join('');
-        };
-    }
-
-    // string.replaceAll
-    if (typeof String.prototype.replaceAll !== 'function') {
-        String.prototype.replaceAll = function (search, replacement) {
-            var me = this;
-            return me.replace(new RegExp(search, 'g'), replacement);
-        };
-    }
-
-    // string.repeat
-    if (typeof String.prototype.repeat !== 'function') {
-        String.prototype.repeat = function (count) {
-            var me = this;
-            var ret = '';
-            for (var i = 0; i < count; i++) ret += me;
-            return ret;
-        };
-    }
-
-    // array.binaryFind
-    if (typeof Array.prototype.binaryFind !== 'function') {
-        Array.prototype.binaryFind = function (predicate) {
-            let me = this;
-            let start = 0;
-            let end = me.length - 1;
-
-            while (start <= end) {
-                let mid = Math.floor((start + end) / 2);
-                let cmp = predicate(me[mid], mid);
-                if (cmp == 0) {
-                    return me[mid];
-                } else if (cmp < 0) {
-                    end = mid - 1;
-                } else if (cmp > 0) {
-                    start = mid + 1;
-                } else {
-                    return undefined;
-                }
-            }
-            return undefined;
-        }
     }
 
     return true;

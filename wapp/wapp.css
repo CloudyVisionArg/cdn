@@ -1,4 +1,35 @@
 .wapp-chat {
+  padding: 0px; /* Removed padding */
+  border: none; /* Removed border */
+  background-color: transparent; /* Set background to transparent */
+  border-radius: 5px;
+  box-shadow: none; /* Removed box-shadow */
+}
+
+.wapp-header {
+  background-color: #e0e0e0;
+  padding: 8px;
+  border-bottom: 1px solid #d5d5d5;
+  color: #333;
+}
+
+.wapp-messages {
+  padding: 12px;
+  background-color: #eeeeee;
+  border: 1px solid #c8c9c9;
+  border-radius: 5px;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.wapp-footer {
+  background-color: #e0e0e0;
+  padding: 8px;
+  border-top: 1px solid #d5d5d5;
+  color: #333;
+}
+/*
+.wapp-chat {
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
     background-color: #eee5db;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -81,7 +112,6 @@
     font-weight: 400;
     font-size: 15px;
     color: #343631;
-    /* font-family: "Apple Color Emoji"; */
 }
 
 .wapp-message-time {
@@ -104,3 +134,4 @@
 .dropdown-submenu .dropdown-menu {
     left: 100%;
 }
+*/
