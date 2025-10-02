@@ -122,3 +122,9 @@
 .dropdown-submenu .dropdown-menu {
     left: 100%;
 }
+
+.wapp-chat a {
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}
