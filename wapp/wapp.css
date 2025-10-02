@@ -1,7 +1,10 @@
 
 .wapp-chat {
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
-    background-color: #eee5db;
+    padding: 0px;
+    border: none;
+    background-color: transparent;
+    border-radius: 5px;
+    box-shadow: none;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     margin-left: var(--wapp-chat-horizontal-margin);
@@ -9,21 +12,33 @@
     margin-top: var(--wapp-chat-vertical-margin);
     margin-bottom: var(--wapp-chat-vertical-margin);
     color: #333;
-    border-radius: 5px;
 }
 
-.wapp-header, .wapp-footer {
-    background-color: #ECECEC;
-    padding: 10px;
+.wapp-header {
+    background-color: #e0e0e0;
+    padding: 8px;
+    border-bottom: 1px solid #d5d5d5;
+    color: #333;
+    display: flex;
+}
+
+.wapp-footer {
+    background-color: #e0e0e0;
+    padding: 8px;
+    border-top: 1px solid #d5d5d5;
+    color: #333;
     display: flex;
 }
 
 .wapp-messages {
-    min-height: 200px;
-    max-height: 380px;
-    overflow-x: hidden;
+    padding: 12px;
+    background-color: #eeeeee;
+    border: 1px solid #c8c9c9;
+    border-radius: 5px;
     overflow-y: auto;
-    padding: 10px;
+    max-height: 300px;
+    min-height: 200px;
+    overflow-x: hidden;
 }
 
 .wapp-button {
