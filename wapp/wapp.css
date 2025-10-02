@@ -20,7 +20,7 @@
     border: 1px solid #c8c9c9;
     color: #333;
     display: flex;
-    border-radius: 5px 5px 0 0;
+    border-radius: 5px;
 }
 
 .wapp-footer {
@@ -29,13 +29,14 @@
     border: 1px solid #c8c9c9;
     color: #333;
     display: flex;
-    border-radius: 0 0 5px 5px;
+    border-radius: 5px;
 }
 
 .wapp-messages {
     padding: 12px;
     background-color: #eeeeee;
     border: 1px solid #c8c9c9;
+    border-radius: 5px;
     overflow-y: auto;
     max-height: 300px;
     min-height: 200px;
