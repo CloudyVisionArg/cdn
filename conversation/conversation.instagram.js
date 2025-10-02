@@ -1260,6 +1260,8 @@ function instaMessengerMsg(){
 							}).appendTo($div);
 							
 							$med.append('<source src="' + att.payload.url + '" >');
+						} else if (att.type == "template") {
+							$div.append('<i>El usuario respondió a una plantilla genérica</i>');
 						}
 					}
 				}
