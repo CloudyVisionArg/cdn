@@ -17,7 +17,7 @@
 .wapp-header {
     background-color: #e0e0e0;
     padding: 8px;
-    border-bottom: 1px solid #d5d5d5;
+    border: 1px solid #c8c9c9;
     color: #333;
     display: flex;
     border-radius: 5px;
@@ -26,7 +26,7 @@
 .wapp-footer {
     background-color: #e0e0e0;
     padding: 8px;
-    border-top: 1px solid #d5d5d5;
+    border: 1px solid #c8c9c9;
     color: #333;
     display: flex;
     border-radius: 5px;
