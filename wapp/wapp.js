@@ -288,6 +288,7 @@ var wapp = {
 				var $li = $('<li/>').appendTo($menu);
 				
 				var $file = $('<a/>').append('Archivo');
+				$file.addClass('dropdown-item');
 				$file.appendTo($li);
 				$file.click(function (e) {
 					wapp.sendFileWeb($cont[0]);
