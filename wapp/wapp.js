@@ -1074,23 +1074,28 @@ var wapp = {
 
 	putTemplate: function (template, target) {
 		wapp.cursorLoading(true);
-		DoorsAPI.folderSearch(wapp.templatesFolder.id, 'text,CONTENT_SID', 'name = \'' + template + '\'', '', 1, null, 0).then(
-			function (res) {
+		wapp.templatesFolder.search({
+			fields: 'text, content_sid',
+			formula: 'name = ' + dSession.db.sqlEnc(template, 1),
+			maxDocs: 1,
+			maxTextLen: 0,
+		}).then(
+			res => {
 				wapp.cursorLoading(false);
 				let template = res[0];
-				if(template["CONTENT_SID"] != null){
+				if (template["CONTENT_SID"] != null) {
 					$(target).attr('data-content-sid', template["CONTENT_SID"]);
-				}
-				else{
+				} else {
 					$(target).removeAttr('data-content-sid');
 				}
 				insertAtCaret(target, res[0]['TEXT']);
 				wapp.inputResize(target);
 				$(target).focus();
 			},
-			function (err) {
+			err => {
 				wapp.cursorLoading(false);
 				console.log(err);
+				alert(dSession.utils.errMsg(err));
 			}
 		)
 	},
