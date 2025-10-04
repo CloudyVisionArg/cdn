@@ -161,7 +161,7 @@ class ModernEmojis {
                    emoji.unicode.includes(searchTerm);
         });
 
-        emojis.slice(0, 100).forEach(emoji => { // Limit to 100 for performance
+        emojis.slice(0, 200).forEach(emoji => { // Limit to 100 for performance
             const emojiItem = document.createElement('span');
             emojiItem.className = 'emoji-item';
             emojiItem.textContent = emoji.unicode;
