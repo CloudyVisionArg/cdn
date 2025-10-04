@@ -91,8 +91,8 @@ class ModernEmojis {
             display: none;
             position: absolute;
             padding: 10px;
-            height: 200px;
-            width: 350px;
+            height: 300px;
+            width: 400px;
             overflow-y: auto;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             border: 1px solid #ddd;
@@ -117,7 +117,7 @@ class ModernEmojis {
         const emojiContainer = document.createElement('div');
         emojiContainer.className = 'emoji-container';
         emojiContainer.style.cssText = `
-            height: 150px;
+            height: 240px;
             overflow-y: auto;
         `;
         this.picker.appendChild(emojiContainer);
@@ -161,7 +161,10 @@ class ModernEmojis {
                    emoji.unicode.includes(searchTerm);
         });
 
-        emojis.slice(0, 200).forEach(emoji => { // Limit to 200 for performance
+        // Create all emoji items without limit
+        const fragment = document.createDocumentFragment();
+        
+        emojis.forEach(emoji => {
             const emojiItem = document.createElement('span');
             emojiItem.className = 'emoji-item';
             emojiItem.textContent = emoji.unicode;
@@ -184,8 +187,11 @@ class ModernEmojis {
                 this.style.backgroundColor = 'transparent';
             });
             
-            container.appendChild(emojiItem);
+            fragment.appendChild(emojiItem);
         });
+        
+        // Append all at once for better performance
+        container.appendChild(fragment);
     }
 
     /**
@@ -233,8 +239,8 @@ class ModernEmojis {
         
         // Position picker
         const picker = this.picker;
-        const pickerWidth = 350;
-        const pickerHeight = 220;
+        const pickerWidth = 400;
+        const pickerHeight = 320;
         
         // Adjust position to keep picker on screen (considering scroll)
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
