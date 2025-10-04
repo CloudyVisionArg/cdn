@@ -334,6 +334,7 @@ var wapp = {
 					role: 'separator',
 					class: 'divider',
 				}).appendTo($menu);
+				$li.append('<hr class="dropdown-divider">')
 
 				var $li = $('<li/>').appendTo($menu);
 				$('<a class="dropdown-item" />').append('Cancelar').appendTo($li);
