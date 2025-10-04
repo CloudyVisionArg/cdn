@@ -160,13 +160,25 @@ class ModernEmojis {
     _populateEmojis(container, filter = '') {
         container.innerHTML = '';
         
-        const emojis = this.emojisData.filter(emoji => {
+        let emojis = this.emojisData.filter(emoji => {
             if (!filter) return true;
             const searchTerm = filter.toLowerCase();
             return emoji.label?.toLowerCase().includes(searchTerm) ||
                    emoji.tags?.some(tag => tag.toLowerCase().includes(searchTerm)) ||
                    emoji.unicode.includes(searchTerm);
         });
+
+        // If no filter, sort to show faces first, then others
+        if (!filter) {
+            emojis = emojis.sort((a, b) => {
+                const aIsFace = /[\u{1F600}-\u{1F64F}\u{1F910}-\u{1F96B}\u{1F970}-\u{1F978}]/u.test(a.unicode);
+                const bIsFace = /[\u{1F600}-\u{1F64F}\u{1F910}-\u{1F96B}\u{1F970}-\u{1F978}]/u.test(b.unicode);
+                
+                if (aIsFace && !bIsFace) return -1;
+                if (!aIsFace && bIsFace) return 1;
+                return 0; // Keep original order within same category
+            });
+        }
 
         // Create all emoji items without limit
         const fragment = document.createDocumentFragment();
