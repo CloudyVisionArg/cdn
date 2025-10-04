@@ -258,7 +258,7 @@ class ModernEmojis {
      * Create emoji picker for a specific element
      */
     createPicker(options) {
-        const { el, inputEl } = options;
+        let { el, inputEl } = options;
         el = $(el)[0];
         
         if (!el || !inputEl) {
