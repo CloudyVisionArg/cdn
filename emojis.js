@@ -6,24 +6,24 @@
 // Global emojis object for backward compatibility
 var emojis = {
     emojisJSON: undefined,
-    modernInstance: null,
+    modEmojis: null,
     isLoading: false,
     
     // Auto-initialize on first use
     async _ensureLoaded() {
-        if (this.modernInstance || this.isLoading) return;
+        if (this.modEmojis || this.isLoading) return;
         this.isLoading = true;
         
         try {
             // Dynamic import of the modern module
-            const module = await import('https://cdn.cloudycrm.net/ghcv/cdn/emojis-modern.mjs?_fresh=1');
-            this.modernInstance = module.default;
+            const module = await import('https://cdn.cloudycrm.net/ghcv/cdn/emojis.mjs');
+            this.modEmojis = module.default;
             
             // Wait for emojis to load
-            await this.modernInstance.loadEmojis();
+            await this.modEmojis.loadEmojis();
             
             // Map data for backward compatibility
-            this.emojisJSON = this.modernInstance.emojisData.map(emoji => ({
+            this.emojisJSON = this.modEmojis.emojisData.map(emoji => ({
                 name: emoji.label,
                 html: emoji.unicode,
                 utf16: emoji.unicode.codePointAt(0)?.toString() || '',
@@ -46,8 +46,8 @@ var emojis = {
         this._ensureLoaded();
         
         // Use modern instance if available
-        if (this.modernInstance && this.modernInstance.isLoaded) {
-            return this.modernInstance.emoji(pName);
+        if (this.modEmojis && this.modEmojis.isLoaded) {
+            return this.modEmojis.emoji(pName);
         }
         
         return '';
@@ -59,20 +59,11 @@ var emojis = {
     createPicker: function (pOptions) {
         // Auto-load if needed
         this._ensureLoaded().then(() => {
-            if (this.modernInstance && this.modernInstance.isLoaded) {
-                this.modernInstance.createPicker(pOptions);
+            if (this.modEmojis && this.modEmojis.isLoaded) {
+                this.modEmojis.createPicker(pOptions);
             }
         });
     },
-    
-    // Search functionality
-    search: function(term) {
-        this._ensureLoaded();
-        if (this.modernInstance && this.modernInstance.isLoaded) {
-            return this.modernInstance.search(term);
-        }
-        return [];
-    }
 };
 
 // No dependencies needed - modern implementation is self-contained
