@@ -278,6 +278,7 @@ var wapp = {
 				$media = $('<i/>', {
 					class: 'fa fa-plus',
 					'data-toggle': 'dropdown',
+					'data-bs-toggle': 'dropdown',
 				}).appendTo($dropup);
 
 				var $menu = $('<ul/>', {
