@@ -16,7 +16,7 @@ class ModernEmojis {
      * @param {string} locale - Language locale (default: 'en')
      * @returns {Promise}
      */
-    async loadEmojis(locale = 'en') {
+    async loadEmojis(locale = 'es') {
         if (this.loadPromise) return this.loadPromise;
         
         this.loadPromise = this._fetchEmojiData(locale);
@@ -161,7 +161,7 @@ class ModernEmojis {
                    emoji.unicode.includes(searchTerm);
         });
 
-        emojis.slice(0, 200).forEach(emoji => { // Limit to 100 for performance
+        emojis.slice(0, 200).forEach(emoji => { // Limit to 200 for performance
             const emojiItem = document.createElement('span');
             emojiItem.className = 'emoji-item';
             emojiItem.textContent = emoji.unicode;
