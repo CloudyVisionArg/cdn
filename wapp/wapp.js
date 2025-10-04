@@ -312,7 +312,7 @@ var wapp = {
 			
 							wapp.templates.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
-								var $a = $('<a/>').appendTo($li);
+								var $a = $('<a class="dropdown-item" />').appendTo($li);
 								$a.append(it);
 								$a.click(function (e) {
 									wapp.putTemplate(this.text, $(this).closest('.wapp-footer').find('.wapp-reply')[0]);
