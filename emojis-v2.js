@@ -75,9 +75,4 @@ var emojis = {
     }
 };
 
-// Load jslib dependency if available
-$(document).ready(function () {
-    if (typeof include === 'function') {
-        include('jslib');
-    }
-});
+// No dependencies needed - modern implementation is self-contained
