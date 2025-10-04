@@ -259,6 +259,7 @@ class ModernEmojis {
      */
     createPicker(options) {
         const { el, inputEl } = options;
+        el = $(el)[0];
         
         if (!el || !inputEl) {
             console.error('createPicker requires el and inputEl options');

@@ -16,7 +16,7 @@ var emojis = {
         
         try {
             // Dynamic import of the modern module
-            const module = await import('https://cdn.cloudycrm.net/ghcv/cdn/emojis-modern.mjs');
+            const module = await import('https://cdn.cloudycrm.net/ghcv/cdn/emojis-modern.mjs?_fresh=1');
             this.modernInstance = module.default;
             
             // Wait for emojis to load
