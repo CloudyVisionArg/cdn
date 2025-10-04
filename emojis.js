@@ -1,7 +1,6 @@
 /**
  * Modern emoji integration - replaces ASP + JSONP approach
- * Uses dynamic import to load emojis-modern.mjs
- */
+*/
 
 // Global emojis object for backward compatibility
 var emojis = {
@@ -15,8 +14,8 @@ var emojis = {
         this.isLoading = true;
         
         try {
-            // Dynamic import of the modern module
-            const module = await import('https://cdn.cloudycrm.net/ghcv/cdn/emojis.mjs');
+            // Dynamic import of the emojis module
+            const module = await import('https://cdn.cloudycrm.net/ghcv/global/emojis.mjs');
             this.modEmojis = module.default;
             
             // Wait for emojis to load
@@ -33,7 +32,7 @@ var emojis = {
             console.log(`Loaded ${this.emojisJSON.length} emojis from emojibase-data`);
             
         } catch (error) {
-            console.error('Failed to load modern emojis:', error);
+            console.error('Failed to load emojis mod:', error);
         }
         
         this.isLoading = false;
@@ -45,7 +44,7 @@ var emojis = {
         // Auto-load if needed
         this._ensureLoaded();
         
-        // Use modern instance if available
+        // Use mod instance if available
         if (this.modEmojis && this.modEmojis.isLoaded) {
             return this.modEmojis.emoji(pName);
         }
@@ -65,5 +64,3 @@ var emojis = {
         });
     },
 };
-
-// No dependencies needed - modern implementation is self-contained
