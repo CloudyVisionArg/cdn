@@ -42,10 +42,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 487, hasdep: true });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 469, hasdep: true });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 467 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 465 });
-    scripts.push({ id: 'jslib', path: '/jslib.js', version: 435 });
-    scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 426 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 334 });
     */
     scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 449 });
     scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 444 });
