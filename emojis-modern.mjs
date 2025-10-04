@@ -129,6 +129,11 @@ class ModernEmojis {
         searchInput.addEventListener('input', (e) => {
             this._filterEmojis(emojiContainer, e.target.value);
         });
+        
+        // Prevent picker from closing when clicking on search input
+        searchInput.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
 
         // Add click handler for emojis
         emojiContainer.addEventListener('click', (e) => {
@@ -139,8 +144,10 @@ class ModernEmojis {
         });
 
         // Hide picker when clicking outside
-        document.addEventListener('click', () => {
-            this.picker.style.display = 'none';
+        document.addEventListener('click', (e) => {
+            if (!this.picker.contains(e.target)) {
+                this.picker.style.display = 'none';
+            }
         });
 
         // Append to body
@@ -206,21 +213,38 @@ class ModernEmojis {
      */
     _insertEmoji(emoji) {
         if (this.currentTarget) {
-            const target = this.currentTarget;
-            if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-                const start = target.selectionStart;
-                const end = target.selectionEnd;
-                const value = target.value;
+            let target = this.currentTarget;
+            
+            // Handle jQuery objects
+            if (target.jquery) {
+                target = target[0];
+            }
+            
+            if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+                const start = target.selectionStart || 0;
+                const end = target.selectionEnd || 0;
+                const value = target.value || '';
                 target.value = value.substring(0, start) + emoji + value.substring(end);
                 target.selectionStart = target.selectionEnd = start + emoji.length;
                 target.focus();
-            } else {
+            } else if (target && target.contentEditable === 'true') {
                 // For contenteditable elements
-                if (typeof target.insertText === 'function') {
-                    target.insertText(emoji);
+                if (document.execCommand) {
+                    target.focus();
+                    document.execCommand('insertText', false, emoji);
                 } else {
-                    target.value = (target.value || '') + emoji;
+                    // Fallback for newer browsers
+                    const selection = window.getSelection();
+                    const range = selection.getRangeAt(0);
+                    range.deleteContents();
+                    range.insertNode(document.createTextNode(emoji));
+                    range.collapse(false);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
                 }
+            } else if (target) {
+                // Last resort - just append
+                target.value = (target.value || '') + emoji;
             }
         }
         this.picker.style.display = 'none';
