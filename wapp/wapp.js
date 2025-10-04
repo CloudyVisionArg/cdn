@@ -299,6 +299,7 @@ var wapp = {
 				}).appendTo($menu);
 
 				var $aTmp = $('<a/>').append('Plantilla <span class="caret">');
+				$aTmp.addClass('dropdown-item');
 				$aTmp.appendTo($liTmp);
 
 				$aTmp.click(function (e) {
