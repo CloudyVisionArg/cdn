@@ -236,9 +236,12 @@ class ModernEmojis {
         const pickerWidth = 350;
         const pickerHeight = 220;
         
-        // Adjust position to keep picker on screen
-        const maxX = window.innerWidth - pickerWidth - 10;
-        const maxY = window.innerHeight - pickerHeight - 10;
+        // Adjust position to keep picker on screen (considering scroll)
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        const maxX = scrollLeft + window.innerWidth - pickerWidth - 10;
+        const maxY = scrollTop + window.innerHeight - pickerHeight - 10;
         
         x = Math.min(x, maxX);
         y = Math.min(y, maxY);
@@ -271,9 +274,9 @@ class ModernEmojis {
             e.preventDefault();
             e.stopPropagation();
             
-            const rect = el.getBoundingClientRect();
-            const x = rect.left;
-            const y = rect.bottom + 5;
+            // Use event coordinates that account for page scroll
+            const x = e.pageX;
+            const y = e.pageY + 10;
             
             this.showPicker(x, y, inputEl);
         });
