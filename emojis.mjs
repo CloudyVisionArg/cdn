@@ -1,7 +1,8 @@
 /**
- * Modern emoji implementation using emojibase-data
- * Replaces ASP + JSONP with direct CDN access to emoji data
- */
+Modern emoji implementation using emojibase-data
+
+Fresh: https://cdn.cloudycrm.net/ghcv/cdn/emojis.mjs?_fresh=1
+*/
 
 class ModernEmojis {
     constructor() {
@@ -366,8 +367,3 @@ if (document.readyState === 'loading') {
 
 // Export for use
 export default modernEmojis;
-
-// Also add to global scope for backward compatibility
-if (typeof window !== 'undefined') {
-    window.modernEmojis = modernEmojis;
-}
