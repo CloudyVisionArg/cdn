@@ -13,7 +13,7 @@ class ModernEmojis {
 
     /**
      * Load emoji data from emojibase-data CDN
-     * @param {string} locale - Language locale (default: 'en')
+     * @param {string} locale - Language locale (default: 'es')
      * @returns {Promise}
      */
     async loadEmojis(locale = 'es') {
