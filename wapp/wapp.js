@@ -336,7 +336,7 @@ var wapp = {
 				}).appendTo($menu);
 
 				var $li = $('<li/>').appendTo($menu);
-				$('<a/>').append('Cancelar').appendTo($li);
+				$('<a class="dropdown-item" />').append('Cancelar').appendTo($li);
 
 			} else {
 				// APP
