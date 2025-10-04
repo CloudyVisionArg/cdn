@@ -1095,7 +1095,11 @@ var wapp = {
 			err => {
 				wapp.cursorLoading(false);
 				console.log(err);
-				alert(dSession.utils.errMsg(err));
+				if (toast) {
+					toast(dSession.utils.errMsg(err), { autohide: false });
+				} else {
+					alert(dSession.utils.errMsg(err));
+				}
 			}
 		)
 	},
