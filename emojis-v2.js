@@ -9,9 +9,9 @@ var emojis = {
     modernInstance: null,
     isLoading: false,
     
-    // Initialize modern emojis
-    async init() {
-        if (this.isLoading) return;
+    // Auto-initialize on first use
+    async _ensureLoaded() {
+        if (this.modernInstance || this.isLoading) return;
         this.isLoading = true;
         
         try {
@@ -34,7 +34,6 @@ var emojis = {
             
         } catch (error) {
             console.error('Failed to load modern emojis:', error);
-            // The modern module has its own fallback data
         }
         
         this.isLoading = false;
@@ -43,34 +42,14 @@ var emojis = {
 
     /** Retorna un emoji por su nombre */
     emoji: function (pName) {
+        // Auto-load if needed
+        this._ensureLoaded();
+        
         // Use modern instance if available
         if (this.modernInstance && this.modernInstance.isLoaded) {
             return this.modernInstance.emoji(pName);
         }
         
-        // Fallback to legacy method
-        if (!this.emojisJSON) return '';
-        
-        for (var i = 0; i < this.emojisJSON.length; i++) {
-            var it = this.emojisJSON[i];
-            if (it.name && it.name.toLowerCase() == pName.toLowerCase()) {
-                if (it.unicode) return it.unicode;
-                
-                // Legacy UTF16 conversion
-                var ret = '';
-                var code = it.utf16.split(';');
-                code.forEach(it2 => {
-                    ret += String.fromCharCode(it2);
-                });
-                if (it.modifiers) {
-                    var modif = it.modifiers.split(';');
-                    modif.forEach(it2 => {
-                        ret += String.fromCharCode(it2);
-                    });
-                }
-                return ret;
-            }
-        }
         return '';
     },
 
@@ -78,17 +57,17 @@ var emojis = {
      * Creates an emoji picker - enhanced version
      */
     createPicker: function (pOptions) {
-        // Use modern instance if available
-        if (this.modernInstance && this.modernInstance.isLoaded) {
-            this.modernInstance.createPicker(pOptions);
-            return;
-        }
-        
-        // No fallback needed - modern instance handles its own fallback
+        // Auto-load if needed
+        this._ensureLoaded().then(() => {
+            if (this.modernInstance && this.modernInstance.isLoaded) {
+                this.modernInstance.createPicker(pOptions);
+            }
+        });
     },
     
     // Search functionality
     search: function(term) {
+        this._ensureLoaded();
         if (this.modernInstance && this.modernInstance.isLoaded) {
             return this.modernInstance.search(term);
         }
@@ -96,15 +75,9 @@ var emojis = {
     }
 };
 
-// Auto-initialize when DOM is ready
+// Load jslib dependency if available
 $(document).ready(function () {
-    // Load jslib if not already loaded
     if (typeof include === 'function') {
         include('jslib');
     }
-    
-    // Initialize modern emojis
-    emojis.init().catch(error => {
-        console.error('Emoji initialization failed:', error);
-    });
 });
