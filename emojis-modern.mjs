@@ -102,7 +102,7 @@ class ModernEmojis {
         // Add search input
         const searchInput = document.createElement('input');
         searchInput.type = 'text';
-        searchInput.placeholder = 'Search emojis...';
+        searchInput.placeholder = 'Buscar...';
         searchInput.style.cssText = `
             width: 100%;
             padding: 8px;
