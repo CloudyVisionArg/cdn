@@ -328,7 +328,7 @@ var wapp = {
 
 							// Locales
 							$ul.append('<li><h5 class="dropdown-header">Locales</h5></li>');
-							wapp.templates.forEach(it => {
+							wapp.templates.local.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a class="dropdown-item" />').appendTo($li);
 								$a.append(it);
