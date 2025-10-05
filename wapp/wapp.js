@@ -275,7 +275,7 @@ var wapp = {
 				// WEB
 
 				var $dropup = $('<div/>', {
-					class: 'dropup',
+					class: 'btn-group dropup',
 				}).appendTo($div);
 
 				$media = $('<i/>', {
