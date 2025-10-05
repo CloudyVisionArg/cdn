@@ -1090,35 +1090,19 @@ var wapp = {
 	},
 
 	putTemplate: function (template, target) {
-		wapp.cursorLoading(true);
-		wapp.templatesFolder.search({
-			fields: 'text, content_sid',
-			formula: 'name = ' + dSession.db.sqlEnc(template, 1),
-			maxDocs: 1,
-			maxTextLen: 0,
-		}).then(
-			res => {
-				wapp.cursorLoading(false);
-				let template = res[0];
-				if (template["CONTENT_SID"] != null) {
-					$(target).attr('data-content-sid', template["CONTENT_SID"]);
-				} else {
-					$(target).removeAttr('data-content-sid');
-				}
-				insertAtCaret(target, res[0]['TEXT']);
-				wapp.inputResize(target);
-				$(target).focus();
-			},
-			err => {
-				wapp.cursorLoading(false);
-				console.log(err);
-				if (toast) {
-					toast(dSession.utils.errMsg(err), { autohide: false });
-				} else {
-					alert(dSession.utils.errMsg(err));
-				}
+		if (template.account_sid) {
+			// Twilio
+		} else {
+			// Local
+			if (template["CONTENT_SID"] != null) {
+				$(target).attr('data-content-sid', template["CONTENT_SID"]);
+			} else {
+				$(target).removeAttr('data-content-sid');
 			}
-		)
+			insertAtCaret(target, res[0]['TEXT']);
+			wapp.inputResize(target);
+			$(target).focus();
+		};
 	},
 	
 	msgMedia: function (pSid) {
