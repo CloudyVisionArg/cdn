@@ -1099,7 +1099,7 @@ var wapp = {
 			} else {
 				$(target).removeAttr('data-content-sid');
 			}
-			insertAtCaret(target, res[0]['TEXT']);
+			insertAtCaret(target, template['TEXT']);
 			wapp.inputResize(target);
 			$(target).focus();
 		};
