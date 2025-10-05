@@ -320,7 +320,7 @@ var wapp = {
 							wapp.templates.twilio.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a class="dropdown-item" />').appendTo($li);
-								$a.append(it.friendlyName);
+								$a.append(it.friendly_name);
 								$a.click(function (e) {
 									wapp.putTemplate(it, $reply);
 								});
@@ -331,7 +331,7 @@ var wapp = {
 							wapp.templates.local.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a class="dropdown-item" />').appendTo($li);
-								$a.append(it);
+								$a.append(it['NAME']);
 								$a.click(function (e) {
 									wapp.putTemplate(it, $reply);
 								});
