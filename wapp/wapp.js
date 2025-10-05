@@ -316,8 +316,7 @@ var wapp = {
 							var $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
 
 							// De Twilio
-							<li><h5 class="dropdown-header">De Twilio</h5></li>
-
+							$ul.append('<li><h5 class="dropdown-header">De Twilio</h5></li>');
 							wapp.templates.twilio.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a class="dropdown-item" />').appendTo($li);
@@ -325,11 +324,10 @@ var wapp = {
 								$a.click(function (e) {
 									wapp.putTemplate(it, $reply);
 								});
-
 							});
 
 							// Locales
-							<li><h5 class="dropdown-header">Locales</h5></li>
+							$ul.append('<li><h5 class="dropdown-header">Locales</h5></li>');
 							wapp.templates.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a class="dropdown-item" />').appendTo($li);
