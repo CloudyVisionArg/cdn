@@ -307,18 +307,35 @@ var wapp = {
 
 				$aTmp.click(function (e) {
 					var $this = $(this);
-					if (wapp.templates && wapp.templates.length > 0) {
+					if (wapp.templates) {
 						if ($this.next('ul').length == 0) {
 							var $ul = $('<ul/>', {
 								class: 'dropdown-menu',
 							}).appendTo($this.parent());
 			
+							var $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
+
+							// De Twilio
+							<li><h5 class="dropdown-header">De Twilio</h5></li>
+
+							wapp.templates.twilio.forEach(it => {
+								var $li = $('<li/>').appendTo($ul);
+								var $a = $('<a class="dropdown-item" />').appendTo($li);
+								$a.append(it.friendlyName);
+								$a.click(function (e) {
+									wapp.putTemplate(it, $reply);
+								});
+
+							});
+
+							// Locales
+							<li><h5 class="dropdown-header">Locales</h5></li>
 							wapp.templates.forEach(it => {
 								var $li = $('<li/>').appendTo($ul);
 								var $a = $('<a class="dropdown-item" />').appendTo($li);
 								$a.append(it);
 								$a.click(function (e) {
-									wapp.putTemplate(this.text, $(this).closest('.wapp-footer').find('.wapp-reply')[0]);
+									wapp.putTemplate(it, $reply);
 								});
 							});
 		
