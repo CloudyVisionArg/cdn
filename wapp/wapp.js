@@ -51,7 +51,6 @@ var inApp = typeof app7 == 'object';
 			order: 'name',
 		}),
 	}
-	debugger
 
 	wapp.loggedUser = await dSession.currentUser;
 
@@ -302,7 +301,7 @@ var wapp = {
 					class: 'dropdown-submenu',
 				}).appendTo($menu);
 
-				var $aTmp = $('<a/>').append('Plantilla <span class="caret">');
+				var $aTmp = $('<a/>').append('Plantilla ->');
 				$aTmp.addClass('dropdown-item');
 				$aTmp.appendTo($liTmp);
 
