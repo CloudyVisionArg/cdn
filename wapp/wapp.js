@@ -301,7 +301,7 @@ var wapp = {
 					class: 'dropdown-submenu',
 				}).appendTo($menu);
 
-				var $aTmp = $('<a/>').append('Plantilla ->');
+				var $aTmp = $('<a/>').append('Plantilla >');
 				$aTmp.addClass('dropdown-item');
 				$aTmp.appendTo($liTmp);
 
