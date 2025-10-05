@@ -44,10 +44,14 @@ var inApp = typeof app7 == 'object';
 	wapp.rootFolder = await dSession.folder(wapp.rootFolderId);
 	wapp.messagesFolder = await wapp.rootFolder.folder('messages');
 	wapp.templatesFolder = await wapp.rootFolder.folder('templates');
-	wapp.templates = (await wapp.templatesFolder.search({
-		fields: 'name',
-		order: 'name',
-	})).map(it => it['NAME']);
+	wapp.templates = {
+		twilio: await wapp.modWapp.twTemplates(),
+		local: await wapp.templatesFolder.search({
+			fields: 'name, text, content_sid',
+			order: 'name',
+		}),
+	}
+	debugger
 
 	wapp.loggedUser = await dSession.currentUser;
 
@@ -315,7 +319,6 @@ var wapp = {
 								var $a = $('<a class="dropdown-item" />').appendTo($li);
 								$a.append(it);
 								$a.click(function (e) {
-									debugger
 									wapp.putTemplate(this.text, $(this).closest('.wapp-footer').find('.wapp-reply')[0]);
 								});
 							});
