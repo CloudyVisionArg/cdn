@@ -848,6 +848,11 @@ var wapp = {
 			var extNumberRev = wapp.cleanNumber(extNumber);
 			var intNumberRev = wapp.cleanNumber(intNumber);
 
+			if (extNumberRev.length < 10 || intNumberRev.length < 10) {
+				console.warn('Nros incorrectos', extNumberRev, intNumberRev);
+				return;
+			}
+			
 			var incLoad = false;
 			var lastLoad = pChat.attr('data-last-load');
 			if (lastLoad) lastLoad = new Date(new Date(lastLoad) - 5000);
