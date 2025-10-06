@@ -1131,6 +1131,10 @@ var wapp = {
 				res.text += res.body;
 			} else if (typeKey == 'twilio/location') {
 				res.text = type.label;
+			} else if (typeKey == 'twilio/call-to-action') {
+				res.text = type.body;
+			} else {
+				res.text = res.body;
 			}
 
 			return res;
