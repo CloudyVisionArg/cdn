@@ -1424,13 +1424,14 @@ wapp.templatePicker = {
         `;
         this.picker.appendChild(footer);
 
-        // Event listeners
+        // Agregar al DOM primero
+        document.body.appendChild(this.picker);
+        
+        // Event listeners después de agregar al DOM
         this._setupEventListeners(searchInput, content);
         
         // Poblar templates inicialmente
         this._populateTemplates(content);
-
-        document.body.appendChild(this.picker);
     },
 
     // Setup event listeners
