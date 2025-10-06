@@ -1128,7 +1128,7 @@ var wapp = {
 				if (res.text) res.text += '\n';
 				res.text += (type.subtitle || '');
 				if (res.text) res.text += '\n';
-				res.text += res.body;
+				res.text += (type.body || '');
 			} else if (typeKey == 'twilio/location') {
 				res.text = type.label;
 			} else if (typeKey == 'twilio/call-to-action') {
