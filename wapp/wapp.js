@@ -314,6 +314,9 @@ var wapp = {
 						return;
 					}
 					
+					// Cerrar el dropdown menu
+					$(this).closest('.dropdown-menu').hide();
+					
 					const $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
 					const x = e.pageX;
 					const y = e.pageY + 10;
