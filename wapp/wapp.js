@@ -1108,13 +1108,13 @@ var wapp = {
 		};
 
 		function twTempResume(temp) {
-			debugger;
 			let typeKey = Object.keys(temp.types)[0];
 			let type = temp.types[typeKey];
 			let res = {
 				sid: temp.sid,
 				variables: temp.variables,
 			}
+			console.log(typeKey, type);
 
 			// https://www.twilio.com/docs/content/content-types-overview
 			if (typeKey == 'twilio/card') {
