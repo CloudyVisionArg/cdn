@@ -1093,6 +1093,7 @@ var wapp = {
 		if (template.account_sid) {
 			// Twilio
 			let tmpRes = twTempResume(template);
+			insertAtCaret(target, tmpRes.text);
 
 		} else {
 			// Local
@@ -1107,8 +1108,31 @@ var wapp = {
 		};
 
 		function twTempResume(temp) {
-			let type = Object.keys(temp.types)[0];
-			debugger;
+			let typeKey = Object.keys(temp.types)[0];
+			let type = temp.types[typeKey];
+			let res = {
+				sid: temp.sid,
+				variables: temp.variables,
+			}
+
+			// https://www.twilio.com/docs/content/content-types-overview
+			if (typeKey == 'twilio/card') {
+				res.text = type.title;
+			} else if (typeKey == 'twilio/quick-reply') {
+				res.text = type.body;
+			} else if (typeKey == 'twilio/text') {
+				res.text = type.body;
+			} else if (typeKey == 'twilio/catalog') {
+				res.text = (type.title || '');
+				if (res.text) res.text += '\n';
+				res.text += (type.subtitle || '');
+				if (res.text) res.text += '\n';
+				res.text += res.body;
+			} else if (typeKey == 'twilio/location') {
+				res.text = type.label;
+			}
+
+			return res;
 		}
 	},
 	
