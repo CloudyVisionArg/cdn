@@ -965,11 +965,6 @@ var wapp = {
 			console.error(err);
 			pChat.find('div.wapp-loadmore a').hide();
 			wapp.cursorLoading(false);
-			if (toast) {
-				toast(dSession.utils.errMsg(err));
-			} else {
-				alert(dSession.utils.errMsg(err));
-			}
 			debugger;
 		}
 	},
