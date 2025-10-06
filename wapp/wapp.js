@@ -1108,6 +1108,7 @@ var wapp = {
 		};
 
 		function twTempResume(temp) {
+			debugger;
 			let typeKey = Object.keys(temp.types)[0];
 			let type = temp.types[typeKey];
 			let res = {
