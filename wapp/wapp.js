@@ -301,22 +301,24 @@ var wapp = {
 					class: 'dropdown-submenu',
 				}).appendTo($menu);
 
-				var $aTmp = $('<a/>').append('Plantilla >>');
+				var $aTmp = $('<a/>').append('Plantilla');
 				$aTmp.addClass('dropdown-item');
 				$aTmp.appendTo($liTmp);
 
 				$aTmp.click(function (e) {
-					e.preventDefault();
-					e.stopPropagation();
+					//e.preventDefault();
+					//e.stopPropagation();
 					
 					if (!wapp.templates) {
 						alert('No hay plantillas definidas');
 						return;
 					}
 					
+					/*
 					// Cerrar el dropdown menu correctamente
 					$(this).closest('.dropdown').removeClass('show');
 					$(this).closest('.dropdown-menu').removeClass('show');
+					*/
 					
 					const $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
 					const x = e.pageX;
