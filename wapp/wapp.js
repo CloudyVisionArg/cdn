@@ -306,46 +306,19 @@ var wapp = {
 				$aTmp.appendTo($liTmp);
 
 				$aTmp.click(function (e) {
-					var $this = $(this);
-					if (wapp.templates) {
-						if ($this.next('ul').length == 0) {
-							var $ul = $('<ul/>', {
-								class: 'dropdown-menu',
-							}).appendTo($this.parent());
-			
-							var $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
-
-							// De Twilio
-							$ul.append('<li><h5 class="dropdown-header">De Twilio</h5></li>');
-							wapp.templates.twilio.forEach(it => {
-								var $li = $('<li/>').appendTo($ul);
-								var $a = $('<a class="dropdown-item" />').appendTo($li);
-								$a.append(it.friendly_name);
-								$a.click(function (e) {
-									wapp.putTemplate(it, $reply);
-								});
-							});
-
-							// Locales
-							$ul.append('<li><h5 class="dropdown-header">Locales</h5></li>');
-							wapp.templates.local.forEach(it => {
-								var $li = $('<li/>').appendTo($ul);
-								var $a = $('<a class="dropdown-item" />').appendTo($li);
-								$a.append(it['NAME']);
-								$a.click(function (e) {
-									wapp.putTemplate(it, $reply);
-								});
-							});
-		
-						};
-
-						$this.next('ul').toggle();
-						e.stopPropagation();
-						e.preventDefault();
-
-					} else {
+					e.preventDefault();
+					e.stopPropagation();
+					
+					if (!wapp.templates) {
 						alert('No hay plantillas definidas');
+						return;
 					}
+					
+					const $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
+					const x = e.pageX;
+					const y = e.pageY + 10;
+					
+					wapp.templatePicker.showPicker(x, y, $reply);
 				});
 
 				$('<li/>', {
@@ -1343,3 +1316,391 @@ var wapp = {
 	}
 
 }
+
+// Template Picker con búsqueda
+wapp.templatePicker = {
+    picker: null,
+    currentTarget: null,
+    
+    // Crear el template picker
+    createPicker() {
+        // Remover picker existente
+        const existingPicker = document.getElementById('templatePicker');
+        if (existingPicker) existingPicker.remove();
+
+        // Crear container principal
+        this.picker = document.createElement('div');
+        this.picker.id = 'templatePicker';
+        this.picker.style.cssText = `
+            background-color: #fff;
+            border-radius: 12px;
+            display: none;
+            position: absolute;
+            padding: 0;
+            height: 400px;
+            width: 450px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border: 1px solid #ddd;
+            z-index: 10000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        `;
+
+        // Header
+        const header = document.createElement('div');
+        header.style.cssText = `
+            background-color: #f8f9fa;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e9ecef;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        `;
+        header.innerHTML = `
+            <span style="font-weight: 600; color: #495057;">📋 Plantillas</span>
+            <button id="templatePickerClose" style="
+                background: none;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                color: #6c757d;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+            ">❌</button>
+        `;
+        this.picker.appendChild(header);
+
+        // Search input
+        const searchContainer = document.createElement('div');
+        searchContainer.style.cssText = `
+            padding: 12px 16px;
+            border-bottom: 1px solid #e9ecef;
+        `;
+        
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.placeholder = '🔍 Buscar plantillas...';
+        searchInput.style.cssText = `
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        `;
+        searchContainer.appendChild(searchInput);
+        this.picker.appendChild(searchContainer);
+
+        // Content container
+        const content = document.createElement('div');
+        content.id = 'templateContent';
+        content.style.cssText = `
+            height: 280px;
+            overflow-y: auto;
+            padding: 12px 0;
+        `;
+        this.picker.appendChild(content);
+
+        // Footer
+        const footer = document.createElement('div');
+        footer.style.cssText = `
+            padding: 12px 16px;
+            border-top: 1px solid #e9ecef;
+            border-radius: 0 0 12px 12px;
+            background-color: #f8f9fa;
+            text-align: right;
+        `;
+        footer.innerHTML = `
+            <button id="templateCancel" style="
+                background-color: #6c757d;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                margin-right: 8px;
+                cursor: pointer;
+            ">Cancelar</button>
+        `;
+        this.picker.appendChild(footer);
+
+        // Event listeners
+        this._setupEventListeners(searchInput, content);
+        
+        // Poblar templates inicialmente
+        this._populateTemplates(content);
+
+        document.body.appendChild(this.picker);
+    },
+
+    // Setup event listeners
+    _setupEventListeners(searchInput, content) {
+        // Búsqueda
+        searchInput.addEventListener('input', (e) => {
+            this._filterTemplates(content, e.target.value);
+        });
+
+        // Prevenir cierre al clickear dentro
+        this.picker.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Cerrar picker
+        document.getElementById('templatePickerClose').addEventListener('click', () => {
+            this.hidePicker();
+        });
+        
+        document.getElementById('templateCancel').addEventListener('click', () => {
+            this.hidePicker();
+        });
+
+        // Cerrar al clickear fuera
+        document.addEventListener('click', (e) => {
+            if (!this.picker.contains(e.target)) {
+                this.hidePicker();
+            }
+        });
+    },
+
+    // Poblar templates
+    _populateTemplates(container, filter = '') {
+        container.innerHTML = '';
+        
+        if (!wapp.templates) {
+            container.innerHTML = '<div style="text-align: center; padding: 20px; color: #6c757d;">No hay plantillas disponibles</div>';
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        if (filter) {
+            // Mostrar resultados filtrados
+            this._showFilteredResults(fragment, filter);
+        } else {
+            // Mostrar por categorías
+            this._showCategorizedTemplates(fragment);
+        }
+
+        container.appendChild(fragment);
+    },
+
+    // Mostrar resultados filtrados
+    _showFilteredResults(container, filter) {
+        const results = this._filterAllTemplates(filter);
+        
+        if (results.length === 0) {
+            const noResults = document.createElement('div');
+            noResults.style.cssText = 'text-align: center; padding: 20px; color: #6c757d;';
+            noResults.textContent = `No se encontraron plantillas para "${filter}"`;
+            container.appendChild(noResults);
+            return;
+        }
+
+        // Header de resultados
+        const resultsHeader = document.createElement('div');
+        resultsHeader.style.cssText = 'padding: 8px 16px; font-weight: 600; color: #495057; border-bottom: 1px solid #e9ecef;';
+        resultsHeader.textContent = `🔍 Resultados para "${filter}" (${results.length})`;
+        container.appendChild(resultsHeader);
+
+        // Lista de resultados
+        results.forEach(result => {
+            const item = this._createTemplateItem(result.template, result.type, result.name);
+            container.appendChild(item);
+        });
+    },
+
+    // Mostrar plantillas por categorías
+    _showCategorizedTemplates(container) {
+        // Sección Twilio
+        if (wapp.templates.twilio && wapp.templates.twilio.length > 0) {
+            const twilioSection = this._createSection('📁 De Twilio', wapp.templates.twilio, 'twilio');
+            container.appendChild(twilioSection);
+        }
+
+        // Sección Local
+        if (wapp.templates.local && wapp.templates.local.length > 0) {
+            const localSection = this._createSection('📁 Locales', wapp.templates.local, 'local');
+            container.appendChild(localSection);
+        }
+    },
+
+    // Crear sección de templates
+    _createSection(title, templates, type) {
+        const section = document.createElement('div');
+        section.style.cssText = 'margin-bottom: 16px;';
+
+        // Header de sección
+        const header = document.createElement('div');
+        header.style.cssText = `
+            padding: 8px 16px;
+            font-weight: 600;
+            color: #495057;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            user-select: none;
+        `;
+        header.textContent = title;
+        section.appendChild(header);
+
+        // Contenido de sección
+        const content = document.createElement('div');
+        content.style.cssText = 'border-bottom: 1px solid #e9ecef;';
+
+        templates.forEach(template => {
+            const name = type === 'twilio' ? template.friendly_name : template.NAME;
+            const item = this._createTemplateItem(template, type, name);
+            content.appendChild(item);
+        });
+
+        section.appendChild(content);
+
+        // Toggle collapse/expand
+        header.addEventListener('click', () => {
+            const isHidden = content.style.display === 'none';
+            content.style.display = isHidden ? 'block' : 'none';
+            header.textContent = title + (isHidden ? '' : ' ▼');
+        });
+
+        return section;
+    },
+
+    // Crear item de template
+    _createTemplateItem(template, type, name) {
+        const item = document.createElement('div');
+        item.style.cssText = `
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f3f4;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        `;
+
+        const icon = type === 'twilio' ? '📨' : '📄';
+        const tag = type === 'twilio' ? '[Twilio]' : '[Local]';
+        const tagColor = type === 'twilio' ? '#17a2b8' : '#28a745';
+
+        item.innerHTML = `
+            <span style="display: flex; align-items: center;">
+                <span style="margin-right: 8px;">${icon}</span>
+                <span>${name}</span>
+            </span>
+            <span style="
+                background-color: ${tagColor};
+                color: white;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 11px;
+                font-weight: 500;
+            ">${tag}</span>
+        `;
+
+        // Hover effect
+        item.addEventListener('mouseenter', () => {
+            item.style.backgroundColor = '#f8f9fa';
+        });
+
+        item.addEventListener('mouseleave', () => {
+            item.style.backgroundColor = 'transparent';
+        });
+
+        // Click handler
+        item.addEventListener('click', () => {
+            this._selectTemplate(template);
+        });
+
+        return item;
+    },
+
+    // Filtrar todas las plantillas
+    _filterAllTemplates(filter) {
+        const results = [];
+        const search = filter.toLowerCase();
+
+        // Filtrar Twilio
+        if (wapp.templates.twilio) {
+            wapp.templates.twilio.forEach(template => {
+                if (template.friendly_name.toLowerCase().includes(search)) {
+                    results.push({
+                        type: 'twilio',
+                        name: template.friendly_name,
+                        template: template
+                    });
+                }
+            });
+        }
+
+        // Filtrar Local
+        if (wapp.templates.local) {
+            wapp.templates.local.forEach(template => {
+                if (template.NAME.toLowerCase().includes(search)) {
+                    results.push({
+                        type: 'local',
+                        name: template.NAME,
+                        template: template
+                    });
+                }
+            });
+        }
+
+        return results;
+    },
+
+    // Filtrar plantillas
+    _filterTemplates(container, filter) {
+        this._populateTemplates(container, filter);
+    },
+
+    // Seleccionar plantilla
+    _selectTemplate(template) {
+        if (this.currentTarget) {
+            wapp.putTemplate(template, this.currentTarget);
+        }
+        this.hidePicker();
+    },
+
+    // Mostrar picker
+    showPicker(x, y, targetElement) {
+        if (!this.picker) {
+            this.createPicker();
+        }
+
+        this.currentTarget = targetElement;
+
+        // Ajustar posición
+        const pickerWidth = 450;
+        const pickerHeight = 400;
+        
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        const maxX = scrollLeft + window.innerWidth - pickerWidth - 10;
+        const maxY = scrollTop + window.innerHeight - pickerHeight - 10;
+        
+        x = Math.min(x, maxX);
+        y = Math.min(y, maxY);
+
+        this.picker.style.left = x + 'px';
+        this.picker.style.top = y + 'px';
+        this.picker.style.display = 'block';
+
+        // Focus en search input
+        const searchInput = this.picker.querySelector('input');
+        if (searchInput) {
+            setTimeout(() => {
+                searchInput.focus();
+                searchInput.value = '';
+                this._populateTemplates(document.getElementById('templateContent'));
+            }, 100);
+        }
+    },
+
+    // Ocultar picker
+    hidePicker() {
+        if (this.picker) {
+            this.picker.style.display = 'none';
+        }
+    }
+};
