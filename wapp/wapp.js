@@ -1092,6 +1092,8 @@ var wapp = {
 	putTemplate: function (template, target) {
 		if (template.account_sid) {
 			// Twilio
+			let tmpRes = twTempResume(template);
+
 		} else {
 			// Local
 			if (template["CONTENT_SID"] != null) {
@@ -1103,6 +1105,11 @@ var wapp = {
 			wapp.inputResize(target);
 			$(target).focus();
 		};
+
+		function twTempResume(temp) {
+			let type = Object.keys(temp)[0];
+			debugger;
+		}
 	},
 	
 	msgMedia: function (pSid) {
