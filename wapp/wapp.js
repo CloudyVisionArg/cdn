@@ -314,8 +314,9 @@ var wapp = {
 						return;
 					}
 					
-					// Cerrar el dropdown menu
-					$(this).closest('.dropdown-menu').hide();
+					// Cerrar el dropdown menu correctamente
+					$(this).closest('.dropdown').removeClass('show');
+					$(this).closest('.dropdown-menu').removeClass('show');
 					
 					const $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
 					const x = e.pageX;
