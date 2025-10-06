@@ -306,24 +306,14 @@ var wapp = {
 				$aTmp.appendTo($liTmp);
 
 				$aTmp.click(function (e) {
-					//e.preventDefault();
-					//e.stopPropagation();
-					
 					if (!wapp.templates) {
 						alert('No hay plantillas definidas');
 						return;
 					}
 					
-					/*
-					// Cerrar el dropdown menu correctamente
-					$(this).closest('.dropdown').removeClass('show');
-					$(this).closest('.dropdown-menu').removeClass('show');
-					*/
-					
 					const $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
 					const x = e.pageX;
 					const y = e.pageY + 10;
-					
 					wapp.templatePicker.showPicker(x, y, $reply);
 				});
 
@@ -1071,6 +1061,7 @@ var wapp = {
 	putTemplate: function (template, target) {
 		if (template.account_sid) {
 			// Twilio
+			$(target).attr('data-content-sid', template.sid);
 			let tmpRes = twTempResume(template);
 			insertAtCaret(target, tmpRes.text);
 
@@ -1082,9 +1073,10 @@ var wapp = {
 				$(target).removeAttr('data-content-sid');
 			}
 			insertAtCaret(target, template['TEXT']);
-			wapp.inputResize(target);
-			$(target).focus();
 		};
+
+		wapp.inputResize(target);
+		$(target).focus();
 
 		function twTempResume(temp) {
 			let typeKey = Object.keys(temp.types)[0];
@@ -1651,10 +1643,183 @@ wapp.templatePicker = {
 
     // Seleccionar plantilla
     _selectTemplate(template) {
-        if (this.currentTarget) {
-            wapp.putTemplate(template, this.currentTarget);
+        const hasVariables = template.variables && Object.keys(template.variables).length > 0;
+        
+        if (hasVariables) {
+            this._showVariablesModal(template);
+        } else {
+            if (this.currentTarget) {
+                wapp.putTemplate(template, this.currentTarget);
+            }
+            this.hidePicker();
         }
-        this.hidePicker();
+    },
+
+    // Modal para completar variables
+    _showVariablesModal(template) {
+        // Crear modal
+        const modal = document.createElement('div');
+        modal.id = 'variablesModal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 15000;
+        `;
+
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+            background: white;
+            border-radius: 12px;
+            width: 400px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        `;
+
+        // Header
+        const header = document.createElement('div');
+        header.style.cssText = `
+            padding: 16px 20px;
+            border-bottom: 1px solid #e9ecef;
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        `;
+        header.textContent = 'Completar Variables';
+
+        // Body
+        const body = document.createElement('div');
+        body.style.cssText = `
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        `;
+
+        // Crear input para cada variable
+        Object.keys(template.variables).forEach(varName => {
+            const row = document.createElement('div');
+            row.style.cssText = `
+                display: flex;
+                align-items: center;
+                margin-bottom: 16px;
+                gap: 12px;
+            `;
+
+            const label = document.createElement('span');
+            label.style.cssText = `
+                min-width: 100px;
+                font-weight: 500;
+                color: #495057;
+            `;
+            label.textContent = varName + ':';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `modal_var_${varName}`;
+            input.value = template.variables[varName] || '';
+            input.placeholder = `Valor para ${varName}`;
+            input.style.cssText = `
+                flex: 1;
+                padding: 8px 12px;
+                border: 2px solid #e9ecef;
+                border-radius: 6px;
+                font-size: 14px;
+            `;
+
+            row.appendChild(label);
+            row.appendChild(input);
+            body.appendChild(row);
+        });
+
+        // Footer
+        const footer = document.createElement('div');
+        footer.style.cssText = `
+            padding: 16px 20px;
+            border-top: 1px solid #e9ecef;
+            background-color: #f8f9fa;
+            text-align: right;
+            gap: 10px;
+            display: flex;
+            justify-content: flex-end;
+        `;
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'Cancelar';
+        cancelBtn.style.cssText = `
+            padding: 8px 16px;
+            border: 2px solid #6c757d;
+            background: white;
+            color: #6c757d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        `;
+
+        const acceptBtn = document.createElement('button');
+        acceptBtn.textContent = 'Aceptar';
+        acceptBtn.style.cssText = `
+            padding: 8px 16px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        `;
+
+        footer.appendChild(cancelBtn);
+        footer.appendChild(acceptBtn);
+
+        modalContent.appendChild(header);
+        modalContent.appendChild(body);
+        modalContent.appendChild(footer);
+        modal.appendChild(modalContent);
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        cancelBtn.addEventListener('click', () => {
+            modal.remove();
+        });
+
+        acceptBtn.addEventListener('click', () => {
+            // Recolectar valores
+            Object.keys(template.variables).forEach(varName => {
+                const input = document.getElementById(`modal_var_${varName}`);
+                if (input) {
+                    template.variables[varName] = input.value || '';
+                }
+            });
+
+            // Aplicar plantilla
+            if (this.currentTarget) {
+                wapp.putTemplate(template, this.currentTarget);
+            }
+            
+            modal.remove();
+            this.hidePicker();
+        });
+
+        // Cerrar con Escape
+        document.addEventListener('keydown', function escapeHandler(e) {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', escapeHandler);
+            }
+        });
+
+        // Focus en primer input
+        setTimeout(() => {
+            const firstInput = body.querySelector('input');
+            if (firstInput) firstInput.focus();
+        }, 100);
     },
 
     // Mostrar picker
