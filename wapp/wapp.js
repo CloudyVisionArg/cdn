@@ -840,19 +840,16 @@ var wapp = {
 			var intNumber = pChat.attr('data-internal-number');
 
 			if (!extNumber || !intNumber) {
-				pChat.find('div.wapp-loadmore a').hide();
-				wapp.cursorLoading(false);
-				return;
+				throw new Error('Falta especificar nros');
 			}
 
 			var extNumberRev = wapp.cleanNumber(extNumber);
 			var intNumberRev = wapp.cleanNumber(intNumber);
 
 			if (extNumberRev.length < 10 || intNumberRev.length < 10) {
-				console.warn('Nros incorrectos', extNumberRev, intNumberRev);
-				return;
+				throw new Error('Nros incorrectos');
 			}
-			
+
 			var incLoad = false;
 			var lastLoad = pChat.attr('data-last-load');
 			if (lastLoad) lastLoad = new Date(new Date(lastLoad) - 5000);
@@ -965,8 +962,14 @@ var wapp = {
 			}
 
 		} catch(err) {
-			console.log(err);
+			console.error(err);
+			pChat.find('div.wapp-loadmore a').hide();
 			wapp.cursorLoading(false);
+			if (toast) {
+				toast(dSession.utils.errMsg(err));
+			} else {
+				alert(dSession.utils.errMsg(err));
+			}
 			debugger;
 		}
 	},
