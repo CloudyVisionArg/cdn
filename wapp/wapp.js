@@ -999,8 +999,8 @@ var wapp = {
 			// Obtener template del input
 			let temp = $inp[0]._template;
 			if (temp && temp.sid) { // Solo los de Twilio se consideran templates
-				sendObj.contentSid = template.sid;
-				sendObj.contentVariables = template.variables;
+				sendObj.contentSid = temp.sid;
+				sendObj.contentVariables = temp.variables;
 
 				// Agrega el name del number pra poder levantar el service sid del number
 				// Deberia enviarlo directamente como temp.messagingServiceSid
