@@ -1324,6 +1324,7 @@ var wapp = {
 wapp.templatePicker = {
     picker: null,
     currentTarget: null,
+    documentClickHandler: null,
     
     // Crear el template picker
     createPicker() {
@@ -1458,12 +1459,20 @@ wapp.templatePicker = {
             this.hidePicker();
         });
 
-        // Cerrar al clickear fuera
-        document.addEventListener('click', (e) => {
-            if (!this.picker.contains(e.target)) {
+        // Remover handler anterior si existe
+        if (this.documentClickHandler) {
+            document.removeEventListener('click', this.documentClickHandler);
+        }
+        
+        // Crear nuevo handler
+        this.documentClickHandler = (e) => {
+            if (this.picker && this.picker.style.display !== 'none' && !this.picker.contains(e.target)) {
                 this.hidePicker();
             }
-        });
+        };
+        
+        // Agregar el handler
+        document.addEventListener('click', this.documentClickHandler);
     },
 
     // Poblar templates
@@ -1705,6 +1714,13 @@ wapp.templatePicker = {
     hidePicker() {
         if (this.picker) {
             this.picker.style.display = 'none';
+            this.currentTarget = null;
+            
+            // Remover el event listener del documento
+            if (this.documentClickHandler) {
+                document.removeEventListener('click', this.documentClickHandler);
+                this.documentClickHandler = null;
+            }
         }
     }
 };
