@@ -1060,19 +1060,19 @@ var wapp = {
 
 	putTemplate: function (template, target) {
 		if (template.account_sid) {
-			// Twilio
+			// Twilio - reemplazar todo el contenido
 			$(target).attr('data-content-sid', template.sid);
 			let tmpRes = twTempResume(template);
-			insertAtCaret(target, tmpRes.text);
+			$(target).val(tmpRes.text);
 
 		} else {
-			// Local
+			// Local - reemplazar todo el contenido
 			if (template["CONTENT_SID"] != null) {
 				$(target).attr('data-content-sid', template["CONTENT_SID"]);
 			} else {
 				$(target).removeAttr('data-content-sid');
 			}
-			insertAtCaret(target, template['TEXT']);
+			$(target).val(template['TEXT']);
 		};
 
 		wapp.inputResize(target);
