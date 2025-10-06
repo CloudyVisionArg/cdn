@@ -1134,7 +1134,7 @@ var wapp = {
 			} else if (typeKey == 'twilio/call-to-action') {
 				res.text = type.body;
 			} else {
-				res.text = res.body;
+				res.text = type.body;
 			}
 
 			return res;
