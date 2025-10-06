@@ -1007,7 +1007,6 @@ var wapp = {
 				let fromName = $chat.attr('data-internal-name');
 				sendObj.from = fromName;
 			}
-			console.warn(sendObj);
 			
 			let msg;
 			try {
