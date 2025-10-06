@@ -1108,6 +1108,15 @@ var wapp = {
 				res.text = type.body;
 			}
 
+			// Reemplazar variables en el texto
+			if (res.text && temp.variables) {
+				Object.keys(temp.variables).forEach(varName => {
+					const placeholder = `{{${varName}}}`;
+					const value = temp.variables[varName] || '';
+					res.text = res.text.replace(new RegExp(placeholder, 'g'), value);
+				});
+			}
+
 			return res;
 		}
 	},
