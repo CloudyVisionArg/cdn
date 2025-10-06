@@ -996,12 +996,14 @@ var wapp = {
 				body: $inp.val(),
 			};
 			
-			let contentId = $inp.attr("data-content-sid");
-			let contentVariables = $inp.attr("data-content-variables");
-			
-			if( contentId !== undefined && contentId !== null && contentId !== "") {
-				sendObj.contentSid = contentId;
-				sendObj.contentVariables = contentVariables || null;
+			// Obtener template del input
+			let temp = $inp[0]._template;
+			if (temp && temp.sid) { // Solo los de Twilio se consideran templates
+				sendObj.contentSid = template.sid;
+				sendObj.contentVariables = template.variables;
+
+				// Agrega el name del number pra poder levantar el service sid del number
+				// Deberia enviarlo directamente como temp.messagingServiceSid
 				let fromName = $chat.attr('data-internal-name');
 				sendObj.from = fromName;
 			}
@@ -1059,19 +1061,16 @@ var wapp = {
 	},
 
 	putTemplate: function (template, target) {
+		// Guardar template completo en propiedad del nodo
+		target._template = template;
+		
 		if (template.account_sid) {
 			// Twilio - reemplazar todo el contenido
-			$(target).attr('data-content-sid', template.sid);
 			let tmpRes = twTempResume(template);
 			$(target).val(tmpRes.text);
 
 		} else {
 			// Local - reemplazar todo el contenido
-			if (template["CONTENT_SID"] != null) {
-				$(target).attr('data-content-sid', template["CONTENT_SID"]);
-			} else {
-				$(target).removeAttr('data-content-sid');
-			}
 			$(target).val(template['TEXT']);
 		};
 
