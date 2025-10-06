@@ -36,7 +36,7 @@ var inApp = typeof app7 == 'object';
 		repo: 'Global',
 		path: 'wappcnn/wapp.mjs',
 		url: true,
-		fresh: true, //todo: sacar fresh
+		//fresh: true, //todo: sacar fresh
 	}))
 	wapp.modWapp.setContext({ dSession });
 
