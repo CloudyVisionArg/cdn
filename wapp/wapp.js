@@ -1107,7 +1107,7 @@ var wapp = {
 		};
 
 		function twTempResume(temp) {
-			let type = Object.keys(temp)[0];
+			let type = Object.keys(temp.types)[0];
 			debugger;
 		}
 	},
