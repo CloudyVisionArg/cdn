@@ -1576,15 +1576,11 @@ wapp.templatePicker = {
             align-items: center;
         `;
 
-        const icon = type === 'twilio' ? '📨' : '📄';
         const tag = type === 'twilio' ? '[Twilio]' : '[Local]';
         const tagColor = type === 'twilio' ? '#17a2b8' : '#28a745';
 
         item.innerHTML = `
-            <span style="display: flex; align-items: center;">
-                <span style="margin-right: 8px;">${icon}</span>
-                <span>${name}</span>
-            </span>
+            <span>${name}</span>
             <span style="
                 background-color: ${tagColor};
                 color: white;
