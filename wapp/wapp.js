@@ -561,7 +561,7 @@ var wapp = {
 			var $msg = $msgs.filter('[data-sid="' + pMsg.sid + '"]');
 			if ($msg.length > 0) {
 				// Ya esta, actualizo el status
-				$msg.find('.wapp-message-status-container').html(wapp.getTicks(pMsg.status, pMsg.error_code, pMsg.error_message));
+				$msg.find('.wapp-message-status-container').html(wapp.getTicks(pMsg.status, pMsg.errorCode, pMsg.errorMessage));
 			} else {
 				$msg = $msgs.first();
 				wapp.renderMsg(pMsg, function (msgRow) {
@@ -737,7 +737,7 @@ var wapp = {
 			$msgTime.append(wapp.formatDate(dt));
 			
 			if (pMsg.status) {
-				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status, pMsg.error_code, pMsg.error_message) + '</span>');
+				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status, pMsg.errorCode, pMsg.errorMessage) + '</span>');
 			}
 			
 			if (pCallback) pCallback($row);
@@ -811,6 +811,7 @@ var wapp = {
 			}
 			
 			return icon;
+
 		} else if (pStatus == 'failed') {
 			var icon = inApp ? 
 				'<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>' :
@@ -823,6 +824,7 @@ var wapp = {
 			}
 			
 			return icon;
+			
 		} else {
 			return '??';
 		}
@@ -926,6 +928,8 @@ var wapp = {
 						msg.direction = 'outbound';
 						msg.operator = row['ACC_NAME'];
 						msg.status = row['STATUS'];
+						msg.errorCode = row['ERRORCODE'];
+						msg.errorMessage = row['ERRORMESSAGE'];
 					}
 					msg.body = row['BODY'];
 					msg.date = row['CREATED'];
