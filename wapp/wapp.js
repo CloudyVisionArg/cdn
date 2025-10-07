@@ -536,10 +536,10 @@ var wapp = {
 				wapp.send(this);
 			});
 
-			// Agregar handle de redimensionado al final del footer
+			// Agregar handle de redimensionado después del footer
 			var $resizeHandle = $('<div/>', {
 				class: 'wapp-resize-handle',
-			}).appendTo($reply);
+			}).appendTo($cont);
 
 			$cont.attr('data-rendered', '1');
 		}

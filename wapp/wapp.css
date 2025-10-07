@@ -12,6 +12,7 @@
     margin-top: var(--wapp-chat-vertical-margin);
     margin-bottom: var(--wapp-chat-vertical-margin);
     color: #333;
+    position: relative;
 }
 
 .wapp-header {
@@ -45,11 +46,16 @@
 }
 
 .wapp-resize-handle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 8px;
     background-color: transparent;
     cursor: row-resize;
     border-top: 1px solid #ddd;
     margin: 0;
+    z-index: 10;
 }
 
 .wapp-resize-handle:hover {
