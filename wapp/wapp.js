@@ -198,6 +198,8 @@ var wapp = {
 			$cont.find('span.internal-number').html($cont.attr('data-internal-number'));
 
 		} else {
+			$cont.empty();
+			
 			var $heading = $('<div/>', {
 				class: 'wapp-header',
 			}).appendTo($cont);
