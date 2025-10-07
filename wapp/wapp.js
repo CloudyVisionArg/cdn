@@ -375,6 +375,8 @@ var wapp = {
 				var $li = $('<li/>').appendTo($menu);
 				$('<a class="dropdown-item" />').append('Cancelar').appendTo($li);
 
+				//todo: agregar soporte para enviar audios
+				
 			} else {
 				// APP
 
