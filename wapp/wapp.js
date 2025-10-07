@@ -110,6 +110,19 @@ var inApp = typeof app7 == 'object';
 				});
 			});
 		}, 60000);
+		
+		// Event handler for error icon tooltips
+		$(document).on('click', '.error-icon', function(e) {
+			e.stopPropagation();
+			var errorText = $(this).data('error');
+			if (errorText) {
+				if (inApp && typeof toast === 'function') {
+					toast(errorText);
+				} else {
+					alert(errorText);
+				}
+			}
+		});
 	});
 
 	wapp.readyFlag = true;
@@ -804,10 +817,10 @@ var wapp = {
 				'<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>' :
 				'<i class="fa fa-exclamation-circle" />';
 			
-			// Agregar tooltip si hay error
+			// Agregar click tooltip si hay error
 			if (pErrorCode || pErrorMessage) {
 				var errorText = pErrorMessage || `Error ${pErrorCode}`;
-				icon = `<span title="${errorText}" style="cursor: help;">${icon}</span>`;
+				icon = `<span class="error-icon" data-error="${errorText.replace(/"/g, '&quot;')}" style="cursor: pointer;">${icon}</span>`;
 			}
 			
 			return icon;
@@ -817,10 +830,10 @@ var wapp = {
 				'<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>' :
 				'<i class="fa fa-exclamation-triangle" />';
 			
-			// Agregar tooltip si hay error
+			// Agregar click tooltip si hay error
 			if (pErrorCode || pErrorMessage) {
 				var errorText = pErrorMessage || `Error ${pErrorCode}`;
-				icon = `<span title="${errorText}" style="cursor: help;">${icon}</span>`;
+				icon = `<span class="error-icon" data-error="${errorText.replace(/"/g, '&quot;')}" style="cursor: pointer;">${icon}</span>`;
 			}
 			
 			return icon;
