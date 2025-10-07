@@ -116,11 +116,7 @@ var inApp = typeof app7 == 'object';
 			e.stopPropagation();
 			var errorText = $(this).data('error');
 			if (errorText) {
-				if (inApp && typeof toast === 'function') {
-					toast(errorText);
-				} else {
-					alert(errorText);
-				}
+				wapp.toast(errorText);
 			}
 		});
 	});
@@ -136,6 +132,18 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 	s3: undefined,
+
+	toast: function (pMsg) {
+		if (inApp) {
+			toast(pMsg);
+		} else {
+			if (typeof(toast) == 'function') {
+				toast(pMsg);
+			} else {
+				alert(pMsg);
+			}
+		}
+	},
 
 	ready: function (pCallback) {
 		var interv = setInterval(function () {
@@ -322,7 +330,7 @@ var wapp = {
 
 				$aTmp.click(function (e) {
 					if (!wapp.templates) {
-						alert('No hay plantillas definidas');
+						wapp.toast('No hay plantillas definidas');
 						return;
 					}
 					
@@ -387,7 +395,8 @@ var wapp = {
 									onClick: function (actions, e) {
 										actions.close();
 	
-										if (wapp.templates && wapp.templates.length > 0) {
+										//todo: dar soporte a los templates de twilio en app
+										if (wapp.templates?.local && wapp.templates.local.length > 0) {
 											var tempButtons = [
 												[],
 												[{
@@ -397,7 +406,7 @@ var wapp = {
 												}]
 											];
 	
-											wapp.templates.forEach(it => {
+											wapp.templates.local.forEach(it => {
 												tempButtons[0].push({
 													text: it,
 													onClick: tempClick,
@@ -1047,7 +1056,7 @@ var wapp = {
 				msg = await wapp.modWapp.send(sendObj);
 			} catch(er) {
 				console.error(er);
-				alert(dSession.utils.errMsg(er));
+				wapp.toast(dSession.utils.errMsg(er));
 				wapp.cursorLoading(false);
 				wapp.sending = false;
 				return;
@@ -1250,7 +1259,7 @@ var wapp = {
 							if (err) {
 								debugger;
 								wapp.cursorLoading(false);
-								alert(errMsg(err));
+								wapp.toast(errMsg(err));
 
 							} else {
 								var $chat = $(pChat);
@@ -1269,7 +1278,7 @@ var wapp = {
 									let msg = await wapp.modWapp.send(sendObj);
 								} catch(er) {
 									console.error(er);
-									alert(dSession.utils.errMsg(er));
+									wapp.toast(dSession.utils.errMsg(er));
 									wapp.cursorLoading(false);
 									wapp.sending = false;
 									return;
