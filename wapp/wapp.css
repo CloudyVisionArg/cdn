@@ -42,18 +42,14 @@
     min-height: 200px;
     max-height: 600px;
     overflow-x: hidden;
-    position: relative;
 }
 
 .wapp-resize-handle {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     height: 8px;
     background-color: transparent;
     cursor: row-resize;
-    z-index: 10;
+    border-top: 1px solid #ddd;
+    margin: 0;
 }
 
 .wapp-resize-handle:hover {

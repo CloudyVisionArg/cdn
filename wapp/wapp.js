@@ -123,7 +123,7 @@ var inApp = typeof app7 == 'object';
 		// Event handler for chat resize
 		$(document).on('mousedown', '.wapp-resize-handle', function(e) {
 			e.preventDefault();
-			var $messages = $(this).parent();
+			var $messages = $(this).closest('.wapp-chat').find('.wapp-messages');
 			var startY = e.pageY;
 			var startHeight = $messages.height();
 			
@@ -277,11 +277,6 @@ var wapp = {
 			var $messages = $('<div/>', {
 				class: 'wapp-messages',
 			}).appendTo($cont);
-			
-			// Agregar handle de redimensionado
-			var $resizeHandle = $('<div/>', {
-				class: 'wapp-resize-handle',
-			}).appendTo($messages);
 			
 			// Observer que salta cdo se pone visible el div y dispara un evento
 			let options = {
@@ -540,6 +535,11 @@ var wapp = {
 			$send.click(function () {
 				wapp.send(this);
 			});
+
+			// Agregar handle de redimensionado al final del footer
+			var $resizeHandle = $('<div/>', {
+				class: 'wapp-resize-handle',
+			}).appendTo($reply);
 
 			$cont.attr('data-rendered', '1');
 		}
