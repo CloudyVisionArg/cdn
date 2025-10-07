@@ -38,9 +38,26 @@
     border: 1px solid #c8c9c9;
     border-radius: 5px;
     overflow-y: auto;
-    max-height: 300px;
+    height: 300px;
     min-height: 200px;
+    max-height: 600px;
     overflow-x: hidden;
+    position: relative;
+}
+
+.wapp-resize-handle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background-color: transparent;
+    cursor: row-resize;
+    z-index: 10;
+}
+
+.wapp-resize-handle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .wapp-button {

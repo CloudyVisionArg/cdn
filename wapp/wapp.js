@@ -119,6 +119,33 @@ var inApp = typeof app7 == 'object';
 				wapp.toast(errorText);
 			}
 		});
+		
+		// Event handler for chat resize
+		$(document).on('mousedown', '.wapp-resize-handle', function(e) {
+			e.preventDefault();
+			var $messages = $(this).parent();
+			var startY = e.pageY;
+			var startHeight = $messages.height();
+			
+			function doDrag(e) {
+				var newHeight = startHeight + (e.pageY - startY);
+				var minHeight = parseInt($messages.css('min-height'));
+				var maxHeight = parseInt($messages.css('max-height'));
+				
+				if (newHeight < minHeight) newHeight = minHeight;
+				if (newHeight > maxHeight) newHeight = maxHeight;
+				
+				$messages.height(newHeight);
+			}
+			
+			function stopDrag() {
+				$(document).off('mousemove', doDrag);
+				$(document).off('mouseup', stopDrag);
+			}
+			
+			$(document).on('mousemove', doDrag);
+			$(document).on('mouseup', stopDrag);
+		});
 	});
 
 	wapp.readyFlag = true;
@@ -250,6 +277,11 @@ var wapp = {
 			var $messages = $('<div/>', {
 				class: 'wapp-messages',
 			}).appendTo($cont);
+			
+			// Agregar handle de redimensionado
+			var $resizeHandle = $('<div/>', {
+				class: 'wapp-resize-handle',
+			}).appendTo($messages);
 			
 			// Observer que salta cdo se pone visible el div y dispara un evento
 			let options = {
