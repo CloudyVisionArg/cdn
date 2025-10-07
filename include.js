@@ -24,9 +24,9 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 509 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 510 });
+    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 510 });
     scripts.push({ id: 'emojis', path: '/emojis.js', version: 508 });
-    scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 507 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 506 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 505, hasdep: true });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 503, hasdep: true });
