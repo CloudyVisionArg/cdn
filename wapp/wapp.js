@@ -561,7 +561,7 @@ var wapp = {
 			var $msg = $msgs.filter('[data-sid="' + pMsg.sid + '"]');
 			if ($msg.length > 0) {
 				// Ya esta, actualizo el status
-				$msg.find('.wapp-message-status-container').html(wapp.getTicks(pMsg.status));
+				$msg.find('.wapp-message-status-container').html(wapp.getTicks(pMsg.status, pMsg.error_code, pMsg.error_message));
 			} else {
 				$msg = $msgs.first();
 				wapp.renderMsg(pMsg, function (msgRow) {
@@ -737,7 +737,7 @@ var wapp = {
 			$msgTime.append(wapp.formatDate(dt));
 			
 			if (pMsg.status) {
-				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status) + '</span>');
+				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status, pMsg.error_code, pMsg.error_message) + '</span>');
 			}
 			
 			if (pCallback) pCallback($row);
@@ -785,7 +785,7 @@ var wapp = {
 	},
 
 	// Devuelve los ticks segun el status
-	getTicks: function (pStatus) {
+	getTicks: function (pStatus, pErrorCode, pErrorMessage) {
 		var tick = '&#x2713;'
 		if (pStatus == 'read') {
 			return '<span class="wapp-message-status" style="color: #5FC4E8;">' + tick + tick + '</span>';
@@ -800,17 +800,29 @@ var wapp = {
 				return '<i class="fa fa-clock-o" />';
 			}
 		} else if (pStatus == 'undelivered') {
-			if (inApp) {
-				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>';
-			} else {
-				return '<i class="fa fa-exclamation-circle" />';
+			var icon = inApp ? 
+				'<i class="f7-icons" style="font-size: 13px;">exclamationmark_circle_fill</i>' :
+				'<i class="fa fa-exclamation-circle" />';
+			
+			// Agregar tooltip si hay error
+			if (pErrorCode || pErrorMessage) {
+				var errorText = pErrorMessage || `Error ${pErrorCode}`;
+				icon = `<span title="${errorText}" style="cursor: help;">${icon}</span>`;
 			}
+			
+			return icon;
 		} else if (pStatus == 'failed') {
-			if (inApp) {
-				return '<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>';
-			} else {
-				return '<i class="fa fa-exclamation-triangle" />';
+			var icon = inApp ? 
+				'<i class="f7-icons" style="font-size: 13px;">exclamationmark_triangle_fill</i>' :
+				'<i class="fa fa-exclamation-triangle" />';
+			
+			// Agregar tooltip si hay error
+			if (pErrorCode || pErrorMessage) {
+				var errorText = pErrorMessage || `Error ${pErrorCode}`;
+				icon = `<span title="${errorText}" style="cursor: help;">${icon}</span>`;
 			}
+			
+			return icon;
 		} else {
 			return '??';
 		}
