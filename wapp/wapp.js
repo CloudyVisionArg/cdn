@@ -1,6 +1,11 @@
 var inApp = typeof app7 == 'object';
 
 (async function () {
+	$(function() {
+		// Mostrar loading en todos los chats
+		$('div.wapp-chat').html('<div class="wapp-loading"><div class="wapp-spinner"></div>Cargando chat...</div>');
+	});
+	
 	await include([
 		{ id: 'whatsapp-css' },
 		{ id: 'jslib' },
