@@ -1299,8 +1299,9 @@ var wapp = {
 									mediaUrl: data.Location,
 								};
 
+								let msg;
 								try {
-									let msg = await wapp.modWapp.send(sendObj);
+									msg = await wapp.modWapp.send(sendObj);
 								} catch(er) {
 									console.error(er);
 									wapp.toast(dSession.utils.errMsg(er));
