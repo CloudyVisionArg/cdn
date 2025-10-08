@@ -166,8 +166,35 @@ var wapp = {
 	s3: undefined,
 	twilioAuthenticated: false,
 
-	// Autentica con Twilio abriendo ventana con credenciales
-	twAuthenticate: async function(firstMediaUrl) {
+	// Autentica con Twilio
+	twAuthenticate: async function(mediaUrl) {
+
+		const authFrame = document.createElement('iframe');
+		authFrame.style.width = '400px';
+		authFrame.style.height = '300px';
+		authFrame.style.border = '1px solid red';
+
+		authFrame.onload = () => {
+			// Obtener la URL actual del iframe
+			let currentUrl;
+			try {
+				currentUrl = authFrame.contentWindow.location.href;
+			} catch (e) {
+				currentUrl = authFrame.src;
+			}
+					
+			debugger
+		}
+
+
+		authFrame.onerror = () => {
+			debugger
+		};
+				
+		document.body.appendChild(authFrame);
+		authFrame.src = authUrl;
+
+		/*
 		// Simplemente intentar autenticar - si ya está autenticado, no debería mostrar dialog
 		// Si muestra dialog de login, significa que necesita autenticación
 
@@ -240,6 +267,7 @@ var wapp = {
 			console.error('Error authenticating with Twilio:', err);
 			wapp.twilioAuthenticated = true;
 		}
+			*/
 	},
 
 	toast: function (pMsg) {
