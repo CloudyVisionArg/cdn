@@ -1466,7 +1466,7 @@ wapp.templatePicker = {
         content.style.cssText = `
             height: 280px;
             overflow-y: auto;
-            padding: 12px 0;
+            padding: 12px 0 0 0;
         `;
         this.picker.appendChild(content);
 
