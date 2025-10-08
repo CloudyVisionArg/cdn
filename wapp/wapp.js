@@ -168,74 +168,8 @@ var wapp = {
 
 	// Autentica con Twilio abriendo ventana con credenciales
 	twAuthenticate: async function(firstMediaUrl) {
-		// Verificar si ya hay sesión HTTP Basic Auth activa usando iframe visible (para debug)
-		try {
-			const isAuthenticated = await new Promise((resolve) => {
-				const testFrame = document.createElement('iframe');
-				testFrame.style.width = '400px';
-				testFrame.style.height = '300px';
-				testFrame.style.border = '1px solid blue';
-				
-				testFrame.onload = () => {
-					// Esperar un poco para que el contenido se renderice
-					setTimeout(() => {
-						try {
-							debugger
-							// Verificar si la URL actual del iframe cambió (indica redirect exitoso)
-							const currentUrl = testFrame.contentWindow.location.href;
-							
-							if (currentUrl.includes('mms.twiliocdn.com')) {
-								console.log('TEST IFRAME: authenticated - redirected to mms.twiliocdn.com');
-								resolve(true);
-							} else {
-								// Verificar contenido para error de autenticación
-								const iframeContent = testFrame.contentDocument || testFrame.contentWindow.document;
-								const bodyText = iframeContent.body ? (iframeContent.body.innerText || iframeContent.body.textContent || '') : '';
-								
-								console.log('TEST IFRAME: bodyText =', bodyText);
-								
-								if (bodyText.includes('Authenticate') || bodyText.includes('20003') || bodyText.includes('RestException')) {
-									console.log('TEST IFRAME: NOT authenticated (got error response)');
-									resolve(false);
-								} else if (bodyText.length > 0) {
-									console.log('TEST IFRAME: authenticated (loaded successfully)');
-									resolve(true);
-								} else {
-									console.log('TEST IFRAME: no content, assuming not authenticated');
-									resolve(false);
-								}
-							}
-						} catch (err) {
-							// Error de CORS probablemente significa que se redirigió a otro dominio = autenticado
-							console.log('TEST IFRAME: CORS error, probably authenticated');
-							resolve(true);
-						}
-					}, 500);
-				};
-				
-				testFrame.onerror = () => {
-					console.log('TEST IFRAME: onerror triggered - not authenticated');
-					resolve(false);
-				};
-				
-				// Timeout de 10 segundos para la prueba
-				setTimeout(() => {
-					console.log('TEST IFRAME: timeout triggered');
-					resolve(false);
-				}, 10000);
-				
-				document.body.appendChild(testFrame);
-				testFrame.src = firstMediaUrl;
-			});
-			
-			debugger
-			if (isAuthenticated) {
-				wapp.twilioAuthenticated = true;
-				return;
-			}
-		} catch (err) {
-			// Si falla, necesitamos autenticar
-		}
+		// Simplemente intentar autenticar - si ya está autenticado, no debería mostrar dialog
+		// Si muestra dialog de login, significa que necesita autenticación
 
 		if (wapp.twilioAuthenticated) return;
 		
