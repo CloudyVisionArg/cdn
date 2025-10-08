@@ -1458,14 +1458,16 @@ var wapp = {
 							});
 						});
 
-						// Enviar directamente como MP3 (cambiar extensión y MIME type)
-						// Muchos WebM con Opus son procesables por Twilio como MP3
+						// Convertir a MP3 real usando lamejs
+						const mp3Blob = await wapp.convertToMp3(audioBlob);
+						
+						// Crear nombre del archivo como MP3
 						let twilioName = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.mp3`;
 						
-						// Crear un File object marcado como MP3
-						let audioFile = new File([audioBlob], twilioName, { type: 'audio/mpeg' });
+						// Crear un File object con MP3 real
+						let audioFile = new File([mp3Blob], twilioName, { type: 'audio/mpeg' });
 						
-						console.log('Sending audio as MP3 to Twilio, original format:', wapp.currentAudioType.mimeType);
+						console.log('Converted and sending real MP3 to Twilio');
 						
 						wapp.sendMedia(audioFile, pChat);
 
@@ -1569,8 +1571,13 @@ var wapp = {
 		}
 	},
 
-	convertToWav: async function (audioBlob) {
+	convertToMp3: async function (audioBlob) {
 		try {
+			// Primero necesitamos cargar lamejs
+			if (!window.lamejs) {
+				await wapp.loadLameJs();
+			}
+			
 			// Crear AudioContext
 			const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 			
@@ -1580,63 +1587,70 @@ var wapp = {
 			// Decodificar el audio
 			const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 			
-			// Convertir a WAV
-			const wavBlob = wapp.audioBufferToWav(audioBuffer);
+			// Convertir a MP3
+			const mp3Blob = wapp.audioBufferToMp3(audioBuffer);
 			
 			audioContext.close();
-			return wavBlob;
+			return mp3Blob;
 			
 		} catch (error) {
-			console.error('Error converting audio:', error);
+			console.error('Error converting audio to MP3:', error);
+			wapp.toast('Error al convertir audio. Enviando formato original.');
 			// Si falla la conversión, devolver el blob original
 			return audioBlob;
 		}
 	},
 
-	audioBufferToWav: function (buffer) {
-		const length = buffer.length;
-		const numberOfChannels = buffer.numberOfChannels;
-		const sampleRate = buffer.sampleRate;
-		const arrayBuffer = new ArrayBuffer(44 + length * numberOfChannels * 2);
-		const view = new DataView(arrayBuffer);
-		
-		// WAV header
-		const writeString = (offset, string) => {
-			for (let i = 0; i < string.length; i++) {
-				view.setUint8(offset + i, string.charCodeAt(i));
+	loadLameJs: async function () {
+		return new Promise((resolve, reject) => {
+			if (window.lamejs) {
+				resolve();
+				return;
 			}
-		};
+			
+			const script = document.createElement('script');
+			script.src = 'https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js';
+			script.onload = () => resolve();
+			script.onerror = () => reject(new Error('Failed to load lamejs'));
+			document.head.appendChild(script);
+		});
+	},
+
+	audioBufferToMp3: function (audioBuffer) {
+		const sampleRate = audioBuffer.sampleRate;
+		const samples = audioBuffer.getChannelData(0); // Mono
 		
-		let offset = 0;
-		writeString(offset, 'RIFF'); offset += 4;
-		view.setUint32(offset, 36 + length * numberOfChannels * 2, true); offset += 4;
-		writeString(offset, 'WAVE'); offset += 4;
-		writeString(offset, 'fmt '); offset += 4;
-		view.setUint32(offset, 16, true); offset += 4;
-		view.setUint16(offset, 1, true); offset += 2;
-		view.setUint16(offset, numberOfChannels, true); offset += 2;
-		view.setUint32(offset, sampleRate, true); offset += 4;
-		view.setUint32(offset, sampleRate * numberOfChannels * 2, true); offset += 4;
-		view.setUint16(offset, numberOfChannels * 2, true); offset += 2;
-		view.setUint16(offset, 16, true); offset += 2;
-		writeString(offset, 'data'); offset += 4;
-		view.setUint32(offset, length * numberOfChannels * 2, true); offset += 4;
+		// Configurar lamejs
+		const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, 128); // mono, sample rate, bitrate
 		
-		// Escribir los datos de audio
-		const channels = [];
-		for (let i = 0; i < numberOfChannels; i++) {
-			channels.push(buffer.getChannelData(i));
+		// Convertir samples a Int16Array
+		const sampleBlockSize = 1152; // Tamaño estándar para MP3
+		const mp3Data = [];
+		
+		// Convertir samples float32 a int16
+		const int16Samples = new Int16Array(samples.length);
+		for (let i = 0; i < samples.length; i++) {
+			const s = Math.max(-1, Math.min(1, samples[i]));
+			int16Samples[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
 		}
 		
-		for (let i = 0; i < length; i++) {
-			for (let channel = 0; channel < numberOfChannels; channel++) {
-				const sample = Math.max(-1, Math.min(1, channels[channel][i]));
-				view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
-				offset += 2;
+		// Codificar en chunks
+		for (let i = 0; i < int16Samples.length; i += sampleBlockSize) {
+			const sampleChunk = int16Samples.subarray(i, i + sampleBlockSize);
+			const mp3buf = mp3encoder.encodeBuffer(sampleChunk);
+			if (mp3buf.length > 0) {
+				mp3Data.push(mp3buf);
 			}
 		}
 		
-		return new Blob([arrayBuffer], { type: 'audio/wav' });
+		// Finalizar
+		const mp3buf = mp3encoder.flush();
+		if (mp3buf.length > 0) {
+			mp3Data.push(mp3buf);
+		}
+		
+		// Crear blob
+		return new Blob(mp3Data, { type: 'audio/mpeg' });
 	}
 
 }
