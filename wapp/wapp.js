@@ -164,118 +164,6 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 	s3: undefined,
-	twilioAuthenticated: false,
-
-	// Autentica con Twilio
-	twAuthenticate: async function(mediaUrl) {
-
-		await new Promise(async resolve => {
-			const authFrame = document.createElement('iframe');
-			authFrame.style.width = '400px';
-			authFrame.style.height = '300px';
-			authFrame.style.border = '1px solid red';
-
-			authFrame.onload = () => {
-				// Obtener la URL actual del iframe
-				let currentUrl;
-				try {
-					currentUrl = authFrame.contentWindow.location.href;
-				} catch (e) {
-					currentUrl = authFrame.src;
-				}
-						
-				debugger
-			}
-
-
-			authFrame.onerror = () => {
-				debugger
-			};
-					
-			document.body.appendChild(authFrame);
-
-			const credentials = await wapp.modWapp.twCredentials();
-			const { accountSid, authToken } = credentials;
-
-			const authUrl = mediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
-			authFrame.src = authUrl;
-		});
-
-		/*
-		// Simplemente intentar autenticar - si ya está autenticado, no debería mostrar dialog
-		// Si muestra dialog de login, significa que necesita autenticación
-
-		if (wapp.twilioAuthenticated) return;
-		
-		try {
-			const credentials = await wapp.modWapp.twCredentials();
-			const { accountSid, authToken } = credentials;
-			
-			// Crear URL con credenciales
-			const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
-			
-			// Usar iframe visible para autenticar (para debug)
-			await new Promise((resolve) => {
-				const authFrame = document.createElement('iframe');
-				authFrame.style.width = '400px';
-				authFrame.style.height = '300px';
-				authFrame.style.border = '1px solid red';
-				
-				let hasResolved = false;
-				
-				authFrame.onload = () => {
-					// Obtener la URL actual del iframe
-					let currentUrl;
-					try {
-						currentUrl = authFrame.contentWindow.location.href;
-					} catch (e) {
-						currentUrl = authFrame.src;
-					}
-					
-					console.log('AUTH IFRAME: onload triggered, currentUrl =', currentUrl);
-					
-					// Ignorar el onload de about:blank
-					if (currentUrl !== 'about:blank' && !hasResolved) {
-						console.log('AUTH IFRAME: valid onload - authentication successful');
-						hasResolved = true;
-						wapp.twilioAuthenticated = true;
-						resolve();
-					} else {
-						console.log('AUTH IFRAME: ignoring about:blank onload');
-					}
-				};
-				
-				authFrame.onerror = () => {
-					if (!hasResolved) {
-						console.log('AUTH IFRAME: onerror triggered - authentication completed with error');
-						hasResolved = true;
-						wapp.twilioAuthenticated = true;
-						resolve();
-					}
-				};
-				
-				// Timeout de seguridad
-				setTimeout(() => {
-					if (!hasResolved) {
-						console.log('AUTH IFRAME: timeout triggered');
-						hasResolved = true;
-						wapp.twilioAuthenticated = true;
-						resolve();
-					}
-				}, 15000);
-				
-				// Asignar src antes de agregar al DOM
-				document.body.appendChild(authFrame);
-				authFrame.src = authUrl;
-				console.log('AUTH IFRAME: iframe added to DOM with src', authUrl);
-			});
-			
-		} catch (err) {
-			console.error('Error authenticating with Twilio:', err);
-			wapp.twilioAuthenticated = true;
-		}
-			*/
-	},
 
 	toast: function (pMsg) {
 		if (inApp) {
@@ -792,10 +680,6 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
-					// Autenticar con Twilio usando la primera URL de media
-					if (media.length > 0) {
-						await wapp.twAuthenticate(media[0].Url);
-					}
 					
 					for (const it of media) {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
