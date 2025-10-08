@@ -1411,7 +1411,7 @@ wapp.templatePicker = {
             width: ${maxWidth}px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             border: 1px solid #ddd;
-            z-index: 10000;
+            z-index: 99999;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
         `;
 
@@ -1495,7 +1495,11 @@ wapp.templatePicker = {
         this.picker.appendChild(footer);
 
         // Agregar al DOM primero
-        document.body.appendChild(this.picker);
+        // Agregar al contenedor apropiado según el contexto
+        const container = typeof app7 === 'object' ? 
+            (document.querySelector('.view-main') || document.body) : 
+            document.body;
+        container.appendChild(this.picker);
         
         // Event listeners después de agregar al DOM
         this._setupEventListeners(searchInput, content);
@@ -1902,9 +1906,9 @@ wapp.templatePicker = {
 
         this.currentTarget = targetElement;
 
-        // Ajustar posición
-        const pickerWidth = 450;
-        const pickerHeight = 400;
+        // Ajustar posición usando las dimensiones reales del picker
+        const pickerWidth = parseInt(this.picker.style.width);
+        const pickerHeight = parseInt(this.picker.style.height);
         
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
