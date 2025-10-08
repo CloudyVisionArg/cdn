@@ -1406,13 +1406,23 @@ var wapp = {
 			try {
 				wapp.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 				
-				// Intentar usar OGG si está disponible, sino WebM
+				// Detectar formato compatible con Twilio
 				let mimeType = 'audio/webm';
 				let fileExtension = 'webm';
-				if (MediaRecorder.isTypeSupported('audio/ogg')) {
-					mimeType = 'audio/ogg';
+				
+				// Intentar formatos compatibles con Twilio en orden de preferencia
+				if (MediaRecorder.isTypeSupported('audio/mp4')) {
+					mimeType = 'audio/mp4';
+					fileExtension = 'm4a';
+				} else if (MediaRecorder.isTypeSupported('audio/ogg; codecs=opus')) {
+					mimeType = 'audio/ogg; codecs=opus';
 					fileExtension = 'ogg';
+				} else if (MediaRecorder.isTypeSupported('audio/webm; codecs=opus')) {
+					mimeType = 'audio/webm; codecs=opus';
+					fileExtension = 'webm';
 				}
+				
+				console.log('Using audio format:', mimeType);
 				
 				wapp.mediaRec = new MediaRecorder(wapp.audioStream, { mimeType });
 				let audioChunks = [];
@@ -1451,8 +1461,15 @@ var wapp = {
 						// Crear nombre del archivo con extensión correcta
 						let name = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.${wapp.currentAudioType.fileExtension}`;
 
-						// Crear un File object para usar con sendMedia
-						let audioFile = new File([audioBlob], name, { type: wapp.currentAudioType.mimeType });
+						// Para Twilio, siempre enviar como OGG aunque sea WebM internamente
+						let twilioMimeType = 'audio/ogg';
+						let twilioExtension = 'ogg';
+						let twilioName = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.${twilioExtension}`;
+						
+						// Crear un File object con tipo compatible para Twilio
+						let audioFile = new File([audioBlob], twilioName, { type: twilioMimeType });
+						
+						console.log('Sending to Twilio as:', twilioMimeType, 'actual format:', wapp.currentAudioType.mimeType);
 						
 						wapp.sendMedia(audioFile, pChat);
 
