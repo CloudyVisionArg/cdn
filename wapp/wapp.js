@@ -164,6 +164,36 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 	s3: undefined,
+	twilioAuthenticated: false,
+
+	// Autentica con Twilio abriendo ventana con credenciales
+	authenticateWithTwilio: async function(firstMediaUrl) {
+		if (wapp.twilioAuthenticated) return;
+		
+		try {
+			const credentials = await wapp.modWapp.twCredentials();
+			const { accountSid, authToken } = credentials;
+			
+			// Crear URL con credenciales
+			const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
+			
+			// Abrir ventana pequeña con la URL autenticada
+			const popup = window.open(authUrl, 'twilio-auth', 'width=1,height=1,left=-1000,top=-1000');
+			
+			// Cerrar la ventana después de un momento
+			setTimeout(() => {
+				if (popup && !popup.closed) {
+					popup.close();
+				}
+				wapp.twilioAuthenticated = true;
+				console.log('Twilio authentication completed via popup');
+			}, 2000);
+			
+		} catch (err) {
+			console.error('Error authenticating with Twilio:', err);
+			wapp.twilioAuthenticated = true;
+		}
+	},
 
 	toast: function (pMsg) {
 		if (inApp) {
@@ -680,9 +710,10 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
-					// Obtener credenciales para agregar a cada URL
-					const credentials = await wapp.modWapp.twCredentials();
-					const { accountSid, authToken } = credentials;
+					// Autenticar con Twilio usando la primera URL de media
+					if (media.length > 0) {
+						await wapp.authenticateWithTwilio(media[0].Url);
+					}
 					
 					for (const it of media) {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
@@ -690,12 +721,9 @@ var wapp = {
 						var $div = $('<div/>').appendTo($msgText);
 						var $btn;
 						
-						// Agregar credenciales a la URL
-						const authenticatedUrl = it.Url.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
-						
 						if (it.ContentType.substr(0, 5) == 'image') {
 							$('<img/>', {
-								src: authenticatedUrl,
+								src: it.Url,
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
@@ -705,7 +733,7 @@ var wapp = {
 								style: 'width: 230px;',
 							}).appendTo($div);
 							
-							$med.append('<source src="' + authenticatedUrl + '" type="' + it.ContentType + '">');
+							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
@@ -713,13 +741,13 @@ var wapp = {
 								style: 'width: 100%; object-fit: contain;',
 							}).appendTo($div);
 							
-							$med.append('<source src="' + authenticatedUrl + '" type="' + it.ContentType + '">');
+							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
 							$('<a/>', {
 								target: '_blank',
-								href: authenticatedUrl,
+								href: it.Url,
 								download: pMsg.body,
 								style: 'font-weight: 500;',
 							}).append(pMsg.body).appendTo($div);
