@@ -207,7 +207,10 @@ var wapp = {
 				}, 15000);
 				
 				document.body.appendChild(authFrame);
-				authFrame.src = authUrl;
+				// Usar setTimeout para asegurar que los event listeners estén configurados antes de cargar
+				setTimeout(() => {
+					authFrame.src = authUrl;
+				}, 100);
 			});
 			
 		} catch (err) {
