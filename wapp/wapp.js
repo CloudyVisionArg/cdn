@@ -388,7 +388,7 @@ var wapp = {
 				
 				$aReload.click(function (e) {
 					const $chat = $(this).closest('.wapp-chat');
-					wapp.reloadAllChatMedia($chat);
+					wapp.reloadMedia($chat);
 				});
 
 				$('<li/>', {
@@ -1671,35 +1671,42 @@ var wapp = {
 
 
 	// Recarga todos los media del chat con autenticación
-	reloadAllChatMedia: async function($chat) {
+	reloadMedia: async function($chat) {
 		try {
+			// Verificar si hay media URL guardada
+			const lastMediaUrl = $chat.attr('data-last-media-url');
+			if (!lastMediaUrl) return;
+			
 			// Obtener credenciales de Twilio
 			const creds = await wapp.modWapp.twCredentials();
 			
-			// Abrir popup para autenticación con cualquier URL de Twilio
+			// Abrir popup para autenticación con la última media URL
 			const popup = window.open(
-				`https://${creds.accountSid}:${creds.authToken}@api.twilio.com/2010-04-01/Accounts/${creds.accountSid}.json`,
+				`https://${creds.accountSid}:${creds.authToken}@${lastMediaUrl.replace('https://', '')}`,
 				'twilioAuth',
 				'width=600,height=400,scrollbars=yes,resizable=yes'
 			);
 			
-			if (!popup) {
-				wapp.toast('Por favor permite popups para recargar el media');
-				return;
-			}
+			if (!popup) return;
 			
-			// Esperar a que se cierre el popup
+			// Cerrar automáticamente después de 1 segundo
+			setTimeout(() => {
+				if (!popup.closed) {
+					popup.close();
+				}
+			}, 1000);
+			
+			// Esperar a que se cierre el popup y recargar media
 			const checkClosed = setInterval(() => {
 				if (popup.closed) {
 					clearInterval(checkClosed);
 					// Recargar todos los media del chat
 					setTimeout(() => wapp.reloadFailedMedia($chat), 500);
 				}
-			}, 1000);
+			}, 100);
 			
 		} catch (error) {
 			console.error('Error recargando media:', error);
-			wapp.toast('Error al intentar recargar media');
 		}
 	},
 
