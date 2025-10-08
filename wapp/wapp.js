@@ -1396,8 +1396,9 @@ wapp.templatePicker = {
         // Crear container principal
         this.picker = document.createElement('div');
         this.picker.id = 'templatePicker';
-        // Ancho adaptativo para app vs web
-        const pickerWidth = (typeof app7 === 'object') ? '300px' : '450px';
+        // Ancho responsivo basado en viewport
+        const maxWidth = Math.min(450, window.innerWidth - 40);
+        const pickerWidth = maxWidth + 'px';
         
         this.picker.style.cssText = `
             background-color: #fff;
@@ -1415,7 +1416,7 @@ wapp.templatePicker = {
 
         // Estructura completa con innerHTML
         this.picker.innerHTML = `
-            <div style="background-color: #f8f9fa; padding: 12px 16px; border-bottom: 1px solid #e9ecef; border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: space-between;">
+            <div id="templateHeader" style="background-color: #f8f9fa; padding: 12px 16px; border-bottom: 1px solid #e9ecef; border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: space-between; cursor: move;">
                 <span style="font-weight: 600; color: #495057;">📋 Plantillas</span>
                 <button id="templatePickerClose" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #6c757d; padding: 0; width: 24px; height: 24px;">❌</button>
             </div>
@@ -1461,6 +1462,54 @@ wapp.templatePicker = {
         document.getElementById('templateCancel').addEventListener('click', () => {
             this.hidePicker();
         });
+        
+        // Drag functionality
+        this._setupDrag();
+    },
+    
+    // Setup drag functionality
+    _setupDrag() {
+        const header = document.getElementById('templateHeader');
+        let isDragging = false;
+        let startX, startY, startLeft, startTop;
+        
+        header.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startLeft = parseInt(this.picker.style.left);
+            startTop = parseInt(this.picker.style.top);
+            
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+            e.preventDefault();
+        });
+        
+        const onMouseMove = (e) => {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            
+            let newLeft = startLeft + deltaX;
+            let newTop = startTop + deltaY;
+            
+            // Mantener dentro del viewport
+            const maxLeft = window.innerWidth - this.picker.offsetWidth;
+            const maxTop = window.innerHeight - this.picker.offsetHeight;
+            
+            newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+            newTop = Math.max(0, Math.min(newTop, maxTop));
+            
+            this.picker.style.left = newLeft + 'px';
+            this.picker.style.top = newTop + 'px';
+        };
+        
+        const onMouseUp = () => {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
     },
 
     // Poblar templates
@@ -1840,7 +1889,7 @@ wapp.templatePicker = {
         this.currentTarget = targetElement;
 
         // Ajustar posición - usar dimensiones reales del picker
-        const pickerWidth = (typeof app7 === 'object') ? 300 : 450;
+        const pickerWidth = Math.min(450, window.innerWidth - 40);
         const pickerHeight = 400;
         
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
