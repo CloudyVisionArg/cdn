@@ -1573,9 +1573,11 @@ var wapp = {
 
 	convertToMp3: async function (audioBlob) {
 		try {
-			// Primero necesitamos cargar lamejs
+			// Cargar lamejs usando el sistema include
 			if (!window.lamejs) {
-				await wapp.loadLameJs();
+				await new Promise((resolve) => {
+					include('lamejs', 'https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js', resolve);
+				});
 			}
 			
 			// Crear AudioContext
@@ -1599,21 +1601,6 @@ var wapp = {
 			// Si falla la conversión, devolver el blob original
 			return audioBlob;
 		}
-	},
-
-	loadLameJs: async function () {
-		return new Promise((resolve, reject) => {
-			if (window.lamejs) {
-				resolve();
-				return;
-			}
-			
-			const script = document.createElement('script');
-			script.src = 'https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js';
-			script.onload = () => resolve();
-			script.onerror = () => reject(new Error('Failed to load lamejs'));
-			document.head.appendChild(script);
-		});
 	},
 
 	audioBufferToMp3: function (audioBuffer) {
