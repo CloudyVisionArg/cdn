@@ -1394,6 +1394,10 @@ var wapp = {
 	},
 
 	mediaRec: null,
+	recordingToast: null,
+	recordingTimer: null,
+	recordingStartTime: null,
+	
 	recordAudio: async function (pChat) {
 		if (!wapp.mediaRec || wapp.mediaRec.state == 'inactive') {
 			try {
@@ -1407,12 +1411,22 @@ var wapp = {
 
 				wapp.mediaRec.onstop = async () => {
 					try {
+						// Cerrar toast de grabación
+						if (wapp.recordingToast) {
+							wapp.recordingToast.hide();
+							wapp.recordingToast = null;
+						}
+						if (wapp.recordingTimer) {
+							clearInterval(wapp.recordingTimer);
+							wapp.recordingTimer = null;
+						}
+						
 						wapp.cursorLoading(true);
 
 						const blb = new Blob(audioChunks, { type: 'audio/webm' });
 
 						// Calcular duración del audio
-						let segs = await new Promise((resolve, reject) => {
+						let segs = await new Promise((resolve) => {
 							const audioUrl = URL.createObjectURL(blb);
 							const audio = new Audio(audioUrl);
 							audio.addEventListener('loadedmetadata', () => {
@@ -1440,7 +1454,25 @@ var wapp = {
 				};
 
 				wapp.mediaRec.start();
-				wapp.toast('🎤 Grabando audio... Haz clic en Audio nuevamente para detener');
+				wapp.recordingStartTime = Date.now();
+				
+				// Toast con micrófono parpadeando
+				wapp.recordingToast = wapp.toast(
+					'<i class="fa fa-microphone blink-recording"></i> Grabando... 0s', 
+					{ autohide: false }
+				);
+				
+				// Timer para actualizar duración
+				wapp.recordingTimer = setInterval(() => {
+					if (wapp.recordingToast && wapp.recordingStartTime) {
+						const elapsed = Math.floor((Date.now() - wapp.recordingStartTime) / 1000);
+						const toastElement = wapp.recordingToast.getToastElement();
+						if (toastElement) {
+							toastElement.querySelector('.toast-body').innerHTML = 
+								'<i class="fa fa-microphone blink-recording"></i> Grabando... ' + elapsed + 's';
+						}
+					}
+				}, 1000);
 
 			} catch (err) {
 				console.error(err);
@@ -1449,7 +1481,6 @@ var wapp = {
 
 		} else if (wapp.mediaRec.state == 'recording') {
 			wapp.mediaRec.stop();
-			wapp.toast('⏹️ Deteniendo grabación...');
 		}
 	}
 

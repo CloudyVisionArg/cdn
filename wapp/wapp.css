@@ -89,6 +89,15 @@
     100% { transform: rotate(360deg); }
 }
 
+.blink-recording {
+    animation: blink-recording 1s ease-in-out infinite alternate;
+}
+
+@keyframes blink-recording {
+    0% { opacity: 1; color: #dc3545; }
+    100% { opacity: 0.3; color: #ff6b6b; }
+}
+
 .wapp-button {
     font-size: var(--wapp-button-size);
     cursor: pointer;
