@@ -166,28 +166,30 @@ var wapp = {
 	s3: undefined,
 	twilioAuthenticated: false,
 
-	// Autentica con Twilio una sola vez usando imagen invisible
-	authenticateWithTwilio: async function() {
+	// Autentica con Twilio usando la primera URL de media disponible
+	authenticateWithTwilio: async function(firstMediaUrl) {
 		if (wapp.twilioAuthenticated) return;
 		
 		try {
 			const credentials = await wapp.modWapp.twCredentials();
 			const { accountSid, authToken } = credentials;
 			
-			// Crear una imagen invisible para forzar autenticación HTTP Basic
+			// Usar la primera URL de media con credenciales para autenticar
+			const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
+			
+			// Crear una imagen invisible para forzar el redirect y autenticación
 			return new Promise((resolve) => {
 				const img = new Image();
-				const authUrl = `https://${accountSid}:${authToken}@api.twilio.com/2010-04-01/Accounts/${accountSid}.json`;
 				
 				img.onload = () => {
 					wapp.twilioAuthenticated = true;
-					console.log('Twilio authentication successful via image');
+					console.log('Twilio media authentication successful - all media URLs should now work');
 					resolve();
 				};
 				
 				img.onerror = () => {
 					wapp.twilioAuthenticated = true;
-					console.log('Twilio authentication completed (with error, but credentials cached)');
+					console.log('Twilio media authentication completed (with error, but redirect executed)');
 					resolve();
 				};
 				
@@ -712,8 +714,6 @@ var wapp = {
 			}).appendTo($msg);
 		
 			if (pMsg.numMedia > 0 && pMsg.media) {
-				// Autenticar con Twilio antes de mostrar media
-				await wapp.authenticateWithTwilio();
 				var media = undefined;
 				try {
 					media = JSON.parse(pMsg.media);
@@ -722,6 +722,10 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
+					// Autenticar con Twilio usando la primera URL de media
+					if (media.length > 0) {
+						await wapp.authenticateWithTwilio(media[0].Url);
+					}
 					
 					for (const it of media) {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
