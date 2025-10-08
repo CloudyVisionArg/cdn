@@ -165,6 +165,7 @@ var wapp = {
 	codelibUrl: undefined,
 	s3: undefined,
 
+
 	toast: function (pMsg) {
 		if (inApp) {
 			toast(pMsg);
@@ -597,11 +598,11 @@ var wapp = {
 		}
 	},
 	
-	insertMsg: function (pChat, pMsg) {
+	insertMsg: async function (pChat, pMsg) {
 		var $cont = pChat.find('div.wapp-messages');
 		var $msgs = pChat.find('div.wapp-message');
 		if ($msgs.length == 0) {
-			wapp.renderMsg(pMsg, function (msgRow) {
+			await wapp.renderMsg(pMsg, function (msgRow) {
 				$cont.append(msgRow);
 			});
 		} else {
@@ -611,7 +612,7 @@ var wapp = {
 				$msg.find('.wapp-message-status-container').html(wapp.getTicks(pMsg.status, pMsg.errorCode, pMsg.errorMessage));
 			} else {
 				$msg = $msgs.first();
-				wapp.renderMsg(pMsg, function (msgRow) {
+				await wapp.renderMsg(pMsg, function (msgRow) {
 					if (pMsg.date <= $msg.attr('data-date')) {
 						$msg.before(msgRow);
 					} else {
@@ -629,30 +630,30 @@ var wapp = {
 		}
 	},
 	
-	renderMsg: function (pMsg, pCallback) {
+	renderMsg: async function (pMsg, pCallback) {
 		// Pide el media, si no esta
 		if (pMsg.numMedia > 0) {
 			if (!pMsg.media) {
 				wapp.msgMedia(pMsg.sid).then(
-					function (res) {
+					async function (res) {
 						pMsg.media = res;
-						render(pMsg, pCallback);
+						await render(pMsg, pCallback);
 					},
-					function (err) {
+					async function (err) {
 						debugger;
 						console.log(err.responseText);
-						render(pMsg, pCallback);
+						await render(pMsg, pCallback);
 					}
 				);
 			} else {
-				render(pMsg, pCallback);
+				await render(pMsg, pCallback);
 			}
 		} else {
-			render(pMsg, pCallback);
+			await render(pMsg, pCallback);
 		}
 		
 		// Renderiza
-		function render(pMsg, pCallback) {
+		async function render(pMsg, pCallback) {
 			var appendBody = true;
 			
 			var $row = $('<div/>', {
@@ -681,15 +682,16 @@ var wapp = {
 				};
 				if (media) {
 					
-					media.forEach(it => {
+					for (const it of media) {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
 						
 						var $div = $('<div/>').appendTo($msgText);
 						var $btn;
+						const authenticatedUrl = await wapp.modWapp.twMediaUrl(it.Url);
 						
 						if (it.ContentType.substr(0, 5) == 'image') {
 							$('<img/>', {
-								src: it.Url,
+								src: authenticatedUrl,
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
@@ -699,7 +701,7 @@ var wapp = {
 								style: 'width: 230px;',
 							}).appendTo($div);
 							
-							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+							$med.append('<source src="' + authenticatedUrl + '" type="' + it.ContentType + '">');
 
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
@@ -707,20 +709,20 @@ var wapp = {
 								style: 'width: 100%; object-fit: contain;',
 							}).appendTo($div);
 							
-							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+							$med.append('<source src="' + authenticatedUrl + '" type="' + it.ContentType + '">');
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
 							$('<a/>', {
 								target: '_blank',
-								href: it.Url,
+								href: authenticatedUrl,
 								download: pMsg.body,
 								style: 'font-weight: 500;',
 							}).append(pMsg.body).appendTo($div);
 							
 							appendBody = false;
 						}
-					});
+					};
 				}
 			}
 			
@@ -960,7 +962,7 @@ var wapp = {
 				var atBottom = ($cont.scrollTop() + $cont.innerHeight() + 20 >= $cont[0].scrollHeight);
 				var sessionUpdated = false;
 						
-				res.forEach(row => {
+				for (const row of res) {
 					row['ACC_NAME'] = accs.find(acc => acc['AccId'] == row['ACC_ID'])['Name'];
 
 					var msg = {};
@@ -985,8 +987,8 @@ var wapp = {
 					msg.latitude = row['LATITUDE'];
 					msg.longitude = row['LONGITUDE'];
 
-					wapp.insertMsg(pChat, msg);
-				});
+					await wapp.insertMsg(pChat, msg);
+				};
 						
 				if (pOlders && $older.length > 0) {
 					$cont.scrollTop($older.offset().top - $cont.offset().top + $cont.scrollTop() - 40);
@@ -1113,7 +1115,7 @@ var wapp = {
 			msg.operator = wapp.loggedUser.Name;
 			msg.date = msg.doorsCreated;
 			
-			wapp.renderMsg(msg, function (msgRow) {
+			await wapp.renderMsg(msg, function (msgRow) {
 				var $cont = $chat.find('div.wapp-messages');
 				$cont.append(msgRow);
 				$cont.scrollTop($cont[0].scrollHeight);
@@ -1323,7 +1325,7 @@ var wapp = {
 								msg.longitude = row['LONGITUDE'];
 								*/
 								
-								wapp.renderMsg(msg, function (msgRow) {
+								await wapp.renderMsg(msg, function (msgRow) {
 									var $cont = $chat.find('div.wapp-messages');
 									$cont.append(msgRow);
 									$cont.scrollTop($cont[0].scrollHeight);
