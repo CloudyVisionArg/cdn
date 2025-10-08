@@ -171,6 +171,7 @@ var wapp = {
 		try {
 			// Primero verificar si ya podemos acceder al media
 			const testResponse = await fetch(firstMediaUrl, { method: 'HEAD' });
+			debugger
 			if (testResponse.ok) {
 				console.log('Twilio already authenticated - no popup needed');
 				wapp.twilioAuthenticated = true;
