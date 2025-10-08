@@ -1406,23 +1406,23 @@ var wapp = {
 			try {
 				wapp.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 				
-				// Detectar formato compatible con Twilio
+				// Usar el mejor formato disponible para grabación
 				let mimeType = 'audio/webm';
 				let fileExtension = 'webm';
 				
-				// Intentar formatos compatibles con Twilio en orden de preferencia
-				if (MediaRecorder.isTypeSupported('audio/mp4')) {
-					mimeType = 'audio/mp4';
-					fileExtension = 'm4a';
+				// Probar formatos en orden de preferencia para calidad de grabación
+				if (MediaRecorder.isTypeSupported('audio/webm; codecs=opus')) {
+					mimeType = 'audio/webm; codecs=opus';
+					fileExtension = 'webm';
 				} else if (MediaRecorder.isTypeSupported('audio/ogg; codecs=opus')) {
 					mimeType = 'audio/ogg; codecs=opus';
 					fileExtension = 'ogg';
-				} else if (MediaRecorder.isTypeSupported('audio/webm; codecs=opus')) {
-					mimeType = 'audio/webm; codecs=opus';
-					fileExtension = 'webm';
+				} else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+					mimeType = 'audio/mp4';
+					fileExtension = 'm4a';
 				}
 				
-				console.log('Using audio format:', mimeType);
+				console.log('Recording in format:', mimeType);
 				
 				wapp.mediaRec = new MediaRecorder(wapp.audioStream, { mimeType });
 				let audioChunks = [];
@@ -1458,16 +1458,14 @@ var wapp = {
 							});
 						});
 
-						// Convertir el audio a formato compatible con Twilio
-						const convertedBlob = await wapp.convertToWav(audioBlob);
+						// Enviar directamente como MP3 (cambiar extensión y MIME type)
+						// Muchos WebM con Opus son procesables por Twilio como MP3
+						let twilioName = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.mp3`;
 						
-						// Crear nombre del archivo como WAV (más compatible)
-						let twilioName = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.wav`;
+						// Crear un File object marcado como MP3
+						let audioFile = new File([audioBlob], twilioName, { type: 'audio/mpeg' });
 						
-						// Crear un File object con WAV
-						let audioFile = new File([convertedBlob], twilioName, { type: 'audio/wav' });
-						
-						console.log('Converted audio to WAV for Twilio compatibility');
+						console.log('Sending audio as MP3 to Twilio, original format:', wapp.currentAudioType.mimeType);
 						
 						wapp.sendMedia(audioFile, pChat);
 
