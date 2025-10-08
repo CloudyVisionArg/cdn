@@ -168,11 +168,10 @@ var wapp = {
 
 	// Autentica con Twilio abriendo ventana con credenciales
 	twAuthenticate: async function(firstMediaUrl) {
-		return
 		try {
 			// Primero verificar si ya podemos acceder al media
 			const testResponse = await fetch(firstMediaUrl, { method: 'HEAD' });
-			debugger
+			console.log(testResponse.ok);
 			if (testResponse.ok) {
 				console.log('Twilio already authenticated - no popup needed');
 				wapp.twilioAuthenticated = true;
@@ -181,7 +180,8 @@ var wapp = {
 		} catch (err) {
 			// Si falla, necesitamos autenticar
 		}
-		
+		return
+
 		if (wapp.twilioAuthenticated) return;
 		
 		try {
