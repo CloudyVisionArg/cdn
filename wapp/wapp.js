@@ -168,7 +168,6 @@ var wapp = {
 
 	// Autentica con Twilio abriendo ventana con credenciales
 	authenticateWithTwilio: async function(firstMediaUrl) {
-		return
 		if (wapp.twilioAuthenticated) return;
 		
 		try {
@@ -204,9 +203,9 @@ var wapp = {
 							clearInterval(checkRedirect);
 							console.log('Twilio authentication completed - popup closed after redirect');
 						}
-					}, 1000);
+					}, 100);
 				}
-			}, 500);
+			}, 100);
 			
 			// Timeout de seguridad para cerrar después de 10 segundos
 			setTimeout(() => {
