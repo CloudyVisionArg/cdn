@@ -168,13 +168,13 @@ var wapp = {
 
 	// Autentica con Twilio abriendo ventana con credenciales
 	twAuthenticate: async function(firstMediaUrl) {
-		// Verificar si ya hay sesión HTTP Basic Auth activa usando iframe invisible
+		// Verificar si ya hay sesión HTTP Basic Auth activa usando iframe visible (para debug)
 		try {
 			const isAuthenticated = await new Promise((resolve) => {
 				const testFrame = document.createElement('iframe');
-				testFrame.style.display = 'none';
-				testFrame.style.width = '1px';
-				testFrame.style.height = '1px';
+				testFrame.style.width = '400px';
+				testFrame.style.height = '300px';
+				testFrame.style.border = '1px solid blue';
 				
 				testFrame.onload = () => {
 					document.body.removeChild(testFrame);
@@ -217,12 +217,12 @@ var wapp = {
 			// Crear URL con credenciales
 			const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
 			
-			// Usar iframe invisible para autenticar (más limpio que popup)
+			// Usar iframe visible para autenticar (para debug)
 			await new Promise((resolve) => {
 				const authFrame = document.createElement('iframe');
-				authFrame.style.display = 'none';
-				authFrame.style.width = '1px';
-				authFrame.style.height = '1px';
+				authFrame.style.width = '400px';
+				authFrame.style.height = '300px';
+				authFrame.style.border = '1px solid red';
 				
 				authFrame.onload = () => {
 					document.body.removeChild(authFrame);
