@@ -1900,8 +1900,8 @@ wapp.templatePicker = {
 
         this.currentTarget = targetElement;
 
-        // Ajustar posición
-        const pickerWidth = 450;
+        // Ajustar posición - usar dimensiones reales del picker
+        const pickerWidth = (typeof app7 === 'object') ? 300 : 450;
         const pickerHeight = 400;
         
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
