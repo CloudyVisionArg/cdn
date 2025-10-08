@@ -1405,8 +1405,18 @@ var wapp = {
 		if (!wapp.mediaRec || wapp.mediaRec.state == 'inactive') {
 			try {
 				wapp.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-				wapp.mediaRec = new MediaRecorder(wapp.audioStream);
+				
+				// Intentar usar OGG si está disponible, sino WebM
+				let mimeType = 'audio/webm';
+				let fileExtension = 'webm';
+				if (MediaRecorder.isTypeSupported('audio/ogg')) {
+					mimeType = 'audio/ogg';
+					fileExtension = 'ogg';
+				}
+				
+				wapp.mediaRec = new MediaRecorder(wapp.audioStream, { mimeType });
 				let audioChunks = [];
+				wapp.currentAudioType = { mimeType, fileExtension };
 
 				wapp.mediaRec.ondataavailable = (event) => {
 					audioChunks.push(event.data);
@@ -1426,11 +1436,11 @@ var wapp = {
 						
 						wapp.cursorLoading(true);
 
-						const blb = new Blob(audioChunks, { type: 'audio/webm' });
+						const audioBlob = new Blob(audioChunks, { type: wapp.currentAudioType.mimeType });
 
 						// Calcular duración del audio
 						let segs = await new Promise((resolve) => {
-							const audioUrl = URL.createObjectURL(blb);
+							const audioUrl = URL.createObjectURL(audioBlob);
 							const audio = new Audio(audioUrl);
 							audio.addEventListener('loadedmetadata', () => {
 								URL.revokeObjectURL(audioUrl);
@@ -1438,11 +1448,11 @@ var wapp = {
 							});
 						});
 
-						// Crear nombre del archivo
-						let name = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.webm`;
+						// Crear nombre del archivo con extensión correcta
+						let name = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.${wapp.currentAudioType.fileExtension}`;
 
 						// Crear un File object para usar con sendMedia
-						let audioFile = new File([blb], name, { type: 'audio/webm' });
+						let audioFile = new File([audioBlob], name, { type: wapp.currentAudioType.mimeType });
 						
 						wapp.sendMedia(audioFile, pChat);
 
