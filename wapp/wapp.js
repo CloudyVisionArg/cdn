@@ -164,7 +164,33 @@ var wapp = {
 	loggedUser: undefined,
 	codelibUrl: undefined,
 	s3: undefined,
+	twilioAuthenticated: false,
 
+	// Autentica con Twilio una sola vez
+	authenticateWithTwilio: async function() {
+		if (wapp.twilioAuthenticated) return;
+		
+		try {
+			const credentials = await wapp.modWapp.twCredentials();
+			const { accountSid, authToken } = credentials;
+			
+			// Hacer petición de autenticación a cualquier endpoint de Twilio
+			const authUrl = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}.json`;
+			
+			const response = await fetch(authUrl, {
+				headers: {
+					'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken)
+				}
+			});
+			
+			if (response.ok) {
+				wapp.twilioAuthenticated = true;
+				console.log('Twilio authentication successful');
+			}
+		} catch (err) {
+			console.error('Error authenticating with Twilio:', err);
+		}
+	},
 
 	toast: function (pMsg) {
 		if (inApp) {
@@ -673,6 +699,8 @@ var wapp = {
 			}).appendTo($msg);
 		
 			if (pMsg.numMedia > 0 && pMsg.media) {
+				// Autenticar con Twilio antes de mostrar media
+				await wapp.authenticateWithTwilio();
 				var media = undefined;
 				try {
 					media = JSON.parse(pMsg.media);
@@ -687,11 +715,10 @@ var wapp = {
 						
 						var $div = $('<div/>').appendTo($msgText);
 						var $btn;
-						const authenticatedUrl = await wapp.modWapp.twMediaUrl(it.Url);
 						
 						if (it.ContentType.substr(0, 5) == 'image') {
 							$('<img/>', {
-								src: authenticatedUrl,
+								src: it.Url,
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
@@ -701,7 +728,7 @@ var wapp = {
 								style: 'width: 230px;',
 							}).appendTo($div);
 							
-							$med.append('<source src="' + authenticatedUrl + '" type="' + it.ContentType + '">');
+							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
@@ -709,13 +736,13 @@ var wapp = {
 								style: 'width: 100%; object-fit: contain;',
 							}).appendTo($div);
 							
-							$med.append('<source src="' + authenticatedUrl + '" type="' + it.ContentType + '">');
+							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
 							$('<a/>', {
 								target: '_blank',
-								href: authenticatedUrl,
+								href: it.Url,
 								download: pMsg.body,
 								style: 'font-weight: 500;',
 							}).append(pMsg.body).appendTo($div);
