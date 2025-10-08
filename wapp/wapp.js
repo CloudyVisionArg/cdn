@@ -177,24 +177,33 @@ var wapp = {
 				testFrame.style.border = '1px solid blue';
 				
 				testFrame.onload = () => {
-					document.body.removeChild(testFrame);
-					console.log('Twilio already authenticated - no popup needed');
+					console.log('TEST IFRAME: onload triggered - already authenticated');
+					setTimeout(() => {
+						if (testFrame.parentNode) {
+							document.body.removeChild(testFrame);
+						}
+					}, 5000); // Mantener 5 segundos para ver
 					resolve(true);
 				};
 				
 				testFrame.onerror = () => {
-					document.body.removeChild(testFrame);
-					console.log('Twilio not authenticated - need popup');
+					console.log('TEST IFRAME: onerror triggered - not authenticated');
+					setTimeout(() => {
+						if (testFrame.parentNode) {
+							document.body.removeChild(testFrame);
+						}
+					}, 5000); // Mantener 5 segundos para ver
 					resolve(false);
 				};
 				
-				// Timeout de 3 segundos para la prueba
+				// Timeout de 10 segundos para la prueba
 				setTimeout(() => {
+					console.log('TEST IFRAME: timeout triggered');
 					if (testFrame.parentNode) {
 						document.body.removeChild(testFrame);
 					}
 					resolve(false);
-				}, 3000);
+				}, 10000);
 				
 				document.body.appendChild(testFrame);
 				testFrame.src = firstMediaUrl;
@@ -225,28 +234,36 @@ var wapp = {
 				authFrame.style.border = '1px solid red';
 				
 				authFrame.onload = () => {
-					document.body.removeChild(authFrame);
-					console.log('Twilio authentication successful via iframe');
+					console.log('AUTH IFRAME: onload triggered - authentication successful');
+					setTimeout(() => {
+						if (authFrame.parentNode) {
+							document.body.removeChild(authFrame);
+						}
+					}, 5000); // Mantener 5 segundos para ver
 					wapp.twilioAuthenticated = true;
 					resolve();
 				};
 				
 				authFrame.onerror = () => {
-					document.body.removeChild(authFrame);
-					console.log('Twilio authentication completed (with error, but credentials sent)');
+					console.log('AUTH IFRAME: onerror triggered - authentication completed with error');
+					setTimeout(() => {
+						if (authFrame.parentNode) {
+							document.body.removeChild(authFrame);
+						}
+					}, 5000); // Mantener 5 segundos para ver
 					wapp.twilioAuthenticated = true;
 					resolve();
 				};
 				
-				// Timeout de seguridad para limpiar después de 10 segundos
+				// Timeout de seguridad para limpiar después de 15 segundos
 				setTimeout(() => {
+					console.log('AUTH IFRAME: timeout triggered');
 					if (authFrame.parentNode) {
 						document.body.removeChild(authFrame);
 					}
 					wapp.twilioAuthenticated = true;
-					console.log('Twilio authentication timeout - iframe removed');
 					resolve();
-				}, 10000);
+				}, 15000);
 				
 				document.body.appendChild(authFrame);
 				authFrame.src = authUrl;
