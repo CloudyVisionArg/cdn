@@ -177,11 +177,13 @@ var wapp = {
 				testFrame.style.border = '1px solid blue';
 				
 				testFrame.onload = () => {
+					debugger
 					console.log('TEST IFRAME: onload triggered - already authenticated');
 					resolve(true);
 				};
 				
 				testFrame.onerror = () => {
+					debugger
 					console.log('TEST IFRAME: onerror triggered - not authenticated');
 					resolve(false);
 				};
