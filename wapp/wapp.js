@@ -177,32 +177,39 @@ var wapp = {
 				testFrame.style.border = '1px solid blue';
 				
 				testFrame.onload = () => {
-					debugger
-					try {
-						// Verificar si la URL actual del iframe cambió (indica redirect exitoso)
-						const currentUrl = testFrame.contentWindow.location.href;
-						
-						if (currentUrl.includes('mms.twiliocdn.com')) {
-							console.log('TEST IFRAME: authenticated - redirected to mms.twiliocdn.com');
-							resolve(true);
-						} else {
-							// Verificar contenido para error de autenticación
-							const iframeContent = testFrame.contentDocument || testFrame.contentWindow.document;
-							const bodyText = iframeContent.body ? (iframeContent.body.innerText || iframeContent.body.textContent || '') : '';
+					// Esperar un poco para que el contenido se renderice
+					setTimeout(() => {
+						try {
+							// Verificar si la URL actual del iframe cambió (indica redirect exitoso)
+							const currentUrl = testFrame.contentWindow.location.href;
 							
-							if (bodyText.includes('Authenticate') || bodyText.includes('20003') || bodyText.includes('RestException')) {
-								console.log('TEST IFRAME: NOT authenticated (got error response)');
-								resolve(false);
-							} else {
-								console.log('TEST IFRAME: authenticated (loaded successfully)');
+							if (currentUrl.includes('mms.twiliocdn.com')) {
+								console.log('TEST IFRAME: authenticated - redirected to mms.twiliocdn.com');
 								resolve(true);
+							} else {
+								// Verificar contenido para error de autenticación
+								const iframeContent = testFrame.contentDocument || testFrame.contentWindow.document;
+								const bodyText = iframeContent.body ? (iframeContent.body.innerText || iframeContent.body.textContent || '') : '';
+								
+								console.log('TEST IFRAME: bodyText =', bodyText);
+								
+								if (bodyText.includes('Authenticate') || bodyText.includes('20003') || bodyText.includes('RestException')) {
+									console.log('TEST IFRAME: NOT authenticated (got error response)');
+									resolve(false);
+								} else if (bodyText.length > 0) {
+									console.log('TEST IFRAME: authenticated (loaded successfully)');
+									resolve(true);
+								} else {
+									console.log('TEST IFRAME: no content, assuming not authenticated');
+									resolve(false);
+								}
 							}
+						} catch (err) {
+							// Error de CORS probablemente significa que se redirigió a otro dominio = autenticado
+							console.log('TEST IFRAME: CORS error, probably authenticated');
+							resolve(true);
 						}
-					} catch (err) {
-						// Error de CORS probablemente significa que se redirigió a otro dominio = autenticado
-						console.log('TEST IFRAME: CORS error, probably authenticated');
-						resolve(true);
-					}
+					}, 500);
 				};
 				
 				testFrame.onerror = () => {
