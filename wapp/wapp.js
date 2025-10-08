@@ -681,10 +681,13 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
-					// Verificar si el primer media requiere autenticación
-					wapp.checkMediaAccess(media[0], pMsg.sid);
 					
 					for (const it of media) {
+						// Verificar autenticación para cada media (pero solo se ejecuta la primera vez)
+						setTimeout(() => {
+							const $chat = $row.closest('.wapp-chat');
+							wapp.checkMediaAccess(it.Url, $chat);
+						}, 100);
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
 						
 						var $div = $('<div/>').appendTo($msgText);
