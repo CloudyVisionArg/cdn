@@ -428,16 +428,38 @@ var wapp = {
 									text: '<i class="f7-icons">chat_bubble_text</i>&nbsp;&nbsp;Plantillas',
 									onClick: function (actions, e) {
 										actions.close();
-										
-										if (!wapp.templates) {
+	
+										if (wapp.templates?.local && wapp.templates.local.length > 0) {
+											var tempButtons = [
+												[],
+												[{
+													text: 'Cancelar',
+													bold: true,
+													close: true,
+												}]
+											];
+	
+											wapp.templates.local.forEach(it => {
+												tempButtons[0].push({
+													text: it,
+													onClick: tempClick,
+												})
+											});
+	
+											tempActions = app7.actions.create({
+												buttons: tempButtons,
+											});
+	
+											tempActions.params.chatEl = actions.params.chatEl;
+											tempActions.open();
+	
+											function tempClick(actions, e) {
+												wapp.putTemplate(this.text, $(actions.params.chatEl).find('.wapp-reply')[0]);
+											};
+	
+										} else {
 											toast('No hay plantillas definidas');
-											return;
 										}
-										
-										const $reply = $(actions.params.chatEl).find('.wapp-reply')[0];
-										const x = 50; // Cerca del borde izquierdo
-										const y = 100; // Desde arriba
-										wapp.templatePicker.showPicker(x, y, $reply);
 									}
 								},
 							],
@@ -1396,22 +1418,17 @@ wapp.templatePicker = {
         // Crear container principal
         this.picker = document.createElement('div');
         this.picker.id = 'templatePicker';
-        // Ajustar tamaño según el dispositivo
-        const isApp = typeof app7 === 'object';
-        const maxWidth = isApp ? Math.min(window.innerWidth - 40, 350) : 450;
-        const maxHeight = isApp ? Math.min(window.innerHeight - 100, 400) : 400;
-        
         this.picker.style.cssText = `
             background-color: #fff;
             border-radius: 12px;
             display: none;
             position: absolute;
             padding: 0;
-            height: ${maxHeight}px;
-            width: ${maxWidth}px;
+            height: 400px;
+            width: 450px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             border: 1px solid #ddd;
-            z-index: 99999;
+            z-index: 10000;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
         `;
 
@@ -1495,11 +1512,7 @@ wapp.templatePicker = {
         this.picker.appendChild(footer);
 
         // Agregar al DOM primero
-        // Agregar al contenedor apropiado según el contexto
-        const container = typeof app7 === 'object' ? 
-            (document.querySelector('.view-main') || document.body) : 
-            document.body;
-        container.appendChild(this.picker);
+        document.body.appendChild(this.picker);
         
         // Event listeners después de agregar al DOM
         this._setupEventListeners(searchInput, content);
@@ -1906,9 +1919,9 @@ wapp.templatePicker = {
 
         this.currentTarget = targetElement;
 
-        // Ajustar posición usando las dimensiones reales del picker
-        const pickerWidth = parseInt(this.picker.style.width);
-        const pickerHeight = parseInt(this.picker.style.height);
+        // Ajustar posición
+        const pickerWidth = 450;
+        const pickerHeight = 400;
         
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
