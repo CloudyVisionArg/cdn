@@ -178,30 +178,17 @@ var wapp = {
 				
 				testFrame.onload = () => {
 					console.log('TEST IFRAME: onload triggered - already authenticated');
-					setTimeout(() => {
-						if (testFrame.parentNode) {
-							document.body.removeChild(testFrame);
-						}
-					}, 5000); // Mantener 5 segundos para ver
 					resolve(true);
 				};
 				
 				testFrame.onerror = () => {
 					console.log('TEST IFRAME: onerror triggered - not authenticated');
-					setTimeout(() => {
-						if (testFrame.parentNode) {
-							document.body.removeChild(testFrame);
-						}
-					}, 5000); // Mantener 5 segundos para ver
 					resolve(false);
 				};
 				
 				// Timeout de 10 segundos para la prueba
 				setTimeout(() => {
 					console.log('TEST IFRAME: timeout triggered');
-					if (testFrame.parentNode) {
-						document.body.removeChild(testFrame);
-					}
 					resolve(false);
 				}, 10000);
 				
@@ -235,32 +222,19 @@ var wapp = {
 				
 				authFrame.onload = () => {
 					console.log('AUTH IFRAME: onload triggered - authentication successful');
-					setTimeout(() => {
-						if (authFrame.parentNode) {
-							document.body.removeChild(authFrame);
-						}
-					}, 5000); // Mantener 5 segundos para ver
 					wapp.twilioAuthenticated = true;
 					resolve();
 				};
 				
 				authFrame.onerror = () => {
 					console.log('AUTH IFRAME: onerror triggered - authentication completed with error');
-					setTimeout(() => {
-						if (authFrame.parentNode) {
-							document.body.removeChild(authFrame);
-						}
-					}, 5000); // Mantener 5 segundos para ver
 					wapp.twilioAuthenticated = true;
 					resolve();
 				};
 				
-				// Timeout de seguridad para limpiar después de 15 segundos
+				// Timeout de seguridad
 				setTimeout(() => {
 					console.log('AUTH IFRAME: timeout triggered');
-					if (authFrame.parentNode) {
-						document.body.removeChild(authFrame);
-					}
 					wapp.twilioAuthenticated = true;
 					resolve();
 				}, 15000);
