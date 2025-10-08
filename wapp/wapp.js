@@ -177,21 +177,30 @@ var wapp = {
 				testFrame.style.border = '1px solid blue';
 				
 				testFrame.onload = () => {
+					debugger
 					try {
-						// Verificar si el contenido del iframe contiene error de autenticación
-						const iframeContent = testFrame.contentDocument || testFrame.contentWindow.document;
-						const bodyText = iframeContent.body.innerText || iframeContent.body.textContent;
+						// Verificar si la URL actual del iframe cambió (indica redirect exitoso)
+						const currentUrl = testFrame.contentWindow.location.href;
 						
-						if (bodyText.includes('Authenticate') || bodyText.includes('20003')) {
-							console.log('TEST IFRAME: onload triggered - NOT authenticated (got 401)');
-							resolve(false);
-						} else {
-							console.log('TEST IFRAME: onload triggered - already authenticated');
+						if (currentUrl.includes('mms.twiliocdn.com')) {
+							console.log('TEST IFRAME: authenticated - redirected to mms.twiliocdn.com');
 							resolve(true);
+						} else {
+							// Verificar contenido para error de autenticación
+							const iframeContent = testFrame.contentDocument || testFrame.contentWindow.document;
+							const bodyText = iframeContent.body ? (iframeContent.body.innerText || iframeContent.body.textContent || '') : '';
+							
+							if (bodyText.includes('Authenticate') || bodyText.includes('20003') || bodyText.includes('RestException')) {
+								console.log('TEST IFRAME: NOT authenticated (got error response)');
+								resolve(false);
+							} else {
+								console.log('TEST IFRAME: authenticated (loaded successfully)');
+								resolve(true);
+							}
 						}
 					} catch (err) {
 						// Error de CORS probablemente significa que se redirigió a otro dominio = autenticado
-						console.log('TEST IFRAME: onload triggered - probably authenticated (CORS error)');
+						console.log('TEST IFRAME: CORS error, probably authenticated');
 						resolve(true);
 					}
 				};
