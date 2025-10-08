@@ -367,8 +367,8 @@ var wapp = {
 					}
 					
 					const $reply = $(this).closest('.wapp-footer').find('.wapp-reply')[0];
-					const x = e.pageX;
-					const y = e.pageY + 10;
+					const x = Math.max(50, Math.min(e.pageX, window.innerWidth - 400));
+					const y = Math.max(50, Math.min(e.pageY + 10, window.innerHeight - 450));
 					wapp.templatePicker.showPicker(x, y, $reply);
 				});
 
@@ -1477,8 +1477,8 @@ wapp.templatePicker = {
             isDragging = true;
             startX = e.clientX;
             startY = e.clientY;
-            startLeft = parseInt(this.picker.style.left);
-            startTop = parseInt(this.picker.style.top);
+            startLeft = parseInt(this.picker.style.left) || 0;
+            startTop = parseInt(this.picker.style.top) || 0;
             
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
