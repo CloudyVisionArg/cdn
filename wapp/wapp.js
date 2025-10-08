@@ -665,6 +665,7 @@ var wapp = {
 		async function render(pMsg, pCallback) {
 			var appendBody = true;
 			var hasMediaError = false;
+			var lastMediaUrl = null;
 			
 			var $row = $('<div/>', {
 				class: 'wapp-message',
@@ -694,6 +695,8 @@ var wapp = {
 					
 					for (const it of media) {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
+						
+						if (it.Url) lastMediaUrl = it.Url;
 						
 						var $div = $('<div/>').appendTo($msgText);
 						var $btn;
@@ -800,6 +803,14 @@ var wapp = {
 			
 			if (pMsg.status) {
 				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status, pMsg.errorCode, pMsg.errorMessage) + '</span>');
+			}
+			
+			// Guardar la última media URL en el chat
+			if (lastMediaUrl) {
+				const $chat = $row.closest('.wapp-chat');
+				if ($chat.length > 0) {
+					$chat.attr('data-last-media-url', lastMediaUrl);
+				}
 			}
 			
 			if (pCallback) pCallback($row);
