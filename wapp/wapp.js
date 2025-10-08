@@ -346,7 +346,7 @@ var wapp = {
 
 				var $li = $('<li/>').appendTo($menu);
 				
-				var $file = $('<a/>').append('Archivo');
+				var $file = $('<a/>').append('<i class="fa fa-paperclip"></i>&nbsp;&nbsp;Archivo');
 				$file.addClass('dropdown-item');
 				$file.appendTo($li);
 				$file.click(function (e) {
@@ -355,7 +355,7 @@ var wapp = {
 
 				var $liAudio = $('<li/>').appendTo($menu);
 				
-				var $audio = $('<a/>').append('Audio');
+				var $audio = $('<a/>').append('<i class="fa fa-microphone"></i>&nbsp;&nbsp;Audio');
 				$audio.addClass('dropdown-item');
 				$audio.appendTo($liAudio);
 				$audio.click(function (e) {
@@ -366,7 +366,7 @@ var wapp = {
 					class: 'dropdown-submenu',
 				}).appendTo($menu);
 
-				var $aTmp = $('<a/>').append('Plantilla');
+				var $aTmp = $('<a/>').append('<i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Plantilla');
 				$aTmp.addClass('dropdown-item');
 				$aTmp.appendTo($liTmp);
 
