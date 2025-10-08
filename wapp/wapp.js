@@ -1295,9 +1295,13 @@ var wapp = {
 									wappaction: 'send',
 									from: fromN,
 									to: toN,
-									body: file2.name, // todo: el body va solo en documentos
 									mediaUrl: data.Location,
 								};
+								
+								// Solo agregar body para documentos, no para audio
+								if (!file2.type.startsWith('audio/')) {
+									sendObj.body = file2.name;
+								}
 
 								let msg;
 								try {
