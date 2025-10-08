@@ -217,46 +217,40 @@ var wapp = {
 			// Crear URL con credenciales
 			const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
 			
-			// Abrir ventana pequeña con la URL autenticada
-			const popup = window.open(authUrl, 'twilio-auth', 'width=1,height=1,left=-1000,top=-1000');
-			
-			// Monitorear cuando se hace el redirect y cerrar la ventana
-			const checkRedirect = setInterval(() => {
-				try {
-					if (popup.closed) {
-						clearInterval(checkRedirect);
-						return;
+			// Usar iframe invisible para autenticar (más limpio que popup)
+			await new Promise((resolve) => {
+				const authFrame = document.createElement('iframe');
+				authFrame.style.display = 'none';
+				authFrame.style.width = '1px';
+				authFrame.style.height = '1px';
+				
+				authFrame.onload = () => {
+					document.body.removeChild(authFrame);
+					console.log('Twilio authentication successful via iframe');
+					wapp.twilioAuthenticated = true;
+					resolve();
+				};
+				
+				authFrame.onerror = () => {
+					document.body.removeChild(authFrame);
+					console.log('Twilio authentication completed (with error, but credentials sent)');
+					wapp.twilioAuthenticated = true;
+					resolve();
+				};
+				
+				// Timeout de seguridad para limpiar después de 10 segundos
+				setTimeout(() => {
+					if (authFrame.parentNode) {
+						document.body.removeChild(authFrame);
 					}
-					
-					// Si la URL cambió a mms.twiliocdn.com, significa que se hizo el redirect
-					if (popup.location && popup.location.href.includes('mms.twiliocdn.com')) {
-						popup.close();
-						clearInterval(checkRedirect);
-						console.log('Twilio authentication successful - redirect to mms.twiliocdn.com detected');
-					}
-				} catch (err) {
-					// Error de CORS es normal cuando cambia de dominio
-					// Esperamos un poco más y luego cerramos
-					setTimeout(() => {
-						if (!popup.closed) {
-							popup.close();
-							clearInterval(checkRedirect);
-							console.log('Twilio authentication completed - popup closed after redirect');
-						}
-					}, 100);
-				}
-			}, 100);
-			
-			// Timeout de seguridad para cerrar después de 10 segundos
-			setTimeout(() => {
-				if (!popup.closed) {
-					popup.close();
-					clearInterval(checkRedirect);
-					console.log('Twilio authentication timeout - popup closed');
-				}
-			}, 10000);
-			
-			wapp.twilioAuthenticated = true;
+					wapp.twilioAuthenticated = true;
+					console.log('Twilio authentication timeout - iframe removed');
+					resolve();
+				}, 10000);
+				
+				document.body.appendChild(authFrame);
+				authFrame.src = authUrl;
+			});
 			
 		} catch (err) {
 			console.error('Error authenticating with Twilio:', err);
