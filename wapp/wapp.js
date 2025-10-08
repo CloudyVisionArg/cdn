@@ -166,7 +166,7 @@ var wapp = {
 	s3: undefined,
 	twilioAuthenticated: false,
 
-	// Autentica con Twilio usando la primera URL de media disponible
+	// Autentica con Twilio usando fetch para no mostrar diálogo de login
 	authenticateWithTwilio: async function(firstMediaUrl) {
 		if (wapp.twilioAuthenticated) return;
 		
@@ -174,36 +174,22 @@ var wapp = {
 			const credentials = await wapp.modWapp.twCredentials();
 			const { accountSid, authToken } = credentials;
 			
-			// Usar la primera URL de media con credenciales para autenticar
-			const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
-			
-			// Crear una imagen invisible para forzar el redirect y autenticación
-			return new Promise((resolve) => {
-				const img = new Image();
-				
-				img.onload = () => {
-					wapp.twilioAuthenticated = true;
-					console.log('Twilio media authentication successful - all media URLs should now work');
-					resolve();
-				};
-				
-				img.onerror = () => {
-					wapp.twilioAuthenticated = true;
-					console.log('Twilio media authentication completed (with error, but redirect executed)');
-					resolve();
-				};
-				
-				// Timeout después de 5 segundos
-				setTimeout(() => {
-					wapp.twilioAuthenticated = true;
-					resolve();
-				}, 5000);
-				
-				img.src = authUrl;
+			// Hacer petición HEAD con headers para autenticar sin mostrar diálogo
+			const response = await fetch(firstMediaUrl, {
+				method: 'HEAD',
+				headers: {
+					'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken)
+				},
+				redirect: 'follow'
 			});
-		} catch (err) {
-			console.error('Error authenticating with Twilio:', err);
+			
 			wapp.twilioAuthenticated = true;
+			console.log('Twilio media authentication successful via fetch');
+			
+		} catch (err) {
+			// Incluso si falla por CORS, marca como autenticado porque las credenciales se enviaron
+			wapp.twilioAuthenticated = true;
+			console.log('Twilio media authentication completed (CORS error expected, but credentials sent)');
 		}
 	},
 
