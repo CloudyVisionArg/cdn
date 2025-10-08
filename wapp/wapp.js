@@ -169,35 +169,37 @@ var wapp = {
 	// Autentica con Twilio
 	twAuthenticate: async function(mediaUrl) {
 
-		const authFrame = document.createElement('iframe');
-		authFrame.style.width = '400px';
-		authFrame.style.height = '300px';
-		authFrame.style.border = '1px solid red';
+		await new Promise(resolve => {
+			const authFrame = document.createElement('iframe');
+			authFrame.style.width = '400px';
+			authFrame.style.height = '300px';
+			authFrame.style.border = '1px solid red';
 
-		authFrame.onload = () => {
-			// Obtener la URL actual del iframe
-			let currentUrl;
-			try {
-				currentUrl = authFrame.contentWindow.location.href;
-			} catch (e) {
-				currentUrl = authFrame.src;
+			authFrame.onload = () => {
+				// Obtener la URL actual del iframe
+				let currentUrl;
+				try {
+					currentUrl = authFrame.contentWindow.location.href;
+				} catch (e) {
+					currentUrl = authFrame.src;
+				}
+						
+				debugger
 			}
+
+
+			authFrame.onerror = () => {
+				debugger
+			};
 					
-			debugger
-		}
+			document.body.appendChild(authFrame);
 
+			const credentials = await wapp.modWapp.twCredentials();
+			const { accountSid, authToken } = credentials;
 
-		authFrame.onerror = () => {
-			debugger
+			const authUrl = mediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
+			authFrame.src = authUrl;
 		};
-				
-		document.body.appendChild(authFrame);
-
-		const credentials = await wapp.modWapp.twCredentials();
-		const { accountSid, authToken } = credentials;
-
-		const authUrl = mediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
-		authFrame.src = authUrl;
 
 		/*
 		// Simplemente intentar autenticar - si ya está autenticado, no debería mostrar dialog
