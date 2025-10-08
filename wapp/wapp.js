@@ -1399,6 +1399,7 @@ var wapp = {
 	recordingTimer: null,
 	recordingStartTime: null,
 	audioStream: null,
+	cancelRecording: false,
 	
 	recordAudio: async function (pChat) {
 		if (!wapp.mediaRec || wapp.mediaRec.state == 'inactive') {
@@ -1415,6 +1416,13 @@ var wapp = {
 					try {
 						// Limpiar UI de grabación
 						wapp.stopRecordingUI();
+						
+						// Si fue cancelado, solo limpiar recursos
+						if (wapp.cancelRecording) {
+							wapp.cancelRecording = false;
+							wapp.releaseAudioStream();
+							return;
+						}
 						
 						wapp.cursorLoading(true);
 
@@ -1465,29 +1473,56 @@ var wapp = {
 	startRecordingUI: function () {
 		wapp.recordingStartTime = Date.now();
 		
-		// Crear elemento flotante simple
+		// Crear ventana modal en el centro
 		wapp.recordingElement = $(`
 			<div id="wapp-recording" style="
 				position: fixed; 
-				top: 20px; 
-				right: 20px; 
-				background: #d9534f; 
-				color: white; 
-				padding: 10px 15px; 
-				border-radius: 5px; 
+				top: 50%; 
+				left: 50%; 
+				transform: translate(-50%, -50%);
+				background: white; 
+				border: 2px solid #d9534f;
+				border-radius: 8px; 
 				z-index: 9999;
 				font-size: 14px;
-				box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+				box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+				width: 300px;
+				text-align: center;
 			">
-				<i class="fa fa-microphone blink-recording"></i> Grabando... 0s
+				<div style="background: #d9534f; color: white; padding: 15px; border-radius: 6px 6px 0 0;">
+					<i class="fa fa-microphone blink-recording"></i> 
+					<span id="recording-text">Grabando... 0s</span>
+				</div>
+				<div style="padding: 20px;">
+					<button id="wapp-send-audio" class="btn btn-success" style="margin-right: 10px;">
+						<i class="fa fa-send"></i> Enviar
+					</button>
+					<button id="wapp-cancel-audio" class="btn btn-default">
+						<i class="fa fa-times"></i> Cancelar
+					</button>
+				</div>
 			</div>
 		`).appendTo('body');
+		
+		// Event handlers para los botones
+		wapp.recordingElement.find('#wapp-send-audio').click(() => {
+			if (wapp.mediaRec && wapp.mediaRec.state == 'recording') {
+				wapp.mediaRec.stop(); // Esto disparará el onstop que envía el audio
+			}
+		});
+		
+		wapp.recordingElement.find('#wapp-cancel-audio').click(() => {
+			if (wapp.mediaRec && wapp.mediaRec.state == 'recording') {
+				wapp.mediaRec.stop();
+				wapp.cancelRecording = true; // Flag para no enviar
+			}
+		});
 		
 		// Timer para actualizar duración
 		wapp.recordingTimer = setInterval(() => {
 			if (wapp.recordingElement && wapp.recordingStartTime) {
 				const elapsed = Math.floor((Date.now() - wapp.recordingStartTime) / 1000);
-				wapp.recordingElement.html(`<i class="fa fa-microphone blink-recording"></i> Grabando... ${elapsed}s`);
+				wapp.recordingElement.find('#recording-text').text(`Grabando... ${elapsed}s`);
 			}
 		}, 1000);
 	},
