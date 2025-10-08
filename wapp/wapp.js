@@ -1353,7 +1353,6 @@ var wapp = {
 			};
 			reader.readAsArrayBuffer(file2);
 		}
-
 	},
 
 	getS3: function (pCallback) {
