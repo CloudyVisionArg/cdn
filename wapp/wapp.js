@@ -167,7 +167,7 @@ var wapp = {
 	twilioAuthenticated: false,
 
 	// Autentica con Twilio abriendo ventana con credenciales
-	authenticateWithTwilio: async function(firstMediaUrl) {
+	twAuthenticate: async function(firstMediaUrl) {
 		if (wapp.twilioAuthenticated) return;
 		
 		try {
@@ -203,7 +203,7 @@ var wapp = {
 							clearInterval(checkRedirect);
 							console.log('Twilio authentication completed - popup closed after redirect');
 						}
-					}, 100);
+					}, 1000);
 				}
 			}, 100);
 			
@@ -741,7 +741,7 @@ var wapp = {
 				if (media) {
 					// Autenticar con Twilio usando la primera URL de media
 					if (media.length > 0) {
-						await wapp.authenticateWithTwilio(media[0].Url);
+						await wapp.twAuthenticate(media[0].Url);
 					}
 					
 					for (const it of media) {
