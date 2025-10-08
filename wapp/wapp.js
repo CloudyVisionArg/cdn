@@ -697,6 +697,7 @@ var wapp = {
 							$img.on('error', function() {
 								hasMediaError = true;
 								$(this).attr('data-media-failed', 'true');
+								wapp.showMediaReloadButton(pMsg.sid);
 							});
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
@@ -710,6 +711,7 @@ var wapp = {
 							$med.on('error', function() {
 								hasMediaError = true;
 								$(this).attr('data-media-failed', 'true');
+								wapp.showMediaReloadButton(pMsg.sid);
 							});
 
 						} else if (it.ContentType.substr(0, 5) == 'video') {
@@ -723,6 +725,7 @@ var wapp = {
 							$med.on('error', function() {
 								hasMediaError = true;
 								$(this).attr('data-media-failed', 'true');
+								wapp.showMediaReloadButton(pMsg.sid);
 							});
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
@@ -792,18 +795,6 @@ var wapp = {
 				$msgText.append(body);
 			}
 			
-			// Agregar botón de recarga si hay media con error
-			if (hasMediaError) {
-				var $reloadBtn = $('<div/>', {
-					class: 'wapp-media-reload-btn',
-					style: 'margin-top: 5px; text-align: center;',
-					html: '<button style="font-size: 12px; padding: 3px 8px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">🔒 Recargar media</button>'
-				}).appendTo($msgText);
-				
-				$reloadBtn.click(async function() {
-					await wapp.reloadMediaWithAuth(pMsg.sid);
-				});
-			}
 			
 			var $msgTime = $('<div/>', {
 				class: 'wapp-message-time',
@@ -1670,6 +1661,26 @@ var wapp = {
 		
 		// Crear blob
 		return new Blob(mp3Data, { type: 'audio/mpeg' });
+	},
+
+	// Muestra botón de recarga de media
+	showMediaReloadButton: function(messageSid) {
+		const $message = $(`.wapp-message[data-sid="${messageSid}"]`);
+		if ($message.length === 0) return;
+		
+		// No agregar si ya existe
+		if ($message.find('.wapp-media-reload-btn').length > 0) return;
+		
+		const $msgTime = $message.find('.wapp-message-time');
+		const $reloadBtn = $('<div/>', {
+			class: 'wapp-media-reload-btn',
+			style: 'margin-top: 5px; text-align: center;',
+			html: '<button style="font-size: 12px; padding: 3px 8px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">🔒 Recargar media</button>'
+		}).insertBefore($msgTime);
+		
+		$reloadBtn.click(async function() {
+			await wapp.reloadMediaWithAuth(messageSid);
+		});
 	},
 
 	// Recarga media con autenticación
