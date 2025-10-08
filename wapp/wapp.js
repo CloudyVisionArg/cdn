@@ -381,6 +381,16 @@ var wapp = {
 					wapp.templatePicker.showPicker(x, y, $reply);
 				});
 
+				var $liReload = $('<li/>').appendTo($menu);
+				var $aReload = $('<a/>').append('<i class="fa fa-refresh"></i>&nbsp;&nbsp;Recargar media');
+				$aReload.addClass('dropdown-item');
+				$aReload.appendTo($liReload);
+				
+				$aReload.click(function (e) {
+					const $chat = $(this).closest('.wapp-chat');
+					wapp.reloadAllChatMedia($chat);
+				});
+
 				$('<li/>', {
 					role: 'separator',
 					class: 'divider',
@@ -683,11 +693,6 @@ var wapp = {
 				if (media) {
 					
 					for (const it of media) {
-						// Verificar autenticación para cada media (pero solo se ejecuta la primera vez)
-						setTimeout(() => {
-							const $chat = $row.closest('.wapp-chat');
-							wapp.checkMediaAccess(it.Url, $chat);
-						}, 100);
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
 						
 						var $div = $('<div/>').appendTo($msgText);
@@ -1653,53 +1658,6 @@ var wapp = {
 		return new Blob(mp3Data, { type: 'audio/mpeg' });
 	},
 
-	// Verifica si el media requiere autenticación (solo una vez por chat)
-	checkMediaAccess: async function(mediaUrl, $chat) {
-		// Verificar si ya se chequeó este chat
-		if ($chat.attr('data-media-checked') === 'true') return;
-		$chat.attr('data-media-checked', 'true');
-		
-		debugger
-		try {
-			const response = await fetch(mediaUrl, { method: 'HEAD' });
-			console.log('Media response status:', response.status);
-			console.log('Media response headers:', response.headers);
-			
-			// Si es 401 o redirige a login, mostrar botón
-			if (response.status === 401 || response.url.includes('login')) {
-				wapp.showMediaReloadButton($chat);
-			}
-		} catch (error) {
-			console.log('Error checking media access:', error);
-			// Si hay error de CORS o similar, asumir que necesita auth
-			wapp.showMediaReloadButton($chat);
-		}
-	},
-
-	// Muestra botón de recarga de media
-	showMediaReloadButton: function($chat) {
-		if ($chat.length === 0) return;
-		
-		const $header = $chat.find('.wapp-header');
-		if ($header.length === 0) return;
-		
-		// No agregar si ya existe
-		if ($header.find('.wapp-media-reload-btn').length > 0) return;
-		
-		const $headerDivs = $header.children('div');
-		if ($headerDivs.length < 2) return;
-		
-		const $secondDiv = $headerDivs.eq(1);
-		const $reloadBtn = $('<span/>', {
-			class: 'wapp-media-reload-btn',
-			style: 'margin-left: 10px; color: #007bff; cursor: pointer; font-size: 11px;',
-			html: '🔄 Recargar media'
-		}).appendTo($secondDiv);
-		
-		$reloadBtn.click(async function() {
-			await wapp.reloadAllChatMedia($chat);
-		});
-	},
 
 	// Recarga todos los media del chat con autenticación
 	reloadAllChatMedia: async function($chat) {
