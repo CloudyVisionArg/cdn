@@ -435,8 +435,8 @@ var wapp = {
 										}
 										
 										const $reply = $(actions.params.chatEl).find('.wapp-reply')[0];
-										const x = window.innerWidth / 2;
-										const y = window.innerHeight / 2;
+										const x = 50; // Cerca del borde izquierdo
+										const y = 100; // Desde arriba
 										wapp.templatePicker.showPicker(x, y, $reply);
 									}
 								},
@@ -1396,14 +1396,19 @@ wapp.templatePicker = {
         // Crear container principal
         this.picker = document.createElement('div');
         this.picker.id = 'templatePicker';
+        // Ajustar tamaño según el dispositivo
+        const isApp = typeof app7 === 'object';
+        const maxWidth = isApp ? Math.min(window.innerWidth - 40, 350) : 450;
+        const maxHeight = isApp ? Math.min(window.innerHeight - 100, 400) : 400;
+        
         this.picker.style.cssText = `
             background-color: #fff;
             border-radius: 12px;
             display: none;
             position: absolute;
             padding: 0;
-            height: 400px;
-            width: 450px;
+            height: ${maxHeight}px;
+            width: ${maxWidth}px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             border: 1px solid #ddd;
             z-index: 10000;
