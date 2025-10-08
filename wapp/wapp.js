@@ -1651,42 +1651,80 @@ var wapp = {
 	},
 
 	// Verifica si el media requiere autenticación
-	checkMediaAccess: async function(mediaItem, messageSid) {
+	checkMediaAccess: async function(mediaUrl, $chat) {
 		debugger
 		try {
-			const response = await fetch(mediaItem.Url, { method: 'HEAD' });
+			const response = await fetch(mediaUrl, { method: 'HEAD' });
 			console.log('Media response status:', response.status);
 			console.log('Media response headers:', response.headers);
 			
 			// Si es 401 o redirige a login, mostrar botón
 			if (response.status === 401 || response.url.includes('login')) {
-				wapp.showMediaReloadButton(messageSid);
+				wapp.showMediaReloadButton($chat);
 			}
 		} catch (error) {
 			console.log('Error checking media access:', error);
 			// Si hay error de CORS o similar, asumir que necesita auth
-			wapp.showMediaReloadButton(messageSid);
+			wapp.showMediaReloadButton($chat);
 		}
 	},
 
 	// Muestra botón de recarga de media
-	showMediaReloadButton: function(messageSid) {
-		const $message = $(`.wapp-message[data-sid="${messageSid}"]`);
-		if ($message.length === 0) return;
+	showMediaReloadButton: function($chat) {
+		if ($chat.length === 0) return;
+		
+		const $header = $chat.find('.wapp-header');
+		if ($header.length === 0) return;
 		
 		// No agregar si ya existe
-		if ($message.find('.wapp-media-reload-btn').length > 0) return;
+		if ($header.find('.wapp-media-reload-btn').length > 0) return;
 		
-		const $msgTime = $message.find('.wapp-message-time');
-		const $reloadBtn = $('<div/>', {
+		const $headerDivs = $header.children('div');
+		if ($headerDivs.length < 2) return;
+		
+		const $secondDiv = $headerDivs.eq(1);
+		const $reloadBtn = $('<span/>', {
 			class: 'wapp-media-reload-btn',
-			style: 'margin-top: 5px; text-align: center;',
-			html: '<button style="font-size: 12px; padding: 3px 8px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">🔒 Recargar media</button>'
-		}).insertBefore($msgTime);
+			style: 'margin-left: 10px; color: #007bff; cursor: pointer; font-size: 11px;',
+			html: '🔄 Recargar media'
+		}).appendTo($secondDiv);
 		
 		$reloadBtn.click(async function() {
-			await wapp.reloadMediaWithAuth(messageSid);
+			await wapp.reloadAllChatMedia($chat);
 		});
+	},
+
+	// Recarga todos los media del chat con autenticación
+	reloadAllChatMedia: async function($chat) {
+		try {
+			// Obtener credenciales de Twilio
+			const creds = await wapp.modWapp.twCredentials();
+			
+			// Abrir popup para autenticación con cualquier URL de Twilio
+			const popup = window.open(
+				`https://${creds.accountSid}:${creds.authToken}@api.twilio.com/2010-04-01/Accounts/${creds.accountSid}.json`,
+				'twilioAuth',
+				'width=600,height=400,scrollbars=yes,resizable=yes'
+			);
+			
+			if (!popup) {
+				wapp.toast('Por favor permite popups para recargar el media');
+				return;
+			}
+			
+			// Esperar a que se cierre el popup
+			const checkClosed = setInterval(() => {
+				if (popup.closed) {
+					clearInterval(checkClosed);
+					// Recargar todos los media del chat
+					setTimeout(() => wapp.reloadFailedMedia($chat), 500);
+				}
+			}, 1000);
+			
+		} catch (error) {
+			console.error('Error recargando media:', error);
+			wapp.toast('Error al intentar recargar media');
+		}
 	},
 
 	// Recarga media con autenticación
@@ -1722,57 +1760,48 @@ var wapp = {
 		}
 	},
 
-	// Recarga solo los elementos media que fallaron
-	reloadFailedMedia: function(messageSid) {
+	// Recarga todos los media de un chat
+	reloadFailedMedia: function($chat) {
 		try {
-			// Buscar el mensaje en la interfaz
-			const $message = $(`.wapp-message[data-sid="${messageSid}"]`);
-			if ($message.length === 0) return;
-			
 			const timestamp = Date.now();
 			
-			// Recargar imágenes que fallaron
-			$message.find('img[data-media-failed="true"]').each(function() {
+			// Recargar todas las imágenes (excepto mapas)
+			$chat.find('img').each(function() {
 				const $img = $(this);
 				const originalSrc = $img.attr('src');
 				if (originalSrc && !originalSrc.includes('maps.google.com')) {
 					const separator = originalSrc.includes('?') ? '&' : '?';
 					$img.attr('src', originalSrc + separator + 't=' + timestamp);
-					$img.removeAttr('data-media-failed');
 				}
 			});
 			
-			// Recargar audios que fallaron
-			$message.find('audio[data-media-failed="true"]').each(function() {
-				const $audio = $(this);
-				const $source = $audio.find('source');
+			// Recargar todos los audios
+			$chat.find('audio source').each(function() {
+				const $source = $(this);
 				const originalSrc = $source.attr('src');
 				if (originalSrc) {
 					const separator = originalSrc.includes('?') ? '&' : '?';
 					$source.attr('src', originalSrc + separator + 't=' + timestamp);
-					this.load(); // Recargar el audio
-					$audio.removeAttr('data-media-failed');
+					$source.parent()[0].load();
 				}
 			});
 			
-			// Recargar videos que fallaron
-			$message.find('video[data-media-failed="true"]').each(function() {
-				const $video = $(this);
-				const $source = $video.find('source');
+			// Recargar todos los videos
+			$chat.find('video source').each(function() {
+				const $source = $(this);
 				const originalSrc = $source.attr('src');
 				if (originalSrc) {
 					const separator = originalSrc.includes('?') ? '&' : '?';
 					$source.attr('src', originalSrc + separator + 't=' + timestamp);
-					this.load(); // Recargar el video
-					$video.removeAttr('data-media-failed');
+					$source.parent()[0].load();
 				}
 			});
 			
 			// Remover el botón de recarga
-			$message.find('.wapp-media-reload-btn').remove();
+			$chat.find('.wapp-media-reload-btn').remove();
 			
 		} catch (error) {
-			console.error('Error recargando elementos media fallidos:', error);
+			console.error('Error recargando media del chat:', error);
 		}
 	}
 
