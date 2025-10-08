@@ -203,7 +203,7 @@ var wapp = {
 							clearInterval(checkRedirect);
 							console.log('Twilio authentication completed - popup closed after redirect');
 						}
-					}, 1000);
+					}, 100);
 				}
 			}, 100);
 			
