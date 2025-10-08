@@ -231,8 +231,8 @@ var wapp = {
 				}, 15000);
 				
 				// Asignar src antes de agregar al DOM
-				authFrame.src = authUrl;
 				document.body.appendChild(authFrame);
+				authFrame.src = authUrl;
 				console.log('AUTH IFRAME: iframe added to DOM with src', authUrl);
 			});
 			
