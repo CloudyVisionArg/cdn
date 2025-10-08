@@ -187,31 +187,41 @@ var wapp = {
 				authFrame.style.height = '300px';
 				authFrame.style.border = '1px solid red';
 				
+				let hasResolved = false;
+				
 				authFrame.onload = () => {
-					console.log('AUTH IFRAME: onload triggered - authentication successful');
-					wapp.twilioAuthenticated = true;
-					resolve();
+					// Ignorar el onload de about:blank
+					if (authFrame.src === authUrl && !hasResolved) {
+						console.log('AUTH IFRAME: onload triggered - authentication successful');
+						hasResolved = true;
+						wapp.twilioAuthenticated = true;
+						resolve();
+					}
 				};
 				
 				authFrame.onerror = () => {
-					console.log('AUTH IFRAME: onerror triggered - authentication completed with error');
-					wapp.twilioAuthenticated = true;
-					resolve();
+					if (!hasResolved) {
+						console.log('AUTH IFRAME: onerror triggered - authentication completed with error');
+						hasResolved = true;
+						wapp.twilioAuthenticated = true;
+						resolve();
+					}
 				};
 				
 				// Timeout de seguridad
 				setTimeout(() => {
-					console.log('AUTH IFRAME: timeout triggered');
-					wapp.twilioAuthenticated = true;
-					resolve();
+					if (!hasResolved) {
+						console.log('AUTH IFRAME: timeout triggered');
+						hasResolved = true;
+						wapp.twilioAuthenticated = true;
+						resolve();
+					}
 				}, 15000);
 				
+				// Asignar src antes de agregar al DOM
+				authFrame.src = authUrl;
 				document.body.appendChild(authFrame);
-				// Usar setTimeout para asegurar que los event listeners estén configurados antes de cargar
-				setTimeout(() => {
-					console.log('AUTH IFRAME: Setting src to', authUrl);
-					authFrame.src = authUrl;
-				}, 100);
+				console.log('AUTH IFRAME: iframe added to DOM with src', authUrl);
 			});
 			
 		} catch (err) {
