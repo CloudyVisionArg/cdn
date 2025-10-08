@@ -352,6 +352,15 @@ var wapp = {
 					wapp.sendFileWeb($cont[0]);
 				});
 
+				var $liAudio = $('<li/>').appendTo($menu);
+				
+				var $audio = $('<a/>').append('Audio');
+				$audio.addClass('dropdown-item');
+				$audio.appendTo($liAudio);
+				$audio.click(function (e) {
+					wapp.sendAudioWeb($cont[0]);
+				});
+
 				var $liTmp = $('<li/>', {
 					class: 'dropdown-submenu',
 				}).appendTo($menu);
@@ -1378,6 +1387,70 @@ var wapp = {
 		var $file = $('#wappFile');
 		$file.prop('data-chat', pChat);
 		$file.click();
+	},
+
+	sendAudioWeb: function (pChat) {
+		wapp.recordAudio(pChat);
+	},
+
+	mediaRec: null,
+	recordAudio: async function (pChat) {
+		if (!wapp.mediaRec || wapp.mediaRec.state == 'inactive') {
+			try {
+				let audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+				wapp.mediaRec = new MediaRecorder(audioStream);
+				let audioChunks = [];
+
+				wapp.mediaRec.ondataavailable = (event) => {
+					audioChunks.push(event.data);
+				};
+
+				wapp.mediaRec.onstop = async () => {
+					try {
+						wapp.cursorLoading(true);
+
+						const blb = new Blob(audioChunks, { type: 'audio/webm' });
+
+						// Calcular duración del audio
+						let segs = await new Promise((resolve, reject) => {
+							const audioUrl = URL.createObjectURL(blb);
+							const audio = new Audio(audioUrl);
+							audio.addEventListener('loadedmetadata', () => {
+								URL.revokeObjectURL(audioUrl);
+								resolve(Math.round(audio.duration));
+							});
+						});
+
+						// Crear nombre del archivo
+						let name = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.webm`;
+
+						// Crear un File object para usar con sendMedia
+						let audioFile = new File([blb], name, { type: 'audio/webm' });
+						
+						wapp.sendMedia(audioFile, pChat);
+
+						// Liberar el audioStream
+						if (audioStream) audioStream.getTracks().forEach(track => track.stop());
+
+					} catch (err) {
+						console.error(err);
+						wapp.toast(dSession.utils.errMsg(err));
+						wapp.cursorLoading(false);
+					}
+				};
+
+				wapp.mediaRec.start();
+				wapp.toast('🎤 Grabando audio... Haz clic en Audio nuevamente para detener');
+
+			} catch (err) {
+				console.error(err);
+				wapp.toast('Error al acceder al micrófono: ' + dSession.utils.errMsg(err));
+			}
+
+		} else if (wapp.mediaRec.state == 'recording') {
+			wapp.mediaRec.stop();
+			wapp.toast('⏹️ Deteniendo grabación...');
+		}
 	}
 
 }
