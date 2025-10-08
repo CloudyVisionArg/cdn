@@ -1395,15 +1395,16 @@ var wapp = {
 	},
 
 	mediaRec: null,
-	recordingToast: null,
+	recordingElement: null,
 	recordingTimer: null,
 	recordingStartTime: null,
+	audioStream: null,
 	
 	recordAudio: async function (pChat) {
 		if (!wapp.mediaRec || wapp.mediaRec.state == 'inactive') {
 			try {
-				let audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-				wapp.mediaRec = new MediaRecorder(audioStream);
+				wapp.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+				wapp.mediaRec = new MediaRecorder(wapp.audioStream);
 				let audioChunks = [];
 
 				wapp.mediaRec.ondataavailable = (event) => {
@@ -1412,15 +1413,8 @@ var wapp = {
 
 				wapp.mediaRec.onstop = async () => {
 					try {
-						// Cerrar toast de grabación
-						if (wapp.recordingToast) {
-							wapp.recordingToast.hide();
-							wapp.recordingToast = null;
-						}
-						if (wapp.recordingTimer) {
-							clearInterval(wapp.recordingTimer);
-							wapp.recordingTimer = null;
-						}
+						// Limpiar UI de grabación
+						wapp.stopRecordingUI();
 						
 						wapp.cursorLoading(true);
 
@@ -1444,36 +1438,19 @@ var wapp = {
 						
 						wapp.sendMedia(audioFile, pChat);
 
-						// Liberar el audioStream
-						if (audioStream) audioStream.getTracks().forEach(track => track.stop());
+						// Liberar recursos
+						wapp.releaseAudioStream();
 
 					} catch (err) {
 						console.error(err);
 						wapp.toast(dSession.utils.errMsg(err));
 						wapp.cursorLoading(false);
+						wapp.releaseAudioStream();
 					}
 				};
 
 				wapp.mediaRec.start();
-				wapp.recordingStartTime = Date.now();
-				
-				// Toast con micrófono parpadeando
-				wapp.recordingToast = wapp.toast(
-					'<i class="fa fa-microphone blink-recording"></i> Grabando... 0s', 
-					{ autohide: false }
-				);
-				
-				// Timer para actualizar duración
-				wapp.recordingTimer = setInterval(() => {
-					if (wapp.recordingToast && wapp.recordingStartTime) {
-						const elapsed = Math.floor((Date.now() - wapp.recordingStartTime) / 1000);
-						const toastElement = wapp.recordingToast.getToastElement();
-						if (toastElement) {
-							toastElement.querySelector('.toast-body').innerHTML = 
-								'<i class="fa fa-microphone blink-recording"></i> Grabando... ' + elapsed + 's';
-						}
-					}
-				}, 1000);
+				wapp.startRecordingUI();
 
 			} catch (err) {
 				console.error(err);
@@ -1482,6 +1459,55 @@ var wapp = {
 
 		} else if (wapp.mediaRec.state == 'recording') {
 			wapp.mediaRec.stop();
+		}
+	},
+	
+	startRecordingUI: function () {
+		wapp.recordingStartTime = Date.now();
+		
+		// Crear elemento flotante simple
+		wapp.recordingElement = $(`
+			<div id="wapp-recording" style="
+				position: fixed; 
+				top: 20px; 
+				right: 20px; 
+				background: #d9534f; 
+				color: white; 
+				padding: 10px 15px; 
+				border-radius: 5px; 
+				z-index: 9999;
+				font-size: 14px;
+				box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+			">
+				<i class="fa fa-microphone blink-recording"></i> Grabando... 0s
+			</div>
+		`).appendTo('body');
+		
+		// Timer para actualizar duración
+		wapp.recordingTimer = setInterval(() => {
+			if (wapp.recordingElement && wapp.recordingStartTime) {
+				const elapsed = Math.floor((Date.now() - wapp.recordingStartTime) / 1000);
+				wapp.recordingElement.html(`<i class="fa fa-microphone blink-recording"></i> Grabando... ${elapsed}s`);
+			}
+		}, 1000);
+	},
+	
+	stopRecordingUI: function () {
+		if (wapp.recordingTimer) {
+			clearInterval(wapp.recordingTimer);
+			wapp.recordingTimer = null;
+		}
+		if (wapp.recordingElement) {
+			wapp.recordingElement.remove();
+			wapp.recordingElement = null;
+		}
+		wapp.recordingStartTime = null;
+	},
+	
+	releaseAudioStream: function () {
+		if (wapp.audioStream) {
+			wapp.audioStream.getTracks().forEach(track => track.stop());
+			wapp.audioStream = null;
 		}
 	}
 
