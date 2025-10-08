@@ -168,8 +168,6 @@ var wapp = {
 
 	// Autentica con Twilio usando la primera URL de media disponible
 	authenticateWithTwilio: async function(firstMediaUrl) {
-		debugger
-		return
 		if (wapp.twilioAuthenticated) return;
 		
 		try {
