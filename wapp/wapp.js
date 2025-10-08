@@ -168,6 +168,7 @@ var wapp = {
 
 	// Autentica con Twilio abriendo ventana con credenciales
 	authenticateWithTwilio: async function(firstMediaUrl) {
+		return
 		if (wapp.twilioAuthenticated) return;
 		
 		try {
