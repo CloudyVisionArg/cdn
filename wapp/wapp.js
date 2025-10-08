@@ -190,12 +190,24 @@ var wapp = {
 				let hasResolved = false;
 				
 				authFrame.onload = () => {
+					// Obtener la URL actual del iframe
+					let currentUrl;
+					try {
+						currentUrl = authFrame.contentWindow.location.href;
+					} catch (e) {
+						currentUrl = authFrame.src;
+					}
+					
+					console.log('AUTH IFRAME: onload triggered, currentUrl =', currentUrl);
+					
 					// Ignorar el onload de about:blank
-					if (authFrame.src === authUrl && !hasResolved) {
-						console.log('AUTH IFRAME: onload triggered - authentication successful');
+					if (currentUrl !== 'about:blank' && !hasResolved) {
+						console.log('AUTH IFRAME: valid onload - authentication successful');
 						hasResolved = true;
 						wapp.twilioAuthenticated = true;
 						resolve();
+					} else {
+						console.log('AUTH IFRAME: ignoring about:blank onload');
 					}
 				};
 				
