@@ -1413,84 +1413,23 @@ wapp.templatePicker = {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
         `;
 
-        // Header
-        const header = document.createElement('div');
-        header.style.cssText = `
-            background-color: #f8f9fa;
-            padding: 12px 16px;
-            border-bottom: 1px solid #e9ecef;
-            border-radius: 12px 12px 0 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        `;
-        header.innerHTML = `
-            <span style="font-weight: 600; color: #495057;">📋 Plantillas</span>
-            <button id="templatePickerClose" style="
-                background: none;
-                border: none;
-                font-size: 18px;
-                cursor: pointer;
-                color: #6c757d;
-                padding: 0;
-                width: 24px;
-                height: 24px;
-            ">❌</button>
-        `;
-        this.picker.appendChild(header);
-
-        // Search input
-        const searchContainer = document.createElement('div');
-        searchContainer.style.cssText = `
-            padding: 12px 16px;
-            border-bottom: 1px solid #e9ecef;
+        // Estructura completa con innerHTML
+        this.picker.innerHTML = `
+            <div style="background-color: #f8f9fa; padding: 12px 16px; border-bottom: 1px solid #e9ecef; border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-weight: 600; color: #495057;">📋 Plantillas</span>
+                <button id="templatePickerClose" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #6c757d; padding: 0; width: 24px; height: 24px;">❌</button>
+            </div>
+            <div style="padding: 12px 16px; border-bottom: 1px solid #e9ecef;">
+                <input type="text" placeholder="🔍 Buscar plantillas..." style="width: 100%; padding: 8px 12px; border: 2px solid #e9ecef; border-radius: 8px; box-sizing: border-box; font-size: 14px;">
+            </div>
+            <div id="templateContent" style="height: 280px; overflow-y: auto; padding: 12px 0 0 0;"></div>
+            <div style="padding: 12px 16px; border-top: 1px solid #e9ecef; text-align: center; border-radius: 0 0 12px 12px; background-color: #f8f9fa;">
+                <button id="templateCancel" style="background-color: #6c757d; color: white; border: none; padding: 8px 24px; border-radius: 6px; cursor: pointer; font-size: 14px;">Cancelar</button>
+            </div>
         `;
         
-        const searchInput = document.createElement('input');
-        searchInput.type = 'text';
-        searchInput.placeholder = '🔍 Buscar plantillas...';
-        searchInput.style.cssText = `
-            width: 100%;
-            padding: 8px 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 14px;
-        `;
-        searchContainer.appendChild(searchInput);
-        this.picker.appendChild(searchContainer);
-
-        // Content container
-        const content = document.createElement('div');
-        content.id = 'templateContent';
-        content.style.cssText = `
-            height: 280px;
-            overflow-y: auto;
-            padding: 12px 0 0 0;
-        `;
-        this.picker.appendChild(content);
-
-        // Footer
-        const footer = document.createElement('div');
-        footer.style.cssText = `
-            padding: 12px 16px;
-            border-top: 1px solid #e9ecef;
-            border-radius: 0 0 12px 12px;
-            background-color: #f8f9fa;
-            text-align: right;
-        `;
-        footer.innerHTML = `
-            <button id="templateCancel" style="
-                background-color: #6c757d;
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                border-radius: 6px;
-                margin-right: 8px;
-                cursor: pointer;
-            ">Cancelar</button>
-        `;
-        this.picker.appendChild(footer);
+        const searchInput = this.picker.querySelector('input');
+        const content = this.picker.querySelector('#templateContent');
 
         // Agregar al DOM primero
         document.body.appendChild(this.picker);
