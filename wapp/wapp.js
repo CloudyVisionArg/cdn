@@ -1650,8 +1650,12 @@ var wapp = {
 		return new Blob(mp3Data, { type: 'audio/mpeg' });
 	},
 
-	// Verifica si el media requiere autenticación
+	// Verifica si el media requiere autenticación (solo una vez por chat)
 	checkMediaAccess: async function(mediaUrl, $chat) {
+		// Verificar si ya se chequeó este chat
+		if ($chat.attr('data-media-checked') === 'true') return;
+		$chat.attr('data-media-checked', 'true');
+		
 		debugger
 		try {
 			const response = await fetch(mediaUrl, { method: 'HEAD' });
