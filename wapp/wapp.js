@@ -211,6 +211,7 @@ var wapp = {
 				testFrame.src = firstMediaUrl;
 			});
 			
+			debugger
 			if (isAuthenticated) {
 				wapp.twilioAuthenticated = true;
 				return;
