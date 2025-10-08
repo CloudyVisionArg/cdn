@@ -177,13 +177,26 @@ var wapp = {
 				testFrame.style.border = '1px solid blue';
 				
 				testFrame.onload = () => {
-					debugger
-					console.log('TEST IFRAME: onload triggered - already authenticated');
-					resolve(true);
+					try {
+						// Verificar si el contenido del iframe contiene error de autenticación
+						const iframeContent = testFrame.contentDocument || testFrame.contentWindow.document;
+						const bodyText = iframeContent.body.innerText || iframeContent.body.textContent;
+						
+						if (bodyText.includes('Authenticate') || bodyText.includes('20003')) {
+							console.log('TEST IFRAME: onload triggered - NOT authenticated (got 401)');
+							resolve(false);
+						} else {
+							console.log('TEST IFRAME: onload triggered - already authenticated');
+							resolve(true);
+						}
+					} catch (err) {
+						// Error de CORS probablemente significa que se redirigió a otro dominio = autenticado
+						console.log('TEST IFRAME: onload triggered - probably authenticated (CORS error)');
+						resolve(true);
+					}
 				};
 				
 				testFrame.onerror = () => {
-					debugger
 					console.log('TEST IFRAME: onerror triggered - not authenticated');
 					resolve(false);
 				};
