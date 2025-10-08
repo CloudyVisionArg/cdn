@@ -695,6 +695,7 @@ var wapp = {
 							}).click(wapp.viewImage).appendTo($div);
 							
 							$img.on('error', function() {
+								debugger;
 								hasMediaError = true;
 								$(this).attr('data-media-failed', 'true');
 								wapp.showMediaReloadButton(pMsg.sid);
@@ -709,6 +710,7 @@ var wapp = {
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 							
 							$med.on('error', function() {
+								debugger;
 								hasMediaError = true;
 								$(this).attr('data-media-failed', 'true');
 								wapp.showMediaReloadButton(pMsg.sid);
@@ -723,6 +725,7 @@ var wapp = {
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 							
 							$med.on('error', function() {
+								debugger;
 								hasMediaError = true;
 								$(this).attr('data-media-failed', 'true');
 								wapp.showMediaReloadButton(pMsg.sid);
@@ -1665,6 +1668,7 @@ var wapp = {
 
 	// Muestra botón de recarga de media
 	showMediaReloadButton: function(messageSid) {
+		debugger;
 		const $message = $(`.wapp-message[data-sid="${messageSid}"]`);
 		if ($message.length === 0) return;
 		
