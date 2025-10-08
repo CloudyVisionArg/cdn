@@ -196,7 +196,7 @@ var wapp = {
 		const credentials = await wapp.modWapp.twCredentials();
 		const { accountSid, authToken } = credentials;
 
-		const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
+		const authUrl = mediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
 		authFrame.src = authUrl;
 
 		/*
