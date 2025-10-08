@@ -168,19 +168,45 @@ var wapp = {
 
 	// Autentica con Twilio abriendo ventana con credenciales
 	twAuthenticate: async function(firstMediaUrl) {
+		// Verificar si ya hay sesión HTTP Basic Auth activa usando iframe invisible
 		try {
-			// Primero verificar si ya podemos acceder al media
-			const testResponse = await fetch(firstMediaUrl, { method: 'HEAD' });
-			console.log(testResponse.ok);
-			if (testResponse.ok) {
-				console.log('Twilio already authenticated - no popup needed');
+			const isAuthenticated = await new Promise((resolve) => {
+				const testFrame = document.createElement('iframe');
+				testFrame.style.display = 'none';
+				testFrame.style.width = '1px';
+				testFrame.style.height = '1px';
+				
+				testFrame.onload = () => {
+					document.body.removeChild(testFrame);
+					console.log('Twilio already authenticated - no popup needed');
+					resolve(true);
+				};
+				
+				testFrame.onerror = () => {
+					document.body.removeChild(testFrame);
+					console.log('Twilio not authenticated - need popup');
+					resolve(false);
+				};
+				
+				// Timeout de 3 segundos para la prueba
+				setTimeout(() => {
+					if (testFrame.parentNode) {
+						document.body.removeChild(testFrame);
+					}
+					resolve(false);
+				}, 3000);
+				
+				document.body.appendChild(testFrame);
+				testFrame.src = firstMediaUrl;
+			});
+			
+			if (isAuthenticated) {
 				wapp.twilioAuthenticated = true;
 				return;
 			}
 		} catch (err) {
 			// Si falla, necesitamos autenticar
 		}
-		return
 
 		if (wapp.twilioAuthenticated) return;
 		
