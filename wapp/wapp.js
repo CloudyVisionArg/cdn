@@ -178,16 +178,11 @@ var wapp = {
 			const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
 			
 			// Abrir ventana pequeña con la URL autenticada
-			const popup = window.open(authUrl, 'twilio-auth', 'width=1,height=1,left=-1000,top=-1000');
+			const popup = window.open(authUrl, 'twilio-auth', 'width=400,height=300');
 			
-			// Cerrar la ventana después de un momento
-			setTimeout(() => {
-				if (popup && !popup.closed) {
-					popup.close();
-				}
-				wapp.twilioAuthenticated = true;
-				console.log('Twilio authentication completed via popup');
-			}, 2000);
+			// Marcar como autenticado (no cerrar para observar)
+			wapp.twilioAuthenticated = true;
+			console.log('Twilio authentication popup opened - check what happens');
 			
 		} catch (err) {
 			console.error('Error authenticating with Twilio:', err);
