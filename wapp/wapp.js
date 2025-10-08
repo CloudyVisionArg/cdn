@@ -1458,18 +1458,16 @@ var wapp = {
 							});
 						});
 
-						// Crear nombre del archivo con extensión correcta
-						let name = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.${wapp.currentAudioType.fileExtension}`;
-
-						// Para Twilio, siempre enviar como OGG aunque sea WebM internamente
-						let twilioMimeType = 'audio/ogg';
-						let twilioExtension = 'ogg';
-						let twilioName = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.${twilioExtension}`;
+						// Convertir el audio a formato compatible con Twilio
+						const convertedBlob = await wapp.convertToWav(audioBlob);
 						
-						// Crear un File object con tipo compatible para Twilio
-						let audioFile = new File([audioBlob], twilioName, { type: twilioMimeType });
+						// Crear nombre del archivo como WAV (más compatible)
+						let twilioName = `audio_${segs}s_${Math.round(Date.now() / 1000).toString(36)}.wav`;
 						
-						console.log('Sending to Twilio as:', twilioMimeType, 'actual format:', wapp.currentAudioType.mimeType);
+						// Crear un File object con WAV
+						let audioFile = new File([convertedBlob], twilioName, { type: 'audio/wav' });
+						
+						console.log('Converted audio to WAV for Twilio compatibility');
 						
 						wapp.sendMedia(audioFile, pChat);
 
@@ -1571,6 +1569,76 @@ var wapp = {
 			wapp.audioStream.getTracks().forEach(track => track.stop());
 			wapp.audioStream = null;
 		}
+	},
+
+	convertToWav: async function (audioBlob) {
+		try {
+			// Crear AudioContext
+			const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+			
+			// Convertir blob a ArrayBuffer
+			const arrayBuffer = await audioBlob.arrayBuffer();
+			
+			// Decodificar el audio
+			const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+			
+			// Convertir a WAV
+			const wavBlob = wapp.audioBufferToWav(audioBuffer);
+			
+			audioContext.close();
+			return wavBlob;
+			
+		} catch (error) {
+			console.error('Error converting audio:', error);
+			// Si falla la conversión, devolver el blob original
+			return audioBlob;
+		}
+	},
+
+	audioBufferToWav: function (buffer) {
+		const length = buffer.length;
+		const numberOfChannels = buffer.numberOfChannels;
+		const sampleRate = buffer.sampleRate;
+		const arrayBuffer = new ArrayBuffer(44 + length * numberOfChannels * 2);
+		const view = new DataView(arrayBuffer);
+		
+		// WAV header
+		const writeString = (offset, string) => {
+			for (let i = 0; i < string.length; i++) {
+				view.setUint8(offset + i, string.charCodeAt(i));
+			}
+		};
+		
+		let offset = 0;
+		writeString(offset, 'RIFF'); offset += 4;
+		view.setUint32(offset, 36 + length * numberOfChannels * 2, true); offset += 4;
+		writeString(offset, 'WAVE'); offset += 4;
+		writeString(offset, 'fmt '); offset += 4;
+		view.setUint32(offset, 16, true); offset += 4;
+		view.setUint16(offset, 1, true); offset += 2;
+		view.setUint16(offset, numberOfChannels, true); offset += 2;
+		view.setUint32(offset, sampleRate, true); offset += 4;
+		view.setUint32(offset, sampleRate * numberOfChannels * 2, true); offset += 4;
+		view.setUint16(offset, numberOfChannels * 2, true); offset += 2;
+		view.setUint16(offset, 16, true); offset += 2;
+		writeString(offset, 'data'); offset += 4;
+		view.setUint32(offset, length * numberOfChannels * 2, true); offset += 4;
+		
+		// Escribir los datos de audio
+		const channels = [];
+		for (let i = 0; i < numberOfChannels; i++) {
+			channels.push(buffer.getChannelData(i));
+		}
+		
+		for (let i = 0; i < length; i++) {
+			for (let channel = 0; channel < numberOfChannels; channel++) {
+				const sample = Math.max(-1, Math.min(1, channels[channel][i]));
+				view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+				offset += 2;
+			}
+		}
+		
+		return new Blob([arrayBuffer], { type: 'audio/wav' });
 	}
 
 }
