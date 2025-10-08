@@ -169,7 +169,7 @@ var wapp = {
 	// Autentica con Twilio
 	twAuthenticate: async function(mediaUrl) {
 
-		await new Promise(resolve => {
+		await new Promise(async resolve => {
 			const authFrame = document.createElement('iframe');
 			authFrame.style.width = '400px';
 			authFrame.style.height = '300px';
@@ -199,7 +199,7 @@ var wapp = {
 
 			const authUrl = mediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
 			authFrame.src = authUrl;
-		};
+		});
 
 		/*
 		// Simplemente intentar autenticar - si ya está autenticado, no debería mostrar dialog
