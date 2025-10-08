@@ -192,6 +192,11 @@ var wapp = {
 		};
 				
 		document.body.appendChild(authFrame);
+
+		const credentials = await wapp.modWapp.twCredentials();
+		const { accountSid, authToken } = credentials;
+
+		const authUrl = firstMediaUrl.replace('https://api.twilio.com/', `https://${accountSid}:${authToken}@api.twilio.com/`);
 		authFrame.src = authUrl;
 
 		/*
