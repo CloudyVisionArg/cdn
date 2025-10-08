@@ -654,6 +654,7 @@ var wapp = {
 		// Renderiza
 		async function render(pMsg, pCallback) {
 			var appendBody = true;
+			var hasMediaError = false;
 			
 			var $row = $('<div/>', {
 				class: 'wapp-message',
@@ -688,10 +689,15 @@ var wapp = {
 						var $btn;
 						
 						if (it.ContentType.substr(0, 5) == 'image') {
-							$('<img/>', {
+							var $img = $('<img/>', {
 								src: it.Url,
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
+							
+							$img.on('error', function() {
+								hasMediaError = true;
+								$(this).attr('data-media-failed', 'true');
+							});
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
 							var $med = $('<audio/>', {
@@ -700,6 +706,11 @@ var wapp = {
 							}).appendTo($div);
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+							
+							$med.on('error', function() {
+								hasMediaError = true;
+								$(this).attr('data-media-failed', 'true');
+							});
 
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
@@ -708,6 +719,11 @@ var wapp = {
 							}).appendTo($div);
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
+							
+							$med.on('error', function() {
+								hasMediaError = true;
+								$(this).attr('data-media-failed', 'true');
+							});
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
@@ -774,6 +790,19 @@ var wapp = {
 				};
 				
 				$msgText.append(body);
+			}
+			
+			// Agregar botón de recarga si hay media con error
+			if (hasMediaError) {
+				var $reloadBtn = $('<div/>', {
+					class: 'wapp-media-reload-btn',
+					style: 'margin-top: 5px; text-align: center;',
+					html: '<button style="font-size: 12px; padding: 3px 8px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">🔒 Recargar media</button>'
+				}).appendTo($msgText);
+				
+				$reloadBtn.click(async function() {
+					await wapp.reloadMediaWithAuth(pMsg.sid);
+				});
 			}
 			
 			var $msgTime = $('<div/>', {
@@ -1641,6 +1670,93 @@ var wapp = {
 		
 		// Crear blob
 		return new Blob(mp3Data, { type: 'audio/mpeg' });
+	},
+
+	// Recarga media con autenticación
+	reloadMediaWithAuth: async function(messageSid) {
+		try {
+			// Obtener credenciales de Twilio
+			const creds = await wapp.modWapp.twCredentials();
+			
+			// Abrir popup para autenticación
+			const popup = window.open(
+				`https://${creds.accountSid}:${creds.authToken}@api.twilio.com/2010-04-01/Accounts/${creds.accountSid}/Messages/${messageSid}/Media.json`,
+				'twilioAuth',
+				'width=600,height=400,scrollbars=yes,resizable=yes'
+			);
+			
+			if (!popup) {
+				wapp.toast('Por favor permite popups para recargar el media');
+				return;
+			}
+			
+			// Esperar a que se cierre el popup
+			const checkClosed = setInterval(() => {
+				if (popup.closed) {
+					clearInterval(checkClosed);
+					// Recargar los elementos media que fallaron
+					setTimeout(() => wapp.reloadFailedMedia(messageSid), 500);
+				}
+			}, 1000);
+			
+		} catch (error) {
+			console.error('Error recargando media:', error);
+			wapp.toast('Error al intentar recargar media');
+		}
+	},
+
+	// Recarga solo los elementos media que fallaron
+	reloadFailedMedia: function(messageSid) {
+		try {
+			// Buscar el mensaje en la interfaz
+			const $message = $(`.wapp-message[data-sid="${messageSid}"]`);
+			if ($message.length === 0) return;
+			
+			const timestamp = Date.now();
+			
+			// Recargar imágenes que fallaron
+			$message.find('img[data-media-failed="true"]').each(function() {
+				const $img = $(this);
+				const originalSrc = $img.attr('src');
+				if (originalSrc && !originalSrc.includes('maps.google.com')) {
+					const separator = originalSrc.includes('?') ? '&' : '?';
+					$img.attr('src', originalSrc + separator + 't=' + timestamp);
+					$img.removeAttr('data-media-failed');
+				}
+			});
+			
+			// Recargar audios que fallaron
+			$message.find('audio[data-media-failed="true"]').each(function() {
+				const $audio = $(this);
+				const $source = $audio.find('source');
+				const originalSrc = $source.attr('src');
+				if (originalSrc) {
+					const separator = originalSrc.includes('?') ? '&' : '?';
+					$source.attr('src', originalSrc + separator + 't=' + timestamp);
+					this.load(); // Recargar el audio
+					$audio.removeAttr('data-media-failed');
+				}
+			});
+			
+			// Recargar videos que fallaron
+			$message.find('video[data-media-failed="true"]').each(function() {
+				const $video = $(this);
+				const $source = $video.find('source');
+				const originalSrc = $source.attr('src');
+				if (originalSrc) {
+					const separator = originalSrc.includes('?') ? '&' : '?';
+					$source.attr('src', originalSrc + separator + 't=' + timestamp);
+					this.load(); // Recargar el video
+					$video.removeAttr('data-media-failed');
+				}
+			});
+			
+			// Remover el botón de recarga
+			$message.find('.wapp-media-reload-btn').remove();
+			
+		} catch (error) {
+			console.error('Error recargando elementos media fallidos:', error);
+		}
 	}
 
 }
