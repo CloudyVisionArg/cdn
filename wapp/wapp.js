@@ -1677,6 +1677,7 @@ var wapp = {
 
 	// Recarga todos los media del chat con autenticación
 	reloadMedia: async function($chat) {
+		debugger
 		try {
 			// Verificar si hay media URL guardada
 			const lastMediaUrl = $chat.attr('data-last-media-url');
