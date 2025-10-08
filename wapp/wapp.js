@@ -428,39 +428,16 @@ var wapp = {
 									text: '<i class="f7-icons">chat_bubble_text</i>&nbsp;&nbsp;Plantillas',
 									onClick: function (actions, e) {
 										actions.close();
-	
-										//todo: dar soporte a los templates de twilio en app
-										if (wapp.templates?.local && wapp.templates.local.length > 0) {
-											var tempButtons = [
-												[],
-												[{
-													text: 'Cancelar',
-													bold: true,
-													close: true,
-												}]
-											];
-	
-											wapp.templates.local.forEach(it => {
-												tempButtons[0].push({
-													text: it,
-													onClick: tempClick,
-												})
-											});
-	
-											tempActions = app7.actions.create({
-												buttons: tempButtons,
-											});
-	
-											tempActions.params.chatEl = actions.params.chatEl;
-											tempActions.open();
-	
-											function tempClick(actions, e) {
-												wapp.putTemplate(this.text, $(actions.params.chatEl).find('.wapp-reply')[0]);
-											};
-	
-										} else {
+										
+										if (!wapp.templates) {
 											toast('No hay plantillas definidas');
+											return;
 										}
+										
+										const $reply = $(actions.params.chatEl).find('.wapp-reply')[0];
+										const x = window.innerWidth / 2;
+										const y = window.innerHeight / 2;
+										wapp.templatePicker.showPicker(x, y, $reply);
 									}
 								},
 							],
