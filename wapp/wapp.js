@@ -209,6 +209,7 @@ var wapp = {
 				document.body.appendChild(authFrame);
 				// Usar setTimeout para asegurar que los event listeners estén configurados antes de cargar
 				setTimeout(() => {
+					console.log('AUTH IFRAME: Setting src to', authUrl);
 					authFrame.src = authUrl;
 				}, 100);
 			});
