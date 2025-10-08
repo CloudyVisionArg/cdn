@@ -681,6 +681,8 @@ var wapp = {
 					console.log(err);
 				};
 				if (media) {
+					// Verificar si el primer media requiere autenticación
+					wapp.checkMediaAccess(media[0], pMsg.sid);
 					
 					for (const it of media) {
 						// https://www.twilio.com/docs/whatsapp/guidance-whatsapp-media-messages#supported-mime-types
@@ -694,12 +696,6 @@ var wapp = {
 								style: 'cursor: pointer; width: 100%; height: 130px; object-fit: cover;',
 							}).click(wapp.viewImage).appendTo($div);
 							
-							$img.on('error', function() {
-								debugger;
-								hasMediaError = true;
-								$(this).attr('data-media-failed', 'true');
-								wapp.showMediaReloadButton(pMsg.sid);
-							});
 							
 						} else if (it.ContentType.substr(0, 5) == 'audio') {
 							var $med = $('<audio/>', {
@@ -709,12 +705,6 @@ var wapp = {
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 							
-							$med.on('error', function() {
-								debugger;
-								hasMediaError = true;
-								$(this).attr('data-media-failed', 'true');
-								wapp.showMediaReloadButton(pMsg.sid);
-							});
 
 						} else if (it.ContentType.substr(0, 5) == 'video') {
 							var $med = $('<video/>', {
@@ -724,12 +714,6 @@ var wapp = {
 							
 							$med.append('<source src="' + it.Url + '" type="' + it.ContentType + '">');
 							
-							$med.on('error', function() {
-								debugger;
-								hasMediaError = true;
-								$(this).attr('data-media-failed', 'true');
-								wapp.showMediaReloadButton(pMsg.sid);
-							});
 
 						} else if (it.ContentType.substr(0, 11) == 'application') {
 							// todo: no anda en cordova
@@ -1666,9 +1650,27 @@ var wapp = {
 		return new Blob(mp3Data, { type: 'audio/mpeg' });
 	},
 
+	// Verifica si el media requiere autenticación
+	checkMediaAccess: async function(mediaItem, messageSid) {
+		debugger
+		try {
+			const response = await fetch(mediaItem.Url, { method: 'HEAD' });
+			console.log('Media response status:', response.status);
+			console.log('Media response headers:', response.headers);
+			
+			// Si es 401 o redirige a login, mostrar botón
+			if (response.status === 401 || response.url.includes('login')) {
+				wapp.showMediaReloadButton(messageSid);
+			}
+		} catch (error) {
+			console.log('Error checking media access:', error);
+			// Si hay error de CORS o similar, asumir que necesita auth
+			wapp.showMediaReloadButton(messageSid);
+		}
+	},
+
 	// Muestra botón de recarga de media
 	showMediaReloadButton: function(messageSid) {
-		debugger;
 		const $message = $(`.wapp-message[data-sid="${messageSid}"]`);
 		if ($message.length === 0) return;
 		
