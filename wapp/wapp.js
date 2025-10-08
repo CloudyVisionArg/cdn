@@ -669,7 +669,6 @@ var wapp = {
 		// Renderiza
 		async function render(pMsg, pCallback) {
 			var appendBody = true;
-			var hasMediaError = false;
 			var lastMediaUrl = null;
 			
 			var $row = $('<div/>', {
@@ -811,6 +810,7 @@ var wapp = {
 			}
 			
 			// Guardar la última media URL en el chat
+			debugger
 			if (lastMediaUrl) {
 				const $chat = $row.closest('.wapp-chat');
 				if ($chat.length > 0) {
