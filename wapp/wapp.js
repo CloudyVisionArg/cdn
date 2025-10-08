@@ -1396,6 +1396,9 @@ wapp.templatePicker = {
         // Crear container principal
         this.picker = document.createElement('div');
         this.picker.id = 'templatePicker';
+        // Ancho adaptativo para app vs web
+        const pickerWidth = (typeof app7 === 'object') ? '300px' : '450px';
+        
         this.picker.style.cssText = `
             background-color: #fff;
             border-radius: 12px;
@@ -1403,7 +1406,7 @@ wapp.templatePicker = {
             position: absolute;
             padding: 0;
             height: 400px;
-            width: 450px;
+            width: ${pickerWidth};
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             border: 1px solid #ddd;
             z-index: 10000;
