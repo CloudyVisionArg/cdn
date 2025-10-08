@@ -381,6 +381,11 @@ var wapp = {
 					wapp.templatePicker.showPicker(x, y, $reply);
 				});
 
+				$('<li/>', {
+					role: 'separator',
+					class: 'divider',
+				}).append('<hr class="dropdown-divider">').appendTo($menu);
+				
 				var $liReload = $('<li/>').appendTo($menu);
 				var $aReload = $('<a/>').append('<i class="fa fa-refresh"></i>&nbsp;&nbsp;Recargar media');
 				$aReload.addClass('dropdown-item');
@@ -1710,39 +1715,6 @@ var wapp = {
 		}
 	},
 
-	// Recarga media con autenticación
-	reloadMediaWithAuth: async function(messageSid) {
-		try {
-			// Obtener credenciales de Twilio
-			const creds = await wapp.modWapp.twCredentials();
-			
-			// Abrir popup para autenticación
-			const popup = window.open(
-				`https://${creds.accountSid}:${creds.authToken}@api.twilio.com/2010-04-01/Accounts/${creds.accountSid}/Messages/${messageSid}/Media.json`,
-				'twilioAuth',
-				'width=600,height=400,scrollbars=yes,resizable=yes'
-			);
-			
-			if (!popup) {
-				wapp.toast('Por favor permite popups para recargar el media');
-				return;
-			}
-			
-			// Esperar a que se cierre el popup
-			const checkClosed = setInterval(() => {
-				if (popup.closed) {
-					clearInterval(checkClosed);
-					// Recargar los elementos media que fallaron
-					setTimeout(() => wapp.reloadFailedMedia(messageSid), 500);
-				}
-			}, 1000);
-			
-		} catch (error) {
-			console.error('Error recargando media:', error);
-			wapp.toast('Error al intentar recargar media');
-		}
-	},
-
 	// Recarga todos los media de un chat
 	reloadFailedMedia: function($chat) {
 		try {
@@ -1779,9 +1751,6 @@ var wapp = {
 					$source.parent()[0].load();
 				}
 			});
-			
-			// Remover el botón de recarga
-			$chat.find('.wapp-media-reload-btn').remove();
 			
 		} catch (error) {
 			console.error('Error recargando media del chat:', error);
