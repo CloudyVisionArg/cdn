@@ -180,6 +180,7 @@ var wapp = {
 					// Esperar un poco para que el contenido se renderice
 					setTimeout(() => {
 						try {
+							debugger
 							// Verificar si la URL actual del iframe cambió (indica redirect exitoso)
 							const currentUrl = testFrame.contentWindow.location.href;
 							
