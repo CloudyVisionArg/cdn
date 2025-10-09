@@ -1685,7 +1685,6 @@ var wapp = {
 
 	// Recarga todos los media del chat con autenticación
 	reloadMedia: async function($chat) {
-		debugger
 		try {
 			// Verificar si hay media URL guardada
 			const lastMediaUrl = $chat.attr('data-last-media-url');
@@ -1703,29 +1702,20 @@ var wapp = {
 			
 			if (!popup) return;
 			
-			// Cerrar automáticamente después de 1 segundo
 			setTimeout(() => {
 				if (!popup.closed) {
 					popup.close();
 				}
-			}, 1000);
-			
-			// Esperar a que se cierre el popup y recargar media
-			const checkClosed = setInterval(() => {
-				if (popup.closed) {
-					clearInterval(checkClosed);
-					// Recargar todos los media del chat
-					setTimeout(() => wapp.reloadFailedMedia($chat), 500);
-				}
-			}, 100);
-			
+				wapp.reloadMedia2($chat)
+			}, 2000);
+						
 		} catch (error) {
 			console.error('Error recargando media:', error);
 		}
 	},
 
 	// Recarga todos los media de un chat
-	reloadFailedMedia: function($chat) {
+	reloadMedia2: function($chat) {
 		try {
 			const timestamp = Date.now();
 			
