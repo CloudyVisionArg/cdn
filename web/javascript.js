@@ -338,7 +338,7 @@ function addWappButton(pControl) {
 function wappButtonClick(pButton) {
 	var url = wappUrl();
 	var number = $(pButton).siblings('input[type="text"]').val();
-	var w = window.open('https://wa.me/' + number);
+	return window.open('https://wa.me/' + wappNumber(number));
 	/*
 	var w = window.open(url + 'send?phone=' + wappNumber(number));
 	if (url == 'whatsapp://') setTimeout(function () { w.close() }, 10000);
