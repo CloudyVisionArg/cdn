@@ -618,6 +618,9 @@ var wapp = {
 		if ($msgs.length == 0) {
 			await wapp.renderMsg(pMsg, function (msgRow) {
 				$cont.append(msgRow);
+				if (msgRow.attr('data-last-media-url')) {
+					pChat.attr('data-last-media-url', msgRow.attr('data-last-media-url'));
+				}
 			});
 		} else {
 			var $msg = $msgs.filter('[data-sid="' + pMsg.sid + '"]');
@@ -638,6 +641,9 @@ var wapp = {
 							// No deberia llegar aca, lo pongo al ultimo
 							$cont.append(msgRow);
 						}
+					}
+					if (msgRow.attr('data-last-media-url')) {
+						pChat.attr('data-last-media-url', msgRow.attr('data-last-media-url'));
 					}
 				});
 			}
@@ -809,13 +815,9 @@ var wapp = {
 				$msgTime.append(' <span class="wapp-message-status-container">' + wapp.getTicks(pMsg.status, pMsg.errorCode, pMsg.errorMessage) + '</span>');
 			}
 			
-			// Guardar la última media URL en el chat
-			debugger
+			// Guardar la última media URL en el row
 			if (lastMediaUrl) {
-				const $chat = $row.closest('.wapp-chat');
-				if ($chat.length > 0) {
-					$chat.attr('data-last-media-url', lastMediaUrl);
-				}
+				$row.attr('data-last-media-url', lastMediaUrl);
 			}
 			
 			if (pCallback) pCallback($row);
@@ -1148,6 +1150,9 @@ var wapp = {
 				var $cont = $chat.find('div.wapp-messages');
 				$cont.append(msgRow);
 				$cont.scrollTop($cont[0].scrollHeight);
+				if (msgRow.attr('data-last-media-url')) {
+					$chat.attr('data-last-media-url', msgRow.attr('data-last-media-url'));
+				}
 				wapp.cursorLoading(false);
 				wapp.sending = false;
 			});
@@ -1358,6 +1363,9 @@ var wapp = {
 									var $cont = $chat.find('div.wapp-messages');
 									$cont.append(msgRow);
 									$cont.scrollTop($cont[0].scrollHeight);
+									if (msgRow.attr('data-last-media-url')) {
+										$chat.attr('data-last-media-url', msgRow.attr('data-last-media-url'));
+									}
 									wapp.cursorLoading(false);
 									wapp.sending = false;
 								});
