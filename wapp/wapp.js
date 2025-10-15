@@ -805,9 +805,9 @@ var wapp = {
 					body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
 										
 					// Versión mejorada con word boundary:
-					body = body.replace(/(^|[\s\p{P}])\*([^*]+)\*(?=[\s\p{P}]|$)/gu, '$1<b>$2</b>');
-					body = body.replace(/(^|[\s\p{P}])_([^_]+)_(?=[\s\p{P}]|$)/gu, '$1<i>$2</i>');
-					body = body.replace(/(^|[\s\p{P}])~([^~]+)~(?=[\s\p{P}]|$)/gu, '$1<del>$2</del>');
+					body = body.replace(/(^|[\s\p{P}])\*([^*]+)\*(?=[\s\p{P}]|$)/gu, '$1<b>$2</b>'); // bold
+					body = body.replace(/(^|[\s\p{P}])_([^_]+)_(?=[\s\p{P}]|$)/gu, '$1<i>$2</i>'); // italic
+					body = body.replace(/(^|[\s\p{P}])~([^~]+)~(?=[\s\p{P}]|$)/gu, '$1<del>$2</del>'); // tachado
 				};
 				
 				$msgText.append(body);
