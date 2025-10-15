@@ -2271,11 +2271,9 @@ wapp.templatePicker = {
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        const maxX = scrollLeft + window.innerWidth - pickerWidth - 10;
-        const maxY = scrollTop + window.innerHeight - pickerHeight - 10;
-        
-        x = Math.min(x, maxX);
-        y = Math.min(y, maxY);
+        // Ajustar coordenadas con el scroll
+        x = Math.max(scrollLeft + 10, Math.min(x, scrollLeft + window.innerWidth - pickerWidth - 10));
+        y = Math.max(scrollTop + 10, Math.min(y, scrollTop + window.innerHeight - pickerHeight - 10));
 
         this.picker.style.left = x + 'px';
         this.picker.style.top = y + 'px';
