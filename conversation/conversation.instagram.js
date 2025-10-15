@@ -174,7 +174,7 @@ function instagramDataProvider(opts){
 					name: page["PAGE_NAME"],
 					status: "stop",
 					selected: page["INSTAGRAM_BUSINESS_ID"] == me.options.from,
-					icon: "fa-facebook"
+					icon: "fa-instagram"
 				});
 			}
 		});
