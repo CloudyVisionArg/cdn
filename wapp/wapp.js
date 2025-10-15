@@ -803,15 +803,7 @@ var wapp = {
 					}
 					
 					body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
-					
-					//todo: estos reemplazos deben trabajar con word boundary
-					// https://stackoverflow.com/questions/58356773/match-star-character-at-end-of-word-boundary-b
-					// Versión anterior (comentada por si acaso):
-					//body = body.replace(/\*([^*]+)\*/g, '<b>$1<\/b>'); // Reemp los * con <b>
-					// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
-					//body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
-					//body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los ~ con <del>
-					
+										
 					// Versión mejorada con word boundary:
 					body = body.replace(/(^|[\s\p{P}])\*([^*]+)\*(?=[\s\p{P}]|$)/gu, '$1<b>$2</b>');
 					body = body.replace(/(^|[\s\p{P}])_([^_]+)_(?=[\s\p{P}]|$)/gu, '$1<i>$2</i>');
