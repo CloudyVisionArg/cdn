@@ -10,6 +10,8 @@ var inApp = typeof app7 == 'object';
 		{ id: 'whatsapp-css' },
 		{ id: 'jslib' },
 		{ id: 'emojis' },
+		{ id: 'linkify', src: 'https://cdn.jsdelivr.net/npm/linkifyjs@4.3.2/dist/linkify.min.js' },
+		{ id: 'linkify-string', depends: ['linkify'], src: 'https://cdn.jsdelivr.net/npm/linkify-string@4.3.2/dist/linkify-string.min.js' },
 	]);
 
 	let root = document.documentElement;
@@ -798,6 +800,16 @@ var wapp = {
 					// Este queda desactivado xq me rompe los enlaces, activarlo cdo este word boundary
 					//body = body.replace(/\_([^_]+)\_/g, '<i>$1<\/i>'); // Reemp los _ con <i>
 					body = body.replace(/\~([^~]+)\~/g, '<del>$1<\/del>'); // Reemp los ~ con <del>
+					
+					// Convertir URLs en links
+					if (window.linkifyStr) {
+						body = window.linkifyStr(body, {
+							target: '_blank',
+							attributes: {
+								style: 'overflow-wrap: break-word;'
+							},
+						});
+					}
 				};
 				
 				$msgText.append(body);
