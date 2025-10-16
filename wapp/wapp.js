@@ -555,12 +555,37 @@ var wapp = {
 		}
 	},
 
+	external: function(pCont, pData) {
+		var $cont = $(pCont);
+		
+		if (pData === undefined) {
+			// Getter
+			return {
+				name: $cont.attr('data-external-name'),
+				number: $cont.attr('data-external-number')
+			};
+		} else {
+			// Setter
+			if (pData.name) $cont.attr('data-external-name', pData.name);
+			if (pData.number) $cont.attr('data-external-number', pData.number);
+			
+			// Esperar inicialización y después llamar init
+			wapp.ready(() => {
+				wapp.init($cont);
+			});
+		}
+	},
+
 	init: function (pCont) {
 		var $cont = $(pCont);
 		wapp.renderChat($cont);
 		wapp.clear($cont);
-		wapp.loadMessages($cont);
-		wapp.refreshSession($cont);
+		
+		// Esperar inicialización antes de cargar mensajes
+		wapp.ready(() => {
+			wapp.loadMessages($cont);
+			wapp.refreshSession($cont);
+		});
 	},
 	
 	refreshSession: async function (pChat, pDate) {
