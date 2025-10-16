@@ -2106,6 +2106,11 @@ function getTabbedViewsLayout(pTabs) {
             }).append(tab.mdicon).appendTo($a);
         };
 
+        // Si no hay iconos especificados, intentar obtener el de la carpeta de forma asíncrona
+        if (!tab.iosicon && !tab.mdicon && tab.url) {
+            loadFolderIconAsync(tab, $a);
+        }
+
         if (tab.label) {
             $('<span/>', {
                 class: 'tabbar-label',
@@ -2113,6 +2118,30 @@ function getTabbedViewsLayout(pTabs) {
         }
 
         return $a;
+    }
+
+    async function loadFolderIconAsync(tab, $tabLink) {
+        try {
+            // Extraer fld_id de la URL de forma más robusta
+            const match = tab.url.match(/[?&]fld_id=(\d+)/);
+            const fldId = match ? parseInt(match[1]) : null;
+            
+            if (fldId && typeof dSession !== 'undefined') {
+                const folder = await dSession.folder(fldId);
+                const folderIcon = dSession.getFolderIcon(folder);
+                if (folderIcon) {
+                    // Usar Font Awesome directamente
+                    if (folderIcon.startsWith('fa-')) {
+                        $('<i/>', {
+                            class: 'fa ' + folderIcon,
+                        }).prependTo($tabLink);
+                    }
+                }
+            }
+        } catch (e) {
+            // Si hay error obteniendo el folder, continuar sin icono
+            console.warn('Error obteniendo icono de folder:', e);
+        }
     }
 
     return $views;
