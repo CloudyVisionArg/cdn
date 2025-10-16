@@ -2121,6 +2121,7 @@ function getTabbedViewsLayout(pTabs) {
     }
 
     async function loadFolderIconAsync(tab, $tabLink) {
+        debugger
         try {
             // Extraer fld_id de la URL de forma más robusta
             const match = tab.url.match(/[?&]fld_id=(\d+)/);
