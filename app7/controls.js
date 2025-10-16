@@ -1965,6 +1965,9 @@ function addDefaultOptions(pContainer) {
 /*
 Para usar en el onDeviceReady. Devuelve un layout inicial con Tabbed Views
 
+NUEVA FUNCIONALIDAD: Si no se especifican iosicon/mdicon y la URL contiene fld_id,
+automáticamente carga el icono de la carpeta usando Font Awesome.
+
 getTabbedViewsLayout([
     {
         // Explorer
@@ -1973,6 +1976,13 @@ getTabbedViewsLayout([
         url: '/explorer/?fld_id=5103&fixed=1',
         iosicon: 'person_2_alt',
         mdicon: 'contacts',
+    },
+    {
+        // Tab sin iconos - automáticamente usará el icono de la carpeta 1006
+        viewid: 'view-ost',
+        label: 'OST', 
+        url: '/explorer/?fld_id=1006&fixed=1',
+        // Sin iosicon/mdicon - se carga automáticamente desde folder
     },
     {
         // Boton con subtabs
