@@ -2139,6 +2139,7 @@ function getTabbedViewsLayout(pTabs) {
                     if (folderIcon.startsWith('fa-')) {
                         $('<i/>', {
                             class: 'fa ' + folderIcon,
+                            style: 'font-size: 28px; line-height: 28px;' // Igualar tamaño a F7 icons
                         }).prependTo($tabLink);
                     }
                 }
