@@ -24,7 +24,8 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 516 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 518 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 518 });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 515, hasdep: true });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 512 });
     scripts.push({ id: 'emojis', path: '/emojis.js', version: 508 });
@@ -34,10 +35,10 @@ function registeredScripts() {
     scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 492 });
     scripts.push({ id: 'jslib', path: '/jslib.js', version: 480 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 476 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 464 });
     /*
     Por si hay que volver atras
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 514 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 464 });
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 516 });
     scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 503 hasdep: true });
     scripts.push({ id: 'emojis', path: '/emojis.js', version: 256 });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 380 });
@@ -45,7 +46,6 @@ function registeredScripts() {
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 487, hasdep: true });
     scripts.push({ id: 'app7-index.css', path: '/app7/index.css', version: 467 });
     */
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 444 });
     scripts.push({ id: 'lib-moment-timezone', path: 'lib/moment-timezone-with-data.min.js', version: 436 });
     scripts.push({ id: 'app7-notifications', path: '/app7/notifications.js', version: 422 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 427 });
