@@ -2129,7 +2129,7 @@ function getTabbedViewsLayout(pTabs) {
             
             if (fldId && typeof dSession !== 'undefined') {
                 const folder = await dSession.folder(fldId);
-                const folderIcon = dSession.getFolderIcon(folder);
+                const folderIcon = folder.icon;
                 if (folderIcon) {
                     // Usar Font Awesome directamente
                     if (folderIcon.startsWith('fa-')) {
