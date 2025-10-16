@@ -2121,8 +2121,12 @@ function getTabbedViewsLayout(pTabs) {
     }
 
     async function loadFolderIconAsync(tab, $tabLink) {
-        debugger
         try {
+            // Cargar Font Awesome si no está disponible
+            if (!$('.fa').length && typeof include !== 'undefined') {
+                await include('font-awesome', 'https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css');
+            }
+            
             // Extraer fld_id de la URL de forma más robusta
             const match = tab.url.match(/[?&]fld_id=(\d+)/);
             const fldId = match ? parseInt(match[1]) : null;
