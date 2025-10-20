@@ -35,7 +35,7 @@ var propInit = 'App7_explorerInit';
 var propImport = 'App7_import';
 var maxLen = 200;
 
-var v8 = route.query.v8 == '0' || route.query.v8 == 'false' ? false : true;
+var v8 = routeTo.query.v8 == '0' || routeTo.query.v8 == 'false' ? false : true;
 
 actionsPopup = getActionsPopup();
 
