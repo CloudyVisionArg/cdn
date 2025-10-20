@@ -363,7 +363,8 @@ var app = {
         };
 
         async function execOnDeviceReady() {
-            v8 = await dSession.settings('instance_guid');
+            let sett = await dSession.settings('V8_SEARCHS_DISABLED');
+            v8Searchs = sett == '1' || sett == 'true' ? false : true;
             debugger
 
             pushReg();
