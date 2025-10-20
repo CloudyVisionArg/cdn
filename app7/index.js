@@ -8,7 +8,7 @@ var doorsapi2;
 /** @type {import('../doorsapi2.mjs').Session} */
 var dSession;
 const changePasswordException = 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException';
-var v8;
+var v8Searchs = true;
 
 var initScripts = [];
 
@@ -364,7 +364,7 @@ var app = {
 
         async function execOnDeviceReady() {
             let sett = await dSession.settings('V8_SEARCHS_DISABLED');
-            v8Searchs = sett == '1' || sett == 'true' ? false : true;
+            v8Searchs = sett == '1' ? false : true;
             debugger
 
             pushReg();
