@@ -35,12 +35,9 @@ var propInit = 'App7_explorerInit';
 var propImport = 'App7_import';
 var maxLen = 200;
 
-var v8 = routeTo.query.v8 == '0' || routeTo.query.v8 == 'false' ? false : true;
-
 actionsPopup = getActionsPopup();
 
 (async () => {
-    debugger
     folder2 = await dSession.folder(fld_id);
     folder = folder2.toJSON();
     let gfeProm = getFolderElements(folder);

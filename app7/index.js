@@ -8,6 +8,7 @@ var doorsapi2;
 /** @type {import('../doorsapi2.mjs').Session} */
 var dSession;
 const changePasswordException = 'Gestar.Doors.API.ObjectModelW.UserMustChangePasswordException';
+var v8;
 
 var initScripts = [];
 
@@ -361,7 +362,9 @@ var app = {
             }
         };
 
-        function execOnDeviceReady() {
+        async function execOnDeviceReady() {
+            v8 = await dSession.settings('instance_guid');
+
             pushReg();
             includeJs('app7-popovers');
 
