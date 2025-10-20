@@ -38,6 +38,7 @@ var maxLen = 200;
 actionsPopup = getActionsPopup();
 
 (async () => {
+    debugger
     folder2 = await dSession.folder(fld_id);
     folder = folder2.toJSON();
     let gfeProm = getFolderElements(folder);
