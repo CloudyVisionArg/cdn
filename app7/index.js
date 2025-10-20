@@ -364,6 +364,7 @@ var app = {
 
         async function execOnDeviceReady() {
             v8 = await dSession.settings('instance_guid');
+            debugger
 
             pushReg();
             includeJs('app7-popovers');
