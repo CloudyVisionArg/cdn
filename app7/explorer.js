@@ -594,7 +594,7 @@ async function loadViewSection(pContainer, pCallback) {
                 order,
                 maxDocs: searchLimit(),
                 maxTextLen: maxLen,
-                v8: true,
+                v8: v8Searchs,
             });
 
             if (res.length == 0) {
@@ -735,7 +735,7 @@ async function loadViewSection(pContainer, pCallback) {
                 formula,
                 order,
                 maxDocs: searchLimit(),
-                v8: true,
+                v8: v8Searchs,
             });
 
             if (res.length == 0) {

@@ -365,7 +365,6 @@ var app = {
         async function execOnDeviceReady() {
             let sett = await dSession.settings('V8_SEARCHS_DISABLED');
             v8Searchs = sett == '1' ? false : true;
-            debugger
 
             pushReg();
             includeJs('app7-popovers');
