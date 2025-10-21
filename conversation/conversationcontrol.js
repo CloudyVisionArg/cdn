@@ -207,6 +207,12 @@ function conversationDataProvider() {
 					provider.conversationControl.cursorLoading(true);
 					provider.sendMessage(msg).then((arg)=>{
 						provider.conversationControl.cursorLoading(false);
+						try{
+							var ev= new CustomEvent('messageSent', { detail: arg });
+							document.dispatchEvent(ev);
+						}catch(e){
+							debugger;
+						}
 						resolve(arg);
 					}, (argErr)=>{
 						provider.conversationControl.cursorLoading(false);
