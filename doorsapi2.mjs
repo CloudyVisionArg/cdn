@@ -499,7 +499,7 @@ export class Session {
     */
     async _attachments(docJson) {
         let me = this;
-        let url = 'documents/' + docJSon.docId + '/attachments/';
+        let url = 'documents/' + docJson.docId + '/attachments/';
         let res = await me.restClient.fetch(url, 'GET', '', '');
         docJson.Attachments = res;
         debugger
