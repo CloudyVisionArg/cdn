@@ -1920,6 +1920,7 @@ export class Attachment {
         var me = this;
         return new Promise(async (resolve, reject) => {
             if (await me.session.doorsVersion < '008.000.000.000') {
+                debugger
                 var formData = new FormData();
                 var fs = await me.fileStream;
                 var blob = (fs instanceof Blob ? fs : new Blob([fs]));
