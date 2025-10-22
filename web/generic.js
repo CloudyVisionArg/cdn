@@ -1463,7 +1463,7 @@ async function saveDoc(exitOnSuccess) {
         if (!doors8) {
             try {
                 await saveAtt();
-                doc.attachmentsReset();
+                await doc.attachmentsReset();
 
             } catch(err) {
                 var attErr = 'Algunos adjuntos no pudieron guardarse, consulte la consola para mas informacion';

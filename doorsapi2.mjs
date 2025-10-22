@@ -502,7 +502,6 @@ export class Session {
         let url = 'documents/' + docJson.DocId + '/attachments';
         let res = await me.restClient.fetch(url, 'GET', '', '');
         docJson.Attachments = res;
-        debugger
     }
 
     /**
@@ -2657,6 +2656,12 @@ export class Document {
     */
     attachmentsNew(attachment) {
         return this.attachmentsAdd(attachment);
+    }
+
+    async attachmentsReset() {
+        this.#attachmentsMap = undefined;
+        await this.session._attachments(this.#json);
+        debugger;
     }
 
     /** No implementado aun */
