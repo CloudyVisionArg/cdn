@@ -494,6 +494,18 @@ export class Session {
     }
     
     /**
+    Obtiene los attachments de un documento
+    y los agrega al Json
+    */
+    async _attachments(docJson) {
+        let me = this;
+        let url = 'documents/' + docJSon.docId + '/attachments/';
+        let res = await me.restClient.fetch(url, 'GET', '', '');
+        docJson.Attachments = res;
+        debugger
+    }
+
+    /**
     Obtiene los campos de relaciones de un documento
     y los agrega al Json
     */
@@ -697,10 +709,7 @@ export class Session {
             me.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
                     await me._docRelFields(res);
-                    debugger
-                    if ((await me.doorsVersion) < '008') {
-                        debugger
-                    }
+                    if ((await me.doorsVersion) < '008') await me._attachments(res);
                     let doc = new Document(res, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
@@ -2982,6 +2991,7 @@ export class Document {
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
                 async res => {
                     await me.session._docRelFields(res);
+                    if ((await me.session.doorsVersion) < '008') await me.session._attachments(res);
                     me.#json = res;
                     me.#json.Tags = Object.assign(tags, me.#json.Tags); // Restauro los tags, creo que no hace falta
 
