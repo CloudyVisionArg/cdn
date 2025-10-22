@@ -2075,7 +2075,17 @@ async function pickImages(opts){
 
 async function pickFiles(opts){
     var files = [];
-    if (_isCapacitor()) {
+
+    if (device.platform == 'browser') {
+        return new Promise((resolve, reject) => {
+            let $inp = $('<input type="file" style="display: none;" multiple />');
+            $inp.change(function (ev) {
+                resolve(this.files);
+            });
+            $inp.click()
+        });
+
+    } else if (_isCapacitor()) {
         let options =  { multiple : true };
         if(opts) { options = opts; }
         const pickFilesResultSucc = await Capacitor.Plugins.FilePicker.pickFiles(options);
