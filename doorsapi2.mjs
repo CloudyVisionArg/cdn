@@ -2661,7 +2661,6 @@ export class Document {
     async attachmentsReset() {
         this.#attachmentsMap = undefined;
         await this.session._attachments(this.#json);
-        debugger;
     }
 
     /** No implementado aun */
