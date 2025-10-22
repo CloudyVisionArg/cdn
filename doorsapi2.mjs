@@ -484,6 +484,7 @@ export class Session {
     #doorsVersion;
     #billing;
     #s3;
+    #v8Disabled; // SYS_SETTING V8_DISABLED
     
     constructor(serverUrl, authToken) {
         this.#restClient = new RestClient(this);
@@ -527,6 +528,7 @@ export class Session {
         this.#utils = undefined;
         this.#doorsVersion = undefined;
         this.#billing = undefined;
+        this.#v8Disabled = undefined;
     }
 
     async _userChange() {
@@ -1144,6 +1146,19 @@ export class Session {
         return this.#v8Client;
     }
 
+    get v8Disabled() {
+        var me = this;
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (me.#v8Disabled === undefined) {
+                    me.#v8Disabled = await me.settings('V8_DISABLED') == '1';
+                }
+                resolve(me.#v8Disabled);
+            } catch(err) {
+                reject(err);
+            }
+        });
+    }
     /**
     Obtiene serverUrl del window.location y authToken de las cookies.
     @returns {Promise<boolean>}
