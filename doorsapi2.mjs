@@ -499,7 +499,7 @@ export class Session {
     */
     async _docRelFields(docJson) {
         let me = this;
-        if (await me.v8Disabled == false) {
+        if (!(await me.v8Disabled)) {
             try {
                 if (docJson.IsNew) {
                     let fldId = docJson.HeadFields.find(el => el['Name'] == 'FLD_ID').Value
