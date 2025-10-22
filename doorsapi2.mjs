@@ -2590,13 +2590,18 @@ export class Document {
         };
 
         // Obtiene el ID
-        let prom1 = me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '')
-        prom1.then(
-            res => {
-                attJson.AttId = res.AttId;
-                attJson.Created = res.Created;
+        let prom1 = new Promise(async (resolve, reject) => {
+            try {
+                if ((await me.session.doorsVersion) >= '008') {
+                    let res = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '')
+                    attJson.AttId = res.AttId;
+                    attJson.Created = res.Created;
+                }
+                resolve(true);
+            } catch(er) {
+                reject(er);
             }
-        );
+        });
 
         // Completa el creador
         let prom2 = me.session.currentUser
