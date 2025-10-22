@@ -697,7 +697,8 @@ export class Session {
             me.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
                     await me._docRelFields(res);
-                    if (me.doorsVersion < '008') {
+                    debugger
+                    if ((await me.doorsVersion) < '008') {
                         debugger
                     }
                     let doc = new Document(res, me);
