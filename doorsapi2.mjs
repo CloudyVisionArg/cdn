@@ -499,24 +499,26 @@ export class Session {
     */
     async _docRelFields(docJson) {
         let me = this;
-        try {
-            if (docJson.IsNew) {
-                let fldId = docJson.HeadFields.find(el => el['Name'] == 'FLD_ID').Value
-                let url = 'folders/' + fldId + '/relfields';
-                let res = await me.v8Client.fetch(url);
-                res.forEach(el => {
-                    el['Value'] = null;
-                    el['ValueOld'] = null;
-                });
-                docJson.RelFields = res;
-            } else {
-                let url = 'documents/' + docJson.DocId + '/relfields';
-                let res = await me.v8Client.fetch(url);
-                docJson.RelFields = res;
-            }
+        if (await me.v8Disabled == false) {
+            try {
+                if (docJson.IsNew) {
+                    let fldId = docJson.HeadFields.find(el => el['Name'] == 'FLD_ID').Value
+                    let url = 'folders/' + fldId + '/relfields';
+                    let res = await me.v8Client.fetch(url);
+                    res.forEach(el => {
+                        el['Value'] = null;
+                        el['ValueOld'] = null;
+                    });
+                    docJson.RelFields = res;
+                } else {
+                    let url = 'documents/' + docJson.DocId + '/relfields';
+                    let res = await me.v8Client.fetch(url);
+                    docJson.RelFields = res;
+                }
 
-        } catch(err) {
-            console.error(err, { consoleTag1: 'doorsapi2.Session._docRelFields' });
+            } catch(err) {
+                console.error(err, { consoleTag1: 'doorsapi2.Session._docRelFields' });
+            }
         }
     }
 
@@ -4054,6 +4056,7 @@ export class Folder {
             '&order=' + encUriC(opt.order) + '&maxDocs=' + encUriC(opt.maxDocs) + 
             '&recursive=' + encUriC(opt.recursive) + '&maxDescrLength=' + encUriC(opt.maxTextLen);
 
+        //todo: consultar Session.v8Disabled
         return opt.v8 ? this.session.v8Client.fetch(url, { method: 'GET', params }) :
             this.session.restClient.fetch(url, 'GET', params, '')
     }
@@ -4094,6 +4097,7 @@ export class Folder {
             '&maxDocs=' + encUriC(opt.maxDocs) + '&recursive=' + encUriC(opt.recursive) + 
             '&groupsOrder=' + encUriC(opt.groupsOrder) + '&totalsOrder=' + encUriC(opt.totalsOrder);
 
+        //todo: consultar Session.v8Disabled
         return opt.v8 ? this.session.v8Client.fetch(url, { method: 'GET', params }) :
             this.session.restClient.fetch(url, 'GET', params, '')
     }
