@@ -1612,7 +1612,11 @@ async function appendAtts(pCont, files){
             if(isCapacitor){
                 file = await writeFileInCachePath(file.uri, file.name);
             }
-            att.URL = file.uri;
+            if (device.platform == 'browser') {
+                att.File = file;
+            } else {
+                att.URL = file.uri;
+            }
             att.Name = file.name;
             att.Size = file.size;
             att.Tag = tag;
