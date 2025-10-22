@@ -697,6 +697,9 @@ export class Session {
             me.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
                     await me._docRelFields(res);
+                    if (me.doorsVersion < '008') {
+                        debugger
+                    }
                     let doc = new Document(res, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
@@ -3634,6 +3637,7 @@ export class Folder {
             me.session.restClient.fetch(url, 'GET', '', '').then(
                 async res => {
                     await me.session._docRelFields(res);
+                    res.Attachments = [];
                     let doc = new Document(res, me.session, me);
                     await doc._dispatchEvent('Document_Open');
                     resolve(doc);
