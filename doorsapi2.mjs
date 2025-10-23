@@ -2995,7 +2995,11 @@ export class Document {
             };
 
             // Espera Promesas
-            await me.awaitPromises();
+            try {
+                await me.awaitPromises();
+            } catch(err) {
+                reject(err);
+            }
 
             var url = 'documents';
             me.session.restClient.fetch(url, 'PUT', me.#json, 'document').then(
