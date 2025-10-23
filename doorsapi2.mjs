@@ -2600,7 +2600,7 @@ export class Document {
                 if ((await me.session.doorsVersion) >= '008') {
                     let url = 'documents/' + me.id + '/attachments/new';
                     let res = await me.session.restClient.fetch(url, 'GET', '');
-                    if (!res) console.log('No attachment info returned', url, res);
+                    if (!res) console.error('No attachment info returned', url, res, { consoleTag1: 'doorsapi2.Document.attachmentsAdd' });
                     attJson.AttId = res.AttId;
                     attJson.Created = res.Created;
                 }
