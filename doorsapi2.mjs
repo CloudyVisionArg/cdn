@@ -2598,7 +2598,9 @@ export class Document {
         let prom1 = new Promise(async (resolve, reject) => {
             try {
                 if ((await me.session.doorsVersion) >= '008') {
-                    let res = await me.session.restClient.fetch('documents/' + me.id + '/attachments/new', 'GET', '')
+                    let url = 'documents/' + me.id + '/attachments/new';
+                    let res = await me.session.restClient.fetch(url, 'GET', '');
+                    if (!res) console.log('No attachment info returned', url, res);
                     attJson.AttId = res.AttId;
                     attJson.Created = res.Created;
                 }
