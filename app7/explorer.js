@@ -411,8 +411,8 @@ function pageInit(e, page) {
 
     if (!pageEl.drs) pageEl.drs = {};
     Object.assign(pageEl.drs, {
-        reloadView, toggleSelectionMode, refreshOnFocus,
-        folder, $navbar, import: importProp, f7Page,
+        reloadView, toggleSelectionMode, refreshOnFocus, getSelected,
+        folder, $navbar, import: importProp, f7Page, actionsPopup,
     });
     pageEl.crm = pageEl.drs; // bg compat
 }
