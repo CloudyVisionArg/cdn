@@ -2569,9 +2569,13 @@ export class Document {
     attachments(attachment) {
         let me = this;
         return new Promise(async (resolve, reject) => {
-            let atts = me._attachments(attachment);
-            await me.awaitPromises();
-            resolve(atts);
+            try {
+                let atts = me._attachments(attachment);
+                await me.awaitPromises();
+                resolve(atts);
+            } catch(err) {
+                reject(err);
+            }
         });
     }
 
