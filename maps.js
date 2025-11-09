@@ -94,7 +94,7 @@ var maps = {
                 });
             }
 
-            el._text = function (text) {
+            el._text = function (text, silent) {
                 var self = this;
                 if (text == undefined) {
                     return self.value;
@@ -102,7 +102,7 @@ var maps = {
                     self.initializing = true;
                     self.value = text;
                     if (inApp) app7.input.checkEmptyState(self);
-                    $(self).change(); // todo: no deberia dispararse si estoy asignando junto con el value
+                    if (!silent) $(self).change();
                     return text;
                 }
 
