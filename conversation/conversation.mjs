@@ -65,8 +65,9 @@ export async function newConversationControl(basicConfig){
 
     //Si ya existe una instancia de la conversación para este selector, no se crea otra
     if(window.cloudy && window.cloudy.conversation){
-        if(window.cloudy.conversation.getInstance(conversationSelector)){
-            return;
+        let foundInstance = window.cloudy.conversation.getInstance(conversationSelector);
+        if(foundInstance){
+            return foundInstance;
         }
     }
     let doc = basicConfig.doc;
