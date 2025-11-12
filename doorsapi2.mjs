@@ -5438,6 +5438,7 @@ export class Utilities {
     Devuelve el ArrayBuffer de un Blob, Buffer o Uint8Array
     */
     async arrBuffer(value) {
+        debugger
         let ret;
         if (value instanceof Blob) {
             ret = await value.arrayBuffer();
