@@ -5450,7 +5450,7 @@ export class Utilities {
             ret = value.buffer;
         } else if (typeof(value) == 'string') {
             let txtEnc = typeof(TextEncoder) == 'undefined' ? (await import('util')).TextEncoder : TextEncoder;
-            ret = new txtEnc().encode('holaaaa').buffer;
+            ret = new txtEnc().encode(value).buffer;
         }
         return ret;
     }
