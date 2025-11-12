@@ -5438,7 +5438,6 @@ export class Utilities {
     Devuelve el ArrayBuffer de un Blob, Buffer o Uint8Array
     */
     async arrBuffer(value) {
-        debugger
         let ret;
         if (value instanceof Blob) {
             ret = await value.arrayBuffer();
@@ -5449,6 +5448,16 @@ export class Utilities {
             ret = value;
         } else if (value instanceof Uint8Array) {
             ret = value.buffer;
+        } else if (typeof(value) == 'string') {
+            debugger
+
+            let txtEnc;
+            if (typeof(TextEncoder) == 'undefined') {
+                txtEnc = (await import('util')).TextEncoder;
+            } else {
+                txtEnc = TextEncoder;
+            }
+            let buf = new txtEnc().encode('holaaaa').buffer;
         }
         return ret;
     }
