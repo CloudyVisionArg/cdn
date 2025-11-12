@@ -5449,14 +5449,7 @@ export class Utilities {
         } else if (value instanceof Uint8Array) {
             ret = value.buffer;
         } else if (typeof(value) == 'string') {
-            debugger
-
-            let txtEnc;
-            if (typeof(TextEncoder) == 'undefined') {
-                txtEnc = (await import('util')).TextEncoder;
-            } else {
-                txtEnc = TextEncoder;
-            }
+            let txtEnc = typeof(TextEncoder) == 'undefined' ? (await import('util')).TextEncoder : TextEncoder;
             ret = new txtEnc().encode('holaaaa').buffer;
         }
         return ret;
