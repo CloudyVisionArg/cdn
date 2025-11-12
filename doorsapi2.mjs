@@ -5457,7 +5457,7 @@ export class Utilities {
             } else {
                 txtEnc = TextEncoder;
             }
-            let buf = new txtEnc().encode('holaaaa').buffer;
+            ret = new txtEnc().encode('holaaaa').buffer;
         }
         return ret;
     }
