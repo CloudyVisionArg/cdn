@@ -147,9 +147,6 @@ async function loadUtils() {
         if (inNode()) {
             if (typeof(ctx) == 'object' && ctx.mainlib) {
                 _mainlib = ctx.mainlib;
-            } else {
-                let mod = await import('../mainlib.mjs');
-                _mainlib = mod.default ? mod.default : mod;
             }
         }
 
@@ -161,10 +158,11 @@ async function loadUtils() {
     // include
 
     try {
+        let incUrl = 'https://cdn.cloudycrm.net/ghcv/cdn/include.js';
         if (!inNode()) {
             if (window.include === undefined) {
-                var res = await fetch('https://cdn.cloudycrm.net/ghcv/cdn/include.js');
-                var code = await res.text();
+                let res = await fetch(incUrl);
+                let code = await res.text();
                 eval(`
                     ${ code }
                     window.include = include;
@@ -175,7 +173,8 @@ async function loadUtils() {
             }
         } else {
             _incjs = {};
-            let code = await _mainlib.gitCdn({ repo: 'cdn', path: 'include.js' });
+            let res = await fetch(incUrl);
+            let code = await res.text();
             eval(`
                 ${ code }
                 _incjs.include = include;
@@ -5901,8 +5900,12 @@ export class Utilities {
         let ret;
         if (typeof(module) == 'object') {
             if (me.session.node.inNode) {
-                // Server
-                ret = await _mainlib.gitImport(module);
+                if (_mainlib) {
+                    // Server
+                    ret = await _mainlib.gitImport(module);
+                } else {
+                    ret = await import(_incjs.gitCdn(Object.assign({ url: true }, module)));
+                }
             } else {
                 // Client
                 ret = await import(window.gitCdn(Object.assign({ url: true }, module)));
