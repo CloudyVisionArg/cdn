@@ -141,7 +141,7 @@ async function loadUtils() {
     }
 
 
-    // mainlib
+    // mainlib (solo v8)
 
     try {
         if (inNode()) {
@@ -5901,9 +5901,10 @@ export class Utilities {
         if (typeof(module) == 'object') {
             if (me.session.node.inNode) {
                 if (_mainlib) {
-                    // Server
+                    // v8
                     ret = await _mainlib.gitImport(module);
                 } else {
+                    // Node no v8, requiere --experimental-network-imports
                     ret = await import(_incjs.gitCdn(Object.assign({ url: true }, module)));
                 }
             } else {
