@@ -147,6 +147,11 @@ async function loadUtils() {
         if (inNode()) {
             if (typeof(ctx) == 'object' && ctx.mainlib) {
                 _mainlib = ctx.mainlib;
+            } else {
+                try {
+                    let mod = await import('../mainlib.mjs');
+                    _mainlib = mod.default ? mod.default : mod;
+                } catch(er) {}
             }
         }
 
