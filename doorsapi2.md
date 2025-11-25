@@ -182,13 +182,16 @@ const results = await folder.search({
     fields: 'NOMBRE, EMAIL, ESTADO',              // Fields to retrieve
     formula: 'ESTADO = "Activo"',                 // Filter formula
     order: 'FECHACREACION DESC',                  // Sort order
-    maxRecords: 100,                              // Limit results
-    related: true                                 // Include related fields
+    maxDocs: 100,                                 // Limit results
+    maxTextLen: 500                               // Max length for text fields
 });
 
-// Iterate results
-for (let doc of results) {
-    console.log(doc.fields('NOMBRE').value);
+// IMPORTANT: search() returns an array of plain objects
+// Field names are uppercase properties
+for (let row of results) {
+    console.log(row.NOMBRE);    // Access fields as uppercase properties
+    console.log(row.EMAIL);
+    console.log(row.ESTADO);
 }
 ```
 
@@ -519,20 +522,22 @@ const results = await folder.search({
     order: 'NOMBRE ASC'
 });
 
-// Advanced search with related fields
-const results = await folder.search({
-    fields: 'NOMBRE, EMAIL, EJECUTIVO.NAME as EJECUTIVO_NOMBRE',
-    formula: 'FECHACREACION >= #2025-01-01# AND ESTADO <> "Cerrado"',
+// Iterate results - search() returns plain objects with uppercase field names
+for (let row of results) {
+    console.log(row.NOMBRE, row.EMAIL, row.ESTADO);
+}
+
+// Advanced search with date filter
+const results2 = await folder.search({
+    fields: 'NOMBRE, EMAIL, EJECUTIVO',
+    formula: "FECHACREACION >= '2025-01-01' AND ESTADO <> 'Cerrado'",
     order: 'FECHACREACION DESC',
-    maxRecords: 50,
-    related: true
+    maxDocs: 50,
+    maxTextLen: 1000
 });
 
-// Iterate results
-for (let doc of results) {
-    console.log(doc.fields('NOMBRE').value);
-    console.log(doc.fields('EMAIL').value);
-}
+// Filter in JavaScript for complex conditions
+const filtered = results2.filter(row => row.NOMBRE.includes('Test'));
 ```
 
 ## Important Notes

@@ -103,7 +103,7 @@ var inApp = typeof app7 == 'object';
 		// Carga mensajes nuevos cada 5 segs
 		setInterval(function () {
 			wapp.checkSession(function () {
-				$('div.wapp-chat[data-rendered]').each(function () {
+				$('div.wapp-chat[data-rendered]:not([data-disabled])').each(function () {
 					wapp.loadMessages($(this));
 				});
 			});
@@ -112,7 +112,7 @@ var inApp = typeof app7 == 'object';
 		// Actualiza el estado de la sesion cada 1'
 		setInterval(function () {
 			wapp.checkSession(function () {
-				$('div.wapp-chat[data-rendered]').each(function () {
+				$('div.wapp-chat[data-rendered]:not([data-disabled])').each(function () {
 					wapp.refreshSession($(this));
 				});
 			});
@@ -961,12 +961,50 @@ var wapp = {
 		return pNumber.replace(/\D/g, '').reverse();
 	},
 
+	disableChat: function (pChat, pReason) {
+		// Marcar como desactivado
+		pChat.attr('data-disabled', '1');
+
+		// Mostrar mensaje de error en el chat
+		var $messages = pChat.find('div.wapp-messages');
+		$messages.html(`
+			<div style="
+				text-align: center;
+				padding: 40px 20px;
+				color: #dc3545;
+				background-color: #f8d7da;
+				border: 1px solid #f5c6cb;
+				border-radius: 8px;
+				margin: 20px;
+			">
+				<i class="fa fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+				<h4 style="margin: 10px 0;">Chat desactivado</h4>
+				<p style="margin: 5px 0;">${pReason}</p>
+				<p style="margin: 10px 0; font-size: 14px; color: #721c24;">
+					Por favor, configure correctamente los números de teléfono para activar este chat.
+				</p>
+			</div>
+		`);
+
+		// Deshabilitar el footer (área de respuesta)
+		var $footer = pChat.find('div.wapp-footer');
+		$footer.css({
+			'opacity': '0.5',
+			'pointer-events': 'none'
+		});
+
+		console.log('Chat desactivado por:', pReason);
+	},
+
 	loadMessages: async function (pChat, pOlders) {
 		if (wapp.sending) return;
-		
+
+		// Si el chat está desactivado, no hacer nada
+		if (pChat.attr('data-disabled') == '1') return;
+
 		try {
 			var msgLimit = 50;
-			
+
 			var extNumber = pChat.attr('data-external-number');
 			var intNumber = pChat.attr('data-internal-number');
 
@@ -1096,9 +1134,17 @@ var wapp = {
 
 		} catch(err) {
 			console.error(err);
-			pChat.find('div.wapp-loadmore a').hide();
+
+			// Si el error es por números faltantes o incorrectos, desactivar el chat
+			if (err.message === 'Falta especificar nros' || err.message === 'Nros incorrectos') {
+				wapp.disableChat(pChat, err.message);
+			} else {
+				// Para otros errores, comportamiento original
+				pChat.find('div.wapp-loadmore a').hide();
+				debugger;
+			}
+
 			wapp.cursorLoading(false);
-			debugger;
 		}
 	},
 
