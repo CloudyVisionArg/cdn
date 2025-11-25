@@ -996,11 +996,25 @@ var wapp = {
 		console.log('Chat desactivado por:', pReason);
 	},
 
+	enableChat: function (pChat) {
+		// Quitar marca de desactivado
+		pChat.removeAttr('data-disabled');
+
+		// Limpiar mensajes y restaurar área de mensajes
+		wapp.clear(pChat);
+
+		// Restaurar el footer (área de respuesta)
+		var $footer = pChat.find('div.wapp-footer');
+		$footer.css({
+			'opacity': '1',
+			'pointer-events': 'auto'
+		});
+
+		console.log('Chat reactivado');
+	},
+
 	loadMessages: async function (pChat, pOlders) {
 		if (wapp.sending) return;
-
-		// Si el chat está desactivado, no hacer nada
-		if (pChat.attr('data-disabled') == '1') return;
 
 		try {
 			var msgLimit = 50;
@@ -1008,6 +1022,7 @@ var wapp = {
 			var extNumber = pChat.attr('data-external-number');
 			var intNumber = pChat.attr('data-internal-number');
 
+			// Validar números
 			if (!extNumber || !intNumber) {
 				throw new Error('Falta especificar nros');
 			}
@@ -1017,6 +1032,12 @@ var wapp = {
 
 			if (extNumberRev.length < 10 || intNumberRev.length < 10) {
 				throw new Error('Nros incorrectos');
+			}
+
+			// Si llegamos acá, los números son válidos
+			// Si el chat estaba desactivado, reactivarlo
+			if (pChat.attr('data-disabled') == '1') {
+				wapp.enableChat(pChat);
 			}
 
 			var incLoad = false;
