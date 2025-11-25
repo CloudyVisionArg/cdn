@@ -312,9 +312,9 @@ var wapp = {
 							name: $cont.attr('data-external-name'),
 						});
 
-						let operatorValue = chatDoc.fields('operator').value;
-						if (operatorValue) {
-							$select.val(operatorValue);
+						let operatorId = chatDoc.fields('operator_id').value;
+						if (operatorId) {
+							$select.val(operatorId);
 						}
 					} catch(err) {
 						console.error('Error cargando operador inicial:', err);
@@ -325,6 +325,7 @@ var wapp = {
 			// Guardar operador al cambiar
 			$select.change(async function() {
 				let operatorId = $(this).val();
+				let operatorName = $(this).find('option:selected').text();
 
 				try {
 					let chatDoc = await wapp.modWapp.chat({
@@ -333,10 +334,11 @@ var wapp = {
 						name: $cont.attr('data-external-name'),
 					});
 
-					chatDoc.fields('operator').value = operatorId;
+					chatDoc.fields('operator_id').value = operatorId;
+					chatDoc.fields('operator').value = operatorId ? operatorName : '';
 					await chatDoc.save();
 
-					console.log('Operador guardado:', operatorId);
+					console.log('Operador guardado:', operatorId, operatorName);
 				} catch(err) {
 					console.error('Error guardando operador:', err);
 					wapp.toast(dSession.utils.errMsg(err));
