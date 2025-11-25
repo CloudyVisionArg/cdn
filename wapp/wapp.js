@@ -286,11 +286,11 @@ var wapp = {
 				style: 'margin-top: 8px; display: flex; align-items: center; gap: 5px; justify-content: flex-end;',
 			}).appendTo($headingRight);
 
-			$operatorDiv.append('<span style="font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 500;">👤</span>');
+			$operatorDiv.append('<span style="font-size: 14px;">👤</span>');
 
 			var $select = $('<select/>', {
 				class: 'wapp-operator',
-				style: 'padding: 3px 6px; border: 1px solid rgba(255,255,255,0.4); border-radius: 3px; font-size: 11px; background: rgba(0,0,0,0.15); color: white; cursor: pointer;',
+				style: 'padding: 5px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;',
 			}).appendTo($operatorDiv);
 
 			$select.append('<option value="">Bot automático</option>');
