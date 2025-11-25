@@ -295,8 +295,8 @@ var wapp = {
 
 			$select.append('<option value="">(no asignado)</option>');
 
-			// Cargar operadores y valor inicial
-			dSession.directory.accountsSearch('(disabled = 0 or disabled is null) and system = 0', 'name').then(
+			// Cargar operadores y valor inicial (solo usuarios, sin grupos)
+			dSession.directory.accountsSearch('(disabled = 0 or disabled is null) and system = 0 and type = 1', 'name').then(
 				async res => {
 					res.forEach(row => {
 						let $o = $('<option/>', { 'value': row['AccId'] });
