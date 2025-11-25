@@ -296,34 +296,11 @@ var wapp = {
 			$select.append('<option value="">Bot automático</option>');
 
 			// Cargar operadores
-			let opt = {
-				formula: '(disabled = 0 or disabled is null) and system = 0',
-				order: 'name',
-			};
-
-			dSession.directory.accountsSearch(opt.formula, opt.order).then(
+			dSession.directory.accountsSearch('(disabled = 0 or disabled is null) and system = 0', 'name').then(
 				res => {
 					res.forEach(row => {
 						let $o = $('<option/>', { 'value': row['AccId'] });
 						$o.html(row['Name']);
-						let type = row['Type'];
-						$o.attr('data-type', type);
-
-						if (inApp) {
-							if (type == '1') {
-								$o.attr('data-option-icon-ios', 'f7:person');
-								$o.attr('data-option-icon-md', 'material:person_outline');
-							} else if (type == '2') {
-								$o.attr('data-option-icon-ios', 'f7:person_2_fill');
-								$o.attr('data-option-icon-md', 'material:group');
-							}
-						} else {
-							if (type == '1') {
-								$o.attr('data-icon', 'bi bi-person');
-							} else if (type == '2') {
-								$o.attr('data-icon', 'bi bi-people-fill');
-							}
-						}
 						$o.appendTo($select);
 					});
 				}
