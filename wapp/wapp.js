@@ -339,9 +339,14 @@ var wapp = {
 
 					chatDoc.fields('operator_id').value = operatorId;
 					chatDoc.fields('operator').value = operatorId ? operatorName : '';
+
+					// Resetear el estado del bot cuando cambia el operador
+					chatDoc.fields('STATE').value = '';
+
 					await chatDoc.save();
 
 					console.log('Operador guardado:', operatorId, operatorName);
+					console.log('Estado del bot reseteado');
 				} catch(err) {
 					console.error('Error guardando operador:', err);
 					wapp.toast(dSession.utils.errMsg(err));
