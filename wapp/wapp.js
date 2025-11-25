@@ -313,8 +313,11 @@ var wapp = {
 						});
 
 						let operatorId = chatDoc.fields('operator_id').value;
+						console.log('Operador inicial del chat:', operatorId);
+
 						if (operatorId) {
 							$select.val(operatorId);
+							console.log('Select value después de setear:', $select.val());
 						}
 					} catch(err) {
 						console.error('Error cargando operador inicial:', err);
