@@ -290,7 +290,7 @@ var wapp = {
 
 			var $select = $('<select/>', {
 				class: 'wapp-operator',
-				style: 'padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;',
+				style: 'padding: 5px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;',
 			}).appendTo($operatorDiv);
 
 			$select.append('<option value="">Bot automático</option>');
