@@ -24,28 +24,24 @@ function registeredScripts() {
         https://cdn.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
         https://nodedev.cloudycrm.net/ghcv/cdn/include.js?_fresh=1
     */
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 527 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 526 });
     scripts.push({ id: 'maps', path: '/maps.js', version: 523 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 521 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 520 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 520 });
-
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 519 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 518 });
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 518 });
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 515, hasdep: true });
     /*
     Por si hay que volver atras
+    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 518 });
     scripts.push({ id: 'doorsapi2', path: '/doorsapi2.mjs', version: 522 });
     scripts.push({ id: 'maps', path: '/maps.js', version: 370 });
     scripts.push({ id: 'app7-generic', path: '/app7/generic.js', version: 427 });
     scripts.push({ id: 'web-generic', path: '/web/generic.js', version: 405 });
     scripts.push({ id: 'app7-index', path: '/app7/index.js', version: 476 });
-    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 492 });
-    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 464 });
-    scripts.push({ id: 'whatsapp', path: '/wapp/wapp.js', version: 516 });
-    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 503 hasdep: true });
     */
+    scripts.push({ id: 'app7-explorer', path: '/app7/explorer.js', version: 519 });
+    scripts.push({ id: 'app7-controls', path: '/app7/controls.js', version: 518 });
+    scripts.push({ id: 'web-javascript', path: '/web/javascript.js', version: 515, hasdep: true });
     scripts.push({ id: 'whatsapp-css', path: '/wapp/wapp.css', version: 512 });
     scripts.push({ id: 'emojis', path: '/emojis.js', version: 508 });
     scripts.push({ id: 'app7-global', path: '/app7/global.js', version: 505, hasdep: true });
