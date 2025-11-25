@@ -293,18 +293,55 @@ var wapp = {
 				style: 'padding: 5px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;',
 			}).appendTo($operatorDiv);
 
-			$select.append('<option value="">Bot automático</option>');
+			$select.append('<option value="">(no asignado)</option>');
 
-			// Cargar operadores
+			// Cargar operadores y valor inicial
 			dSession.directory.accountsSearch('(disabled = 0 or disabled is null) and system = 0', 'name').then(
-				res => {
+				async res => {
 					res.forEach(row => {
 						let $o = $('<option/>', { 'value': row['AccId'] });
 						$o.html(row['Name']);
 						$o.appendTo($select);
 					});
+
+					// Cargar valor inicial del chat
+					try {
+						let chatDoc = await wapp.modWapp.chat({
+							intNum: $cont.attr('data-internal-number'),
+							extNum: $cont.attr('data-external-number'),
+							name: $cont.attr('data-external-name'),
+						});
+
+						let operatorValue = chatDoc.fields('operator').value;
+						if (operatorValue) {
+							$select.val(operatorValue);
+						}
+					} catch(err) {
+						console.error('Error cargando operador inicial:', err);
+					}
 				}
 			);
+
+			// Guardar operador al cambiar
+			$select.change(async function() {
+				let operatorId = $(this).val();
+
+				try {
+					let chatDoc = await wapp.modWapp.chat({
+						intNum: $cont.attr('data-internal-number'),
+						extNum: $cont.attr('data-external-number'),
+						name: $cont.attr('data-external-name'),
+					});
+
+					chatDoc.fields('operator').value = operatorId;
+					await chatDoc.save();
+
+					console.log('Operador guardado:', operatorId);
+				} catch(err) {
+					console.error('Error guardando operador:', err);
+					wapp.toast(dSession.utils.errMsg(err));
+				}
+			});
 
 			var $messages = $('<div/>', {
 				class: 'wapp-messages',
