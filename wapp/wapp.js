@@ -277,9 +277,23 @@ var wapp = {
 			var $headingRight = $('<div/>', {
 				style: 'width: 40%; text-align: right;',
 			}).appendTo($heading);
-			
-			$headingRight.append('<b><span class="internal-name">' + $cont.attr('data-internal-name') + 
+
+			$headingRight.append('<b><span class="internal-name">' + $cont.attr('data-internal-name') +
 			'</span></b><br>(<span class="internal-number">' + $cont.attr('data-internal-number') + '</span>)');
+
+			// Fila de operador
+			var $operatorRow = $('<div/>', {
+				style: 'padding: 8px 16px; background: #f8f9fa; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; gap: 10px;',
+			}).appendTo($cont);
+
+			$operatorRow.append('<span style="font-weight: 500; color: #495057;">Operador:</span>');
+
+			var $select = $('<select/>', {
+				class: 'wapp-operator',
+				style: 'flex: 1; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;',
+			}).appendTo($operatorRow);
+
+			$select.append('<option value="">Bot automático</option>');
 
 			var $messages = $('<div/>', {
 				class: 'wapp-messages',
