@@ -409,7 +409,7 @@ function gitCdn(options) {
             */
             var lsScripts = JSON.parse(window.localStorage.getItem('scripts'));
             if (Array.isArray(lsScripts)) {
-                var scr = lsScripts.find(el => el.owner == options.owner && el.repo == options.repo && el.path == options.path);
+                var scr = lsScripts.find(el => (el.owner || '') == (options.owner || '') && (el.repo || '') == (options.repo || '') && el.path == options.path);
                 if (scr) {
                     options.ref = scr.ref;
                     options.fresh = scr.fresh;
