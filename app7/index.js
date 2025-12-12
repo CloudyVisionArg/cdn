@@ -99,8 +99,31 @@ var app = {
         if (!cordova.InAppBrowser) console.error('Plugin error: cordova-plugin-inappbrowser');
         if (!window.sqlitePlugin) console.error('Plugin error: cordova-sqlite-storage');
         if (typeof BuildInfo == 'undefined') console.error('Plugin error: cordova-plugin-buildinfo');
-        
+
         // Fin verificacion de plugins
+
+        // Android 15+ Edge-to-Edge fix
+        if (typeof Capacitor !== 'undefined' && Capacitor.getPlatform() === 'android') {
+            (async () => {
+                try {
+                    const { Device } = Capacitor.Plugins;
+                    const { EdgeToEdge } = Capacitor.Plugins;
+
+                    if (Device && EdgeToEdge) {
+                        const info = await Device.getInfo();
+                        if (Number(info.osVersion) >= 15) {
+                            await EdgeToEdge.enable();
+                            console.log('Edge-to-Edge enabled (Android 15+)');
+                        } else {
+                            await EdgeToEdge.disable();
+                            console.log('Edge-to-Edge disabled (Android <15)');
+                        }
+                    }
+                } catch (err) {
+                    console.log('Edge-to-Edge plugin not available:', err.message);
+                }
+            })();
+        }
 
         // Custom
         self.custom = new URLSearchParams(window.location.search).get('custom');
