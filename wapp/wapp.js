@@ -889,7 +889,8 @@ var wapp = {
 			if (appendBody) {
 				var body = pMsg.body;
 
-				// Detectar si es un template (body null pero tiene message con contentSid)
+				// Fallback: Detectar templates en mensajes viejos (sin BODY)
+				// Mensajes nuevos ya tienen BODY completo guardado por el backend
 				if (!body && pMsg.message && pMsg.direction.indexOf('outbound') >= 0) {
 					try {
 						var msgObj = JSON.parse(pMsg.message);
@@ -897,39 +898,17 @@ var wapp = {
 							// Buscar el template por sid
 							var template = wapp.templates.twilio.find(t => t.sid === msgObj.contentSid);
 							if (template) {
-								// Renderizar según el tipo de template
+								// Usar la función del backend para renderizar
+								var contentVars = msgObj.contentVariables;
+								if (typeof contentVars === 'string') {
+									contentVars = JSON.parse(contentVars);
+								}
+								var rendered = wapp.modWapp.twRenderTemplate(template, contentVars);
+
+								// Formatear con estilo de template
 								body = '<div style="background-color: #f0f0f0; padding: 8px; border-radius: 8px; margin-bottom: 4px;">';
-								body += '<div style="font-weight: 600; font-size: 11px; color: #666; margin-bottom: 6px;">📄 TEMPLATE (' + template.friendly_name + ')</div>';
-
-								// Extraer el body según el tipo
-								var templateBody = '';
-								if (template.types['twilio/text']) {
-									templateBody = template.types['twilio/text'].body;
-								} else if (template.types['twilio/list-picker']) {
-									templateBody = template.types['twilio/list-picker'].body;
-									// Agregar las opciones
-									if (template.types['twilio/list-picker'].items) {
-										templateBody += '\n\n' + template.types['twilio/list-picker'].button + ':';
-										template.types['twilio/list-picker'].items.forEach(function(item) {
-											templateBody += '\n• ' + item.item;
-										});
-									}
-								} else if (template.types['twilio/call-to-action']) {
-									templateBody = template.types['twilio/call-to-action'].body;
-									// Agregar los botones
-									if (template.types['twilio/call-to-action'].actions) {
-										template.types['twilio/call-to-action'].actions.forEach(function(action) {
-											templateBody += '\n🔗 ' + action.title + ': ' + action.url;
-										});
-									}
-								}
-
-								// Procesar el body del template
-								if (templateBody) {
-									templateBody = templateBody.replace(/\n/g, '<br>');
-									body += '<div>' + templateBody + '</div>';
-								}
-
+								body += '<div style="font-weight: 600; font-size: 11px; color: #666; margin-bottom: 6px;">📄 TEMPLATE (' + rendered.name + ')</div>';
+								body += '<div>' + rendered.text.replace(/\n/g, '<br>') + '</div>';
 								body += '</div>';
 							}
 						}
@@ -1407,45 +1386,8 @@ var wapp = {
 		$(target).focus();
 
 		function twTempResume(temp) {
-			let typeKey = Object.keys(temp.types)[0];
-			let type = temp.types[typeKey];
-			let res = {
-				sid: temp.sid,
-				variables: temp.variables,
-			}
-			console.log(typeKey, type);
-
-			// https://www.twilio.com/docs/content/content-types-overview
-			if (typeKey == 'twilio/card') {
-				res.text = type.title;
-			} else if (typeKey == 'twilio/quick-reply') {
-				res.text = type.body;
-			} else if (typeKey == 'twilio/text') {
-				res.text = type.body;
-			} else if (typeKey == 'twilio/catalog') {
-				res.text = (type.title || '');
-				if (res.text) res.text += '\n';
-				res.text += (type.subtitle || '');
-				if (res.text) res.text += '\n';
-				res.text += (type.body || '');
-			} else if (typeKey == 'twilio/location') {
-				res.text = type.label;
-			} else if (typeKey == 'twilio/call-to-action') {
-				res.text = type.body;
-			} else {
-				res.text = type.body;
-			}
-
-			// Reemplazar variables en el texto
-			if (res.text && temp.variables) {
-				Object.keys(temp.variables).forEach(varName => {
-					const placeholder = `{{${varName}}}`;
-					const value = temp.variables[varName] || '';
-					res.text = res.text.replace(new RegExp(placeholder, 'g'), value);
-				});
-			}
-
-			return res;
+			// Usar la función del backend que tiene toda la lógica
+			return wapp.modWapp.twRenderTemplate(temp, temp.variables);
 		}
 	},
 	
