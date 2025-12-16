@@ -888,28 +888,26 @@ var wapp = {
 
 			if (appendBody) {
 				var body = pMsg.body;
+				var isTemplate = false;
+				var templateName = '';
 
-				// Fallback: Detectar templates en mensajes viejos (sin BODY)
-				// Mensajes nuevos ya tienen BODY completo guardado por el backend
-				if (!body && pMsg.message && pMsg.direction.indexOf('outbound') >= 0) {
+				// Detectar y renderizar templates (siempre con twRenderTemplate si tiene contentSid)
+				if (pMsg.message && pMsg.direction.indexOf('outbound') >= 0) {
 					try {
 						var msgObj = JSON.parse(pMsg.message);
 						if (msgObj.contentSid && wapp.templates && wapp.templates.twilio) {
-							// Buscar el template por sid
 							var template = wapp.templates.twilio.find(t => t.sid === msgObj.contentSid);
 							if (template) {
-								// Usar la función del backend para renderizar
+								isTemplate = true;
+								templateName = template.friendly_name;
+
+								// Siempre renderizar con twRenderTemplate
 								var contentVars = msgObj.contentVariables;
 								if (typeof contentVars === 'string') {
 									contentVars = JSON.parse(contentVars);
 								}
 								var rendered = wapp.modWapp.twRenderTemplate(template, contentVars);
-
-								// Formatear con estilo de template
-								body = '<div style="background-color: #f0f0f0; padding: 8px; border-radius: 8px; margin-bottom: 4px;">';
-								body += '<div style="font-weight: 600; font-size: 11px; color: #666; margin-bottom: 6px;">📄 TEMPLATE (' + rendered.name + ')</div>';
-								body += '<div>' + rendered.text.replace(/\n/g, '<br>') + '</div>';
-								body += '</div>';
+								body = rendered.text;
 							}
 						}
 					} catch (err) {
@@ -934,6 +932,12 @@ var wapp = {
 					body = body.replace(/(^|[\s\p{P}])\*([^*]+)\*(?=[\s\p{P}]|$)/gu, '$1<b>$2</b>'); // bold
 					body = body.replace(/(^|[\s\p{P}])_([^_]+)_(?=[\s\p{P}]|$)/gu, '$1<i>$2</i>'); // italic
 					body = body.replace(/(^|[\s\p{P}])~([^~]+)~(?=[\s\p{P}]|$)/gu, '$1<del>$2</del>'); // tachado
+
+					// Si es template, agregar header
+					if (isTemplate) {
+						var templateHeader = '<div style="font-weight: 600; font-size: 11px; color: #666; margin-bottom: 6px;">📄 TEMPLATE (' + templateName + ')</div>';
+						$msgText.append(templateHeader);
+					}
 				};
 
 				$msgText.append(body);
