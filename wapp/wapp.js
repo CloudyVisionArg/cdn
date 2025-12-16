@@ -888,6 +888,56 @@ var wapp = {
 
 			if (appendBody) {
 				var body = pMsg.body;
+
+				// Detectar si es un template (body null pero tiene message con contentSid)
+				if (!body && pMsg.message && pMsg.direction.indexOf('outbound') >= 0) {
+					try {
+						var msgObj = JSON.parse(pMsg.message);
+						if (msgObj.contentSid && wapp.templates && wapp.templates.twilio) {
+							// Buscar el template por sid
+							var template = wapp.templates.twilio.find(t => t.sid === msgObj.contentSid);
+							if (template) {
+								// Renderizar según el tipo de template
+								body = '<div style="background-color: #f0f0f0; padding: 8px; border-radius: 8px; margin-bottom: 4px;">';
+								body += '<div style="font-weight: 600; font-size: 11px; color: #666; margin-bottom: 6px;">📄 TEMPLATE (' + template.friendly_name + ')</div>';
+
+								// Extraer el body según el tipo
+								var templateBody = '';
+								if (template.types['twilio/text']) {
+									templateBody = template.types['twilio/text'].body;
+								} else if (template.types['twilio/list-picker']) {
+									templateBody = template.types['twilio/list-picker'].body;
+									// Agregar las opciones
+									if (template.types['twilio/list-picker'].items) {
+										templateBody += '\n\n' + template.types['twilio/list-picker'].button + ':';
+										template.types['twilio/list-picker'].items.forEach(function(item) {
+											templateBody += '\n• ' + item.item;
+										});
+									}
+								} else if (template.types['twilio/call-to-action']) {
+									templateBody = template.types['twilio/call-to-action'].body;
+									// Agregar los botones
+									if (template.types['twilio/call-to-action'].actions) {
+										template.types['twilio/call-to-action'].actions.forEach(function(action) {
+											templateBody += '\n🔗 ' + action.title + ': ' + action.url;
+										});
+									}
+								}
+
+								// Procesar el body del template
+								if (templateBody) {
+									templateBody = templateBody.replace(/\n/g, '<br>');
+									body += '<div>' + templateBody + '</div>';
+								}
+
+								body += '</div>';
+							}
+						}
+					} catch (err) {
+						console.error('Error parsing template message:', err);
+					}
+				}
+
 				if (body) {
 					// Primero convertir URLs en links
 					if (window.linkifyStr) {
@@ -898,15 +948,15 @@ var wapp = {
 							},
 						});
 					}
-					
+
 					body = body.replace(/\n/g, '<br>'); // Reemp los \n con <br>
-										
+
 					// Versión mejorada con word boundary:
 					body = body.replace(/(^|[\s\p{P}])\*([^*]+)\*(?=[\s\p{P}]|$)/gu, '$1<b>$2</b>'); // bold
 					body = body.replace(/(^|[\s\p{P}])_([^_]+)_(?=[\s\p{P}]|$)/gu, '$1<i>$2</i>'); // italic
 					body = body.replace(/(^|[\s\p{P}])~([^~]+)~(?=[\s\p{P}]|$)/gu, '$1<del>$2</del>'); // tachado
 				};
-				
+
 				$msgText.append(body);
 			}
 			
@@ -1183,6 +1233,7 @@ var wapp = {
 					msg.media = row['MEDIA'];
 					msg.latitude = row['LATITUDE'];
 					msg.longitude = row['LONGITUDE'];
+					msg.message = row['MESSAGE'];
 
 					await wapp.insertMsg(pChat, msg);
 				};
