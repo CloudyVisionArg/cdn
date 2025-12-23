@@ -18,44 +18,6 @@ Session
 swagger: http://w3.cloudycrm.net/apidocs
 types para intelliSense: https://github.com/DefinitelyTyped/DefinitelyTyped
 async constructors: https://dev.to/somedood/the-proper-way-to-write-async-constructors-in-javascript-1o8c
-
-
-
-Esta funcion es para obtener el sessionId (de sys_connections) a partir del authToken
-
-const crypto = require('crypto');
-
-function decryptAuthToken(authToken) {
-    const KEY = "elgnuj eht ot emocleW";
-    const keyBytes = Buffer.from(KEY, 'utf8');
-
-    // Generar clave e IV
-    const key = crypto.pbkdf2Sync(KEY, keyBytes, 1000, 16, 'sha1');
-    const iv = crypto.pbkdf2Sync(KEY, keyBytes, 1000, 16, 'sha1');
-
-    // Descifrar
-    const decipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
-    decipher.setAutoPadding(false);
-
-    const encryptedData = Buffer.from(authToken, 'hex');
-    let decrypted = Buffer.concat([
-        decipher.update(encryptedData),
-        decipher.final()
-    ]);
-
-    // Convertir hex resultado a string
-    const hexResult = decrypted.toString('hex');
-    let sessionId = '';
-    for (let i = 0; i < hexResult.length; i += 2) {
-        const hexChar = hexResult.substr(i, 2);
-        const charCode = parseInt(hexChar, 16);
-        if (charCode !== 0) { // Ignorar null bytes del padding
-            sessionId += String.fromCharCode(charCode);
-        }
-    }
-
-    return sessionId.toUpperCase();
-}
 */
 
 var _mainlib, _moment, _numeral, _CryptoJS, _serializeError,
